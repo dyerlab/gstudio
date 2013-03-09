@@ -1,0 +1,428 @@
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{Using gstudio}
+-->
+
+<link href="http://dyerlab.bio.vcu.edu/media/dyerlab.doc.css" rel="stylesheet"></link>
+
+
+
+
+# An Introduction to the **gstudio** Package
+
+
+## Package Overview
+
+The **gstudio**  package is a package created to make the inclusion of marker based population genetic data in the R workflow easy.  An underlying motivation for this package is to provide a link between spatial analysis and graphing packages such that the user can be quickly and easily manipulate data in exploratory ways that aid in gaining biological inferences.
+
+
+
+
+### Installing the package
+
+This package requires several other packages for installation.  By default, the install should be easily accomplished using the build-in functionalities in R.
+
+```{r, eval=FALSE,echo=TRUE}
+install.packages("gstudio")
+```
+
+Occassionally, you should look to see if there are updates to the package by doing the following (this will update all packages you have installed)
+
+```{r, eval=FALSE}
+update.packages( ask=FALSE )
+```
+
+
+### Loading the Package
+
+And any time you need to use the package, you would just pull it into your session.
+
+```{r}
+require(gstudio, quietly=TRUE)
+```
+
+This should get you everything you need. The **gstudio**  package does contain a lot of build-in documentation including a lot of examples.  All the functions and examples associaed with them can be found in the build-in documents available from:
+
+
+```{r, eval=FALSE}
+help(package="gstudio")
+```
+
+At any point if you have any questions about the values or options for a particular function in **gstudio**  or any other package, you can use the  *help.search(func)* or *?* functionality.This file is also kept in sync with the development of the **gstudio**  package (it is in the source packge that you downloaded from CRAN) and will serve as a tutorial for your use of this package.  If there are any questions that you may have regarding this package, feel free to contact [Rodney Dyer](mailto://rjdyer@vcu.edu) and I will get back to you as soon as possible.
+
+
+
+---
+
+
+
+## Genetic Data 
+
+The overriding philosophy behind the **gstudio**  package is to make it as easy as possible to create, load, use, and integrate, genetic marker data into your analysis workflow.  As such, we typically use *data.frame* objects to hold our data and the addition of the *Locus* class as a fundamental data type allows us to continue to do so.
+
+```{r}
+x <- locus( c(1,2) )
+class(x)
+x
+```
+
+
+You can think of a *Locus* object as a vector of alleles.  There are several options you can use when constructing a *Locus* object, mostly dealing with how they are going to treat the data you are passing to it.
+
+Option        | Function
+------------- | ---------
+x             | The vector of values that are to be treated as alleles.
+is.snp.minor  | A flag indicating that *x* is 0,1,2 encoding for minor snp alleles.
+is.zyme       | Flag showing that genotype "12" is a zyme-like heterozygote (e.g., "1" & "2" alleles).
+is.phased     | Flag indicating that the order of alleles in *x* should be maintained for phased gametes.
+is.separated  | Flag indiciating that the alleles are encoded as "A:B" with colon separating the alleles,
+
+Here is some examples.
+
+```{r}
+loc0 <- locus( )
+loc1 <- locus( 1 )
+loc2 <- locus( c("C","A"), is.phased=TRUE )
+loc3 <- locus( c("C","A") )
+loc4 <- locus( 12, is.zyme=TRUE )
+loc5 <- locus( 1:4 )
+loc6 <- locus( "A:C:C:G", is.separated=TRUE )
+loci <- c(loc0, loc1, loc2, loc3, loc4, loc5, loc6 )
+loci
+```
+
+Notice how the printing of each *Locus* object uses the colon character to separate alleles.  Also, since the *Locus* object is a basic data type, it can be used in other data structures.
+
+```{r}
+df <- data.frame( ID=0:6, Loci=loci )
+df
+```
+
+And you can use normal vector processing of the locus vector to do normal R data like operations.
+
+```{r}
+is.na( df$Loci )
+is.heterozygote( df$Loci )
+```
+
+
+
+
+
+### Saving and Loading Data
+
+Saving data once it is in R is trivial and you do it as you would for any other R object.  The R object system knows how to serialize its own data using the *load()* and *save()* functions.
+
+```{r,eval=FALSE}
+save(df, file="MyData.rda")
+```
+
+To load the objects back into the workspace, you just do:
+
+```{r,eval=FALSE}
+load("MyData.rda")
+```
+
+And you can verify that you have data in your workspace by listing it.
+
+```{r}
+ls()
+```
+
+
+
+
+
+### Importing Data
+
+Importing data is not that difficult.  People tend to keep their data in spreadsheets or text files, which are easily accessable via R.  For genetic marker data **gstudio**  has a particular function, *read_population()* that is a mix between the traditional *read.table()* function and the *Locus()* functions.  Options for this function include:
+
+Option        |    Function
+------------- | --------------
+path          | The full path to the text file
+sep           | The character used to separate columns (',' is default)
+header        | Columns have header names (e.g., locus names, etc.)
+locus.columns | A vector of numbers of columns to be treated as *Locus()* objects
+is.two.column | Flag indicating that a single locus takes two columns of data (e.g., microsats)
+is.snp.minor  | Flag indicating loci are 0, 1, 2 for number of minor alleles
+is.zyme       | Flag indicating loci are encoded as allozyme loci (e.g., 23 is heterozygote 2 & 3)
+is.phased     | Flag indicating alleles are phased
+is.separated  | Flag indicating a colon separates individual alleles, must be single column for each locus
+
+
+As an example, consider a file that has the first three columns of strata and coordinates and the next 10 columns representing microsat loci, encoded in two column format (e.g., 5 loci).  This would be imported as:
+
+```{r, eval=FALSE}
+data <- read_population( "~/Desktop/genotypes.csv",sep=",", header=T, locus.columns=4:14, is.two.column=TRUE)
+```
+
+At this point, you can treat the data as any other R object
+
+
+
+
+### Packaged Data
+
+The main genetic data included with the package if from the Sonoran desert bark beetle, *Araptus attenuatus* from the Dyer laboratory.  You can load it into your workspace by:
+
+
+```{r}
+data(arapat)
+summary(arapat)
+```
+
+
+
+
+### Convenience Functions
+
+
+Dealing easily with parts of your data is a critical skill and a huge benefit in using a grammar like R to do your analyses.  In R, *data.frame* objects are almost like little databases and you can do some really creative manipulations with them. The **gstudio**  package provides a few things that may help you work more efficiently with your data.
+
+
+
+#### Data Classes
+
+Often it is important to know which columns of a data set are actually of a particular data type.  Here is a simple function that tells you either the name or index of columns in a data.frame that of a specific data type.
+
+```{r}
+column_class( arapat, class="locus")
+column_class( arapat, class="locus", mode="index" )
+```
+
+#### Partitioning
+
+The *Partition()* function takes a data frame and returns a list of data frames, partitioned by the stratum you pass to it.  This is really nice if you are doing a nested analysis of sorts and want to work with subsets of your data that are defined by a categorical *factor* variable.
+
+```{r}
+names(arapat)
+clades <- partition( arapat, stratum="Species")
+names( clades )
+```
+
+
+
+
+
+
+
+
+
+### Plotting Populations
+
+One of the key benefits to using an analysis environtment such as R is that you can mash together functionality that you just can't get from a monolithic program.  An example of this is plotting populations.  If your data has spatial coordinates in them then you can use this to plot the location of your sites on a GoogleMap tile.  By default, you **must** have your coordinates in decimal degree format.  This is the default for the GoogleMaps API.  Moreover, if you name the columns of data "Longitude" and "Latitude" much of the spatial functionality in **gstudio** will be more transparent (if not, you have to specify the Longitude and Latitude names each time you use a function that needs them).
+
+```{r, warning=FALSE}
+plot( arapat )
+```
+
+There are other options you can pass to the plot function, see "?plot.data.frame" for more information.  If you need to get more fancy than just a plot, you can do the plotting manually. Lets say I want to plot the different Species in the data set as different colors.  The following are the steps I would use to create some plots coloring different clusters.
+
+1. Find coordinates for each population and keep only the unique ones.
++ Determine the centroid of this area.
++ Request a map tile from Google (this needs internet connections obviously)
++ Turn the tile into a data.frame
++ Create a plot (I favor ggplot2 as a plotting paradigm)
+
+```{r, warning=FALSE}
+data <- unique( arapat[,c(2,3,6,5)] )
+centroid <- apply( data[,3:4], 2, mean )
+centroid
+map <- population_map(data)
+ggmap( map ) + geom_point( aes(x=Longitude, y=Latitude, color=Cluster), data=data, size=4 )
+```
+
+
+
+
+
+
+
+
+
+
+## Allele Frequencies
+
+
+
+Another object made easily in **gstudio** are objects related to allele frequencies.  There are two levels of these objects, a *FrequencySpectrum* is the base object that contains the allele frequencies, and measures of heterozygosity for a locus.  An object of type *AlleleFrequencies* is one what may have many loci (e.g *FrequencySpectrum*) associated with it.
+
+
+### Single Locus
+
+Grabbing alllele frequencies is a fundamental task for any population genetic analysis and should be as easy as possible.  Here are some examples of various ways to get allele frequency information using the *Araptus attenuatus* data set.
+
+
+```{r, singleLocus }
+freq.EF <- frequencies( arapat$EF )
+class( freq.EF)
+freq.EF
+```
+
+Quick population genetic parameters related to heterozygosity are also easily accessed.
+
+```{r}
+Ho( arapat$EF )
+He( arapat$EF )
+Fis( arapat$EF )
+```
+
+
+
+
+### Multilocus
+
+The conversion of loci to a `data.frame` expands beyond the single locus. If you do not specify which locus to use, it will use all `locus` objects and add an additional column to the data frame (n.b., I only print out the first 10 rows to give you the idea).
+
+```{r, multilocusFreqs}
+freqs.loci <- frequencies( arapat )
+freqs.loci[1:10,]
+```
+
+
+### Substrata and Allele Frequencies
+
+To complete the symmetry here, adding stratum to the analysis, provides yet another categorical variable upon which allele frequencies may be estimated.  Here is an example looking at the "Cluster" strata in the data set and a partial printout of the results.
+
+```{r, strataFreqs }
+freqs.strata <- frequencies( arapat, stratum="Cluster" )
+freqs.strata[1:10,]
+```
+
+
+### Plotting Allele Frequencies
+
+There are several ways you may want to graphically view the locus data and for convienence, the **gstudio**  package provides some interfaces for nice plots using the *ggplot2* package.  
+
+Plotting a vector of loci will by default estimate the frequencies of each allele for graphical output.  There are two different output for this (n.b., a pie chart by its nature can lead to inaccurate interpretations and most statisticians hate them).
+
+```{r}
+plot( arapat$MP20 )
+plot( arapat$MP20, mode="pie")
+```
+
+
+
+The frequencies across a collection of loci can easily be plot just as well (internally, this simple plot is just turns the object into a data frame and then plots it). At times, examination of allele spectra can reveal blantant differnces in substratum of your data.  For example, consider the following spectrum for the locus MP20.
+
+
+```{r}
+f <- freqs.strata[ freqs.strata$Locus %in% c("MP20","AML"), ]
+plot_frequencies(f)
+```
+
+
+
+
+### Frequency Gradients
+
+When you have many strata or you are conducting landscape-level analyses, it is often helpful to look at how allele frequencies change in relation to some variable other than stratum.  
+
+
+```{r}
+baja <- arapat[ arapat$Species != "CladeB",]
+```
+
+The `EN` locus has a few different alleles but if we look at the frequencies of each, the first two dominate.
+
+```{r}
+plot( baja$EN )
+```
+
+Using just the first allele `01`, it is pretty easy to plot the strata frequency as a function of latitude using normal `R` approaches.  To do this, one needs to:
+
+1. Extract the `01` allele frequencies by population.
+```{r}
+freqs <- frequencies( baja, stratum="Population", loci="EN")
+freq.01 <- freqs[ freqs$Allele == "01",]
+```
+2. Merge this `data.frame` with one containing the coordinates of the populations.
+```{r}
+coords <- strata_coordinates( baja )
+df <- merge( freq.01, coords)
+df[1:10,]
+```
+
+Now, you can plot the frequencies as either a linear plot (below you will see how to plot these along environmental gradients).
+
+```{r}
+ggplot( df, aes(x=Latitude,y=Frequency)) + geom_line(linetype=2) + geom_point(size=4) 
+```
+
+This is interesting.  Now, just to 'kick it up a knotch' I'm going to look at the `Cluster` variable.  This is from mtDNA and shows putatively cryptic species.  I'm going to remake the plot above but color the points to indicate the presence of the 'SCBP-A' clade (perhaps another species).  Below I grab add a new column of data to `df` and then make it all 'baja'.  Then I figure out which populations have 'SCBP-A' individuals in it.
+
+```{r}
+df$Species <- "Baja"
+pops.with.scbp <- as.character(unique(baja$Population[ baja$Cluster=="SCBP-A"]))
+df$Species[ df$Stratum %in% pops.with.scbp ] <- "Cape"
+```
+
+Then plot it.
+
+```{r}
+ggplot( df, aes(x=Latitude,y=Frequency)) + geom_line(linetype=2) + geom_point(size=5, aes(color=Species) ) 
+```
+
+I think this leads to some interesting questions about the relationship between potential species differences, where species are guaged by mtDNA, in nuclear allelic diversity.
+
+
+### Spatial Frequency Plots
+
+
+It is also possible to plot the data in a spatial context.  Here is an example of how to mix `ggplot` and `ggmap` data and I'll plot the locations as proportional in size to the allele frequency.
+
+```{r, warning=FALSE}
+map <- population_map(baja)
+ggmap( map ) + geom_point( aes(x=Longitude, y=Latitude, size=Frequency), data=df)
+```
+
+
+## Multivariate Analogs
+
+Genotype data is inheriently multivariate.  In fact, it is multinomial multivarite *senus stricto* but we generally ignore that. That being said, we can easily translate raw genotypes into raw multivariate encodings for other statistical analyses.  Here is a quick example using a few individuals and the `WNT` locus.
+
+```{r}
+as.matrix( arapat$WNT[1:10]  )
+as.matrix( arapat$WNT[1:10], drop.allele=TRUE)
+```
+
+
+
+
+## Genetic Diversity
+
+
+
+### Rarefraction
+
+
+
+### Inbreeding
+
+
+
+
+## Genetic Structure
+
+
+
+### Structural Parameters
+
+
+
+
+### Statistical Differences
+
+
+
+
+## Population Graphs
+
+
+
+
+
+
+## References
+
+

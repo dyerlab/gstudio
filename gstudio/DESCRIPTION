@@ -1,0 +1,64 @@
+Package: gstudio
+Maintainer: Rodney J. Dyer <rjdyer@vcu.edu>
+License: GPL (>= 2)
+Title: Spatial utility functions from the Dyer laboratory
+Type: Package
+LazyLoad: yes
+Author: Rodney J. Dyer <rjdyer@vcu.edu>
+Description: This package contains classes and functions for
+    the spatial analysis of marker data to include structure
+    statistics, analyses based upon allele frequencies, and
+    Population Graphs network analysis of spatial conditional
+    genetic covariance.  This package supersedes the original
+    studio package by interfacing with raster and sp objects
+    directly.
+Version: 1.0
+Date: 2012-10-11
+Depends:
+    ggplot2,
+    grid,
+    ggmap,
+    reshape2,
+    raster
+Suggests:
+    testthat,
+    knitr
+VignetteBuilder: knitr
+Collate:
+    'alleles.R'
+    'as_data_frame.R'
+    'as_matrix.R'
+    'column_class.R'
+    'cov_2_dist.R'
+    'dest.R'
+    'dist_2_cov.R'
+    'dist_amova.R'
+    'dist_bray.R'
+    'dist_cavalli.R'
+    'dist_jaccard.R'
+    'dist_nei.R'
+    'genetic_distance.R'
+    'genetic_structure.R'
+    'gst_prime.R'
+    'gst.R'
+    'gstudio-package.R'
+    'he.R'
+    'ho.R'
+    'indices.R'
+    'is_heterozygote.R'
+    'is_na.R'
+    'locus.R'
+    'partition.R'
+    'pies_on_map.R'
+    'ploidy.R'
+    'plot_surface_and_points.R'
+    'plot.R'
+    'population_map.R'
+    'print.R'
+    'read_population.R'
+    'strata_coordinates.R'
+    'structure_statistic.R'
+    'frequencies.R'
+    'is_frequency.R'
+    'fis.R'
+    'plot_frequencies.R'
