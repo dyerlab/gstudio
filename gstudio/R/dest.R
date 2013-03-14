@@ -1,7 +1,7 @@
-#' Estimation Joost's dest parameter 
+#' Estimation Joost's Dest parameter 
 #' 
 #' This function estimates the parameter (and potentially the confidence
-#'  surrounding its value) for Joost's dest.
+#'  surrounding its value) for Joost's Dest.
 #' @param strata A partitioning of data into groups
 #' @param loci A list of \code{\link{locus}} objects partitioned by stratum.
 #' @param nperm The number of permutations to run for significance of the
@@ -11,7 +11,7 @@
 #' @return An object of type "structure statistic"
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
-dest <- function( strata, loci, nperm=0, size.correct=FALSE ) {
+Dest <- function( strata, loci, nperm=0, size.correct=FALSE ) {
   if( !inherits(loci,"locus") )
     stop("This function requires objects of type 'locus' to function.")
   if( !is(strata,"factor") )
@@ -66,7 +66,7 @@ dest <- function( strata, loci, nperm=0, size.correct=FALSE ) {
   else
     D.perm <- numeric(0)
   
-  ret <- structure_statistic( mode="dest", estimate=D, ci=D.perm, Hs=hs.estimated, Ht=ht.estimated )
+  ret <- structure_statistic( mode="Dest", estimate=D, ci=D.perm, Hs=hs.estimated, Ht=ht.estimated )
   
   return( ret )
 }

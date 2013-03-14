@@ -8,7 +8,7 @@
 #' \itemize{
 #'  \item{Gst}{Nei's Gst (not Berg and Hamrick)}
 #'  \item{Gst_prime}{Hedrick's correction of Nei's Gst for diverse loci}
-#'  \item{dest}{Joost's estimate}
+#'  \item{Dest}{Joost's estimate}
 #' }
 #' @param loci The name of loci to be used.
 #' @param nperm The number of permutations used to test the hypothesis that
@@ -20,7 +20,7 @@
 #'  a genetic measure of , differentiation.  American Journal of Botany 89(3): 460-465.
 #' @export
 
-genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime", "dest")[1], loci="All", nperm=0, verbose=TRUE ) {
+genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime", "Dest")[1], loci="All", nperm=0, verbose=TRUE ) {
   
   if( ! inherits(x,"data.frame") )
       stop("You need to pass a data frame to the funciton genetic_structure()...")
@@ -58,10 +58,10 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
       ret$loci[[locus]]$locus <- locus
     }
   
-  else if( mode == "dest" ) 
+  else if( mode == "Dest" ) 
     for( locus in loci ) {
       if( verbose )cat(".")
-      ret$loci[[locus]] <- dest(x[[stratum]],x[[locus]])
+      ret$loci[[locus]] <- Dest(x[[stratum]],x[[locus]])
       ret$loci[[locus]]$locus <- locus
     }
   

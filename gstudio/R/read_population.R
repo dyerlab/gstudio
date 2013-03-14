@@ -30,14 +30,15 @@
 #' \dontrun{
 #' # an example for reading in a data set with tab separation and alleles encoded 
 #' # in two columns each.  These start at column 4 and go to 24 (e.g., 5 loci)
-#' data.2col <- read_population( "./myfile.txt", header=T, sep="\t", two.column=TRUE, locus.columns=4:24)
+#' data.2col <- read.population( "./myfile.txt", header=T, sep="\t", two.column=TRUE, locus.columns=4:24)
 #' 
 #' # an example of an aflp data set with 220 loci encoded as 0/1 in a comma separated data file.
-#' data.aflp <- read_population( "./aflps.csv, header=T, sep=",", is.aflp=TRUE, locus.columns=2:221 )
+#' data.aflp <- read.population( "./aflps.csv, header=T, sep=",", is.aflp=TRUE, locus.columns=2:221 )
 #' }
 #'    
 
-read_population <- function( path, sep=",", header=TRUE, 
+
+read.population <- function( path, sep=",", header=TRUE, 
                              locus.columns=NULL, 
                              is.two.column=FALSE,
                              is.snp.minor=FALSE,

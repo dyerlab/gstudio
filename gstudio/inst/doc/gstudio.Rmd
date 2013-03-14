@@ -135,7 +135,7 @@ ls()
 
 ### Importing Data
 
-Importing data is not that difficult.  People tend to keep their data in spreadsheets or text files, which are easily accessable via R.  For genetic marker data **gstudio**  has a particular function, *read_population()* that is a mix between the traditional *read.table()* function and the *Locus()* functions.  Options for this function include:
+Importing data is not that difficult.  People tend to keep their data in spreadsheets or text files, which are easily accessable via R.  For genetic marker data **gstudio**  has a particular function, *read.population()* that is a mix between the traditional *read.table()* function and the *Locus()* functions.  Options for this function include:
 
 Option        |    Function
 ------------- | --------------
@@ -153,7 +153,7 @@ is.separated  | Flag indicating a colon separates individual alleles, must be si
 As an example, consider a file that has the first three columns of strata and coordinates and the next 10 columns representing microsat loci, encoded in two column format (e.g., 5 loci).  This would be imported as:
 
 ```{r, eval=FALSE}
-data <- read_population( "~/Desktop/genotypes.csv",sep=",", header=T, locus.columns=4:14, is.two.column=TRUE)
+data <- read.population( "~/Desktop/genotypes.csv",sep=",", header=T, locus.columns=4:14, is.two.column=TRUE)
 ```
 
 At this point, you can treat the data as any other R object
