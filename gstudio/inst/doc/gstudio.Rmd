@@ -5,6 +5,10 @@
 
 <link href="http://dyerlab.bio.vcu.edu/media/dyerlab.doc.css" rel="stylesheet"></link>
 
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(out.extra='style="display:block; margin: auto"', fig.align="center")
+```
 
 
 
@@ -37,7 +41,7 @@ update.packages( ask=FALSE )
 
 And any time you need to use the package, you would just pull it into your session.
 
-```{r}
+```{r,message=FALSE}
 require(gstudio, quietly=TRUE)
 ```
 
@@ -69,13 +73,13 @@ x
 
 You can think of a *Locus* object as a vector of alleles.  There are several options you can use when constructing a *Locus* object, mostly dealing with how they are going to treat the data you are passing to it.
 
-Option        | Function
-------------- | ---------
-x             | The vector of values that are to be treated as alleles.
-is.snp.minor  | A flag indicating that *x* is 0,1,2 encoding for minor snp alleles.
-is.zyme       | Flag showing that genotype "12" is a zyme-like heterozygote (e.g., "1" & "2" alleles).
-is.phased     | Flag indicating that the order of alleles in *x* should be maintained for phased gametes.
-is.separated  | Flag indiciating that the alleles are encoded as "A:B" with colon separating the alleles,
+Option          | Function
+--------------- | ---------
+`x`             | The vector of values that are to be treated as alleles.
+`is.snp.minor`  | A flag indicating that *x* is 0,1,2 encoding for minor snp alleles.
+`is.zyme`       | Flag showing that genotype "12" is a zyme-like heterozygote (e.g., "1" & "2" alleles).
+`is.phased`     | Flag indicating that the order of alleles in *x* should be maintained for phased gametes.
+`is.separated`  | Flag indiciating that the alleles are encoded as "A:B" with colon separating the alleles,
 
 Here is some examples.
 
@@ -161,7 +165,7 @@ At this point, you can treat the data as any other R object
 
 
 
-### Packaged Data
+### Datasets in the Package
 
 The main genetic data included with the package if from the Sonoran desert bark beetle, *Araptus attenuatus* from the Dyer laboratory.  You can load it into your workspace by:
 
@@ -171,11 +175,9 @@ data(arapat)
 summary(arapat)
 ```
 
-
-
+You can see several things here.  First, the locus data are displayed by genotype counts including NA values where there was missing data.  A column of type `locus` is just like any other kind of variable and can be used as such.  This opens up a lot of functionality for you to be able to treat marker data just like everything else in R.
 
 ### Convenience Functions
-
 
 Dealing easily with parts of your data is a critical skill and a huge benefit in using a grammar like R to do your analyses.  In R, *data.frame* objects are almost like little databases and you can do some really creative manipulations with them. The **gstudio**  package provides a few things that may help you work more efficiently with your data.
 
@@ -201,13 +203,6 @@ names( clades )
 ```
 
 
-
-
-
-
-
-
-
 ### Plotting Populations
 
 One of the key benefits to using an analysis environtment such as R is that you can mash together functionality that you just can't get from a monolithic program.  An example of this is plotting populations.  If your data has spatial coordinates in them then you can use this to plot the location of your sites on a GoogleMap tile.  By default, you **must** have your coordinates in decimal degree format.  This is the default for the GoogleMaps API.  Moreover, if you name the columns of data "Longitude" and "Latitude" much of the spatial functionality in **gstudio** will be more transparent (if not, you have to specify the Longitude and Latitude names each time you use a function that needs them).
@@ -224,7 +219,7 @@ There are other options you can pass to the plot function, see "?plot.data.frame
 + Turn the tile into a data.frame
 + Create a plot (I favor ggplot2 as a plotting paradigm)
 
-```{r, warning=FALSE}
+```{r, mapplot, warning=FALSE,message=FALSE,cache=TRUE}
 data <- unique( arapat[,c(2,3,6,5)] )
 centroid <- apply( data[,3:4], 2, mean )
 centroid
@@ -245,8 +240,7 @@ ggmap( map ) + geom_point( aes(x=Longitude, y=Latitude, color=Cluster), data=dat
 
 
 
-Another object made easily in **gstudio** are objects related to allele frequencies.  There are two levels of these objects, a *FrequencySpectrum* is the base object that contains the allele frequencies, and measures of heterozygosity for a locus.  An object of type *AlleleFrequencies* is one what may have many loci (e.g *FrequencySpectrum*) associated with it.
-
+Another object made easily in **gstudio** are objects related to allele frequencies.  Allele frequencies are just like every other kind of data and can be extracted from a `data.frame` containing `locus` objects using the function `frequencies()`.  
 
 ### Single Locus
 
@@ -371,10 +365,26 @@ I think this leads to some interesting questions about the relationship between 
 
 It is also possible to plot the data in a spatial context.  Here is an example of how to mix `ggplot` and `ggmap` data and I'll plot the locations as proportional in size to the allele frequency.
 
-```{r, warning=FALSE}
+```{r, warning=FALSE,message=FALSE}
 map <- population_map(baja)
 ggmap( map ) + geom_point( aes(x=Longitude, y=Latitude, size=Frequency), data=df)
 ```
+
+
+
+
+```{r,warning=FALSE,message=FALSE,cache=TRUE}
+pies_on_map( arapat, stratum="Population", locus="EN")
+```
+
+
+
+
+
+
+
+
+
 
 
 ## Multivariate Analogs

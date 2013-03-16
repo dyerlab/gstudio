@@ -189,6 +189,7 @@ c.locus <- function(..., recursive = FALSE) {
 print.locus <- function(x, ... ) {
   x0 <- unlist( lapply( x, as.character ) )
   x0[x0=="NA"] <- NA
+  x0[nchar(x0)==0] <- NA
   print.default(x0,...)
   invisible(x0)
 }
