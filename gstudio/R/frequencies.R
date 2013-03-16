@@ -56,10 +56,10 @@ frequencies.data.frame <- function( x, loci, stratum, ... ) {
     loci <- column_class( x, "locus" )
   }
   
-  # throw warning if asked for non-existent loci
+  # throw error if asked for non-existent loci
   if( length( setdiff( loci, column_class(x,"locus") )) ){
     loci <- intersect( column_class( x, "locus" ), loci)
-    warning("Asked for loci not in the data frame...")
+    stop("Asked for loci not in the data frame...")
   }
   
   # all loci to do.
@@ -67,9 +67,14 @@ frequencies.data.frame <- function( x, loci, stratum, ... ) {
     ret <- data.frame( Locus=character(0), Allele=character(0), Frequency=numeric(0) )
     for( locus in loci ) {
       loc <- frequencies.locus( x[[locus]] )
-      loc$Locus <- locus
-      ret <- rbind( ret, loc[,c(3,1,2)] )
+      if( nrow(loc) ) {
+        loc$Locus <- locus
+        ret <- rbind( ret, loc[,c(3,1,2)] )
+      }
     }
+  }
+  else if (!(stratum %in% names(x))){
+    stop("Asking for non-existant stratum.")
   }
   
   # Asking for stratum
@@ -78,9 +83,13 @@ frequencies.data.frame <- function( x, loci, stratum, ... ) {
     pops <- partition( x, stratum=stratum )
     popnames <- names(pops)
     for( pop in popnames ){
+      
       strat <- frequencies( pops[[pop]], loci )
-      strat$Stratum <- pop
-      ret <- rbind( ret, strat[,c(4,1,2,3)] )
+      
+      if( nrow(strat) ){
+        strat$Stratum <- pop
+        ret <- rbind( ret, strat[,c(4,1,2,3)] )        
+      }
     }
   }
   

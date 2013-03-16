@@ -44,6 +44,36 @@ test_that("creating new ones", {
 )
 
 
+test_that( "Vectors of Input", {
+  
+  snp <- c(0,1,2)
+  loc <- NULL
+  loc <- locus( snp, is.snp.minor=TRUE)
+  expect_that( loc, is_a("locus"))
+  expect_that( length(loc), equals(3) )
+  
+  separated <- c( "A:B", "A:C", "B:C" )
+  loc <- NULL
+  loc <- locus( separated, is.separated=TRUE )
+  expect_that( loc, is_a("locus"))
+  expect_that( length(loc), equals(3) )
+  
+  twocol <- matrix( c(1,2,1,1,2,2), ncol=2, byrow=T)
+  loc <- NULL
+  loc <- locus( twocol )
+  expect_that( loc, is_a("locus"))
+  expect_that( length(loc), equals(3) )
+  
+  zyme <- c( "AA","AB","BB")
+  loc <- NULL
+  loc <- locus( zyme , is.zyme=TRUE)
+  expect_that( loc, is_a("locus"))
+  expect_that( length(loc), equals(3) )
+  
+})
+
+
+
 test_that( "Operations", {
   AA <- locus( c("A","A") )
   AB <- locus( c("A","B") )

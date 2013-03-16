@@ -33,43 +33,6 @@
 #'
 NULL
 
-#' Richmond city coverage
-#' 
-#' This raster layer represents a portion of Richmond Virginia, USA 
-#'  as structures and tree canopy.
-#' @name richmond
-#' @docType data
-#' @keywords data
-NULL
-
-#' Human SNP data
-#' 
-#' A data frame human SNP genotypes from chromosome 2
-#' @name humans.ch2
-#' @docType data
-#' @keywords data
-NULL
-
-
-
-#' Lophocereus data set
-#' 
-#' This is a zyme data set for the Sonoran desert cactus
-#'  Lophocereus schottii.
-#' @name lopho
-#' @docType data
-#' @keywords data
-NULL
-
-#' Raw Lophocereus data set
-#' 
-#' This is a raw csv data set.
-#' @name lopho.raw
-#' @docType data
-#' @keywords data
-NULL
-
-
 #' Data for Araptus attenuatus
 #' 
 #' This is a EPIC genetic dataset for the Sonoran desert
@@ -83,7 +46,71 @@ NULL
 #' AFLP example data set
 #' 
 #' This is an example of the AFLP data input types.
-#' @name aflps
+#' @name data_aflp
 #' @docType data
 #' @keywords data
 NULL
+
+
+
+#' Two Column Example Data
+#' 
+#' Example data for 2-column data types
+#' @name data_2_column
+#' @docType data
+#' @keywords data
+NULL
+
+
+
+#' Separated Example Data
+#' 
+#' Example data for separated data types
+#' @name data_separated
+#' @docType data
+#' @keywords data
+NULL
+
+
+#' SNP Example Data
+#' 
+#' Example data for SNP data types
+#' @name data_snp
+#' @docType data
+#' @keywords data
+NULL
+
+
+#' Zyme-like Example Data
+#' 
+#' Example data like zyme genotypes
+#' @name data_zymelike
+#' @docType data
+#' @keywords data
+NULL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

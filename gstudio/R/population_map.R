@@ -34,13 +34,13 @@ population_map <- function( coords, map.source="google", map.type="terrain", zoo
     lt.rng <- abs( location[1]-location[3] ) * 0.2
     ln.rng <- abs( location[2]-location[4] ) * 0.2
     location <- location + c(-lt.rng,-ln.rng,lt.rng,ln.rng)
-    map <- get_map( location=location, maptype=map.type, source=map.source )    
+    map <- get_map( location=location, maptype=map.type, source=map.source, filename=tempfile() )    
   }
   else {
     location <- c( lon=mean(coords$Longitude),lat=mean(coords$Latitude ) )
     if( !is.numeric( zoom ) )
       zoom <- as.numeric( zoom )
-    map <- get_map( location=location, maptype=map.type, source=map.source, zoom=zoom )
+    map <- get_map( location=location, maptype=map.type, source=map.source, zoom=zoom, filename=tempfile() )
   }
   
   return( map )

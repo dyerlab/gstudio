@@ -45,12 +45,14 @@ test_that("frequencies.data.frame", {
   expect_that( length(unique(f$Locus)), equals(2) )
   expect_that( sum( f$Frequency), equals(2) )
   
-  expect_that( f <- frequencies( df, loci="bob"), gives_warning() )
-  expect_that( dim(f), is_equivalent_to(c(0,3)))
+  expect_that( f <- frequencies( df, loci="bob"), throws_error() )
+  expect_that( f <- frequencies( df, loci=c("bob","TPI")), throws_error() )
+  expect_that( f <- frequencies( df, stratum="bob"), throws_error() )
   
-  expect_that( f <- frequencies( df, loci=c("bob","TPI")), gives_warning() )
-  expect_that( dim(f), is_equivalent_to(c(4,3)))
-  expect_that( f$Allele, equals(LETTERS[1:4]))
+  
+  file <- "~/Documents/Dropbox/R/gstudio/gstudio/data/arapat.rda"
+  load(file)
+  f <- frequencies( arapat, stratum="Population",loci="ZMP")
   
 })
 

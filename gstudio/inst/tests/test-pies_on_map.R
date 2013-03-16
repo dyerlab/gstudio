@@ -1,16 +1,13 @@
 context("pies_on_map.R")
-
+rm(list=ls())
 
 test_that("testing",{
-
-  file <- system.file("data","arapat.rda",package="gstudio")
-  load( file )
+  loc <- locus( 1:2 )
+  pop <- data.frame(Population=1:4,loc=c(loc,loc,loc,loc))
   
   expect_that( pies_on_map(FALSE), throws_error() )
-  expect_that( pies_on_map(arapat), throws_error() )
-  expect_that( pies_on_map(arapat,stratum="Population"), throws_error() )
-
-  pies_on_map(arapat,stratum="Population",locus="EN")
-  dev.off()
-
+  
+  expect_that( pies_on_map(pop), throws_error() )
+  expect_that( pies_on_map(pop,stratum="Population"), throws_error() )
+  
 })

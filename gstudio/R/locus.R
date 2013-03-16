@@ -20,19 +20,24 @@
 #' @return An object of one or more \code{locus} entities.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @examples
+#' locus( c(1,1) )
+#' locus( 1:2 ) 
+#' locus( c("B","A"), is.phased=TRUE )
+#' locus( c(0,1,1,0), is.snp.minor=TRUE )
+#' locus( "132:136", is.separated=TRUE ) 
 #' 
-#' loc1 <- locus( c(1,1) )
-#' loc1
-#' loc2 <- locus( 1:2 ) 
-#' loc2 
-#' 
-locus <- function( x=character(0), is.snp.minor=FALSE, is.zyme=FALSE, is.phased=FALSE, 
+locus <- function( x=character(0), 
+                   is.snp.minor=FALSE, 
+                   is.zyme=FALSE, 
+                   is.phased=FALSE, 
                    is.separated=FALSE,... ) {
+
   
-  if( is.separated && is(x,"character") && length(x) > 1 ) 
-    x <- matrix(x)
+  if( (is.snp.minor | is.zyme | is.separated) && !is(x,"matrix") && length(x)>1 ) 
+    x <- matrix( x, ncol=1 )
+
   
-  if( is(x,"matrix") || is(x,"data.frame")) 
+  if( is(x,"matrix") || is(x,"data.frame") ) 
     ret <- apply( x, 1, locus, is.snp.minor=is.snp.minor, is.zyme=is.zyme, is.phased=is.phased )
   
   else { 
@@ -41,28 +46,42 @@ locus <- function( x=character(0), is.snp.minor=FALSE, is.zyme=FALSE, is.phased=
       alleles <- character(0)
     
     # snp minor
-    if( is.snp.minor ) {
-      if( x == 0 )
-        alleles <- c("A","A")
-      else if( x==1 )
-        alleles <- c("A","B")
-      else if( x==2 )
-        alleles <- c("B","B")
+    else if( is.snp.minor ) {
+      
+      if( !is.na(x)) {
+        if( x == 0 )
+          alleles <- c("A","A")
+        else if( x==1 )
+          alleles <- c("A","B")
+        else if( x==2 )
+          alleles <- c("B","B")        
+      }
       else
         alleles <- character(0)
     }
-    else if( !is(x,"character") )
-      alleles <- as.character(x)
+    
+    else if( is.zyme ){
+      if(!is(x,"character"))
+        x <- as.character(x)
+      N <- nchar(x)
+      n <- N/2
+      l <- substr(x,1,n)
+      r <- substr(x,(n+1),N)
+      alleles <- c(l,r)
+    }
+    
+    else if( !is(x,"character") ) {
+      if( x!="NA:NA")
+        alleles <- as.character(x)
+      else
+        alleles <- character(0)
+    }
+      
+    
     else
       alleles <- x
 
-    if( is.zyme ){
-      N <- nchar(alleles)
-      n <- N/2
-      l <- substr(alleles,1,n)
-      r <- substr(alleles,(n+1),N)
-      alleles <- c(l,r)
-    }
+
     
     if( !is.phased ) {
       if( is.separated )

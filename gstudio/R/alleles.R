@@ -28,23 +28,27 @@ alleles.default <- function( x ) {
 #' @export
 #' @rdname alleles
 alleles.locus <- function ( x ) {
-  ret <- character(0)
-  #if( !all(is.na.locus( x ) )) {
+  ret <- NULL
+
+  # catch all missing 
+
     if( length(x) > 1 ) {
       lst <- lapply( x, alleles.locus )
       ncol <- max( unlist( lapply(lst,length)))
-      ret <- matrix(NA,nrow=length(lst), ncol=ncol)
-      for( i in 1:length(lst)){
-        rep <- lst[[i]]
-        if( length(rep))
-          ret[i,1:length(rep)] <- lst[[i]]
+      if( ncol ){
+        ret <- matrix(NA,nrow=length(lst), ncol=ncol)
+        for( i in 1:length(lst)){
+          rep <- lst[[i]]
+          if( length(rep) > 0)
+            ret[i,1:length(rep)] <- lst[[i]]
+        }
       }
+    }  
+    else if( length(x) == 1 ) {  
+        ret <- unlist(strsplit(x,":"))
     }
-    
-    else if( length(x) == 1 )
-      ret <- unlist(strsplit(x,":"))
-    
-  #}
+      
+
   
   return( ret )  
 }

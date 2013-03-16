@@ -153,14 +153,28 @@ is.zyme       | Flag indicating loci are encoded as allozyme loci (e.g., 23 is h
 is.phased     | Flag indicating alleles are phased
 is.separated  | Flag indicating a colon separates individual alleles, must be single column for each locus
 
+There are some example data files included in the project for you to look at. Depending upon how your computer is set up, they may be placed in different locations.  Here is a quick way to find out where the installed folder is for the **gstudio** package and the location of the 'data' folder within it.
 
-As an example, consider a file that has the first three columns of strata and coordinates and the next 10 columns representing microsat loci, encoded in two column format (e.g., 5 loci).  This would be imported as:
-
-```{r, eval=FALSE}
-data <- read.population( "~/Desktop/genotypes.csv",sep=",", header=T, locus.columns=4:14, is.two.column=TRUE)
+```{r}
+system.file("data",package="gstudio")
 ```
 
-At this point, you can treat the data as any other R object
+
+Here are some examples of data files with different kinds of genetic data, each of which exercises the `read.population()` funciton in a different way.  Hopefully this covers the main types of data being imported, if not, drop me an email (rjdyer@vcu.edu).  
+
+Missing genotypes should be missing data or encoded as `NA`.  If you do not have a genotype then leave it blank.  There is no reason to use negative numbers or other conventions.  It is missing
+
+#### Two Column Data
+
+#### SNP Minor Allele Data
+
+#### Zyme-Like Data
+
+#### Phased Data
+
+#### Pre-Separated Data For Higher Ploidy
+
+
 
 
 

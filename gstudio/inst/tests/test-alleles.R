@@ -13,6 +13,11 @@ test_that("testing", {
   expect_that( alleles(ZZ), is_equivalent_to( character(0) ) )
   expect_that( alleles( loci ), is_equivalent_to( matrix(c("A","A",NA,"A","B",NA),ncol=2) ) )
 
+  loci <- c(ZZ,ZZ,ZZ)
+  a <- alleles( loci )
+  expect_that( length(a), equals(0))
+
+  
 }
 )
 

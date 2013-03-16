@@ -47,18 +47,9 @@ read.population <- function( path, sep=",", header=TRUE,
                              is.phased=FALSE,
                              is.aflp=FALSE) {
   
-  # read in the raw , object
-  df <- read.table(path, sep=sep,header=header,stringsAsFactors=FALSE)
-  if( !is(df,"data.frame"))
-    stop("Unable to create a data frame from that file.")
-  
-  if( ncol(df)<2 )
-    warning("Your data frame does not have many columns of data in it.  This is a problem.  Check your 'sep' on the call.")
-  
   # catch bad locus.columns parameter
   if( is.null(locus.columns) ) {
-    warning("You need to specify which columns are intended to be loci in this file.")
-    return(NULL)
+    stop("You need to specify which columns are intended to be loci in this file.")
   }
   
   # check the range of the locus.columns
@@ -68,9 +59,23 @@ read.population <- function( path, sep=",", header=TRUE,
   if( min(locus.columns ) < 1 )
     stop("Error, the minimum value for locus.columns must be strictly greater than zero.")
   
+  # read in the raw , object
+  df <- read.table(path, sep=sep,header=header,stringsAsFactors=FALSE)
+  if( !is(df,"data.frame"))
+    stop("Unable to create a data frame from that file.")
+  
+  if( ncol(df)<2 )
+    warning("Your data frame does not have many columns of data in it.  This is a problem.  Check your 'sep' on the call.")  
+  
   if( max(locus.columns) > (dim(df)[2]) ) 
     stop(paste("Your data file has fewer columns than you expect (has ", dim(df)[2], " expected at least ",max(locus.columns), ")", sep=""))
 
+  # catch errors that are is.two.column AND user give sequence of all loci
+  if( is.two.column ){
+    # sequence is sequential
+    if( all(diff(locus.columns)==diff(locus.columns)[1]))
+      locus.columns <- seq( min(locus.columns), max(locus.columns), by=2 )  
+  }
     
   
   # make return object that is all the non-genetic stuff to the left of the genotypes
@@ -92,7 +97,7 @@ read.population <- function( path, sep=",", header=TRUE,
           
     if( is.two.column )
       alleles <- df[,locCol:(locCol+1)]
-    if( is.aflp )
+    if( is.aflp | is.snp.minor )
       tmp <- locus( data.frame(alleles), is.snp.minor=is.snp.minor, is.zyme=is.zyme, is.phased=is.phased, is.separated=is.separated ) 
     else
       tmp <- locus( alleles, is.snp.minor=is.snp.minor, is.zyme=is.zyme, is.phased=is.phased, is.separated=is.separated ) 
