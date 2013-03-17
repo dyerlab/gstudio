@@ -1,101 +1,94 @@
-#' Default constructor for locus
+#' General constructor for locus object
 #' 
-#' The main constructor for a \code{locus} object.  This can take either a single set of alleles
-#'  or a matrix of alleles.
-#' @param x The vector of alleles for a locus.  For a single locus this can be either a numeric 
-#'  or character set of variables.  For several loci, this should be a matrix of values with each
-#'  row representing a different locus.
-#' @param is.snp.minor A logical flag indicating that the values in \code{x} are 0, 1, or 2 indicating 
-#'  number of 'minor' alleles at the SNP locus.  Major alleles will be encoded as 'A' whereas minor 
-#'  alleles will be indicated by allele 'B'.  The default is \code{FALSE}.
-#' @param is.zyme A logical flag that indicates that the values in \code{x} are zyme-like genotypes 
-#'  (e.g., 12, 22, 33).  This will also split larger allele counts (e.g., 122144 is equivalent to 
-#'  c(122,144)).  The default is \code{FALSE}
-#' @param is.phased A logical flag indicating that the order of alleles in the genotype are important 
-#'  (e.g., they have been phased).  The default is \code{FALSE}.
-#' @param is.separated A logical flag indicating that the alleles being passed are already separated 
-#'  by a colon value
-#' @param \dots Ignored at this time.
-#' @export
-#' @return An object of one or more \code{locus} entities.
+#' This function creates an object of type \code{locus}, a fundamental
+#'  type in the gstudio package.  Therea re several kinds of loci that
+#'  can be created.
+#' @param x The data to be turned into a \code{locus} object
+#' @param type An indication of what kind of data it is.  By default this
+#'  parameter is missing and this will cause the function to assume that 
+#'  every element of x is an allele in the genotype.
+#'  \itemize{
+#'    \item{blank}{Default value, uses all passed items as alleles}
+#'    \item{aflp}{Encoded as 0,1 for absence/presence of bands.}
+#'    \item{column}{Two columns of alleles}
+#'    \item{separated}{Pre-separated alleles (with ':').}
+#'    \item{snp}{Encoded by the number of minor alleles at the locus.}
+#'    \item{zyme}{Alleles like zymes (e.g., 12 for '1' and '2' alleles).}
+#' }
+#' @param phased A flag indicating the the alleles should are of
+#'  known gametic phase (default=FALSE).
+#' @return Either a single or vector of objects of type \code{locus}.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
-#' @examples
-#' locus( c(1,1) )
-#' locus( 1:2 ) 
-#' locus( c("B","A"), is.phased=TRUE )
-#' locus( c(0,1,1,0), is.snp.minor=TRUE )
-#' locus( "132:136", is.separated=TRUE ) 
-#' 
-locus <- function( x=character(0), 
-                   is.snp.minor=FALSE, 
-                   is.zyme=FALSE, 
-                   is.phased=FALSE, 
-                   is.separated=FALSE,... ) {
-
+#' @export
+locus <- function( x, type, phased=FALSE ){
   
-  if( (is.snp.minor | is.zyme | is.separated) && !is(x,"matrix") && length(x)>1 ) 
-    x <- matrix( x, ncol=1 )
-
+  # missing data
+  if( missing(x) || (length(x)==1 & nchar(x)==0) )
+    ret <- ""
   
-  if( is(x,"matrix") || is(x,"data.frame") ) 
-    ret <- apply( x, 1, locus, is.snp.minor=is.snp.minor, is.zyme=is.zyme, is.phased=is.phased )
-  
-  else { 
-    # x is missing or NA
-    if( missing(x) || is.na(x) )
-      alleles <- character(0)
-    
-    # snp minor
-    else if( is.snp.minor ) {
-      
-      if( !is.na(x)) {
-        if( x == 0 )
-          alleles <- c("A","A")
-        else if( x==1 )
-          alleles <- c("A","B")
-        else if( x==2 )
-          alleles <- c("B","B")        
-      }
-      else
-        alleles <- character(0)
+  # default, sort and collapse em.
+  else if( missing(type) ){  
+    ret <- as.character(x)
+    if( any(nchar(ret))) {
+      if( !phased )
+        ret <- sort(ret)
+      ret <- paste(ret,collapse=":")
+      if( ret == "NA:NA")
+        ret <- ""
     }
+  }
+  
+  # aflp
+  else if( type == "aflp" ){
+    if( length(x) > 1 ) 
+      ret <- unlist(lapply(x,function(x) locus(as.character(x),type="aflp"))) 
+    else if( !(x %in% c("0","1")) )
+      ret <- ""
+    else
+      ret <- x
+  }
+  
+  else if( type == "snp"){
+    if( length(x) > 1 )
+      ret <- unlist(lapply(x,function(x) locus(as.character(x),type="snp")))
+    else 
+      ret <- switch( as.character(x),"0"=c("A:A"),"1"=c("A:B"),"2"=c("B:B"),"")
+  }
+  
+  #column types
+  else if( type == "column") 
+    ret <- apply( x, 1, function(x) locus(as.character(x), phased=phased))
+  
+  
+  else if( type == "separated" ) {
+    if( length(x) > 1)
+      ret <- unlist(lapply(x,function(x) locus(x)))
+    else {
+      if( x == "NA:NA" || x == "NA")
+        ret <- ""
+      else 
+        ret <- locus( strsplit( x, split=":")[[1]], phased=phased)
+    }
+      
+  } 
+  
+  else if( type == "zyme" ){
     
-    else if( is.zyme ){
-      if(!is(x,"character"))
-        x <- as.character(x)
+    if( length(x) > 1 )
+      ret <- unlist( lapply(x, function(x) locus(x,type="zyme")))
+    else {
       N <- nchar(x)
       n <- N/2
       l <- substr(x,1,n)
       r <- substr(x,(n+1),N)
-      alleles <- c(l,r)
+      ret <- locus(c(l,r))
     }
-    
-    else if( !is(x,"character") ) {
-      if( x!="NA:NA")
-        alleles <- as.character(x)
-      else
-        alleles <- character(0)
-    }
-      
-    
-    else
-      alleles <- x
-
-
-    
-    if( !is.phased ) {
-      if( is.separated )
-        alleles <- strsplit(x,split=":")[[1]]
-      alleles <- sort(alleles)
-    }
-    
-    ret <- paste( alleles, collapse=":")    
-
   }
+  
+  
   class(ret) <- "locus"
-  ret
+  return(ret)
 }
-
 
 
 

@@ -71,26 +71,26 @@ x
 ```
 
 
-You can think of a *Locus* object as a vector of alleles.  There are several options you can use when constructing a *Locus* object, mostly dealing with how they are going to treat the data you are passing to it.
+You can think of a *Locus* object as a vector of alleles.  There are several options you can use when constructing a *Locus* object based upon what kind of marker data you are using.  These options are passed through the `type` option to the `locus()` function.  Here are the current options.
 
-Option          | Function
---------------- | ---------
-`x`             | The vector of values that are to be treated as alleles.
-`is.snp.minor`  | A flag indicating that *x* is 0,1,2 encoding for minor snp alleles.
-`is.zyme`       | Flag showing that genotype "12" is a zyme-like heterozygote (e.g., "1" & "2" alleles).
-`is.phased`     | Flag indicating that the order of alleles in *x* should be maintained for phased gametes.
-`is.separated`  | Flag indiciating that the alleles are encoded as "A:B" with colon separating the alleles,
+`type` Option | Function
+------------- | ---------
+              | This is the default value (e.g., nothing passed). It will treat the values passed to locus as alleles to a single locus
+`snp`         | Alleles are `0`, `1`, or `2` indicating the number of minor alleles.
+`zyme`        | Genotypes are encoded as "12" like zymes (e.g., "1" & "2" alleles together).
+`separated`   | Alleles are already separated by ":" character (for putting in polyploid data)
+
 
 Here is some examples.
 
 ```{r}
 loc0 <- locus( )
 loc1 <- locus( 1 )
-loc2 <- locus( c("C","A"), is.phased=TRUE )
+loc2 <- locus( c("C","A"), phased=TRUE )
 loc3 <- locus( c("C","A") )
-loc4 <- locus( 12, is.zyme=TRUE )
+loc4 <- locus( 12, type="zyme" )
 loc5 <- locus( 1:4 )
-loc6 <- locus( "A:C:C:G", is.separated=TRUE )
+loc6 <- locus( "A:C:C:G", type="separated" )
 loci <- c(loc0, loc1, loc2, loc3, loc4, loc5, loc6 )
 loci
 ```
@@ -108,8 +108,6 @@ And you can use normal vector processing of the locus vector to do normal R data
 is.na( df$Loci )
 is.heterozygote( df$Loci )
 ```
-
-
 
 
 
@@ -139,7 +137,7 @@ ls()
 
 ### Importing Data
 
-Importing data is not that difficult.  People tend to keep their data in spreadsheets or text files, which are easily accessable via R.  For genetic marker data **gstudio**  has a particular function, *read.population()* that is a mix between the traditional *read.table()* function and the *Locus()* functions.  Options for this function include:
+Importing data is not that difficult.  People tend to keep their data in spreadsheets or text files, which are easily accessable via R.  For genetic marker data **gstudio**  has a particular function, *read.population()* that is a mix between the traditional *read.table()* function and the *locus()* functions.  Options for this function include:
 
 Option        |    Function
 ------------- | --------------
@@ -156,24 +154,60 @@ is.separated  | Flag indicating a colon separates individual alleles, must be si
 There are some example data files included in the project for you to look at. Depending upon how your computer is set up, they may be placed in different locations.  Here is a quick way to find out where the installed folder is for the **gstudio** package and the location of the 'data' folder within it.
 
 ```{r}
-system.file("data",package="gstudio")
+system.file("extdata",package="gstudio")
 ```
 
 
-Here are some examples of data files with different kinds of genetic data, each of which exercises the `read.population()` funciton in a different way.  Hopefully this covers the main types of data being imported, if not, drop me an email (rjdyer@vcu.edu).  
-
-Missing genotypes should be missing data or encoded as `NA`.  If you do not have a genotype then leave it blank.  There is no reason to use negative numbers or other conventions.  It is missing
+Here are some examples of data files with different kinds of genetic data, each of which exercises the `read.population()` function in a different way.  Hopefully this covers the main types of data being imported, if not, drop me an email (rjdyer@vcu.edu).  Missing genotypes should be missing data or encoded as `NA`.  If you do not have a genotype then leave it blank.  There is no reason to use negative numbers or other conventions.  It is missing
 
 #### Two Column Data
 
+
+
+```{r}
+file <- system.file("extdata","data_2_column.csv",package="gstudio")
+data <- read.population(file,type="column", locus.columns=4:7)
+data
+```
+
+
+##### Phased Data
+
+```{r}
+file <- system.file("extdata","data_2_column.csv",package="gstudio")
+data <- read.population(file,type="column", locus.columns=4:7, phased=TRUE)
+data
+```
+
+
+
 #### SNP Minor Allele Data
+
+```{r}
+file <- system.file("extdata","data_snp.csv",package="gstudio")
+data <- read.population(file,type="snp", locus.columns=4:7)
+data
+```
+
+
 
 #### Zyme-Like Data
 
-#### Phased Data
+```{r}
+file <- system.file("extdata","data_zymelike.csv",package="gstudio")
+data <- read.population(file,type="zyme", locus.columns=4:7)
+data
+```
+
+
 
 #### Pre-Separated Data For Higher Ploidy
 
+```{r}
+file <- system.file("extdata","data_separated.csv",package="gstudio")
+data <- read.population(file,type="separated", locus.columns=c(4,5))
+data
+```
 
 
 
