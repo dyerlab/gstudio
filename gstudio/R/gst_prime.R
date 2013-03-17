@@ -22,7 +22,7 @@ Gst_prime <- function( strata, loci, nperm=0, size.correct=TRUE ) {
   strata.lvls <- levels(strata)
   
   totfreq <- 1 # FIXME allele.spectrum( loci )
-  inds <- as.matrix.locus(loci,alleles=alleles(totfreq) )
+  inds <- to_mv.locus(loci,alleles=alleles(totfreq) )
   p.vec <- colSums(inds)
   ht <- 1-sum((p.vec/sum(p.vec))^2)
   hs <- mean(unlist(lapply( strata.lvls, 

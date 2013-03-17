@@ -13,7 +13,8 @@ test_that("strata",{
   CC <- locus( c("C","C") )
   CD <- locus( c("C","D") )
   DD <- locus( c("D","D") )
-  loci <- as.matrix( c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD) )
+  
+  loci <- to_mv( c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD) )
   
   expect_that( dist_amova(c(1,1), loci ), equals(0) )
   expect_that( dist_amova(c(1,2), loci ), equals(1) )

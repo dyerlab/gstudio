@@ -21,7 +21,7 @@ Dest <- function( strata, loci, nperm=0, size.correct=FALSE ) {
   strata.lvls <- levels(strata)
   
   totfreq <- frequencies( loci )
-  inds <- as.matrix.locus(loci,alleles=alleles(totfreq) )
+  inds <- to_mv.locus(loci,alleles=alleles(totfreq) )
   p.vec <- colSums(inds)
   ht <- 1-sum((p.vec/sum(p.vec))^2)
   hs <- mean(unlist(lapply( strata.lvls, 

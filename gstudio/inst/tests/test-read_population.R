@@ -2,20 +2,17 @@ context("read_population.R")
 
 test_that("error checking", {
   path <- system.file("extdata","data_2_column.csv",package="gstudio")
-   
   # normal data.frame w/o genetic dta
   expect_that( data <- read.population(path), throws_error() )
-    
   # bad locus.columns
   expect_that( (data <- read.population(path, locus.columns="BOB")), throws_error() )
-
   # wrong value for locus.columns
-  expect_that( (data <- read.population(path, locus.columns=2:40)), throws_error() )
-  
+  expect_that( (data <- read.population(path, locus.columns=2:40)), throws_error() )  
 })
 
 
 test_that("two column file", {
+  
   path <- system.file("extdata","data_2_column.csv",package="gstudio")
 
   # self-correcting locus.column
@@ -44,7 +41,6 @@ test_that("reading separated data file",{
   expect_that( data, is_a("data.frame") )
   expect_that( length( column_class(data,"locus")), equals(2) )
 })
-
 
 
 test_that("reading snp data file",{

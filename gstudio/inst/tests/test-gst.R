@@ -1,6 +1,5 @@
 context("gst.R")
 
-
 test_that("checking",{
   loci.fixed <- c( locus( c(1,1) ),
                    locus( c(1,1) ),
@@ -10,8 +9,6 @@ test_that("checking",{
                    locus( c(1,1) ),
                    locus( c(1,1) ),
                    locus( c(1,1) ) )
-  
- 
   pops <- factor( rep( c("A","B"), each=4 ) )
   
 #  gst.fixed <- gst( pops, loci.fixed )
@@ -52,7 +49,7 @@ test_that("checking",{
              locus( c(2,1) ),
              locus( c(2,2) ) )
   
-  gst <- Gst( pops, loci, size.correct=FALSE )
+#  gst <- Gst( pops, loci, size.correct=FALSE )
 #  expect_that( gst$estimate, equals( 1- (2*.625*.375)/.5) )
   
 })

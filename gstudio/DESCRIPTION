@@ -3,7 +3,6 @@ Maintainer: Rodney J. Dyer <rjdyer@vcu.edu>
 License: GPL (>= 2)
 Title: Spatial utility functions from the Dyer laboratory
 Type: Package
-LazyLoad: yes
 Author: Rodney J. Dyer <rjdyer@vcu.edu>
 Description: This package contains classes and functions for
     the spatial analysis of marker data to include structure
@@ -14,6 +13,7 @@ Description: This package contains classes and functions for
     directly.
 Version: 1.0
 Date: 2012-10-11
+LazyLoad: true
 Depends:
     R (>= 2.15),
     ggplot2,
@@ -23,12 +23,12 @@ Depends:
     raster
 Suggests:
     testthat,
-    knitr
+    knitr,
+    ggdendro
 VignetteBuilder: knitr
 Collate:
     'alleles.R'
     'as_data_frame.R'
-    'as_matrix.R'
     'column_class.R'
     'cov_2_dist.R'
     'dest.r'
@@ -63,3 +63,4 @@ Collate:
     'is_frequency.R'
     'fis.R'
     'plot_frequencies.R'
+    'to_mv.R'

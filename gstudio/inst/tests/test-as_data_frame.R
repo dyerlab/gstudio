@@ -16,8 +16,6 @@ test_that( "genetic_structure",{
              locus( c(2,2) ) )
   pops <- rep( c("A","B"), each=4 )
   df <- data.frame( Population=pops, TPI=loci )
-  
-  gs <- genetic_structure( df, verbose=FALSE  )
 })
 
 
