@@ -490,6 +490,59 @@ pops <- as.numeric(df$Pop[ df$Species=="CladeC"])
 
 
 
+## Genetic Distance
+
+
+There are several genetic distances available within the **gstudio** package and the ability to use multivariate analogs of genotypes opens up all distance essentially all distance metrics to the end user.  In the stuff that follows are the distances that are internally implemented in the pacakge along with a brief overview.
+
+
+
+### Individual Distances
+
+At the base level, you can estimate distances among individuals resulting in an $NxN$ matrix of pair-wise distances.  This is internally how the AMOVA anlaysis is conducted and is a nice heuristic for conceptual understanding of variance decomposition.  
+
+
+#### AMOVA Distance
+
+
+
+
+#### Bray Curtis Individual Distance
+
+
+
+
+
+
+
+
+### Strata Distances
+
+
+#### Euclidean Distance
+
+
+#### Cavalli-Sforza Distance
+
+\[
+D_{CS,m,n} =  \frac{2}{\pi}\sqrt{ 2 * 1-\sum_{i=1}^{\ell} p_{m,i}*p_{n,i}}
+\]
+
+#### Jaccard Distance
+
+
+
+#### Conditional Genetic Distance (cGD; Graph Distance)
+
+
+#### Nei's Genetic Distance
+
+
+
+
+
+
+
 ## Genetic Structure
 
 

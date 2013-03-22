@@ -54,7 +54,7 @@ genetic_distance <- function( x, stratum="Population", mode=c("AMOVA","cGD")[1],
   
   #######################  Individual Distances
   if( mode == "AMOVA" ) 
-    ret <- apply( idx, 1, dist_amova, data=as.matrix(data) ) 
+    ret <- apply( idx, 1, dist_amova, data=to_mv(data) ) 
   
   else if( mode=="Jaccard")
     ret <- apply( idx, 1, dist_jaccard, data=data, nLoc=nLoc)

@@ -46,7 +46,6 @@ to_mv.locus <- function( x, ploidy=2, alleles=NA, drop.allele=FALSE, ... ){
   # asking for single locus
   else { 
     all.alleles <- alleles(x)
-    print(any(all.alleles==FALSE))
     ret <- list()
     ret[alleles] <- 0
     for( allele in all.alleles) 
