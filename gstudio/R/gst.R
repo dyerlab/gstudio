@@ -12,6 +12,7 @@
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
 Gst <- function( strata, loci, nperm=0, size.correct=TRUE ) {
+  
   if( !is(loci,"locus") )
     stop("This function requires objects of type 'locus' to function.")
   
@@ -22,8 +23,9 @@ Gst <- function( strata, loci, nperm=0, size.correct=TRUE ) {
   strata.lvls <- levels(strata)
   
   totfreq <- frequencies( loci )
-  inds <- to_mv.locus(loci,alleles=alleles(totfreq) )
+  inds <- to_mv.locus(loci )
   p.vec <- colSums(inds)
+ 
   ht <- 1-sum((p.vec/sum(p.vec))^2)
   hs <- mean(unlist(lapply( strata.lvls, 
                             function(strat,inds,strata ) {
@@ -32,12 +34,19 @@ Gst <- function( strata, loci, nperm=0, size.correct=TRUE ) {
                               return(f)
                             }, inds=inds, strata=strata)))
   
-  if( size.correct ) {
+  if( ht == 0 ) {
+    gst <- NA
+    ht.estimated <- 0
+    hs.estimated <- 0
+  }
+  
+  else if( size.correct ) {
     n.harmonic <- 1/mean(1/table(strata))
     hs.estimated <- (2*n.harmonic)/(2*n.harmonic -1) * hs
     ht.estimated <- ht + hs.estimated/(2*k*n.harmonic)
     gst <- 1-hs.estimated/ht.estimated    
   }
+  
   else {
     gst <- 1-hs/ht
     hs.estimated <- hs
@@ -46,7 +55,7 @@ Gst <- function( strata, loci, nperm=0, size.correct=TRUE ) {
     
   
   
-  if( nperm > 0 ) {
+  if( nperm > 0 & ht > 0 ) {
     perms <- rep(NA,nperm)
     for(i in 1:nperm ) {
       hs.perm <- lapply( strata.lvls, 
@@ -64,12 +73,11 @@ Gst <- function( strata, loci, nperm=0, size.correct=TRUE ) {
     }
     else
       perms <- 1 - perms/ht
-
   }
   else
     perms <- numeric(0)
   
-  ret <- structure_statistic( mode="Gst", estimate=Gst, ci=perms, Hs=hs.estimated, Ht=ht.estimated )
+  ret <- structure_statistic( mode="Gst", estimate=gst, ci=perms, Hs=hs.estimated, Ht=ht.estimated )
   
   return( ret )
 }

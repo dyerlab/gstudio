@@ -9,6 +9,7 @@
 #'  \item{Gst}{Nei's Gst (not Berg and Hamrick)}
 #'  \item{Gst_prime}{Hedrick's correction of Nei's Gst for diverse loci}
 #'  \item{Dest}{Joost's estimate}
+#'  \item{AMOVA}{Analysis of MOlecular VAriance}
 #' }
 #' @param loci The name of loci to be used.
 #' @param nperm The number of permutations used to test the hypothesis that
@@ -22,7 +23,7 @@
 
 genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime", "Dest")[1], loci="All", nperm=0, verbose=TRUE ) {
   
-  if( ! inherits(x,"data.frame") )
+  if( !inherits(x,"data.frame") )
       stop("You need to pass a data frame to the funciton genetic_structure()...")
     
   if( !(stratum %in% names(x) ) ) 
@@ -32,7 +33,7 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
     loci <- column_class( x, "locus" )
   
   else if( any(setdiff(loci,column_class(x,"locus"))) )
-    stop("Some of the loci requested are not in the ,.")
+    stop("Some of the loci requested are not in the data.frame")
   
   strata <- x[[stratum]]
   
