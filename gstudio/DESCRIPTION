@@ -14,6 +14,7 @@ Description: This package contains classes and functions for
 Version: 1.0
 Date: 2012-10-11
 LazyLoad: true
+VignetteBuilder: knitr
 Depends:
     R (>= 2.15),
     ggplot2,
@@ -23,9 +24,7 @@ Depends:
     raster
 Suggests:
     testthat,
-    knitr,
-    ggdendro
-VignetteBuilder: knitr
+    knitr
 Collate:
     'alleles.R'
     'as_data_frame.R'

@@ -1,6 +1,7 @@
 <!--
-%\VignetteEngine{knitr}
-%\VignetteIndexEntry{Using gstudio}
+% \VignetteEngine{knitr::knitr}
+% \VignetteIndexEntry{gstudio}
+% \VignetteKeyword{gstudio}
 -->
 
 <link href="http://dyerlab.bio.vcu.edu/media/dyerlab.doc.css" rel="stylesheet"></link>
@@ -466,9 +467,7 @@ Looks like there are three main groups divided by clade and within the more dens
 ```{r,fig.width=12}
 baja <- pred[df$Species=="CladeC",]
 h <- hclust( dist( baja ), method="single")
-#plclust(h,main="Main Baja California Clade")
-require(ggdendro)
-ggdendrogram(hc, rotate=FALSE, size=2)
+plclust(h,main="Main Baja California Clade")
 ```
 
 
