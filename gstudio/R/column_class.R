@@ -44,3 +44,5 @@ column_class <- function( x, class, mode=c("label","index")[1] ) {
   else
     return(NA)
 }
+
+

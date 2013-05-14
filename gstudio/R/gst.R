@@ -81,3 +81,5 @@ Gst <- function( strata, loci, nperm=0, size.correct=TRUE ) {
   
   return( ret )
 }
+
+

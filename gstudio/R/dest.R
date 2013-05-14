@@ -70,3 +70,6 @@ Dest <- function( strata, loci, nperm=0, size.correct=FALSE ) {
   
   return( ret )
 }
+
+
+

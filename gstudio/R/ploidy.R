@@ -20,4 +20,4 @@ ploidy <- function ( x ) {
   else
     return( length( alleles( x ) ) )
 }
- 
+

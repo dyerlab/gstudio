@@ -15,3 +15,6 @@ indices <- function( seq, only.unique=TRUE ) {
     ret <- ret[ ret[,1] < ret[,2],  ]
   return(ret)
 } 
+
+
+

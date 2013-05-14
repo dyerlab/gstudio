@@ -13,3 +13,6 @@ dist_bray <- function( idx, data, nloc=1 ) {
   ret <- -log( sum(apply(x,1,min)) / nloc )
   return(ret)
 }
+
+
+
