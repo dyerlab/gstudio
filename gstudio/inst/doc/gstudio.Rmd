@@ -505,14 +505,23 @@ At the base level, you can estimate distances among individuals resulting in an 
 
 #### AMOVA Distance
 
+\[
+\delta_{ij}^2 = 2(p_i-p_j)^2
+\]
 
+#### Jaccard Distance
+\[
+J_\delta(A,B) = \frac{|A \bigcup B| - |A \bigcap B|}{|A \bigcup B|}
+\]
 
 
 #### Bray Curtis Individual Distance
 
 
 
-
+\[
+BC_\delta = \frac{S_i + S_j - 2S_{ij}}{S_i+S_j}
+\]
 
 
 
