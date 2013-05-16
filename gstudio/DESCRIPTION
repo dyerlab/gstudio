@@ -64,3 +64,4 @@ Collate:
     'plot_frequencies.R'
     'to_mv.R'
     'allelic.diversity.R'
+    'rarefaction.R'

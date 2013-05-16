@@ -490,9 +490,35 @@ allelic.diversity(loci,mode="A95")
 ```
 
 
-#### Rarefraction
+#### Rarefaction
 
-Rarefraction is a technique used to measure diversity in  look at diversity when you have 
+Rarefaction is a technique used to measure diversity in different populations.  It is particularly important for situations where you have different sample sizes.  Is there more diversity in the larger population because you sampled more or is it a truely more diverse population?  I'll use the data from the beetle to show how diversity changes with sample sizes and highlight how you can use the *rarefaction()* function.  
+
+In the mainland populations, there are only 36 samples and the allelic diversity is relatively low at the WNT locus.
+
+```{r}
+loci.son <- arapat$WNT[ arapat$Species == "CladeB" ] 
+length( loci.son )
+allelic.diversity( loci.son, mode="Ae")
+```
+
+The larger clade on the peninsula has many more individuals and is more diverse.  
+
+```{r}
+loci.baja <- arapat$WNT[ arapat$Species == "CladeC" ]
+length( loci.baja )
+allelic.diversity( loci.baja, mode="Ae")
+```
+
+So is this difference a consequence of the sample sizes or is peninsular Baja California more genetically diverse?  To answer this, rarefaction randomly subsamples the loci.baja data and estimates the value of $\hat{A}_e$ for samples of size 36 (for our case) to see if the observed diversity differences are due to sampling alone.  To visualize the distribution, I throw it into a *data.frame* and use the **ggplot2** functions to make the pretty colored histogram.
+
+```{r warning=FALSE}
+Ae.Baja  <- rarefaction(loci.baja, mode="Ae", size=36)
+df <- data.frame( Ae.Baja )
+ggplot( df, aes(x=Ae.Baja) ) + geom_histogram(aes(fill=..count..)) + scale_fill_gradient("count",low="#cccccc",high="#a60000") + theme_bw()
+```
+
+
 
 ### Heterozygosity
 
