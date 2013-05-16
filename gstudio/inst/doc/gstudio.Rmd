@@ -311,14 +311,6 @@ class( freq.EF)
 freq.EF
 ```
 
-Quick population genetic parameters related to heterozygosity are also easily accessed.
-
-```{r}
-Ho( arapat$EF )
-He( arapat$EF )
-Fis( arapat$EF )
-```
-
 
 
 
@@ -467,27 +459,68 @@ Looks like there are three main groups divided by clade and within the more dens
 ```{r,fig.width=12}
 baja <- pred[df$Species=="CladeC",]
 h <- hclust( dist( baja ), method="single")
-plclust(h,main="Main Baja California Clade")
+plclust(h,main="Main Baja California Clade", xlab="")
 ```
 
-
-Lets make it just a little better by coloring the leaves by population.
-
-```{r}
-pops <- as.numeric(df$Pop[ df$Species=="CladeC"])
-```
 
 
 ## Genetic Diversity
 
+Genetic diversity is estimated by several different means.  It can be estiamted at several different levels; at individuals, at groups, at populations, etc.  It can also be estimated by several different parameters.  This section covers some of the more common parameters used for quantifying genetic diversity.
 
 
-### Rarefraction
+### Allelic Diversity
 
+At the most basic level, the number of alleles within a group of individuals is a base measure of diversity.  However, there are some caveats to be made about the way in which we count alleles.  Rare alleles may or may not be as informative.  The three ways commonly used to look at allelic diversity are
+
+1. The total number of alleles ($A$).
+2. The effective number of alleles ($A_e$).
+3. The number of alleles with at least 5% frequency ($A_{95}$).
+
+These parameters are estimated from your data using the **allelic.diversity()** function.  The argument **mode** takes either "A" (the default), "Ae", or "A95" to differentiate.
+
+```{r}
+AA <- locus( c("A","A") )
+AB <- locus( c("A","B") )
+loci <- c(AA,AB,AA,AA,AA,AA,AA,AA,AA,AA,AA)
+loci
+allelic.diversity(loci)
+allelic.diversity(loci,mode="Ae")
+allelic.diversity(loci,mode="A95")
+```
+
+
+#### Rarefraction
+
+Rarefraction is a technique used to measure diversity in  look at diversity when you have 
+
+### Heterozygosity
+
+At a base level, heterozygosity is a form of diversity.  
+
+
+Quick population genetic parameters related to heterozygosity are also easily accessed.
+
+```{r}
+Ho( arapat$EF )
+He( arapat$EF )
+```
 
 
 ### Inbreeding
 
+Inbreeding is a consequence of mating patterns and/or demographic population size.  The consequences of inbreeding are related to how alleles are put into genotypes.  One approach to looking at inbreeding is to estimate the expected frequency of heterozygotes (e.g., the $2pq$ part of the classic Hardy-Weinberg equation) and compare it to the observed level of inbreeding. This is the classic $F$ statistic and is estimated as:
+
+\[
+F_{IS} = 1 - \frac{H_{O}}{H_{E}}
+\]
+
+Using the beetle data again, from the maps above we see three mainland populations and there is a good reason to believe that these are a separate species (see Garrick *et al.* 2013).  These populations are small and isolated and as such may experience inbreeding.  
+
+```{r}
+sonora <- arapat[ arapat$Species == "CladeB",]
+Fis( sonora )
+```
 
 
 
@@ -510,29 +543,60 @@ At the base level, you can estimate distances among individuals resulting in an 
 \]
 
 #### Jaccard Distance
+
+Jaccard distance is a set-theoretic distance quantifying dissimilarity.  Assuming that loci are sets of alleles, the Jaccard dissimilarity between genotypes $A$ and $B$ is given by:
+
 \[
 J_\delta(A,B) = \frac{|A \bigcup B| - |A \bigcap B|}{|A \bigcup B|}
 \]
+
+You can look at the elements of the LTRS matrix (it is 36x36 so I am not printing it out here).  With \texttt{mode="Jaccard"}, missing genotypes will result in \texttt{NA} rows and columns in the distance matrix.  It is no entirely clear how this metric can easily handle missing genotypes.
+
 
 
 #### Bray Curtis Individual Distance
 
 
+Bray-Curtis Distance (Bray \& Curtis 1957) has been primarily used to quantify differences in species composition.  It is defined as the total number of species that are unique to either of the two sites standardized by the number of species in both sites.  
 
 \[
 BC_\delta = \frac{S_i + S_j - 2S_{ij}}{S_i+S_j}
 \]
 
-
+where $S_x$ is the species count and $S_{ij}$ is the sum of minimum abundances.  Lately, this has seen considerable use within individual-based landscape genetic studies.  Missing genotypes are set to average allele frequencies, that is to say that every missing genotype is considered to have all the alleles present in the entire population, but with probability equal to their global frequencies.  Essentially, this removes the \texttt{NA} problem like in the \texttt{mode="Jaccard"} situation and does so by taking the non-missing genotype's genetic distance from the global genetic centroid (it's cosmic man!).  Here is the estimation using two loci.
 
 
 ### Strata Distances
 
 
+Genetic distances can also be estimated among groups of individuals.  The same data will be used here but since there are only three populations, we'll be able to see the whole distance matrix. 
+
+
 #### Euclidean Distance
 
 
+Euclidean distance is the most straight-forward distance metric available as it is essentially straight-line distance based upon the allele frequencies in each population.  It is given by:
+
+\[
+  d_{eucl} = \sqrt{ \sum_{j=1}^L(p_{ij} - p_{kj})^2 }
+\]
+
+where $p_{ij}$ and $p_{kj}$ are the frequencies of the $j^{th}$ allele in both the $i^{th}$ and $j^{th}$ population.  In this and the following distance examples, I am going to take the resulting distance matrix among all pairs of populations and put them into a Neighbor joining tree (via the *nj()* function from the *ape* package) as it may be easier to see differences in topologies rather than matrices.
+
+It is perhaps easiest to think of Euclidean distance in x,y coordinate space.  This distance can be estimated by *stratum.distance()* using the optional parameter *method='eucl'* and it will return a *dist* matrix.
+
+Once the matrix has been estimated, you can visualize it in many ways.  One of the most straight-forward approaches it to visualizing the relationships among rows and columns is to put it into a bifurcating tree.  
+
+
 #### Cavalli-Sforza Distance
+
+Another distance approach that is commonly used for microsatellite loci is Cavalli-Sforza distance, $D_C$ (Cavalli-Sforza and Edwards, 1967).  Here population allele frequencies are plot on the surface of a sphere (radius=1) using the square root of the allele frequencies.  
+
+\[
+  D_C = \frac{2}{\pi}\sqrt{(2-2cos\theta)}
+\]
+
+The genetic distance, $D_C$ is measured as the chord distance as indicated in Figure.  The resulting Neighbor joining tree from this distance is shown in Figure \ref{fig:cavalli_dist}
 
 \[
 D_{CS,m,n} =  \frac{2}{\pi}\sqrt{ 2 * 1-\sum_{i=1}^{\ell} p_{m,i}*p_{n,i}}

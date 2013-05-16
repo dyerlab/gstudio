@@ -1,0 +1,47 @@
+#' Estimates allelic diversity
+#' 
+#' This function takes a single \code{locus} object or a \code{data.frame} object
+#'  and estimates allelic diversity as either the number of alleles, the effective
+#'  number of alleles, or the number of alleles observed at a frequency of at least
+#'  five percent.
+#' @param x A \code{locus} object or a \code{data.frame} with some loci in it
+#' @param mode The kind of diversity to estimate.  Current options include 'A' the 
+#'  total number of alleles, 'Ae' the effective number of alleles, and 'A95' the 
+#'  number of alleles with a frequency of at least five percent.
+#' @return Numeric value for diversity
+#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @export
+allelic.diversity <- function( x, mode=c("A","Ae","A95")[1] ) {
+  
+  if( !(mode %in% c("A","Ae","A95" ) ) )
+    stop("The 'mode' you passed for allelic.diversity() is not recognized.")
+  
+  if( is(x,"locus") ) {
+    
+    a <- NA
+    if( mode == "A" ) {
+      a <- as.numeric( sum(!is.na(unique( matrix( alleles( x ), ncol=1 )) )) )
+    }
+    else if( mode == "Ae" ) {
+      a <- 1 / ( 1 - He(x) )
+    }
+    else if( mode == "A95") {
+      a <- sum(frequencies.locus(x)[,2] >= 0.05)
+    }
+    names(a) <- mode
+    return( a )
+  }
+  
+  else if( is(x,"data.frame") ) { 
+    cols <- column_class(x,"locus")
+    ret <- list()
+    for( col in cols )
+      ret[[col]] <- allelic.diversity( x[[col]], mode )
+    ret <- as.numeric( ret )
+    names(ret) <- cols
+    return( ret )
+  }
+  else
+    stop("data type 'x' passed to allelic.diversity() not recognized.")
+}
+
