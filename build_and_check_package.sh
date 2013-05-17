@@ -25,7 +25,7 @@ perl -pi -e 's/\"}/}/g' ./gstudio/man/*.Rd
 perl -pi -e 's/{\"/{/g' ./gstudio/man/*.Rd
 
 # build the package with compacted vignettes
-R CMD build ./gstudio --compact-vignettes --resave-data
+R CMD build ./gstudio --resave-data
 
 # check the package against CRAN
 R CMD check gstudio_1.0.tar.gz --as-cran

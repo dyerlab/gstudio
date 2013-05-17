@@ -3,7 +3,7 @@
 #' This function takes some data and does perumations on it and passes
 #'  it along to the indicated function.  There are options for permuting
 #'  genotypes or permuting alleles.  Make sure you know the difference.
-#' @param x The \class{locus} data being used.
+#' @param x The \code{locus} data being used.
 #' @param stratum An optional argument if passed, permutes \code{x} among 
 #'  strata and gives the results to the function.
 #' @param allele_perm A flag (default=TRUE) to permute alleles in the

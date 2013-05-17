@@ -1,10 +1,13 @@
 <!--
-% \VignetteEngine{knitr::knitr}
-% \VignetteIndexEntry{gstudio}
-% \VignetteKeyword{gstudio}
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{An general vignette for gstudio}
 -->
 
-<link href="http://dyerlab.bio.vcu.edu/media/dyerlab.doc.css" rel="stylesheet"></link>
+<link href="style.css" rel="stylesheet"></link>
+
+```{r css}
+options(markdown.HTML.stylesheet = system.file('doc', 'style.css', package='gstudio'))
+```
 
 ```{r setup, include=FALSE}
 library(knitr)
@@ -22,8 +25,9 @@ The **gstudio**  package is a package created to make the inclusion of marker ba
 
 
 
+---
 
-### Installing the package
+## Installing the package
 
 This package requires several other packages for installation.  By default, the install should be easily accomplished using the build-in functionalities in R.
 
@@ -48,9 +52,8 @@ require(gstudio, quietly=TRUE)
 
 This should get you everything you need. The **gstudio**  package does contain a lot of build-in documentation including a lot of examples.  All the functions and examples associaed with them can be found in the build-in documents available from:
 
-
 ```{r, eval=FALSE}
-help(package="gstudio")
+help(package="gstudio", help_type = 'html')
 ```
 
 At any point if you have any questions about the values or options for a particular function in **gstudio**  or any other package, you can use the  *help.search(func)* or *?* functionality.This file is also kept in sync with the development of the **gstudio**  package (it is in the source packge that you downloaded from CRAN) and will serve as a tutorial for your use of this package.  If there are any questions that you may have regarding this package, feel free to contact [Rodney Dyer](mailto://rjdyer@vcu.edu) and I will get back to you as soon as possible.
@@ -673,10 +676,19 @@ Using the beetle data again, from the maps above we see three mainland populatio
 
 ```{r}
 sonora <- arapat[ arapat$Species == "CladeB",]
-Fis( sonora )
+fis.sonora <- Fis( sonora )
+fis.sonora
 ```
 
-There are various ways to get a confidence interval on these kind of analyses.  In what follows is an implicit test of $H_O: F_{IS} = 0$ using permuation.  If that Null hypothesis is true, then any random perumation of alleles (combined into genotypes) sampled from this population would produce estimates of $F_{IS}$ as large as that observed.
+There are various ways to get a confidence interval on these kind of analyses.  In what follows is an implicit test of $H_O: F_{IS} = 0$ using permuation.  If that Null hypothesis is true, then any random perumation of alleles (combined into genotypes) sampled from this population would produce estimates of $F_{IS}$ as large as that observed.  This kind of permutation is handled by the function *permute_ci()* (though it can be applied to more complicated analysess as shown below).  Here is an example of how to use it to create the null distribution of $F_{IS}$ values given these data.  
+
+For simplicity, I only apply this to the $EN$ locus.
+
+```{r,warning=FALSE}
+fis.perm <- permute_ci( sonora$EN, FUN=Fis, nperm=999 )
+summary( fis.perm )
+```
+
 
 
 
