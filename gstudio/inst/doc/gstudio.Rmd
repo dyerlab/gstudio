@@ -57,9 +57,20 @@ At any point if you have any questions about the values or options for a particu
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
-
-
 
 ## Genetic Data 
 
@@ -255,7 +266,16 @@ column_class( arapat, class="locus")
 column_class( arapat, class="locus", mode="index" )
 ```
 
-#### Partitioning
+
+
+
+
+
+
+
+--
+
+## Partitioning
 
 The *Partition()* function takes a data frame and returns a list of data frames, partitioned by the stratum you pass to it.  This is really nice if you are doing a nested analysis of sorts and want to work with subsets of your data that are defined by a categorical *factor* variable.
 
@@ -265,8 +285,48 @@ clades <- partition( arapat, stratum="Species")
 names( clades )
 ```
 
+This kind of partitioning is very common in the analysis of spatial genetic stucture and as such should be as simple as possible to provide the most flexibility to you, the analyst.  One of the common analysis patterns that you will come back to over and over again is to partition the entire data set and perform operations on each of the subgroups.  In **R** this is a pretty easy process if you look into the *lapply()* function (and its relatives).  This is such an important component, that I'm going to spend a little time here to make sure you understand what I am doing.  Once you get it, it will make you life tremendously more awesome!
 
-### Plotting Populations
+The basic form of the various 'apply' functions is that you pass them some data and a function on which it will take each part of that data and apply it.  For lists (the *l* part in *lapply()*), the function will take each entry in the list and pass it along to the function.  The function itself can be one that is already available (like *length()* or *is.na()* or something) or it can be something you specify directly, on the fly.  Here is an example looking at the number of samples in each 'Species' as partitioned above.
+
+```{r}
+lapply( clades, dim)
+```
+
+Here the *dim()* function returns the dimension of the data.frame in each clade, all have the same number of columns, but differ in the number of individuals (the rows).  While this is a stupid example (you could get the same thing from *dim(arapat$Species*) but it shows the general pattern.  
+
+Where these functions come in handy is in creating your own functions.   These can be small functions that do something specific and can be shoved into the *lapply()* function directly.  This gives a lot of leeway in what you can do in R and is a very powerful way of understanding data.  Here is an example, say we want to know the number of individuals of each "Species" found in each population (some are in sympatry in the Cape Region of Baja California).  The general approach will be:
+
+1. Partition on population
++  Make a table of Species counts for each population.
++  Take resulting list and turn it into a matrix (use the *unlist()* function) with three columns (the *byrow=TRUE* is key here)
++  Add row and column labels
+
+```{r}
+pops <- partition( arapat, stratum="Population")
+counts <- lapply( pops, function(x) { return (table(x$Species) ) } )
+m <- matrix( unlist( counts), ncol=3, byrow=TRUE )
+rownames(m) <- names(pops)
+colnames(m) <- levels( arapat$Species )
+m[1:10,]
+```
+
+(only the first 10 rows are displayed).  You will see this kind of use of the *lapply()* throughout the rest of this document.
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+## Plotting Populations
 
 One of the key benefits to using an analysis environtment such as R is that you can mash together functionality that you just can't get from a monolithic program.  An example of this is plotting populations.  If your data has spatial coordinates in them then you can use this to plot the location of your sites on a GoogleMap tile.  By default, you **must** have your coordinates in decimal degree format.  This is the default for the GoogleMaps API.  Moreover, if you name the columns of data "Longitude" and "Latitude" much of the spatial functionality in **gstudio** will be more transparent (if not, you have to specify the Longitude and Latitude names each time you use a function that needs them).
 
@@ -295,6 +355,11 @@ ggmap( map ) + geom_point( aes(x=Longitude, y=Latitude, color=Cluster), data=dat
 
 
 
+
+
+
+
+---
 
 ## Allele Frequencies
 
@@ -410,8 +475,10 @@ ggplot( df, aes(x=Latitude,y=Frequency)) + geom_line(linetype=2) + geom_point(si
 I think this leads to some interesting questions about the relationship between potential species differences, where species are guaged by mtDNA, in nuclear allelic diversity.
 
 
-### Spatial Frequency Plots
 
+
+
+### Spatial Frequency Plots
 
 It is also possible to plot the data in a spatial context.  Here is an example of how to mix `ggplot` and `ggmap` data and I'll plot the locations as proportional in size to the allele frequency.
 
@@ -428,7 +495,22 @@ pies_on_map( arapat, stratum="Population", locus="EN")
 
 
 
-## Multivariate Analogs
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+## Multivariate Analogs for Loci
 
 Genotype data is inheriently multivariate.  In fact, it is multinomial multivarite *senus stricto* but we generally ignore that. That being said, we can easily translate raw genotypes into raw multivariate encodings for other statistical analyses.  Here is a quick example using a few individuals and the `WNT` locus.
 
@@ -464,7 +546,25 @@ plclust(h,main="Main Baja California Clade", xlab="")
 
 
 
-## Genetic Diversity
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+## Measures of Genetic Diversity
 
 Genetic diversity is estimated by several different means.  It can be estiamted at several different levels; at individuals, at groups, at populations, etc.  It can also be estimated by several different parameters.  This section covers some of the more common parameters used for quantifying genetic diversity.
 
@@ -522,18 +622,46 @@ ggplot( df, aes(x=Ae.Baja) ) + geom_histogram(aes(fill=..count..)) + scale_fill_
 
 ### Heterozygosity
 
-At a base level, heterozygosity is a form of diversity.  
-
-
-Quick population genetic parameters related to heterozygosity are also easily accessed.
+At a base level, heterozygosity is a form of diversity (see Nei).  Heterozygosity can be measured at many different stratum and in two forms.  All of these approaches can be accessed through the functions *Ho()* (for observed heterozygosity)  
 
 ```{r}
 Ho( arapat$EF )
+```
+
+and *He()* (for expected heterozygosity given Hardy Weinberg Equilibrium).
+
+```{r}
 He( arapat$EF )
 ```
 
+Given the broadness of these functions, it is easy to integrate them into broader analyses. Here is an example of expected heterozygosity ($H_E$ or genetic diversity in Nei's terms) as a function of latitude for the peninsular populations.  The output is displayed as a plot.
 
-### Inbreeding
+```{r}
+baja <- arapat[ arapat$Species != "CladeB",]
+coords <- strata_coordinates(baja)
+pops <- partition(baja,stratum="Population")
+he <- lapply( pops, function(x) return(He(x$EN, small.sample.correction=TRUE)) ) 
+data <- merge( coords, data.frame( Stratum=names(he), He=unlist(he)))
+data <- data[ order( data$Latitude), ]
+ggplot( data, aes(x=Latitude, y=He)) + geom_line(linetype=2) + geom_point(color="red",size=4)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+
+## Inbreeding
 
 Inbreeding is a consequence of mating patterns and/or demographic population size.  The consequences of inbreeding are related to how alleles are put into genotypes.  One approach to looking at inbreeding is to estimate the expected frequency of heterozygotes (e.g., the $2pq$ part of the classic Hardy-Weinberg equation) and compare it to the observed level of inbreeding. This is the classic $F$ statistic and is estimated as:
 
@@ -548,9 +676,24 @@ sonora <- arapat[ arapat$Species == "CladeB",]
 Fis( sonora )
 ```
 
+There are various ways to get a confidence interval on these kind of analyses.  In what follows is an implicit test of $H_O: F_{IS} = 0$ using permuation.  If that Null hypothesis is true, then any random perumation of alleles (combined into genotypes) sampled from this population would produce estimates of $F_{IS}$ as large as that observed.
 
 
-## Genetic Distance
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+## Measures of Genetic Distance
 
 
 There are several genetic distances available within the **gstudio** package and the ability to use multivariate analogs of genotypes opens up all distance essentially all distance metrics to the end user.  In the stuff that follows are the distances that are internally implemented in the pacakge along with a brief overview.

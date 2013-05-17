@@ -5,6 +5,6 @@
 # R.J. Dyer <rjdyer@vcu.edu>
 #
 
-perl -pi -e 's/\"}/}/g' ./gstudio/man/*.Rd
-perl -pi -e 's/{\"/{/g' ./gstudio/man/*.Rd
+perl -pi -e 's/\"}/}/g' ~/Documents/Dropbox/R/gstudio/gstudio/man/*.Rd
+perl -pi -e 's/{\"/{/g' ~/Documents/Dropbox/R/gstudio/gstudio/man/*.Rd
 

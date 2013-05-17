@@ -65,3 +65,4 @@ Collate:
     'to_mv.R'
     'allelic.diversity.R'
     'rarefaction.R'
+    'permute_ci.R'
