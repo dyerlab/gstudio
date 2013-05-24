@@ -14,7 +14,7 @@
 #' @return A list of labels or indices indicating where
 #'  columns of the querried type exist or a list of all column classes.
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu> 
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu} 
 #' 
 column_class <- function( x, class, mode=c("label","index")[1] ) {
   if( !inherits(x,"data.frame") )

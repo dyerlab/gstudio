@@ -21,7 +21,7 @@
 #' @param y.label The name of the label in \code{coords} to be used as y 
 #'  coordiantes (default "Y")
 #' @return A ggplot object.
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 #' 
 surface.point.plot <- function( raster, coords = NA, is.discrete=TRUE, palette=1, group=NA, x.label="X", y.label="Y" ) {

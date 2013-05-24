@@ -13,7 +13,7 @@
 #' @param replace A flag indicating if randomization should be with replacement (default FALSE)
 #' @param ... Passed on as arguments to \code{FUN}.
 #' @return A vector of permuted response values from the function.
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 permute_ci <- function( x, stratum=NULL, allele_perm=TRUE, nperm=99, FUN=NULL, replace=FALSE, ... ) {
   

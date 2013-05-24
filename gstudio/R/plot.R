@@ -6,7 +6,7 @@
 #' @return A ggplot object that is printed.
 #' @method plot structure_statistic
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 plot.structure_statistic <- function( x, ... ) {
   if( !length(x$confidence) ) 
     stop("Plotting a structure statistic without a permutation confidence is rather boring.")
@@ -55,7 +55,7 @@ plot.structure_statistic <- function( x, ... ) {
 #' @return A ggplot object that will be plotted by default.
 #' @method plot data.frame
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 plot.data.frame <- function( x, 
                              stratum="Population", 
                              Longitude="Longitude", Latitude="Latitude",  
@@ -91,7 +91,7 @@ plot.data.frame <- function( x,
 #' @param ... Ignored
 #' @method plot locus
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 plot.locus <- function( x, mode=c("bar","pie")[1], ... ) {
   require(ggplot2)
   f <- frequencies( x )
@@ -118,7 +118,7 @@ plot.locus <- function( x, mode=c("bar","pie")[1], ... ) {
 #' @param ... Ignored
 #' @method plot genetic_distance
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 
 plot.genetic_distance <- function( x, ...) {
   require(ggplot2)

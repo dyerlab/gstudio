@@ -7,7 +7,7 @@
 #'  of alleles present in the \code{locus} object.  
 #' @note A haploid or NA locus is never heterozygous.
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' 
 #' loc <- locus( 1:2 )

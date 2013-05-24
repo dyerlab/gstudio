@@ -8,7 +8,7 @@
 #'  and/or strata, you may have a difficult time getting it to look right.  By default, 
 #'  the function does NOTHING to prevent you from making crappy plots with too many 
 #'  levels.  To plot a reduced number of loci/strata, use a subset of your data.
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 plot_frequencies <- function(x){
   require(ggplot2)

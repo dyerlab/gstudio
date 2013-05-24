@@ -5,7 +5,7 @@
 #' @param x A square \code{matrix} representing covariance
 #' @return A square matrix of pair-wise distance values.
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @seealso \code{\link{dist_2_cov}}
 #' 
 cov_2_dist <- function( x ) {

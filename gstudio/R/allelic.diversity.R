@@ -9,7 +9,7 @@
 #'  total number of alleles, 'Ae' the effective number of alleles, and 'A95' the 
 #'  number of alleles with a frequency of at least five percent.
 #' @return Numeric value for diversity
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 allelic.diversity <- function( x, mode=c("A","Ae","A95")[1] ) {
   
@@ -20,13 +20,13 @@ allelic.diversity <- function( x, mode=c("A","Ae","A95")[1] ) {
     
     a <- NA
     if( mode == "A" ) {
-      a <- as.numeric( sum(!is.na(unique( matrix( alleles( x ), ncol=1 )) )) )
+      a <- A(x) 
     }
     else if( mode == "Ae" ) {
-      a <- 1 / ( 1 - He(x) )
+      a <- Ae(x) 
     }
     else if( mode == "A95") {
-      a <- sum(frequencies.locus(x)[,2] >= 0.05)
+      a <- A(x, min_freq=0.05) 
     }
     names(a) <- mode
     return( a )

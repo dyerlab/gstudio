@@ -7,9 +7,10 @@
 #' @param data The genotypes to examine.
 #' @param nLoc The number of loci (default=1)
 #' @return The Jaccard set dissimilarity
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 dist_jaccard <- function( idx, data, nLoc=1 ) {
   b  <- dist_bray( idx, data, nLoc)
+  
   return( (2*b)/(1+b))
 }

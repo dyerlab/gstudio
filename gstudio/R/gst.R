@@ -1,32 +1,33 @@
 #' Estimation Nei's Gst parameter
 #' 
-#' This function estimates the parameter (and potentially the confidence
-#'  surrounding its value).
+#' This function estimates Nei's Gst parameter and potentially
+#'  returns the components of it as well as the probability.  The results are returned
+#'  as a \code{data.frame}.
 #' @param strata A partitioning of data into groups
 #' @param loci A list of \code{\link{locus}} objects partitioned by stratum.
 #' @param nperm The number of permutations to run for significance of the
 #'  estimator.
 #' @param size.correct A flag indicating that the estimate should be corrected for
 #'  based upon sample sizes (default=TRUE).
-#' @return An object of type "structure statistic"
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @return An \code{data.frame} with Gst, Ht, and Hs and optionally P
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 Gst <- function( strata, loci, nperm=0, size.correct=TRUE ) {
   
-  if( !is(loci,"locus") )
+  if( !is( loci, "locus") )
     stop("This function requires objects of type 'locus' to function.")
   
-  if( !is(strata,"factor") )
-    strata <- factor( strata)
+  if( !is( strata, "factor") )
+    strata <- factor( strata )
   
-  k <- length(levels(strata))
-  strata.lvls <- levels(strata)
+  k <- length( levels( strata ) )
+  strata.lvls <- levels( strata )
   
   totfreq <- frequencies( loci )
-  inds <- to_mv.locus(loci )
-  p.vec <- colSums(inds)
+  inds <- to_mv.locus( loci )
+  p.vec <- colSums( inds )
  
-  ht <- 1-sum((p.vec/sum(p.vec))^2)
+  ht <- 1-sum( (p.vec / sum( p.vec ) )^2 )
   hs <- mean(unlist(lapply( strata.lvls, 
                             function(strat,inds,strata ) {
                               s <- colSums(as.matrix(inds[strata==strat,]))
@@ -55,6 +56,8 @@ Gst <- function( strata, loci, nperm=0, size.correct=TRUE ) {
     
   
   
+  
+  
   if( nperm > 0 & ht > 0 ) {
     perms <- rep(NA,nperm)
     for(i in 1:nperm ) {
@@ -73,11 +76,18 @@ Gst <- function( strata, loci, nperm=0, size.correct=TRUE ) {
     }
     else
       perms <- 1 - perms/ht
+    
+    perms <- perms[ !is.na(perms) ]
+    
+    P <- sum( perms >= gst ) / length(perms)
   }
-  else
-    perms <- numeric(0)
+  else 
+    P <- NA
   
-  ret <- structure_statistic( mode="Gst", estimate=gst, ci=perms, Hs=hs.estimated, Ht=ht.estimated )
+  
+  ret <- data.frame( Gst=gst, Hs=hs.estimated, Ht=ht.estimated, P=P)
+  
+  #ret <- structure_statistic( mode="Gst", estimate=gst, ci=perms, Hs=hs.estimated, Ht=ht.estimated )
   
   return( ret )
 }

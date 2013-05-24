@@ -5,7 +5,7 @@
 #' @return A square matrix representing covariance
 #' @seealso \code{\link{cov_2_dist}}
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' 
 dist_2_cov <- function( x ) {
   

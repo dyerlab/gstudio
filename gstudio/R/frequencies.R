@@ -10,7 +10,7 @@
 #' @param ... Ignored
 #' @return A data frame with Frequencies, Alleles, Loci, and perhaps 
 #'  Stratum columns (Allele and Frquencies are at a minimium).
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 frequencies <- function( x, loci, stratum, ... ) {
   UseMethod("frequencies")
@@ -18,7 +18,7 @@ frequencies <- function( x, loci, stratum, ... ) {
 
 #' @return A data frame with Frequencies, Alleles, Loci, and perhaps 
 #'  Stratum columns (Allele and Frquencies are at a minimium).
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @method frequencies default
 #' @rdname frequencies
 frequencies.default <- function( x, ... ) {
@@ -32,7 +32,7 @@ frequencies.default <- function( x, ... ) {
 
 #' @return A data frame with Frequencies, Alleles, Loci, and perhaps 
 #'  Stratum columns (Allele and Frquencies are at a minimium).
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @method frequencies locus
 #' @rdname frequencies
 #' @export
@@ -45,7 +45,7 @@ frequencies.locus <- function( x, loci, ... ) {
 
 #' @return A data frame with Frequencies, Alleles, Loci, and perhaps 
 #'  Stratum columns (Allele and Frquencies are at a minimium).
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @method frequencies data.frame
 #' @rdname frequencies
 #' @export

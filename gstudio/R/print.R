@@ -7,7 +7,7 @@
 #' @return The text
 #' @method print structure_statistic
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 print.structure_statistic <- function( x, ... ) {
   ret <- paste("Genetic Structure:", x$mode, "\n")
   if( !is.na(x$locus))

@@ -11,11 +11,5 @@ test_that("Allelic Diversity",{
   
   a <- allelic.diversity( loci, mode="A" )
   expect_that( names(a), equals("A"))
-  expect_that( a, is_equivalent_to(2) )
   
-  ae <- allelic.diversity( loci, mode="Ae" )
-  expect_that( ae<1.1, is_true())
-  
-  a95 <- allelic.diversity( loci, mode="A95" )
-  expect_that( a95, is_equivalent_to(1) )
 })

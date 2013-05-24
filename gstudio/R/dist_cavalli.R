@@ -5,7 +5,7 @@
 #' @param idx indices to compare
 #' @param data The genotypes to examine.
 #' @return The Cavalli-Sforza Genetic distance
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 dist_cavalli <- function( idx, data ) {
   px <- data[idx[1],]

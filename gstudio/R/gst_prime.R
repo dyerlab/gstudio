@@ -10,21 +10,29 @@
 #' @param size.correct A flag indicating that the estimate should be corrected for
 #'  based upon sample sizes (default=TRUE).
 #' @return An object of type "structure statistic"
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 Gst_prime <- function( strata, loci, nperm=0, size.correct=TRUE ) {
+  
   if( !is(loci,"locus") )
     stop("This function requires objects of type 'locus' to function.")
+  
+  if( missing( strata) )
+    stop("You need to specify strata for Gst_prime to be estimated.")
+  
   if( !is(strata,"factor") )
     strata <- factor( strata)
   
   k <- length(levels(strata))
-  strata.lvls <- levels(strata)
   
-  totfreq <- 1 # FIXME allele.spectrum( loci )
-  inds <- to_mv.locus(loci,alleles=alleles(totfreq) )
+  strata.lvls <- levels(strata)
+    
+  inds <- to_mv.locus(loci )
+  
   p.vec <- colSums(inds)
+  
   ht <- 1-sum((p.vec/sum(p.vec))^2)
+  
   hs <- mean(unlist(lapply( strata.lvls, 
                             function(strat,inds,strata ) {
                               s <- colSums(as.matrix(inds[strata==strat,]))
@@ -42,7 +50,7 @@ Gst_prime <- function( strata, loci, nperm=0, size.correct=TRUE ) {
   else {
     hs.estimated <- hs
     ht.estimated <- ht
-    Gst_prime <- 1-hs/ht * (k-1+hs)
+    Gst_prime <- (1-hs/ht) * (k-1+hs)
     Gst_prime <- Gst_prime / ((k-1)*(1-hs))
   }
   
@@ -67,12 +75,14 @@ Gst_prime <- function( strata, loci, nperm=0, size.correct=TRUE ) {
       Gst_prime.perm <- (1-perms/ht) * (k-1+perms)
       Gst_prime.perm <- Gst_prime.perm / ((k-1)*(1-perms))
     }
-
+    Gst_prime.perm <- Gst_prime.perm[ !is.na( Gst_prime.perm) ]
+    P <- sum( Gst_prime.perm >= Gst_prime ) / length( Gst_prime.perm )
   }
-  else
-    Gst_prime.perm <- numeric(0)
+  else 
+    P <- 0
   
-  ret <- structure_statistic( mode="Gst_prime", estimate=Gst_prime, ci=Gst_prime.perm, Hs=hs.estimated, Ht=ht.estimated )
+  ret <- data.frame( Gst=Gst_prime, Hs=hs.estimated, Ht=ht.estimated, P=P)
+    
   
   return( ret )
 }

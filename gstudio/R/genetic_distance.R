@@ -20,7 +20,7 @@
 #'  @return A \code{genetic_distance} object (also a matrix) with the genetic 
 #'    distances and a bit of additional information about its creation.
 #'  @export
-#'  @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#'  @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #'  
 genetic_distance <- function( x, stratum="Population", mode=c("AMOVA","cGD")[1], ... ){
   
@@ -43,61 +43,63 @@ genetic_distance <- function( x, stratum="Population", mode=c("AMOVA","cGD")[1],
   }
     
   else
-    stop("This function only works on objects of inheriting from 'data.frame' or 'locus")
+    stop("This function only works on objects of inheriting from either a 'data.frame' or a 'locus' object.")
 
   if( N < 2 )
     stop( "You need at least two entities to measure distance...")
   
   ret <- NULL
-  idx <- indices(1:N)
   
   
-  #######################  Individual Distances
-  if( mode == "AMOVA" ) 
-    ret <- apply( idx, 1, dist_amova, data=to_mv(data) ) 
   
-  else if( mode=="Jaccard")
-    ret <- apply( idx, 1, dist_jaccard, data=data, nLoc=nLoc)
-  
-  else if( mode == "BrayCurtis") 
-    ret <- apply( idx, 1, dist_bray, data=as.matrix(data), nLoc=nLoc) 
-  
+#   idx <- indices(1:N)
+#   
+#   
+#   #######################  Individual Distances
+#   if( mode == "AMOVA" ) 
+#     ret <- apply( idx, 1, dist_amova, data=to_mv(data) ) 
+#   
+#   else if( mode=="Jaccard")
+#     ret <- apply( idx, 1, dist_jaccard, data=data, nLoc=nLoc)
+#   
+#   else if( mode == "BrayCurtis") 
+#     ret <- apply( idx, 1, dist_bray, data=as.matrix(data), nLoc=nLoc) 
+#   
+# 
+# 
+#   
+#    #######################   Graph Distance
+#    else if( mode == "cGD" ){
+#      require(popgraph)
+#      graph <- population_graph(to_mv(data),groups=stratum)
+#      ret <- shortest.paths(graph)
+#      return( ret )
+#    }
+#   
+#   
+#   #######################   Stratum Distance
+#   else {
+#     data <- frequencies(x,stratum=stratum)
+#     attr(ret,"strata") <- row.names(data)
+#     
+#     if( mode=="Euclidean")
+#       ret <- apply( idx, 1, function(i,freqs) sqrt(sum( (freqs[i[1],]-freqs[i[2],])^2 )), freqs=data)
+#     
+#     # Cavalli-Sforza Edwards Distance
+#     else if( mode=="CavalliSforza")
+#       ret <- apply( idx, 1, dist_cavalli, data=data )
+# 
+#     # Nei Distance
+#     else if( mode=="Nei")  
+#       ret <- apply( idx, 1, dist.nei, data=data )
+#     
+#     else if( mode=="Dps")
+#       ret <- apply( idx, 1, dist_bray, data=data, nloc=nLoc )
+# 
+#     
+#   }
 
-
-  
-   #######################   Graph Distance
-   else if( mode == "cGD" ){
-    warning("Not implemented yet.")      
-   }
-  
-  
-  #######################   Graph Distance
-  else {
-    data <- frequencies(x,stratum=stratum)
-    attr(ret,"strata") <- row.names(data)
-    
-    if( mode=="Euclidean")
-      ret <- apply( idx, 1, function(i,freqs) sqrt(sum( (freqs[i[1],]-freqs[i[2],])^2 )), freqs=data)
-    
-    # Cavalli-Sforza Edwards Distance
-    else if( mode=="CavalliSforza")
-      ret <- apply( idx, 1, dist_cavalli, data=data )
-
-    # Nei Distance
-    else if( mode=="Nei")  
-      ret <- apply( idx, 1, dist.nei, data=data )
-    
-    else if( mode=="Dps")
-      ret <- apply( idx, 1, dist_bray, data=data, nloc=nLoc )
-
-    
-  }
-
-  m <- matrix(0,N,N)
-  m[ lower.tri(m)] <- ret
-  m <- m + t(m)
-  
-  return(m)
+  return(ret)
 }
 
 

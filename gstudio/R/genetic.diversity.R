@@ -22,7 +22,7 @@
 #'  @param ... Ignored in general, but can be used to pass options to \code{permute_ci}.
 #'  @return A \code{data.frame} with columns for strata, diversity (mode), and potentially P(mode=0).
 #'  @export
-#'  @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#'  @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 genetic.diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He","PIC")[2], perm_prob=FALSE, ...){
   if( missing(x) )
     stop("You must pass a data.frame to the genetic.diversity() function.")

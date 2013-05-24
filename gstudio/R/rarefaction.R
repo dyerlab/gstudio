@@ -7,7 +7,7 @@
 #' @param size The smaller sample size to use.
 #' @param nperm The number of times to subsample the data (default 999)
 #' @return A vector of permuted values.
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 rarefaction <- function( x, mode="Ae", size=0, nperm=999 ) {
   if( !is(x,"locus"))

@@ -8,7 +8,7 @@
 #' @param latitude The column name of the latitude
 #' @return A data frame, with Stratum Latitude and Longitude, summarized by center of each stratum.
 #' @export 
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 strata_coordinates <- function( 	x,
                                 stratum="Population", 
                                 longitude="Longitude", 

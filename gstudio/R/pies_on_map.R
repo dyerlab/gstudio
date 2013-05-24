@@ -11,7 +11,7 @@
 #' @param ... Ignored
 #' @return Nothing
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 pies_on_map <- function( x, stratum, locus, Longitude='Longitude', Latitude='Latitude',line.color="black", label=FALSE, ... ) {
   require( grid )
   

@@ -6,7 +6,7 @@
 #' @param x Either a \code{locus} object or a data.frame with locus objects.
 #' @return The inbreeding F statistic
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' 
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )

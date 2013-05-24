@@ -6,7 +6,7 @@
 #' @param x A \code{locus} object (single or vector)
 #' @return A count of the number of alleles in the \code{locus}
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' 
 #' loc <- locus( 1:2 )

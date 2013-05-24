@@ -18,6 +18,7 @@ test_that("error checks",{
   df <- data.frame( Population=c(rep("A",5),rep("B",5)), TPI=loc1, PGM=loc2 )
   
   expect_that( genetic_distance(df, mode="Bob"), throws_error() )
+  expect_that( genetic_distance( loc1, mode="Bob"), throws_error() )
   expect_that( genetic_distance( numeric(10), mode="AMOVA"), throws_error() )
   expect_that( genteic_distance( data.frame(A=numeric(0),mode="AMOVA")), throws_error() )
   

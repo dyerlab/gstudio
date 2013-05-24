@@ -23,7 +23,7 @@
 #'    each data type that will be treated as a \code{locus} object.
 #' @return A \code{data.frame} with \code{locus} columns pre-formatted.
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #'    
 
 

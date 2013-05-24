@@ -6,7 +6,7 @@
 #' @param data The genotypes to examine.
 #' @param nloc The number of loci 
 #' @return The Bray-Curtis set dissimilarity
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 dist_bray <- function( idx, data, nloc=1 ) {
   x <- cbind( data[idx[1],], data[idx[2],])

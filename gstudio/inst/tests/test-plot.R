@@ -29,16 +29,6 @@ test_that("genetic_distance",{
 
 
 
-test_that("structure_statistic",{
-  ss <- structure_statistic( "Gst",0,ci=rnorm(100) )
-  p <- plot(ss)
-  expect_that( inherits(p,"ggplot"), is_true() )
-  expect_that( p$data, is_a("data.frame"))
-  expect_that( p$data$Permuted.Values, is_a("numeric"))
-  
-})
-
-
 test_that("data.frame",{
   
   expect_that( 1, equals(1) )

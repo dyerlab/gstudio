@@ -9,11 +9,12 @@
 #' @param size.correct A flag indicating that the estimate should be corrected for
 #'  based upon sample sizes (default=TRUE).
 #' @return An object of type "structure statistic"
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 Dest <- function( strata, loci, nperm=0, size.correct=FALSE ) {
   if( !inherits(loci,"locus") )
     stop("This function requires objects of type 'locus' to function.")
+  
   if( !is(strata,"factor") )
     strata <- factor( strata)
   
@@ -21,7 +22,7 @@ Dest <- function( strata, loci, nperm=0, size.correct=FALSE ) {
   strata.lvls <- levels(strata)
   
   totfreq <- frequencies( loci )
-  inds <- to_mv.locus(loci,alleles=alleles(totfreq) )
+  inds <- to_mv.locus( loci )
   p.vec <- colSums(inds)
   ht <- 1-sum((p.vec/sum(p.vec))^2)
   hs <- mean(unlist(lapply( strata.lvls, 
@@ -62,11 +63,15 @@ Dest <- function( strata, loci, nperm=0, size.correct=FALSE ) {
       D.perm <- (ht-perms) /(1-perms)
     
     D.perm <- D.perm / (k/(k-1))
+    P <- sum( D.perm >= D ) / length( D.perm )
   }
   else
-    D.perm <- numeric(0)
+    P <- 0
   
-  ret <- structure_statistic( mode="Dest", estimate=D, ci=D.perm, Hs=hs.estimated, Ht=ht.estimated )
+  
+  
+  #ret <- structure_statistic( mode="Dest", estimate=D, ci=D.perm, Hs=hs.estimated, Ht=ht.estimated )
+  ret <- data.frame( Dest=D, Hs=hs.estimated, Ht=ht.estimated, P=P)
   
   return( ret )
 }

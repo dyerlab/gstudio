@@ -6,7 +6,7 @@
 #' @return A matrix of alleles.  If \code{x} is a vector then the result
 #'  will be represented by rows.
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 alleles <- function( x ) { 
   UseMethod( "alleles" )
 }

@@ -5,7 +5,7 @@
 #' @return A logical flag indicating if \code{x} is NA
 #' @method is.na locus
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' 
 is.na.locus <- function( x ) {
   

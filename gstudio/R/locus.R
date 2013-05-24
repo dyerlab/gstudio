@@ -18,7 +18,7 @@
 #' @param phased A flag indicating the the alleles should are of
 #'  known gametic phase (default=FALSE).
 #' @return Either a single or vector of objects of type \code{locus}.
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 locus <- function( x, type, phased=FALSE ){
   
@@ -117,7 +117,7 @@ locus <- function( x, type, phased=FALSE ){
 #' @return A \code{list} object.
 #' @method as.list locus
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' 
 #' loc1 <- c( locus(1:2), locus(1:2), locus( c(1,1) ) )
@@ -140,7 +140,7 @@ as.list.locus <- function( x, ... ) {
 #' @param x An object that is to be truned into a \code{locus}.
 #' @return An object of type \code{locus}
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @seealso \code{\link{locus}}
 #' @examples
 #' 
@@ -167,7 +167,7 @@ as.locus <- function( x ) {
 #' @return A vector of \code{locus} objects
 #' @method c locus
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' 
 #' loci <- c( locus(1:2), locus(1:2), locus( c(1,1) ) )
@@ -192,7 +192,7 @@ c.locus <- function(..., recursive = FALSE) {
 #' @return Nothing
 #' @method print locus
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' 
 #' loc <- locus( 1:2 )
@@ -222,7 +222,7 @@ print.locus <- function(x, ... ) {
 #' @return A summary of the vector of \code{locus} objects in \code{object}
 #' @method summary locus
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 
 summary.locus <- function(object,...) { 
   genos <- paste(as.character( object ), " ", sep="")
@@ -241,7 +241,7 @@ summary.locus <- function(object,...) {
 #' @param x An object to query
 #' @return A logical flag indicating if \code{x} is a type of \code{locus}
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' 
 #' loc1 <- locus( c("A","A") )
@@ -266,7 +266,7 @@ is.locus <- function ( x ) {
 #' @rdname locus-operator-index
 #' @method "[" locus
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' 
 #' loci <- c( locus(1:2), locus(1:2), locus( c(1,1) ) )
@@ -293,7 +293,7 @@ is.locus <- function ( x ) {
 #' @rdname locus-operator-plus
 #' @method "+" locus
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' 
 #' dad <- locus( c("A", "A") ) 
@@ -338,7 +338,7 @@ is.locus <- function ( x ) {
 #' @rdname locus-operator-minus
 #' @method "-" locus
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' 
 #' mom <- locus( c("A", "A") ) 

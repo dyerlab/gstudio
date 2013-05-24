@@ -8,7 +8,7 @@
 #' @param x An objet of type \code{\link{genetic_structure}}
 #' @param ... Ignored
 #' @return A data frame
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 #' @method as.data.frame genetic_structure
 as.data.frame.genetic_structure <- function(x, ...) {
@@ -41,7 +41,7 @@ as.data.frame.genetic_structure <- function(x, ...) {
 #'  of the variable you assigned it.  If this is confusing see the examples.
 #' @method as.data.frame locus
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' 
 #' loc1 <- c( locus(1:2), locus(1:2), locus( c(1,1) ) )

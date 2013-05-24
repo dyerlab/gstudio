@@ -3,16 +3,30 @@ context("dist_nei.R")
 
 test_that("test",{
 
-  f <- matrix( c(0.1, 0.3, 0.6, 0.2, 0.4, 0.4), ncol=3, byrow=T )
-  idx <- c(1,2)
+  AA <- locus( c("A","A") )
+  AB <- locus( c("A","B") )
+  BB <- locus( c("B","B") )
+  AC <- locus( c("A","C") )
+  AD <- locus( c("A","D") )
+  BC <- locus( c("B","C") )
+  BD <- locus( c("B","D") )
+  CC <- locus( c("C","C") )
+  CD <- locus( c("C","D") )
+  DD <- locus( c("D","D") )
+  loc1 <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD)
+  loc2 <- c(AA,AA,AC,AA,CC,CC,AC,CC,AA,AC)
+  df <- data.frame( Population=c(rep("A",5),rep("B",5)), TPI=loc1, PGM=loc2 )
   
-  d <- dist.nei( idx, f)
+  d <- dist.nei( df )
   
-  top <- sum( f[1,] * f[2,] )
-  bot <- sqrt( sum( f[1,]^2) * sum(f[2,]^2) )
-
-  n <- -log(top/bot)
-  expect_that( d, equals(n) )
+  expect_that( d, is_a("matrix"))
+  expect_that( nrow(d), equals(2) )
+  expect_that( ncol(d), equals(2) )
+  expect_that( sum(diag(d)), equals(0))
+  
+  expect_that( d[1,2]==d[2,1], is_true() )
+  expect_that( (d[1,2]-0.3507115 < 2e-7), is_true() )
+  
   
 
 })

@@ -6,7 +6,7 @@
 #' @param stratum The column name of the stratum to partition on (default='Population').
 #' @return A partitioned list of objects, indexed by name
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' 
 partition <- function( x, stratum="Population" ){
 

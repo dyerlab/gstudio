@@ -9,7 +9,7 @@
 #' @param ... Ignored
 #' @return The matrix representation of \code{x}.
 #' @export
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 to_mv <- function( x, ploidy, alleles, drop.allele=FALSE, ... ) { 
   UseMethod( "to_mv" )
 }
@@ -62,7 +62,7 @@ to_mv.locus <- function( x, ploidy=2, alleles=NA, drop.allele=FALSE, ... ){
 
 #' @return A matrix
 #' @method to_mv data.frame
-#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 #' @rdname to_mv
 to_mv.data.frame <- function (x, ploidy=2, alleles=NA, drop.allele=FALSE, ...)  {
