@@ -31,7 +31,7 @@ test_that("checking",{
   gst <- Gst( pops, loci.fixed )
   expect_that( gst$Gst, equals(1.) )
   
-  loci <- c( locus( c(1,1) ),
+  loci.1 <- c( locus( c(1,1) ),
              locus( c(1,2) ),
              locus( c(1,2) ),
              locus( c(1,1) ),
@@ -40,10 +40,10 @@ test_that("checking",{
              locus( c(2,1) ),
              locus( c(2,2) ) )
   
-  gst <- Gst( pops, loci, size.correct=FALSE )
+  gst <- Gst( pops, loci.1, size.correct=FALSE )
   expect_that( gst$Gst, equals( 1 - 0.375/0.5) )
   
-  loci <- c( locus( c(1,1) ),
+  loci.2 <- c( locus( c(1,1) ),
              locus( c(2,2) ),
              locus( c(1,2) ),
              locus( c(1,1) ),
@@ -52,7 +52,16 @@ test_that("checking",{
              locus( c(2,1) ),
              locus( c(2,2) ) )
   
-  gst <- Gst( pops, loci, size.correct=FALSE )
+  gst <- Gst( pops, loci.2, size.correct=FALSE )
   expect_that( gst$Gst, equals( 1- (2*.625*.375)/.5) )
+  
+  
+  loci <- data.frame( TPI = loci.1, PGM=loci.2)
+  gst <- Gst( pops, loci, nperm=99 )
+  expect_that( gst, is_a("data.frame"))
+  expect_that( dim(gst)[1], equals(3))
+  expect_that( dim(gst)[2], equals(5))
+  expect_that( names(gst), is_equivalent_to( c("Locus","Gst","Hs","Ht","P")))
+  
   
 })

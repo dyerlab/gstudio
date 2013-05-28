@@ -15,9 +15,9 @@ test_that("test",{
   DD <- locus( c("D","D") )
   loc1 <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD)
   loc2 <- c(AA,AA,AC,AA,CC,CC,AC,CC,AA,AC)
-  df <- data.frame( Population=c(rep("A",5),rep("B",5)), TPI=loc1, PGM=loc2 )
+  df <- data.frame( Population=c(rep("Pop-A",5),rep("Pop-B",5)), TPI=loc1, PGM=loc2 )
   
-  d <- dist.nei( df )
+  d <- dist_nei( df )
   
   expect_that( d, is_a("matrix"))
   expect_that( nrow(d), equals(2) )

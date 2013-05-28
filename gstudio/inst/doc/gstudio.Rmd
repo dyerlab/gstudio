@@ -5,13 +5,11 @@
 
 <link href="style.css" rel="stylesheet"></link>
 
-```{r css}
-options(markdown.HTML.stylesheet = system.file('doc', 'style.css', package='gstudio'))
-```
 
 ```{r setup, include=FALSE}
 library(knitr)
 opts_chunk$set(out.extra='style="display:block; margin: auto"', fig.align="center")
+options(markdown.HTML.stylesheet = system.file('doc', 'style.css', package='gstudio'))
 ```
 
 
@@ -35,7 +33,7 @@ This package requires several other packages for installation.  By default, the 
 install.packages("gstudio")
 ```
 
-Occassionally, you should look to see if there are updates to the package by doing the following (this will update all packages you have installed)
+Occasionally, you should look to see if there are updates to the package by doing the following (this will update all packages you have installed)
 
 ```{r, eval=FALSE}
 update.packages( ask=FALSE )
@@ -50,13 +48,13 @@ And any time you need to use the package, you would just pull it into your sessi
 require(gstudio, quietly=TRUE)
 ```
 
-This should get you everything you need. The **gstudio**  package does contain a lot of build-in documentation including a lot of examples.  All the functions and examples associaed with them can be found in the build-in documents available from:
+This should get you everything you need. The **gstudio**  package does contain a lot of build-in documentation including a lot of examples.  All the functions and examples associated with them can be found in the build-in documents available from:
 
 ```{r, eval=FALSE}
 help(package="gstudio", help_type = 'html')
 ```
 
-At any point if you have any questions about the values or options for a particular function in **gstudio**  or any other package, you can use the  *help.search(func)* or *?* functionality.This file is also kept in sync with the development of the **gstudio**  package (it is in the source packge that you downloaded from CRAN) and will serve as a tutorial for your use of this package.  If there are any questions that you may have regarding this package, feel free to contact [Rodney Dyer](mailto://rjdyer@vcu.edu) and I will get back to you as soon as possible.
+At any point if you have any questions about the values or options for a particular function in **gstudio**  or any other package, you can use the  *help.search(func)* or *?* functionality.This file is also kept in sync with the development of the **gstudio**  package (it is in the source package that you downloaded from CRAN) and will serve as a tutorial for your use of this package.  If there are any questions that you may have regarding this package, feel free to contact [Rodney Dyer](mailto://rjdyer@vcu.edu) and I will get back to you as soon as possible.
 
 
 
@@ -134,13 +132,13 @@ Saving data once it is in R is trivial and you do it as you would for any other 
 save(df, file="MyData.rda")
 ```
 
-To load the objects back into the workspace, you just do:
+To load the objects back into the work space, you just do:
 
 ```{r,eval=FALSE}
 load("MyData.rda")
 ```
 
-And you can verify that you have data in your workspace by listing it.
+And you can verify that you have data in your work space by listing it.
 
 ```{r}
 ls()
@@ -152,7 +150,7 @@ ls()
 
 ### Importing Data
 
-Importing data is not that difficult.  People tend to keep their data in spreadsheets or text files, which are easily accessable via R.  For genetic marker data **gstudio**  has a particular function, *read.population()* that is a mix between the traditional *read.table()* function and the *locus()* functions.  Options for this function include:
+Importing data is not that difficult.  People tend to keep their data in spreadsheets or text files, which are easily accessible via R.  For genetic marker data **gstudio**  has a particular function, *read.population()* that is a mix between the traditional *read.table()* function and the *locus()* functions.  Options for this function include:
 
 Option        |    Function
 ------------- | --------------
@@ -199,7 +197,7 @@ data
 
 #### AFLP-like data
 
-Genotypes that are 'aflp'-like are encoded as binary characters (e.g., 0/1) indicating the presence or absence of a paraticular band.  
+Genotypes that are 'aflp'-like are encoded as binary characters (e.g., 0/1) indicating the presence or absence of a particular band.  
 
 ```{r}
 file <- system.file("extdata","data_aflp.csv",package="gstudio")
@@ -220,7 +218,7 @@ data
 
 #### Zyme-Like Data
 
-Some data is encoded as allozyme genotypes (e.g., 33, 35, 55 for dipoid individuals with alleles '3' and '5').
+Some data is encoded as allozyme genotypes (e.g., 33, 35, 55 for diploid individuals with alleles '3' and '5').
 
 ```{r}
 file <- system.file("extdata","data_zymelike.csv",package="gstudio")
@@ -242,9 +240,9 @@ data
 
 
 
-### Datasets in the Package
+### Data sets in the Package
 
-The main genetic data included with the package if from the Sonoran desert bark beetle, *Araptus attenuatus* from the Dyer laboratory.  You can load it into your workspace by:
+The main genetic data included with the package if from the Sonoran desert bark beetle, *Araptus attenuatus* from the Dyer laboratory.  You can load it into your work space by:
 
 
 ```{r}
@@ -288,7 +286,7 @@ clades <- partition( arapat, stratum="Species")
 names( clades )
 ```
 
-This kind of partitioning is very common in the analysis of spatial genetic stucture and as such should be as simple as possible to provide the most flexibility to you, the analyst.  One of the common analysis patterns that you will come back to over and over again is to partition the entire data set and perform operations on each of the subgroups.  In **R** this is a pretty easy process if you look into the *lapply()* function (and its relatives).  This is such an important component, that I'm going to spend a little time here to make sure you understand what I am doing.  Once you get it, it will make you life tremendously more awesome!
+This kind of partitioning is very common in the analysis of spatial genetic structure and as such should be as simple as possible to provide the most flexibility to you, the analyst.  One of the common analysis patterns that you will come back to over and over again is to partition the entire data set and perform operations on each of the subgroups.  In **R** this is a pretty easy process if you look into the *lapply()* function (and its relatives).  This is such an important component, that I'm going to spend a little time here to make sure you understand what I am doing.  Once you get it, it will make you life tremendously more awesome!
 
 The basic form of the various 'apply' functions is that you pass them some data and a function on which it will take each part of that data and apply it.  For lists (the *l* part in *lapply()*), the function will take each entry in the list and pass it along to the function.  The function itself can be one that is already available (like *length()* or *is.na()* or something) or it can be something you specify directly, on the fly.  Here is an example looking at the number of samples in each 'Species' as partitioned above.
 
@@ -331,7 +329,7 @@ m[1:10,]
 
 ## Plotting Populations
 
-One of the key benefits to using an analysis environtment such as R is that you can mash together functionality that you just can't get from a monolithic program.  An example of this is plotting populations.  If your data has spatial coordinates in them then you can use this to plot the location of your sites on a GoogleMap tile.  By default, you **must** have your coordinates in decimal degree format.  This is the default for the GoogleMaps API.  Moreover, if you name the columns of data "Longitude" and "Latitude" much of the spatial functionality in **gstudio** will be more transparent (if not, you have to specify the Longitude and Latitude names each time you use a function that needs them).
+One of the key benefits to using an analysis environment such as R is that you can mash together functionality that you just can't get from a monolithic program.  An example of this is plotting populations.  If your data has spatial coordinates in them then you can use this to plot the location of your sites on a GoogleMap tile.  By default, you **must** have your coordinates in decimal degree format.  This is the default for the GoogleMaps API.  Moreover, if you name the columns of data "Longitude" and "Latitude" much of the spatial functionality in **gstudio** will be more transparent (if not, you have to specify the Longitude and Latitude names each time you use a function that needs them).
 
 ```{r, warning=FALSE,message=FALSE}
 plot( arapat )
@@ -370,7 +368,7 @@ Another object made easily in **gstudio** are objects related to allele frequenc
 
 ### Single Locus
 
-Grabbing alllele frequencies is a fundamental task for any population genetic analysis and should be as easy as possible.  Here are some examples of various ways to get allele frequency information using the *Araptus attenuatus* data set.
+Grabbing allele frequencies is a fundamental task for any population genetic analysis and should be as easy as possible.  Here are some examples of various ways to get allele frequency information using the *Araptus attenuatus* data set.
 
 
 ```{r, singleLocus }
@@ -404,7 +402,7 @@ freqs.strata[1:10,]
 
 ### Plotting Allele Frequencies
 
-There are several ways you may want to graphically view the locus data and for convienence, the **gstudio**  package provides some interfaces for nice plots using the *ggplot2* package.  
+There are several ways you may want to graphically view the locus data and for convenience, the **gstudio**  package provides some interfaces for nice plots using the *ggplot2* package.  
 
 Plotting a vector of loci will by default estimate the frequencies of each allele for graphical output.  There are two different output for this (n.b., a pie chart by its nature can lead to inaccurate interpretations and most statisticians hate them).
 
@@ -415,7 +413,7 @@ plot( arapat$MP20, mode="pie")
 
 
 
-The frequencies across a collection of loci can easily be plot just as well (internally, this simple plot is just turns the object into a data frame and then plots it). At times, examination of allele spectra can reveal blantant differnces in substratum of your data.  For example, consider the following spectrum for the locus MP20.
+The frequencies across a collection of loci can easily be plot just as well (internally, this simple plot is just turns the object into a data frame and then plots it). At times, examination of allele spectra can reveal blatant differences in substratum of your data.  For example, consider the following spectrum for the locus MP20.
 
 
 ```{r}
@@ -461,7 +459,7 @@ Now, you can plot the frequencies as either a linear plot (below you will see ho
 ggplot( df, aes(x=Latitude,y=Frequency)) + geom_line(linetype=2) + geom_point(size=4) 
 ```
 
-This is interesting.  Now, just to 'kick it up a knotch' I'm going to look at the `Cluster` variable.  This is from mtDNA and shows putatively cryptic species.  I'm going to remake the plot above but color the points to indicate the presence of the 'SCBP-A' clade (perhaps another species).  Below I grab add a new column of data to `df` and then make it all 'baja'.  Then I figure out which populations have 'SCBP-A' individuals in it.
+This is interesting.  Now, just to 'kick it up a notch' I'm going to look at the `Cluster` variable.  This is from mtDNA and shows punitively cryptic species.  I'm going to remake the plot above but color the points to indicate the presence of the 'SCBP-A' clade (perhaps another species).  Below I grab add a new column of data to `df` and then make it all 'Baja'.  Then I figure out which populations have 'SCBP-A' individuals in it.
 
 ```{r}
 df$Species <- "Baja"
@@ -475,7 +473,7 @@ Then plot it.
 ggplot( df, aes(x=Latitude,y=Frequency)) + geom_line(linetype=2) + geom_point(size=5, aes(color=Species) ) 
 ```
 
-I think this leads to some interesting questions about the relationship between potential species differences, where species are guaged by mtDNA, in nuclear allelic diversity.
+I think this leads to some interesting questions about the relationship between potential species differences, where species are gauged by mtDNA, in nuclear allelic diversity.
 
 
 
@@ -515,7 +513,7 @@ pies_on_map( arapat, stratum="Population", locus="EN")
 
 ## Multivariate Analogs for Loci
 
-Genotype data is inheriently multivariate.  In fact, it is multinomial multivarite *senus stricto* but we generally ignore that. That being said, we can easily translate raw genotypes into raw multivariate encodings for other statistical analyses.  Here is a quick example using a few individuals and the `WNT` locus.
+Genotype data is inherently multivariate.  In fact, it is multinomial multivariate *senus stricto* but we generally ignore that. That being said, we can easily translate raw genotypes into raw multivariate encodings for other statistical analyses.  Here is a quick example using a few individuals and the `WNT` locus.
 
 ```{r}
 to_mv( arapat$WNT[1:10]  )
@@ -523,7 +521,7 @@ to_mv( arapat$WNT[1:10], drop.allele=TRUE)
 ```
 
 
-For multiple loci, we can use the same apporach.  Here is an example of a PCA analysis done on raw genotypes.
+For multiple loci, we can use the same approach.  Here is an example of a PCA analysis done on raw genotypes.
 
 ```{r}
 x <- to_mv( arapat, drop.allele=TRUE)
@@ -539,7 +537,7 @@ df <- data.frame( PC1=pred[,1], PC2=pred[,2], Species=arapat$Species, Clade=arap
 ggplot( df ) + geom_point( aes(x=PC1,y=PC2,shape=Species,color=Clade), size=3, alpha=0.75)
 ```
 
-Looks like there are three main groups divided by clade and within the more dense clade, there is some substructuring.  I'll take the data that is in the main clade and do a quick heirarchical clustering analysis.
+Looks like there are three main groups divided by clade and within the more dense clade, there is some sub-structuring.  I'll take the data that is in the main clade and do a quick hierarchical clustering analysis.
 
 ```{r,fig.width=12}
 baja <- pred[df$Species=="CladeC",]
@@ -569,7 +567,7 @@ plclust(h,main="Main Baja California Clade", xlab="")
 
 ## Measures of Genetic Diversity
 
-Genetic diversity is estimated by several different means.  It can be estiamted at several different levels; at individuals, at groups, at populations, etc.  It can also be estimated by several different parameters.  This section covers some of the more common parameters used for quantifying genetic diversity.
+Genetic diversity is estimated by several different means.  It can be estimated at several different levels; at individuals, at groups, at populations, etc.  It can also be estimated by several different parameters.  This section covers some of the more common parameters used for quantifying genetic diversity.
 
 
 ### Allelic Diversity
@@ -595,7 +593,7 @@ allelic.diversity(loci,mode="A95")
 
 #### Rarefaction
 
-Rarefaction is a technique used to measure diversity in different populations.  It is particularly important for situations where you have different sample sizes.  Is there more diversity in the larger population because you sampled more or is it a truely more diverse population?  I'll use the data from the beetle to show how diversity changes with sample sizes and highlight how you can use the *rarefaction()* function.  
+Rarefaction is a technique used to measure diversity in different populations.  It is particularly important for situations where you have different sample sizes.  Is there more diversity in the larger population because you sampled more or is it a truly more diverse population?  I'll use the data from the beetle to show how diversity changes with sample sizes and highlight how you can use the *rarefaction()* function.  
 
 In the mainland populations, there are only 36 samples and the allelic diversity is relatively low at the WNT locus.
 
@@ -613,7 +611,7 @@ length( loci.baja )
 allelic.diversity( loci.baja, mode="Ae")
 ```
 
-So is this difference a consequence of the sample sizes or is peninsular Baja California more genetically diverse?  To answer this, rarefaction randomly subsamples the loci.baja data and estimates the value of $\hat{A}_e$ for samples of size 36 (for our case) to see if the observed diversity differences are due to sampling alone.  To visualize the distribution, I throw it into a *data.frame* and use the **ggplot2** functions to make the pretty colored histogram.
+So is this difference a consequence of the sample sizes or is peninsular Baja California more genetically diverse?  To answer this, rarefaction randomly sub-samples the loci.baja data and estimates the value of $\hat{A}_e$ for samples of size 36 (for our case) to see if the observed diversity differences are due to sampling alone.  To visualize the distribution, I throw it into a *data.frame* and use the **ggplot2** functions to make the pretty colored histogram.
 
 ```{r warning=FALSE}
 Ae.Baja  <- rarefaction(loci.baja, mode="Ae", size=36)
@@ -680,7 +678,7 @@ fis.sonora <- Fis( sonora )
 fis.sonora
 ```
 
-There are various ways to get a confidence interval on these kind of analyses.  In what follows is an implicit test of $H_O: F_{IS} = 0$ using permuation.  If that Null hypothesis is true, then any random perumation of alleles (combined into genotypes) sampled from this population would produce estimates of $F_{IS}$ as large as that observed.  This kind of permutation is handled by the function *permute_ci()* (though it can be applied to more complicated analysess as shown below).  Here is an example of how to use it to create the null distribution of $F_{IS}$ values given these data.  
+There are various ways to get a confidence interval on these kind of analyses.  In what follows is an implicit test of $H_O: F_{IS} = 0$ using permutation.  If that Null hypothesis is true, then any random permutation of alleles (combined into genotypes) sampled from this population would produce estimates of $F_{IS}$ as large as that observed.  This kind of permutation is handled by the function *permute_ci()* (though it can be applied to more complicated analyses as shown below).  Here is an example of how to use it to create the null distribution of $F_{IS}$ values given these data.  
 
 For simplicity, I only apply this to the $EN$ locus.
 
@@ -700,21 +698,18 @@ summary( fis.perm )
 
 
 
-
-
-
 ---
 
 ## Measures of Genetic Distance
 
 
-There are several genetic distances available within the **gstudio** package and the ability to use multivariate analogs of genotypes opens up all distance essentially all distance metrics to the end user.  In the stuff that follows are the distances that are internally implemented in the pacakge along with a brief overview.
+There are several genetic distances available within the **gstudio** package and the ability to use multivariate analogs of genotypes opens up all distance essentially all distance metrics to the end user.  In the stuff that follows are the distances that are internally implemented in the package along with a brief overview.
 
 
 
 ### Individual Distances
 
-At the base level, you can estimate distances among individuals resulting in an $NxN$ matrix of pair-wise distances.  This is internally how the AMOVA anlaysis is conducted and is a nice heuristic for conceptual understanding of variance decomposition.  
+At the base level, you can estimate distances among individuals resulting in an $NxN$ matrix of pair-wise distances.  This is internally how the AMOVA analysis is conducted and is a nice heuristic for conceptual understanding of variance decomposition.  
 
 
 #### AMOVA Distance
@@ -789,35 +784,133 @@ D_{CS,m,n} =  \frac{2}{\pi}\sqrt{ 2 * 1-\sum_{i=1}^{\ell} p_{m,i}*p_{n,i}}
 
 #### Conditional Genetic Distance (cGD; Graph Distance)
 
+Conditional genetic distance, *cGD*, is a measure based upon conditional genetic covariance and is distinctly different than these other measures as it is not a pair-wise distance metric.  Rather it is the distance through a *Population Graph* topology whose construction is determined by the totality of the data.  To estimate *cGD* from your data, you can use the *genetic.distance()* function as before and it will do right thing and return you a matrix.  However, you should probably look into what a *Population Graph* really is prior to using it.  You will find more information below as well as in the documents for the **popgraph** package itself.  For consistency, we'll add it here and look a the output below.
+
 
 #### Nei's Genetic Distance
 
+A very common metric of genetic distance, if you think the data you have are due to drift/mutation balance, is that of Nei.  The implementation in **gstudio** of Nei's distance is based upon the sample size correction from 1978, and is calculated as:
 
+\[
+I = \frac{(2N-1)\sum_{l=1}^L\sum_{m=1}^M p_{Alm}p_{Blm}}{\sqrt{ \sum_{l=1}^L(2N\sum_{m=1}^{M_A}p_{Alm}^2-1)(2N\sum_{m=1}^{M_B}p_{Blm}^2 -1)}}
+\]
 
+for the "Genetic Identity" (where $p_A$ is the allele frequencies at one population and $p_B$ are the corresponding frequencies for the other, $L$ is across loci and $M$ is across alleles at the $l^{th}$ locus).  
 
+Nei's (1978) genetic distance, $D_N$, is:
+
+\[
+D = -ln(I)
+\]
 
 
 
 ## Genetic Structure
 
-
+The estimation of structure from genetic data is a common (and commonly misused) endeavor.  The **gstudio** packages makes a distinction between structural parameters and statistical differences.  Structural parameters are the various $X_{ST}$ statistics that crop all too quickly.  These are simply parameters of the data and are not *sensu stricto* measures of differentiation.  To quote Sewell Wright (1972), "..."  All of these parameters are based upon assumptions related to population genetic processes.  Statistical differences, are those analyses we can do on genetic data that test a specific hypothesis that is not based upon population genetic understanding, rather the simple properties of multinomial multivariate data.
 
 ### Structural Parameters
 
+Since first introduced by Sewell Wright as F-statistics, there has been a continued development of realted parameters that are used to characterize 'popualtion structure' in one way or another.  The parameters that **gstudio** provides are sufficient for most needs.  These include:
 
+- $G_{ST}$: This is Nei's parameter.
+- $G_{ST}^\prime$: This is the modification of Nei's $G_{ST}$ as proposed by Hedrick.
+- $D_{est}$: This is the parameter of Joost.
+
+Both $G_{ST}^\prime$ and $D_{est}$ are parameters derived for loci with lots of alleles.  There was a heated debate in the literature between Hedrick & Joost about issues related to Nei's $G_{ST}$ for data with many loci (say >6 to be conservative) and these are two options available for your use.  I would recommend looking over the debate to decide which may be more appropriate for you (using them both is a lame option and you will be mocked by your reviewers if you take that approach).  
+
+Here are some examples of how to estimate these parameters using the beetle data.  In all of these approaches, you pass both the stratum and the locus and they return a data frame.  
+
+#### Nei's $G_{ST}$ Parameter
+
+```{r}
+Gst( arapat$Population, arapat$LTRS, nperm=99 )
+```
+
+If the loci that you pass is a bunch of loci in a data.frame, it will return the single locus estimate as well as the multilocus estimate (based upon summing the heterozygosities and then estimating it as in Nei, not in just averaging the $G_{ST}$ values as in Berg & Hamrick (XXXX), see XXXX for more on the differences).
+
+```{r}
+Gst( arapat$Population, arapat[,c(7:14)], nperm=99)
+```
+
+
+#### Hendrick's $G_{ST}^\prime$ Parameter
+
+```{r}
+sort(unique(matrix( alleles(arapat$MP20), ncol=1)))
+Gst_prime(arapat$Population, arapat$MP20, nperm=99 )
+```
+
+#### Joost's $D_{est}$ Parameter
+
+```{r}
+Dest(arapat$Population, arapat$MP20, nperm=99 )
+```
 
 
 ### Statistical Differences
 
+There are two statistical tests of differentiation you can conduct in *R* using **gstudio** and both of them are based upon the same approach.  Originally shown by Weir & Cockerham (1984), the parameter $\theta$ can be though of as the proportion of among-strata variance in a random effects Analysis of Variance based upon single loci.  A decade later, Excoffier *et al.* (1992) showed that the same kind of parameter can be estimated using multilocus data.  Unfortunately, they calling the parameter $\Phi_{ST}$ and this has caused some confusion among analysts who confuse this parameter with the structural parameters above.  I should not throw stones, I also followed in the obfuscation of these parameters in Smouse *et al.* (2001) when we showed how to use this approach to analyze pollen pools and called it $\Phi_{FT}$ (the 'F' for father as we are analyzing paternal pollen pools).  We should have also called it PAMOVA for "Pollen AMOVA" but you cannot change history).  Later, we (Dyer *et al.* 2004) showed that both $\theta$ and $\Phi$ are simply multivariate general linear models based upon $NxN$ covariance matrices rather than $pxp$ ones (though the broader use of more powerful statistical models has yet to be fully embraced).  There is a direct link between $\theta$ and $\Phi$ in that they are identical, both statistically and numerically, wen you only use a single locus.  What $\Phi$ does it to extend the analysis to a multilocus analysis.  
+
+For simplicity, I'll use the cape region clade as an example here and borrow the AMOVA routine from the **ecodist** package.
+
+```{r}
+data <- arapat[ arapat$Species == "CladeA",]
+```
 
 
+
+
+---
 
 ## Population Graphs
 
+A *Population Graph* is a model-free network created using conditional genetic covariance.  Connectivity within a population graph is based solely upon the multilocus genetic covariance, which is dominated by neutral processes such as gene flow and historical demography.  The routines to create population graphs were previously nestled within this package but due to the expansion of the approach outside genetic analyses, I opted to pull those routines out and put them in their own packages.  I will show briefly the use of population graphs here, just enough to show how it is done.  There is a complete write-up on it (like this one) on my website at http://dyerlab.bio.vcu.edu/docs/popgraph.html that goes into it in much greater detail and shows you how to do various analyses on the data.
 
+```{r install.popgraph}
+if( !require(popgraph) )
+  install.packages("popgraph")
+```
 
+By default, the input to *popgraph()* is a multivariate data set and a factor to be used to identify the nodes.  For this example, we'll use the larger clade in the beetle, CladeC, as an example.
 
+```{r}
+data <- to_mv( arapat )
+pops <- arapat$Population
+graph <- population_graph(x=data,groups=pops)
+```
 
+Now you have the graph and can plot and work with it as you find useful.  Here I'll make a color vector to indicate the species collected in each population.  You can get an idea of this by using the **table()** function as follows:
+
+```{r}
+t <- table( arapat$Species, arapat$Population)
+t
+```
+
+And from there create the node colors from there.  I'll color the mainland populations in dark grey, the clade only populations in light gray, the large clade in red and the populations mixed with both peninsular species in salmon colors.
+
+```{r}
+nodes <- V(graph)$name
+color <- rep( "#f4a582", length(nodes) )
+# the A clade
+color[ t[1,]!= 0] <- "#bababa"
+# the B clade
+color[ t[2,] != 0] <- "#404040"
+# the C clade
+color[ t[3,] != 0] <- "#ca0020"
+# the mixed populations
+color[ t[1,] != 0 & t[3,] != 0] <- "#f4a582"
+color
+```
+
+And now we can plot it.  If the graph has a *color* attributed for the vertices (the nodes), the it will automagically use it.  Here I omit the population name for brevity.
+
+```{r}
+V(graph)$color <- color
+plot(graph, vertex.label="")
+```
+
+For a lot more on how to use and analyze population graph topologies see the documentation associated with it on my website.
 
 ## References
 
