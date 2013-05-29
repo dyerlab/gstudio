@@ -68,3 +68,4 @@ Collate:
     'genetic.diversity.R'
     'A.R'
     'Ae.R'
+    'dist_cgd.R'
