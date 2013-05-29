@@ -867,7 +867,7 @@ data <- arapat[ arapat$Species == "CladeA",]
 
 A *Population Graph* is a model-free network created using conditional genetic covariance.  Connectivity within a population graph is based solely upon the multilocus genetic covariance, which is dominated by neutral processes such as gene flow and historical demography.  The routines to create population graphs were previously nestled within this package but due to the expansion of the approach outside genetic analyses, I opted to pull those routines out and put them in their own packages.  I will show briefly the use of population graphs here, just enough to show how it is done.  There is a complete write-up on it (like this one) on my website at http://dyerlab.bio.vcu.edu/docs/popgraph.html that goes into it in much greater detail and shows you how to do various analyses on the data.
 
-```{r install.popgraph}
+```{r install.popgraph, error=FALSE, message=FALSE}
 if( !require(popgraph) )
   install.packages("popgraph")
 ```

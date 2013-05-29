@@ -18,7 +18,7 @@
 #'  BB <- locus( c("B","B") )
 #'  locus <- c(AA,AB,AA,AA,BB,BB,BB,AB,AB,AA)
 #'  Population=c(rep("Pop-A",5),rep("Pop-B",5))
-#'  Gst( locus, Population, nperm=99 )
+#'  Gst(  Population, locus, nperm=99 )
 Gst <- function(strata, loci, nperm=0, size.correct=TRUE ) {
   
   # Do this function recursively if a data.frame is passed as loci
@@ -28,7 +28,7 @@ Gst <- function(strata, loci, nperm=0, size.correct=TRUE ) {
     if( length(loci_df)==0 )
       stop("You must pass some loci to this function")
     
-    ret <- data.frame(Locus=loci_df,Gst=NA,Hs=NA,Ht=NA,P=NA)
+    ret <- data.frame(Locus=loci_df,Gst=NA,Hs=NA,Ht=NA,P=NA,stringsAsFactors=FALSE)
     for( i in 1:length(loci_df) ){
       data <- loci[[loci_df[i]]] 
       r <- Gst( strata, data,  nperm, size.correct)

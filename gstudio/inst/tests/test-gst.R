@@ -59,6 +59,7 @@ test_that("checking",{
   loci <- data.frame( TPI = loci.1, PGM=loci.2)
   gst <- Gst( pops, loci, nperm=99 )
   expect_that( gst, is_a("data.frame"))
+  
   expect_that( dim(gst)[1], equals(3))
   expect_that( dim(gst)[2], equals(5))
   expect_that( names(gst), is_equivalent_to( c("Locus","Gst","Hs","Ht","P")))
