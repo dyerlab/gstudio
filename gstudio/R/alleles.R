@@ -3,11 +3,14 @@
 #' This function will provide the alelles within a \code{locus} object 
 #'  for either a single locus or for a vector of loci
 #' @param x A \code{locus} object (single or vector)
+#' @param all A flag indicating that you want all alleles returned (default=TRUE)
+#'  A \code{FALSE} flag here indicates that you only want the unique alleles
+#'  returned (e.g., the ones present).
 #' @return A matrix of alleles.  If \code{x} is a vector then the result
 #'  will be represented by rows.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-alleles <- function( x ) { 
+alleles <- function( x, all=TRUE ) { 
   UseMethod( "alleles" )
 }
 
@@ -16,7 +19,7 @@ alleles <- function( x ) {
 #' @method alleles default
 #' @export
 #' @rdname alleles
-alleles.default <- function( x ) {
+alleles.default <- function( x, all=TRUE ) {
   return( names( x ) )
 }
 
@@ -27,7 +30,7 @@ alleles.default <- function( x ) {
 #' @method alleles locus
 #' @export
 #' @rdname alleles
-alleles.locus <- function ( x ) {
+alleles.locus <- function ( x, all=TRUE ) {
   ret <- NULL
 
   # catch all missing 
@@ -48,7 +51,9 @@ alleles.locus <- function ( x ) {
         ret <- unlist(strsplit(x,":"))
     }
       
-
+  if( !all ){
+    ret <- sort( unique( matrix( ret, ncol=1 ) ) )
+  }
   
   return( ret )  
 }

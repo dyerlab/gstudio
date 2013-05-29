@@ -1,7 +1,8 @@
 #' Estimation of Bray-Curtis distance
 #' 
 #' This function returns a measure of genetic distance based upon
-#'  the Cavalli-Sforza & Edwards (1967)  distance metric.  
+#'  the Cavalli-Sforza & Edwards (1967)  distance metric.  Assuming 
+#'  drift is the only source or differences observed among strata.
 #' @param stratum The groups among which you are going to estimate genetic distances.
 #' @param x The genetic data, either as a single locus or multilocus (\code{data.frame}) 
 #'  object.  
@@ -21,6 +22,8 @@ dist_cavalli <- function( x, stratum="Population" ) {
   K <- length( locus_names )
   if( K==0)
     stop("You need to pass objects of type 'locus' to use for dist_cavalli().")
+  if( K > 1 )
+    warning("Multilous estimates of Cavalli-Sforza distance are assumed to be additive.")
 
   freqs <- frequencies( x, stratum=stratum) 
   f <- dcast( freqs, Locus + Allele ~ Stratum, value.var="Frequency", fill=0)

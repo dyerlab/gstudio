@@ -33,7 +33,6 @@ Collate:
     'dest.R'
     'dist_2_cov.R'
     'dist_amova.R'
-    'dist_bray.R'
     'dist_cavalli.R'
     'dist_jaccard.R'
     'dist_nei.R'

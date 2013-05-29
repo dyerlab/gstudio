@@ -1,7 +1,8 @@
 #' Estimation of Bray-Curtis distance
 #' 
 #' This function returns a measure of genetic distance based upon
-#'  the Nei's Genetic distance metric.  
+#'  the Nei's Genetic distance metric.  Assumes drift/mutation equilibrium
+#'  is the main force governing your observed differences.
 #' @param x A data frame with locus objects in it as well as a stratum object.
 #' @param stratum A factor indicating the stratum to use.
 #' @return The Nei Genetic distance

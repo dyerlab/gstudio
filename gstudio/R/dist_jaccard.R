@@ -1,16 +1,52 @@
 #' Estimation of jaccard distance
 #' 
 #' This function returns a measure of genetic distance based upon
-#'  the AMOVA distance metric.  Jaccard distance is essentially
-#'  2b/(1+b) where b is Bray-Curtis distnance.  
-#' @param idx indices to compare
-#' @param data The genotypes to examine.
-#' @param nLoc The number of loci (default=1)
-#' @return The Jaccard set dissimilarity
+#'  the AMOVA distance metric.  
+#' @param x A \code{data.frame} with both stratum and \code{locus} 
+#'  objects in them.
+#' @param stratum The name of the stratum variable in \code{x}
+#' @return A matrix of Jaccard distance
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
-dist_jaccard <- function( idx, data, nLoc=1 ) {
-  b  <- dist_bray( idx, data, nLoc)
+dist_jaccard <- function( x, stratum ) {
   
-  return( (2*b)/(1+b))
+  if( !is( x, "data.frame") )
+    stop("You need to pass a data.frame to dist_cavalli() to work.")
+  
+  if( !(stratum %in% names(x)))
+    stop("You need to specify the correct stratum for dist_cavalli() to work.")
+  
+  locus_names <- column_class( x, "locus")
+  K <- length( locus_names )
+  if( K==0)
+    stop("You need to pass objects of type 'locus' to use for dist_cavalli().")
+  else if( K > 1 )
+    warning("Jaccard distance will be assumed to be entirely additive across loci.")
+  
+  pops <- partition(x, stratum=stratum) 
+  K <- length(pops)
+  
+  ret <- matrix(0,ncol=K,nrow=K)
+  
+  for(locus in locus_names){
+    for(i in 1:K ){
+      p1 <- alleles( pops[[i]][[locus]], all=FALSE)
+      for( j in i:K){
+        if(i!=j){
+          p2 <- alleles( pops[[j]][[locus]], all=FALSE)
+          m11 <- length(intersect( p1, p2 ))
+          m01 <- length(setdiff( p2, p1 ))
+          m10 <- length(setdiff( p1, p2 ))
+          j <- (m01 + m10) / (m01 + m10 + m11)
+          ret[i,j] <- ret[i,j] + j
+        }
+      }
+    }   
+  }
+  
+  ret <- ret + t(ret)
+  
+    
+  return(ret)
+
 }

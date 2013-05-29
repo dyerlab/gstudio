@@ -9,20 +9,29 @@
 #'    can be an optional parameter when estimating distance measures calculated
 #'    among indiviudals (default='Population'). 
 #'  @param mode The particular genetic distance metric that you are going to use. 
-#'    The \code{gstudio} package currently includes the following individual distance 
+#'  @param ... Ignored
+#'  @return A \code{genetic_distance} object (also a matrix) with the genetic 
+#'    distances and a bit of additional information about its creation.
+#'  @note This function currently includes the following individual distance 
 #'    measures:
 #'    \itemize{
 #'      \item{AMOVA}{Inter-individual }
 #'      \item{Bray}{Proportion of shared alleles}
 #'      \item{Jaccard}{Jaccard set dissimilarity}
 #'    }
-#'  @param ... Ignored
-#'  @return A \code{genetic_distance} object (also a matrix) with the genetic 
-#'    distances and a bit of additional information about its creation.
+#'    This function also supports genetic distances based upon stratum distances.  The
+#'    currently supported genetic distances are:
+#'    \itemize{
+#'      \item{Euclidean}{Euclidean frequency distance}
+#'      \item{cGD}{Conditional Genetic Distance}
+#'      \item{Nei}{Nei's corrected genetic distance (1978)}
+#'      \item{Dps}{Shared allele distance = 1 - Ps}
+#'    }
+
 #'  @export
 #'  @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #'  
-genetic_distance <- function( x, stratum="Population", mode=c("AMOVA","cGD")[1], ... ){
+genetic_distance <- function( x, stratum="Population", mode, ... ){
   
   
   if( !(mode %in% c("AMOVA","cGD","Jaccard","Bray","Euclidean","Nei","Dps", "cGD")))
