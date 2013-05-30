@@ -9,7 +9,6 @@
 #'    can be an optional parameter when estimating distance measures calculated
 #'    among indiviudals (default='Population'). 
 #'  @param mode The particular genetic distance metric that you are going to use. 
-#'  @param ... Ignored
 #'  @return A \code{genetic_distance} object (also a matrix) with the genetic 
 #'    distances and a bit of additional information about its creation.
 #'  @note This function currently includes the following individual distance 
@@ -17,7 +16,6 @@
 #'    \itemize{
 #'      \item{AMOVA}{Inter-individual }
 #'      \item{Bray}{Proportion of shared alleles}
-#'      \item{Jaccard}{Jaccard set dissimilarity}
 #'    }
 #'    This function also supports genetic distances based upon stratum distances.  The
 #'    currently supported genetic distances are:
@@ -26,87 +24,59 @@
 #'      \item{cGD}{Conditional Genetic Distance}
 #'      \item{Nei}{Nei's corrected genetic distance (1978)}
 #'      \item{Dps}{Shared allele distance = 1 - Ps}
+#'      \item{Jaccard}{Jaccard set dissimilarity}
 #'    }
 
 #'  @export
 #'  @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #'  
-genetic_distance <- function( x, stratum="Population", mode, ... ){
-  
-  
-  if( !(mode %in% c("AMOVA","cGD","Jaccard","Bray","Euclidean","Nei","Dps", "cGD")))
-    stop("Unrecognized genetic distance")
-  
-  # passing a df not pop
-  if( inherits(x,"locus")) {
-    data <- x
-    N <- length(data)
-    nLoc <- 1
-  }
-    
-  else if( inherits(x,"data.frame")) {
-    data <- x[,column_class(x,"locus",mode="index")]
-    d <- dim(data)
-    N <- d[1]
-    nLoc <- d[2]
-  }
-    
-  else
-    stop("This function only works on objects of inheriting from either a 'data.frame' or a 'locus' object.")
+genetic_distance <- function( x, stratum="Population", mode ){
 
-  if( N < 2 )
-    stop( "You need at least two entities to measure distance...")
+  if( missing(mode)) 
+    stop("You need to indicate which genetic distance you would like to use.")
+  
+  mode <- tolower(mode)
+
+  if( is(x,"locus") ) {
+    x <- data.frame(Locus=x,Stratum=stratum)
+    stratum <- "Stratum"
+  }
+  
+  if( !is(x,"data.frame") )
+    stop("You must either pass a 'locus' vector or a 'data.frame' with 'locus' objects in it to this function.")
+  else {
+    if( !(stratum %in% names(x) ) )
+      stop("The stratum variable must be ")
+  }
   
   ret <- NULL
+
+  if( mode == "amova" )
+    ret <- dist_amova(x)
   
+  else if( mode == "bray"){
+    x[[stratum]] <- 1:length(x[,1])
+    ret <- dist_bray(x=x,stratum=stratum)
+  }
   
+  else if( mode == "euclidean") 
+    ret <- dist_euclidean(x,stratum)
   
-#   idx <- indices(1:N)
-#   
-#   
-#   #######################  Individual Distances
-#   if( mode == "AMOVA" ) 
-#     ret <- apply( idx, 1, dist_amova, data=to_mv(data) ) 
-#   
-#   else if( mode=="Jaccard")
-#     ret <- apply( idx, 1, dist_jaccard, data=data, nLoc=nLoc)
-#   
-#   else if( mode == "BrayCurtis") 
-#     ret <- apply( idx, 1, dist_bray, data=as.matrix(data), nLoc=nLoc) 
-#   
-# 
-# 
-#   
-#    #######################   Graph Distance
-#    else if( mode == "cGD" ){
-#      require(popgraph)
-#      graph <- population_graph(to_mv(data),groups=stratum)
-#      ret <- shortest.paths(graph)
-#      return( ret )
-#    }
-#   
-#   
-#   #######################   Stratum Distance
-#   else {
-#     data <- frequencies(x,stratum=stratum)
-#     attr(ret,"strata") <- row.names(data)
-#     
-#     if( mode=="Euclidean")
-#       ret <- apply( idx, 1, function(i,freqs) sqrt(sum( (freqs[i[1],]-freqs[i[2],])^2 )), freqs=data)
-#     
-#     # Cavalli-Sforza Edwards Distance
-#     else if( mode=="CavalliSforza")
-#       ret <- apply( idx, 1, dist_cavalli, data=data )
-# 
-#     # Nei Distance
-#     else if( mode=="Nei")  
-#       ret <- apply( idx, 1, dist.nei, data=data )
-#     
-#     else if( mode=="Dps")
-#       ret <- apply( idx, 1, dist_bray, data=data, nloc=nLoc )
-# 
-#     
-#   }
+  else if( mode == "cgd") 
+    ret <- dist_cgd(x,stratum)
+  
+  else if( mode == "nei")
+    ret <- dist_nei(x,stratum)
+  
+  else if( mode == "dps")
+    ret <- dist_bray(x,stratum)
+  
+  else if( mode == "jaccard" )
+    ret <- dist_jaccard(x,stratum)
+  
+  else
+    stop("Unrecognized genetic distance metric being requested.")
+
 
   return(ret)
 }
