@@ -1,3 +1,6 @@
 inst/doc/figure/
 inst/doc/gstudio.md
 inst/doc/gstudio.html
+inst/doc/*.tex
+inst/doc/*.log
+inst/doc/*.synctex.gz
