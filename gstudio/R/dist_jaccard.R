@@ -1,14 +1,14 @@
 #' Estimation of jaccard distance
 #' 
 #' This function returns a measure of genetic distance based upon
-#'  the AMOVA distance metric.  
+#'  the Jaccard set distance metric.  
 #' @param x A \code{data.frame} with both stratum and \code{locus} 
 #'  objects in them.
 #' @param stratum The name of the stratum variable in \code{x}
 #' @return A matrix of Jaccard distance
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
-dist_jaccard <- function( x, stratum ) {
+dist_jaccard <- function( x, stratum="Population" ) {
   
   if( !is( x, "data.frame") )
     stop("You need to pass a data.frame to dist_cavalli() to work.")
@@ -27,6 +27,7 @@ dist_jaccard <- function( x, stratum ) {
   K <- length(pops)
   
   ret <- matrix(0,ncol=K,nrow=K)
+  colnames(ret) <- rownames(ret) <- names(pops)
   
   for(locus in locus_names){
     for(i in 1:K ){
@@ -37,8 +38,8 @@ dist_jaccard <- function( x, stratum ) {
           m11 <- length(intersect( p1, p2 ))
           m01 <- length(setdiff( p2, p1 ))
           m10 <- length(setdiff( p1, p2 ))
-          j <- (m01 + m10) / (m01 + m10 + m11)
-          ret[i,j] <- ret[i,j] + j
+          jc <- (m01 + m10) / (m01 + m10 + m11)
+          ret[i,j] <- ret[i,j] + jc
         }
       }
     }   

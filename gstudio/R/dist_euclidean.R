@@ -1,29 +1,28 @@
 #' Estimation of euclidean distance
 #' 
 #' This function returns a measure of genetic distance based upon
-#'  the frequency euclidean distance metric.  Assuming 
-#'  drift is the only source or differences observed among strata.
-#' @param stratum The groups among which you are going to estimate genetic distances.
+#'  the euclidean frequency distance metric.  
 #' @param x The genetic data, either as a single locus or multilocus (\code{data.frame}) 
 #'  object.  
-#' @return A matrix of Cavalli-Sforza Genetic distance estimates.
+#' @param stratum The groups among which you are going to estimate genetic distances.
+#' @return A matrix of euclidean distance estimates.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 #' @importFrom reshape2 dcast 
 dist_euclidean <- function( x, stratum="Population" ) {
   
   if( !is( x, "data.frame") )
-    stop("You need to pass a data.frame to dist_cavalli() to work.")
+    stop("You need to pass a data.frame to dist_euclidean() to work.")
   
   if( !(stratum %in% names(x)))
-    stop("You need to specify the correct stratum for dist_cavalli() to work.")
+    stop("You need to specify the correct stratum for dist_euclidean() to work.")
   
   locus_names <- column_class( x, "locus")
   K <- length( locus_names )
   if( K==0)
-    stop("You need to pass objects of type 'locus' to use for dist_cavalli().")
+    stop("You need to pass objects of type 'locus' to use for dist_euclidean().")
   if( K > 1 )
-    warning("Multilous estimates of Cavalli-Sforza distance are assumed to be additive.")
+    warning("Multilous estimates of Euclidean distance are assumed to be additive.")
 
   freqs <- frequencies( x, stratum=stratum) 
   f <- dcast( freqs, Locus + Allele ~ Stratum, value.var="Frequency", fill=0)
@@ -33,13 +32,10 @@ dist_euclidean <- function( x, stratum="Population" ) {
   colnames(ret) <- rownames(ret) <- strata_names
   
   for( i in 1:K ) {
+    px <- f[, (i+2)]
     for( j in 1:K){
-      d <- 0
-      for( locus in unique( f$Locus ) ){
-        px <- f[ f$Locus==locus, (i+2) ]
-        py <- f[ f$Locus==locus, (j+2) ]
-        d <- d + (  2/pi * sqrt( 2 * ( 1- sum( sqrt( px*py  ) ) ) ) )
-      }
+      py <- f[,(j+2)]
+      d <- sqrt( sum(  (px-py)^2 ) )      
       ret[i,j] <- ret[j,i] <- d  
     }
   }
