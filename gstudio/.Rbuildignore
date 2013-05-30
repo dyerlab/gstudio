@@ -1,6 +1,5 @@
-inst/doc/figure/
-inst/doc/gstudio.md
-inst/doc/gstudio.html
-inst/doc/*.tex
-inst/doc/*.log
-inst/doc/*.synctex.gz
+gstudio.log
+gstudio-concordance.tex
+gstudio-tex
+gstudio.tex
+

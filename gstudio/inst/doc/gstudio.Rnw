@@ -11,9 +11,11 @@
 \usepackage{kmath,kerkis}
 \usepackage{hyperref}
 \usepackage{parskip}
-\title{The \texttt{gstudio} Package}
+\title{Using \texttt{gstudio}}
 \author{Rodney J. Dyer\\Department of Biology\\Virginia Commonwealth University}
 \date{\today}
+
+%\VignetteIndexEntry{Using gstudio}
 
 \begin{document}
 \maketitle

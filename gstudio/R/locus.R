@@ -101,12 +101,6 @@ locus <- function( x, type, phased=FALSE ){
 ##########################################################################
 
 
-
-
-
-
-
-
 #' Converts locus to a list
 #' 
 #' This converts a \code{locus} object into a \code{list} so that
@@ -264,7 +258,7 @@ is.locus <- function ( x ) {
 #' @param i The index of the allele to grab.
 #' @return The allele at the ith position.
 #' @rdname locus-operator-index
-#' @method "[" locus
+#' @method [ locus
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
@@ -291,7 +285,7 @@ is.locus <- function ( x ) {
 #' @return A new \code{locus} object that represents an offspring 
 #'  genotype.
 #' @rdname locus-operator-plus
-#' @method "+" locus
+#' @method + locus
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
@@ -336,7 +330,7 @@ is.locus <- function ( x ) {
 #'  consider cases where both parent and offspring are the same 
 #'  heterozygote).
 #' @rdname locus-operator-minus
-#' @method "-" locus
+#' @method - locus
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
