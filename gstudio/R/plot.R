@@ -55,6 +55,7 @@ plot.structure_statistic <- function( x, ... ) {
 #' @return A ggplot object that will be plotted by default.
 #' @method plot data.frame
 #' @export
+#' @import ggmap
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 plot.data.frame <- function( x, 
                              stratum="Population", 
@@ -66,8 +67,6 @@ plot.data.frame <- function( x,
   if( (stratum %in% names(x)) && 
         (Longitude %in% names(x)) && 
         (Latitude %in% names(x) ) ) {
-    require( ggmap )
-    require(ggplot2)
     args <- list(...)  
     coords <- strata_coordinates( x , stratum, Longitude, Latitude )
     map <- population_map( coords, map.source, map.type, zoom )

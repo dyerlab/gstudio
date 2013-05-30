@@ -16,12 +16,14 @@ Date: 2012-10-11
 LazyLoad: true
 VignetteBuilder: knitr
 Depends:
-    R (>= 2.15),
+    R (>= 3.0.0),
     ggplot2,
+    ggmap
+Imports:
+    raster,
     grid,
-    ggmap,
-    reshape2,
-    raster
+    popgraph,
+    reshape2
 Suggests:
     testthat,
     knitr
@@ -68,3 +70,5 @@ Collate:
     'A.R'
     'Ae.R'
     'dist_cgd.R'
+    'dist_bray.R'
+    'dist_euclidean.R'

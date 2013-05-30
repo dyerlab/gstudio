@@ -23,10 +23,10 @@
 #'  the code will attempt to define the map by the bounding box defined by the coords
 #' @return A map raster
 #' @export
+#' @import ggmap
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' 
 population_map <- function( coords, map.source="google", map.type="terrain", zoom=NA ){
-  require(ggmap)
   Longitude <- Latitude <- NULL
   
   if( is.na(zoom) ) {

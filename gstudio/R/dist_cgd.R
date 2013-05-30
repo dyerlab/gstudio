@@ -7,6 +7,7 @@
 #'  object.  
 #' @return A matrix of conditional genetic distance estimates.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @importFrom popgraph population_graph to_matrix
 #' @export
 dist_cgd <- function( x, stratum="Population" ) {
   
@@ -16,10 +17,10 @@ dist_cgd <- function( x, stratum="Population" ) {
   if( !(stratum %in% names(x)))
     stop("You need to specify the correct stratum for dist_cavalli() to work.")
 
-  require(popgraph)
+
   mv <- to_mv( x )
-  graph <- population_graph(x=mv, groups=x[[stratum]] )
-  ret <- to_matrix(lopho, mode = "shortest path")
+  graph <- popgraph:::population_graph(x=mv, groups=x[[stratum]] )
+  ret <- popgraph:::to_matrix(graph, mode = "shortest path")
   return(ret)
 }
 

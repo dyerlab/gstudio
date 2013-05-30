@@ -9,6 +9,7 @@
 #' @note This is the bias corrected Nei's Standard genetic distance.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
+#' @importFrom reshape2 dcast 
 #' @examples
 #'  AA <- locus( c("A","A") )
 #'  AB <- locus( c("A","B") )
@@ -26,7 +27,6 @@
 #'  dist_nei( df )
 #'  
 dist_nei <- function( x, stratum="Population") {
-  require(reshape2)
   
   if( !is(x,"data.frame") & !is(x,"locus") )
     stop("This function requires a data.frame to work.")

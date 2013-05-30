@@ -16,7 +16,7 @@ test_that("individual",{
   loc2 <- c(AA,AA,AC,AA,CC,CC,AC,CC,AA,AC)
   df <- data.frame( Population=c(rep("Pop-A",5),rep("Pop-B",5)), TPI=loc1, PGM=loc2 )
   
-  Dc <- dist_cavalli( df )
+  suppressWarnings( Dc <- dist_cavalli( df ) )
   expect_that( Dc, is_a("matrix"))
   expect_that( dim(Dc), is_equivalent_to( c(2,2) ) )
   expect_that( sum(diag(Dc)), equals(0))

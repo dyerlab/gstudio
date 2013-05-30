@@ -1,7 +1,7 @@
-#' Estimation of Bray-Curtis distance
+#' Estimation of euclidean distance
 #' 
 #' This function returns a measure of genetic distance based upon
-#'  the Cavalli-Sforza & Edwards (1967)  distance metric.  Assuming 
+#'  the frequency euclidean distance metric.  Assuming 
 #'  drift is the only source or differences observed among strata.
 #' @param stratum The groups among which you are going to estimate genetic distances.
 #' @param x The genetic data, either as a single locus or multilocus (\code{data.frame}) 
@@ -10,7 +10,7 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 #' @importFrom reshape2 dcast 
-dist_cavalli <- function( x, stratum="Population" ) {
+dist_euclidean <- function( x, stratum="Population" ) {
   
   if( !is( x, "data.frame") )
     stop("You need to pass a data.frame to dist_cavalli() to work.")

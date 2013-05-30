@@ -1,6 +1,6 @@
 <!--
 %\VignetteEngine{knitr}
-%\VignetteIndexEntry{An general vignette for gstudio}
+%\VignetteIndexEntry{gstudio}
 -->
 
 <link href="style.css" rel="stylesheet"></link>
@@ -489,6 +489,7 @@ ggmap( map ) + geom_point( aes(x=Longitude, y=Latitude, size=Frequency), data=df
 ```
 
 There is also the option to make use of some pie charts.  I know, pie charts suck and any statistician will tell you that they should probably not be used because they can be misleading, but here they are.  For exploratory data analysis, they can be very insightful at times.  Here is the frequency of alleles at the *enolase* locus in *Araptus*.  Any spatial structuring catch your eye?
+
 
 ```{r,warning=FALSE,message=FALSE}
 pies_on_map( arapat, stratum="Population", locus="EN")

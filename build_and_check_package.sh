@@ -12,7 +12,6 @@ rm -rf ./gstudio/inst/doc/*.tex
 rm -rf ./gstudio/inst/doc/*.pdf
 rm -rf ./gstudio/inst/doc/*.gz
 rm -rf ./gstudio/inst/doc/*.toc
-rm -rf ./gstudio/inst/doc/*.html
 rm -rf ./gstudio/inst/doc/*.md
 rm -rf ./gstudio/inst/doc/figure/
 
