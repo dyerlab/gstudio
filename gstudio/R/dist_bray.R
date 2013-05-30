@@ -8,7 +8,7 @@
 #' @return A matrix of Jaccard distance
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
-dist_bray <- function( x, stratum ) {
+dist_bray <- function( x, stratum="Population" ) {
   
   if( !is( x, "data.frame") )
     stop("You need to pass a data.frame to dist_bray() to work.")
