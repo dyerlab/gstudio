@@ -23,7 +23,8 @@ Imports:
     raster,
     grid,
     popgraph,
-    reshape2
+    reshape2,
+    ecodist
 Suggests:
     testthat,
     knitr
