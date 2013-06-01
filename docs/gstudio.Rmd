@@ -432,7 +432,7 @@ When you have many strata or you are conducting landscape-level analyses, it is 
 
 
 ```{r}
-baja <- arapat[ arapat$Species != "CladeB",]
+baja <- arapat[ arapat$Species != "Mainland",]
 ```
 
 The `EN` locus has a few different alleles but if we look at the frequencies of each, the first two dominate.
@@ -485,7 +485,7 @@ I think this leads to some interesting questions about the relationship between 
 
 It is also possible to plot the data in a spatial context.  Here is an example of how to mix `ggplot` and `ggmap` data and I'll plot the locations as proportional in size to the allele frequency.
 
-```{r, warning=FALSE,message=FALSE}
+```{r, warning=FALSE,message=FALSE, error=FALSE}
 map <- population_map(baja)
 ggmap( map ) + geom_point( aes(x=Longitude, y=Latitude, size=Frequency), data=df)
 ```
@@ -497,6 +497,7 @@ There is also the option to make use of some pie charts.  I know, pie charts suc
 pies_on_map( arapat, stratum="Population", locus="EN")
 ```
 
+Note the messages about the approximation.  This is because the google maps API has an integer for zoom factor and at times it is not able to get all the points into the field of view using an integer zoom.  If this happens to you, you can manually specify the *zoom* as an optional argument to either function *pies_on_map()* or *population_map()*.
 
 
 
@@ -543,7 +544,7 @@ ggplot( df ) + geom_point( aes(x=PC1,y=PC2,shape=Species,color=Clade), size=3, a
 Looks like there are three main groups divided by clade and within the more dense clade, there is some sub-structuring.  I'll take the data that is in the main clade and do a quick hierarchical clustering analysis.
 
 ```{r,fig.width=12}
-baja <- pred[df$Species=="CladeC",]
+baja <- pred[df$Species=="Peninsula",]
 h <- hclust( dist( baja ), method="single")
 plclust(h,main="Main Baja California Clade", xlab="")
 ```
@@ -601,7 +602,7 @@ Rarefaction is a technique used to measure diversity in different populations.  
 In the mainland populations, there are only 36 samples and the allelic diversity is relatively low at the WNT locus.
 
 ```{r}
-loci.son <- arapat$WNT[ arapat$Species == "CladeB" ] 
+loci.son <- arapat$WNT[ arapat$Species == "Mainland" ] 
 length( loci.son )
 allelic.diversity( loci.son, mode="Ae")
 ```
@@ -609,17 +610,17 @@ allelic.diversity( loci.son, mode="Ae")
 The larger clade on the peninsula has many more individuals and is more diverse.  
 
 ```{r}
-loci.baja <- arapat$WNT[ arapat$Species == "CladeC" ]
-length( loci.baja )
-allelic.diversity( loci.baja, mode="Ae")
+loci.peninsula <- arapat$WNT[ arapat$Species == "Peninsula" ]
+length( loci.peninsula )
+allelic.diversity( loci.peninsula, mode="Ae")
 ```
 
 So is this difference a consequence of the sample sizes or is peninsular Baja California more genetically diverse?  To answer this, rarefaction randomly sub-samples the loci.baja data and estimates the value of $\hat{A}_e$ for samples of size 36 (for our case) to see if the observed diversity differences are due to sampling alone.  To visualize the distribution, I throw it into a *data.frame* and use the **ggplot2** functions to make the pretty colored histogram.
 
-```{r warning=FALSE}
-Ae.Baja  <- rarefaction(loci.baja, mode="Ae", size=36)
-df <- data.frame( Ae.Baja )
-ggplot( df, aes(x=Ae.Baja) ) + geom_histogram(aes(fill=..count..)) + scale_fill_gradient("count",low="#cccccc",high="#a60000") + theme_bw()
+```{r hist-Ae}
+Ae.peninsula  <- rarefaction(loci.peninsula, mode="Ae", size=36)
+df <- data.frame( Ae.peninsula )
+ggplot( df, aes(x=Ae.peninsula) ) + geom_histogram(aes(fill=..count..), binwidth=0.05) + scale_fill_gradient("count",low="#cccccc",high="#a60000") + theme_bw()
 ```
 
 
@@ -648,7 +649,7 @@ He( arapat )
 Given the broadness of these functions, it is easy to integrate them into broader analyses. Here is an example of expected heterozygosity ($H_E$ or genetic diversity in Nei's terms) as a function of latitude for the peninsular populations.  The output is displayed as a plot.
 
 ```{r}
-baja <- arapat[ arapat$Species != "CladeB",]
+baja <- arapat[ arapat$Species != "Mainland",]
 coords <- strata_coordinates(baja)
 pops <- partition(baja,stratum="Population")
 he <- lapply( pops, function(x) return(He(x$EN, small.sample.correction=TRUE)) ) 
@@ -683,7 +684,7 @@ F_{IS} = 1 - \frac{H_{O}}{H_{E}}
 Using the beetle data again, from the maps above we see three mainland populations and there is a good reason to believe that these are a separate species (see Garrick *et al.* 2013).  These populations are small and isolated and as such may experience inbreeding.  
 
 ```{r}
-sonora <- arapat[ arapat$Species == "CladeB",]
+sonora <- arapat[ arapat$Species == "Mainland",]
 fis.sonora <- Fis( sonora )
 fis.sonora
 ```
@@ -708,7 +709,7 @@ ggplot( df, aes(x=Fis)) + geom_histogram(binwidth=0.025) + facet_grid( Locus~. )
 ```
 
 
-Estimating a confidence interval around a point estimate is a bit different.  In the example above, we could ask if $F_{IS,EN}=$`fis.sonora[3]` was different than $F_{IS,ATPS}=$`fis.sonora[7], which is an entirely different question than the one addressing $H_O: F_{IS} = 0$.  That being said, it is not too difficult to do this given the tools you have in **R**.
+Estimating a confidence interval around a point estimate is a bit different.  In the example above, we could ask if $F_{IS,EN}=$ `{r}fis.sonora[3]` was different than $F_{IS,ATPS}=$ `{r}fis.sonora[7]`, which is an entirely different question than the one addressing $H_O: F_{IS} = 0$.  That being said, it is not too difficult to do this given the tools you have in **R**.
 
 
 
@@ -757,7 +758,7 @@ loci <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD)
 
 #### AMOVA Distance
 
-The AMOVA distance metric was first introduced in Excoffier *et al.* (1996) using restriction fragment encodings. However, a more elegant description of it was described in Smouse & Peakall (1999) using a geometric interpreation.  Essentially, the codings of alleles at a locus can be depicted by a vector $\vec{p}$ whose length is equal to the number of alleles at the locus.  The presence of an allele increments the appropriate element of that vector.  For two individuals, the squared vector distance between them is:
+The AMOVA distance metric was first introduced in Excoffier *et al.* (1992) using restriction fragment encodings. However, a more elegant description of it was described in Smouse & Peakall (1999) using a geometric interpreation.  Essentially, the codings of alleles at a locus can be depicted by a vector $\vec{p}$ whose length is equal to the number of alleles at the locus.  The presence of an allele increments the appropriate element of that vector.  For two individuals, the squared vector distance between them is:
 
 \[
 \delta_{ij}^2 = 2(p_i-p_j)^2
@@ -799,7 +800,7 @@ dist_bray( loci )
 Genetic distances can also be estimated among partitioned groups of individuals.   Here, I will use the data from the mainland Sonoran beetle dataset using locus $ATPS$ and the $Population$ stratum as it is small enough to easily display all the results.
 
 ```{r}
-data <- arapat[arapat$Species == "CladeB",c(3,13)]
+data <- arapat[arapat$Species == "Mainland",c(3,13)]
 ```
 
 It should be noted that for some of these metrics, we need to make assumptions about how to represent them as true 'multilocus' estimators.  Where assumptions are being made, a warning message will be displayed to remind the user that there is an assumption being made in the estimation.
@@ -959,7 +960,7 @@ As you can see, there is a great deal of correlation between these parameters.
 
 ## Genetic Structure
 
-The estimation of structure from genetic data is a common (and commonly misused) endeavor.  The **gstudio** packages makes a distinction between structural parameters and statistical differences.  Structural parameters are the various $X_{ST}$ statistics that crop all too quickly.  These are simply parameters of the data and are not *sensu stricto* measures of differentiation.  To quote Sewell Wright (1972), "..."  All of these parameters are based upon assumptions related to population genetic processes.  Statistical differences, are those analyses we can do on genetic data that test a specific hypothesis that is not based upon population genetic understanding, rather the simple properties of multinomial multivariate data.
+The estimation of structure from genetic data is a common (and commonly misused) endeavor.  The **gstudio** packages makes a distinction between structural parameters and statistical differences.  Structural parameters are the various $X_{ST}$ statistics that crop all too quickly.  These are simply parameters of the data and are not *sensu stricto* measures of differentiation.  To quote Sewell Wright (1978), "..."  All of these parameters are based upon assumptions related to population genetic processes.  Statistical differences, are those analyses we can do on genetic data that test a specific hypothesis that is not based upon population genetic understanding, rather the simple properties of multinomial multivariate data.
 
 ### Structural Parameters
 
@@ -1046,8 +1047,8 @@ There are two statistical tests of differentiation you can conduct in *R* using 
 
 Here is an example with the larger Clade using the function *adonis()* from the **vegan** package. 
 
-```{r}
-data <- arapat[ arapat$Species == "CladeA",]
+```{r, message=FALSE}
+data <- arapat[ arapat$Species == "Cape",]
 D <- dist( dist_amova( data ) )
 Pop <- factor( as.character( data$Population ) )
 require(vegan)
@@ -1068,7 +1069,7 @@ if( !require(popgraph) )
   install.packages("popgraph")
 ```
 
-By default, the input to *popgraph()* is a multivariate data set and a factor to be used to identify the nodes.  For this example, we'll use the larger clade in the beetle, CladeC, as an example.
+By default, the input to *popgraph()* is a multivariate data set and a factor to be used to identify the nodes.  For this example, we'll use the larger clade in the beetle, Peninsula, as an example.
 
 ```{r}
 data <- to_mv( arapat )
@@ -1106,8 +1107,26 @@ V(graph)$color <- color
 plot(graph, vertex.label="")
 ```
 
-For a lot more on how to use and analyze population graph topologies see the documentation associated with it on my website.
+For a lot more on how to use and analyze population graph topologies see the documentation associated with it on my website or http://dyerlab.github.io/popgraph/ .
 
 ## References
 
-Excoffier *et al.* (1996)
+Bray, J. R. and J. T. Curtis. 1957. An ordination of upland forest communities of southern Wisconsin. Ecological *Monographs*, **27**, 325-349
+
+Cavalli-Sforza LL and Edwards AWF. 1967. Phylogenetic analysis: models and estimation procedures. *American Journal of Human Genetics*, **19**, 233-257.
+
+Dyer RJ, Westfall RD, Sork VL, Smouse PE. 2004. Two-generation analysis of pollen flow across a landscape V: a stepwise approach for extracting factors contributing to pollen structure. *Heredity*, **92**, 204-211.
+
+Excoffier, L., Smouse, P.E., and Quattro, J.M. 1992. Analysis of molecular variance inferred from metric distances among DNA haplotypes: application to human mitochondrial DNA restriction data. *Genetics*, **131**, 479-491.
+
+Garrick RC, Nason JD, Fernandez-Manjaress JFF, Dyer RJ. In Press. Ecological co-associations influence species’ responses to past climatic change: an example from a Sonoran Desert bark beetle. *Molecular Ecology*
+
+Nei, M. 1978. Estimation of average heterozygosity and genetic distance from a small number of individuals. *Genetics*, **76**, 379-390.
+
+Smouse PE and Peakall R. 1999. Spatial autocorrelation analysis of multi-allele and multi-locus genetic microstructure. *Heredity*, **82**, 561-573. 
+
+Smouse PE, Dyer RJ, Westfall RD, Sork VL. 2001. Two-generation analysis of pollen flow across a landscape I. Male gamete heterogeneity among females. *Evolution*, **55**, 260-271.
+
+Weir BS, Cockerham CC.  1984.  Estimating F-Statistics for the Analysis of Population Structure.  *Evolution*, **38**, 1358-1370.
+
+Wright, S. 1978. Evolution and the Genetics of Populations, *Vol. 4: Variability Within and Among Natural Populations*. University of Chicago Press, Chicago.

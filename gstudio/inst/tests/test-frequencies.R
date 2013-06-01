@@ -50,9 +50,6 @@ test_that("frequencies.data.frame", {
   expect_that( f <- frequencies( df, stratum="bob"), throws_error() )
   
   
-  file <- "~/Documents/Dropbox/R/gstudio/gstudio/data/arapat.rda"
-  load(file)
-  f <- frequencies( arapat, stratum="Population",loci="ZMP")
   
 })
 

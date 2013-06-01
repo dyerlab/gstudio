@@ -15,11 +15,15 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 #' @examples
-#'  raw_alleles <- matrix( c(sample( LETTERS[1:5], size=20, replace=TRUE), sample( LETTERS[4:8], size=20, replace=TRUE)), ncol=2, byrow=TRUE )
+#'  a1 <- sample( LETTERS[1:5], size=20, replace=TRUE)
+#'  a2 <- sample( LETTERS[4:8], size=20, replace=TRUE)
+#'  raw_alleles <- matrix( c(a1,a2), ncol=2, byrow=TRUE )
 #'  locus <- locus( raw_alleles, type="column")
 #'  Population <- c(rep("Pop-A",10),rep("Pop-B",10))
 #'  Gst_prime( locus, Population )
-#'  raw_alleles <- matrix( c(sample( LETTERS[1:5], size=20, replace=TRUE), sample( LETTERS[4:8], size=20, replace=TRUE)), ncol=2, byrow=TRUE )
+#'  a1 <- sample( LETTERS[1:5], size=20, replace=TRUE)
+#'  a2 <- sample( LETTERS[4:8], size=20, replace=TRUE)
+#'  raw_alleles <- matrix( c(a1,a2), ncol=2, byrow=TRUE )
 #'  locus2 <- locus( raw_alleles, type="column")
 #'  df <- data.frame( Population, TPI=locus, PGM=locus2 )
 #'  Gst_prime( df, nperm=99)

@@ -1,0 +1,10 @@
+gstudio 1.0
+-----------------
+
+* This is a complete rewrite of the gstudio (ver. 0.X) package.  What I have done is to remake
+  the fundamental locus object as an S3 object rather than an S4 class. As a consequence, all 
+  functions have been changed.
+* Too much has changed to interate through all of the changes.  To get a good idea of how to 
+  use the new functionality see http://dyerlab.github.io/gstudio/
+
+
