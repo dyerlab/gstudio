@@ -31,7 +31,7 @@ permute_ci <- function( x, stratum=NULL, allele_perm=TRUE, nperm=99, FUN=NULL, r
   if( any( is.na(x) ) )
     warning( "Some of your data is 'missing' and as such will be permuted as normal.  Make sure this is what you intend to do.")
   
-  ret <- rep(NA,nperm)
+  ret <- numeric(nperm)
   for( i in 1:nperm){
     
     # permute strata and do function
@@ -42,8 +42,10 @@ permute_ci <- function( x, stratum=NULL, allele_perm=TRUE, nperm=99, FUN=NULL, r
     
     # must be individual genotype-only function
     else {
+      
       if( !allele_perm )
         xp <- sample(x, size=length(x), replace=replace)
+      
       else {
         a <- alleles( x )
         xp <- matrix( sample( a, size=nrow(a)*ncol(a), replace=replace ), ncol=ncol(a))
@@ -55,6 +57,7 @@ permute_ci <- function( x, stratum=NULL, allele_perm=TRUE, nperm=99, FUN=NULL, r
     
   }
   
+  ret <- unlist(ret)
   return( ret )  
 }
 

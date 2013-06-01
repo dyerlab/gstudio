@@ -20,6 +20,7 @@ rarefaction <- function( x, mode="Ae", size=0, nperm=999 ) {
   ret <- rep(NA, nperm)
   for( i in 1:nperm )
     ret[i] <- allelic.diversity( sample(x,size=size,replace=TRUE), mode=mode )
+  ret <- unlist(ret)
   
   return( ret )
 }

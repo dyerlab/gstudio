@@ -23,8 +23,7 @@ Imports:
     raster,
     grid,
     popgraph,
-    reshape2,
-    ecodist
+    reshape2
 Suggests:
     testthat,
     knitr
@@ -67,9 +66,9 @@ Collate:
     'allelic.diversity.R'
     'rarefaction.R'
     'permute_ci.R'
-    'genetic.diversity.R'
     'A.R'
     'Ae.R'
     'dist_cgd.R'
     'dist_bray.R'
     'dist_euclidean.R'
+    'genetic_diversity.R'

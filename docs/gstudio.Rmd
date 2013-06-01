@@ -679,18 +679,27 @@ fis.sonora <- Fis( sonora )
 fis.sonora
 ```
 
-There are various ways to get a confidence interval on these kind of analyses.  In what follows is an implicit test of $H_O: F_{IS} = 0$ using permutation.  If that Null hypothesis is true, then any random permutation of alleles (combined into genotypes) sampled from this population would produce estimates of $F_{IS}$ as large as that observed.  This kind of permutation is handled by the function *permute_ci()* (though it can be applied to more complicated analyses as shown below).  Here is an example of how to use it to create the null distribution of $F_{IS}$ values given these data.  
-
-For simplicity, I only apply this to the $EN$ locus.
+There are various ways to get a confidence interval on these kind of analyses.  In what follows is an implicit test of $H_O: F_{IS} = 0$ using permutation.  If that Null hypothesis is true, then any random permutation of alleles (combined into genotypes) sampled from this population would produce estimates of $F_{IS}$ as large as that observed.  This kind of permutation is handled by the function *permute_ci()* (though it can be applied to more complicated analyses as shown below).  Here is an example of how to use it to create the null distribution of $F_{IS}$ values given these data for the loci $EN$, $AML$, and $ATPS$. 
 
 ```{r,warning=FALSE}
-fis.perm <- permute_ci( sonora$EN, FUN=Fis, nperm=999 )
-summary( fis.perm )
+locus.en <- sonora$EN[!is.na(sonora$EN)]
+locus.aml <- sonora$EN[ !is.na(sonora$AML)]
+locus.atps <- sonora$EN[ !is.na(sonora$ATPS)]
+fis.en <- permute_ci( locus.en , FUN=Fis, nperm=99 )
+fis.aml <- permute_ci( locus.aml , FUN=Fis, nperm=99 )
+fis.atps <- permute_ci( locus.atps , FUN=Fis, nperm=99 )
+```
+
+Now we can plot these as histograms to look at their distributions.
+
+```{r}
+df <- data.frame( Locus=rep(c("EN","AML","ATPS"), each=length(fis.en)), Fis=c(fis.en,fis.aml,fis.atps))
+fis.sonora
+ggplot( df, aes(x=Fis)) + geom_histogram(binwidth=0.025) + facet_grid( Locus~. ) + theme_bw()
 ```
 
 
-
-
+Estimating a confidence interval around a point estimate is a bit different.  In the example above, we could ask if $F_{IS,EN}=$`fis.sonora[3]` was different than $F_{IS,ATPS}=$`fis.sonora[7], which is an entirely different question than the one addressing $H_O: F_{IS} = 0$.  That being said, it is not too difficult to do this given the tools you have in **R**.
 
 
 
@@ -706,28 +715,54 @@ summary( fis.perm )
 
 There are several genetic distances available within the **gstudio** package and the ability to use multivariate analogs of genotypes opens up all distance essentially all distance metrics to the end user.  In the stuff that follows are the distances that are internally implemented in the package along with a brief overview.
 
+Since all the genetic distance approaches take the same general data, **gstudio** provides a general interface for all distance metrics in the *genetic_distand()* function.  This function takes the data as either a data frame with *locus* objects or a vector of *locus* objects and the genetic distance metric to be estimated and returns the approprite response.  The general form of this function is as follows and only differes in the sense that individual genetic distances do not require a *stratum* whereas strata distances do. However, as all functions in **gstudio** that need a stratum, if your default name for that column is "Population" you do not need to provide it.
 
+```{r,eval=FALSE}
+amova.dist <- genetic_distance(data,mode="AMOVA")
+nei.dist <- genetic_distance( data, stratum="Population", mode="Nei")
+```
+
+What folows is a more in-depth overview of each of the genetic distance metrics.  
 
 ### Individual Distances
 
 At the base level, you can estimate distances among individuals resulting in an $NxN$ matrix of pair-wise distances.  This is internally how the AMOVA analysis is conducted and is a nice heuristic for conceptual understanding of variance decomposition.  
 
+In the following examples, I will use a made-up data locus consisting of four alleles and an individual with each genotype to show how these distances work.  Here is the data:
+
+```{r}
+AA <- locus( c("A","A") )
+AB <- locus( c("A","B") )
+BB <- locus( c("B","B") )
+AC <- locus( c("A","C") )
+AD <- locus( c("A","D") )
+BC <- locus( c("B","C") )
+BD <- locus( c("B","D") )
+CC <- locus( c("C","C") )
+CD <- locus( c("C","D") )
+DD <- locus( c("D","D") )
+loci <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD) 
+```
+
+
 
 #### AMOVA Distance
+
+The AMOVA distance metric was first introduced in Excoffier *et al.* (1996) using restriction fragment encodings. However, a more elegant description of it was described in Smouse & Peakall (1999) using a geometric interpreation.  Essentially, the codings of alleles at a locus can be depicted by a vector $\vec{p}$ whose length is equal to the number of alleles at the locus.  The presence of an allele increments the appropriate element of that vector.  For two individuals, the squared vector distance between them is:
 
 \[
 \delta_{ij}^2 = 2(p_i-p_j)^2
 \]
 
-#### Jaccard Distance
+Across loci, these are additive (though see Smouse & Peakall for additional weighing schemes by locus or allele and the relative power of adopting such approaches).  Across a set of individuals the squared genetic distance between all individuals can be represented by a square symmetric matrix with a zero diagnonal, **D**.  The AMOVA analysis itself is conducting by taking the "Sums of Squared Genetic Distances" for all individuals (SSGD(Total)), wihtin group SSW, and among groups SSA and variance is decomposed following the standard approach for a random effects model.  There is essentially no mystery in this apporach, though it has been shrouded in obscurity.  Dyer *et al.* (2004) showed how this is just a multivariate linear model amenable to a much broader range of experimental designs than just 1-way and nested designs.
 
-Jaccard distance is a set-theoretic distance quantifying dissimilarity.  Assuming that loci are sets of alleles, the Jaccard dissimilarity between genotypes $A$ and $B$ is given by:
 
-\[
-J_\delta(A,B) = \frac{|A \bigcup B| - |A \bigcap B|}{|A \bigcup B|}
-\]
+```{r}
+dist_amova( loci )
+```
 
-You can look at the elements of the LTRS matrix (it is 36x36 so I am not printing it out here).  With \texttt{mode="Jaccard"}, missing genotypes will result in \texttt{NA} rows and columns in the distance matrix.  It is no entirely clear how this metric can easily handle missing genotypes.
+
+
 
 
 
@@ -741,6 +776,12 @@ BC_\delta = \frac{S_i + S_j - 2S_{ij}}{S_i+S_j}
 \]
 
 where $S_x$ is the species count and $S_{ij}$ is the sum of minimum abundances.  Lately, this has seen considerable use within individual-based landscape genetic studies.  Missing genotypes are set to average allele frequencies, that is to say that every missing genotype is considered to have all the alleles present in the entire population, but with probability equal to their global frequencies.  Essentially, this removes the \texttt{NA} problem like in the \texttt{mode="Jaccard"} situation and does so by taking the non-missing genotype's genetic distance from the global genetic centroid (it's cosmic man!).  Here is the estimation using two loci.
+
+```{r}
+dist_bray( loci )
+```
+
+
 
 
 ### Strata Distances
@@ -779,7 +820,20 @@ The genetic distance, $D_C$ is measured as the chord distance as indicated in Fi
 D_{CS,m,n} =  \frac{2}{\pi}\sqrt{ 2 * 1-\sum_{i=1}^{\ell} p_{m,i}*p_{n,i}}
 \]
 
+
+
+
+
 #### Jaccard Distance
+
+Jaccard distance is a set-theoretic distance quantifying dissimilarity.  Assuming that loci are sets of alleles, the Jaccard dissimilarity between genotypes $A$ and $B$ is given by:
+
+\[
+J_\delta(A,B) = \frac{|A \bigcup B| - |A \bigcap B|}{|A \bigcup B|}
+\]
+
+You can look at the elements of the LTRS matrix (it is 36x36 so I am not printing it out here).  With \texttt{mode="Jaccard"}, missing genotypes will result in \texttt{NA} rows and columns in the distance matrix.  It is no entirely clear how this metric can easily handle missing genotypes.
+
 
 
 
@@ -803,6 +857,14 @@ Nei's (1978) genetic distance, $D_N$, is:
 \[
 D = -ln(I)
 \]
+
+
+
+
+
+
+
+
 
 
 
@@ -915,4 +977,4 @@ For a lot more on how to use and analyze population graph topologies see the doc
 
 ## References
 
-
+Excoffier *et al.* (1996)

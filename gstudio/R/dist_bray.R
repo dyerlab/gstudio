@@ -2,13 +2,23 @@
 #' 
 #' This function returns a measure of genetic distance based upon
 #'  the AMOVA distance metric.  
-#' @param x A \code{data.frame} with both stratum and \code{locus} 
-#'  objects in them.
+#' @param x Either a \code{data.frame} with both stratum and \code{locus} 
+#'  objects in them (for strata distance) OR a vector of \code{locus} 
+#'  objects and this will calculate distance based upon individual
+#'  genetic distances.
 #' @param stratum The name of the stratum variable in \code{x}
 #' @return A matrix of Jaccard distance
+#' 
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 dist_bray <- function( x, stratum="Population" ) {
+  
+  # Special case where x is passed a a locus object, this 
+  #   will assume that we are talking about individual Bray Curtis distance
+  if( is(x,"locus") ) {
+    x <- data.frame(Locus=x,Population=1:length(x))
+    stratum <- "Population"
+  }
   
   if( !is( x, "data.frame") )
     stop("You need to pass a data.frame to dist_bray() to work.")

@@ -17,26 +17,22 @@
 #'      \item{He}{Expected heterozygosity}
 #'      \item{PIC}{Polymorphic Information Content}
 #'    }
-#'  @param perm_prob A flag indicating that the probability of mode==0 should be assessed using 
+#'  @param nperm A flag indicating that the probability of mode==0 should be assessed using 
 #'    permuation (via \code{permute_ci})
-#'  @param ... Ignored in general, but can be used to pass options to \code{permute_ci}.
 #'  @return A \code{data.frame} with columns for strata, diversity (mode), and potentially P(mode=0).
 #'  @export
 #'  @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-genetic.diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He","PIC")[2], perm_prob=FALSE, ...){
+genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He","PIC")[2], nperm=0 ){
+  
   if( missing(x) )
     stop("You must pass a data.frame to the genetic.diversity() function.")
   
-  # make the data frame and 
-  if( is.null(stratum) ) {
-    ret <- data.frame( Stratum="All" )
-    pops <- list(All=x)
-  }
-  else {
-    pops <- partition(x,stratum)
-    ret <- data.frame( Stratum=names(pops) )
-  }
-    
+  if( is.null(stratum))
+    data <- list(x)
+  else
+    data <- partition(x,stratum)
+  
+  
   
   
   
