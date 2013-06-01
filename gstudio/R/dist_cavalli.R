@@ -23,7 +23,7 @@ dist_cavalli <- function( x, stratum="Population" ) {
   if( K==0)
     stop("You need to pass objects of type 'locus' to use for dist_cavalli().")
   if( K > 1 )
-    warning("Multilous estimates of Cavalli-Sforza distance are assumed to be additive.")
+    message("Multilous estimates of Cavalli-Sforza distance are assumed to be additive.")
 
   freqs <- frequencies( x, stratum=stratum) 
   f <- dcast( freqs, Locus + Allele ~ Stratum, value.var="Frequency", fill=0)

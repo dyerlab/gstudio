@@ -10,7 +10,8 @@
 #'  estimator.
 #' @param size.correct A flag indicating that the estimate should be corrected for
 #'  based upon sample sizes (default=TRUE).
-#' @return An \code{data.frame} with Gst, Ht, and Hs and optionally P
+#' @return An \code{data.frame} with Gst, Ht, and Hs and optionally P.  If more than one locus is provided,
+#'  then a 'mutlilocus' estimate is shown using the harmonic mean of individual locus Gst_prime values.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 #' @examples
@@ -35,7 +36,8 @@ Gst_prime <- function(  x, stratum="Population",  nperm=0, size.correct=TRUE ) {
     if( !(stratum %in% names(x)) )
       stop("If you pass a data.frame to Gst(), you need to indicate a stratum varaible column.")
     
-    strata <- x[[stratum]]
+    strata <- factor(as.character(x[[stratum]]))
+    k <- length(levels(stratum))
     K <- length(locus_names)
     ret <- data.frame(Locus=locus_names, Gst=numeric(K), Hs=numeric(K), Ht=numeric(K), P=numeric(K), stringsAsFactors=FALSE)
     
@@ -46,9 +48,9 @@ Gst_prime <- function(  x, stratum="Population",  nperm=0, size.correct=TRUE ) {
       
     }
     
-    Hs.tot <- sum(ret$Hs, na.rm=TRUE )
-    Ht.tot <- sum(ret$Ht, na.rm=TRUE )
-    Gst.tot <- 1 - Hs.tot / Ht.tot
+    Hs.tot <- mean(ret$Hs, na.rm=TRUE )
+    Ht.tot <- mean(ret$Ht, na.rm=TRUE )
+    Gst.tot <-  1.0 / ( mean( 1/ret$Gst, na.rm=TRUE))
     
     ret[K+1,1] <- "Multilocus"
     ret[K+1,2] <- Gst.tot
@@ -75,13 +77,13 @@ Gst_prime <- function(  x, stratum="Population",  nperm=0, size.correct=TRUE ) {
     strata.lvls <- levels(stratum)
     inds <- to_mv.locus( x )
     p.vec <- colSums(inds)
-    ht <- 1-sum((p.vec/sum(p.vec))^2)
+    ht <- 1-sum((p.vec/sum(p.vec))^2, na.rm=TRUE)
     hs <- mean(unlist(lapply( strata.lvls, 
                               function(strat,inds,strata ) {
                                 s <- colSums(as.matrix(inds[strata==strat,]))
                                 f <- 1-sum((s/sum(s))^2)
                                 return(f)
-                              }, inds=inds, strata=stratum)))
+                              }, inds=inds, strata=stratum)), na.rm=TRUE)
     
     if( size.correct ) {
       n.harmonic <- 1/mean(1/table(stratum))
@@ -107,7 +109,7 @@ Gst_prime <- function(  x, stratum="Population",  nperm=0, size.correct=TRUE ) {
                            }, 
                            inds=inds, 
                            strata=sample(stratum))
-        perms[i] <- mean(unlist(hs.perm))
+        perms[i] <- mean(unlist(hs.perm), na.rm=TRUE)
       }
       if( size.correct ) {
         perms <- (2*n.harmonic) / (2*n.harmonic-1) * perms

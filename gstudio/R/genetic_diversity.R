@@ -15,7 +15,6 @@
 #'      \item{Ae}{Effective number of alleles (default)}
 #'      \item{A95}{Number of alleles with frequency at least five percent}
 #'      \item{He}{Expected heterozygosity}
-#'      \item{PIC}{Polymorphic Information Content}
 #'    }
 #'  @param nperm A flag indicating that the probability of mode==0 should be assessed using 
 #'    permuation (via \code{permute_ci})
@@ -25,14 +24,23 @@
 genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He","PIC")[2], nperm=0 ){
   
   if( missing(x) )
-    stop("You must pass a data.frame to the genetic.diversity() function.")
+    stop("You must pass a data.frame to the genetic_diversity() function.")
   
   if( is.null(stratum))
     data <- list(x)
   else
     data <- partition(x,stratum)
   
+  mode <- tolower( mode )
   
+  if( mode == "a")
+    ret <- A(x)
+  else if( mode == "a95")
+    ret <- A(x,min_freq=0.05)
+  else if( mode == "He")
+    ret <- He(x)
+  else
+    stop(paste("The type of diversity measure '", mode, "' you requested was not recognized.", sep=""))
   
   
   

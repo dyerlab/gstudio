@@ -9,7 +9,9 @@
 #'  estimator.
 #' @param size.correct A flag indicating that the estimate should be corrected for
 #'  based upon sample sizes (default=TRUE).
-#' @return An object of type "structure statistic"
+#' @return A \code{data.frame} with Dest, Hs, Ht, and P (if asked for).  When multiple 
+#'  loci are provided, the results also provide a multilocus estimate using the 
+#'  harmonic mean.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 #' @examples
@@ -47,10 +49,10 @@ Dest <- function( x, stratum="Population", nperm=0, size.correct=FALSE ) {
     }
     
     k <- length(levels(strata))
-    Hs.tot <- sum(ret$Hs, na.rm=TRUE )
-    Ht.tot <- sum(ret$Ht, na.rm=TRUE )
-    Dest.tot <- (( Ht.tot-Hs.tot) / (1-Hs.tot))
-    Dest.tot <- Dest.tot / (k/(k-1))
+    Hs.tot <- mean(ret$Hs, na.rm=TRUE )
+    Ht.tot <- mean(ret$Ht, na.rm=TRUE )
+    Dest.tot <- 1.0 / ( mean( 1/ret$Dest, na.rm=TRUE))
+
     
     ret[K+1,1] <- "Multilocus"
     ret[K+1,2] <- Dest.tot
@@ -82,7 +84,7 @@ Dest <- function( x, stratum="Population", nperm=0, size.correct=FALSE ) {
                               function(strat,inds,strata ) {
                                 s <- colSums(as.matrix(inds[strata==strat,]))
                                 f <- 1-sum((s/sum(s))^2)
-                              }, inds=inds, strata=stratum)))
+                              }, inds=inds, strata=stratum)),na.rm=TRUE)
     
     n.harmonic <- 1/mean(1/table(stratum))
     hs.estimated <- (2*n.harmonic)/(2*n.harmonic -1) * hs
@@ -106,7 +108,7 @@ Dest <- function( x, stratum="Population", nperm=0, size.correct=FALSE ) {
                            }, 
                            inds=inds, 
                            strata=sample( stratum ) )
-        perms[i] <- mean( unlist( hs.perm ) )
+        perms[i] <- mean( unlist( hs.perm ) , na.rm=TRUE)
       }
       
       if( size.correct ) {

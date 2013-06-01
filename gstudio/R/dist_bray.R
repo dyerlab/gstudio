@@ -31,7 +31,7 @@ dist_bray <- function( x, stratum="Population" ) {
   if( K==0)
     stop("You need to pass objects of type 'locus' to use for dist_bray().")
   else if( K > 1 )
-    warning("Jaccard distance will be assumed to be entirely additive across loci.")
+    message("Bray distance will be assumed to be entirely additive across loci.")
  
   j <- dist_jaccard( x, stratum )
   ret <- -j / (j-2)

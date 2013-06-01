@@ -45,13 +45,15 @@ update.packages( ask=FALSE )
 And any time you need to use the package, you would just pull it into your session.
 
 ```{r,message=FALSE}
-require(gstudio, quietly=TRUE)
+require(gstudio)
 ```
 
-This should get you everything you need. The **gstudio**  package does contain a lot of build-in documentation including a lot of examples.  All the functions and examples associated with them can be found in the build-in documents available from:
+This should get you everything you need. The **gstudio**  package does contain a lot of build-in documentation including a lot of examples.  All the functions and examples associated with them can be found in the build-in documents available from any of the following (n.b., the vignette is a simple placeholder with links to the website.)
 
 ```{r, eval=FALSE}
-help(package="gstudio", help_type = 'html')
+help(package="gstudio")
+vignette('gstudio')
+system( "open http://dyerlab.github.io/gstudio/")
 ```
 
 At any point if you have any questions about the values or options for a particular function in **gstudio**  or any other package, you can use the  *help.search(func)* or *?* functionality.This file is also kept in sync with the development of the **gstudio**  package (it is in the source package that you downloaded from CRAN) and will serve as a tutorial for your use of this package.  If there are any questions that you may have regarding this package, feel free to contact [Rodney Dyer](mailto://rjdyer@vcu.edu) and I will get back to you as soon as possible.
@@ -636,6 +638,13 @@ and *He()* (for expected heterozygosity given Hardy Weinberg Equilibrium).
 He( arapat$EF )
 ```
 
+Both $H_E$ and $H_O$ can be used with full data sets as well. When you pass a full *data.frame* to these functions, it will return a *data.frame* with loci by row.
+
+```{r}
+He( arapat )
+```
+
+
 Given the broadness of these functions, it is easy to integrate them into broader analyses. Here is an example of expected heterozygosity ($H_E$ or genetic diversity in Nei's terms) as a function of latitude for the peninsular populations.  The output is displayed as a plot.
 
 ```{r}
@@ -787,8 +796,13 @@ dist_bray( loci )
 ### Strata Distances
 
 
-Genetic distances can also be estimated among groups of individuals.  The same data will be used here but since there are only three populations, we'll be able to see the whole distance matrix. 
+Genetic distances can also be estimated among partitioned groups of individuals.   Here, I will use the data from the mainland Sonoran beetle dataset using locus $ATPS$ and the $Population$ stratum as it is small enough to easily display all the results.
 
+```{r}
+data <- arapat[arapat$Species == "CladeB",c(3,13)]
+```
+
+It should be noted that for some of these metrics, we need to make assumptions about how to represent them as true 'multilocus' estimators.  Where assumptions are being made, a warning message will be displayed to remind the user that there is an assumption being made in the estimation.
 
 #### Euclidean Distance
 
@@ -803,7 +817,11 @@ where $p_{ij}$ and $p_{kj}$ are the frequencies of the $j^{th}$ allele in both t
 
 It is perhaps easiest to think of Euclidean distance in x,y coordinate space.  This distance can be estimated by *stratum.distance()* using the optional parameter *method='eucl'* and it will return a *dist* matrix.
 
-Once the matrix has been estimated, you can visualize it in many ways.  One of the most straight-forward approaches it to visualizing the relationships among rows and columns is to put it into a bifurcating tree.  
+```{r}
+dist_euclidean( data )
+```
+
+
 
 
 #### Cavalli-Sforza Distance
@@ -821,6 +839,9 @@ D_{CS,m,n} =  \frac{2}{\pi}\sqrt{ 2 * 1-\sum_{i=1}^{\ell} p_{m,i}*p_{n,i}}
 \]
 
 
+```{r}
+dist_cavalli( data )
+```
 
 
 
@@ -829,17 +850,38 @@ D_{CS,m,n} =  \frac{2}{\pi}\sqrt{ 2 * 1-\sum_{i=1}^{\ell} p_{m,i}*p_{n,i}}
 Jaccard distance is a set-theoretic distance quantifying dissimilarity.  Assuming that loci are sets of alleles, the Jaccard dissimilarity between genotypes $A$ and $B$ is given by:
 
 \[
-J_\delta(A,B) = \frac{|A \bigcup B| - |A \bigcap B|}{|A \bigcup B|}
+J_{\delta(A,B)} = \frac{|A \bigcup B| - |A \bigcap B|}{|A \bigcup B|}
 \]
 
-You can look at the elements of the LTRS matrix (it is 36x36 so I am not printing it out here).  With \texttt{mode="Jaccard"}, missing genotypes will result in \texttt{NA} rows and columns in the distance matrix.  It is no entirely clear how this metric can easily handle missing genotypes.
+```{r}
+dist_jaccard( data )
+```
 
 
 
+#### The $D_{PS}$ Distance
+
+The Bray Curtis distance can also be estimated on groups of individuals.  However, when it is done it is often represented as $D_{PS} = (1 - P_S)$ (where $P_S$ is the proportion of shared alleles), which I will follow here for simplicity such that the individual distances and the strata distances are not confused.  The $D_{PS}$ distance metric is direclty related to Jaccard's distance as:
+
+\[
+D_{PS} = \frac{-J_{\delta(A,B)}}{J_{\delta(A,B)}-2}
+\]
+
+
+```{r}
+dist_bray( data )
+```
+
+It should be noted here that the function *dist_bray()* is used for both individual distance AND strata distance depending upon what you pass to it.  An individual distance is found by passing it a vector of loci whereas a stratum distance is returned by passing it a *data.frame* object (that has a $stratum$ column).  In the *genetic_distance()* function these are also differentiated by *mode="Bray"* for the individual one and *mode="Dps"* for the stratum.
 
 #### Conditional Genetic Distance (cGD; Graph Distance)
 
-Conditional genetic distance, *cGD*, is a measure based upon conditional genetic covariance and is distinctly different than these other measures as it is not a pair-wise distance metric.  Rather it is the distance through a *Population Graph* topology whose construction is determined by the totality of the data.  To estimate *cGD* from your data, you can use the *genetic.distance()* function as before and it will do right thing and return you a matrix.  However, you should probably look into what a *Population Graph* really is prior to using it.  You will find more information below as well as in the documents for the **popgraph** package itself.  For consistency, we'll add it here and look a the output below.
+Conditional genetic distance, *cGD*, is a measure based upon conditional genetic covariance and is distinctly different than these other measures as it is not a pair-wise distance metric.  Rather it is the distance through a *Population Graph* topology whose construction is determined by the totality of the data.  To estimate *cGD* from your data, you can use the *genetic.distance()* function as before and it will do right thing and return you a matrix.  However, you should probably look into what a *Population Graph* really is prior to using it.  You will find more information below as well as in the documents for the **popgraph** package itself.  For consistency, the function is shown below BUT this dataset with 3 populations is too small to be of interest for a network analysis (how many ways can you connect 3 things...)
+
+```{r,message=FALSE,warning=FALSE}
+dist_cgd( data )
+```
+
 
 
 #### Nei's Genetic Distance
@@ -858,12 +900,59 @@ Nei's (1978) genetic distance, $D_N$, is:
 D = -ln(I)
 \]
 
+```{r}
+dist_nei( data )
+```
+
+
+
+#### Comparing strata distance metrics 
+
+There are several more genetic distance metrics available and each may have its own set of assumptions.  However, it is also true that across these metrics, there is some similarity between them.  Just for illistrative purposes, we'll look at the various strata distances and plot them against eachother to look at the correlative structure between alternative measures using the $ATPS$ locus and the entire beetle dataset.
+
+```{r}
+x <- arapat[ , c(3,13,14) ]
+summary(x)
+```
+
+Now, we'll grab the distance metrics
+
+```{r, distances, warning=FALSE,message=FALSE}
+dist.euc <- genetic_distance( x, mode="Euclidean")
+dist.cgd <- genetic_distance( x, mode="cGD")
+dist.nei <- genetic_distance( x, mode="Nei")
+dist.dps <- genetic_distance( x, mode="Dps")
+dist.jac <- genetic_distance( x, mode="Jaccard")
+```
+
+and then take the upper triangle of each and put them into a $data.frame$.
+
+```{r}
+df <- data.frame( Euclidean= dist.euc[ upper.tri(dist.euc) ] )
+df$cGD <- dist.cgd[ upper.tri(dist.cgd) ]
+df$Nei <- dist.nei[ upper.tri(dist.nei) ]
+df$Dps <- dist.dps[ upper.tri(dist.dps) ]
+df$Jaccard <- dist.jac[ upper.tri(dist.jac) ]
+```
+
+Before we plot them, there is a bit of cleaning up to do in these data.  For populations that have no alleles in common, Nei's genetic distance will be $Inf$ (e.g., $-log(0)$). Also, with cGD, sets of populations that are independent will also have a infinite distance (e.g., they are not connected so it is impossible to go through the graph from one population to the other).  So with these data, we should first remove them.
+
+
+and then we can plot them against each other and look at their correlations.
+
+```{r, pairs, message=FALSE, warning=FALSE}
+df <- df[ is.finite(df$Nei), ]
+df <- df[ is.finite(df$cGD), ]
+require(GGally)
+ggpairs( df )
+```
+
+As you can see, there is a great deal of correlation between these parameters.
 
 
 
 
-
-
+---
 
 
 
@@ -884,41 +973,85 @@ Both $G_{ST}^\prime$ and $D_{est}$ are parameters derived for loci with lots of 
 
 Here are some examples of how to estimate these parameters using the beetle data.  In all of these approaches, you pass both the stratum and the locus and they return a data frame.  
 
+As in the case for genetic distance measures, structure parameters can also be estimated using either the individual structure functions OR the generalized function *genetic_structure()* with the appropriate 
+
+
 #### Nei's $G_{ST}$ Parameter
 
 ```{r}
-Gst( arapat$Population, arapat$LTRS, nperm=99 )
+Gst(  arapat$LTRS, arapat$Population, nperm=99 )
 ```
 
 If the loci that you pass is a bunch of loci in a data.frame, it will return the single locus estimate as well as the multilocus estimate (based upon summing the heterozygosities and then estimating it as in Nei, not in just averaging the $G_{ST}$ values as in Berg & Hamrick (XXXX), see XXXX for more on the differences).
 
 ```{r}
-Gst( arapat$Population, arapat[,c(7:14)], nperm=99)
+Gst(arapat[,c(3,7:14)], nperm=99)
 ```
 
 
 #### Hendrick's $G_{ST}^\prime$ Parameter
 
+A correction to Nei's $G_{ST}$ was suggested for loci with a lot of alleles.  This is because the maximum value for expected heterozygosity is determined by the number of alleles and as such $G_{ST}$ for high allelic loci is not bound on the interval $[0,1]$ but is maxed out below 1.0.  As a consequence, Hedrick 
+
+
 ```{r}
 sort(unique(matrix( alleles(arapat$MP20), ncol=1)))
-Gst_prime(arapat$Population, arapat$MP20, nperm=99 )
+Gst_prime(arapat$MP20, arapat$Population,  nperm=99 )
 ```
+
+In a similar fashion, the multilocus analog can be found by passing a *data.frame* to the function (again I am skipping the *stratum* variable to this function as the data has the strata in a column named 'Population').
+
+```{r}
+Gst_prime(arapat[,c(3,7:14)], nperm=99)
+```
+
+
+
+
+
 
 #### Joost's $D_{est}$ Parameter
 
+Following a discussion back-and-forth between Hedrick & Joost, Joost proposed an alternative measure $D_{EST}$.  The estimation of this parameter is found in a similar way as the other structure parameters.
+
 ```{r}
-Dest(arapat$Population, arapat$MP20, nperm=99 )
+Dest( arapat$MP20, arapat$Population, nperm=99 )
 ```
+
+```{r}
+Dest( arapat[,c(3,7:14)], nperm=99)
+```
+
+
+
+#### Similarities in Parameters
+
+As in genetic distance metrics, there is some similarity in output from these structure parameters.  Here is a paired plot of the three parameters as above.
+
+```{r, structurepairs}
+gst <- Gst( arapat )$Gst
+gstp <- Gst_prime( arapat )$Gst 
+dest <- Dest( arapat )$Dest
+df <- data.frame( Gst=gst, Gst_prime=gstp, Dest=dest )
+require(GGally)
+ggpairs( df )
+```
+
+You can tell from these plots which locus has a lot of alleles and which ones do not...
 
 
 ### Statistical Differences
 
 There are two statistical tests of differentiation you can conduct in *R* using **gstudio** and both of them are based upon the same approach.  Originally shown by Weir & Cockerham (1984), the parameter $\theta$ can be though of as the proportion of among-strata variance in a random effects Analysis of Variance based upon single loci.  A decade later, Excoffier *et al.* (1992) showed that the same kind of parameter can be estimated using multilocus data.  Unfortunately, they calling the parameter $\Phi_{ST}$ and this has caused some confusion among analysts who confuse this parameter with the structural parameters above.  I should not throw stones, I also followed in the obfuscation of these parameters in Smouse *et al.* (2001) when we showed how to use this approach to analyze pollen pools and called it $\Phi_{FT}$ (the 'F' for father as we are analyzing paternal pollen pools).  We should have also called it PAMOVA for "Pollen AMOVA" but you cannot change history).  Later, we (Dyer *et al.* 2004) showed that both $\theta$ and $\Phi$ are simply multivariate general linear models based upon $NxN$ covariance matrices rather than $pxp$ ones (though the broader use of more powerful statistical models has yet to be fully embraced).  There is a direct link between $\theta$ and $\Phi$ in that they are identical, both statistically and numerically, wen you only use a single locus.  What $\Phi$ does it to extend the analysis to a multilocus analysis.  
 
-For simplicity, I'll use the cape region clade as an example here and borrow the AMOVA routine from the **ecodist** package.
+Here is an example with the larger Clade using the function *adonis()* from the **vegan** package. 
 
 ```{r}
 data <- arapat[ arapat$Species == "CladeA",]
+D <- dist( dist_amova( data ) )
+Pop <- factor( as.character( data$Population ) )
+require(vegan)
+adonis(D ~ Pop )
 ```
 
 

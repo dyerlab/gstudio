@@ -1,5 +1,7 @@
 gstudio.log
 gstudio-concordance.tex
-gstudio-tex
 gstudio.tex
 
+/inst/doc/gstudio-concordance.tex
+/inst/doc/gstudio.synctex.gz
+/inst/doc/gstudio.tex

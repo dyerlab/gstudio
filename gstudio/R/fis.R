@@ -4,7 +4,8 @@
 #'  a set of them if the value passed is a \code{data.frame} with locus objects.
 #'  
 #' @param x Either a \code{locus} object or a data.frame with locus objects.
-#' @return The inbreeding F statistic
+#' @return The inbreeding F statistic as a \code{numeric} value or a \code{data.frame}
+#'  if you passed multiple loci to this function.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
@@ -13,18 +14,20 @@
 #' Fis( loci )
 #' 
 Fis <- function( x ) {
-  if( is(x,"locus") )
-    return( 1.0 - Ho(x) / He(x) )
+  if( is(x,"locus") ) {
+    ret <- 1.0 - Ho(x) / He(x)
+    names(ret) <- "Fis"
+  }
   else if( is(x,"data.frame")) {
     cols <- column_class( x, "locus" )
-    ret <- list()
-    for( col in cols )
-      ret[col] <- Fis( x[[col]] )
-    ret <- as.numeric( ret )
-    names(ret) <- cols
-    return( ret )
+    ret <- data.frame( Locus=cols, Fis=0)
+    for( i in 1:length(cols) )
+      ret$Fis[i] <- Fis( x[[cols[i]]] )
+    
+   
   }
   else
     stop(paste("This function does not know how to handle data of type",class(x)))
   
+  return( ret )
 }

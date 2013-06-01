@@ -21,7 +21,7 @@ dist_jaccard <- function( x, stratum="Population" ) {
   if( K==0)
     stop("You need to pass objects of type 'locus' to use for dist_cavalli().")
   else if( K > 1 )
-    warning("Jaccard distance will be assumed to be entirely additive across loci.")
+    message("Jaccard distance will be assumed to be entirely additive across loci.")
   
   pops <- partition(x, stratum=stratum) 
   K <- length(pops)

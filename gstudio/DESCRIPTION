@@ -18,12 +18,13 @@ VignetteBuilder: knitr
 Depends:
     R (>= 3.0.0),
     ggplot2,
-    ggmap
+    ggmap,
+    popgraph
 Imports:
     raster,
     grid,
-    popgraph,
-    reshape2
+    reshape2,
+    igraph
 Suggests:
     testthat,
     knitr

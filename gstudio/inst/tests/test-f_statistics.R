@@ -18,8 +18,8 @@ test_that("Inbreeding",{
   
   data <- data.frame( A=loci, B=loci, C=loci)
   f <- Fis( data )
-  expect_that( length(f), equals(3) )
-  expect_that( f, is_a("numeric"))
-  expect_that( f, is_equivalent_to( c(0.2,0.2,0.2)))
+  expect_that( dim(f), is_equivalent_to( c(3,2) ) )
+  expect_that( f, is_a("data.frame"))
+  expect_that( f$Fis, is_equivalent_to( c(0.2,0.2,0.2)))
 
 })

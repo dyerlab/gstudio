@@ -45,8 +45,7 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
   else 
     stop( paste( "This function does not support the parameter '",mode,"', see the documentation for supported types" ) )
   
-  if( verbose )
-    cat("\n")
+
   
   return( ret )
 }
