@@ -1,10 +1,20 @@
-gstudio 1.0
+gstudio 1.0 - Submitted X June 2013
 -----------------
 
 * This is a complete rewrite of the gstudio (ver. 0.X) package.  What I have done is to remake
-  the fundamental locus object as an S3 object rather than an S4 class. As a consequence, all 
-  functions have been changed.
+  the fundamental locus object as an S3 object rather than an S4 class. 
 * Too much has changed to interate through all of the changes.  To get a good idea of how to 
   use the new functionality see http://dyerlab.github.io/gstudio/
+* Integrated, where possible, spatial connections to both the raster and sp packages such that 
+  direct analyses of spatial population genetic processes can be accessed.
+* This first version has the following functional components.
+    - locus(), alleles(), frequencies()
+    - heterozygosity in terms of He(), Fis(), Ho()
+    - genetic_diversity() for parameters Ae(), A(), A95() with rarefaction()
+    - genetic_distance() for dist_amova(), dist_bray(), dist_euclidean(), dist_cgd(), dist_nei(), dist_jaccard(), dist_Dps()
+    - genetic_structure() for Gst(), Gst_prime(), and Dest()
+    - spatial plotting and mapping using sp, raster, and google_maps API's
+    - paternity() with transition_probability() for both strict and fractional paternity.
+    - 2gener() with minus_mom()
 
 

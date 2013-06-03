@@ -96,6 +96,14 @@ NULL
 #' @keywords data
 NULL
 
+#' Data set from Cornus florida parent/offspring
+#' 
+#' Example data from Cornus florida (Dyer et al. 2010)
+#' @name cornfl
+#' @docType data
+#' @keywords data
+NULL
+
 
 
 

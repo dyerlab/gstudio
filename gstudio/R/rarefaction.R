@@ -3,7 +3,7 @@
 #' This funciton subsamples the data with a smaller sample size and estimates the 
 #'  density of the diversity parameter.
 #' @param x The raw data as a \code{locus} vector.
-#' @param mode The mode passed to \code{allelic.diversity}.
+#' @param mode The mode passed to \code{allelic_diversity}.
 #' @param size The smaller sample size to use.
 #' @param nperm The number of times to subsample the data (default 999)
 #' @return A vector of permuted values.
@@ -19,7 +19,7 @@ rarefaction <- function( x, mode="Ae", size=0, nperm=999 ) {
   
   ret <- rep(NA, nperm)
   for( i in 1:nperm )
-    ret[i] <- allelic.diversity( sample(x,size=size,replace=TRUE), mode=mode )
+    ret[i] <- allelic_diversity( sample(x,size=size,replace=TRUE), mode=mode )
   ret <- unlist(ret)
   
   return( ret )

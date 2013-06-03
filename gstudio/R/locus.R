@@ -344,8 +344,8 @@ is.locus <- function ( x ) {
   if( is.na(e1) || is.na(e2))
     stop("Cannot subtract missing locus objects.")
   
-  off = alleles(e1)
-  mom = alleles(e2)
+  off <- alleles(e1)
+  mom <- alleles(e2)
   if( length(off)!=length(mom))
     stop("Cannot subtract genotypes with different ploidy levels.")
   if( length(off)<2 || length(mom)<2 )
@@ -354,17 +354,8 @@ is.locus <- function ( x ) {
     stop("General subtraction is not supported for odd ploidy (too many assumptions), 
          you can write your own routine.")
   
-  int <- intersect(off,mom)
-  
-  # mother alleles not in offspring or not having half of the alleles
-  if( length(int) < length(mom)/2 ) {
-    warning(paste("Cannot subtract mom '",e2,"' from offspring '",e1,
-                  "', result is unreduced.",sep=""))
-    return(e1)
-  }
-  
   # mother and offspring both same
-  else if( e1 == e2 ){
+  if( e1 == e2 ){
     
     # cant reduce heterozygotes
     if( is.heterozygote(e1))
@@ -375,10 +366,28 @@ is.locus <- function ( x ) {
       return( locus(off[1:(length(off)/2)]))
   }
   
-  # mother and offspring different
-  else {
-    return(e1) #stop("Mother Offspring TODO")
-  } 
+  else { 
+    
+    int <- intersect(off,mom)
+    
+    # mother alleles not in offspring or not having half of the alleles
+    if( length(int) == 0 ) {
+      warning(paste("Cannot subtract mom '",e2,"' from offspring '",e1,
+                    "', result is unreduced.",sep=""))
+      return(e1)
+    }  
+    
+    # mother and offspring different
+    else {
+      mom_allele <- which( off==int)[1]
+      offidx <- 1:length(off)
+      
+      ret <- locus( off[ offidx[ offidx != mom_allele]])
+      return(ret) 
+    }
+  }
+  
+   
 }
 
 

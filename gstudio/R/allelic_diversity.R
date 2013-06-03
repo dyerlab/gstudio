@@ -11,10 +11,10 @@
 #' @return Numeric value for diversity
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
-allelic.diversity <- function( x, mode=c("A","Ae","A95")[1] ) {
+allelic_diversity <- function( x, mode=c("A","Ae","A95")[1] ) {
   
   if( !(mode %in% c("A","Ae","A95" ) ) )
-    stop("The 'mode' you passed for allelic.diversity() is not recognized.")
+    stop("The 'mode' you passed for allelic_diversity() is not recognized.")
   
   if( is(x,"locus") ) {
     
@@ -36,12 +36,12 @@ allelic.diversity <- function( x, mode=c("A","Ae","A95")[1] ) {
     cols <- column_class(x,"locus")
     ret <- list()
     for( col in cols )
-      ret[[col]] <- allelic.diversity( x[[col]], mode )
+      ret[[col]] <- allelic_diversity( x[[col]], mode )
     ret <- as.numeric( ret )
     names(ret) <- cols
     return( ret )
   }
   else
-    stop("data type 'x' passed to allelic.diversity() not recognized.")
+    stop("data type 'x' passed to allelic_diversity() not recognized.")
 }
 

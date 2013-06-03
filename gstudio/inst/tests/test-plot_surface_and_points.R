@@ -7,7 +7,7 @@ test_that("shortest paths", {
   coords <- data.frame( X=c( 0.15, 0.95 ),Y=c( 0.15, 0.95 ) ) 
   
   
-  p <- surface.point.plot( surface, coords )
+  p <- surface_point_plot( surface, coords )
   
   expect_that( p, is_a("ggplot") )
   expect_that( p, is_a("gg") )

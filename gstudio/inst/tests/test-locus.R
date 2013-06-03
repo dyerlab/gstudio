@@ -105,6 +105,8 @@ test_that( "Operations", {
   AB <- locus( c("A","B") )
   BB <- locus( c("B","B") )
   AC <- locus( c("A","C") )
+  BC <- locus( c("B","C") )
+  
   
   expect_that( AA==AA, is_true() )
   expect_that( AA==BB, is_false() )
@@ -116,14 +118,21 @@ test_that( "Operations", {
   expect_that( off, is_a("locus") )
   expect_that( ploidy(off), equals(2) )
   expect_that( is.heterozygote(off), is_true() )
-  expect_that( off, prints_text("A:B") )
+  expect_that( as.character(off)=="A:B", is_true() ) 
   
   off <- AA-AA
   expect_that( off, is_a("locus"))
-  expect_that( off, prints_text("A") )
+  expect_that( as.character(off)=="A", is_true() ) 
   
   off <- AB-AB
   expect_that( off, is_a("locus") )
-  expect_that( off, prints_text("A:B") )
+  expect_that( as.character(off)=="A:B", is_true() )
+  
+  expect_that( AA-BB, gives_warning())
+  
+  off <- BB-AB
+  expect_that( as.character(off)=="B", is_true())
+  
+  expect_that( AA-BC, gives_warning())
   
 })

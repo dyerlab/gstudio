@@ -24,10 +24,11 @@
 #' @return A \code{data.frame} with \code{locus} columns pre-formatted.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#'    
-
-
-read.population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE ) {
+#' @examples
+#'\dontrun{
+#' data <- read_population( "~/data.csv, type="column", locus.columns=2:15 )
+#'}
+read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE ) {
   
   # Catch obvious errors
   if( is.null(locus.columns) ) 
