@@ -6,7 +6,6 @@
 #' @method is.na locus
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' 
 is.na.locus <- function( x ) {
   
   func <- function(x) {

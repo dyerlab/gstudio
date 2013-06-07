@@ -117,7 +117,7 @@ test_that( "Operations", {
   off <- AA+BB
   expect_that( off, is_a("locus") )
   expect_that( ploidy(off), equals(2) )
-  expect_that( is.heterozygote(off), is_true() )
+  expect_that( is_heterozygote(off), is_true() )
   expect_that( as.character(off)=="A:B", is_true() ) 
   
   off <- AA-AA

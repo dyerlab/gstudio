@@ -15,7 +15,15 @@
 #'  columns of the querried type exist or a list of all column classes.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu} 
-#' 
+#' @examples
+#' locus <- c( locus(1:2), locus(c(1,1)), locus(c(2,2)), locus(2:3) )
+#' pop <- factor( c(rep("A",2), rep("B",2)))
+#' df <- data.frame( Population=pop, X=runif(4), TPI=locus )
+#' df
+#' column_class(df,"factor")
+#' column_class(df,"numeric")
+#' column_class(df, "locus" )
+#' column_class(df,"locus",mode="index")
 column_class <- function( x, class, mode=c("label","index")[1] ) {
   if( !inherits(x,"data.frame") )
     stop( paste("This function works on objects inherited from data.frame objects, you passed a ",class(x),sep="") )

@@ -9,10 +9,8 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
-#' 
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )
 #' Fis( loci )
-#' 
 Fis <- function( x ) {
   if( is(x,"locus") ) {
     ret <- 1.0 - Ho(x) / He(x)

@@ -7,11 +7,8 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
-#' 
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )
-#' He( loci )
-#' He( loci, small.sample.correction=TRUE )
-#' 
+#' Ho( loci )
 Ho <- function( x ) {  
   
   
@@ -30,7 +27,7 @@ Ho <- function( x ) {
   else if( is( x, "locus")) {
     ret <- NA 
     Ninds <- sum( ploidy(x)>1 )
-    Nhets <- sum( is.heterozygote(x) )
+    Nhets <- sum( is_heterozygote(x) )
     
     if( Ninds < sum( !is.na(x) ))
       warning("Some loci were not treated as elegable to be counted for heterozygotes due to ploidy < 2.")

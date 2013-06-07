@@ -8,6 +8,16 @@
 #' @return A matrix of Jaccard distance
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
+#' @examples
+#'   AA <- locus( c("A","A") )
+#'   AB <- locus( c("A","B") )
+#'   AC <- locus( c("A","C") )
+#'   BB <- locus( c("B","B") )
+#'   BC <- locus( c("B","C") )
+#'   CC <- locus( c("C","C") )
+#'   loci <- c(AA,AA,AB,AA,BB,BC,CC,BB,BB,CC)
+#'   df <- data.frame( Population=c(rep("A",5),rep("B",5) ), TPI=loci )
+#'   dist_jaccard(df)
 dist_jaccard <- function( x, stratum="Population" ) {
   
   if( !is( x, "data.frame") )

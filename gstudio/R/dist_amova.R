@@ -6,6 +6,21 @@
 #' @return The AMOVA distance matrix
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
+#' @examples
+#' AA <- locus( c("A","A") )
+#' AB <- locus( c("A","B") )
+#' BB <- locus( c("B","B") )
+#' AC <- locus( c("A","C") )
+#' AD <- locus( c("A","D") )
+#' BC <- locus( c("B","C") )
+#' BD <- locus( c("B","D") )
+#' CC <- locus( c("C","C") )
+#' CD <- locus( c("C","D") )
+#' DD <- locus( c("D","D") )
+#' loci <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD) 
+#' D <- dist_amova( loci )
+#' rownames(D) <- colnames(D) <- as.character(loci)
+#' D
 dist_amova <- function( x ) {
   
   if( is(x,"locus") )

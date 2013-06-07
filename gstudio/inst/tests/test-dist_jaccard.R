@@ -9,8 +9,6 @@ test_that("individual",{
   BB <- locus( c("B","B") )
   BC <- locus( c("B","C") )
   CC <- locus( c("C","C") )
-
-  
   loci <- c(AA,AA,AB,AA,BB,BC,CC,BB,BB,CC)
   df <- data.frame( Population=c(rep("A",5),rep("B",5) ), TPI=loci )
 

@@ -9,16 +9,14 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
-#' 
 #' loc <- locus( 1:2 )
-#' is.heterozygote( loc )
-#'
-is.heterozygote <- function( x ) { 
+#' is_heterozygote( loc )
+is_heterozygote <- function( x ) { 
   if( !is(x,"locus") )
-    stop("The function 'is.heterozygote' works on objects of type 'locus' ")
+    stop("The function 'is_heterozygote' works on objects of type 'locus' ")
   
   if( length(x)>1 )
-    ret <- unlist(lapply( x, is.heterozygote ))
+    ret <- unlist(lapply( x, is_heterozygote ))
   else {
     a <- alleles( x ) 
     if( length(a) < 2 )

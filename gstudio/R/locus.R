@@ -20,6 +20,19 @@
 #' @return Either a single or vector of objects of type \code{locus}.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
+#' @examples
+#' AA <- locus( c("A","A") )
+#' AB <- locus( c("A","B") )
+#' BB <- locus( c("B","B") )
+#' AC <- locus( c("A","C") )
+#' AD <- locus( c("A","D") )
+#' BC <- locus( c("B","C") )
+#' BD <- locus( c("B","D") )
+#' CC <- locus( c("C","C") )
+#' CD <- locus( c("C","D") )
+#' DD <- locus( c("D","D") )
+#' loci <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD) 
+#' loci
 locus <- function( x, type, phased=FALSE ){
   
   # missing data
@@ -358,7 +371,7 @@ is.locus <- function ( x ) {
   if( e1 == e2 ){
     
     # cant reduce heterozygotes
-    if( is.heterozygote(e1))
+    if( is_heterozygote(e1))
       return(e1)
     
     # homozygote, return half of the offspring alleles

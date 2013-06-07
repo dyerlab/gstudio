@@ -8,12 +8,10 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
-#' 
 #' loc <- locus( 1:2 )
 #' ploidy( loc )
 #' loci <- c( locus(1:2), locus(c(1,1) ) )
 #' ploidy( loci )
-#' 
 ploidy <- function ( x ) {
   if( length(x)>1 )
     return( unlist(lapply(x,ploidy) ) )

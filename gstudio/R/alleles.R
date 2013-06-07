@@ -10,6 +10,9 @@
 #'  will be represented by rows.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples
+#' locus <- c( locus(1:2), locus(c(1,1)), locus(c(2,2)), locus(2:3) )
+#' alleles(locus)
 alleles <- function( x, all=TRUE ) { 
   UseMethod( "alleles" )
 }

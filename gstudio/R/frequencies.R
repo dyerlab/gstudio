@@ -12,15 +12,25 @@
 #'  Stratum columns (Allele and Frquencies are at a minimium).
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
+#' @examples
+#' AA <- locus( c("A","A") )
+#' AB <- locus( c("A","B") )
+#' BB <- locus( c("B","B") )
+#' loc1 <- c(AA,AB,AB,AA,BB)
+#' frequencies(loc1)
+#' loc2 <- c(BB,BB,AB,AA,BB)
+#' df <- data.frame(Population=c(rep("A",3), rep("B",2)), TPI=loc1, PGM=loc2)
+#' frequencies(df)
+#' frequencies(df,stratum="Population")
 frequencies <- function( x, loci, stratum, ... ) {
   UseMethod("frequencies")
 }
 
 #' @return A data frame with Frequencies, Alleles, Loci, and perhaps 
 #'  Stratum columns (Allele and Frquencies are at a minimium).
-#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @method frequencies default
 #' @rdname frequencies
+#' @export
 frequencies.default <- function( x, ... ) {
   t <- table(x)
   Allele <- as.character(names(t))
@@ -32,7 +42,6 @@ frequencies.default <- function( x, ... ) {
 
 #' @return A data frame with Frequencies, Alleles, Loci, and perhaps 
 #'  Stratum columns (Allele and Frquencies are at a minimium).
-#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @method frequencies locus
 #' @rdname frequencies
 #' @export
@@ -45,7 +54,6 @@ frequencies.locus <- function( x, loci, ... ) {
 
 #' @return A data frame with Frequencies, Alleles, Loci, and perhaps 
 #'  Stratum columns (Allele and Frquencies are at a minimium).
-#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @method frequencies data.frame
 #' @rdname frequencies
 #' @export

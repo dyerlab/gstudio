@@ -11,6 +11,12 @@
 #' @return Numeric value for diversity
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
+#' @examples
+#' locus <- c( locus(1:2), locus(c(1,1)), locus(c(2,2)), locus(2:3) )
+#' locus2 <- c( locus(1:2), locus(c(1,1)), locus(c(2,2)), locus(2:3) )
+#' df <- data.frame( locus, locus2 )
+#' allelic_diversity(df,mode="A")
+#' allelic_diversity(df,mode="Ae")
 allelic_diversity <- function( x, mode=c("A","Ae","A95")[1] ) {
   
   if( !(mode %in% c("A","Ae","A95" ) ) )

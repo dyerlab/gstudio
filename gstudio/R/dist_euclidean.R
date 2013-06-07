@@ -9,6 +9,13 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 #' @importFrom reshape2 dcast 
+#' @examples
+#'   AA <- locus( c("A","A") )
+#'   AB <- locus( c("A","B") )
+#'   BB <- locus( c("B","B") )
+#'   loci <- c(AA,AA,AB,AA,BB,BB,BB,AB,BB,AB)
+#'   df <- data.frame( Population=c(rep("A",5),rep("B",5) ), TPI=loci )
+#'   dist_euclidean(df)
 dist_euclidean <- function( x, stratum="Population" ) {
   
   if( !is( x, "data.frame") )

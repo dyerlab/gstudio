@@ -4,14 +4,14 @@
 #'  either individuals or stratum.  Given the large number of genetic distance
 #'  metrics, some are recreated here, de novo, and some are estimated through 
 #'  other existing R packages.  
-#'  @param x A \code{data.frame} object with \code{\link{locus}} columns.
-#'  @param stratum The strata by which the genetic distances are estimated.  This
+#' @param x A \code{data.frame} object with \code{\link{locus}} columns.
+#' @param stratum The strata by which the genetic distances are estimated.  This
 #'    can be an optional parameter when estimating distance measures calculated
 #'    among indiviudals (default='Population'). 
-#'  @param mode The particular genetic distance metric that you are going to use. 
-#'  @return A \code{genetic_distance} object (also a matrix) with the genetic 
+#' @param mode The particular genetic distance metric that you are going to use. 
+#' @return A \code{genetic_distance} object (also a matrix) with the genetic 
 #'    distances and a bit of additional information about its creation.
-#'  @note This function currently includes the following individual distance 
+#' @note This function currently includes the following individual distance 
 #'    measures:
 #'    \itemize{
 #'      \item{AMOVA}{Inter-individual }
@@ -27,9 +27,24 @@
 #'      \item{Jaccard}{Jaccard set dissimilarity}
 #'    }
 
-#'  @export
-#'  @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#'  
+#' @export
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples
+#' AA <- locus( c("A","A") )
+#' AB <- locus( c("A","B") )
+#' BB <- locus( c("B","B") )
+#' AC <- locus( c("A","C") )
+#' AD <- locus( c("A","D") )
+#' BC <- locus( c("B","C") )
+#' BD <- locus( c("B","D") )
+#' CC <- locus( c("C","C") )
+#' CD <- locus( c("C","D") )
+#' DD <- locus( c("D","D") )
+#' loci <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD) 
+#' pops <- c(rep("A",5), rep("B",5))
+#' df <- data.frame( Population=pops, TPI=loci)
+#' genetic_distance(df, mode="AMOVA")
+#' genetic_distance(df, mode="Dps")
 genetic_distance <- function( x, stratum="Population", mode ){
 
   if( missing(mode)) 

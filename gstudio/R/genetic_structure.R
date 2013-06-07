@@ -19,7 +19,15 @@
 #'  suggestions of Culley et al. (2001) A comparison of two methods of calculating Gst, 
 #'  a genetic measure of , differentiation.  American Journal of Botany 89(3): 460-465.
 #' @export
-
+#' @examples
+#'  AA <- locus( c("A","A") )
+#'  AB <- locus( c("A","B") )
+#'  BB <- locus( c("B","B") )
+#'  locus <- c(AA,AA,AA,AA,BB,BB,BB,AB,AB,AA)
+#'  locus2 <- c(AB,BB,AA,BB,BB,AB,AB,AA,AA,BB)
+#'  Population <- c(rep("Pop-A",5),rep("Pop-B",5))
+#'  df <- data.frame( Population, TPI=locus, PGM=locus2 )
+#'  genetic_structure( df, mode="Gst")
 genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime", "Dest")[1], nperm=0, size.correct=TRUE ) {
   
   if( !inherits(x,"data.frame") )

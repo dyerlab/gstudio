@@ -11,11 +11,9 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
-#' 
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )
 #' He( loci )
 #' He( loci, small.sample.correction=TRUE )
-#' 
 He <- function( x, small.sample.correction=FALSE ) { 
   
   if( is(x,"data.frame") ){

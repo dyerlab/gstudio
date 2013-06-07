@@ -11,7 +11,7 @@ Description: This package contains classes and functions for
     genetic covariance.  This package supersedes the original
     studio package by interfacing with raster and sp objects
     directly.
-Version: 1.0
+Version: 1.1
 Date: 2012-10-11
 LazyLoad: true
 VignetteBuilder: knitr
@@ -32,9 +32,7 @@ Collate:
     'alleles.R'
     'as_data_frame.R'
     'column_class.R'
-    'cov_2_dist.R'
     'dest.R'
-    'dist_2_cov.R'
     'dist_amova.R'
     'dist_cavalli.R'
     'dist_jaccard.R'
@@ -75,3 +73,7 @@ Collate:
     'transition_probability.R'
     'allelic_diversity.R'
     'minus_mom.R'
+    'paternity.R'
+    'exclusion_probability.R'
+    'mate.R'
+    'make_population.R'

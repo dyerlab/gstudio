@@ -1,4 +1,4 @@
-gstudio 1.0 - Submitted X June 2013
+gstudio 1.0 
 -----------------
 
 * This is a complete rewrite of the gstudio (ver. 0.X) package.  What I have done is to remake
@@ -15,6 +15,7 @@ gstudio 1.0 - Submitted X June 2013
     - genetic_structure() for Gst(), Gst_prime(), and Dest()
     - spatial plotting and mapping using sp, raster, and google_maps API's
     - paternity() with transition_probability() for both strict and fractional paternity.
-    - 2gener() with minus_mom()
+    - parent offspring stuff with with minus_mom()
+    - added make_population() and mate() for making random populations
 
 
