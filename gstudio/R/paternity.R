@@ -56,28 +56,24 @@ paternity <- function( offspring, mother, fathers, ID="ID", OffID="OffID"){
     oret <- data.frame(MomID=mother[[ID]], OffID=offspring[off,][[OffID]], DadID=fathers[[ID]],  Fij=0)
     
     for( i in 1:N) {
-      fij <- NA
+      fij <- list()
       
       for( locus in locus_names){
         o <- offspring[off,][[locus]]
         m <-mother[[locus]]
         f <- fathers[i,][[locus]]
         
-        if( !is.na(o) & !is.na(m) & !is.na(f) ) {
-          r <- transition_probability(o,m,f)
-          if( !is.na(fij) )
-            fij <- fij * r
-          else if( is.na(fij) & r>0)
-            fij <- r
-        }
+        if( !is.na(o) & !is.na(m) & !is.na(f) ) 
+          fij[[locus]] <- transition_probability(o,m,f)
+
       }
-      oret$Fij[i] <- fij
+      oret$Fij[i] <- prod(as.numeric(fij))
     }
-    
-    oret <- oret[ !is.na(oret$Fij),]
-    oret$Fij <- oret$Fij/ sum(oret$Fij, na.rm=TRUE)
+    if( sum(oret$Fij)>0)
+      oret$Fij <- oret$Fij/ sum( oret$Fij )
     oret <- oret[ oret$Fij>0 , ]
-    ret <- rbind( ret, oret )
+    if( dim(oret)[1]>0)
+      ret <- rbind( ret, oret )
   }
   
   rownames(ret) <- 1:length(rownames(ret))

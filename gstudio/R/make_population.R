@@ -31,10 +31,11 @@ make_population <- function( x, N=20){
       f <- x[x$Stratum==stratum, c(2:4)]
       r <- make_population( f, N )
       l <- length(names(r))
-      r$Stratum =stratum
+      r$Population =stratum
       r <- r[, c( (l+1), (1:l))]
       ret <- rbind( ret, r)
     }
+    ret$Population <- factor( ret$Population )
   }
   
   else if( "Locus" %in% names(x) ){

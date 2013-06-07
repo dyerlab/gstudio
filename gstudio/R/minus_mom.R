@@ -41,6 +41,7 @@ minus_mom <- function( x, MomCol="ID", OffCol="OffID"  )  {
     if( length( locus_names) == 0 )
       stop("You need to have some loci to use this function.")
   
+    x[[OffCol]] <- as.character( x[[OffCol]] )
     moms <- x[ x[[OffCol]]=="0",]
     ret <- x[ x[[OffCol]]!="0",]
     N <- dim(ret)[1]
@@ -61,7 +62,6 @@ minus_mom <- function( x, MomCol="ID", OffCol="OffID"  )  {
     stop("Cannot subtract maternal contributions given the data you provided.")
 
 
-  
   return(ret)
 }
 

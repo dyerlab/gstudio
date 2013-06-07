@@ -36,7 +36,7 @@ Gst <- function( x, stratum="Population", nperm=0, size.correct=TRUE ) {
     if( !(stratum %in% names(x)) )
       stop("If you pass a data.frame to Gst(), you need to indicate a stratum varaible column.")
     
-    strata <- x[[stratum]]
+    strata <- factor( as.character( x[[stratum]]))
     K <- length(locus_names)
     ret <- data.frame(Locus=locus_names, Gst=numeric(K), Hs=numeric(K), Ht=numeric(K), P=numeric(K), stringsAsFactors=FALSE)
 
@@ -47,14 +47,16 @@ Gst <- function( x, stratum="Population", nperm=0, size.correct=TRUE ) {
       
     }
     
-    Hs.tot <- sum(ret$Hs, na.rm=TRUE )
-    Ht.tot <- sum(ret$Ht, na.rm=TRUE )
-    Gst.tot <- 1 - Hs.tot / Ht.tot
-    
-    ret[K+1,1] <- "Multilocus"
-    ret[K+1,2] <- Gst.tot
-    ret[K+1,3] <- Hs.tot
-    ret[K+1,4] <- Ht.tot
+    if( length(locus_names) > 1 ) {
+      Hs.tot <- sum(ret$Hs, na.rm=TRUE )
+      Ht.tot <- sum(ret$Ht, na.rm=TRUE )
+      Gst.tot <- 1 - Hs.tot / Ht.tot
+      
+      ret[K+1,1] <- "Multilocus"
+      ret[K+1,2] <- Gst.tot
+      ret[K+1,3] <- Hs.tot
+      ret[K+1,4] <- Ht.tot      
+    }
 
   }
   
@@ -65,7 +67,7 @@ Gst <- function( x, stratum="Population", nperm=0, size.correct=TRUE ) {
       stop(paste("This function requires objects of type 'locus' to function, you passed a '", class(x), "' object",sep="" ))
     
     if( !is( stratum, "factor") )
-      stratum <- factor( stratum )
+      stratum <- factor( as.character(stratum ))
     
     if( length(x) != length(stratum) )
       stop("You must pass loci and strata vectors of the same length to Gst().")

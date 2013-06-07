@@ -52,14 +52,17 @@ Gst_prime <- function(  x, stratum="Population",  nperm=0, size.correct=TRUE ) {
       
     }
     
-    Hs.tot <- mean(ret$Hs, na.rm=TRUE )
-    Ht.tot <- mean(ret$Ht, na.rm=TRUE )
-    Gst.tot <-  1.0 / ( mean( 1/ret$Gst, na.rm=TRUE))
+    if( length( locus_names) > 1 ) {
+      Hs.tot <- mean(ret$Hs, na.rm=TRUE )
+      Ht.tot <- mean(ret$Ht, na.rm=TRUE )
+      Gst.tot <-  1.0 / ( mean( 1/ret$Gst, na.rm=TRUE))
+      
+      ret[K+1,1] <- "Multilocus"
+      ret[K+1,2] <- Gst.tot
+      ret[K+1,3] <- Hs.tot
+      ret[K+1,4] <- Ht.tot      
+    }
     
-    ret[K+1,1] <- "Multilocus"
-    ret[K+1,2] <- Gst.tot
-    ret[K+1,3] <- Hs.tot
-    ret[K+1,4] <- Ht.tot
   }
   
   # do this for a single locus

@@ -41,7 +41,7 @@ Dest <- function( x, stratum="Population", nperm=0, size.correct=FALSE ) {
     if( !(stratum %in% names(x)) )
       stop("If you pass a data.frame to Gst(), you need to indicate a stratum varaible column.")
     
-    strata <- factor(x[[stratum]])
+    strata <- factor(as.character(x[[stratum]]))
     K <- length(locus_names)
     ret <- data.frame(Locus=locus_names, Dest=numeric(K), Hs=numeric(K), Ht=numeric(K), P=numeric(K), stringsAsFactors=FALSE)
     
@@ -52,16 +52,17 @@ Dest <- function( x, stratum="Population", nperm=0, size.correct=FALSE ) {
       
     }
     
-    k <- length(levels(strata))
-    Hs.tot <- mean(ret$Hs, na.rm=TRUE )
-    Ht.tot <- mean(ret$Ht, na.rm=TRUE )
-    Dest.tot <- 1.0 / ( mean( 1/ret$Dest, na.rm=TRUE))
-
-    
-    ret[K+1,1] <- "Multilocus"
-    ret[K+1,2] <- Dest.tot
-    ret[K+1,3] <- Hs.tot
-    ret[K+1,4] <- Ht.tot
+    if( length(locus_names) > 1 ) {
+      k <- length(levels(strata))
+      Hs.tot <- mean(ret$Hs, na.rm=TRUE )
+      Ht.tot <- mean(ret$Ht, na.rm=TRUE )
+      Dest.tot <- 1.0 / ( mean( 1/ret$Dest, na.rm=TRUE))
+      
+      ret[K+1,1] <- "Multilocus"
+      ret[K+1,2] <- Dest.tot
+      ret[K+1,3] <- Hs.tot
+      ret[K+1,4] <- Ht.tot      
+    }
     
   }
   
@@ -71,8 +72,7 @@ Dest <- function( x, stratum="Population", nperm=0, size.correct=FALSE ) {
     if( !inherits(x,"locus") )
       stop("This function requires objects of type 'locus' to function.")
     
-    if( !is(stratum,"factor") )
-      stratum <- factor( stratum)
+    stratum <- factor( as.character(stratum) )
     
     if( length(stratum) != length(x))
       stop("If you are going to pass vector loci and strata, they should be the same size...")

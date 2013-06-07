@@ -29,9 +29,9 @@ transition_probability <- function( off, mom, dad ){
   m <- alleles( mom )
   d <- alleles( dad )
   
-  offs <- locus( cbind( rep(m, times=length(d) ), rep(d,times=length(m))), type="column", phased=FALSE )
+  offs <- locus( cbind( rep(m, times=length(d) ), rep(d,each=length(m))), type="column", phased=FALSE )
   off <- locus( alleles(off), phased=FALSE )
   
-  ret <- sum( off==offs) / length(offs)
+  ret <- sum( off==offs ) / length(offs)
   return( ret )
 }

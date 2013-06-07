@@ -24,6 +24,6 @@ test_that("testing",{
   expect_that( p, is_a("data.frame"))
   expect_that( dim(p)[1]>0, is_true() )
   expect_that( names(p), is_equivalent_to(c("MomID","OffID","DadID","Fij")))
-  expect_that( sum(p$Fij), equals(10) )
+  expect_that( sum(p$Fij, na.rm=TRUE), equals(10) )
   
 })
