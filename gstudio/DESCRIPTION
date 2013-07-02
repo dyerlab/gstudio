@@ -12,7 +12,7 @@ Description: This package contains classes and functions for
     studio package by interfacing with raster and sp objects
     directly.
 Version: 1.1
-Date: 2012-10-11
+Date: 2012-07-03
 LazyLoad: true
 VignetteBuilder: knitr
 Depends:

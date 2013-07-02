@@ -6,7 +6,7 @@ gstudio 1.1
 * [FIX] Gst(), Gst_prime(), and Dest() for when subset of data is passed (e.g., stratum with zeros counts), the zeros are ignored.
 * [FIX] transition_probability() had an issue with double hets.
 * [ADD] Added paternity and other items to documentation.
-
+* [ADD] Added ability to input GenePop files using read_population(file, type="genepop")
 
 gstudio 1.0 
 -----------------
