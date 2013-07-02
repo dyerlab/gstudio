@@ -155,7 +155,24 @@ ls()
 
 ### Importing Data
 
-Importing data is not that difficult.  People tend to keep their data in spreadsheets or text files, which are easily accessible via R.  For genetic marker data **gstudio**  has a particular function, `read_population()` that is a mix between the traditional `read.table()` function and the `locus()` functions.  Options for this function include:
+Importing data is not that difficult.  People tend to keep their data in either spreadsheets or text files, which are easily accessible via R, or some archane program format (wave to Arlequin everyone), which may be less accessable.  As of version 1.1,  **gstudio** handles data both in raw format (e.g., as they appear in your spreadsheet) or in GENEPOP format.  All of these formats are accessed in **gstudio** using the function, `read_population()` that is a mix between the traditional `read.table()` function and the `locus()` functions. 
+
+#### Import from GENEPOP files
+
+The GENEPOP file format, as interpreted by **gstudio** has the following format.  
+
+1. It is a text file and preferrably space delimited.
++ The first line has some info for you, it is mostly ignored but should include a bit about what the data are.
++ The next $K$ lines of the file list the names of the loci to be used, one per line.
++ The rest of the file contains populations.  Each population starts with "Pop" alone on its own line.  All individuals are assumed to be in the same population until such time the next "Pop" is reached.
++ For each individual, there is an identification value first, and followed by a comma are the genotypes.
++ All genotypes are encoded using 3 digits for each allele (e.g., a 3:5 genotype is 003005).  Missing data is all zeros '000000' and haploid is just three digits.
+
+The import from *read_population()* names loci, adds "ID" for the identification column and adds to each population a "Pop-X" designation.  Other than that, it is identical to what is below.  However, if you have your data in a spreadsheet, there is no need to shove it into a genepop format to import into R.
+
+#### Text File Import
+
+Options for this function include:
 
 Option        |    Function
 ------------- | --------------
@@ -196,8 +213,6 @@ file <- system.file("extdata","data_2_column.csv",package="gstudio")
 data <- read_population(file,type="column", locus.columns=4:7, phased=TRUE)
 data
 ```
-
-
 
 
 #### AFLP-like data
