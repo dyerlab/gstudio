@@ -1,8 +1,11 @@
 body {
   padding: 30px;
   max-width: 900px;
-  font-size: 10pt;
+  font-family:"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", "Sans Serif"; 
+  font-size: 0.95em; 
+  line-height: 1.25em;
 }
+
 
 h1 {
   font-size: 24pt;
