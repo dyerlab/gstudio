@@ -33,10 +33,7 @@ test_that("error checks",{
   gd <- genetic_diversity( df, stratum="Population")
   expect_that( dim(gd), is_equivalent_to(c(3,3)))
   expect_that( names(gd), is_equivalent_to(c("Stratum","Locus","Ae")))
-  
-  
-  
-  
+    
 })
 
 

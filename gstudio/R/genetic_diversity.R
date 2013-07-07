@@ -15,9 +15,8 @@
 #'      \item{Ae}{Effective number of alleles (default)}
 #'      \item{A95}{Number of alleles with frequency at least five percent}
 #'      \item{He}{Expected heterozygosity}
+#'      \item{Fis}{Wright's Inbreeding coefficient (size corrected).}
 #'    }
-#' @param nperm A flag indicating that the probability of mode==0 should be assessed using 
-#'    permuation (via \code{permute_ci})
 #' @return A \code{data.frame} with columns for strata, diversity (mode), and potentially P(mode=0).
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -30,7 +29,7 @@
 #'  Population <- c(rep("Pop-A",5),rep("Pop-B",5))
 #'  df <- data.frame( Population, TPI=locus, PGM=locus2 )
 #'  genetic_diversity( df, mode="Ae")
-genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He")[2], nperm=0 ){
+genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Fis")[2] ){
   
   if( missing(x) )
     stop("You must pass a data.frame to the genetic_diversity() function.")
@@ -39,7 +38,7 @@ genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He")[2], 
     pops <- partition(x,stratum)
     ret <- data.frame(Stratum=NA,Locus=NA, Diversity=NA)
     for( pop in names(pops) ){
-      gd <- genetic_diversity(pops[[pop]], mode=mode, nperm=nperm )
+      gd <- genetic_diversity(pops[[pop]], mode=mode )
       gd$Stratum <- pop
       gd <- gd[, c(3,1,2)]
       names(ret)[3] <- mode
@@ -62,6 +61,8 @@ genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He")[2], 
     ret <- A(x,min_freq=0.05)
   else if( mode == "he")
     ret <- He(x)
+  else if( mode == "fis")
+    ret <- Fis(x)
   else
     stop(paste("The type of diversity measure '", mode, "' you requested was not recognized.", sep=""))
   
