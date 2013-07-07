@@ -9,6 +9,7 @@ gstudio 1.1
 * [ADD] Added ability to input GenePop files using read_population(file, type="genepop")
 * [FIX] The function genetic_diversity() did not recognize the 'stratum' option 
 * [ADD] Added Fis to genetic_diversity() for continuity.
+* [FIX] A() was not accepting data.frames as it should have been.
 
 gstudio 1.0 
 -----------------
