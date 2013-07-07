@@ -8,6 +8,8 @@ gstudio 1.1
 * [ADD] Added paternity and other items to documentation.
 * [ADD] Added ability to input GenePop files using read_population(file, type="genepop")
 
+* [FIX] The function genetic_diversity() did not recognize the 'stratum' option and was not returning the proper results
+
 gstudio 1.0 
 -----------------
 
