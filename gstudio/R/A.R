@@ -10,10 +10,27 @@
 #' A(loci)
 #' A(loci, min_freq=0.13)
 A <- function(x, min_freq=0 ){
-  if( !is(x,"locus"))
-    stop("The function A() only works with objects of type 'locus'")
-  f <- frequencies( x )
-  ret <- dim(f[ f$Frequency>=min_freq,] )[1]
+
+  if( is( x, "data.frame" ) ){
+    locus_names <- column_class(x,"locus")
+    if( length(locus_names)==0 )
+      stop("You must pass some loci to the A() function.")
+    K <- length(locus_names)
+    ret <- data.frame( Locus=locus_names, A=0 )
+    for( i in 1:K){
+      data <- x[[locus_names[i]]]
+      ret[i,2] <- A( data )
+    }  
+  }
+  
+  else if( is(x,"locus") ) {
+    f <- frequencies( x )
+    ret <- dim(f[ f$Frequency>=min_freq,] )[1]
+  }
+  
+  else
+    stop("The function Ae() only works with objects of type 'locus'")
+  
   return( ret )
 }
 
