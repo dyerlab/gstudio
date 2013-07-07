@@ -15,6 +15,7 @@
 #'      \item{Ae}{Effective number of alleles (default)}
 #'      \item{A95}{Number of alleles with frequency at least five percent}
 #'      \item{He}{Expected heterozygosity}
+#'      \item{Ho}{Observed heterozygosity}
 #'      \item{Fis}{Wright's Inbreeding coefficient (size corrected).}
 #'    }
 #' @return A \code{data.frame} with columns for strata, diversity (mode), and potentially P(mode=0).
@@ -29,7 +30,7 @@
 #'  Population <- c(rep("Pop-A",5),rep("Pop-B",5))
 #'  df <- data.frame( Population, TPI=locus, PGM=locus2 )
 #'  genetic_diversity( df, mode="Ae")
-genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Fis")[2] ){
+genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Ho", "Fis")[2] ){
   
   if( missing(x) )
     stop("You must pass a data.frame to the genetic_diversity() function.")
@@ -61,6 +62,8 @@ genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Fis
     ret <- A(x,min_freq=0.05)
   else if( mode == "he")
     ret <- He(x)
+  else if( mode == "ho")
+    ret <- Ho(x)
   else if( mode == "fis")
     ret <- Fis(x)
   else
