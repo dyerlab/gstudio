@@ -53,9 +53,25 @@ Gst_prime <- function(  x, stratum="Population",  nperm=0, size.correct=TRUE ) {
     }
     
     if( length( locus_names) > 1 ) {
-      Hs.tot <- mean(ret$Hs, na.rm=TRUE )
-      Ht.tot <- mean(ret$Ht, na.rm=TRUE )
-      Gst.tot <-  1.0 / ( mean( 1/ret$Gst, na.rm=TRUE))
+      
+      #
+      # TODO Determine if these can ever be differents length vectors?
+      #
+      Hs.tot <- sum(ret$Hs, na.rm=TRUE )
+      Ht.tot <- sum(ret$Ht, na.rm=TRUE )
+      
+      # do the multiloucs as a summation
+      if( size.correct ) {
+        n.harmonic <- 1/mean(1/table(stratum))
+        hs.estimated <- (2*n.harmonic)/(2*n.harmonic -1) * Hs.tot
+        ht.estimated <- Ht.tot + hs.estimated/(2*k*n.harmonic)    
+        Gst.tot <- ((1-hs.estimated/ht.estimated)*(k-1+hs.estimated) )
+        Gst.tot <- Gst.tot / ((k-1)*(1-hs.estimated))
+      }
+      else {
+        Gst.tot <- (1-Hs.tot/Ht.tot) * (k-1+Hs.tot)
+        Gst.tot <- Gst.tot / ((k-1)*(Hs.tot))
+      } 
       
       ret[K+1,1] <- "Multilocus"
       ret[K+1,2] <- Gst.tot
