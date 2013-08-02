@@ -10,8 +10,11 @@ gstudio 1.1
 * [FIX] The function genetic_diversity() did not recognize the 'stratum' option 
 * [ADD] Added Fis to genetic_diversity() for continuity.
 * [FIX] A() was not accepting data.frames as it should have been.
+<<<<<<< HEAD:NEWS
 * [FIX] Multilocus estimate of Gst_prime() was wrong if there was a single locus estimate that was negative, in which case the harmonic mean is not correct.
 * [ADD] Added function strata_distance() to return distance matrix between stratum based upon either Euclidean distance or great-circle distance.
+=======
+>>>>>>> 03a8280d1997133518024d9334d59c1c59d22c2a:gstudio/NEWS
 
 gstudio 1.0 
 -----------------
