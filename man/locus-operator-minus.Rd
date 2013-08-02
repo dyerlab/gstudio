@@ -1,0 +1,36 @@
+\name{-.locus}
+\alias{-.locus}
+\title{Overload '-' operator for pairs of \code{locus} objects}
+\usage{
+  \method{-}{locus} (e1, e2)
+}
+\arguments{
+  \item{e1}{A \code{locus} object reprenting the
+  offspring.}
+
+  \item{e2}{A \code{locus} object representing the parent.}
+}
+\value{
+  A new \code{locus} object that represents the genotypes
+  left over after removing the parental part (if possible).
+}
+\description{
+  An overload of the \code{-} operator for \code{locus}
+  objects that removes the contribution of a parental
+  genotype to a offspring genotype (if possible).
+}
+\note{
+  In some cases it is not possible to remove parental
+  alleles (e.g., consider cases where both parent and
+  offspring are the same heterozygote).
+}
+\examples{
+mom <- locus( c("A", "A") )
+off <- locus( c("A", "B") )
+dad.gamete <- off - mom
+dad.gamete
+}
+\author{
+  Rodney J. Dyer \email{rjdyer@vcu.edu}
+}
+
