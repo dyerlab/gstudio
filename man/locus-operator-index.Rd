@@ -1,0 +1,26 @@
+\name{[.locus}
+\alias{[.locus}
+\title{Overload '[' for vectors of \code{locus} objects}
+\usage{
+  \method{[}{locus} (x, i)
+}
+\arguments{
+  \item{x}{An object of type \code{locus}}
+
+  \item{i}{The index of the allele to grab.}
+}
+\value{
+  The allele at the ith position.
+}
+\description{
+  An overload of the \code{[} function for \code{locus}
+  objects.
+}
+\examples{
+loci <- c( locus(1:2), locus(1:2), locus( c(1,1) ) )
+loci[2]
+}
+\author{
+  Rodney J. Dyer \email{rjdyer@vcu.edu}
+}
+

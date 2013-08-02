@@ -1,0 +1,32 @@
+\name{dist_euclidean}
+\alias{dist_euclidean}
+\title{Estimation of euclidean distance}
+\usage{
+  dist_euclidean(x, stratum = "Population")
+}
+\arguments{
+  \item{x}{The genetic data, either as a single locus or
+  multilocus (\code{data.frame}) object.}
+
+  \item{stratum}{The groups among which you are going to
+  estimate genetic distances.}
+}
+\value{
+  A matrix of euclidean distance estimates.
+}
+\description{
+  This function returns a measure of genetic distance based
+  upon the euclidean frequency distance metric.
+}
+\examples{
+AA <- locus( c("A","A") )
+  AB <- locus( c("A","B") )
+  BB <- locus( c("B","B") )
+  loci <- c(AA,AA,AB,AA,BB,BB,BB,AB,BB,AB)
+  df <- data.frame( Population=c(rep("A",5),rep("B",5) ), TPI=loci )
+  dist_euclidean(df)
+}
+\author{
+  Rodney J. Dyer \email{rjdyer@vcu.edu}
+}
+
