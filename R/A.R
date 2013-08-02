@@ -14,15 +14,9 @@ A <- function(x, min_freq=0 ){
   if( is( x, "data.frame" ) ){
     locus_names <- column_class(x,"locus")
     if( length(locus_names)==0 )
-<<<<<<< HEAD
-      stop("You must pass some loci to the Ae() function.")
-    K <- length(locus_names)
-    ret <- data.frame( Locus=locus_names, Ae=0 )
-=======
       stop("You must pass some loci to the A() function.")
     K <- length(locus_names)
     ret <- data.frame( Locus=locus_names, A=0 )
->>>>>>> Fixed some A() action
     for( i in 1:K){
       data <- x[[locus_names[i]]]
       ret[i,2] <- A( data )
