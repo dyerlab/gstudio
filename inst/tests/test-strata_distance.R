@@ -11,7 +11,7 @@ test_that("checking",{
              locus( c(1,1) ),
              locus( c(1,1) ) )
   pops <- factor( rep( c("A","B"), each=4 ) )
-  df <- data.frame( Populations=df, loci=loci )
+  df <- data.frame( Populations=pops, loci=loci )
   
   expect_that( strata_distance(df), throws_error() )
   expect_that( strata_distance(), throws_error() )
