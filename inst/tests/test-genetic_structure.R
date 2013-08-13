@@ -13,11 +13,16 @@ test_that("checking",{
   pops <- rep( c("A","B"), each=2 )
   df <- data.frame( Population=pops, TPI=loci )
   
-#  gs <- genetic_structure( df, verbose=FALSE  )
-#  expect_that( gs, is_a("genetic_structure") )
-#  expect_that( gs$mode, equals( "Gst" ) ) 
-#  expect_that( gs$loci, is_a("list") )
-#  expect_that( gs$loci$TPI, is_a("structure_statistic") )
-#  expect_that( gs$loci$TPI$estimate, equals(-0.2/3))
+  gs <- genetic_structure( df  )
+  expect_that( gs, is_a("data.frame") )
+  expect_that( dim(gs), is_equivalent_to(c(1,5) ) )
+  expect_that( names(gs), is_equivalent_to(c("Locus","Gst","Hs","Ht","P") ) )
+  
+  df$PGM <- rev(loci)
+  
+  gs <- genetic_structure( df, pairwise=TRUE )
+  expect_that( gs, is_a("list") )
+  expect_that( length(gs), equals(2) )
+  expect_that( gs[[1]], is_a("matrix") )  
   
 })
