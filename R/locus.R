@@ -280,9 +280,9 @@ is.locus <- function ( x ) {
 #' loci[2]
 #'
 `[.locus` <- function (x, i) {
-  y <- unclass(x)[i]
-  class(y) <- "locus"
-  y
+    y <- unclass(x)[i]
+    class(y) <- "locus"
+    return(y)  
 }
 
 

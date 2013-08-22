@@ -4,7 +4,7 @@
 \usage{
   genetic_structure(x, stratum = "Population",
     mode = c("Gst", "Gst_prime", "Dest")[1], nperm = 0,
-    size.correct = TRUE)
+    size.correct = TRUE, pairwise = FALSE)
 }
 \arguments{
   \item{x}{An object of type \code{data.frame} with at
@@ -24,6 +24,9 @@
   \item{size.correct}{A flag indicating that the estimate
   should be corrected for based upon sample sizes
   (default=TRUE).}
+
+  \item{pairwise}{A flag indicating that the analysis
+  should be done among all pairs of strata.}
 }
 \value{
   An object of type \code{genetic_structure}.

@@ -5,14 +5,18 @@ gstudio 1.1
 * [FIX] Gst(), Gst_prime(), and Dest() for when a data.frame is passed with only one locus, there is no need to do the multilocus response.  
 * [FIX] Gst(), Gst_prime(), and Dest() for when subset of data is passed (e.g., stratum with zeros counts), the zeros are ignored.
 * [FIX] transition_probability() had an issue with double hets.
+* [FIX] Fixed problem when importing data from text file where you have only one external variable.  
 * [ADD] Added paternity and other items to documentation.
 * [ADD] Added ability to input GenePop files using read_population(file, type="genepop")
+* [ADD] Added pairwise option to genetic_structure() function.
 * [FIX] The function genetic_diversity() did not recognize the 'stratum' option 
 * [ADD] Added Fis to genetic_diversity() for continuity.
 * [FIX] A() was not accepting data.frames as it should have been.
 * [FIX] Multilocus estimate of Gst_prime() was wrong if there was a single locus estimate that was negative, in which case the harmonic mean is not correct.
 * [ADD] Added function strata_distance() to return distance matrix between stratum based upon either Euclidean distance or great-circle distance.
 * [ADD] Added function genotype_frequencies() to return both observed and expected frequencies for a given locus.
+
+
 
 gstudio 1.0 
 -----------------

@@ -58,6 +58,11 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   if( end.col.meta.data == 0 ) {
     ret <- data.frame(ID=seq(1, length(df[,1])))
   }
+  else if( end.col.meta.data == 1) {
+    ret <- data.frame( df[,end.col.meta.data])
+    names(ret)[1] <- names(df)[1]
+
+  }
   else {
     ret <- df[,1:end.col.meta.data]
   }
