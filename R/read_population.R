@@ -26,7 +26,8 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE ) {
-  
+  if( !missing(type) && !(type %in% c("aflp","column","separated","snp","zyme","genepop")))
+    stop("Unrecognized 'type' submitted to read_population()")
   # check for genepop and handle in its own 
   if( type == "genepop")
     return( .read_genepop(path) )

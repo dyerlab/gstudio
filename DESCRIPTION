@@ -16,15 +16,15 @@ Date: 2012-07-03
 LazyLoad: true
 VignetteBuilder: knitr
 Depends:
-    R (>= 3.0.0),
-    ggplot2,
-    ggmap,
-    popgraph
+    R (>= 3.0.0)
 Imports:
     raster,
     grid,
     reshape2,
-    igraph
+    igraph,
+    ggplot2,
+    ggmap,
+    popgraph
 Suggests:
     testthat,
     knitr

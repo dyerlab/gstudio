@@ -24,10 +24,10 @@ plot_frequencies <- function(x){
   if( "Locus" %in% names(x) ){
     
     if( "Stratum" %in% names(x) ){
-      ret <- ret + facet_grid(Stratum~Locus)
+      ret <- ret + facet_grid(Stratum~Locus, space="free", scales="free_x")
     }
     else {
-      ret <- ret + facet_grid(.~Locus)
+      ret <- ret + facet_grid(.~Locus, space="free", scales="free_x")
     }
     
   }
