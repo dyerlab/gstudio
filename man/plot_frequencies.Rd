@@ -2,11 +2,14 @@
 \alias{plot_frequencies}
 \title{Plot allele frequencies}
 \usage{
-  plot_frequencies(x)
+  plot_frequencies(x, ...)
 }
 \arguments{
   \item{x}{The data frame with allele frequencies from
   \code{frequencies}.}
+
+  \item{...}{Ingored but passed on to \code{facet_grid()}
+  for optional stuff}
 }
 \value{
   An object of type \code{ggplot}
