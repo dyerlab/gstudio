@@ -3,6 +3,7 @@
 #' This function allows you to plot allele frequencies for 
 #'  several potential levels of stratum and loci.
 #' @param x The data frame with allele frequencies from \code{frequencies}.
+#' @param ... Ingored but passed on to \code{facet_grid()} for optional stuff
 #' @return An object of type \code{ggplot}
 #' @note This function does a pretty good job of plotting but if you have too many loci
 #'  and/or strata, you may have a difficult time getting it to look right.  By default, 
@@ -10,7 +11,7 @@
 #'  levels.  To plot a reduced number of loci/strata, use a subset of your data.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
-plot_frequencies <- function(x){
+plot_frequencies <- function(x, ...){
   require(ggplot2)
   Allele <- Frequency <- NULL
   
