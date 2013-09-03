@@ -40,7 +40,7 @@ test_that("checking",{
   expect_that( all( is.na(diag(gs))), is_true() ) 
   expect_that( gs[1,2] == gs[2,1], is_true() )
   
- 
+  
   
   
 })

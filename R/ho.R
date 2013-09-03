@@ -17,10 +17,10 @@ Ho <- function( x ) {
     if( length(locus_names)==0)
       stop("Cannot estimate expected heterozygosity if there are no loci...")
     
-    ret <- data.frame( Locus=locus_names, He=0 )
+    ret <- data.frame( Locus=locus_names, Ho=0 )
     k <- length(locus_names)
     for( i in 1:k)
-      ret$He[i] <- Ho( x[[locus_names[i]]] )
+      ret$Ho[i] <- Ho( x[[locus_names[i]]] )
     return( ret )
   }
   

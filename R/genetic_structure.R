@@ -10,14 +10,14 @@
 #'  \item{Gst_prime}{Hedrick's correction of Nei's Gst for diverse loci}
 #'  \item{Dest}{Joost's estimate}
 #' }
-#' @param locus An optional parameter specifying the locus or loci to be used
-#'  in the analysis.  If this is not specified, then all loci are used.
 #' @param nperm The number of permutations used to test the hypothesis that
 #'  the parameter = 0.
 #' @param size.correct A flag indicating that the estimate should be corrected for
 #'  based upon sample sizes (default=TRUE).
 #' @param pairwise A flag indicating that the analysis should be done among all pairs of 
 #'  strata. 
+#' @param locus An optional parameter specifying the locus or loci to be used
+#'  in the analysis.  If this is not specified, then all loci are used.
 #' @return An object of type \code{data.frame} containing estimates for each locus and a
 #'  multilocus estiamte.  If \code{pairwise=TRUE}, then it returns the multilocus (if more
 #'  than one locus) estiamte in a matrix format.
@@ -36,7 +36,7 @@
 #'  genetic_structure( df, mode="Gst")
 #'  genetic_structure( df, mode="Gst", pairwise=TRUE)
 #'  genetic_structure( df, mode="Gst", pairwise=TRUE, locus=TPI )
-genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime", "Dest")[1], locus=NULL,nperm=0, size.correct=TRUE, pairwise=FALSE ) {
+genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime", "Dest")[1], nperm=0, size.correct=TRUE, pairwise=FALSE, locus ) {
   
   if( !inherits(x,"data.frame") )
       stop("You need to pass a data frame to the funciton genetic_structure()...")
@@ -48,7 +48,11 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
     stop(paste("The structure mode",mode,"is not recognized") )
   
   # subsets of loci
-  if( !is.null( locus ) ){
+  if( !missing( locus ) ){
+    
+    print(locus)
+    print(pairwise)
+    
     if( all( locus %in% column_class(x,"locus")) ) 
       x <- x[, c(stratum,locus) ]
     else

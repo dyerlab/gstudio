@@ -16,8 +16,9 @@ gstudio 1.1
 * [ADD] Added function strata_distance() to return distance matrix between stratum based upon either Euclidean distance or great-circle distance.
 * [ADD] Added function genotype_frequencies() to return both observed and expected frequencies for a given locus.
 * [ADD] Added ", space="free", scales="free_x" to plot_frequencies() for non-overlapping allele counts and better plots.
-
-
+* [FIX] Fixed exclusion_probability() to return numeric values for various columns and added multilocus exclusion to result.
+* [FIX] Dataframe column name on multilocus Ho was incorrect
+* [ADD] Changed the transition_probability() function to handle multilocus estimates of both two parent and single parent situations when data are contained in data.frame elements.
 
 gstudio 1.0 
 -----------------
