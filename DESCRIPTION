@@ -16,7 +16,7 @@ Date: 2012-07-03
 LazyLoad: true
 VignetteBuilder: knitr
 Depends:
-    R (>= 3.0.0)
+    R (>= 2.15)
 Imports:
     raster,
     grid,
