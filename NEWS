@@ -19,6 +19,7 @@ gstudio 1.1
 * [FIX] Fixed exclusion_probability() to return numeric values for various columns and added multilocus exclusion to result.
 * [FIX] Dataframe column name on multilocus Ho was incorrect
 * [ADD] Changed the transition_probability() function to handle multilocus estimates of both two parent and single parent situations when data are contained in data.frame elements.
+* [FIX] Removed missing data from estimation of genotype_frequencies()
 
 gstudio 1.0 
 -----------------
