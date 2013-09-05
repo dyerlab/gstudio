@@ -12,6 +12,10 @@
 #'  as all offspring from a maternal individual have the same ID (see also
 #'  \code{\link{paternity}} and \code{\link{minus_mom}}).
 #' @return A \code{data.frame} of offspring.
+#' @note If only a \code{data.frame} is passed to as 'mom' and the rest are
+#'  left out, by default the code will do a complete random mating (no inbreeding)
+#'  process for you keeping the same population size as the data you passed it.  
+#'  This is nice for iterating across generations in simulation work.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
@@ -21,33 +25,48 @@
 #' mate( adults[1,], adults[2,], N=10)
 mate <- function( mom, dad, N, ID="ID"){
   
-  if( missing(mom) | missing(dad) )
-    stop("You need to pass both parents to make an offspring using mate().")
-  if(missing(N))
-    stop("You need to specify how many offspring to make using mate().")
-  
-  locus_names <- column_class(mom,"locus")
-  offnames <- setdiff( names(mom), locus_names)
-  offnames <- c(offnames, "OffID")
-  
-  ret <- data.frame( ID=rep(mom[[ID]], N), OffID=seq(1,N) )
-  
-  # add the other metadata
-  for( item in offnames)
-    if( item != ID & item != "OffID")
-      ret[[item]] <- mom[[item]]
-  
-  # add the loci as NA
-  for( locus in locus_names) 
-    ret[[locus]] <- NA
-  
-  
-  # add the loci
-  for( locus in locus_names){
-    l <- rep(NA,N)
-    for( i in 1:N)
-      l[i] <- mom[[locus]] + dad[[locus]]
-    ret[[locus]] <- locus( l, type="separated")
+  if( !missing(mom) & nrow(mom)>1 & missing(dad) ){
+    ret <- mom
+    N <- nrow(ret)
+    for( i in 1:N ) {
+      for( locus in column_class(ret,"locus")){
+        idx <- sample(1:N, size=2)
+        ret[[locus]][i] <- mom[[locus]][idx[1]] + mom[[locus]][idx[2]]
+      }
+    }
+  }
+
+  else {
+    
+    if( missing(mom) | missing(dad) )
+      stop("You need to pass both parents to make an offspring using mate().")
+    if(missing(N))
+      stop("You need to specify how many offspring to make using mate().")
+    
+    locus_names <- column_class(mom,"locus")
+    offnames <- setdiff( names(mom), locus_names)
+    offnames <- c(offnames, "OffID")
+    
+    ret <- data.frame( ID=rep(mom[[ID]], N), OffID=seq(1,N) )
+    
+    # add the other metadata
+    for( item in offnames)
+      if( item != ID & item != "OffID")
+        ret[[item]] <- mom[[item]]
+    
+    # add the loci as NA
+    for( locus in locus_names) 
+      ret[[locus]] <- NA
+    
+    
+    # add the loci
+    for( locus in locus_names){
+      l <- rep(NA,N)
+      for( i in 1:N)
+        l[i] <- mom[[locus]] + dad[[locus]]
+      ret[[locus]] <- locus( l, type="separated")
+    }
+    
   }
   
   
