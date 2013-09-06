@@ -77,3 +77,4 @@ Collate:
     'make_population.R'
     'strata_distance.R'
     'genotype_frequencies.R'
+    'optimal_sampling.R'
