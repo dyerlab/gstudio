@@ -27,6 +27,13 @@
   This function is mostly for simulation work and functions
   to produce a set of offpsring for the individuals passed.
 }
+\note{
+  If only a \code{data.frame} is passed to as 'mom' and the
+  rest are left out, by default the code will do a complete
+  random mating (no inbreeding) process for you keeping the
+  same population size as the data you passed it.  This is
+  nice for iterating across generations in simulation work.
+}
 \examples{
 f <- data.frame(Allele=LETTERS[1:2], Frequency=c(0.5,0.5))
 adults <- make_population(f,N=2)

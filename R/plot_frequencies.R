@@ -12,7 +12,7 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 plot_frequencies <- function(x, ...){
-  require(ggplot2)
+  #require(ggplot2)
   Allele <- Frequency <- NULL
   
   if( !("Frequency" %in% names(x)) | !("Allele" %in% names(x)))

@@ -1,8 +1,8 @@
-\name{is.frequency}
-\alias{is.frequency}
+\name{is_frequency}
+\alias{is_frequency}
 \title{Is-A function for Allele Frequences}
 \usage{
-  is.frequency(x)
+  is_frequency(x)
 }
 \arguments{
   \item{x}{A \code{data.frame} potentially from

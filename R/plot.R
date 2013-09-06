@@ -1,32 +1,3 @@
-#' Plot a genetic statistic
-#' 
-#' This function plots out the observed and permuted values for the statistic
-#' @param x An object of type 'genetic statistic'
-#' @param ... Ignored
-#' @return A ggplot object that is printed.
-#' @method plot structure_statistic
-#' @export
-#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-plot.structure_statistic <- function( x, ... ) {
-  if( !length(x$confidence) ) 
-    stop("Plotting a structure statistic without a permutation confidence is rather boring.")
-  require( ggplot2 )
-  ..density.. <- NULL
-  Permuted.Values <- x$confidence
-  df <- data.frame( Permuted.Values= Permuted.Values)
-  rng <- range(df[,1])
-  binwidth <- (rng[2]-rng[1])/30
-  plot <- ggplot( df, aes(x=Permuted.Values) ) + 
-    geom_histogram(aes(y= ..density.. ), fill="#aaaaaa", color="black", binwidth=binwidth )
-  plot <- plot + geom_density(color="red", alpha=.2, fill="red")
-  plot <- plot + xlab(paste("Permuted", x$mode, "Values")) + ylab("Density")
-  plot <- plot + geom_vline(xintercept=x$estimate, labels="bob",color="#00cc00", size=1)
-  return( plot )
-}
-
-
-
-
 #' Plotting the locations of a 'population' 
 #' 
 #' Plots a data frame if that data frame has names indicated by the 
@@ -92,7 +63,7 @@ plot.data.frame <- function( x,
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 plot.locus <- function( x, mode=c("bar","pie")[1], ... ) {
-  require(ggplot2)
+  #require(ggplot2)
   f <- frequencies( x )
   Allele <- Frequency <- NULL
   if( mode=="bar")
@@ -107,31 +78,6 @@ plot.locus <- function( x, mode=c("bar","pie")[1], ... ) {
             theme(axis.ticks=element_blank(), axis.text.y=element_blank())
   return(plot)
 }
-
-
-
-#' Overload plot function
-#' 
-#' This function is just for quick plotting of genetic distance objects
-#' @param x A \code{genetic_distance} object
-#' @param ... Ignored
-#' @method plot genetic_distance
-#' @export
-#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-
-plot.genetic_distance <- function( x, ...) {
-  require(ggplot2)
-  Values <- ..density.. <- NULL
-  
-  df <- data.frame( Values=x[upper.tri(x)] )
-  binwidth <- ( max(df$Values) - min(df$Values) ) / 30
-  plot <- ggplot( df, aes(x=Values) ) + 
-    geom_histogram(aes(y= ..density.. ), fill="#aaaaaa", color="black", binwidth=binwidth )
-  plot <- plot + geom_density(color="red", alpha=.2, fill="red")
-  plot <- plot + xlab(paste("Pairwise", attr(x,"mode"), "Distances")) + ylab("Density")
-  return( plot )
-}
-
 
 
 

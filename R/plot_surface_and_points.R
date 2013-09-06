@@ -25,7 +25,7 @@
 #' @export
 #' 
 surface_point_plot <- function( raster, coords = NA, is.discrete=TRUE, palette=1, group=NA, x.label="X", y.label="Y" ) {
-  require(ggplot2)
+  #require(ggplot2)
   
   X <- Y <- Group <- Value <- NULL
   

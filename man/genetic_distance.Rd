@@ -17,9 +17,7 @@
   you are going to use.}
 }
 \value{
-  A \code{genetic_distance} object (also a matrix) with the
-  genetic distances and a bit of additional information
-  about its creation.
+  A matrix with the genetic distances
 }
 \description{
   This function is the main one used for estimating genetic

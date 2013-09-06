@@ -21,6 +21,8 @@ gstudio 1.1
 * [ADD] Changed the transition_probability() function to handle multilocus estimates of both two parent and single parent situations when data are contained in data.frame elements.
 * [FIX] Removed missing data from estimation of genotype_frequencies()
 * [ADD] Added ability for mate() to do replacement random mating (e.g., take all individuals in data.frame and make equal size next generation using complete random mating).
+* [ADD] Added ability to get SpatialPoints object from strata_coordinates() function as well as data.frame.
+
 
 gstudio 1.0 
 -----------------

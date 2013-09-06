@@ -33,9 +33,9 @@
 #'  locus2 <- c(AB,BB,AA,BB,BB,AB,AB,AA,AA,BB)
 #'  Population <- c(rep("Pop-A",5),rep("Pop-B",5))
 #'  df <- data.frame( Population, TPI=locus, PGM=locus2 )
-#'  genetic_structure( df, mode="Gst")
+#'  genetic_structure( df, mode="Gst", nperm=999)
 #'  genetic_structure( df, mode="Gst", pairwise=TRUE)
-#'  genetic_structure( df, mode="Gst", pairwise=TRUE, locus=TPI )
+#'  genetic_structure( df, mode="Gst", pairwise=TRUE, locus="TPI" )
 genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime", "Dest")[1], nperm=0, size.correct=TRUE, pairwise=FALSE, locus ) {
   
   if( !inherits(x,"data.frame") )
@@ -49,9 +49,6 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
   
   # subsets of loci
   if( !missing( locus ) ){
-    
-    print(locus)
-    print(pairwise)
     
     if( all( locus %in% column_class(x,"locus")) ) 
       x <- x[, c(stratum,locus) ]

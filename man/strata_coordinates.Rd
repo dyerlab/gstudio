@@ -3,7 +3,8 @@
 \title{Grab coordinates for strata}
 \usage{
   strata_coordinates(x, stratum = "Population",
-    longitude = "Longitude", latitude = "Latitude")
+    longitude = "Longitude", latitude = "Latitude",
+    as.SpatialPoints = FALSE)
 }
 \arguments{
   \item{x}{A \code{data.frame} object.}
@@ -14,6 +15,11 @@
   \item{longitude}{The column name of the longitude}
 
   \item{latitude}{The column name of the latitude}
+
+  \item{as.SpatialPoints}{A flag indicating what kind of
+  coordinates to return should be turned into a
+  SpatialPoints object (TRUE) or as a \code{data.frame}
+  (FALSE, the default)}
 }
 \value{
   A data frame, with Stratum Latitude and Longitude,

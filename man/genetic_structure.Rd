@@ -3,8 +3,8 @@
 \title{Estimation of , genetic structure statistics.}
 \usage{
   genetic_structure(x, stratum = "Population",
-    mode = c("Gst", "Gst_prime", "Dest")[1], locus = NULL,
-    nperm = 0, size.correct = TRUE, pairwise = FALSE)
+    mode = c("Gst", "Gst_prime", "Dest")[1], nperm = 0,
+    size.correct = TRUE, pairwise = FALSE, locus)
 }
 \arguments{
   \item{x}{An object of type \code{data.frame} with at
@@ -18,10 +18,6 @@
   Hamrick)} \item{Gst_prime}{Hedrick's correction of Nei's
   Gst for diverse loci} \item{Dest}{Joost's estimate} }}
 
-  \item{locus}{An optional parameter specifying the locus
-  or loci to be used in the analysis.  If this is not
-  specified, then all loci are used.}
-
   \item{nperm}{The number of permutations used to test the
   hypothesis that the parameter = 0.}
 
@@ -31,6 +27,10 @@
 
   \item{pairwise}{A flag indicating that the analysis
   should be done among all pairs of strata.}
+
+  \item{locus}{An optional parameter specifying the locus
+  or loci to be used in the analysis.  If this is not
+  specified, then all loci are used.}
 }
 \value{
   An object of type \code{data.frame} containing estimates
@@ -56,8 +56,8 @@ AA <- locus( c("A","A") )
  locus2 <- c(AB,BB,AA,BB,BB,AB,AB,AA,AA,BB)
  Population <- c(rep("Pop-A",5),rep("Pop-B",5))
  df <- data.frame( Population, TPI=locus, PGM=locus2 )
- genetic_structure( df, mode="Gst")
+ genetic_structure( df, mode="Gst", nperm=999)
  genetic_structure( df, mode="Gst", pairwise=TRUE)
- genetic_structure( df, mode="Gst", pairwise=TRUE, locus=TPI )
+ genetic_structure( df, mode="Gst", pairwise=TRUE, locus="TPI" )
 }
 
