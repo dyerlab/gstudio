@@ -1,0 +1,32 @@
+\name{geom_locus}
+\alias{geom_locus}
+\title{Translate a vector of \code{locus} objects into a \code{gemo_bars} layer}
+\usage{
+  geom_locus(mapping, data, ...)
+}
+\arguments{
+  \item{mapping}{The aesthetic mapping (e.g., which locus
+  to use).  Use \code{aes(x=LOCUS_NAME)} to specify which
+  locus is being used.}
+
+  \item{data}{A \code{data.frame} containing one or more
+  loci to be plot}
+
+  \item{...}{Added to geom_bar}
+}
+\value{
+  A formatted set of \code{ggplot} objects to be plot
+}
+\description{
+  This function takes a data frame containing genetic data
+  and returns a \code{geom_bars} layer for \code{ggplot}
+  integration.
+}
+\note{
+  If using more than one stratum, use fill=STRATA_NAME for
+  partitioning
+}
+\author{
+  Rodney J. Dyer \email{rjdyer@vcu.edu}
+}
+
