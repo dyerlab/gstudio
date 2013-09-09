@@ -11,27 +11,18 @@
 #'  levels.  To plot a reduced number of loci/strata, use a subset of your data.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
-plot_frequencies <- function(x, ...){
-  #require(ggplot2)
+geom_frequencies <- function(x, ...){
+
+  if( !is(x,'data.frame'))
+    stop("The function geom_frequencies() uses frequency data.frames from frequencies() to create plots.")
+  
   Allele <- Frequency <- NULL
+
   
   if( !("Frequency" %in% names(x)) | !("Allele" %in% names(x)))
     stop("Cannot plot this data.frame, it does not appear to be from frequencies().")
   
-  ret <- ggplot( x ) + 
-          ylim( c(0,1) ) + 
-          geom_bar( aes(x=Allele,y=Frequency,fill=Allele), stat="identity" )
-  
-  if( "Locus" %in% names(x) ){
-    
-    if( "Stratum" %in% names(x) ){
-      ret <- ret + facet_grid(Stratum~Locus, space="free", scales="free_x")
-    }
-    else {
-      ret <- ret + facet_grid(.~Locus, space="free", scales="free_x")
-    }
-    
-  }
+  ret <- geom_bar( aes(x=Allele,y=Frequency,fill=Allele), stat="identity", data=x )
   
   return( ret )
 }
