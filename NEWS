@@ -23,7 +23,7 @@ gstudio 1.1
 * [ADD] Added ability for mate() to do replacement random mating (e.g., take all individuals in data.frame and make equal size next generation using complete random mating).
 * [ADD] Added ability to get SpatialPoints object from strata_coordinates() function as well as data.frame.
 * [ADD] Added function optimal_sampling() to help estimate optimal sampling designs for methods requiring estimates of genetic differentiation.
-
+* [ADD] Added multilocus_diversity() function to return proportion of sample size with unique multilocus genotypes.
 
 gstudio 1.0 
 -----------------

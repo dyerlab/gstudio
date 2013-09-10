@@ -10,7 +10,7 @@
 geom_surface <- function( raster, ... ) {
   if( missing(raster) )
     stop("Cannot turn raster into ggplot object without a raster to start with...")
-  
+  x <- y <- NULL
   df <- data.frame( raster::rasterToPoints( raster ) )  
   ret <- geom_raster( aes(x,y,fill=layer), data=df, hjust=0, vjust=0, ...)
   

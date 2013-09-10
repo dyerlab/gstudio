@@ -29,7 +29,8 @@ geom_locus <- function( mapping, data, ... ) {
       stop("The requested stratum is not in the data.frame...")
   } 
     
-
+  Allele <- Frequency <- Stratum <- NULL
+  
   if( is.null(mapping$fill) ) {
     freqs <- frequencies( data, loci=as.character(mapping$x) )
     ret <- geom_bar( aes(x=Allele,y=Frequency), stat="identity", data=freqs, ... ) 

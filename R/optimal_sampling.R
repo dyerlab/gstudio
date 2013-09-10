@@ -6,7 +6,7 @@
 #'  among strata.
 #' @param N The total sample size (number of strata * number of individuals 
 #'  pre stratum)
-#' @param Phi An estimate of the level of differentiation.
+#' @param phi An estimate of the level of differentiation.
 #' @return A ggplot object with a plot of the variance in phi due to
 #'  different sample sizes with a region of +/- 10% of the provided
 #'  phi value
@@ -22,6 +22,7 @@ optimal_sampling <- function( N, phi) {
   
   if( missing( phi ) )
     stop("You need to provide a mean estiamte of differentiation for this function to work.")
+  Strata <- Var.Phi <- NULL
   
   x <- seq(2,N-2)
   y <- N / x
