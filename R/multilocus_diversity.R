@@ -5,6 +5,7 @@
 #' @param x A data frame with \code{locus} objects in it.
 #' @return The fraction of that data set that have unique multilocus genotypes.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @export
 multilocus_diversity <- function( x ) {
   if( !is(x,'data.frame'))
     stop("You need to pass a data.frame to the multilocus_diversity() function.")
