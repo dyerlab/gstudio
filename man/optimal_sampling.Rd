@@ -8,7 +8,7 @@
   \item{N}{The total sample size (number of strata * number
   of individuals pre stratum)}
 
-  \item{Phi}{An estimate of the level of differentiation.}
+  \item{phi}{An estimate of the level of differentiation.}
 }
 \value{
   A ggplot object with a plot of the variance in phi due to

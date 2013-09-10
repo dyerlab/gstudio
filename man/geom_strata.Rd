@@ -25,7 +25,8 @@
 require(ggplot2)
 data(arapat)
 ggplot() + geom_strata( aes(x=Longitude,y=Latitude,stratum=Population), data=arapat) + coord_equal()
-s <- geom_strata( aes(x=Longitude,y=Latitude,stratum=Population, color=Cluster, shape=Species), data=arapat)
+mapping <- aes(x=Longitude,y=Latitude,stratum=Population, color=Cluster, shape=Species)
+s <- geom_strata( mapping, data=arapat)
 ggplot() + s + coord_equal()
 }
 \author{

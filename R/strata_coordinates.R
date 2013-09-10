@@ -10,6 +10,7 @@
 #'  should be turned into a SpatialPoints object (TRUE) or as a \code{data.frame} (FALSE,
 #'  the default)
 #' @return A data frame, with Stratum Latitude and Longitude, summarized by center of each stratum.
+#' @importFrom sp SpatialPoints
 #' @export 
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 strata_coordinates <- function( x,
@@ -28,7 +29,7 @@ strata_coordinates <- function( x,
     coords <- cbind( x=ret$Longitude,
                      y=ret$Latitude) 
     rownames( coords ) <- ret$Stratum
-    ret <- SpatialPoints(coords)
+    ret <- sp::SpatialPoints(coords)
   }
   return( df[ !duplicated(df),] )
 }

@@ -1,8 +1,8 @@
-\name{plot_frequencies}
-\alias{plot_frequencies}
+\name{geom_frequencies}
+\alias{geom_frequencies}
 \title{Plot allele frequencies}
 \usage{
-  plot_frequencies(x, ...)
+  geom_frequencies(x, ...)
 }
 \arguments{
   \item{x}{The data frame with allele frequencies from
