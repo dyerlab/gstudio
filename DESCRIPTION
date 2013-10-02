@@ -82,3 +82,4 @@ Collate:
     'transition_probability.R'
     'geom_frequencies.R'
     'multilocus_diversity.R'
+    'genetic_relatedness.R'

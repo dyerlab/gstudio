@@ -9,7 +9,12 @@
 #' @return A formatted set of \code{ggplot} objects to be plot
 #' @note If using more than one stratum, use fill=STRATA_NAME for partitioning
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' 
+#' @export
+#' @examples
+#' require(ggplot2)
+#' loci <- c( locus(1:2), locus(2:3), locus(c(1,1)), locus(1:2) )
+#' data <- data.frame( Population=c("A","A","B","B"), Locus=loci)
+#' ggplot() + geom_locus( aes(x=Locus, fill=Population), data=data )
 geom_locus <- function( mapping, data, ... ) {
   
   if( missing(data)) 
@@ -33,11 +38,13 @@ geom_locus <- function( mapping, data, ... ) {
   
   if( is.null(mapping$fill) ) {
     freqs <- frequencies( data, loci=as.character(mapping$x) )
-    ret <- geom_bar( aes(x=Allele,y=Frequency), stat="identity", data=freqs, ... ) 
+    ret <- geom_bar( aes(x=Allele,y=Frequency), stat="identity", data=freqs, binwidth=1 ) 
   }
     
   else {
     freqs <- frequencies( data, loci=as.character(mapping$x), stratum=as.character(mapping$fill))
+    vals <- expand.grid( Stratum=unique(freqs$Stratum), Locus=unique(freqs$Locus), Allele=unique(freqs$Allele))
+    freqs <- merge( freqs, vals, all=TRUE)
     ret <- geom_bar( aes(x=Allele,y=Frequency, fill=Stratum), stat="identity", data=freqs, position=position_dodge(), ... )
   }
     

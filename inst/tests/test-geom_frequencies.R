@@ -1,4 +1,4 @@
-context("geom_locus.R")
+context("geom_frequencies.R")
 
 test_that("shortest paths", {
 
