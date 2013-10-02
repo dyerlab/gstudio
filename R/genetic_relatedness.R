@@ -16,7 +16,7 @@
 #' @export
 #' @examples
 #' loci <- c( locus(1:2), locus(c(2,2)), locus(1:2) )
-#' genteic_relatedness( loci )
+#' genetic_relatedness( loci )
 #' genetic_relatedness( loci, freqs = data.frame( Allele=c("1","2"), Frequency=c(0.5,0.5)))
 genetic_relatedness <- function( loci, mode=c("Ritland96","LynchRitland")[1], freqs=NULL ) {
   if( missing(loci) )
