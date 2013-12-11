@@ -2,7 +2,7 @@
 \alias{print.locus}
 \title{Overload of \code{print} function for \code{locus} objects}
 \usage{
-  \method{print}{locus} (x, ...)
+\method{print}{locus}(x, ...)
 }
 \arguments{
   \item{x}{The \code{locus} object}
@@ -11,16 +11,16 @@
   \code{\link{print.default}}.}
 }
 \value{
-  Nothing
+Nothing
 }
 \description{
-  Prints out the \code{locus} to stdout.
+Prints out the \code{locus} to stdout.
 }
 \examples{
 loc <- locus( 1:2 )
 print( loc )
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

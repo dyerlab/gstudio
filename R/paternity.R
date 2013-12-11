@@ -28,7 +28,8 @@
 #' adults <- make_population(f,N=20)
 #' adults
 #' offs <- mate( adults[1,], adults[2,], N=10)
-#' offs
+#' offs$OffID <- offs$ID
+#' offs$MomID <- adults$ID[1]
 #' paternity( offs, adults[1,], adults )
 paternity <- function( offspring, mother, fathers, ID="ID", OffID="OffID"){
 

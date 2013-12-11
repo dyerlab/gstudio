@@ -3,8 +3,7 @@
 \alias{data_separated}
 \title{Separated Example Data}
 \description{
-  Example data for separated data types
+Example data for separated data types
 }
 \keyword{data}
-\keyword{datasets}
 

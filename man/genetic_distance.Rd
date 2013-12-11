@@ -2,7 +2,7 @@
 \alias{genetic_distance}
 \title{Estimate genetic distances among strata in a ,}
 \usage{
-  genetic_distance(x, stratum = "Population", mode)
+genetic_distance(x, stratum = "Population", mode)
 }
 \arguments{
   \item{x}{A \code{data.frame} object with
@@ -17,27 +17,26 @@
   you are going to use.}
 }
 \value{
-  A matrix with the genetic distances
+A matrix with the genetic distances
 }
 \description{
-  This function is the main one used for estimating genetic
-  distances among either individuals or stratum.  Given the
-  large number of genetic distance metrics, some are
-  recreated here, de novo, and some are estimated through
-  other existing R packages.
+This function is the main one used for estimating genetic
+distances among either individuals or stratum.  Given the
+large number of genetic distance metrics, some are
+recreated here, de novo, and some are estimated through
+other existing R packages.
 }
 \note{
-  This function currently includes the following individual
-  distance measures: \itemize{
-  \item{AMOVA}{Inter-individual } \item{Bray}{Proportion of
-  shared alleles} } This function also supports genetic
-  distances based upon stratum distances.  The currently
-  supported genetic distances are: \itemize{
-  \item{Euclidean}{Euclidean frequency distance}
-  \item{cGD}{Conditional Genetic Distance} \item{Nei}{Nei's
-  corrected genetic distance (1978)} \item{Dps}{Shared
-  allele distance = 1 - Ps} \item{Jaccard}{Jaccard set
-  dissimilarity} }
+This function currently includes the following individual
+distance measures: \itemize{ \item{AMOVA}{Inter-individual
+} \item{Bray}{Proportion of shared alleles} } This function
+also supports genetic distances based upon stratum
+distances.  The currently supported genetic distances are:
+\itemize{ \item{Euclidean}{Euclidean frequency distance}
+\item{cGD}{Conditional Genetic Distance} \item{Nei}{Nei's
+corrected genetic distance (1978)} \item{Dps}{Shared allele
+distance = 1 - Ps} \item{Jaccard}{Jaccard set
+dissimilarity} }
 }
 \examples{
 AA <- locus( c("A","A") )
@@ -57,6 +56,6 @@ genetic_distance(df, mode="AMOVA")
 genetic_distance(df, mode="Dps")
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

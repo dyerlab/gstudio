@@ -1,6 +1,6 @@
 gstudio 1.1 
 -----------------
-
+* [FIX] Changed mate() function for simplicity.
 * [FIX] Made "Stratum" column from make_population() a factor and made the stratum of the resulting population not "Stratum" but "Population"
 * [FIX] Gst(), Gst_prime(), and Dest() for when a data.frame is passed with only one locus, there is no need to do the multilocus response.  
 * [FIX] Gst(), Gst_prime(), and Dest() for when subset of data is passed (e.g., stratum with zeros counts), the zeros are ignored.

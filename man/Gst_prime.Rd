@@ -2,8 +2,7 @@
 \alias{Gst_prime}
 \title{Estimation Nei's Gst parameter with Hedrick's correction for allelic diversity}
 \usage{
-  Gst_prime(x, stratum = "Population", nperm = 0,
-    size.correct = TRUE)
+Gst_prime(x, stratum = "Population", nperm = 0, size.correct = TRUE)
 }
 \arguments{
   \item{x}{A vector of \code{\link{locus}} objects or a
@@ -22,16 +21,15 @@
   (default=TRUE).}
 }
 \value{
-  An \code{data.frame} with Gst, Ht, and Hs and optionally
-  P.  If more than one locus is provided, then a
-  'mutlilocus' estimate is shown using the harmonic mean of
-  individual locus Gst_prime values.
+An \code{data.frame} with Gst, Ht, and Hs and optionally P.
+If more than one locus is provided, then a 'mutlilocus'
+estimate is shown using the harmonic mean of individual
+locus Gst_prime values.
 }
 \description{
-  This function estimates the parameter (and potentially
-  the confidence surrounding its value) for Gst.  It is
-  corrected by the diversity of the parameter as outlined
-  by Hedrick.
+This function estimates the parameter (and potentially the
+confidence surrounding its value) for Gst.  It is corrected
+by the diversity of the parameter as outlined by Hedrick.
 }
 \examples{
 a1 <- sample( LETTERS[1:5], size=20, replace=TRUE)
@@ -48,6 +46,6 @@ a1 <- sample( LETTERS[1:5], size=20, replace=TRUE)
  Gst_prime( df, nperm=99)
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

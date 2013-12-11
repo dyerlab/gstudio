@@ -2,7 +2,7 @@
 \alias{mate}
 \title{Produces offspring}
 \usage{
-  mate(mom, dad, N, ID = "ID")
+mate(mom, dad, N = 1)
 }
 \arguments{
   \item{mom}{This is the 'maternal' individual in that all
@@ -14,25 +14,27 @@
   offspring.}
 
   \item{N}{The number of offspring to produce.}
-
-  \item{ID}{The column in \code{mom} that is the
-  identification column as all offspring from a maternal
-  individual have the same ID (see also
-  \code{\link{paternity}} and \code{\link{minus_mom}}).}
 }
 \value{
-  A \code{data.frame} of offspring.
+A \code{data.frame} of offspring.
 }
 \description{
-  This function is mostly for simulation work and functions
-  to produce a set of offpsring for the individuals passed.
+This function is mostly for simulation work and functions
+to produce a set of offpsring for the individuals passed.
 }
 \note{
-  If only a \code{data.frame} is passed to as 'mom' and the
-  rest are left out, by default the code will do a complete
-  random mating (no inbreeding) process for you keeping the
-  same population size as the data you passed it.  This is
-  nice for iterating across generations in simulation work.
+There are several 'hidden' things in this routine.  First,
+if you do not pass a 'dad' object, it will assume you want
+a selfed offspring.  Second, it will by default only make a
+single offspring.  Next, if you have a column labelled
+"Sex" it will make a random selection of which sex each
+offspring should be and only mate the opposite sexes based
+upon the levels of the values in the Sex column.  Finally,
+if there are columns ID and OffID in the mom, then all
+offspring will have the same ID as the mom but will have
+OffID equal to 1:N to conform with how the functions like
+\code{paternity()} operate.  If you do not have ID and
+OffID then it will do nothing special.
 }
 \examples{
 f <- data.frame(Allele=LETTERS[1:2], Frequency=c(0.5,0.5))
@@ -41,6 +43,6 @@ adults
 mate( adults[1,], adults[2,], N=10)
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

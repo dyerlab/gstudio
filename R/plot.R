@@ -48,7 +48,7 @@ plot.data.frame <- function( x,
   
   # otherwise pass it along to the normal plot stuff
   else
-    base::plot.default( x, ... )
+    plot.default( x, ... )
 }
 
 

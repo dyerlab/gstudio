@@ -3,8 +3,7 @@
 \alias{data_snp}
 \title{SNP Example Data}
 \description{
-  Example data for SNP data types
+Example data for SNP data types
 }
 \keyword{data}
-\keyword{datasets}
 

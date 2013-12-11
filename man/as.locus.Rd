@@ -2,18 +2,18 @@
 \alias{as.locus}
 \title{As operator for locus}
 \usage{
-  as.locus(x)
+as.locus(x)
 }
 \arguments{
   \item{x}{An object that is to be truned into a
   \code{locus}.}
 }
 \value{
-  An object of type \code{locus}
+An object of type \code{locus}
 }
 \description{
-  This takes several things and shoves it into the
-  constructor
+This takes several things and shoves it into the
+constructor
 }
 \examples{
 lst <- list( "A", "B" )
@@ -26,9 +26,9 @@ chr.sep <- "A:A"
 as.locus( chr )
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 \seealso{
-  \code{\link{locus}}
+\code{\link{locus}}
 }
 

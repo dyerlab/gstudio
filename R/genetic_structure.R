@@ -66,7 +66,8 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
     for( i in 1:K){
       for( j in i:K){
         if( i!=j ){
-          r <- genetic_structure( x, stratum, mode, nperm=0, size.correct )
+          y <- rbind(x[x[[stratum]]==pops[i],], x[x[[stratum]]==pops[j],])
+          r <- genetic_structure( y, stratum, mode, nperm=0, size.correct )
           ret[i,j] <- ret[j,i] <-  r[nrow(r),2]
         } 
       }

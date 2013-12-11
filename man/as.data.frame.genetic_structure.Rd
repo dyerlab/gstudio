@@ -2,7 +2,7 @@
 \alias{as.data.frame.genetic_structure}
 \title{Conversion of genetic_structure to data.frame}
 \usage{
-  \method{as.data.frame}{genetic_structure} (x, ...)
+\method{as.data.frame}{genetic_structure}(x, ...)
 }
 \arguments{
   \item{x}{An objet of type
@@ -11,14 +11,14 @@
   \item{...}{Ignored}
 }
 \value{
-  A data frame
+A data frame
 }
 \description{
-  Converts the \code{\link{genetic_structure}} object to a
-  common data.frame object with keys 'locus', 'Allele' and
-  'Frequency'
+Converts the \code{\link{genetic_structure}} object to a
+common data.frame object with keys 'locus', 'Allele' and
+'Frequency'
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

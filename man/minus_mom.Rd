@@ -2,7 +2,7 @@
 \alias{minus_mom}
 \title{Subtracts maternal component to offspring genotypes}
 \usage{
-  minus_mom(x, MomCol = "ID", OffCol = "OffID")
+minus_mom(x, MomCol = "ID", OffCol = "OffID")
 }
 \arguments{
   \item{x}{A \code{data.frame} with mother and offspring
@@ -18,16 +18,15 @@
   mother of those offspring.}
 }
 \value{
-  A \code{data.frame} object of only the offspring after
-  removing the contribution of each maternal individual.
+A \code{data.frame} object of only the offspring after
+removing the contribution of each maternal individual.
 }
 \description{
-  This function removes the female component to the
-  offspring genotypes. It is one step in the \code{2gener}
-  analysis. The coding of the \code{MomCol} and the
-  \code{OffCol} headers are specific so that this algorithm
-  can differentiate between maternal individuals and
-  offspring.
+This function removes the female component to the offspring
+genotypes. It is one step in the \code{2gener} analysis.
+The coding of the \code{MomCol} and the \code{OffCol}
+headers are specific so that this algorithm can
+differentiate between maternal individuals and offspring.
 }
 \examples{
 AA <- locus( c("A","A") )
@@ -47,6 +46,6 @@ df <- data.frame( ID=factor(momID), OffID=factor(offID), TPI=loci )
 minus_mom( df )
 }
 \author{
-  Rodney J. Dyer <rjdyer@vcu.edu>
+Rodney J. Dyer <rjdyer@vcu.edu>
 }
 

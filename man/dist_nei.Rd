@@ -2,7 +2,7 @@
 \alias{dist_nei}
 \title{Estimation of Bray-Curtis distance}
 \usage{
-  dist_nei(x, stratum = "Population")
+dist_nei(x, stratum = "Population")
 }
 \arguments{
   \item{x}{A data frame with locus objects in it as well as
@@ -11,17 +11,16 @@
   \item{stratum}{A factor indicating the stratum to use.}
 }
 \value{
-  The Nei Genetic distance
+The Nei Genetic distance
 }
 \description{
-  This function returns a measure of genetic distance based
-  upon the Nei's Genetic distance metric.  Assumes
-  drift/mutation equilibrium is the main force governing
-  your observed differences.
+This function returns a measure of genetic distance based
+upon the Nei's Genetic distance metric.  Assumes
+drift/mutation equilibrium is the main force governing your
+observed differences.
 }
 \note{
-  This is the bias corrected Nei's Standard genetic
-  distance.
+This is the bias corrected Nei's Standard genetic distance.
 }
 \examples{
 AA <- locus( c("A","A") )
@@ -40,6 +39,6 @@ AA <- locus( c("A","A") )
   dist_nei( df )
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 
