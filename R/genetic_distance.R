@@ -9,8 +9,7 @@
 #'    can be an optional parameter when estimating distance measures calculated
 #'    among indiviudals (default='Population'). 
 #' @param mode The particular genetic distance metric that you are going to use. 
-#' @return A \code{genetic_distance} object (also a matrix) with the genetic 
-#'    distances and a bit of additional information about its creation.
+#' @return A matrix with the genetic distances 
 #' @note This function currently includes the following individual distance 
 #'    measures:
 #'    \itemize{
@@ -26,7 +25,6 @@
 #'      \item{Dps}{Shared allele distance = 1 - Ps}
 #'      \item{Jaccard}{Jaccard set dissimilarity}
 #'    }
-
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples

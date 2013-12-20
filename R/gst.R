@@ -12,6 +12,7 @@
 #'  based upon sample sizes (default=TRUE).
 #' @return An \code{data.frame} with Gst, Ht, and Hs and optionally P
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @import ggplot2
 #' @export
 #' @examples
 #'  AA <- locus( c("A","A") )
@@ -44,7 +45,6 @@ Gst <- function( x, stratum="Population", nperm=0, size.correct=TRUE ) {
       data <- x[[locus_names[i]]] 
       r <- Gst( data, strata, nperm, size.correct)
       ret[i,2:5] <- r
-      
     }
     
     if( length(locus_names) > 1 ) {

@@ -7,6 +7,8 @@ test_that("testing",{
   f <- data.frame(Locus=loci, Allele=alleles, Frequency=freqs)
   adults <- make_population(f,N=20)
   offs <- mate( adults[1,], adults[2,], N=10)
+  offs$OffID <- offs$ID
+  offs$MomID <- 1
   
   
   expect_that( adults, is_a("data.frame"))

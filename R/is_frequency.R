@@ -9,6 +9,6 @@
 #'  representing allele frequencies
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
-is.frequency <- function( x ) {
+is_frequency <- function( x ) {
   return( is(x,"data.frame") & ("Allele" %in% names(x)) & ("Frequency" %in% names(x) ))
 }

@@ -4,7 +4,7 @@
 \usage{
   pies_on_map(x, stratum = "Population", locus = NA,
     Longitude = "Longitude", Latitude = "Latitude",
-    line.color = "black", label = FALSE, ...)
+    line.color = "black", label = FALSE, palette = 8, ...)
 }
 \arguments{
   \item{x}{An object of type \code{data.frame} created from
@@ -26,6 +26,9 @@
 
   \item{label}{A flag indicating that the stratum names
   will be printed in the map plots.}
+
+  \item{palette}{The number of the brewer palette to use
+  (default=8)}
 
   \item{...}{Ignored}
 }

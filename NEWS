@@ -1,6 +1,12 @@
 gstudio 1.1 
 -----------------
+* [ADD] Added ability to subtract vectors of loci instead of single locus estimates.
+* [ADD] Added bad_parents() to scan offspring, mother data.frames and determine if the mother could be the real mother.
+* [ADD] Added parent_finder() to do fractional maternal individual identification.
 
+
+* [CHANGE] Dropped warming when subtracting loci when one is missing.  Used to result in a stop() but now only provides a warning and returns the left hand locus (the one the subtraction is being done from).
+* [FIX] Changed mate() function for simplicity.
 * [FIX] Made "Stratum" column from make_population() a factor and made the stratum of the resulting population not "Stratum" but "Population"
 * [FIX] Gst(), Gst_prime(), and Dest() for when a data.frame is passed with only one locus, there is no need to do the multilocus response.  
 * [FIX] Gst(), Gst_prime(), and Dest() for when subset of data is passed (e.g., stratum with zeros counts), the zeros are ignored.
@@ -15,6 +21,17 @@ gstudio 1.1
 * [FIX] Multilocus estimate of Gst_prime() was wrong if there was a single locus estimate that was negative, in which case the harmonic mean is not correct.
 * [ADD] Added function strata_distance() to return distance matrix between stratum based upon either Euclidean distance or great-circle distance.
 * [ADD] Added function genotype_frequencies() to return both observed and expected frequencies for a given locus.
+* [ADD] Added ", space="free", scales="free_x" to plot_frequencies() for non-overlapping allele counts and better plots.
+* [FIX] Fixed exclusion_probability() to return numeric values for various columns and added multilocus exclusion to result.
+* [FIX] Dataframe column name on multilocus Ho was incorrect
+* [ADD] Changed the transition_probability() function to handle multilocus estimates of both two parent and single parent situations when data are contained in data.frame elements.
+* [FIX] Removed missing data from estimation of genotype_frequencies()
+* [ADD] Added ability for mate() to do replacement random mating (e.g., take all individuals in data.frame and make equal size next generation using complete random mating).
+* [ADD] Added ability to get SpatialPoints object from strata_coordinates() function as well as data.frame.
+* [ADD] Added function optimal_sampling() to help estimate optimal sampling designs for methods requiring estimates of genetic differentiation.
+* [ADD] Added multilocus_diversity() function to return proportion of sample size with unique multilocus genotypes.
+* [ADD] Added geom_locus, geom_frequencies, geom_strata, and geom_surface to plotting functions 
+* [ADD] Added function genetic_relatedness() for Ritland 1996 and Lynch & Ritland 1999 marker estimators.
 
 
 

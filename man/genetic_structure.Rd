@@ -4,7 +4,7 @@
 \usage{
   genetic_structure(x, stratum = "Population",
     mode = c("Gst", "Gst_prime", "Dest")[1], nperm = 0,
-    size.correct = TRUE, pairwise = FALSE)
+    size.correct = TRUE, pairwise = FALSE, locus)
 }
 \arguments{
   \item{x}{An object of type \code{data.frame} with at
@@ -27,9 +27,16 @@
 
   \item{pairwise}{A flag indicating that the analysis
   should be done among all pairs of strata.}
+
+  \item{locus}{An optional parameter specifying the locus
+  or loci to be used in the analysis.  If this is not
+  specified, then all loci are used.}
 }
 \value{
-  An object of type \code{genetic_structure}.
+  An object of type \code{data.frame} containing estimates
+  for each locus and a multilocus estiamte.  If
+  \code{pairwise=TRUE}, then it returns the multilocus (if
+  more than one locus) estiamte in a matrix format.
 }
 \description{
   This function estimates common , genetic statistics.
@@ -38,8 +45,8 @@
   The multilocus estimation of these parameters is
   estimated following the suggestions of Culley et al.
   (2001) A comparison of two methods of calculating Gst, a
-  genetic measure of , differentiation.  American Journal
-  of Botany 89(3): 460-465.
+  genetic measure of population differentiation.  American
+  Journal of Botany 89(3): 460-465.
 }
 \examples{
 AA <- locus( c("A","A") )
@@ -49,6 +56,8 @@ AA <- locus( c("A","A") )
  locus2 <- c(AB,BB,AA,BB,BB,AB,AB,AA,AA,BB)
  Population <- c(rep("Pop-A",5),rep("Pop-B",5))
  df <- data.frame( Population, TPI=locus, PGM=locus2 )
- genetic_structure( df, mode="Gst")
+ genetic_structure( df, mode="Gst", nperm=999)
+ genetic_structure( df, mode="Gst", pairwise=TRUE)
+ genetic_structure( df, mode="Gst", pairwise=TRUE, locus="TPI" )
 }
 

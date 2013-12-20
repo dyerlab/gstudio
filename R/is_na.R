@@ -15,9 +15,3 @@ is.na.locus <- function( x ) {
   
   return ( unlist(lapply( x, func) ) )
 }
-
-
-is.na.structure_statistic <- function( x ) {
-  return( is.na( x$estimate ) )
-}
-

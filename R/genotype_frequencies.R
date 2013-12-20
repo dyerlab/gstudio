@@ -19,6 +19,9 @@ genotype_frequencies <- function( x ) {
   if( !is(x,"locus"))
     stop("This function works on locus objects only")
   
+  # remove missing data
+  x <- x[ !is.na(x)]
+  
   t <- table( x )
   ret <- data.frame( Genotype=names(t), Observed=as.numeric(t), Expected=0,stringsAsFactors=FALSE)
   f <- frequencies( x ) 

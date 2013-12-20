@@ -36,14 +36,16 @@
   offspring given a set of potential fathers.
 }
 \examples{
-freqs <- c(0.55, 0.30, 0.15, 0.34, 0.34, 0.32)
-loci <- c(rep("TPI",3), rep("PGM",3))
-alleles <- c(LETTERS[1:3],LETTERS[8:10])
+freqs <- c(1/3,1/3,1/3)
+loci <- rep( paste("Loc",1:6,sep="-"), each=3)
+alleles <- LETTERS[1:3]
 f <- data.frame(Locus=loci, Allele=alleles, Frequency=freqs)
+f
 adults <- make_population(f,N=20)
 adults
 offs <- mate( adults[1,], adults[2,], N=10)
-offs
+offs$OffID <- offs$ID
+offs$MomID <- adults$ID[1]
 paternity( offs, adults[1,], adults )
 }
 \author{

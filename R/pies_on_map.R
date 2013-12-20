@@ -8,13 +8,14 @@
 #' @param Latitude The name of the Latitude data column (default 'Latitude')
 #' @param line.color An parameter indicating the color of the border of bars and pie wedges.
 #' @param label A flag indicating that the stratum names will be printed in the map plots.
+#' @param palette The number of the brewer palette to use (default=8)
 #' @param ... Ignored
 #' @return Nothing
 #' @importFrom grid grid.newpage pushViewport viewport grid.text grid.layout
 #' @import ggmap
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-pies_on_map <- function( x, stratum="Population", locus=NA, Longitude='Longitude', Latitude='Latitude',line.color="black", label=FALSE, ... ) {
+pies_on_map <- function( x, stratum="Population", locus=NA, Longitude='Longitude', Latitude='Latitude',line.color="black", label=FALSE, palette=8,... ) {
   
   if( !inherits(x,"data.frame"))
     stop("Cannot create pie charts without some data...")
@@ -52,11 +53,13 @@ pies_on_map <- function( x, stratum="Population", locus=NA, Longitude='Longitude
       geom_bar(width=0.75, color=line.color, stat="identity") + 
       coord_polar(theta='y') + 
       theme_nothing()
+    if( length(df$Allele) < 13 )
+      pie <- pie +  scale_fill_brewer(type="div", palette=palette)
     print( pie, vp=viewport(x=lon,y=lat,width=0.05,height=0.05) )
   }
   
   if( label ) 
-    grid.text( label=coords[,1], x=coords[,2]+0.02, y=coords[,3]+0.02, gp=grid:::gpar(col=line.color), just="left")
+    grid.text( label=coords[,1], x=coords[,2]+0.02, y=coords[,3]+0.02, gp=grid::gpar(col=line.color), just="left")
   
   
   

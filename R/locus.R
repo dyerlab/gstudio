@@ -354,8 +354,22 @@ is.locus <- function ( x ) {
 #' dad.gamete
 #'
 `-.locus` <- function( e1, e2 ){
-  if( is.na(e1) || is.na(e2))
-    stop("Cannot subtract missing locus objects.")
+  
+  
+  if( length(e1) > 1 ){
+    ret <- locus()
+    for( i in 1:length(e1)){
+      ret <- c( ret, e1[i] - e2[i] )
+    }
+    return( ret[-1] )
+  }
+  
+  
+  if( is.na(e1) || is.na(e2)) {
+    warning("Subtract missing locus objects.  Nothing subtracted.")
+    return( e1 )
+  }
+    
   
   off <- alleles(e1)
   mom <- alleles(e2)
@@ -385,7 +399,7 @@ is.locus <- function ( x ) {
     
     # mother alleles not in offspring or not having half of the alleles
     if( length(int) == 0 ) {
-      warning(paste("Cannot subtract mom '",e2,"' from offspring '",e1,
+      message(paste("Unable to subtract adult '",e2,"' from offspring '",e1,
                     "', result is unreduced.",sep=""))
       return(e1)
     }  
