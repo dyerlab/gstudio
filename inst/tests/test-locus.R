@@ -128,11 +128,7 @@ test_that( "Operations", {
   expect_that( off, is_a("locus") )
   expect_that( as.character(off)=="A:B", is_true() )
   
-  expect_that( AA-BB, gives_warning())
-  
   off <- BB-AB
   expect_that( as.character(off)=="B", is_true())
-  
-  expect_that( AA-BC, gives_warning())
-  
+    
 })

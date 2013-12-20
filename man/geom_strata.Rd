@@ -2,7 +2,7 @@
 \alias{geom_strata}
 \title{Returns ggplot layer for population data}
 \usage{
-geom_strata(mapping = NULL, data = NULL, ...)
+  geom_strata(mapping = NULL, data = NULL, ...)
 }
 \arguments{
   \item{mapping}{The aesthetic mapping, this MUST have
@@ -15,10 +15,11 @@ geom_strata(mapping = NULL, data = NULL, ...)
   \code{geom_point()}.}
 }
 \description{
-This function takes a \code{data.frame} of population data
-and returns a \code{geom_point()} layer for plotting.  You
-can also indicate shape and color attributes in the mapping
-(through \code{aes}) that will be carried through.
+  This function takes a \code{data.frame} of population
+  data and returns a \code{geom_point()} layer for
+  plotting.  You can also indicate shape and color
+  attributes in the mapping (through \code{aes}) that will
+  be carried through.
 }
 \examples{
 require(ggplot2)
@@ -29,6 +30,6 @@ s <- geom_strata( mapping, data=arapat)
 ggplot() + s + coord_equal()
 }
 \author{
-Rodney J. Dyer \email{rjdyer@vcu.edu}
+  Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

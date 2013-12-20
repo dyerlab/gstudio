@@ -30,8 +30,6 @@ test_that( "testing",{
   
   expect_that( as.character(mm$TPI), is_equivalent_to(c("B","C","D","C","D","C:D","D")))
   
-  df$TPI[10] <- locus(c("A","B"))
-  expect_that( minus_mom(df ), gives_warning())
-  
+
   
 })

@@ -2,8 +2,8 @@
 \alias{read_population}
 \title{Read a raw text file in and translate appropriate columns into genotypes}
 \usage{
-read_population(path, type, locus.columns, phased = FALSE, sep = ",",
-  header = TRUE)
+  read_population(path, type, locus.columns,
+    phased = FALSE, sep = ",", header = TRUE)
 }
 \arguments{
   \item{path}{The path to the text file}
@@ -35,14 +35,14 @@ read_population(path, type, locus.columns, phased = FALSE, sep = ",",
   a \code{locus} object.}
 }
 \value{
-A \code{data.frame} with \code{locus} columns
-pre-formatted.
+  A \code{data.frame} with \code{locus} columns
+  pre-formatted.
 }
 \description{
-The function reads in a text file and does the proper
-translations for genotypes and spatial coordinates.
+  The function reads in a text file and does the proper
+  translations for genotypes and spatial coordinates.
 }
 \author{
-Rodney J. Dyer \email{rjdyer@vcu.edu}
+  Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

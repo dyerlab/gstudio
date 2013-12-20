@@ -2,7 +2,7 @@
 \alias{transition_probability}
 \title{Returns transition probability for offspring given one or more parents.}
 \usage{
-transition_probability(off, mom, dad, multilocus = TRUE)
+  transition_probability(off, mom, dad, multilocus = TRUE)
 }
 \arguments{
   \item{off}{A locus from the offspring}
@@ -18,12 +18,13 @@ transition_probability(off, mom, dad, multilocus = TRUE)
   values.}
 }
 \value{
-The numeric probability of the offspring given the parents
+  The numeric probability of the offspring given the
+  parents
 }
 \description{
-This is a quick function used in paternity testing that
-provides the probability of transition for a locus of any
-ploidy level.
+  This is a quick function used in paternity testing that
+  provides the probability of transition for a locus of any
+  ploidy level.
 }
 \examples{
 off <- locus( 1:2 )
@@ -36,6 +37,6 @@ transition_probability( off, mom, dad2 )
 transition_probability( off, mom, dad3 )
 }
 \author{
-Rodney J. Dyer <rjdyer@vcu.edu>
+  Rodney J. Dyer <rjdyer@vcu.edu>
 }
 

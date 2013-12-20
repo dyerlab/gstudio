@@ -2,8 +2,9 @@
 \alias{genetic_structure}
 \title{Estimation of , genetic structure statistics.}
 \usage{
-genetic_structure(x, stratum = "Population", mode = c("Gst", "Gst_prime",
-  "Dest")[1], nperm = 0, size.correct = TRUE, pairwise = FALSE, locus)
+  genetic_structure(x, stratum = "Population",
+    mode = c("Gst", "Gst_prime", "Dest")[1], nperm = 0,
+    size.correct = TRUE, pairwise = FALSE, locus)
 }
 \arguments{
   \item{x}{An object of type \code{data.frame} with at
@@ -32,20 +33,20 @@ genetic_structure(x, stratum = "Population", mode = c("Gst", "Gst_prime",
   specified, then all loci are used.}
 }
 \value{
-An object of type \code{data.frame} containing estimates
-for each locus and a multilocus estiamte.  If
-\code{pairwise=TRUE}, then it returns the multilocus (if
-more than one locus) estiamte in a matrix format.
+  An object of type \code{data.frame} containing estimates
+  for each locus and a multilocus estiamte.  If
+  \code{pairwise=TRUE}, then it returns the multilocus (if
+  more than one locus) estiamte in a matrix format.
 }
 \description{
-This function estimates common , genetic statistics.
+  This function estimates common , genetic statistics.
 }
 \note{
-The multilocus estimation of these parameters is estimated
-following the suggestions of Culley et al. (2001) A
-comparison of two methods of calculating Gst, a genetic
-measure of population differentiation.  American Journal of
-Botany 89(3): 460-465.
+  The multilocus estimation of these parameters is
+  estimated following the suggestions of Culley et al.
+  (2001) A comparison of two methods of calculating Gst, a
+  genetic measure of population differentiation.  American
+  Journal of Botany 89(3): 460-465.
 }
 \examples{
 AA <- locus( c("A","A") )

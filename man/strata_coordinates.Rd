@@ -2,8 +2,9 @@
 \alias{strata_coordinates}
 \title{Grab coordinates for strata}
 \usage{
-strata_coordinates(x, stratum = "Population", longitude = "Longitude",
-  latitude = "Latitude", as.SpatialPoints = FALSE)
+  strata_coordinates(x, stratum = "Population",
+    longitude = "Longitude", latitude = "Latitude",
+    as.SpatialPoints = FALSE)
 }
 \arguments{
   \item{x}{A \code{data.frame} object.}
@@ -21,15 +22,15 @@ strata_coordinates(x, stratum = "Population", longitude = "Longitude",
   (FALSE, the default)}
 }
 \value{
-A data frame, with Stratum Latitude and Longitude,
-summarized by center of each stratum.
+  A data frame, with Stratum Latitude and Longitude,
+  summarized by center of each stratum.
 }
 \description{
-This function takes a , and a stratum and makes a data
-frame consisting of Stratum, Latitide, and Longitude for
-each stratum
+  This function takes a , and a stratum and makes a data
+  frame consisting of Stratum, Latitide, and Longitude for
+  each stratum
 }
 \author{
-Rodney J. Dyer \email{rjdyer@vcu.edu}
+  Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 
