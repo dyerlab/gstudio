@@ -5,13 +5,13 @@
 \alias{frequencies.locus}
 \title{Get allele frequencies}
 \usage{
-  frequencies(x, loci, stratum, ...)
+frequencies(x, loci, stratum, ...)
 
-  \method{frequencies}{default} (x, ...)
+\method{frequencies}{default}(x, ...)
 
-  \method{frequencies}{locus} (x, loci, ...)
+\method{frequencies}{locus}(x, loci, ...)
 
-  \method{frequencies}{data.frame} (x, loci, stratum, ...)
+\method{frequencies}{data.frame}(x, loci, stratum, ...)
 }
 \arguments{
   \item{x}{Either a vector of types \code{locus} or a
@@ -26,25 +26,21 @@
   \item{...}{Ignored}
 }
 \value{
-  A data frame with Frequencies, Alleles, Loci, and perhaps
-  Stratum columns (Allele and Frquencies are at a
-  minimium).
+A data frame with Frequencies, Alleles, Loci, and perhaps
+Stratum columns (Allele and Frquencies are at a minimium).
 
-  A data frame with Frequencies, Alleles, Loci, and perhaps
-  Stratum columns (Allele and Frquencies are at a
-  minimium).
+A data frame with Frequencies, Alleles, Loci, and perhaps
+Stratum columns (Allele and Frquencies are at a minimium).
 
-  A data frame with Frequencies, Alleles, Loci, and perhaps
-  Stratum columns (Allele and Frquencies are at a
-  minimium).
+A data frame with Frequencies, Alleles, Loci, and perhaps
+Stratum columns (Allele and Frquencies are at a minimium).
 
-  A data frame with Frequencies, Alleles, Loci, and perhaps
-  Stratum columns (Allele and Frquencies are at a
-  minimium).
+A data frame with Frequencies, Alleles, Loci, and perhaps
+Stratum columns (Allele and Frquencies are at a minimium).
 }
 \description{
-  This function converts loci into data frames consisting
-  of alleles, stratum, frequencies, etc.
+This function converts loci into data frames consisting of
+alleles, stratum, frequencies, etc.
 }
 \examples{
 AA <- locus( c("A","A") )
@@ -58,6 +54,6 @@ frequencies(df)
 frequencies(df,stratum="Population")
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

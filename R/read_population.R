@@ -6,7 +6,7 @@
 #' @param type An indication of what kind of loci that the data represent. The 
 #'  following kinds are recoginzed (n.b., if you have several types load them
 #'  separately and \code{merge} them).
-#' \itemize{
+#' \describe{
 #'  \item{missing}{The default. This will cause \code{read.population()} to read each column as a single locus with one allele}
 #'  \item{aflp}{Encoded as 0,1 for absence/presence of bands.}
 #'  \item{column}{Two columns of alleles per locus.}

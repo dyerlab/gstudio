@@ -10,7 +10,7 @@
 #' @param mode The particular genetic diversity metric that you are going to use. 
 #'    The \code{gstudio} package currently includes the following individual distance 
 #'    measures:
-#'    \itemize{
+#'    \describe{
 #'      \item{A}{Number of alleles}
 #'      \item{Ae}{Effective number of alleles (default)}
 #'      \item{A95}{Number of alleles with frequency at least five percent}

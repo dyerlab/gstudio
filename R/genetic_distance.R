@@ -12,13 +12,13 @@
 #' @return A matrix with the genetic distances 
 #' @note This function currently includes the following individual distance 
 #'    measures:
-#'    \itemize{
+#'    \describe{
 #'      \item{AMOVA}{Inter-individual }
 #'      \item{Bray}{Proportion of shared alleles}
 #'    }
 #'    This function also supports genetic distances based upon stratum distances.  The
 #'    currently supported genetic distances are:
-#'    \itemize{
+#'    \describe{
 #'      \item{Euclidean}{Euclidean frequency distance}
 #'      \item{cGD}{Conditional Genetic Distance}
 #'      \item{Nei}{Nei's corrected genetic distance (1978)}

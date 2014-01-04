@@ -2,7 +2,7 @@
 \alias{dist_euclidean}
 \title{Estimation of euclidean distance}
 \usage{
-  dist_euclidean(x, stratum = "Population")
+dist_euclidean(x, stratum = "Population")
 }
 \arguments{
   \item{x}{The genetic data, either as a single locus or
@@ -12,11 +12,11 @@
   estimate genetic distances.}
 }
 \value{
-  A matrix of euclidean distance estimates.
+A matrix of euclidean distance estimates.
 }
 \description{
-  This function returns a measure of genetic distance based
-  upon the euclidean frequency distance metric.
+This function returns a measure of genetic distance based
+upon the euclidean frequency distance metric.
 }
 \examples{
 AA <- locus( c("A","A") )
@@ -27,6 +27,6 @@ AA <- locus( c("A","A") )
   dist_euclidean(df)
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

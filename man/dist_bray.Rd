@@ -2,7 +2,7 @@
 \alias{dist_bray}
 \title{Estimation of jaccard distance}
 \usage{
-  dist_bray(x, stratum = "Population")
+dist_bray(x, stratum = "Population")
 }
 \arguments{
   \item{x}{Either a \code{data.frame} with both stratum and
@@ -14,11 +14,11 @@
   \code{x}}
 }
 \value{
-  A matrix of Jaccard distance
+A matrix of Jaccard distance
 }
 \description{
-  This function returns a measure of genetic distance based
-  upon the AMOVA distance metric.
+This function returns a measure of genetic distance based
+upon the AMOVA distance metric.
 }
 \examples{
 AA <- locus( c("A","A") )
@@ -32,6 +32,6 @@ df <- data.frame( Population=c(rep("A",5),rep("B",5) ), TPI=loci )
 D <- dist_bray(df)
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

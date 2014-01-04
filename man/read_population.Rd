@@ -2,8 +2,8 @@
 \alias{read_population}
 \title{Read a raw text file in and translate appropriate columns into genotypes}
 \usage{
-  read_population(path, type, locus.columns,
-    phased = FALSE, sep = ",", header = TRUE)
+read_population(path, type, locus.columns, phased = FALSE, sep = ",",
+  header = TRUE)
 }
 \arguments{
   \item{path}{The path to the text file}
@@ -11,9 +11,9 @@
   \item{type}{An indication of what kind of loci that the
   data represent. The following kinds are recoginzed (n.b.,
   if you have several types load them separately and
-  \code{merge} them). \itemize{ \item{missing}{The default.
-  This will cause \code{read.population()} to read each
-  column as a single locus with one allele}
+  \code{merge} them). \describe{ \item{missing}{The
+  default. This will cause \code{read.population()} to read
+  each column as a single locus with one allele}
   \item{aflp}{Encoded as 0,1 for absence/presence of
   bands.} \item{column}{Two columns of alleles per locus.}
   \item{separated}{Pre-separated alleles (with ':').}
@@ -35,14 +35,14 @@
   a \code{locus} object.}
 }
 \value{
-  A \code{data.frame} with \code{locus} columns
-  pre-formatted.
+A \code{data.frame} with \code{locus} columns
+pre-formatted.
 }
 \description{
-  The function reads in a text file and does the proper
-  translations for genotypes and spatial coordinates.
+The function reads in a text file and does the proper
+translations for genotypes and spatial coordinates.
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

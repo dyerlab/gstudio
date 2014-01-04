@@ -7,7 +7,7 @@
 #'  the classes of each column will be returned.
 #' @param mode How you would like the column references to be used.  Current
 #'  values are:
-#'    \itemize{
+#'    \describe{
 #'      \item{label}{The name of the column label with the specified class.}
 #'      \item{index}{The numerical index of the column with specified class.}
 #'    }

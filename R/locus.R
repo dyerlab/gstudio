@@ -7,7 +7,7 @@
 #' @param type An indication of what kind of data it is.  By default this
 #'  parameter is missing and this will cause the function to assume that 
 #'  every element of x is an allele in the genotype.
-#'  \itemize{
+#'  \describe{
 #'    \item{blank}{Default value, uses all passed items as alleles}
 #'    \item{aflp}{Encoded as 0,1 for absence/presence of bands.}
 #'    \item{column}{Two columns of alleles}
@@ -44,7 +44,7 @@ locus <- function( x, type, phased=FALSE ){
     ret <- as.character(x)
     if( any(nchar(ret))) {
       if( !phased )
-        ret <- sort(ret)
+        ret <- as.character(sort(x))
       ret <- paste(ret,collapse=":")
       if( ret == "NA:NA")
         ret <- ""
@@ -161,6 +161,8 @@ as.list.locus <- function( x, ... ) {
 #' as.locus( chr )
 #' 
 as.locus <- function( x ) {
+  if( inherits(x,"list"))
+    x <- unlist(x)
   return( locus(x) )
 }
 

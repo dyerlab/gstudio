@@ -2,10 +2,9 @@
 \alias{plot.data.frame}
 \title{Plotting the locations of a 'population'}
 \usage{
-  \method{plot}{data.frame} (x, stratum = "Population",
-    Longitude = "Longitude", Latitude = "Latitude",
-    map.source = "google", map.type = "terrain",
-    color = "black", zoom = NA, ...)
+\method{plot}{data.frame}(x, stratum = "Population",
+  Longitude = "Longitude", Latitude = "Latitude", map.source = "google",
+  map.type = "terrain", color = "black", zoom = NA, ...)
 }
 \arguments{
   \item{x}{An object of type \code{data.frame}}
@@ -20,12 +19,12 @@
   latitude}
 
   \item{map.source}{Where the map should be retrieved from.
-  Common options include \itemize{ \item{google}{Get the
+  Common options include \describe{ \item{google}{Get the
   map from Google Maps (this is the default)}
   \item{osm}{Open Streat Map derived} }}
 
   \item{map.type}{What kind of map to use.  Current types
-  include: \itemize{ \item{sattelite}{A satellite image of
+  include: \describe{ \item{sattelite}{A satellite image of
   the area.} \item{terrain}{A stylized topological map
   (this is the default).} \item{road}{The default google
   road map.} \item{hybrid}{Mix of road and terrain maps.}
@@ -40,15 +39,14 @@
   \item{...}{Ignored}
 }
 \value{
-  A ggplot object that will be plotted by default.
+A ggplot object that will be plotted by default.
 }
 \description{
-  Plots a data frame if that data frame has names indicated
-  by the passed arguments stratum, Longtitude, and
-  Latitude.  Otherwise it passes the object on to
-  plot.default()
+Plots a data frame if that data frame has names indicated
+by the passed arguments stratum, Longtitude, and Latitude.
+Otherwise it passes the object on to plot.default()
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

@@ -8,12 +8,12 @@
 #' @param Longitude Name of the column to be used as a decimal longitude
 #' @param Latitude Name of the column to be used as decimal latitude
 #' @param map.source Where the map should be retrieved from. Common options include
-#'  \itemize{
+#'  \describe{
 #'    \item{google}{Get the map from Google Maps (this is the default)}
 #'    \item{osm}{Open Streat Map derived}
 #' }
 #' @param map.type What kind of map to use.  Current types include:
-#' \itemize{
+#' \describe{
 #'  \item{sattelite}{A satellite image of the area.}
 #'  \item{terrain}{A stylized topological map (this is the default).}
 #'  \item{road}{The default google road map.}

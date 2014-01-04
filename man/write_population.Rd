@@ -2,8 +2,8 @@
 \alias{write_population}
 \title{Writes data frame with genotypes and other data to a file}
 \usage{
-  write_population(df, file,
-    mode = c("Text", "GENEPOP", "STRUCTURE"))
+write_population(df, file, mode = c("text", "genepop", "structure")[1],
+  stratum = NULL)
 }
 \arguments{
   \item{df}{The \code{data.frame} to be written to the
@@ -11,10 +11,28 @@
 
   \item{file}{The path to the file you want to write to.}
 
-  \item{mode}{A distinction of}
+  \item{mode}{Which format to use for writing data to file.
+  At present there are \describe{ \item{text}{Outputs all
+  data columns with loci treated as colon separated.  This
+  is the default.}
+
+  \item{genepop}{Saves genetic data into GENEPOP format.
+  You must specify a stratum.} \item{structure}{Saves
+  genetic data into the two-lined per individual STRUCTURE
+  format.  You must specify a stratum.} }}
+
+  \item{stratum}{An optional argument if using genepop or
+  structure formats.  By default, the 'text' option writes
+  all data to file.}
+}
+\value{
+nothing.
 }
 \description{
-  This is a basic output file formatter for saving files
-  necessary for saving output in textual formats.
+This is a basic output file formatter for saving files
+necessary for saving output in textual formats.
+}
+\author{
+Rodney J. Dyer <rjdyer@vcu.edu>
 }
 

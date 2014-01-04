@@ -2,7 +2,7 @@
 \alias{c.locus}
 \title{Concatinate \code{locus} objects}
 \usage{
-  \method{c}{locus} (..., recursive = FALSE)
+\method{c}{locus}(..., recursive = FALSE)
 }
 \arguments{
   \item{\dots}{The \code{locus} objects to be
@@ -12,17 +12,17 @@
   recursively.}
 }
 \value{
-  A vector of \code{locus} objects
+A vector of \code{locus} objects
 }
 \description{
-  An overload of the \code{c} function for \code{locus}
-  objects.
+An overload of the \code{c} function for \code{locus}
+objects.
 }
 \examples{
 loci <- c( locus(1:2), locus(1:2), locus( c(1,1) ) )
 loci
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

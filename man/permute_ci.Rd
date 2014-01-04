@@ -2,8 +2,8 @@
 \alias{permute_ci}
 \title{Permute for confidence interval}
 \usage{
-  permute_ci(x, stratum = NULL, allele_perm = TRUE,
-    nperm = 99, FUN = NULL, replace = FALSE, ...)
+permute_ci(x, stratum = NULL, allele_perm = TRUE, nperm = 99,
+  FUN = NULL, replace = FALSE, ...)
 }
 \arguments{
   \item{x}{The \code{locus} data being used.}
@@ -25,15 +25,15 @@
   \item{...}{Passed on as arguments to \code{FUN}.}
 }
 \value{
-  A vector of permuted response values from the function.
+A vector of permuted response values from the function.
 }
 \description{
-  This function takes some data and does perumations on it
-  and passes it along to the indicated function.  There are
-  options for permuting genotypes or permuting alleles.
-  Make sure you know the difference.
+This function takes some data and does perumations on it
+and passes it along to the indicated function.  There are
+options for permuting genotypes or permuting alleles.  Make
+sure you know the difference.
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

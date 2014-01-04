@@ -26,20 +26,20 @@ bad_parents <- function( df, AdultID="ID", OffID="OffID", verbose=FALSE) {
   if( !inherits(df[[OffID]], "character"))
     df[[OffID]] <- as.character( df[[OffID]])
   
-  df$Is.Parent <- NA
-  loci <- column_class(df,"locus")
-  for( i in 1:nrow(df) ) {
-    ind <- df[i,]
-    if( !is.na(ind[[AdultID]]) & ind[[OffID]] != "0" & !is.na(ind[[AdultID]])) {
-      mom <- df[ df[[AdultID]] == ind[[AdultID]] & df$OffID=="0",]
-      if( nrow(mom) > 0 ){
-        t <- transition_probability(ind,mom)
-        if( verbose &  t == 0 )
-          print(rbind(mom,ind))
-        df$Is.Parent[i] <- ( t>0 )
-      }
-    }
-  }
+  ret <- parent_finder( df )
+  ret$UniqueID <- paste(ret$ID,ret$OffID,sep=":")
+  matched <- ret$UniqueID[ ret$ID == ret$ParentID] 
+  total <- paste( df[[AdultID]][df[[OffID]]!=0], df[[OffID]][df[[OffID]]!=0], sep=":")
+  unmatched <- setdiff( total,matched )
   
-  return( df )
+  m <- c( matched, unmatched )
+  
+  
+  status <- c( rep(TRUE,length(matched)), rep(FALSE,length(unmatched)))
+  
+  res <- data.frame(matrix(unlist(strsplit(m,split=":")),ncol=2,byrow=T))
+  res$PossibleParent <- status
+  names(res)[1:2] <- c("ID","OffID")
+  
+  return( res )
 }

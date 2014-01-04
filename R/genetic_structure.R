@@ -5,7 +5,7 @@
 #'  of type \code{\link{locus}}
 #' @param stratum The stratum to use as groupings (default='Population').
 #' @param mode Whic statistic to estimate.  Current options include:
-#' \itemize{
+#' \describe{
 #'  \item{Gst}{Nei's Gst (not Berg and Hamrick)}
 #'  \item{Gst_prime}{Hedrick's correction of Nei's Gst for diverse loci}
 #'  \item{Dest}{Joost's estimate}

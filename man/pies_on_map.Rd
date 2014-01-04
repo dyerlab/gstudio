@@ -2,9 +2,9 @@
 \alias{pies_on_map}
 \title{Plot overload}
 \usage{
-  pies_on_map(x, stratum = "Population", locus = NA,
-    Longitude = "Longitude", Latitude = "Latitude",
-    line.color = "black", label = FALSE, palette = 8, ...)
+pies_on_map(x, stratum = "Population", locus = NA,
+  Longitude = "Longitude", Latitude = "Latitude", line.color = "black",
+  label = FALSE, palette = 8, ...)
 }
 \arguments{
   \item{x}{An object of type \code{data.frame} created from
@@ -33,12 +33,12 @@
   \item{...}{Ignored}
 }
 \value{
-  Nothing
+Nothing
 }
 \description{
-  Plots an allele frequencies object as bar or maps.
+Plots an allele frequencies object as bar or maps.
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 
