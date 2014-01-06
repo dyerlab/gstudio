@@ -48,4 +48,10 @@ td {
   font-size: 10pt;
 }
 
+code.r {
+	font-size: 10pt;
+}
 
+pre code {
+	font-size: 10pt;
+}
