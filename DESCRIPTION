@@ -6,13 +6,9 @@ Type: Package
 Author: Rodney J. Dyer <rjdyer@vcu.edu>
 Description: This package contains classes and functions for
     the spatial analysis of marker data to include structure
-    statistics, analyses based upon allele frequencies, and
-    Population Graphs network analysis of spatial conditional
-    genetic covariance.  This package supersedes the original
-    studio package by interfacing with raster and sp objects
-    directly.
-Version: 1.1
-Date: 2012-07-03
+    statistics, analyses based upon allele frequencies.
+Version: 1.2
+Date: 2014-01-04
 LazyLoad: true
 VignetteBuilder: knitr
 Depends:
@@ -28,61 +24,3 @@ Imports:
 Suggests:
     testthat,
     knitr
-Collate:
-    'A.R'
-    'Ae.R'
-    'alleles.R'
-    'as_data_frame.R'
-    'column_class.R'
-    'dest.R'
-    'dist_amova.R'
-    'dist_bray.R'
-    'dist_cavalli.R'
-    'dist_cgd.R'
-    'dist_euclidean.R'
-    'dist_jaccard.R'
-    'dist_nei.R'
-    'dist_ss.R'
-    'exclusion_probability.R'
-    'fis.R'
-    'frequencies.R'
-    'genetic_distance.R'
-    'genetic_diversity.R'
-    'genetic_relatedness.R'
-    'genetic_structure.R'
-    'genotype_frequencies.R'
-    'geom_frequencies.R'
-    'geom_locus.R'
-    'geom_stratum.R'
-    'geom_surface.R'
-    'gst.R'
-    'gst_prime.R'
-    'gstudio-package.R'
-    'he.R'
-    'ho.R'
-    'indices.R'
-    'is_frequency.R'
-    'is_heterozygote.R'
-    'is_na.R'
-    'locus.R'
-    'make_population.R'
-    'mate.R'
-    'migrate.R'
-    'minus_mom.R'
-    'multilocus_diversity.R'
-    'optimal_sampling.R'
-    'partition.R'
-    'paternity.R'
-    'permute_ci.R'
-    'pies_on_map.R'
-    'ploidy.R'
-    'plot.R'
-    'population_map.R'
-    'rarefaction.R'
-    'read_population.R'
-    'strata_coordinates.R'
-    'strata_distance.R'
-    'to_mv.R'
-    'transition_probability.R'
-    'write_population.R'
-    'bad_parents.R'

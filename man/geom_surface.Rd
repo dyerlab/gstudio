@@ -2,7 +2,7 @@
 \alias{geom_surface}
 \title{Translate raster into ggplot object}
 \usage{
-  geom_surface(raster, ...)
+geom_surface(raster, ...)
 }
 \arguments{
   \item{raster}{An object of type raster}
@@ -11,13 +11,13 @@
   arguments.}
 }
 \value{
-  An object of type geom_tile
+An object of type geom_tile
 }
 \description{
-  This function takes a raster and translates it into a
-  ggplot geometry layer for plotting.
+This function takes a raster and translates it into a
+ggplot geometry layer for plotting.
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

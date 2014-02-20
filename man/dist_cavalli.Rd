@@ -2,7 +2,7 @@
 \alias{dist_cavalli}
 \title{Estimation of Bray-Curtis distance}
 \usage{
-  dist_cavalli(x, stratum = "Population")
+dist_cavalli(x, stratum = "Population")
 }
 \arguments{
   \item{stratum}{The groups among which you are going to
@@ -12,13 +12,13 @@
   multilocus (\code{data.frame}) object.}
 }
 \value{
-  A matrix of Cavalli-Sforza Genetic distance estimates.
+A matrix of Cavalli-Sforza Genetic distance estimates.
 }
 \description{
-  This function returns a measure of genetic distance based
-  upon the Cavalli-Sforza & Edwards (1967) distance metric.
-  Assuming drift is the only source or differences observed
-  among strata.
+This function returns a measure of genetic distance based
+upon the Cavalli-Sforza & Edwards (1967) distance metric.
+Assuming drift is the only source or differences observed
+among strata.
 }
 \examples{
 AA <- locus( c("A","A") )
@@ -36,6 +36,6 @@ AA <- locus( c("A","A") )
   df <- data.frame( Population=c(rep("Pop-A",5),rep("Pop-B",5)), TPI=loc1, PGM=loc2 )
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

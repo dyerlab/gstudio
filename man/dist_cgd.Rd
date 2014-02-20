@@ -2,7 +2,7 @@
 \alias{dist_cgd}
 \title{Estimation of conditional genetic distance}
 \usage{
-  dist_cgd(x, stratum = "Population")
+dist_cgd(x, stratum = "Population")
 }
 \arguments{
   \item{stratum}{The groups among which you are going to
@@ -12,14 +12,14 @@
   multilocus (\code{data.frame}) object.}
 }
 \value{
-  A matrix of conditional genetic distance estimates.
+A matrix of conditional genetic distance estimates.
 }
 \description{
-  This function returns a measure of conditional genetic
-  distance based upon the Population Graphs approach from
-  Dyer & Nason (2004) and Dyer et al. (2010).
+This function returns a measure of conditional genetic
+distance based upon the Population Graphs approach from
+Dyer & Nason (2004) and Dyer et al. (2010).
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

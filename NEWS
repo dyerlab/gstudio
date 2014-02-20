@@ -1,10 +1,12 @@
+gstudio 1.2
+-----------------
+* [FIX] Changed relatedness to be multilocus if so required.
+
 gstudio 1.1 
 -----------------
 * [ADD] Added ability to subtract vectors of loci instead of single locus estimates.
 * [ADD] Added bad_parents() to scan offspring, mother data.frames and determine if the mother could be the real mother.
 * [ADD] Added parent_finder() to do fractional maternal individual identification.
-
-
 * [CHANGE] Dropped warming when subtracting loci when one is missing.  Used to result in a stop() but now only provides a warning and returns the left hand locus (the one the subtraction is being done from).
 * [FIX] Changed mate() function for simplicity.
 * [FIX] Made "Stratum" column from make_population() a factor and made the stratum of the resulting population not "Stratum" but "Population"

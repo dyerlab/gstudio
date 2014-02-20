@@ -2,8 +2,8 @@
 \alias{genetic_relatedness}
 \title{Estimates pair-wise relatedness}
 \usage{
-  genetic_relatedness(loci,
-    mode = c("Ritland96", "LynchRitland")[1], freqs = NULL)
+genetic_relatedness(loci, mode = c("Ritland96", "LynchRitland")[1],
+  freqs = NULL)
 }
 \arguments{
   \item{loci}{An object of type \code{locus}}
@@ -20,15 +20,15 @@
   global measures of relatedness.}
 }
 \value{
-  A matrix of pairwise relatedness estimates
+A matrix of pairwise relatedness estimates
 }
 \description{
-  This function returns single relatedness estimates as a
-  pairwise matrix.
+This function returns single relatedness estimates as a
+pairwise matrix.
 }
 \note{
-  This only works on diploid data and will return NA for
-  any comparison of missing genotypes.
+This only works on diploid data and will return NA for any
+comparison of missing genotypes.
 }
 \examples{
 loci <- c( locus(1:2), locus(c(2,2)), locus(1:2) )

@@ -2,7 +2,7 @@
 \alias{dist_jaccard}
 \title{Estimation of jaccard distance}
 \usage{
-  dist_jaccard(x, stratum = "Population")
+dist_jaccard(x, stratum = "Population")
 }
 \arguments{
   \item{x}{A \code{data.frame} with both stratum and
@@ -12,11 +12,11 @@
   \code{x}}
 }
 \value{
-  A matrix of Jaccard distance
+A matrix of Jaccard distance
 }
 \description{
-  This function returns a measure of genetic distance based
-  upon the Jaccard set distance metric.
+This function returns a measure of genetic distance based
+upon the Jaccard set distance metric.
 }
 \examples{
 AA <- locus( c("A","A") )
@@ -30,6 +30,6 @@ AA <- locus( c("A","A") )
   dist_jaccard(df)
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

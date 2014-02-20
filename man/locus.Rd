@@ -2,7 +2,7 @@
 \alias{locus}
 \title{General constructor for locus object}
 \usage{
-  locus(x, type, phased = FALSE)
+locus(x, type, phased = FALSE)
 }
 \arguments{
   \item{x}{The data to be turned into a \code{locus}
@@ -23,13 +23,12 @@
   are of known gametic phase (default=FALSE).}
 }
 \value{
-  Either a single or vector of objects of type
-  \code{locus}.
+Either a single or vector of objects of type \code{locus}.
 }
 \description{
-  This function creates an object of type \code{locus}, a
-  fundamental type in the gstudio package.  Therea re
-  several kinds of loci that can be created.
+This function creates an object of type \code{locus}, a
+fundamental type in the gstudio package.  Therea re several
+kinds of loci that can be created.
 }
 \examples{
 AA <- locus( c("A","A") )
@@ -46,6 +45,6 @@ loci <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD)
 loci
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

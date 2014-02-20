@@ -2,7 +2,7 @@
 \alias{partition}
 \title{Subdivide , into a list of substrata}
 \usage{
-  partition(x, stratum = "Population")
+partition(x, stratum = "Population")
 }
 \arguments{
   \item{x}{Any object that can be column indexed by the
@@ -12,12 +12,12 @@
   partition on (default='Population').}
 }
 \value{
-  A partitioned list of objects, indexed by name
+A partitioned list of objects, indexed by name
 }
 \description{
-  This function allows you to take a single
-  \code{Population} object into a list of \code{Population}
-  objects, one for each stratum.
+This function allows you to take a single \code{Population}
+object into a list of \code{Population} objects, one for
+each stratum.
 }
 \examples{
 AA <- locus( c("A","A") )
@@ -30,6 +30,6 @@ AA <- locus( c("A","A") )
  partition(df, stratum="Population")
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

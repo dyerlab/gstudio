@@ -55,7 +55,7 @@ genetic_relatedness <- function( loci, mode=c("Ritland96","LynchRitland")[1], fr
   
   
   N <- length( loci )
-  ret <- matrix(0,nrow=N,ncol=N)
+  ret <- matrix(1,nrow=N,ncol=N)
   for( i in 1:N){
     loc1 <- alleles(loci[i])
     if( length(loc1) == 2 ) {    

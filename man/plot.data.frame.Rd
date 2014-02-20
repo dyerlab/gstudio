@@ -2,10 +2,9 @@
 \alias{plot.data.frame}
 \title{Plotting the locations of a 'population'}
 \usage{
-  \method{plot}{data.frame} (x, stratum = "Population",
-    Longitude = "Longitude", Latitude = "Latitude",
-    map.source = "google", map.type = "terrain",
-    color = "black", zoom = NA, ...)
+\method{plot}{data.frame}(x, stratum = "Population",
+  Longitude = "Longitude", Latitude = "Latitude", map.source = "google",
+  map.type = "terrain", color = "black", zoom = NA, ...)
 }
 \arguments{
   \item{x}{An object of type \code{data.frame}}
@@ -40,15 +39,14 @@
   \item{...}{Ignored}
 }
 \value{
-  A ggplot object that will be plotted by default.
+A ggplot object that will be plotted by default.
 }
 \description{
-  Plots a data frame if that data frame has names indicated
-  by the passed arguments stratum, Longtitude, and
-  Latitude.  Otherwise it passes the object on to
-  plot.default()
+Plots a data frame if that data frame has names indicated
+by the passed arguments stratum, Longtitude, and Latitude.
+Otherwise it passes the object on to plot.default()
 }
 \author{
-  Rodney J. Dyer \email{rjdyer@vcu.edu}
+Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 
