@@ -55,3 +55,16 @@ code.r {
 pre code {
 	font-size: 10pt;
 }
+
+
+div.sidebar {
+  background-color: #eeeeee;
+  border-radius: 5px;
+  line-height: 130%;
+  font-size: smaller;
+}
+
+
+div.content {
+  
+}
