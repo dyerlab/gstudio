@@ -1,0 +1,15 @@
+{
+    "contents" : "#' Estimates allelic diversity\n#' \n#' This function takes a single \\code{locus} object or a \\code{data.frame} object\n#'  and estimates allelic diversity as either the number of alleles, the effective\n#'  number of alleles, or the number of alleles observed at a frequency of at least\n#'  five percent.\n#' @param x A \\code{locus} object or a \\code{data.frame} with some loci in it\n#' @param mode The kind of diversity to estimate.  Current options include 'A' the \n#'  total number of alleles, 'Ae' the effective number of alleles, and 'A95' the \n#'  number of alleles with a frequency of at least five percent.\n#' @return Numeric value for diversity\n#' @author Rodney J. Dyer \\email{rjdyer@@vcu.edu}\n#' @export\n#' @examples\n#' locus <- c( locus(1:2), locus(c(1,1)), locus(c(2,2)), locus(2:3) )\n#' locus2 <- c( locus(1:2), locus(c(1,1)), locus(c(2,2)), locus(2:3) )\n#' df <- data.frame( locus, locus2 )\n#' allelic_diversity(df,mode=\"A\")\n#' allelic_diversity(df,mode=\"Ae\")\nallelic_diversity <- function( x, mode=c(\"A\",\"Ae\",\"A95\")[1] ) {\n  \n  if( !(mode %in% c(\"A\",\"Ae\",\"A95\" ) ) )\n    stop(\"The 'mode' you passed for allelic_diversity() is not recognized.\")\n  \n  if( is(x,\"locus\") ) {\n    \n    a <- NA\n    if( mode == \"A\" ) {\n      a <- A(x) \n    }\n    else if( mode == \"Ae\" ) {\n      a <- Ae(x) \n    }\n    else if( mode == \"A95\") {\n      a <- A(x, min_freq=0.05) \n    }\n    names(a) <- mode\n    return( a )\n  }\n  \n  else if( is(x,\"data.frame\") ) { \n    cols <- column_class(x,\"locus\")\n    ret <- list()\n    for( col in cols )\n      ret[[col]] <- allelic_diversity( x[[col]], mode )\n    ret <- as.numeric( ret )\n    names(ret) <- cols\n    return( ret )\n  }\n  else\n    stop(\"data type 'x' passed to allelic_diversity() not recognized.\")\n}\n\n",
+    "created" : 1378254419721.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4002725631",
+    "id" : "8B0A7EC4",
+    "lastKnownWriteTime" : 1370534788,
+    "path" : "~/Dropbox/R/gstudio/gstudio/R/allelic_diversity.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

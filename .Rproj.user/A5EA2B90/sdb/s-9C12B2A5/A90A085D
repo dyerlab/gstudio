@@ -1,0 +1,16 @@
+{
+    "contents" : "Package: gstudio\nMaintainer: Rodney J. Dyer <rjdyer@vcu.edu>\nLicense: GPL (>= 2)\nTitle: Spatial utility functions from the Dyer laboratory\nType: Package\nAuthor: Rodney J. Dyer <rjdyer@vcu.edu>\nDescription: This package contains classes and functions for\n    the spatial analysis of marker data to include structure\n    statistics, analyses based upon allele frequencies.\nVersion: 1.2\nDate: 2014-01-04\nLazyLoad: true\nVignetteBuilder: knitr\nDepends:\n    R (>= 2.15)\nImports:\n    sp,\n    raster,\n    grid,\n    reshape2,\n    ggplot2,\n    ggmap,\n    popgraph\nSuggests:\n    testthat,\n    knitr\nCollate:\n    'A.R'\n    'Ae.R'\n    'alleles.R'\n    'as_data_frame.R'\n    'column_class.R'\n    'dest.R'\n    'dist_amova.R'\n    'dist_bray.R'\n    'dist_cavalli.R'\n    'dist_cgd.R'\n    'dist_euclidean.R'\n    'dist_jaccard.R'\n    'dist_nei.R'\n    'dist_ss.R'\n    'exclusion_probability.R'\n    'fis.R'\n    'frequencies.R'\n    'genetic_distance.R'\n    'genetic_diversity.R'\n    'genetic_relatedness.R'\n    'genetic_structure.R'\n    'genotype_frequencies.R'\n    'geom_frequencies.R'\n    'geom_locus.R'\n    'geom_stratum.R'\n    'geom_surface.R'\n    'gst.R'\n    'gst_prime.R' \n    'gstudio-package.R'\n    'he.R'\n    'ho.R'\n    'indices.R'\n    'is_frequency.R'\n    'is_heterozygote.R'\n    'is_na.R'\n    'locus.R'\n    'make_population.R'\n    'mate.R'\n    'migrate.R'\n    'minus_mom.R'\n    'multilocus_diversity.R'\n    'optimal_sampling.R'\n    'partition.R'\n    'paternity.R'\n    'permute_ci.R'\n    'pies_on_map.R'\n    'ploidy.R'\n    'plot.R'\n    'population_map.R'\n    'rarefaction.R'\n    'read_population.R'\n    'strata_coordinates.R'\n    'strata_distance.R'\n    'to_mv.R'\n    'transition_probability.R'\n    'write_population.R'\n    'bad_parents.R'\n",
+    "created" : 1388929269710.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1138771296",
+    "id" : "A90A085D",
+    "lastKnownWriteTime" : 1393869343,
+    "path" : "~/Documents/Dropbox/R/gstudio/gstudio/DESCRIPTION",
+    "project_path" : "DESCRIPTION",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "dcf"
+}
