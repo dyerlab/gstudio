@@ -1,0 +1,16 @@
+{
+    "contents" : "#' This function finds a set of potential parents from an offspring.\n#' \n#' This is a general exclusion finder for a single parent. For dual\n#'  parent exclusion, you can use the \\code{paternity()} function.\n#' @param df A \\code{data.frame} of individuals adults individuals.  This will\n#'  be the population from which the identification of potential parentage will\n#'  be examined..\n#' @param ID The adult \"ID\" column designator (default=\"ID\").  All adults \n#'  have a unique ID designation.  This will be how each adult is identified.  \n#' @param OffID This is a non-zero number for each offspring.  The combination of \n#'  ID and OffID should be able to be used to identify each offspring uniquely.  All\n#'  adults have OffID=0, by definition.\n#' @return A \\code{data.frame} with the following columns.  ID = the offspring id, \n#'  OffID = the offspring OffID (these two will identify the offspring uniquely), \n#'  ParentID = the putative parent identified, T = the multilocus transition \n#'  probability associated with the offspring and parent.\n#' @export\n#' @author Rodney J. Dyer <rjdyer@@vcu.edu>\nparent_finder <- function( df, ID=\"ID\", OffID=\"OffID\"){\n  \n  if( !(ID %in% names(df)))\n    stop(\"You need to supply the ID column for the data.frame.\")\n  if( !(OffID %in% names(df)))\n    stop(\"You need to supply the OffID column designation for the data.frame\")\n  \n  offs <- df[ df[[OffID]]!=0,]\n  adults <- df[ df[[OffID]]==0,]\n  \n  ret <- data.frame( ID=NULL, OffID=NULL, ParentID=NULL, T=NULL)\n  \n  for( i in 1:nrow(offs)){\n    for( j in 1:nrow(adults)) {\n      t <- transition_probability( offs[i,], adults[j,], multilocus=TRUE )\n      if( t > 0 ) {\n        ret <- rbind( ret, data.frame(ID=offs[[ID]][i], OffID=offs[[OffID]][i], ParentID=adults[[ID]][j], T=t ))\n      }\n    }\n  }\n  \n  return( ret )\n}",
+    "created" : 1393869377284.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "41370711",
+    "id" : "6E5DE453",
+    "lastKnownWriteTime" : 1393895523,
+    "path" : "~/Documents/Dropbox/R/gstudio/gstudio/R/parent_finder.R",
+    "project_path" : "R/parent_finder.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

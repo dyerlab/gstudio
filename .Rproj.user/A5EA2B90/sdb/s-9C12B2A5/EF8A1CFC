@@ -1,0 +1,16 @@
+{
+    "contents" : "context(\"transition_probability.R\")\n\ntest_that(\"testing\",{\n  off  <- locus( 1:2 )\n  mom  <- locus( c(1,1) )\n  dad1 <- locus( c(2,2) )\n  dad2 <- locus( c(1,2) )\n  dad3 <- locus( c(1,1) )\n\n  expect_that( transition_probability(), throws_error() ) \n  \n  t1 <- transition_probability( off, mom, dad1 )\n  t2 <- transition_probability( off, mom, dad2 )\n  t3 <- transition_probability( off, mom, dad3 )\n  \n  expect_that( t1, equals(1.0) )\n  expect_that( t2, equals(0.5) )\n  expect_that( t3, equals(0.0) )\n\n  \n  t4 <- transition_probability( mom, dad3)  # 1.0\n  t5 <- transition_probability( off, mom )  # 0.5\n  t6 <- transition_probability( mom, dad1 ) # 0.0\n  expect_that( t4, equals(1.0))\n  expect_that( t5, equals(0.5))\n  expect_that( t6, equals(0.0))\n  \n  \n  # test to see if it handles \n  df <- data.frame( ID=1:5, PGM=c(off,mom,dad1,dad2,dad3))\n  expect_that( transition_probability( df[1,], df[2,] ), is_equivalent_to(0.5))\n  expect_that( transition_probability( df[2,], df[3,] ), is_equivalent_to(0.0))\n  expect_that( transition_probability( df[2,], df[5,] ), is_equivalent_to(1.0))\n  \n  df$PGI <- df$PGM\n  df$TPI <- df$PGM\n  expect_that( transition_probability( df[1,], df[2,], df[4,] ), is_equivalent_to(0.5^3))\n  expect_that( transition_probability( df[1,], df[2,], df[4,], multilocus=FALSE ), is_equivalent_to(c(0.5,0.5,0.5)))\n  expect_that( transition_probability( df[1,], df[2,], df[3,] ), is_equivalent_to(1.0))\n  expect_that( transition_probability( df[1,], df[2,], df[5,] ), is_equivalent_to(0.0))\n  \n  \n\n  df$PGI[1] <- NA\n  expect_that( transition_probability( df[1,], df[2,], df[4,], multilocus=FALSE ), is_equivalent_to( c(0.5,NA,0.5)) )\n  expect_that( transition_probability( df[1,], df[2,], df[4,] ), is_equivalent_to( 0.25) )\n  \n               \n})",
+    "created" : 1391456229006.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3170146889",
+    "id" : "EF8A1CFC",
+    "lastKnownWriteTime" : 1377954202,
+    "path" : "~/Documents/Dropbox/R/gstudio/gstudio/inst/tests/test-transition_probability.R",
+    "project_path" : "inst/tests/test-transition_probability.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
