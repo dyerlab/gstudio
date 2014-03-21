@@ -1,0 +1,11 @@
+{
+    "dialog-state" : {
+        "caseSensitive" : false,
+        "filePatterns" : [
+            "*.R"
+        ],
+        "path" : "~/Dropbox/R/gstudio/gstudio",
+        "query" : "allele.spectrum",
+        "regex" : false
+    }
+}
