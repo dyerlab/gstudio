@@ -17,6 +17,7 @@ figure/
 gstudio.Rcheck/
 gstudio_*.tar.gz
 gstudio/man/
+^\.Rproj\.user$
 
 README.html
 
