@@ -7,7 +7,6 @@
 .DS_Store
 
 .Rproj.user
-.Rproj.user/
 .Rhistory
 gstudio.html
 gstudio.md
@@ -17,7 +16,6 @@ figure/
 gstudio.Rcheck/
 gstudio_*.tar.gz
 gstudio/man/
-^\.Rproj\.user$
 
 README.html
 
