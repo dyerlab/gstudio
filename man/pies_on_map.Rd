@@ -3,7 +3,7 @@
 \title{Plot overload}
 \usage{
 pies_on_map(x, stratum = "Population", locus = NA,
-  Longitude = "Longitude", Latitude = "Latitude", line.color = "black",
+  longitude = "Longitude", latitude = "Latitude", line.color = "black",
   label = FALSE, palette = 8, ...)
 }
 \arguments{

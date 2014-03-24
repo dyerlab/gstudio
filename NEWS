@@ -1,6 +1,11 @@
 gstudio 1.2
 -----------------
 * [FIX] Changed relatedness to be multilocus if so required.
+* [FIX] Problem with pies_on_map() where one population was always a bit off.
+
+* [ADD] Added option to sort strata in strata_coords (default=FALSE) in alphabetical order.
+* [FIX] Inconsistance in case for arguments to strata_coordinates;  was longitude/latitude rather than Longitude/Latitude
+* [FIX] Two problems with strata_coordinates() for returning SpatialPoints.
 
 gstudio 1.1 
 -----------------

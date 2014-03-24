@@ -3,7 +3,7 @@
 \title{Plotting the locations of a 'population'}
 \usage{
 \method{plot}{data.frame}(x, stratum = "Population",
-  Longitude = "Longitude", Latitude = "Latitude", map.source = "google",
+  longitude = "Longitude", latitude = "Latitude", map.source = "google",
   map.type = "terrain", color = "black", zoom = NA, ...)
 }
 \arguments{

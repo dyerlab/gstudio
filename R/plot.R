@@ -30,7 +30,7 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 plot.data.frame <- function( x, 
                              stratum="Population", 
-                             Longitude="Longitude", Latitude="Latitude",  
+                             longitude="Longitude", latitude="Latitude",  
                              map.source="google", map.type="terrain", 
                              color="black", zoom=NA,... ) {
   
@@ -41,7 +41,7 @@ plot.data.frame <- function( x,
     args <- list(...)  
     coords <- strata_coordinates( x , stratum, Longitude, Latitude )
     map <- population_map( coords, map.source, map.type, zoom )
-    ret <- ggmap( map ) + geom_point( aes(x=Longitude, y=Latitude), data=coords, size=4, color=color ) 
+    ret <- ggmap( map ) + geom_point( aes(x=longitude, y=latitude), data=coords, size=4, color=color ) 
     ret <- ret + xlab("Longitude") + ylab("Latitude")
     return( ret )    
   }
