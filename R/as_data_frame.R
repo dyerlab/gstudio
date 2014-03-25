@@ -1,33 +1,5 @@
 
 
-
-#' Conversion of genetic_structure to data.frame
-#' 
-#' Converts the \code{\link{genetic_structure}} object to a common
-#'  data.frame object with keys 'locus', 'Allele' and 'Frequency'
-#' @param x An objet of type \code{\link{genetic_structure}}
-#' @param ... Ignored
-#' @return A data frame
-#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @export
-#' @method as.data.frame genetic_structure
-as.data.frame.genetic_structure <- function(x, ...) {
-  df <- data.frame( unlist(lapply( x$loci, function(x) return( x$estimate )) ) , stringsAsFactors=FALSE)
-  names(df)[1] <- x$mode
-  df$Hs <- unlist( lapply( x$loci, function(x) return( x$Hs ) ) )
-  df$Ht <- unlist( lapply( x$loci, function(x) return( x$Ht ) ) )
-  
-  muHs <- mean(df$Hs)
-  muHt <- mean(df$Ht)
-  muParam <- 1 - muHs/muHt
-  
-  df <- rbind( df, c(muParam, muHs, muHt))
-  rownames(df)[dim(df)[1]] <- "Multilocus"
-  
-  return(df)
-  
-}
-
 #' Converts locus to a data frame
 #' 
 #' This converts a \code{locus} object into a \code{data.frame} so that
