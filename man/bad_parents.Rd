@@ -2,7 +2,8 @@
 \alias{bad_parents}
 \title{Determines of the indicated parent can possibly be the parent of the offspring}
 \usage{
-bad_parents(df, AdultID = "ID", OffID = "OffID", verbose = FALSE)
+  bad_parents(df, AdultID = "ID", OffID = "OffID",
+    verbose = FALSE)
 }
 \arguments{
   \item{df}{A \code{data.frame} with identification and
@@ -23,12 +24,12 @@ bad_parents(df, AdultID = "ID", OffID = "OffID", verbose = FALSE)
   pairs.}
 }
 \value{
-The \code{data.frame} with a new column, Is.Parent with
-values of TRUE/FALSE/NA (the NA is for adults).
+  The \code{data.frame} with a new column, Is.Parent with
+  values of TRUE/FALSE/NA (the NA is for adults).
 }
 \description{
-This function takes a \code{data.frame} full of parents and
-offspring and checks to see if the offspring are actually
-assigned to a compatible adult.
+  This function takes a \code{data.frame} full of parents
+  and offspring and checks to see if the offspring are
+  actually assigned to a compatible adult.
 }
 

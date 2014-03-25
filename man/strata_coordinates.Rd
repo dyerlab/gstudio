@@ -2,8 +2,9 @@
 \alias{strata_coordinates}
 \title{Grab coordinates for strata}
 \usage{
-strata_coordinates(x, stratum = "Population", longitude = "Longitude",
-  latitude = "Latitude", as.SpatialPoints = FALSE, sort.output = FALSE)
+  strata_coordinates(x, stratum = "Population",
+    longitude = "Longitude", latitude = "Latitude",
+    as.SpatialPoints = FALSE, sort.output = FALSE)
 }
 \arguments{
   \item{x}{A \code{data.frame} object.}
@@ -19,17 +20,20 @@ strata_coordinates(x, stratum = "Population", longitude = "Longitude",
   coordinates to return should be turned into a
   SpatialPoints object (TRUE) or as a \code{data.frame}
   (FALSE, the default)}
+
+  \item{sort.output}{A flag indicating if the results
+  should be sorted alphabetically (default=FALSE)}
 }
 \value{
-A data frame, with Stratum Latitude and Longitude,
-summarized by center of each stratum.
+  A data frame, with Stratum Latitude and Longitude,
+  summarized by center of each stratum.
 }
 \description{
-This function takes a , and a stratum and makes a data
-frame consisting of Stratum, Latitide, and Longitude for
-each stratum
+  This function takes a , and a stratum and makes a data
+  frame consisting of Stratum, Latitide, and Longitude for
+  each stratum
 }
 \author{
-Rodney J. Dyer \email{rjdyer@vcu.edu}
+  Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

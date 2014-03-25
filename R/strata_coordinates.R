@@ -9,6 +9,7 @@
 #' @param as.SpatialPoints A flag indicating what kind of coordinates to return 
 #'  should be turned into a SpatialPoints object (TRUE) or as a \code{data.frame} (FALSE,
 #'  the default)
+#' @param sort.output A flag indicating if the results should be sorted alphabetically (default=FALSE)
 #' @return A data frame, with Stratum Latitude and Longitude, summarized by center of each stratum.
 #' @importFrom sp SpatialPoints
 #' @export 

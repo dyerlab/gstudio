@@ -5,8 +5,8 @@
 #'  it passes the object on to plot.default()
 #' @param x An object of type \code{data.frame}
 #' @param stratum The stratum to plot (default='Population').
-#' @param Longitude Name of the column to be used as a decimal longitude
-#' @param Latitude Name of the column to be used as decimal latitude
+#' @param longitude Name of the column to be used as a decimal longitude
+#' @param latitude Name of the column to be used as decimal latitude
 #' @param map.source Where the map should be retrieved from. Common options include
 #'  \itemize{
 #'    \item{google}{Get the map from Google Maps (this is the default)}
@@ -36,10 +36,10 @@ plot.data.frame <- function( x,
   
   # if it has stratum and lat/lon, plot it in ggmap
   if( (stratum %in% names(x)) && 
-        (Longitude %in% names(x)) && 
-        (Latitude %in% names(x) ) ) {
+        (longitude %in% names(x)) && 
+        (latitude %in% names(x) ) ) {
     args <- list(...)  
-    coords <- strata_coordinates( x , stratum, Longitude, Latitude )
+    coords <- strata_coordinates( x , stratum, longitude, latitude )
     map <- population_map( coords, map.source, map.type, zoom )
     ret <- ggmap( map ) + geom_point( aes(x=longitude, y=latitude), data=coords, size=4, color=color ) 
     ret <- ret + xlab("Longitude") + ylab("Latitude")

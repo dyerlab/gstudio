@@ -2,7 +2,8 @@
 \alias{Dest}
 \title{Estimation Joost's Dest parameter}
 \usage{
-Dest(x, stratum = "Population", nperm = 0, size.correct = FALSE)
+  Dest(x, stratum = "Population", nperm = 0,
+    size.correct = FALSE)
 }
 \arguments{
   \item{x}{A vector of \code{\link{locus}} objects or a
@@ -21,13 +22,13 @@ Dest(x, stratum = "Population", nperm = 0, size.correct = FALSE)
   (default=TRUE).}
 }
 \value{
-A \code{data.frame} with Dest, Hs, Ht, and P (if asked
-for).  When multiple loci are provided, the results also
-provide a multilocus estimate using the harmonic mean.
+  A \code{data.frame} with Dest, Hs, Ht, and P (if asked
+  for).  When multiple loci are provided, the results also
+  provide a multilocus estimate using the harmonic mean.
 }
 \description{
-This function estimates the parameter (and potentially the
-confidence surrounding its value) for Joost's Dest.
+  This function estimates the parameter (and potentially
+  the confidence surrounding its value) for Joost's Dest.
 }
 \examples{
 a1 <- sample( LETTERS[1:5], size=20, replace=TRUE)
@@ -44,6 +45,6 @@ a1 <- sample( LETTERS[1:5], size=20, replace=TRUE)
  Dest( df, nperm=99)
 }
 \author{
-Rodney J. Dyer \email{rjdyer@vcu.edu}
+  Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

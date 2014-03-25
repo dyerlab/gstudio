@@ -4,8 +4,8 @@
 #' @param x An object of type \code{data.frame} created from \code{frequencies}
 #' @param stratum The stratum to use for calculating frequencies (default 'Population')
 #' @param locus The name of the locus to use (default=NA)
-#' @param Longitude The name of the Longitude data column (default 'Longitude')
-#' @param Latitude The name of the Latitude data column (default 'Latitude')
+#' @param longitude The name of the Longitude data column (default 'Longitude')
+#' @param latitude The name of the Latitude data column (default 'Latitude')
 #' @param line.color An parameter indicating the color of the border of bars and pie wedges.
 #' @param label A flag indicating that the stratum names will be printed in the map plots.
 #' @param palette The number of the brewer palette to use (default=8)
@@ -37,8 +37,8 @@ pies_on_map <- function( x, stratum="Population", locus=NA, longitude='Longitude
   bbox <- attributes(map)$bb
   
   ret <- ggmap( map, extent="device" ) 
-  ret <- ret + geom_point(aes(x=Longitude,y=Latitude),data=coords) 
-  ret <- ret + geom_text(aes(x=Longitude,y=Latitude,label=Stratum),data=coords)
+  ret <- ret + geom_point(aes(x=longitude,y=latitude),data=coords) 
+  ret <- ret + geom_text(aes(x=longitude,y=latitude,label=Stratum),data=coords)
   
   coords$Longitude <- ( coords$Longitude - bbox$ll.lon ) / (bbox$ur.lon - bbox$ll.lon)
   coords$Latitude <- ( coords$Latitude - bbox$ll.lat ) / (bbox$ur.lat - bbox$ll.lat)

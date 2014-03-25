@@ -2,7 +2,8 @@
 \alias{Gst}
 \title{Estimation Nei's Gst parameter}
 \usage{
-Gst(x, stratum = "Population", nperm = 0, size.correct = TRUE)
+  Gst(x, stratum = "Population", nperm = 0,
+    size.correct = TRUE)
 }
 \arguments{
   \item{x}{A vector of \code{\link{locus}} objects or a
@@ -21,12 +22,14 @@ Gst(x, stratum = "Population", nperm = 0, size.correct = TRUE)
   (default=TRUE).}
 }
 \value{
-An \code{data.frame} with Gst, Ht, and Hs and optionally P
+  An \code{data.frame} with Gst, Ht, and Hs and optionally
+  P
 }
 \description{
-This function estimates Nei's Gst parameter and potentially
-returns the components of it as well as the probability.
-The results are returned as a \code{data.frame}.
+  This function estimates Nei's Gst parameter and
+  potentially returns the components of it as well as the
+  probability.  The results are returned as a
+  \code{data.frame}.
 }
 \examples{
 AA <- locus( c("A","A") )
@@ -40,6 +43,6 @@ AA <- locus( c("A","A") )
  Gst( df, nperm=99)
 }
 \author{
-Rodney J. Dyer \email{rjdyer@vcu.edu}
+  Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

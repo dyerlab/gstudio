@@ -2,7 +2,7 @@
 \alias{geom_locus}
 \title{Translate a vector of \code{locus} objects into a \code{gemo_bars} layer}
 \usage{
-geom_locus(mapping, data, ...)
+  geom_locus(mapping, data, ...)
 }
 \arguments{
   \item{mapping}{The aesthetic mapping (e.g., which locus
@@ -15,16 +15,16 @@ geom_locus(mapping, data, ...)
   \item{...}{Added to geom_bar}
 }
 \value{
-A formatted set of \code{ggplot} objects to be plot
+  A formatted set of \code{ggplot} objects to be plot
 }
 \description{
-This function takes a data frame containing genetic data
-and returns a \code{geom_bars} layer for \code{ggplot}
-integration.
+  This function takes a data frame containing genetic data
+  and returns a \code{geom_bars} layer for \code{ggplot}
+  integration.
 }
 \note{
-If using more than one stratum, use fill=STRATA_NAME for
-partitioning
+  If using more than one stratum, use fill=STRATA_NAME for
+  partitioning
 }
 \examples{
 require(ggplot2)
@@ -33,6 +33,6 @@ data <- data.frame( Population=c("A","A","B","B"), Locus=loci)
 ggplot() + geom_locus( aes(x=Locus, fill=Population), data=data )
 }
 \author{
-Rodney J. Dyer \email{rjdyer@vcu.edu}
+  Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

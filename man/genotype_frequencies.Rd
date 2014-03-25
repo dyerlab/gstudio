@@ -2,18 +2,18 @@
 \alias{genotype_frequencies}
 \title{Genotype Frequencies}
 \usage{
-genotype_frequencies(x)
+  genotype_frequencies(x)
 }
 \arguments{
   \item{x}{An object of type \code{locus}}
 }
 \value{
-A \code{data.frame} with genotype, observed, and expected
-as counts.
+  A \code{data.frame} with genotype, observed, and expected
+  as counts.
 }
 \description{
-Provides a summary of gentoype frequencies (observed and
-expected) from a vector of \code{locus} objects.
+  Provides a summary of gentoype frequencies (observed and
+  expected) from a vector of \code{locus} objects.
 }
 \examples{
 freqs <- c(0.55, 0.30, 0.15)
@@ -24,6 +24,6 @@ freqs <- c(0.55, 0.30, 0.15)
   genotype_frequencies( data$PGM )
 }
 \author{
-Rodney J. Dyer \email{rjdyer@vcu.edu}
+  Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 

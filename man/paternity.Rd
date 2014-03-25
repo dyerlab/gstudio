@@ -2,7 +2,8 @@
 \alias{paternity}
 \title{Estimates fractional paternity probability}
 \usage{
-paternity(offspring, mother, fathers, ID = "ID", OffID = "OffID")
+  paternity(offspring, mother, fathers, ID = "ID",
+    OffID = "OffID")
 }
 \arguments{
   \item{offspring}{A particular offspring. Often as a row
@@ -26,12 +27,13 @@ paternity(offspring, mother, fathers, ID = "ID", OffID = "OffID")
   offspring ID.}
 }
 \value{
-A \code{data.frame} with indications of paternity by row.
-Columns will include ID, OffID, DadID, and potentially Fij.
+  A \code{data.frame} with indications of paternity by row.
+  Columns will include ID, OffID, DadID, and potentially
+  Fij.
 }
 \description{
-This function estimates fractional paternity for offspring
-given a set of potential fathers.
+  This function estimates fractional paternity for
+  offspring given a set of potential fathers.
 }
 \examples{
 freqs <- c(1/3,1/3,1/3)
@@ -47,6 +49,6 @@ offs$MomID <- adults$ID[1]
 paternity( offs, adults[1,], adults )
 }
 \author{
-Rodney J. Dyer \email{rjdyer@vcu.edu}
+  Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 
