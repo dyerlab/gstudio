@@ -25,7 +25,7 @@ test_that("error checks",{
   r <- genetic_relatedness( loci )
   expect_that( r, is_a("matrix") )
   expect_that( dim(r), is_equivalent_to(c(10,10)))
-  expect_that( sum(diag(r)), is_equivalent_to(0))
+  expect_that( sum(diag(r)), is_equivalent_to(10))
   expect_that( sum( r - t(r)), is_equivalent_to(0))
   
 })

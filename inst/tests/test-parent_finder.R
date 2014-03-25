@@ -8,6 +8,7 @@ test_that("testing",{
   
 
   
+<<<<<<< HEAD
   p <- parent_finder( data )  
   expect_that( p, is_a("data.frame"))
   expect_that( nrow(p), equals(6) )
@@ -16,5 +17,10 @@ test_that("testing",{
   expect_that( p$ParentID, is_equivalent_to(c(1,2,1,2,3,2)))
   expect_that( p$ID, is_equivalent_to(c(4,4,5,5,6,6)))
   expect_that( p$OffID, is_equivalent_to(c(1,1,2,2,3,3)))
+=======
+  
+  
+  
+>>>>>>> develop
   
 })

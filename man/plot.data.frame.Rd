@@ -2,9 +2,16 @@
 \alias{plot.data.frame}
 \title{Plotting the locations of a 'population'}
 \usage{
+<<<<<<< HEAD
 \method{plot}{data.frame}(x, stratum = "Population",
   Longitude = "Longitude", Latitude = "Latitude", map.source = "google",
   map.type = "terrain", color = "black", zoom = NA, ...)
+=======
+  \method{plot}{data.frame} (x, stratum = "Population",
+    longitude = "Longitude", latitude = "Latitude",
+    map.source = "google", map.type = "terrain",
+    color = "black", zoom = NA, ...)
+>>>>>>> develop
 }
 \arguments{
   \item{x}{An object of type \code{data.frame}}
@@ -12,10 +19,10 @@
   \item{stratum}{The stratum to plot
   (default='Population').}
 
-  \item{Longitude}{Name of the column to be used as a
+  \item{longitude}{Name of the column to be used as a
   decimal longitude}
 
-  \item{Latitude}{Name of the column to be used as decimal
+  \item{latitude}{Name of the column to be used as decimal
   latitude}
 
   \item{map.source}{Where the map should be retrieved from.

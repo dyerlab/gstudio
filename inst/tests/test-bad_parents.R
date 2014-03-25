@@ -5,6 +5,7 @@ test_that("testing",{
   loci <- c(rep("TPI",3), rep("PGM",3))
   alleles <- c(LETTERS[1:3],LETTERS[8:10])
   f <- data.frame(Locus=loci, Allele=alleles, Frequency=freqs)
+<<<<<<< HEAD
   adults <- make_population(f,N=3)
   offs <- mate( adults[1,], adults[2,], N=2)
   offs$ID <- c(1,1)
@@ -20,4 +21,20 @@ test_that("testing",{
   expect_that(nrow(p),equals(2))
   expect_that(ncol(p),equals(3))
   expect_that(p$PossibleParent,is_equivalent_to(c(TRUE,FALSE)))
+=======
+  adults <- make_population(f,N=20)
+  offs <- mate( adults[1,], adults[2,], N=10)
+  offs$ID <- 1
+  offs$OffID <- 1:10
+  adults$OffID <- 0
+  
+  data <- rbind( adults[,c(1,4,2,3)], offs[,c(1,4,2,3)])
+  
+  p1 <- bad_parents(data)
+  
+  expect_that( p1, is_a("data.frame"))
+  expect_that( p1$PGM, is_a("locus"))    
+  expect_that( all(p1$Is.Parent[ p1$Off!=0]), is_true())
+
+>>>>>>> develop
 })

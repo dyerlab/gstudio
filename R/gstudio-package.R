@@ -34,7 +34,9 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @docType package
 #' @keywords package
-#' @import raster ggplot2 
+#' @import raster 
+#' @import ggplot2 
+#' @import ggmap
 #' @name gstudio-package
 #' @rdname gstudio-package
 #'

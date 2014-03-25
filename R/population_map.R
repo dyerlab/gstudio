@@ -30,17 +30,17 @@ population_map <- function( coords, map.source="google", map.type="terrain", zoo
   Longitude <- Latitude <- NULL
   
   if( is.na(zoom) ) {
-    location <- make_bbox( Longitude, Latitude, data=coords, f=0 )
-    lt.rng <- abs( location[1]-location[3] ) * 0.2
-    ln.rng <- abs( location[2]-location[4] ) * 0.2
-    location <- location + c(-lt.rng,-ln.rng,lt.rng,ln.rng)
-    map <- get_map( location=location, maptype=map.type, source=map.source, filename=tempfile() )    
+    location <- make_bbox( Longitude, Latitude, data=coords )
+#     lt.rng <- abs( location[1]-location[3] ) * 0.2
+#     ln.rng <- abs( location[2]-location[4] ) * 0.2
+#     location <- location + c(-lt.rng,-ln.rng,lt.rng,ln.rng)
+    map <- get_map( location=location, maptype=map.type, source=map.source )    
   }
   else {
     location <- c( lon=mean(coords$Longitude),lat=mean(coords$Latitude ) )
     if( !is.numeric( zoom ) )
       zoom <- as.numeric( zoom )
-    map <- get_map( location=location, maptype=map.type, source=map.source, zoom=zoom, filename=tempfile() )
+    map <- get_map( location=location, maptype=map.type, source=map.source, zoom=zoom )
   }
   
   return( map )

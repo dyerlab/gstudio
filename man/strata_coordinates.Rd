@@ -2,8 +2,14 @@
 \alias{strata_coordinates}
 \title{Grab coordinates for strata}
 \usage{
+<<<<<<< HEAD
 strata_coordinates(x, stratum = "Population", longitude = "Longitude",
   latitude = "Latitude", as.SpatialPoints = FALSE)
+=======
+  strata_coordinates(x, stratum = "Population",
+    longitude = "Longitude", latitude = "Latitude",
+    as.SpatialPoints = FALSE, sort.output = FALSE)
+>>>>>>> develop
 }
 \arguments{
   \item{x}{A \code{data.frame} object.}
@@ -19,6 +25,9 @@ strata_coordinates(x, stratum = "Population", longitude = "Longitude",
   coordinates to return should be turned into a
   SpatialPoints object (TRUE) or as a \code{data.frame}
   (FALSE, the default)}
+
+  \item{sort.output}{A flag indicating if the results
+  should be sorted alphabetically (default=FALSE)}
 }
 \value{
 A data frame, with Stratum Latitude and Longitude,
