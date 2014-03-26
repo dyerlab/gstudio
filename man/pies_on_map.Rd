@@ -2,15 +2,9 @@
 \alias{pies_on_map}
 \title{Plot overload}
 \usage{
-<<<<<<< HEAD
 pies_on_map(x, stratum = "Population", locus = NA,
-  Longitude = "Longitude", Latitude = "Latitude", line.color = "black",
+  longitude = "Longitude", latitude = "Latitude", line.color = "black",
   label = FALSE, palette = 8, ...)
-=======
-  pies_on_map(x, stratum = "Population", locus = NA,
-    longitude = "Longitude", latitude = "Latitude",
-    line.color = "black", label = FALSE, palette = 8, ...)
->>>>>>> develop
 }
 \arguments{
   \item{x}{An object of type \code{data.frame} created from

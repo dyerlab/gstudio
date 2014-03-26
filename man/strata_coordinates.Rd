@@ -2,14 +2,8 @@
 \alias{strata_coordinates}
 \title{Grab coordinates for strata}
 \usage{
-<<<<<<< HEAD
 strata_coordinates(x, stratum = "Population", longitude = "Longitude",
-  latitude = "Latitude", as.SpatialPoints = FALSE)
-=======
-  strata_coordinates(x, stratum = "Population",
-    longitude = "Longitude", latitude = "Latitude",
-    as.SpatialPoints = FALSE, sort.output = FALSE)
->>>>>>> develop
+  latitude = "Latitude", as.SpatialPoints = FALSE, sort.output = FALSE)
 }
 \arguments{
   \item{x}{A \code{data.frame} object.}

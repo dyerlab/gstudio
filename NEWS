@@ -9,7 +9,6 @@ gstudio 1.2
 
 gstudio 1.1 
 -----------------
-<<<<<<< HEAD
 * [ADD] Added write_population() function to save textual output as text, GENEPOP, and STRUCTURE.
 * [ADD] Added several functions to aid in export translations for other programs such as GENEPOP and STRUCTURE.  These functions include: to_fixed_locus(), to_STRUCTURE(), and to_GENEPOP().
 
@@ -17,11 +16,9 @@ gstudio 1.1
 * [ADD] Added ability to subtract vectors of loci instead of single locus estimates usiung the loc1 - loc2 operator.
 * [ADD] Added bad_parents() to scan offspring, mother data.frames and determine if the mother could be the real mother.
 * [ADD] Added parent_finder() to do fractional single parent identification.
-=======
 * [ADD] Added ability to subtract vectors of loci instead of single locus estimates.
 * [ADD] Added bad_parents() to scan offspring, mother data.frames and determine if the mother could be the real mother.
 * [ADD] Added parent_finder() to do fractional maternal individual identification.
->>>>>>> develop
 * [CHANGE] Dropped warming when subtracting loci when one is missing.  Used to result in a stop() but now only provides a warning and returns the left hand locus (the one the subtraction is being done from).
 * [FIX] Changed mate() function for simplicity.
 * [FIX] Made "Stratum" column from make_population() a factor and made the stratum of the resulting population not "Stratum" but "Population"

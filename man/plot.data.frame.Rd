@@ -2,16 +2,9 @@
 \alias{plot.data.frame}
 \title{Plotting the locations of a 'population'}
 \usage{
-<<<<<<< HEAD
 \method{plot}{data.frame}(x, stratum = "Population",
-  Longitude = "Longitude", Latitude = "Latitude", map.source = "google",
+  longitude = "Longitude", latitude = "Latitude", map.source = "google",
   map.type = "terrain", color = "black", zoom = NA, ...)
-=======
-  \method{plot}{data.frame} (x, stratum = "Population",
-    longitude = "Longitude", latitude = "Latitude",
-    map.source = "google", map.type = "terrain",
-    color = "black", zoom = NA, ...)
->>>>>>> develop
 }
 \arguments{
   \item{x}{An object of type \code{data.frame}}

@@ -2,11 +2,7 @@
 \alias{parent_finder}
 \title{This function finds a set of potential parents from an offspring.}
 \usage{
-<<<<<<< HEAD
 parent_finder(df, ID = "ID", OffID = "OffID")
-=======
-  parent_finder(df, ID = "ID", OffID = "OffID")
->>>>>>> develop
 }
 \arguments{
   \item{df}{A \code{data.frame} of individuals adults
@@ -23,7 +19,6 @@ parent_finder(df, ID = "ID", OffID = "OffID")
   adults have OffID=0, by definition.}
 }
 \value{
-<<<<<<< HEAD
 A \code{data.frame} with the following columns.  ID = the
 offspring id, OffID = the offspring OffID (these two will
 identify the offspring uniquely), ParentID = the putative
@@ -37,20 +32,5 @@ function.
 }
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
-=======
-  A \code{data.frame} with the following columns.  ID = the
-  offspring id, OffID = the offspring OffID (these two will
-  identify the offspring uniquely), ParentID = the putative
-  parent identified, T = the multilocus transition
-  probability associated with the offspring and parent.
-}
-\description{
-  This is a general exclusion finder for a single parent.
-  For dual parent exclusion, you can use the
-  \code{paternity()} function.
-}
-\author{
-  Rodney J. Dyer <rjdyer@vcu.edu>
->>>>>>> develop
 }
 

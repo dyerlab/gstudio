@@ -101,11 +101,3 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
 
 
 
-print.genetic_structure <- function( x, ... ){
-  
-  cat("Genetic Structure\n")
-  print(as.data.frame.genetic_structure(x))
-  
-}
-
-
