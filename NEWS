@@ -6,6 +6,7 @@ gstudio 1.2
 * [ADD] Added option to sort strata in strata_coords (default=FALSE) in alphabetical order.
 * [FIX] Inconsistance in case for arguments to strata_coordinates;  was longitude/latitude rather than Longitude/Latitude, also had to change stuff in pies_on_map and plot.data.frame
 * [FIX] Two problems with strata_coordinates() for returning SpatialPoints.
+* [FIX] Problems with bad_parent() and parent_finder()
 
 gstudio 1.1 
 -----------------

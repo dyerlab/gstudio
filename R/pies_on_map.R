@@ -17,8 +17,6 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 pies_on_map <- function( x, stratum="Population", locus=NA, longitude='Longitude', latitude='Latitude',line.color="black", label=FALSE, palette=8,... ) {
   
-  warning("This function can produce a few incorrect plots")
-  
   if( !inherits(x,"data.frame"))
     stop("Cannot create pie charts without some data...")
   

@@ -32,12 +32,11 @@ bad_parents <- function( df, AdultID="ID", OffID="OffID", verbose=FALSE) {
   total <- paste( df[[AdultID]][df[[OffID]]!=0], df[[OffID]][df[[OffID]]!=0], sep=":")
   unmatched <- setdiff( total,matched )
   
-  m <- c( matched, unmatched )
-  
+  m <- c( matched, unmatched ) 
   
   status <- c( rep(TRUE,length(matched)), rep(FALSE,length(unmatched)))
   
-  res <- data.frame(matrix(unlist(strsplit(m,split=":")),ncol=2,byrow=T))
+  res <- data.frame(matrix(unlist(strsplit(m,split=":")),ncol=2,byrow=T),stringsAsFactors=FALSE)
   res$PossibleParent <- status
   names(res)[1:2] <- c("ID","OffID")
   
