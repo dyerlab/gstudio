@@ -22,11 +22,13 @@ pies_on_map <- function( x, stratum="Population", locus=NA, longitude='Longitude
   
   if( !(stratum %in% names(x)))
     stop(paste("Cannot use the stratum requested (",stratum,"), it is not in the data.frame",sep=""))
-
+  else
+    x[[stratum]] <- factor( as.character(x[[stratum]]))
+  
   if( is.na(locus) | missing(locus) | !(locus %in% names(x)))
     stop(paste("Cannot use the locus requested (",locus,"), it is not in the data.frame",sep=""))
   
-  freqs <- frequencies( x, stratum=stratum, loci=locus )
+  freqs <- frequencies( x, loci=locus, stratum=stratum )
   coords <- strata_coordinates(x,stratum=stratum,longitude=longitude,latitude=latitude)
   ret <- Allele <- Frequency <- Stratum <- NULL  
   
@@ -34,40 +36,50 @@ pies_on_map <- function( x, stratum="Population", locus=NA, longitude='Longitude
   suppressWarnings( map <- population_map( coords, ... ) )
   bbox <- attributes(map)$bb
   
-  ret <- ggmap( map, extent="device" ) 
-  ret <- ret + geom_point(aes(x=longitude,y=latitude),data=coords) 
-  ret <- ret + geom_text(aes(x=longitude,y=latitude,label=Stratum),data=coords)
+  # use subset in extent
+  npop <- nrow(coords)
+  coords <- coords[ (coords$Longitude >= bbox$ll.lon & coords$Longitude <= bbox$ur.lon) , ]
+  coords <- coords[ (coords$Latitude >= bbox$ll.lat & coords$Latitude <= bbox$ur.lat) , ]
+  if( npop > nrow(coords))
+    message(paste("The google tile cut off ",(npop-nrow(coords))," locations, you must manually adjust 'zoom' parameter for this map to get all of your sites."))
   
-  coords$Longitude <- ( coords$Longitude - bbox$ll.lon ) / (bbox$ur.lon - bbox$ll.lon)
-  coords$Latitude <- ( coords$Latitude - bbox$ll.lat ) / (bbox$ur.lat - bbox$ll.lat)
+  
+  ret <- ggmap( map, extent="device" ) 
+  #ret <- ret + geom_point(aes(x=Longitude,y=Latitude),data=coords) 
+  #ret <- ret + geom_text(aes(x=Longitude,y=Latitude,label=Stratum),data=coords)
+  
+  
+  coords$Latitude <- ( coords$Latitude - bbox$ll.lat ) / abs(bbox$ur.lat - bbox$ll.lat)
+  coords$Longitude <- (coords$Longitude-bbox$ll.lon) / abs(bbox$ur.lon-bbox$ll.lon)
   
   vplayout <- function( x , y ) viewport(layout.pos.row=x, layout.pos.col=y)
   grid.newpage()
-  pushViewport( viewport( layout=grid.layout(100,100) ) )
+  pushViewport( viewport( layout=grid.layout(100,100)) )
   print(ret, vp=vplayout(1:100,1:100) )
+  
   
   freqs$Allele <- factor( freqs$Allele )
   all.alleles <- levels( freqs$Allele )
-  pops <- sort( unique( freqs$Stratum ) )
+  pops <- sort( unique( as.character(coords$Stratum ) ))
   for( pop in pops ){
     df <- freqs[ freqs$Stratum == pop, ] 
-    lon <- coords$Longitude[ coords$Stratum==pop]
-    lat <- coords$Latitude[ coords$Stratum==pop]
+    lon <- coords$Longitude[ coords$Stratum==pop ]
+    lat <- coords$Latitude[ coords$Stratum==pop ]
+    #cat(pop,lon,lat,"\n") 
     pie <- ggplot( df, aes(y=Frequency,x="",fill=Allele)) + 
       geom_bar(width=0.75, color=line.color, stat="identity") + 
       coord_polar(theta='y') + 
       theme_nothing()
     if( length(df$Allele) < 13 )
-      pie <- pie +  scale_fill_brewer(type="div", palette=palette)
+      pie <- pie + scale_fill_brewer(type="div", palette=palette)
     print( pie, vp=viewport(x=lon,y=lat,width=0.05,height=0.05) )
-    cat(pop,"\n")
+             
   }
   
   if( label ) 
     grid.text( label=coords[,1], x=coords[,2]+0.011, y=coords[,3]+0.021, gp=grid::gpar(col=line.color), just="left")
   
-  
-  
+
   
   invisible(NULL)  
 }

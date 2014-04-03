@@ -5,13 +5,13 @@
 *-Ex.R
 
 .DS_Store
-
+inst/tests/ggmapTemp.png
+ggmapTemp.png
 .Rproj.user
 .Rhistory
 gstudio.html
 gstudio.md
 gstudio.Rproj
-ggmapTemp.png
 figure/
 gstudio.Rcheck/
 gstudio_*.tar.gz

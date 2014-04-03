@@ -263,6 +263,29 @@ is.locus <- function ( x ) {
 }
 
 
+#' Replicate a locus
+#' 
+#' A quick replacement for \code{rep} so it does not 
+#'  replicate a \code{locus} object as a character so
+#'  we can use functions like \code{outer} efficiently.
+#' @param x An object of type character
+#' @param times The number of times to replicate this
+#' @return A vector of \code{locus} objects
+#' @export
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples
+#' 
+#' loc1 <- locus( c("A","B"))
+#' rep(loc1, times=4)
+rep.locus <- function( x, times ){
+  c <- as.character(x)
+  ret <- rep(c,times=times)
+  class(ret) <- "locus"
+  return(ret)
+}
+
+
+
 
 
 
@@ -418,6 +441,11 @@ is.locus <- function ( x ) {
   
    
 }
+
+
+
+
+
 
 
 

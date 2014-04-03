@@ -13,7 +13,7 @@
 #' is_heterozygote( loc )
 is_heterozygote <- function( x ) { 
   if( !is(x,"locus") )
-    stop("The function 'is_heterozygote' works on objects of type 'locus' ")
+    stop(paste("The function 'is_heterozygote' works on objects of type 'locus', not ",class(x),sep=""))
   
   if( length(x)>1 )
     ret <- unlist(lapply( x, is_heterozygote ))

@@ -60,7 +60,7 @@ frequencies.locus <- function( x, loci, ... ) {
 frequencies.data.frame <- function( x, loci, stratum, ... ) {
   
   # no loci specified so grab all of them
-  if( missing(loci) ) {
+  if( missing(loci) || is.na(loci) ) {
     loci <- column_class( x, "locus" )
   }
   

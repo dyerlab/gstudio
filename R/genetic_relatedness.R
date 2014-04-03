@@ -2,15 +2,16 @@
 #' 
 #' This function returns single relatedness estimates as a 
 #'  pairwise matrix.
-#' @param loci An object of type \code{locus} 
+#' @param x A \code{data.frame} that has \code{locus} columns.
+#' @param loci The loci to use (if missing all loci are used).
 #' @param mode The kind of relatedness to be estimated.  Currently
-#'  Ritland96 (the default) and LynchRitland are available.
+#'  Fij (the default), Ritland96 and LynchRitland are available.
 #' @param freqs An optional \code{data.frame} (as returned by the
 #'  function \code{frequencies()} with allele frequencies).  If this 
-#'  is not provided, it will be estimated from the locus.  This allows
+#'  is not provided, it will be estimated from all the data.  This allows
 #'  you to estimate relatedness among subsets of individuals using 
 #'  more global measures of relatedness.
-#' @return A matrix of pairwise relatedness estimates
+#' @return A matrix of pairwise relatedness estimates.
 #' @note This only works on diploid data and will return NA for any 
 #'  comparison of missing genotypes.
 #' @export
@@ -18,15 +19,88 @@
 #' loci <- c( locus(1:2), locus(c(2,2)), locus(1:2) )
 #' genetic_relatedness( loci )
 #' genetic_relatedness( loci, freqs = data.frame( Allele=c("1","2"), Frequency=c(0.5,0.5)))
-genetic_relatedness <- function( loci, mode=c("Ritland96","LynchRitland")[1], freqs=NULL ) {
-  if( missing(loci) )
-    stop("Cannot use this function without actually passing it some loci.")
-  if( !is(loci,"locus"))
-    stop("You need to pass objects of type 'locus' to this function.")
-  if( !(mode %in% c("Ritland96","LynchRitland")))
-    stop("Unrecognized relatedness measure")
-  if( is.null(freqs) )
-    freqs <- frequencies( loci )
+
+
+genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","Ritland","LynchRitland")[1],freqs=NA ) {
+  if( !is(x,"data.frame"))
+    stop("Cannot perform relatedness estimates on non-data.frame objects.")
+  if( any(is.na(column_class(arapat,"locus"))) )
+    stop("You need to have genetic loci in the data.frame to estimate relatedness")
+  if( is.na(freqs) )
+    freqs <- frequencies( x )
+
+  if( is.na(loci) )
+    loci <- column_class(x,"locus")
+  N <- nrow(x)
+  
+  ret <- matrix(0,nrow=N,ncol=N)
+  
+  # go through the loci
+  for( locus in loci ){
+    l <- x[[locus]] 
+    
+    if( mode=="Nason" ) 
+      theFunc <- .relatedness_Nason
+    else if( mode=="LynchRitland")
+      theFunc <- .relatedness_Ritland
+    else if( mode=="Ritland")
+      theFunc <- .relatedness_LynchRitland
+    else
+      stop("Unrecognized relatedness statistic requested")
+    
+    freq <- frequencies( l )
+    
+    ret <- ret + theFunc(l, freq, length(loci)>1 )
+  }
+  
+  diag(ret) <- 1
+  
+  return( ret )
+}
+
+
+
+.relatedness_Nason <- function( loci, freq, correctMultilocus ) {
+  
+}
+
+.relatedness_LynchRitland <- function( loci, freq, correctMultilocus ) {
+  
+  data <- cbind( rep(loci, rep.int(length(loci), length(loci))), rep(loci, times = ceiling(length(Y)/length(loci))))
+  
+  
+  ans <- rep(0,nrow(data))
+  dim(ans) <- c(length(loci),length(loci))
+  return(ans)
+}
+
+.relatedness_Ritland <- function( loci, freq, correctMultilocus ) {
+  
+}
+
+
+# define the individual functions
+.relatedness_rit96 <- function(dij,dik,dil,djk,djl,pi,pj,n){
+  top <- (dik+dil)/pi + (djk+djl)/pj - 1
+  bot <- 4*(n-1)
+  if( is.finite(bot) )
+    return( top/bot )
+  else
+    return( NA )
+}
+
+.relatedness_lynchrit <- function(dij,dik,dil,djk,djl,pi,pj,n){
+  top <- pi*(djk+djl) + pj*(dik+dil) - 4*pi*pj
+  bot <- (1+dij)*(pi+pj) - 4*pi*pj
+  return( top/bot )
+}
+
+
+
+
+
+
+.estimate_relatedness <- function( loci, mode, freqs ) {
   n <- length( freqs$Allele )
   if( n < 6 & mode=="LynchRitland")
     warning( "You should probably not use Lynch & Ritland estimator for loci with fewer than 6 alleles...")
