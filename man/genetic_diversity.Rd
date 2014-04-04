@@ -3,7 +3,7 @@
 \title{Estimate genetic diversity among strata in a Population,}
 \usage{
 genetic_diversity(x, stratum = NULL, mode = c("A", "Ae", "A95", "He", "Ho",
-  "Fis")[2])
+  "Fis", "Pe")[2])
 }
 \arguments{
   \item{x}{A \code{data.frame} object with
@@ -22,7 +22,8 @@ genetic_diversity(x, stratum = NULL, mode = c("A", "Ae", "A95", "He", "Ho",
   \item{A95}{Number of alleles with frequency at least five
   percent} \item{He}{Expected heterozygosity}
   \item{Ho}{Observed heterozygosity} \item{Fis}{Wright's
-  Inbreeding coefficient (size corrected).} }}
+  Inbreeding coefficient (size corrected).} \item{Pe}{Locus
+  polymorphic index.} }}
 }
 \value{
 A \code{data.frame} with columns for strata, diversity

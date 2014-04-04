@@ -2,25 +2,29 @@
 \alias{genetic_relatedness}
 \title{Estimates pair-wise relatedness}
 \usage{
-genetic_relatedness(loci, mode = c("Ritland96", "LynchRitland")[1],
-  freqs = NULL)
+genetic_relatedness(x, loci = NA, mode = c("Nason", "Ritland",
+  "LynchRitland")[1], freqs = NA)
 }
 \arguments{
-  \item{loci}{An object of type \code{locus}}
+  \item{x}{A \code{data.frame} that has \code{locus}
+  columns.}
+
+  \item{loci}{The loci to use (if missing all loci are
+  used).}
 
   \item{mode}{The kind of relatedness to be estimated.
-  Currently Ritland96 (the default) and LynchRitland are
-  available.}
+  Currently Fij (the default), Ritland96 and LynchRitland
+  are available.}
 
   \item{freqs}{An optional \code{data.frame} (as returned
   by the function \code{frequencies()} with allele
   frequencies).  If this is not provided, it will be
-  estimated from the locus.  This allows you to estimate
+  estimated from all the data.  This allows you to estimate
   relatedness among subsets of individuals using more
   global measures of relatedness.}
 }
 \value{
-A matrix of pairwise relatedness estimates
+A matrix of pairwise relatedness estimates.
 }
 \description{
 This function returns single relatedness estimates as a

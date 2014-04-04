@@ -1,7 +1,7 @@
 gstudio 1.2
 -----------------
 * [FIX] Changed relatedness to be multilocus if so required.
-* [ADD] Added Nason's Fij statistic to genetic_relatedness
+* [ADD] Added Nason's Fij statistic to genetic_relatedness()
 
 * [FIX] Problem with pies_on_map() where one population was always a bit off.  This is really not a problem with the plotting, it is more of a problem with the ratio of h/w for the plot.  Make them the same and it will be fine.
 * [ADD] Added option to sort strata in strata_coords (default=FALSE) in alphabetical order.
@@ -9,6 +9,7 @@ gstudio 1.2
 * [FIX] Two problems with strata_coordinates() for returning SpatialPoints.
 * [FIX] Problems with bad_parent() and parent_finder()
 * [ADD] Added ellipsis to read_population() function to allow optional values to be passed on to read.table()
+* [ADD] Added Pe, locus specific polymorphic index sum(p_i(1-p_i)) for genetic_diversity()
 
 
 gstudio 1.1 
