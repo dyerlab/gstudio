@@ -131,7 +131,7 @@ genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","LynchRitland")[1],
   
 }
 
-.relatedness_Nason <- function( loci, freq, correctMultilocus, ... ) {
+.relatedness_Nason <- function( loci, freq, correctMultilocus=TRUE, ... ) {
   N <- length(loci)
   k <- N*(N-1)/2
   ret <- matrix(0,N,N)
@@ -141,7 +141,7 @@ genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","LynchRitland")[1],
       if( i!=j){
         pj <- to_mv(loci[j],alleles=freq$Allele)
         pbar <- freq$Frequency
-        fij <-  sum((pi-pbar)*(pj-pbar) / (pbar*(1-pbar)*k) ) + 1/(2*(N-1))
+        fij <-  mean( ( (pi-pbar)*(pj-pbar) / (pbar*(1-pbar)*k) ) + 1/(2*(N-1)) )
         ret[i,j] <- ret[j,i] <- fij
       }
     }

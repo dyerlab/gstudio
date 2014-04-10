@@ -2,8 +2,8 @@
 \alias{genetic_relatedness}
 \title{Estimates pair-wise relatedness}
 \usage{
-genetic_relatedness(x, loci = NA, mode = c("Nason", "Ritland",
-  "LynchRitland")[1], freqs = NA)
+genetic_relatedness(x, loci = NA, mode = c("Nason", "LynchRitland")[1],
+  freqs = NA)
 }
 \arguments{
   \item{x}{A \code{data.frame} that has \code{locus}
@@ -13,8 +13,8 @@ genetic_relatedness(x, loci = NA, mode = c("Nason", "Ritland",
   used).}
 
   \item{mode}{The kind of relatedness to be estimated.
-  Currently Fij (the default), Ritland96 and LynchRitland
-  are available.}
+  Currently Fij (the default) and LynchRitland are
+  available.}
 
   \item{freqs}{An optional \code{data.frame} (as returned
   by the function \code{frequencies()} with allele
