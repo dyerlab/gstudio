@@ -42,20 +42,21 @@ genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","LynchRitland")[1],
   for( locus in loci ){
     l <- x[[locus]] 
     
-    if( mode=="Nason" ) 
-      theFunc <- .relatedness_Nason
-    else if( mode=="LynchRitland")
-      theFunc <- .relatedness_kronecker
-    else if( mode=="Ritland")
-      theFunc <- .relatedness_kronecker
+    
+    
+    if( mode=="Nason" )  {
+      ret <- ret + Fij(l)
+    }
+    
+    else if( mode=="LynchRitland" ) {
+      
+    }
+    else if( mode=="Ritland" ) {
+      
+    }
     else
       stop("Unrecognized relatedness statistic requested")
     
-    freq <- frequencies( l )
-    
-    rel <- theFunc(l, freq, length(loci)>1, mode )
-    
-    ret <- ret + rel
   }
   
   diag(ret) <- 1

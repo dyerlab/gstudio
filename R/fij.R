@@ -3,6 +3,9 @@
 #' This function estimates the allele-wise coancestry statistic fij from
 #'  Nason.  It can be used as a single locus or multilocus estimator if 
 #'  you provide the correct standardizations.
+#' @note This estimator will use missing data but it treats it as if the 
+#'  frequency for each allele at an individual locus are equal to the 
+#'  population allele frequencies.  This may influence your estimators.
 #' @param x A vector of loci to use.
 #' @param allele The allele to estimate.  If this is left blank, a locus-wide
 #'  estimator is provided.  That is the average of the allele-wise estimators
@@ -28,6 +31,14 @@ Fij <- function( x, allele=NA ){
   
   loci <- to_mv(x,alleles=allele )
   
+  
+  # correct for missing data by putting in freqs for allele so it is zero
+  if( any( is.na(x))) {
+    loci[ is.na(x) ] <- freq$Frequency
+    message("Some of your loci are missing, Fij will treat these as loci with all alleles with likelihood equal to the population allele frequency.")
+  }
+    
+  
   pbar <- freq$Frequency
   
   for( i in 1:N){
@@ -44,6 +55,8 @@ Fij <- function( x, allele=NA ){
   # correct for multi allelic estimators
   if( length(allele) > 1 )
     ret <- ret / Pe(x)
+  
+  diag(ret) <- 1
   
   return(ret)
 }
