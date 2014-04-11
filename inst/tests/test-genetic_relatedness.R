@@ -20,20 +20,21 @@ test_that("error checks",{
   loci <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD) 
   
   expect_that( genetic_relatedness( loci, mode="Bob"), throws_error() )
-  r <- genetic_relatedness( loci, mode="Nason")
-  expect_that( r, is_a("matrix") )
-  expect_that( dim(r), is_equivalent_to(c(10,10)))
-  expect_that( sum(diag(r)), is_equivalent_to(10))
   
-  
-  # make the data frame
-  df <- data.frame(TPI=loci)
-  expect_that( genetic_relatedness( df, mode="bob"), throws_error())
-  expect_that( genetic_relatedness( df, mode="LynchRitland"),gives_warning())
-  
-  r2 <- genetic_relatedness( df )
-  expect_that( sum(r-r2), is_equivalent_to(0))
-  expect_that( sum( r - t(r2)), is_equivalent_to(0))
+#   r <- genetic_relatedness( loci, mode="Nason")
+#   expect_that( r, is_a("matrix") )
+#   expect_that( dim(r), is_equivalent_to(c(10,10)))
+#   expect_that( sum(diag(r)), is_equivalent_to(10))
+#   
+#   
+#   # make the data frame
+#   df <- data.frame(TPI=loci)
+#   expect_that( genetic_relatedness( df, mode="bob"), throws_error())
+#   expect_that( genetic_relatedness( df, mode="LynchRitland"),gives_warning())
+#   
+#   r2 <- genetic_relatedness( df )
+#   expect_that( sum(r-r2), is_equivalent_to(0))
+#   expect_that( sum( r - t(r2)), is_equivalent_to(0))
   
 })
 

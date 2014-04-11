@@ -13,8 +13,9 @@ test_that("Inbreeding",{
   
   f <- Fij( x,allele="A" )
   expect_that( is(f,"matrix"), is_true())
-  expect_that( dim(x), is_equivalent_to( c(10,10)))
-  expect_that( sum(x), is_equivalent_to(0) )
+  
+  expect_that( dim(f), is_equivalent_to( c(10,10)))
+  expect_that( sum(diag(f)), is_equivalent_to(10) )
   expect_that( f[1,10], is_equivalent_to( 0.1/3) )
 
 })

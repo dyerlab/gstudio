@@ -2,10 +2,10 @@
 \alias{Fij}
 \title{This estimates Fij allele-wise}
 \usage{
-Fij(loci, allele = NA)
+Fij(x, allele = NA)
 }
 \arguments{
-  \item{loci}{A vector of loci to use.}
+  \item{x}{A vector of loci to use.}
 
   \item{allele}{The allele to estimate.  If this is left
   blank, a locus-wide estimator is provided.  That is the

@@ -270,6 +270,7 @@ is.locus <- function ( x ) {
 #'  we can use functions like \code{outer} efficiently.
 #' @param x An object of type character
 #' @param times The number of times to replicate this
+#' @param ... Ignored
 #' @return A vector of \code{locus} objects
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -277,7 +278,7 @@ is.locus <- function ( x ) {
 #' 
 #' loc1 <- locus( c("A","B"))
 #' rep(loc1, times=4)
-rep.locus <- function( x, times ){
+rep.locus <- function( x, times,... ){
   c <- as.character(x)
   ret <- rep(c,times=times)
   class(ret) <- "locus"

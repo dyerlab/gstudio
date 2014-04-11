@@ -27,7 +27,7 @@ genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","LynchRitland")[1],
     x <- data.frame(x)
   if( !is(x,"data.frame"))
     stop("Cannot perform relatedness estimates on data that is not either a data.frame or a locus vector.")
-  if( any(is.na(column_class(arapat,"locus"))) )
+  if( any(is.na(column_class(x,"locus"))) )
     stop("You need to have genetic loci in the data.frame to estimate relatedness")
   if( is.na(freqs) )
     freqs <- frequencies( x )

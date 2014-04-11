@@ -2,12 +2,14 @@
 \alias{rep.locus}
 \title{Replicate a locus}
 \usage{
-\method{rep}{locus}(x, times)
+\method{rep}{locus}(x, times, ...)
 }
 \arguments{
   \item{x}{An object of type character}
 
   \item{times}{The number of times to replicate this}
+
+  \item{...}{Ignored}
 }
 \value{
 A vector of \code{locus} objects

@@ -15,6 +15,7 @@ Fij <- function( x, allele=NA ){
   N <- length(x)
   k <- N*(N-1)/2
   ret <- matrix(0,N,N)
+  diag(ret) <- 1
   
   freq <- frequencies( x )
   if( is.na(allele) ) 
