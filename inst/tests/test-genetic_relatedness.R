@@ -20,11 +20,14 @@ test_that("error checks",{
   loci <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD) 
   
   expect_that( genetic_relatedness( loci, mode="Bob"), throws_error() )
+  df <- data.frame( ID=1:10 )
+  expect_that( genetic_relatedness(df),throws_error() )
   
-#   r <- genetic_relatedness( loci, mode="Nason")
-#   expect_that( r, is_a("matrix") )
-#   expect_that( dim(r), is_equivalent_to(c(10,10)))
-#   expect_that( sum(diag(r)), is_equivalent_to(10))
+  df$TPI <- loci
+  r <- genetic_relatedness( df, mode="Nason")
+  expect_that( r, is_a("matrix") )
+  expect_that( dim(r), is_equivalent_to(c(10,10)))
+  expect_that( sum(diag(r)), is_equivalent_to(10))
 #   
 #   
 #   # make the data frame

@@ -38,26 +38,21 @@ genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","LynchRitland")[1],
   
   ret <- matrix(0,nrow=N,ncol=N)
   
-  # go through the loci
-  for( locus in loci ){
-    l <- x[[locus]] 
-    
-    
-    
-    if( mode=="Nason" )  {
-      ret <- ret + Fij(l)
-    }
-    
-    else if( mode=="LynchRitland" ) {
-      
-    }
-    else if( mode=="Ritland" ) {
-      
-    }
-    else
-      stop("Unrecognized relatedness statistic requested")
-    
+  
+  if( mode=="Nason"){
+    for( locus_name in loci)
+      ret <- ret + Fij(x[[locus_name]])
+    ret <- ret * 1/length(loci)
   }
+  else if( mode=="LynchRitland" || mode=="Ritland"){
+    for( locus in loci ){
+      freq <- frequencies( x[[locus]] )
+      val <- .relatedness_kronecker( x[[locus]], freq, length(loci)>1,mode )
+    }
+  }
+  else
+    stop("Unrecognized relatedness statistic requested")
+  
   
   diag(ret) <- 1
   
@@ -132,26 +127,5 @@ genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","LynchRitland")[1],
   
 }
 
-.relatedness_Nason <- function( loci, freq, correctMultilocus=TRUE, ... ) {
-  N <- length(loci)
-  k <- N*(N-1)/2
-  ret <- matrix(0,N,N)
-  for(i in 1:N) {
-    pi <- to_mv( loci[i],alleles=freq$Allele)
-    for( j in 1:(i-1)) {
-      if( i!=j){
-        pj <- to_mv(loci[j],alleles=freq$Allele)
-        pbar <- freq$Frequency
-        fij <-  mean( ( (pi-pbar)*(pj-pbar) / (pbar*(1-pbar)*k) ) + 1/(2*(N-1)) )
-        ret[i,j] <- ret[j,i] <- fij
-      }
-    }
-  }
-  
-  if( correctMultilocus ) 
-    ret <- ret / Pe( loci )
-  diag(ret) <- 1
-  return( ret )
-}
 
 
