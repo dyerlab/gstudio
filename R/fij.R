@@ -44,11 +44,9 @@ Fij <- function( x, allele=NA ){
   for( i in 1:N){
     pi <- loci[i,]
     for( j in 1:i) {
-      if( i!=j) {
         pj <- loci[j,]
         fij <- mean( ((pi-pbar)*(pj-pbar))/(k*pbar*(1-pbar)) + 1/(2*(N-1)) )   
         ret[i,j] <- ret[j,i] <- fij
-      }
     }
   }
   
