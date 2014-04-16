@@ -1,0 +1,37 @@
+\name{kronecker_delta}
+\alias{kronecker_delta}
+\title{This function returns the kronecker operator for two loci.}
+\usage{
+kronecker_delta(locus1, locus2)
+}
+\arguments{
+  \item{locus1}{An object of type 'locus'}
+
+  \item{locus2}{An object of type 'locus'}
+}
+\value{
+a named vector of kronecker products.
+}
+\description{
+This is a quick utility function that provides the
+Kronecker operators for a pair of loci
+}
+\note{
+The Kronecker operator is a vector consisting of values
+related to the similarity of alleles among two loci.  For
+the genotypes AiAj and AkAl the Kronecker deltas are =0 of
+the subscripted alleles are different and =1 if they are
+the same (e.g., dij = 0 if heterzygote, = 1 if homozygote)
+}
+\examples{
+loc1 <- locus( c(1,1) )
+loc2 <- locus( c(1,2) )
+loc3 <- locus( c(2,2) )
+kronecker_delta( loc1, loc2 )
+kronecker_delta( loc1, loc3 )
+kronecker_delta( loc2, loc3 )
+}
+\author{
+Rodney J. Dyer <rjdyer@vcu.edu>
+}
+

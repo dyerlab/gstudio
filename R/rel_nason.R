@@ -1,4 +1,4 @@
-#' This estimates Fij allele-wise 
+#' This estimates the Fij statistic from Nason allele-wise or for a whole locus 
 #' 
 #' This function estimates the allele-wise coancestry statistic fij from
 #'  Nason.  It can be used as a single locus or multilocus estimator if 
@@ -10,9 +10,12 @@
 #' @param allele The allele to estimate.  If this is left blank, a locus-wide
 #'  estimator is provided.  That is the average of the allele-wise estimators
 #'  standardized by the polymorphic index, \code{Pe()}.
-#' @return A matrix of pairwise values for either the allele or 
+#' @param as.relatedness Return r instead of Fij (default=FALSE)
+#' @return A matrix of pairwise values for either the allele or for the full locus.
+#' @export
+#' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' 
-Fij <- function( x, allele=NA ){
+rel_nason <- function( x, allele=NA, as.relatedness=FALSE ){
   if( !is(x,"locus"))
     stop("This function takes a vector of locus class objects as an argument.")
   N <- length(x)
@@ -54,7 +57,8 @@ Fij <- function( x, allele=NA ){
   if( length(allele) > 1 )
     ret <- ret / Pe(x)
   
-  diag(ret) <- 1
+  if( as.relatedness )
+    ret <- 2*ret
   
   return(ret)
 }

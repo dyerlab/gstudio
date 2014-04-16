@@ -41,7 +41,7 @@ genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","LynchRitland")[1],
   
   if( mode=="Nason"){
     for( locus_name in loci)
-      ret <- ret + Fij(x[[locus_name]])
+      ret <- ret + rel_nason(x[[locus_name]])
     ret <- ret * 1/length(loci)
   }
   else if( mode=="LynchRitland" || mode=="Ritland"){
@@ -126,6 +126,9 @@ genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","LynchRitland")[1],
   return(ret)
   
 }
+
+
+
 
 
 
