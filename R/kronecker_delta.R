@@ -19,8 +19,8 @@
 #' kronecker_delta( loc1, loc3 )
 #' kronecker_delta( loc2, loc3 )
 kronecker_delta <- function( locus1, locus2 ) {
-  ret <- rep(0,5)
-  names(ret) <- c("dij","dik","dil","djk","djl")
+  ret <- rep(0,6)
+  names(ret) <- c("dab","dac","dad","dbc","dbd","dcd")
   
   if( missing( locus1 ) | missing( locus2 ) ) {
     warning( "Cannot estimate kronecker operators on missing data")
@@ -46,6 +46,8 @@ kronecker_delta <- function( locus1, locus2 ) {
     ret[4] <- 1
   if( loc1[2]==loc2[2] )
     ret[5] <- 1
+  if( !is_heterozygote( locus2))
+    ret[6] <- 1
     
   return( ret )
 }

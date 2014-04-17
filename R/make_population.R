@@ -21,7 +21,6 @@
 #'   make_population(f,N=20)
 make_population <- function( x, N=20){
   
-  
   # subdivided
   if( "Stratum" %in% names(x) ){
     strata <- levels( factor( x$Stratum ))

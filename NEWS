@@ -1,8 +1,9 @@
 gstudio 1.2
 -----------------
-* [FIX] Changed relatedness to be multilocus if so required.
-* [ADD] Added Nason's Fij statistic to genetic_relatedness()
+* [ADD] Added all the relatedness statistics to genetic_relatedness() function
 
+* [ADD] Added rel_ritland() to estimate Ritland (1996)
+* [ADD] Added rel_lynch() to estimate Lynch & Ritland (1999)
 * [ADD] Added rel_queller() to estimate Queller & Goodnight (1989)
 * [ADD] Added rel_nason() as a function for allelic or locus-wide coancestry from Nasons fij 
 * [ADD] Added kronecker_delta() function to return locus differences after Ritland 2000
