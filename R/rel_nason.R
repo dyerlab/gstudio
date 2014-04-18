@@ -60,5 +60,7 @@ rel_nason <- function( x, allele=NA, as.relatedness=FALSE ){
   if( as.relatedness )
     ret <- 2*ret
   
+  diag(ret) <- NA
+  
   return(ret)
 }

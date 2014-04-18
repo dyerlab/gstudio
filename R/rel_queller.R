@@ -63,6 +63,7 @@ rel_queller <- function( x ){
   
   diag(ret.bot) <- 1
   ret <- ret.top/ret.bot
+  diag(ret) <- NA
   
   return( ret )
 }

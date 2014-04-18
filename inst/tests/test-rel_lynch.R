@@ -1,4 +1,4 @@
-context("rel_nason.R")
+context("rel_lynch.R")
 
 test_that("Inbreeding",{
   AA <- locus( c("A","A") )
@@ -9,14 +9,14 @@ test_that("Inbreeding",{
   CC <- locus( c("C","C") )
   x <- c(AA,AA,AB,BB,CC,AB,AC,BB,BC,CC)
   
-  expect_that( f <- rel_nason( x,allele="X" ), throws_error() )
+  expect_that( f <- rel_lynch( ), throws_error() )
+  expect_that( f <- rel_lynch("B"), throws_error() )
   
-  f <- rel_nason( x,allele="A" )
+  f <- rel_lynch( x )
   expect_that( is(f,"matrix"), is_true())
   expect_that( dim(f), is_equivalent_to( c(10,10)))
-  expect_that( f[1,10], is_equivalent_to( 0.1/3) )
+  expect_that( f[1,2], is_equivalent_to(1.0) ) 
 
-  f1 <- rel_nason( x )
   x[2] <- NA
   expect_message(f2<-rel_nason(x))
 })

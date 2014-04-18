@@ -23,7 +23,7 @@ kronecker_delta <- function( locus1, locus2 ) {
   names(ret) <- c("dab","dac","dad","dbc","dbd","dcd")
   
   if( missing( locus1 ) | missing( locus2 ) ) {
-    warning( "Cannot estimate kronecker operators on missing data")
+    stop( "Cannot estimate kronecker operators on missing data")
     return( ret )
   }
   

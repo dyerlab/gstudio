@@ -10,10 +10,10 @@ test_that("checking",{
   expect_that( kronecker_delta( "A", 23), throws_error() )
  
   k <- kronecker_delta(locus1,locus2)
-  expect_that( k, is_equivalent_to( c(1,1,0,1,0)))
+  expect_that( k, is_equivalent_to( c(1,1,0,1,0,0)))
   k <- kronecker_delta(locus1,locus3)
-  expect_that( k, is_equivalent_to( c(1,0,0,0,0)))
+  expect_that( k, is_equivalent_to( c(1,0,0,0,0,1)))
   k <- kronecker_delta(locus2,locus3)
-  expect_that( k, is_equivalent_to( c(0,0,0,1,1)))
+  expect_that( k, is_equivalent_to( c(0,0,0,1,1,1)))
 }
 )

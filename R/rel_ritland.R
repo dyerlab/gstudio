@@ -54,5 +54,6 @@ rel_ritland <- function( x, ... ) {
   }
   
   ret <- ret / wt
+  diag(ret) <- NA
   return(ret)
 }
