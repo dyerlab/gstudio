@@ -37,7 +37,7 @@ dist_amova <- function( x ) {
   
   # make data vectors for 2gener amova
   if( any( p$Ploidy != round(p$Ploidy))){
-    data <- NA
+    data <- FALSE
     
     if( any( p$Ploidy > 2))
       stop("As currently implemented, the 2gener amova distance is limited to diploid individuals.")
@@ -60,7 +60,7 @@ dist_amova <- function( x ) {
         
       }
       
-      if( is.na(data))
+      if( is(data,"logical") )
         data <- y
       else
         data <- cbind( data, y)

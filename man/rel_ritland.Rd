@@ -2,7 +2,7 @@
 \alias{rel_ritland}
 \title{This estimates the relatedness statistic from Ritland (1996)}
 \usage{
-rel_ritland(x, ...)
+rel_ritland(x)
 }
 \arguments{
   \item{x}{A \code{data.frame} or \code{vector} that has

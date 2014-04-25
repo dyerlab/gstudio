@@ -10,7 +10,7 @@
 #' @export
 #' @author Rodney J. dyer <rjdyer@@vcu.edu>
 #' 
-rel_ritland <- function( x, ... ) {
+rel_ritland <- function( x ) {
   if( is(x,"locus"))
     x <- data.frame( Locus=x )
   
