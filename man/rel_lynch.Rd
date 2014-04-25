@@ -15,7 +15,8 @@ A matrix of pairwise values
 }
 \description{
 This function estimates the allele-wise relatedness
-statistic from Lynch & Ritland (1999).
+statistic from Lynch & Ritland (1999). It is very sensitive
+to the presence of rare alleles.
 }
 \details{
 This is an symetric estimator using the formula:
@@ -26,12 +27,12 @@ where
 
 \deqn{r_{XY} = \frac{1}{\sum_{i=1}^L w_i} \sum_{i=1}^L
 \frac{p_a(\delta_{bc}+\delta_{bd}) + p_b(\delta_{ac} +
-\delta_{ad}) - 4p_ap_b}{2p_ap_b} }
+\delta_{ad}) - 4p_a p_b}{2p_a p_b} }
 
 and
 
-\deqn{w_i = \frac{((1+\delta_{ab})(p_a+p_b) -
-4*p_ap_b)}{2p_ap_b}}
+\deqn{w_i = \frac{((1+\delta_{ab})(p_a+p_b) - 4*p_a
+p_b)}{2p_a p_b}}
 
 For missing genotypes, relatedness is not estimated for any
 pair-wise comparison.  This does not constitute an error,

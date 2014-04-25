@@ -98,6 +98,15 @@ NULL
 #' @keywords data
 NULL
 
+#' Cornus mom/offspring data set
+#' 
+#' Example data set for demonstrating parent/offspring data
+#' @name cornus_florida
+#' @docType data
+#' @keywords data
+NULL
+
+
 
 
 

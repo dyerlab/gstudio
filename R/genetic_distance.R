@@ -57,11 +57,7 @@ genetic_distance <- function( x, stratum="Population", mode ){
   
   if( !is(x,"data.frame") )
     stop("You must either pass a 'locus' vector or a 'data.frame' with 'locus' objects in it to this function.")
-  else {
-    if( !(stratum %in% names(x) ) )
-      stop("The stratum variable must be ")
-  }
-  
+
   ret <- NULL
 
   if( mode == "amova" )

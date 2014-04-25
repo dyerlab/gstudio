@@ -2,6 +2,11 @@ gstudio 1.2
 -----------------
 * [ADD] Added all the relatedness statistics to genetic_relatedness() function
 
+* [ADD] Added mixed ploidy for 2Gener analysis to dist_amova
+
+* [ADD] Added cornus_florida data set for example parent/offspring data
+* [FIX] Changed errors in minus_mom() to be more verbose.
+* [ADD] Added option in ploidy() to return mean ploidy for data.frame of loci.
 * [ADD] Added rel_ritland() to estimate Ritland (1996)
 * [ADD] Added rel_lynch() to estimate Lynch & Ritland (1999)
 * [ADD] Added rel_queller() to estimate Queller & Goodnight (1989)

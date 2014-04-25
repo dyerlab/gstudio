@@ -35,7 +35,13 @@ minus_mom <- function( x, MomCol="ID", OffCol="OffID"  )  {
   
   
   # x is data.frame in 
-  if( is(x,"data.frame") & (MomCol %in% names(x)) & (OffCol %in% names(x) ) ) {
+  if( !is(x,"data.frame"))
+    stop("You need to pass the data as a data.frame to the minus_mom() function.")
+  else if( !(MomCol %in% names(x)))
+    stop("You need to specify the column that represents the mother (adult) column for minus_mom() to work.")
+  else if( !(OffCol %in% names(x)))
+    stop("You need to specify the column that represents the offspring identification column for minus_mom() to work.")
+  else {
     locus_names <- column_class(x,"locus")
     
     if( length( locus_names) == 0 )
@@ -57,9 +63,6 @@ minus_mom <- function( x, MomCol="ID", OffCol="OffID"  )  {
     }
     
   }
-
-  else
-    stop("Cannot subtract maternal contributions given the data you provided.")
 
 
   return(ret)
