@@ -1,4 +1,4 @@
-context("dist_amova.R")
+context("dist_amova.R adult")
 
 
 test_that("strata",{
@@ -29,5 +29,36 @@ test_that("strata",{
   expect_that( D[1,10], equals(4) )
   expect_that( D[2,9], equals(2) ) 
 
+})
+
+
+context("dist_amova.R 2Gener")
+test_that("strata",{
+  loci <- c( locus("1"),
+             locus("3"),
+             locus("3"),
+             locus(c("1","3")),
+             locus(c("2","4")),
+             locus("2"),
+             locus("4"))
+  
+  D <- dist_amova(loci)
+  
+  expect_that( is(D,"matrix"), is_true())
+  expect_that( dim(D), is_equivalent_to(c(7,7)))
+  expect_that( diag(D), is_equivalent_to(rep(0,7)))
+  expect_that( D[1,2], is_equivalent_to(1.0))
+  
+  # 1/3 vs 3
+  expect_that( D[3,4], is_equivalent_to(0.16))  
+  
+  # 1/3 vs 2
+  expect_that( D[4,6], is_equivalent_to(0.76))
+  
+  # 1/3 2/4
+  expect_that( D[4,5], is_equivalent_to(0.51))
+  
+  
+  
 })
 

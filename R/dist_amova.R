@@ -35,46 +35,55 @@ dist_amova <- function( x ) {
   # check for amova with mixed ploidy
   p <- ploidy(x)
   
-  # 2gener amova
+  # make data vectors for 2gener amova
   if( any( p$Ploidy != round(p$Ploidy))){
-    freqs <- frequencies( x ) 
-    loci <- p$Locus
-    for( locus_name in loci){
-      r <- matrix(0,N,N)
-      locus <- loci[[locus]]
-      y <- to_mv( locus )
-      for( i in 1:N){
-        if( sum(y[i,])==1 ){
-          a <- colnames(y)[y[i,]!=0]
-          f <- freqs$Frequency[ freqs$Allele %in% a]
-        }
-      }
-      stop("not done")
-      
-      ret <- ret + r + t(r)
-      
-    }
-   }
+    data <- NA
     
-    ret <- ret + t(ret)
+    if( any( p$Ploidy > 2))
+      stop("As currently implemented, the 2gener amova distance is limited to diploid individuals.")
+    
+    loci <- p$Locus
+    
+    for( locus_name in loci){
+      locus <- x[[locus_name]]
+      freqs <- frequencies(locus)
+      y <- to_mv( locus )
+      p <- ploidy(locus)
+      
+      for( i in seq(1:N)[p==2]){  
+#         a <- colnames(y)[y[i,]!=0]
+#         f <- freqs$Frequency[ freqs$Allele %in% a]
+#         idx <- which(names(y[i,]) %in% a)
+#         y[i,idx] <- (y[i,idx]) * f / sum(f)
+        f <- freqs$Frequency * y[i,]
+        y[i,] <- f/sum(f)/2
+        
+      }
+      
+      if( is.na(data))
+        data <- y
+      else
+        data <- cbind( data, y)
+    }
+    
   }
   
-  # adult AMOVA
-  else {
+  # make data vectors as adult AMOVA
+  else 
     data <- to_mv( x, drop.allele=FALSE )
-    for( i in 1:N) {
-      x <- data[i,]
-      for( j in i:N) {
-        if( i != j ) {
-          y <- data[j,]
-          if( sum(x)==sum(y))
-            ret[i,j] <- ret[j,i] <- sum( 2*t(x-y) %*% (x-y) )
-        }
+  
+  
+  for( i in 1:N) {
+    x <- data[i,]
+    for( j in 1:i) {
+      if( i != j ) {
+        y <- data[j,]
+        ret[i,j] <- ret[j,i] <- sum( 2*t(x-y) %*% (x-y) )
       }
     }
-    
   }
-    
+  
+  
   
   
   return( ret ) 
