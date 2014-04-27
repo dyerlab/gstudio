@@ -15,17 +15,26 @@
 #' @return A \code{data.frame} with the segments correctly formated for 
 #'  \code{geom_segment}.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
-spiderplot_data <- function( pat, df, ID="ID", Longitude="Longitude", Latitude="Latitude"){
+spiderplot_data <- function( pat, df, ID="ID", OffID="OffID", longitude="Longitude", latitude="Latitude"){
   
   if( !is(pat,"data.frame") | !all(names(pat) == c("MomID","OffID","DadID","Fij")))
     stop("The spiderplot_data function needs a data frame from the paternity() function.")
   
-  if( !is(df,"data.frame") | !(any(c(ID,Longitude,Latitude) %in% names(df))))
+  if( !is(df,"data.frame") | !(any(c(ID,longitude,latitude) %in% names(df))))
     stop("You need to pass df that has the ID and spatial coordinate columns.")
   
   ret <- pat
   
   ret$Yend <- ret$Y  <- ret$Xend <- ret$X <- NA
+  adults <- df[ df[[OffID]]==0,]
+  for( i in 1:nrow(ret)){
+    mom <- adults[ adults[[ID]]==ret$MomID[i] ,]
+    dad <- adults[ adults[[ID]]==ret$DadID[i] ,]
+    ret$X[i] <- mom[[longitude]]
+    ret$Y[i] <- mom[[latitude]]
+    ret$Xend[i] <- dad[[longitude]]
+    ret$Yend[i] <- dad[[latitude]]
+  }
   
   
   return(ret)

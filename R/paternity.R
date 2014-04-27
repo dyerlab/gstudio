@@ -39,7 +39,8 @@ paternity <- function( offspring, mother, fathers, ID="ID", OffID="OffID"){
   if( !(ID %in% names(offspring)) | !(ID %in% names(mother)) | !(ID %in% names(fathers)))
     stop("You need to have an ID column in offspring, mother, and putative father data sets.")
   
-  
+  if( nrow(mother) > 1 )
+    stop("The paternity function is designed to work on a single family array (e.g., only one mother at a time).")
   
   locus_names <- column_class(offspring,"locus")
   if( !(all( locus_names == column_class(mother,"locus"))))
