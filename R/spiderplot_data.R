@@ -15,6 +15,7 @@
 #' @return A \code{data.frame} with the segments correctly formated for 
 #'  \code{geom_segment}.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @export
 spiderplot_data <- function( pat, df, ID="ID", OffID="OffID", longitude="Longitude", latitude="Latitude"){
   
   if( !is(pat,"data.frame") | !all(names(pat) == c("MomID","OffID","DadID","Fij")))
