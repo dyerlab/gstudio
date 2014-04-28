@@ -15,11 +15,14 @@ spiderplot_data(pat, df, ID = "ID", OffID = "OffID",
   \item{ID}{The name of the column in \code{df} that has
   the ID of the fathers (default="ID")}
 
-  \item{Longitude}{The label for the x-coordinate for the
+  \item{OffID}{The column name in \code{df} that has the
+  offspring id value}
+
+  \item{longitude}{The label for the x-coordinate for the
   adults as it is found in the \code{df} object
   (default="Longitude")}
 
-  \item{Latitude}{The label for the y-coordinate for the
+  \item{latitude}{The label for the y-coordinate for the
   adults as it is found in the \code{df} object
   (default="Latitude")}
 }

@@ -8,9 +8,10 @@
 #'  spatial coordinates.
 #' @param ID The name of the column in \code{df} that has the ID of the fathers 
 #'  (default="ID")
-#' @param Longitude The label for the x-coordinate for the adults as it is found 
+#' @param OffID The column name in \code{df} that has the offspring id value
+#' @param longitude The label for the x-coordinate for the adults as it is found 
 #'  in the \code{df} object (default="Longitude")
-#' @param Latitude The label for the y-coordinate for the adults as it is found
+#' @param latitude The label for the y-coordinate for the adults as it is found
 #'  in the \code{df} object (default="Latitude")
 #' @return A \code{data.frame} with the segments correctly formated for 
 #'  \code{geom_segment}.
