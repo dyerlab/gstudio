@@ -4,4 +4,5 @@ README.md
 gstudio.Rproj
 .git/*
 data/TuckerGenos.rda
-
+ggmapTemp.png
+inst/tests/gmapTemp.png
