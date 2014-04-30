@@ -106,6 +106,13 @@ NULL
 #' @keywords data
 NULL
 
+#' CDPop Data
+#' 
+#' Example data set for CDPop input
+#' @name grid.csv
+#' @docType data
+#' @keywords data
+NULL
 
 
 
