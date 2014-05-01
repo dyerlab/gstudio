@@ -114,6 +114,13 @@ NULL
 #' @keywords data
 NULL
 
+#' SNP probability data
+#' 
+#' Example data for probabilistically calling snps
+#' @name snp_prob.csv
+#' @docType data
+#' @keywords data
+NULL
 
 
 
