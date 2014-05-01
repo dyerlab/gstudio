@@ -1,7 +1,9 @@
+gstudio 1.3
+-----------------
+
 gstudio 1.2
 -----------------
 * [ADD] Added all the relatedness statistics to genetic_relatedness() function
-
 * [ADD] Added spiderplot_data() function to take output from paternity() and plot it using geom_segment().
 * [ADD] Added mixed ploidy for 2Gener analysis to dist_amova
 * [ADD] Added cornus_florida data set for example parent/offspring data
