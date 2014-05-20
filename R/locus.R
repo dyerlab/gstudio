@@ -14,6 +14,7 @@
 #'    \item{separated}{Pre-separated alleles (with ':').}
 #'    \item{snp}{Encoded by the number of minor alleles at the locus.}
 #'    \item{zyme}{Alleles like zymes (e.g., 12 for '1' and '2' alleles).}
+#'    \item{snp_prob}{A probabilistic snp call denoted as three posterior likelihoods for AA, AB, and BB as is often found in RAD-seq data.}
 #' }
 #' @param phased A flag indicating the the alleles should are of
 #'  known gametic phase (default=FALSE).
@@ -95,6 +96,26 @@ locus <- function( x, type, phased=FALSE ){
       l <- substr(x,1,n)
       r <- substr(x,(n+1),N)
       ret <- locus(c(l,r))
+    }
+  }
+  
+  else if( type=="snp_prob"){
+    # a single genotype
+    if( is(x,"numeric") ) {
+      if( length(x)!=3) {
+        print(x)
+        print(class(x))
+        stop("The snp_prob type requires vectors of length 3 for genotype probabilities.")
+      }
+        
+      idx <- which(x==max(x))
+      ret <- c("A:A","A:B","B:B")[idx]
+      attr(ret,"snp_prob") <- x
+    }
+    else if( is(x,"matrix")){
+      if( ncol(x)!=3)
+        stop("The snp_prob type requires three columns of data for genotype probabilities")
+      ret <- apply(x,1,FUN = function(x) return(locus(x,type="snp_prob")))
     }
   }
   
@@ -307,7 +328,8 @@ rep.locus <- function( x, times,... ){
 #'
 `[.locus` <- function (x, i) {
     y <- unclass(x)[i]
-    class(y) <- "locus"
+    #class(y) <- "locus"
+    attributes(y) <- attributes(x)
     return(y)  
 }
 

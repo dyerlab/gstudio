@@ -11,7 +11,7 @@
 \usepackage{kmath,kerkis}
 \usepackage{hyperref}
 \usepackage{parskip}
-\title{Using \texttt{gstudio}}
+\title{\texttt{gstudio}: An package for the spatial analysis of population genetic marker data.}
 \author{Rodney J. Dyer\\Department of Biology\\Virginia Commonwealth University}
 \date{\today}
 
