@@ -83,7 +83,7 @@ locus <- function( x, type, phased=FALSE ){
       else 
         ret <- locus( strsplit( x, split=":")[[1]], phased=phased)
     }
-      
+    
   } 
   
   else if( type == "zyme" ){
@@ -96,26 +96,6 @@ locus <- function( x, type, phased=FALSE ){
       l <- substr(x,1,n)
       r <- substr(x,(n+1),N)
       ret <- locus(c(l,r))
-    }
-  }
-  
-  else if( type=="snp_prob"){
-    # a single genotype
-    if( is(x,"numeric") ) {
-      if( length(x)!=3) {
-        print(x)
-        print(class(x))
-        stop("The snp_prob type requires vectors of length 3 for genotype probabilities.")
-      }
-        
-      idx <- which(x==max(x))
-      ret <- c("A:A","A:B","B:B")[idx]
-      attr(ret,"snp_prob") <- x
-    }
-    else if( is(x,"matrix")){
-      if( ncol(x)!=3)
-        stop("The snp_prob type requires three columns of data for genotype probabilities")
-      ret <- apply(x,1,FUN = function(x) return(locus(x,type="snp_prob")))
     }
   }
   
@@ -327,10 +307,10 @@ rep.locus <- function( x, times,... ){
 #' loci[2]
 #'
 `[.locus` <- function (x, i) {
-    y <- unclass(x)[i]
-    #class(y) <- "locus"
-    attributes(y) <- attributes(x)
-    return(y)  
+  y <- unclass(x)[i]
+  #class(y) <- "locus"
+  attributes(y) <- attributes(x)
+  return(y)  
 }
 
 
@@ -371,7 +351,7 @@ rep.locus <- function( x, times,... ){
          you can write your own routine.")
   n <- length(a1)/2
   off <- locus(  c( sample(a1, size=n, replace=FALSE),
-                   sample(a2, size=n, replace=FALSE)))
+                    sample(a2, size=n, replace=FALSE)))
   return(off)
 }
 
@@ -417,7 +397,7 @@ rep.locus <- function( x, times,... ){
     warning("Subtract missing locus objects.  Nothing subtracted.")
     return( e1 )
   }
-    
+  
   
   off <- alleles(e1)
   mom <- alleles(e2)
@@ -462,7 +442,7 @@ rep.locus <- function( x, times,... ){
     }
   }
   
-   
+  
 }
 
 
