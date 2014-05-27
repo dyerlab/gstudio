@@ -23,6 +23,7 @@ migrate <- function( data, stratum="Population", m=0.01){
   
   strata <- unique( as.character( data[[stratum]] ) )
   if( !is(m,"matrix") ){
-    
+    K <- length(strata)
+    mat <- matrix( m, K, K)
   }
 }

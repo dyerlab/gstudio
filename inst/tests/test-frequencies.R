@@ -62,8 +62,8 @@ test_that("frequencies.data.frame", {
   f <- frequencies(df)
   expect_that( f, is_a("data.frame"))
   expect_that( names(f), is_equivalent_to(c("Locus","Allele","Frequency")))
-  expect_that( f$Allele, is_equivalent_to(factor(c("A","B"))))
-  expect_that( f$Locus, is_equivalent_to(factor(c("Loc1","Loc1"))))
+  expect_that( f$Allele, is_equivalent_to(c("A","B")))
+  expect_that( f$Locus, is_equivalent_to(c("Loc1","Loc1")))
   expect_that( sum(f$Frequency), is_equivalent_to(1))
 
 })

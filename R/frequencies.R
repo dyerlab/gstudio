@@ -79,7 +79,7 @@ frequencies.locus <- function( x, loci, ... ) {
   # the no stratum frequency
   if( missing(stratum) ) {
 
-    ret <- data.frame( Locus=rep(loc_names,each=2), Allele=rep( c("A","B"), times=length(loc_names)), Frequency=0)
+    ret <- data.frame( Locus=rep(loc_names,each=2), Allele=rep( c("A","B"), times=length(loc_names)), Frequency=0, stringsAsFactors=FALSE)
     x <- df[,loc_cols]
     if( ncol(x) %% 3 )
       stop("You must have three columns for each locus representing the probability of each genotype.")
@@ -130,7 +130,7 @@ frequencies.data.frame <- function( x, loci, stratum, ... ) {
   
   # all loci to do.
   if( missing( stratum ) ){
-    ret <- data.frame( Locus=character(0), Allele=character(0), Frequency=numeric(0) )
+    ret <- data.frame( Locus=character(0), Allele=character(0), Frequency=numeric(0), stringsAsFactors=FALSE)
     for( locus in loci ) {
       loc <- frequencies.locus( x[[locus]] )
       if( nrow(loc) ) {
