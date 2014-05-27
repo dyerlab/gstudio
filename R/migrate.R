@@ -25,5 +25,8 @@ migrate <- function( data, stratum="Population", m=0.01){
   if( !is(m,"matrix") ){
     K <- length(strata)
     mat <- matrix( m, K, K)
+    rownames(mat) <- colnames(mat) <- strata
+    diag(mat) <- 0
+    
   }
 }
