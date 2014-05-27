@@ -3,6 +3,8 @@ gstudio 1.3
 * [ADD] Added ability to use RAD-seq style data to frequencies() function.  Here each locus is represented by the posterior likelihood of each genotype (e.g., three columns per locus).  Your locus columns will be numeric and labeled as 'LocusName_1', 'LocusName_2', and 'LocusName_3'.  It will split on the underscore and assume that the middle one (the _2) is the heterozygote.  Alleles will be A (estimated from _1 as homozygote + het) and B (estiamted from _3 + het).
 * [ADD] Filter to import CDPOP genotype files via read_population().
 * [ADD] Added 'haploid' type for read_population().
+* [ADD] Added ability to pass migration matrix to mate() function as well as constant migration.
+* [CUTOFF]  This is where new features for Dyer (2014) stopped.  
 
 gstudio 1.2
 -----------------
@@ -24,7 +26,6 @@ gstudio 1.2
 * [FIX] Problems with bad_parent() and parent_finder()
 * [ADD] Added ellipsis to read_population() function to allow optional values to be passed on to read.table()
 * [ADD] Added Pe, locus specific polymorphic index sum(p_i(1-p_i)) for genetic_diversity()
-
 
 gstudio 1.1 
 -----------------
@@ -65,8 +66,6 @@ gstudio 1.1
 * [ADD] Added multilocus_diversity() function to return proportion of sample size with unique multilocus genotypes.
 * [ADD] Added geom_locus, geom_frequencies, geom_strata, and geom_surface to plotting functions 
 * [ADD] Added function genetic_relatedness() for Ritland 1996 and Lynch & Ritland 1999 marker estimators.
-
-
 
 gstudio 1.0 
 -----------------
