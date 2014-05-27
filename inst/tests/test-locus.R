@@ -98,20 +98,6 @@ test_that("testing",{
 
 
 
-context( "Locus.R snp_prob")
-test_that("testing",{
-#   x <- c(0.1,0.3,0.6)
-#   loc <- locus( x, type="snp_prob")
-#   expect_that( loc, is_a("locus"))
-#   expect_that( ("snp_prob" %in% names(attributes(loc))), is_true() )
-#   
-#   y <- rbind(x,rev(x))
-#   loci <- locus(y, type="snp_prob")
-#   expect_that( length(loci),equals(2) )
-
-})
-
-
 context("Locus.R operators")
 test_that( "Operations", {
   AA <- locus( c("A","A") )

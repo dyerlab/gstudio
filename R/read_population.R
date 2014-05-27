@@ -11,9 +11,11 @@
 #'  \item{aflp}{Encoded as 0,1 for absence/presence of bands.}
 #'  \item{column}{Two columns of alleles per locus.}
 #'  \item{separated}{Pre-separated alleles (with ':').}
+#'  \item{haploid}{One column per locus.}
 #'  \item{snp}{Encoded by the number of minor alleles at the locus.}
 #'  \item{zyme}{Alleles like zymes (e.g., 12 for '1' and '2' alleles).}
 #'  \item{genepop}{Import data that is in 'genepop' format.}
+#'  \item{cdpop}{Import genotypes encoded by CDPOP for subsequent analyses.}
 #' }
 #' @param phased A flag indicating the the alleles should are of
 #'  known gametic phase (default=FALSE).
@@ -22,23 +24,40 @@
 #'    idea).  
 #' @param locus.columns A vector indicating the numerical column number for 
 #'    each data type that will be treated as a \code{locus} object.
+#' @param ... Optional parameters you can pass to \code{read.csv} or \code{read.table}.
 #' @return A \code{data.frame} with \code{locus} columns pre-formatted.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE) {
-  if( !missing(type) && !(type %in% c("aflp","column","separated","snp","zyme","genepop")))
+read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE, ...) {
+  if( !missing(type) && !(type %in% c("aflp","column","separated","snp","zyme","genepop","cdpop","haploid")))
     stop("Unrecognized 'type' submitted to read_population()")
+  
+  # specify the haploid as separated, it will come out as a single column due to no separators
+  if( type=="haploid"){
+    type <- "separated"
+  }
+  
+  
   # check for genepop and handle in its own 
   if( type == "genepop")
     return( .read_genepop(path) )
+  
+  # do the cdpop readin
+  else if( type=="cdpop")
+    return( .read_cdpop(path, ...) )
+  
+  # default
   else 
-    return( .read_columns( path, type, locus.columns, phased, sep, header ))
+    return( .read_columns( path, type, locus.columns, phased, sep, header, ...))
 
 }
 
 
+
+
+
 # These are helper functions
-.read_columns <- function( path, type, locus.columns, phased, sep, header ) {
+.read_columns <- function( path, type, locus.columns, phased, sep, header, ... ) {
   
   # Catch obvious errors
   if( is.null(locus.columns) ) 
@@ -46,7 +65,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   if( !is(locus.columns, "numeric") )
     stop("Invalid value passed as 'locus.columns'")  
   
-  df <- read.table(path, sep=sep,header=header, stringsAsFactors=FALSE)
+  df <- read.table(path, sep=sep,header=header, stringsAsFactors=FALSE, ...)
   
   if( ncol(df)==1 )
     warning("Your data.frame has only 1 column, did you misspecify the 'sep' character?")    
@@ -165,5 +184,48 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
 
   return( ret )
 }
+
+
+
+
+.read_cdpop <- function( path, ... ) {
+  data <- read.csv(path,stringsAsFactors=FALSE, ...)
+  col_names <- names(data)
+  locus_names <- grepl("L[[:digit:]]A[[:digit:]]+$",col_names)
+  loci <- data[, col_names[ locus_names ]]
+  df <- data[, col_names[ !locus_names] ]
+  locus_names <- names(loci)
+  
+  
+  # figure out how many loci are here
+  last_loc <- names(loci)[ length(locus_names)]
+  l <- strsplit(last_loc,split = "A")[[1]][1]
+  l <- as.numeric(substr(l, 2, nchar(l)))
+  for( i in 0:l){
+    locus_name <- paste("Locus",i,sep="-")
+    idx <- grep(paste("L",i,sep=""),locus_names)
+    x <- loci[,idx]
+    get_alleles <- function(x){
+      a <- which(x!=0)
+      a <- a-1
+      if( length(a)==1)
+        a <- c(a,a)
+      return( paste(a,collapse=":"))
+    }
+    
+    alleles <- locus(apply(x,1,get_alleles), type="separated")
+    df[[locus_name]] <- alleles
+  }
+  
+  return( df )
+}
+
+
+
+
+
+
+
+
 
   

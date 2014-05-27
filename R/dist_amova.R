@@ -25,6 +25,7 @@ dist_amova <- function( x ) {
   
   if( is(x,"locus") )
     x <- data.frame( LOCUS=x )
+  
   if( !is(x,"data.frame") )
     stop(paste("The function dist_amova() requires a locus vector or a data frame of locus vectors.  You passed a '",class(x), "' object.",sep=""))
   

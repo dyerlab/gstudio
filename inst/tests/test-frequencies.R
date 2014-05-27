@@ -54,4 +54,21 @@ test_that("frequencies.data.frame", {
 })
 
 
+test_that("frequencies.data.frame", {
+  x <- matrix( abs( rnorm(30)), ncol=3)
+  x <- x / rowSums(x)
+  df <- data.frame( Loc1_1=x[,1], Loc1_2=x[,2], Loc1_3=x[,3])
+  
+  f <- frequencies(df)
+  expect_that( f, is_a("data.frame"))
+  expect_that( names(f), is_equivalent_to(c("Locus","Allele","Frequency")))
+  expect_that( f$Allele, is_equivalent_to(factor(c("A","B"))))
+  expect_that( f$Locus, is_equivalent_to(factor(c("Loc1","Loc1"))))
+  expect_that( sum(f$Frequency), is_equivalent_to(1))
+
+})
+
+
+
+
 

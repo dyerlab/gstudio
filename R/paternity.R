@@ -15,6 +15,10 @@
 #'  located.  All offspring from a maternal individual should have
 #'  have the same maternal \code{ID} to indicate which mother they
 #'  are from but must also have a unique offspring ID.
+#' @param strict A flag (default=FALSE) to use strict paternity (e.g.,
+#'  where only one dad can be the father) versus fractional paternity 
+#'  (e.g., where potentially more than one father is assignable but 
+#'  whose likelihood is based upon their transition probabilities).
 #' @return A \code{data.frame} with indications of paternity by row.  Columns 
 #'  will include ID, OffID, DadID, and potentially Fij.
 #' @export
@@ -31,7 +35,7 @@
 #' offs$OffID <- offs$ID
 #' offs$MomID <- adults$ID[1]
 #' paternity( offs, adults[1,], adults )
-paternity <- function( offspring, mother, fathers, ID="ID", OffID="OffID"){
+paternity <- function( offspring, mother, fathers, ID="ID", OffID="OffID", strict=FALSE){
 
   if( missing(offspring) | missing(mother) | missing(fathers) )
     stop("you need to pass offspring, mother, and putative fathers to paternity()")
@@ -80,6 +84,10 @@ paternity <- function( offspring, mother, fathers, ID="ID", OffID="OffID"){
   }
   ret <- ret[ order( ret[,1], ret[,2], -ret[,4]),]
   rownames(ret) <- 1:length(rownames(ret))
+  
+  if( strict )
+    ret <- ret[ret$Fij==1,]
+  
   
   return(ret)
 }
