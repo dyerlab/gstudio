@@ -27,6 +27,11 @@ migrate <- function( data, stratum="Population", m=0.01){
     mat <- matrix( m, K, K)
     rownames(mat) <- colnames(mat) <- strata
     diag(mat) <- 0
-    
+    diag(mat) <- 1 - rowSums( mat )
+    m <- mat
   }
+  if( any(m > 1.0))
+    stop("You must specify the migration rate as a rate (e.g., they must be <= 1.0)")
+  
+
 }
