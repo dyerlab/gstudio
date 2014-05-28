@@ -4,7 +4,7 @@ gstudio 1.3
 * [ADD] Filter to import CDPOP genotype files via read_population().
 * [ADD] Added 'haploid' type for read_population().
 * [ADD] Added ability to pass migration matrix to mate() function as well as constant migration.
-* [ADD] Ability to call mate() with vectors of individuals at once.
+* [ADD] Ability to call mate() with vectors of individuals at once and to specify either uniform or variable numbers of offspring per pair.
 * [CUTOFF]  This is where new features for Dyer (2014) stopped.  
 
 gstudio 1.2
