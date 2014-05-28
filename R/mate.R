@@ -27,36 +27,52 @@
 #' mate( adults[1,], adults[2,], N=10)
 mate <- function( mom, dad, N=1 ){
   
-  ret <- data.frame(ID = 1:N)
-  
-  if( missing(mom)  )
-    stop("You need to pass both parents to make an offspring using mate().")
-  
-  if( missing(dad) )
-    mom <- dad
-  
-  locus_names <- column_class(mom,"locus")
-  ext_names <- setdiff( names(mom), locus_names)
-   
-  for(ename in ext_names)
-    ret[[ename]] <- mom[[ename]]
-
-  if( "Sex" %in% names(mom) )  
-    ret$Sex <- sample( unique(as.character( mom$Sex)), replace=TRUE, size=N )
+  if( is(mom,"data.frame") && is( dad,"data.frame") && nrow(mom)>1 && nrow(dad)>1 ){
     
-  
-  for( locus in locus_names) {
-    l <- rep(NA,N)
-    for(i in 1:N)
-      l[i] <- mom[[locus]] + dad[[locus]]
-    ret[[locus]] <- locus( l, type="separated")
+    K <- nrow(mom)
+    ret <- data.frame()
+    for( i in 1:K){
+      df <- mate( mom[i,], dad[i,], N)
+      ret <- rbind( ret, df )
+    }
   }
-    
-  if( !("ID" %in% ext_names) )
-    ret$ID <- NULL
+  
+  else {
 
-  if( "OffID" %in% names(mom) )
-    ret$OffID <- 1:N 
+    ret <- data.frame(ID = 1:N)
+    
+    if( missing(mom)  )
+      stop("You need to pass both parents to make an offspring using mate().")
+    
+    if( missing(dad) )
+      mom <- dad
+    
+    locus_names <- column_class(mom,"locus")
+    ext_names <- setdiff( names(mom), locus_names)
+    
+    for(ename in ext_names)
+      ret[[ename]] <- mom[[ename]]
+    
+    if( "Sex" %in% names(mom) )  
+      ret$Sex <- sample( unique(as.character( mom$Sex)), replace=TRUE, size=N )
+    
+    
+    for( locus in locus_names) {
+      l <- rep(NA,N)
+      for(i in 1:N)
+        l[i] <- mom[[locus]] + dad[[locus]]
+      ret[[locus]] <- locus( l, type="separated")
+    }
+    
+    if( !("ID" %in% ext_names) )
+      ret$ID <- NULL
+    
+    if( "OffID" %in% names(mom) )
+      ret$OffID <- 1:N 
+    
+    
+  }
+  
   
   return( ret )
 }
