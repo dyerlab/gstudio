@@ -33,30 +33,34 @@ dist_jaccard <- function( x, stratum="Population" ) {
   else if( K > 1 )
     message("Jaccard distance will be assumed to be entirely additive across loci.")
   
-  pops <- partition(x, stratum=stratum) 
-  K <- length(pops)
-  
-  ret <- matrix(0,ncol=K,nrow=K)
-  colnames(ret) <- rownames(ret) <- names(pops)
-  
-  for(locus in locus_names){
-    for(i in 1:K ){
-      p1 <- alleles( pops[[i]][[locus]], all=FALSE)
-      for( j in i:K){
-        if(i!=j){
-          p2 <- alleles( pops[[j]][[locus]], all=FALSE)
-          m11 <- length(intersect( p1, p2 ))
-          m01 <- length(setdiff( p2, p1 ))
-          m10 <- length(setdiff( p1, p2 ))
-          jc <- (m01 + m10) / (m01 + m10 + m11)
-          ret[i,j] <- ret[i,j] + jc
-        }
-      }
-    }   
-  }
-  
-  ret <- ret + t(ret)
-  
+#   pops <- partition(x, stratum=stratum) 
+#   K <- length(pops)
+#   
+#   ret <- matrix(0,ncol=K,nrow=K)
+#   colnames(ret) <- rownames(ret) <- names(pops)
+# 
+#   #d <- to_mv( x )
+#   
+#   for(locus in locus_names){
+#     for(i in 1:K ){
+#       p1 <- alleles( pops[[i]][[locus]], all=FALSE)
+#       for( j in i:K){
+#         if(i!=j){
+#           p2 <- alleles( pops[[j]][[locus]], all=FALSE)
+#           m11 <- length(intersect( p1, p2 ))
+#           m01 <- length(setdiff( p2, p1 ))
+#           m10 <- length(setdiff( p1, p2 ))
+#           jc <- (m01 + m10) / (m01 + m10 + m11)
+#           ret[i,j] <- ret[i,j] + jc
+#         }
+#       }
+#     }   
+#   }  
+#  ret <- ret + t(ret)
+#  ret <- ret / length(locus_names)
+
+  ret <- suppressMessages( dist_bray(x,stratum) )
+  ret <- (2*ret) / (1+ret)
     
   return(ret)
 

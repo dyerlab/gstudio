@@ -23,7 +23,7 @@
 #' D <- dist_bray(df)
 dist_bray <- function( x, stratum="Population" ) {
   
-  # Special case where x is passed a a locus object, this 
+  # Special case where x is passed a locus object, this 
   #   will assume that we are talking about individual Bray Curtis distance
   if( is(x,"locus") ) {
     x <- data.frame(Locus=x,Population=1:length(x))
@@ -43,7 +43,21 @@ dist_bray <- function( x, stratum="Population" ) {
   else if( K > 1 )
     message("Bray distance will be assumed to be entirely additive across loci.")
  
-  j <- dist_jaccard( x, stratum )
-  ret <- -j / (j-2)
+  
+  #j <- dist_jaccard( x, stratum )
+  #ret <- -j / (j-2)
+  
+  f <- to_mv_freq(x,stratum)
+  K <- nrow(f)
+  nloc <- ncol(f)
+  ret <- matrix(0,K,K)
+  for( i in 1:K){
+    for( j in 1:i){
+      if( i != j){
+        ret[i,j] <- ret[j,i] <- sum(apply(f[ c(i,j), ], 2, min)) / nloc
+      }
+    }
+  }
+  
   return(ret)
 }
