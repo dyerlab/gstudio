@@ -26,6 +26,8 @@ to_mv_freq <- function( x, stratum="Population") {
   if( !( stratum %in% names(x)))
     stop("The stratum name you provided is not in the data.frame")
   
+  x[[stratum]] <- factor( as.character(x[[stratum]]))
+  
   s <- x[[stratum]]
   if( !is(s,"factor"))
     s <- factor(s)

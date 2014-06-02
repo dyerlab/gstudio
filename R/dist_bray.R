@@ -44,13 +44,11 @@ dist_bray <- function( x, stratum="Population" ) {
     message("Bray distance will be assumed to be entirely additive across loci.")
  
   
-  #j <- dist_jaccard( x, stratum )
-  #ret <- -j / (j-2)
-  
   f <- to_mv_freq(x,stratum)
   K <- nrow(f)
   nloc <- ncol(f)
   ret <- matrix(0,K,K)
+  rownames(ret) <- colnames(ret) <- rownames(f)
   for( i in 1:K){
     for( j in 1:i){
       if( i != j){
