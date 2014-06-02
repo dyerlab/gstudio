@@ -6,3 +6,5 @@ gstudio.Rproj
 data/TuckerGenos.rda
 ggmapTemp.png
 inst/tests/gmapTemp.png
+index_cache
+index_files
