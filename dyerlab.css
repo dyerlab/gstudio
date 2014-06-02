@@ -1,0 +1,61 @@
+body {
+  padding: 30px;
+  max-width: 900px;
+  font-size: 10pt;
+}
+
+body { 
+    font-family:"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", "Sans Serif";
+    font-size: 0.95em; 
+    line-height: 1.25em;
+}
+
+.mac body { font-weight:300; }
+.ipad body { zoom: 88%; }
+
+
+h1 {
+  font-size: 24pt;
+  color: #0489B7;
+}
+
+h2 {
+  padding-top: 20pt;
+  color: #D05C00;
+}
+
+h3 {
+  padding-top: 1.5em; 
+  
+}
+
+a {
+    color: #3299BB; /*#FF9900; #394250;*/
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover { 
+  color: #c00;
+}
+
+
+table { 
+  margin-left:auto; 
+  margin-right:auto;
+}
+
+
+th {
+  font-size: 10pt;
+  font-weight: bold;
+}
+
+td { 
+  font-size: 10pt;
+}
+
+code code.r r {
+    font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+    font-size: 8pt;
+}
