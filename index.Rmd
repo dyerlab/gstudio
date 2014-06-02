@@ -557,10 +557,7 @@ There is also the option to make use of some pie charts.  I know, pie charts suc
 pies_on_map( arapat, stratum="Population", locus="EN")
 ```
 
-Note the messages about the approximation.  This is because the google maps API has an integer for zoom factor and at times it is not able to get all the points into the field of view using an integer zoom.  If this happens to you, you can manually specify the *zoom* as an optional argument to either function `pies_on_map()` or `population_map()`.
-
-
-
+Note the messages about the approximation.  This is because the google maps API has an integer for zoom factor and at times it is not able to get all the points into the field of view using an integer zoom.  If this happens to you, you can manually specify the *zoom* as an optional argument to either function `pies_on_map()` or `population_map()`.  You also need to be careful with the `pies_on_map()` function because the way it works is that the background tile is plotted and then I plot the pies ontop of it.  If you reshape your plot window outside equal x- and y- coordinates (e.g., make it a non-square figure), the spatial location of the pie charts will move!  This is a very frustrating thing but it has to do with the way viewports are overlain onto graphical objects in R and I have absolutely **no** control over it.  So, the best option is to make the plot square, export it as PNG or TIFF or whaterver, then crop as necessary.
 
 
 
@@ -910,19 +907,6 @@ dist_cavalli( data )
 
 
 
-#### Jaccard Distance
-
-Jaccard distance is a set-theoretic distance quantifying dissimilarity.  Assuming that loci are sets of alleles, the Jaccard dissimilarity between genotypes $A$ and $B$ is given by:
-
-\[
-J_{\delta(A,B)} = \frac{|A \bigcup B| - |A \bigcap B|}{|A \bigcup B|}
-\]
-
-```{r}
-dist_jaccard( data )
-```
-
-
 
 #### The $D_{PS}$ Distance
 
@@ -938,6 +922,26 @@ dist_bray( data )
 ```
 
 It should be noted here that the function `dist_bray()` is used for both individual distance AND strata distance depending upon what you pass to it.  An individual distance is found by passing it a vector of loci whereas a stratum distance is returned by passing it a *data.frame* object (that has a $stratum$ column).  In the `genetic_distance()` function these are also differentiated by *mode="Bray"* for the individual one and *mode="Dps"* for the stratum.
+
+
+#### Jaccard Distance
+
+Jaccard distance is a set-theoretic distance quantifying dissimilarity.  Assuming that loci are sets of alleles, the Jaccard dissimilarity between genotypes $A$ and $B$ is given by:
+
+\[
+J_{\delta(A,B)} = \frac{|A \bigcup B| - |A \bigcap B|}{|A \bigcup B|}
+\]
+
+```{r}
+dist_jaccard( data )
+```
+
+The reverse relationship between $D_{PS}$ and $J_{\delta(A,B)}$ is given as:
+
+\[
+J_{\delta(A,B)} = \frac{2+D_{PS}}{1 + D_{PS}}
+\]
+
 
 #### Conditional Genetic Distance (cGD; Graph Distance)
 
@@ -1260,26 +1264,15 @@ color
 
 And now we can plot it.  If the graph has a *color* attributed for the vertices (the nodes), the it will automagically use it.  Here I omit the population name for brevity.
 
-```{r}
+```{r,cache=TRUE,fig.width=7,fig.height=7}
 V(graph)$color <- color
 plot(graph, vertex.label="")
 ```
 
-For a lot more on how to use and analyze population graph topologies see the documentation associated with it on my website or http://dyerlab.github.io/popgraph/ .
-
-
-
-
-
-
-
-
-
-
-
-
+For a lot more on how to use and analyze population graph topologies see the documentation associated with it on my website or from [here](http://dyerlab.github.io/popgraph/).
 
 ---
+
 ## Simulations
 
 The **gstudio** packages is starting to include some functions that aid in basic simulations of genetic processes.  These functions are generally concerned with combining data through a mating process and/or making random populations that follow some particular format.  
