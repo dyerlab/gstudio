@@ -55,7 +55,7 @@ alleles.locus <- function ( x, all=TRUE ) {
     }
       
   if( !is.null(ret) ) {
-    ret <- ret[ !is.na(ret)]
+    #ret <- ret[ !is.na(ret)]
     if( !all ){
       #ret <- sort( unique( ret ) )
       ret <- sort( unique( matrix( ret, ncol=1 ) ) )

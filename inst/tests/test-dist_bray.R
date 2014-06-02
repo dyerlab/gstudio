@@ -22,5 +22,5 @@ test_that("individual",{
   expect_that( dim(D), is_equivalent_to(c(2,2)))
   expect_that( sum(diag(D)), equals(0) )
   expect_that( D[1,2]==D[2,1], is_true() )
-  expect_that( D[1,2], equals( 0.5 ) )
+  expect_that( D[1,2], equals( 0.1 ) )
 })
