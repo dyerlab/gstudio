@@ -33,8 +33,8 @@
 #' # RAD-seq example
 #' m <- matrix(abs(rnorm(30)),nrow=10)
 #' m <- m / rowSums(m)
-#' colnames(m) <- c("Loc1-1","Loc1-2","Loc1-3")
 #' df <- data.frame(m)
+#' names(df) <- c("Loc1_1","Loc1_2","Loc1_3")
 #' frequencies(df)
 frequencies <- function( x, loci, stratum, ... ) {
   UseMethod("frequencies")

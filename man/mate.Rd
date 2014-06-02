@@ -31,7 +31,11 @@ There are several 'hidden' things in this routine.  First, if you do not
  the Sex column.  Finally, if there are columns ID and OffID in the mom, then all
  offspring will have the same ID as the mom but will have OffID equal to 1:N to
  conform with how the functions like \code{paternity()} operate.  If you do not
- have ID and OffID then it will do nothing special.
+ have ID and OffID then it will do nothing special.  This can be more than
+ one individual mom & dad, but if you pass several, they will all have the same
+ number of offspring (if you only specify a single value of N) or different
+ numbers of offspring (if N is passed as a vector and is of length equal to
+ that of mom and dad)
 }
 \examples{
 f <- data.frame(Allele=LETTERS[1:2], Frequency=c(0.5,0.5))
