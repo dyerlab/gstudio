@@ -39,6 +39,7 @@ plot.data.frame <- function( x,
         (longitude %in% names(x)) && 
         (latitude %in% names(x) ) ) {
     args <- list(...)  
+    Longitude <- Latitude <- NULL
     coords <- strata_coordinates( x , stratum, longitude, latitude )
     map <- population_map( coords, map.source, map.type, zoom )
     ret <- ggmap( map ) + geom_point( aes(x=Longitude, y=Latitude), data=coords, size=4, color=color ) 
