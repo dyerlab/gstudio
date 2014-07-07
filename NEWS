@@ -1,3 +1,10 @@
+gstudio 1.4
+-----------------
+* [ADD] Takes centroid of coordinates in strata_coordinates (default) if more than one coordinate is provided.
+* [ADD] Added heirfstat to genetic_structure to allow functional calling 
+* [ADD] Added hooks into genetic distances from pegas through genetic_distance() for other distance measures.
+
+
 gstudio 1.3
 -----------------
 * [ADD] Added ability to use RAD-seq style data to frequencies() function.  Here each locus is represented by the posterior likelihood of each genotype (e.g., three columns per locus).  Your locus columns will be numeric and labeled as 'LocusName_1', 'LocusName_2', and 'LocusName_3'.  It will split on the underscore and assume that the middle one (the _2) is the heterozygote.  Alleles will be A (estimated from _1 as homozygote + het) and B (estiamted from _3 + het).

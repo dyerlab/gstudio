@@ -18,4 +18,13 @@ test_that("checking",{
   coords.sort <- strata_coordinates( pop, sort.output=TRUE )
   expect_that( as.character(coords.sort$Stratum), is_equivalent_to(c("A","B")))
   
+  
+  pop[5,] <- NA
+  pop$Population[5] <- "A"
+  pop$Longitude[5] <- 0.5
+  pop$Latitude[5] <- 0.5
+  coords <- strata_coordinates( pop )
+  expect_that( coords$Longitude, is_equivalent_to(c(1,0.25)))
+  expect_that( coords$Latitude, is_equivalent_to(c(0,0.75)))
+
 })
