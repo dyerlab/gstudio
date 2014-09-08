@@ -4,7 +4,8 @@
 \title{Grab coordinates for strata}
 \usage{
 strata_coordinates(x, stratum = "Population", longitude = "Longitude",
-  latitude = "Latitude", as.SpatialPoints = FALSE, sort.output = FALSE)
+  latitude = "Latitude", as.SpatialPoints = FALSE, sort.output = FALSE,
+  single.stratum = TRUE)
 }
 \arguments{
 \item{x}{A \code{data.frame} object.}
@@ -20,6 +21,9 @@ should be turned into a SpatialPoints object (TRUE) or as a \code{data.frame} (F
 the default)}
 
 \item{sort.output}{A flag indicating if the results should be sorted alphabetically (default=FALSE)}
+
+\item{single.stratum}{A flag to indicate that you only want one entry per stratum (for collapsing
+points within strata, Default=TRUE).}
 }
 \value{
 A data frame, with Stratum Latitude and Longitude, summarized by center of each stratum.
