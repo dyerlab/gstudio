@@ -1,9 +1,10 @@
 gstudio 1.4
 -----------------
+* [ADD] Added conversion from genind from adegenet to a data.frame object with locus objects for translation.
 * [ADD] Takes centroid of coordinates in strata_coordinates (default) if more than one coordinate is provided.
 * [ADD] Added heirfstat to genetic_structure to allow functional calling 
 * [ADD] Added hooks into genetic distances from pegas through genetic_distance() for other distance measures.
-
+* [ADD] Added function self() to produce selfed individuals.
 
 gstudio 1.3
 -----------------

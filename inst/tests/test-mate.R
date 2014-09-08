@@ -16,6 +16,7 @@ test_that( "testing",{
   expect_that( names(o), is_equivalent_to( c("ID","TPI")))
   expect_that( nrow(o), equals(1) )
   
+  
   df$OffID=0
   o <- mate(df[1,], df[1,], N=10)
   expect_that( nrow(o), equals(10) )
