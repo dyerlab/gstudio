@@ -38,7 +38,7 @@ mixed_mating <- function( data, N=1, F=0) {
     idx2 <- sample( 1:nrow(data), size=Noutcross, replace=TRUE )
     ret <- rbind( ret, mate( data[idx1,], data[idx2,], N ) ) 
     
-    $ fix up the ID column
+    # fix up the ID column
     if( "ID" %in% names( ret ) )
       ret$ID <- 1:nrow(ret) 
   }
