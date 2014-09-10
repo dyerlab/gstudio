@@ -14,10 +14,10 @@
 #' @export
 mixed_mating <- function( data, N=1, F=0) {
   if( F < 0.0 | F > 1.0) 
-    stop("F must be bound on 0-1 at this time.")
+    stop("F must be bound on [0,1] at this time.")
   if( !is(data,'data.frame'))
     stop("You must pass a data.frame object to use this function.")
-  if( length( column_class(data,"locus")) < 1 )
+  if( is.na( column_class(data,"locus")) )
     stop("Please pass at least one locus object to this function...")
   
   # Catch if F=0 ~ No selfing
@@ -26,17 +26,22 @@ mixed_mating <- function( data, N=1, F=0) {
   
   # some degree of selfing
   else {
+    
     Nselfed <- F*nrow(data)
     Noutcross <- nrow(data) - Nselfed
 
     # index to selfing
-    idx <- sample( 1:nrow(data), size=Nselfed, replace=TRUE)
-    ret <- mate( data[ idx,],data[idx,], N)
+    if( Nselfed ) {
+      idx <- sample( 1:nrow(data), size=Nselfed, replace=TRUE)
+      ret <- mate( data[ idx,],data[idx,], N)      
+    }
     
     # index to random mate pairs
-    idx1 <- sample( 1:nrow(data), size=Noutcross, replace=TRUE )
-    idx2 <- sample( 1:nrow(data), size=Noutcross, replace=TRUE )
-    ret <- rbind( ret, mate( data[idx1,], data[idx2,], N ) ) 
+    if( Noutcross ){
+      idx1 <- sample( 1:nrow(data), size=Noutcross, replace=TRUE )
+      idx2 <- sample( 1:nrow(data), size=Noutcross, replace=TRUE )
+      ret <- rbind( ret, mate( data[idx1,], data[idx2,], N ) )       
+    }
     
     # fix up the ID column
     if( "ID" %in% names( ret ) )
