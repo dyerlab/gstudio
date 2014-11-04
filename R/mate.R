@@ -35,7 +35,7 @@ mate <- function( mom, dad, N=1 ){
     stop("You need to pass both parents to make an offspring using mate().")
     
   if( missing(dad) )
-    mom <- dad  
+    dad <- mom  
   
   if( nrow(mom) != nrow(dad) )
     stop("You need to supply the same number of parental individuals (rowwise) for the matings.")

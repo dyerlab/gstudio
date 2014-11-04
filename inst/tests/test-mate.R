@@ -9,7 +9,6 @@ test_that( "testing",{
   df <- data.frame( ID=factor(momID), TPI=loci )
   
   expect_that( mate(), throws_error())
-  expect_that( mate(df[1,]), throws_error())
   
   o <- mate(df[1,], df[1,], N=1)
   expect_that( o , is_a("data.frame") )
