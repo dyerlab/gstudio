@@ -25,7 +25,7 @@ partition <- function( x, stratum="Population" ){
   lvls <- sort( unique( x[[stratum]]) )
   
   for( lvl in lvls ) 
-    ret[[lvl]] <- x[ x[[stratum]]==lvl, ]
+    ret[[lvl]] <- droplevels( x[ x[[stratum]]==lvl, ] )
   
   return( ret )
 }

@@ -1,5 +1,8 @@
 gstudio 1.4
 -----------------
+* [ADD] Added option to specify inbreeding (F) in make_population() function
+
+* [FIX] Changed issue with partion() to have it droplevels() to remove factors with zero occurrances. 
 * [ADD] Added conversion from genind from adegenet to a data.frame object with locus objects for translation.
 * [ADD] Takes centroid of coordinates in strata_coordinates (default) if more than one coordinate is provided.
 * [ADD] Added heirfstat to genetic_structure to allow functional calling 

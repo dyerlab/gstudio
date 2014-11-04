@@ -10,6 +10,7 @@
 #' @param N The number of individuals to create (default = 20).  This is a 
 #'  'per-stratum' estimate so if you have K strata the result will be K*N 
 #'  individuals.
+#' @param F The inbreeding index (Fis).
 #' @return A \code{data.frame} with individuals, loci, and potentially strata
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -19,7 +20,7 @@
 #'   alleles <- c(LETTERS[1:3],LETTERS[8:10])
 #'   f <- data.frame(Locus=loci, Allele=alleles, Frequency=freqs)
 #'   make_population(f,N=20)
-make_population <- function( x, N=20){
+make_population <- function( x, N=20, F = 0){
   
   # subdivided
   if( "Stratum" %in% names(x) ){
@@ -47,13 +48,13 @@ make_population <- function( x, N=20){
     }
   }
   
-  else if( all(c("Allele","Frequency") %in% names(x) )){
+  else if( all(c("Allele","Frequency") %in% names(x) )) {
     alleles <- x$Allele
     freqs <- x$Frequency
     if( sum(freqs) != 1){
       d <- (1.0 - sum(freqs))/length(alleles)
       warning( paste( "Your allele frequencies do not add to 1.0.  The difference of ",
-                      d, " will be added equally across all alleles", sep=""))
+                      d, " will be partioned across all noted alleles", sep=""))
       freqs <- freqs + d
     }
     K <- length(alleles)
@@ -63,11 +64,11 @@ make_population <- function( x, N=20){
     for( i in 1:K){
       for( j in i:K){
         G[ctr] <- paste(alleles[i],alleles[j],sep=":")
-        if( i==j) {
-          P[ctr] <- freqs[i]*freqs[j]
+        if( i==j ) {
+          P[ctr] <- (freqs[i]^2)*(1-F) + (F * freqs[i])
         }
         else
-          P[ctr] <- 2*freqs[i] * freqs[j]
+          P[ctr] <- (2*freqs[i] * freqs[j]) * (1-F) 
         ctr <- ctr+1
       }
     }
