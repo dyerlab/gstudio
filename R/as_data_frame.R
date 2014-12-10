@@ -33,12 +33,16 @@ as.data.frame.locus <- function( x, ... ) {
 #' This is a conversion function to translate an object of type \code{genind} from
 #'  the adegenet package into a normal data frame with \code{locus} objects.
 #' @param x An object of type \code{genind}
+#' @param row.names ignored here
+#' @param optional ignored here
+#' @param ... ignored here
 #' @return A \code{data.frame} object with loci represented as \code{locus} objects.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @method as.data.frame genind
 #' @importFrom adegenet genind
 #' @importFrom adegenet genind2df
 #' @export
-as.data.frame.genind <- function( x ) {  
+as.data.frame.genind <- function( x, row.names, optional, ... ) {  
   ret <- genind2df( x, sep=":", usepop=TRUE, oneColPerAll=FALSE )
   loci <- x$loc.names
   for( col in loci ) 
