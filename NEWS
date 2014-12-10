@@ -1,6 +1,7 @@
 gstudio 1.4
 -----------------
 * [ADD] Added option to specify inbreeding (F) in make_population() function
+* [ADD] Added Fst as random anova version.
 
 * [FIX] Changed issue with partion() to have it droplevels() to remove factors with zero occurrances. 
 * [ADD] Added conversion from genind from adegenet to a data.frame object with locus objects for translation.
