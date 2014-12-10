@@ -47,7 +47,9 @@ Fst <- function( x, stratum="Population", loci=NULL ) {
       phat <- freqs$Frequency[ freqs$Allele==a & freqs$Locus==locus]
       if( length(phat) < numpops )
         phat <- c(phat, rep(0,numpops-length(phat)) )
-      pq <- p*(1-p)*length(phat)
+      
+      pbar <- mean(phat)
+      pq <- pbar*(1-pbar)
       varp <- var(phat)
       
       ret$sigma2[ ret$Locus==locus ] <- varp
