@@ -4,6 +4,7 @@ gstudio 1.4
 * [ADD] Added Fst as random anova version.
 * [FIX] Fixed problem with wrapper function around Nei line 9 Stratum => stratum
 
+* [FIX] Removed plot() overload for data.frame with Latitude/Longitude columns because of snotty CRAN rules that banned package from online repository
 * [FIX] Changed issue with partion() to have it droplevels() to remove factors with zero occurrances. 
 * [ADD] Added conversion from genind from adegenet to a data.frame object with locus objects for translation.
 * [ADD] Takes centroid of coordinates in strata_coordinates (default) if more than one coordinate is provided.
