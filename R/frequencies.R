@@ -66,45 +66,45 @@ frequencies.locus <- function( x, loci, ... ) {
 }
 
 
-#' A private method 
-.frequencies.snp.prob <- function( df, loci, stratum, ... ){
-  colnames <- names(df)
-  loc_cols <- colnames[ unlist(lapply( colnames, function(x) return( length(strsplit(x,split="_")[[1]])==2))) ]
-  loc_names <- unique(matrix(unlist(strsplit(loc_cols,"_")),ncol=2,byrow=TRUE)[,1])
-  
-  if( !length(loc_names) )
-    stop("If you are going to estimate frequencies from RAD-seq data, you must label your loci as XXX_Y where the XXX is the name of the snp locus.  These must be unique.")
-
-  
-  # the no stratum frequency
-  if( missing(stratum) ) {
-
-    ret <- data.frame( Locus=rep(loc_names,each=2), Allele=rep( c("A","B"), times=length(loc_names)), Frequency=0, stringsAsFactors=FALSE)
-    x <- df[,loc_cols]
-    if( ncol(x) %% 3 )
-      stop("You must have three columns for each locus representing the probability of each genotype.")
-    N <- nrow(x)
-    
-    for( i in seq(1,ncol(x),by = 3)) {
-      theloc <- strsplit(loc_cols[i],split="_")[[1]][1]
-      f.a <- sum( 2*x[,i] )/(2*N) + sum( x[,(i+1)])/(2*N)
-      ret$Frequency[ (ret$Locus == theloc & ret$Allele=="A") ] <- f.a
-      ret$Frequency[ (ret$Locus == theloc & ret$Allele=="B") ] <- 1-f.a
-    }
-  }
-  else {
-    pops <- partition(df,stratum = stratum)
-    ret <- data.frame( Stratum=character(0), Locus=character(0), Allele=character(0), Frequency=numeric(0) )
-    for( strat in names(pops) ){
-      d <- .frequencies.snp.prob( pops[[strat]] )
-      d$Stratum <- strat
-      d <- d[, c(4,1,2,3)]
-      ret <- rbind( ret, d )
-    }
-  }
-  
-  return(ret)
-}
+# #' A private method 
+# .frequencies.snp.prob <- function( df, loci, stratum, ... ){
+#   colnames <- names(df)
+#   loc_cols <- colnames[ unlist(lapply( colnames, function(x) return( length(strsplit(x,split="_")[[1]])==2))) ]
+#   loc_names <- unique(matrix(unlist(strsplit(loc_cols,"_")),ncol=2,byrow=TRUE)[,1])
+#   
+#   if( !length(loc_names) )
+#     stop("If you are going to estimate frequencies from RAD-seq data, you must label your loci as XXX_Y where the XXX is the name of the snp locus.  These must be unique.")
+# 
+#   
+#   # the no stratum frequency
+#   if( missing(stratum) ) {
+# 
+#     ret <- data.frame( Locus=rep(loc_names,each=2), Allele=rep( c("A","B"), times=length(loc_names)), Frequency=0, stringsAsFactors=FALSE)
+#     x <- df[,loc_cols]
+#     if( ncol(x) %% 3 )
+#       stop("You must have three columns for each locus representing the probability of each genotype.")
+#     N <- nrow(x)
+#     
+#     for( i in seq(1,ncol(x),by = 3)) {
+#       theloc <- strsplit(loc_cols[i],split="_")[[1]][1]
+#       f.a <- sum( 2*x[,i] )/(2*N) + sum( x[,(i+1)])/(2*N)
+#       ret$Frequency[ (ret$Locus == theloc & ret$Allele=="A") ] <- f.a
+#       ret$Frequency[ (ret$Locus == theloc & ret$Allele=="B") ] <- 1-f.a
+#     }
+#   }
+#   else {
+#     pops <- partition(df,stratum = stratum)
+#     ret <- data.frame( Stratum=character(0), Locus=character(0), Allele=character(0), Frequency=numeric(0) )
+#     for( strat in names(pops) ){
+#       d <- .frequencies.snp.prob( pops[[strat]] )
+#       d$Stratum <- strat
+#       d <- d[, c(4,1,2,3)]
+#       ret <- rbind( ret, d )
+#     }
+#   }
+#   
+#   return(ret)
+# }
 
 #' @return A data frame with Frequencies, Alleles, Loci, and perhaps 
 #'  Stratum columns (Allele and Frquencies are at a minimium).
@@ -119,8 +119,9 @@ frequencies.data.frame <- function( x, loci, stratum, ... ) {
   }
   
   # no 'locus' objects, try to send it to the snp.prob 
-  if( length(loci)==1 & any(is.na(loci) ))
-    return( .frequencies.snp.prob( x, stratum ) )
+  #  TODO: Get snp probability going
+  #if( length(loci)==1 & any(is.na(loci) ))
+  #  return( .frequencies.snp.prob( x, stratum ) )
   
   # throw error if asked for non-existent loci
   if( length( setdiff( loci, column_class(x,"locus") )) ){

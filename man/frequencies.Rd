@@ -42,6 +42,8 @@ A data frame with Frequencies, Alleles, Loci, and perhaps
 \description{
 This function converts loci into data frames consisting of
  alleles, stratum, frequencies, etc.
+
+#A private method
 }
 \note{
 You can submit RAD-seq genotypes in a normal \code{data.frame}

@@ -4,6 +4,10 @@ gstudio 1.5
 * [ADD] Added Fst as random anova version.
 * [FIX] Fixed problem with wrapper function around Nei line 9 Stratum => stratum
 
+* [FIX] Change pies_on_map to use leaflet and sp poly to make plots.
+
+
+
 
 gstudio 1.4
 -----------------
