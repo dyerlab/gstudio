@@ -5,6 +5,7 @@ gstudio 1.5
 * [FIX] Fixed problem with wrapper function around Nei line 9 Stratum => stratum
 
 * [FIX] Change pies_on_map to use leaflet and sp poly to make plots.
+* [FIX] Allow mate() to take vectors as well as data.frame objects for producing offspring
 
 
 
