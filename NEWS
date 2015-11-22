@@ -3,10 +3,16 @@ gstudio 1.5
 * [ADD] Added option to specify inbreeding (F) in make_population() function
 * [ADD] Added Fst as random anova version.
 * [FIX] Fixed problem with wrapper function around Nei line 9 Stratum => stratum
+* [FIX] Added ability to pass data.frame with one or more loci to it to genotype_frequency() function
+* [FIX] Refined make_population() specifying F!=0 better.
+* [ADD] Added function make_loci() to make vectors of loci outside of making populations.  Fixed problem with specifying F for small N as well.
+
 
 * [FIX] Change pies_on_map to use leaflet and sp poly to make plots.
 * [FIX] Allow mate() to take vectors as well as data.frame objects for producing offspring
 * [FIX] Change selfing rate parameter F in mixed_mating() to s and check output.  Looks fishy right now.
+
+
 
 
 

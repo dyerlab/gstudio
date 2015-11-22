@@ -29,7 +29,7 @@ make_population <- function( x, N=20, F = 0){
     ret <- data.frame()
     for( stratum in strata ){
       f <- x[x$Stratum==stratum, c(2:4)]
-      r <- make_population( f, N )
+      r <- make_population( f, N, F )
       l <- length(names(r))
       r$Population =stratum
       r <- r[, c( (l+1), (1:l))]
@@ -43,46 +43,47 @@ make_population <- function( x, N=20, F = 0){
     ret <- data.frame(ID=1:N) 
     for( locus in loci ){
       f <- x[x$Locus == locus,c(2,3)]
-      r <- make_population(f,N)
-      ret[[locus]] <- r$Locus
+      theLoc <- make_population(f,N,F)
+      ret[[locus]] <- theLoc        
     }
   }
   
   else if( all(c("Allele","Frequency") %in% names(x) )) {
-    alleles <- x$Allele
-    freqs <- x$Frequency
-    if( sum(freqs) != 1){
-      d <- (1.0 - sum(freqs))/length(alleles)
-      warning( paste( "Your allele frequencies do not add to 1.0.  The difference of ",
-                      d, " will be partioned across all noted alleles", sep=""))
-      freqs <- freqs + d
-    }
-    K <- length(alleles)
-    P <- rep(0,(K + K*(K-1)/2) )
-    G <- rep("",length(P))
-    ctr <- 1
-    for( i in 1:K){
-      for( j in i:K){
-        G[ctr] <- paste(alleles[i],alleles[j],sep=":")
-        if( i==j ) {
-          P[ctr] <- (freqs[i]^2)*(1-F) + (F * freqs[i])
-        }
-        else
-          P[ctr] <- (2*freqs[i] * freqs[j]) * (1-F) 
-        ctr <- ctr+1
-      }
-    }
-    
-    P <- cumsum(P)
-    ret <- data.frame(ID=1:N)
-    l <- rep(NA,N)
-    for( i in 1:N){
-      r <- runif(1)
-      a <- which(P>=r)[1]
-      g <- G[a]
-      l[i] <- g
-    }
-    ret$Locus <- locus(l, type="separated")
+    return( make_loci(x,N,F) )    
+#     alleles <- x$Allele
+#     freqs <- x$Frequency
+#     if( sum(freqs) != 1){
+#       d <- (1.0 - sum(freqs))/length(alleles)
+#       warning( paste( "Your allele frequencies do not add to 1.0.  The difference of ",
+#                       d, " will be partioned across all noted alleles", sep=""))
+#       freqs <- freqs + d
+#     }
+#     K <- length(alleles)
+#     P <- rep(0,(K + K*(K-1)/2) )
+#     G <- rep("",length(P))
+#     ctr <- 1
+#     for( i in 1:K){
+#       for( j in i:K){
+#         G[ctr] <- paste(alleles[i],alleles[j],sep=":")
+#         if( i==j ) {
+#           P[ctr] <- (freqs[i]^2)*(1-F) + (F * freqs[i])
+#         }
+#         else
+#           P[ctr] <- (2*freqs[i] * freqs[j]) * (1-F) 
+#         ctr <- ctr+1
+#       }
+#     }
+#     
+#     P <- round(P*N)
+#     loci <- c()
+#     for( i in 1:length(P)){
+#       loci <- c( loci, rep(G[i],times=P[i]))
+#     }
+#     loci <- locus( loci, type="separated")
+#     ret <- data.frame(ID=1:N, Locus=loci)
+#     print("Hello?")
+#     print(P)
+#     print(G)
   }
   else
     stop("Unrecognized data.frame being passed to make_population().")

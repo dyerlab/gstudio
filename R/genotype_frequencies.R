@@ -16,8 +16,25 @@
 genotype_frequencies <- function( x ) {
   if( missing(x))
     stop("You need to pass this function a vector of locus objects.")
-  if( !is(x,"locus"))
+  
+  if( is(x,"data.frame")){
+    ret <- data.frame( Locus=NA, Genotype=NA, Observed=NA, Expected=0,stringsAsFactors=FALSE)
+    
+    for( locus_name in column_class(x,"locus")){
+      theLoc <- x[[locus_name]]
+      df <- genotype_frequencies(theLoc)
+      df$Locus <- locus_name
+      ret <- rbind(ret,df)
+    }
+    
+    ret <- ret[ !is.na(ret$Locus),]
+    return( ret )
+    
+  }
+  else if( !is(x,"locus")) {
     stop("This function works on locus objects only")
+  }
+    
   
   # remove missing data
   x <- x[ !is.na(x)]
