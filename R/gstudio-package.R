@@ -106,6 +106,15 @@ NULL
 #' @keywords data
 NULL
 
+#' Cornus adult data
+#' 
+#' Example data set with adult multilocus gentoypes from
+#' Cornus florida at the Rice Center
+#' @name cornus
+#' @docType data
+#' @keywords data
+NULL
+
 #' CDPop Data
 #' 
 #' Example data set for CDPop input

@@ -26,3 +26,4 @@ Imports:
 Suggests:
     testthat,
     knitr
+RoxygenNote: 5.0.1
