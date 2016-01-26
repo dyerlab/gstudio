@@ -42,26 +42,25 @@ Fst <- function( x, stratum="Population", loci=NULL ) {
   ret <- data.frame( Locus=loci, Fst=0, sigma2=0, pq=0 )
 
 # FIX: What is freqs in line 51?  
-#   for( locus in loci){
-#     f <- frequencies( x[[locus]] ) 
-#     if( nrow(f) > 1){
-#       a <- f[1,1]
-#       p <- f[1,2]
-#       
-#       
-#       phat <- freqs$Frequency[ freqs$Allele==a & freqs$Locus==locus]
-#       if( length(phat) < numpops )
-#         phat <- c(phat, rep(0,numpops-length(phat)) )
-#       
-#       pbar <- mean(phat)
-#       pq <- pbar*(1-pbar)
-#       varp <- var(phat)
-#       
-#       ret$sigma2[ ret$Locus==locus ] <- varp
-#       ret$pq[ ret$Locus==locus ] <- pq
-#       ret$Fst[ ret$Locus==locus ] <- varp/pq
-#     }
-#   }
+  for( locus in loci){
+    f <- frequencies( x[[locus]] ) 
+    if( nrow(f) > 1){
+      a <- f[1,1]
+      p <- f[1,2]
+      
+      phat <- f$Frequency[ f$Allele==a & f$Locus==locus]
+      if( length(phat) < numpops )
+        phat <- c(phat, rep(0,numpops-length(phat)) )
+      
+      pbar <- mean(phat)
+      pq <- pbar*(1-pbar)
+      varp <- var(phat)
+      
+      ret$sigma2[ ret$Locus==locus ] <- varp
+      ret$pq[ ret$Locus==locus ] <- pq
+      ret$Fst[ ret$Locus==locus ] <- varp/pq
+    }
+  }
   
   return( ret )
 }
