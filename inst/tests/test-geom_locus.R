@@ -16,13 +16,15 @@ test_that("shortest paths", {
   
   df <- data.frame( strata = c(rep("A",5),rep("B",5)), TPI  )
   p <- geom_locus( aes(x=TPI), data=df )
-  expect_that( p, is_a("proto"))
-  expect_that( p, is_a("environment"))
+  expect_that( p, is_a("ggproto"))
+  expect_that( p, is_a("LayerInstance"))
+  expect_that( p, is_a("Layer"))
   
   
   p <- geom_locus( aes(x=TPI, fill=strata), data=df )
-  expect_that( p, is_a("proto"))
-  expect_that( p, is_a("environment"))
+  expect_that( p, is_a("ggproto"))
+  expect_that( p, is_a("LayerInstance"))
+  expect_that( p, is_a("Layer"))
   
   
 })

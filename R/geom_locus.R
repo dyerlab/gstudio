@@ -38,7 +38,7 @@ geom_locus <- function( mapping, data, ... ) {
   
   if( is.null(mapping$fill) ) {
     freqs <- frequencies( data, loci=as.character(mapping$x) )
-    ret <- geom_bar( aes(x=Allele,y=Frequency), stat="identity", data=freqs, binwidth=1 ) 
+    ret <- geom_bar( aes(x=Allele,y=Frequency), stat="identity", data=freqs ) 
   }
     
   else {

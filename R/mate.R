@@ -26,7 +26,7 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' f <- data.frame(Allele=LETTERS[1:2], Frequency=c(0.5,0.5))
-#' adults <- make_population(f,N=2)
+#' adults <- data.frame( ID=1:2, Locus=make_loci(f,N=2) )
 #' adults
 #' mate( adults[1,], adults[2,], N=10)
 mate <- function( mom, dad, N=1 ){
