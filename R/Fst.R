@@ -36,11 +36,10 @@ Fst <- function( x, stratum="Population", loci=NULL ) {
   if( !(stratum %in% names(x)))
     stop("You need to pass this function the name of the column to use as a locus")
   
-  tot_freqs <- frequencies( x, loci=loci )
-  pop_freqs <- frequencies( x, stratum, loci = loci)
-  numpops <- length(unique(x[[stratum]]))
-  ret <- data.frame( Locus=loci, Fst=0, sigma2=0, pq=0 )
-
+#   tot_freqs <- frequencies( x, loci=loci )
+#   pop_freqs <- frequencies( x, stratum, loci = loci)
+#   numpops <- length(unique(x[[stratum]]))
+#   ret <- data.frame( Locus=loci, Fst=0, sigma2=0, pq=0 )
 # FIX: What is freqs in line 51?  
 #   for( locus in loci){
 #     f <- frequencies( x[[locus]] ) 
@@ -62,7 +61,11 @@ Fst <- function( x, stratum="Population", loci=NULL ) {
 #     }
 #   }
 
-  
+  hs <- He( x, stratum=stratum )
+  ht <- Ht( x, stratum=stratum )
+  ret <- merge( hs, ht)
+  names(ret)[2] <- "Hs"
+  ret$Fst <- 1 - ret$Hs/ret$Ht
   
     
   return( ret )

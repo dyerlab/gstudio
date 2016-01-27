@@ -26,13 +26,13 @@ Ht <- function( x, stratum ) {
   cts <- genotype_counts(x, stratum)
   K <- nrow(cts)
   
-  
   for( locus in locus_names ) {
     nbar <-  harmonic_mean(cts[[locus]])
     xki <- freqs[ freqs$Locus==locus, ]
-    xibar <- unlist(by( xki$Frequency, xki$Allele, function(x) sum(x/K) ))
-    ht <- 1 - sum(xibar) + hs$He[hs$Locus==locus] - ho$Ho[ho$Locus==locus]
+    xibar <- unlist(by( xki$Frequency, xki$Allele, function(x) sum(x/K )))
+    ht <- 1 - sum(xibar^2) + hs$He[hs$Locus==locus]/(K*nbar) - ho$Ho[ho$Locus==locus]/(K*nbar*2)
     ret$Ht[ ret$Locus == locus ] <- ht
   }
+  
   return( ret )
 }
