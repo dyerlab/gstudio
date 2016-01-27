@@ -6,6 +6,8 @@
 #'  a vector or \code{locus} objects.
 #' @param small.sample.correction Apply the 2N/(2N-1) correction to the data
 #'  for small sample sizes.
+#' @param stratum  This optional argument makes He estimate Nei's Hs parameter taking
+#'  into consideration population subdivision.  This is an unbiased estimator.
 #' @return The expected heterozygosity as a numeric or a \code{data.frame} if 
 #'  several loci are passed.
 #' @export
@@ -14,17 +16,41 @@
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )
 #' He( loci )
 #' He( loci, small.sample.correction=TRUE )
-He <- function( x, small.sample.correction=FALSE ) { 
+He <- function( x, small.sample.correction=FALSE, stratum=NULL ) { 
   
   if( is(x,"data.frame") ){
+    
+    if( !is.null(stratum) && !(stratum %in% names(x) ) )
+      stop("If you are going to specify a column for stratum, make sure it is actually in the data.frame you pass...")
+    
     locus_names <- column_class(x,class="locus")
     if( length(locus_names)==0)
       stop("Cannot estimate expected heterozygosity if there are no loci...")
     
     ret <- data.frame( Locus=locus_names, He=0 )
     k <- length(locus_names)
-    for( i in 1:k)
-      ret$He[i] <- He( x[[locus_names[i]]], small.sample.correction )
+    if( is.null( stratum ) ) {
+      for( i in 1:k) {
+        if( is.null(stratum) ){
+          ret$He[i] <- He( x[[locus_names[i]]], small.sample.correction )  
+        }
+      }
+    } else {
+      ho <- Ho( x, stratum=stratum )
+      cts <- genotype_counts(x, stratum)
+      K <- nrow(cts)
+      freqs <- frequencies( x, stratum=stratum)
+      
+      for( locus in locus_names ) {
+        nbar <-  harmonic_mean(cts[[locus]])
+        xki <- freqs[ freqs$Locus==locus, ]
+        x2ibar <- unlist(by( xki$Frequency, xki$Allele, function(x) sum(x^2/K) ))
+        hs <- nbar/(nbar-1) * ( 1 - sum(x2ibar) - ho$Ho[ ho$Locus==locus]/(2*nbar) )
+        ret$He[ ret$Locus == locus ] <- hs
+      }
+      
+    }
+    
     return( ret )
   }
   
@@ -41,5 +67,5 @@ He <- function( x, small.sample.correction=FALSE ) {
   
   else 
     stop("he() is only available for objects of type 'locus' or type 'data.frame'")
-
+  
 }
