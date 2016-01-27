@@ -11,32 +11,33 @@
 #' 
 
 genotype_counts <- function( x, stratum=NULL ) {
+  if( missing(x))
+    stop("You need to pass a data.frame to this function...")
+  
   if( !is(x,"data.frame"))
     stop("This function works on data.frames")
   
-  if( !is.null(stratum) & !(stratum %in% names(x)))
-    stop("If you specify 'stratum=' you need to give it the name of a real column.")
-  
-  
-
-  if( is.null(stratum) ) {
-    x$ALL <- "All"
-    stratum <- "All"
+  if( !is.null(stratum)) {
+    if( !(stratum %in% names(x))) {
+      stop("If you specify 'stratum=' you need to give it the name of a real column.")   
+    }
   }
-    
+  else {
+    x$ALL <- "ALL"
+    stratum <- "ALL"
+  }
+  
   sf <- summary.factor( x[[stratum]])
-  
-  
   ret <- data.frame(Stratum=names(sf), N=sf)
-  for( locus in column_class( x, "locus" ) ){
-    missing <- which(!is.na(x[[locus]]))
-    t <- table( x[[stratum]][missing] )
-    
-    ret[[locus]] <- tapply( x[[locus]][missing], x[[stratum]]), length )
+  df <- partition(x,stratum)
+  for( locus in column_class(x,"locus")){
+    ret[[locus]] <- 0
+    for( strata in names(df)){
+      ret[ rownames(ret)==strata, colnames(ret)==locus ] <- sum( !is.na(df[[strata]][locus]))
+    }
   }
-  
-  
   ret
+  
   return( ret )
   
 }
