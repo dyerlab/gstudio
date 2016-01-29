@@ -7,7 +7,7 @@ gstudio 1.5
 * [FIX] Refined make_population() specifying F!=0 with less suckiness.
 * [ADD] Added function make_loci() to make vectors of loci outside of making populations.  Fixed problem with specifying F for small N as well.
 * [ADD] Added frequency_matrix() function to reshape data.frame of allele frequencies across strata for a particular locus.
-
+* [ADD] Added a continuity correction warning to genotype_frequencies()
 
 * [FIX] Change pies_on_map to use leaflet and sp poly to make plots.
 * [FIX] Allow mate() to take vectors as well as data.frame objects for producing offspring

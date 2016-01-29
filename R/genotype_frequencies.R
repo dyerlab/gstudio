@@ -58,6 +58,9 @@ genotype_frequencies <- function( x ) {
   
   ret$Expected <- ret$Expected * length(x)
   
+  if( any( ret$Expected < 5.0 ))
+    warning("Some genotype expectations are < 5, a continuity correction should be applied.  See ?hwe")
+  
   return( ret )
 }
 
