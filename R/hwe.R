@@ -5,15 +5,17 @@
 #' @param x A \code{data.frame} with one or more \code{locus} objects in it
 #' @param mode The way in which the probabilities are estimated.  Possible values include
 #'  'Chi': Chi-square approximation & 'Permute': A permutation approach
+#' @param supress_warnings A flag that prevents sample size warnings from being displayed
+#'  (often helpful if you are simulating data sets for permutation)
 #' @return A \code{data.frame} with columns for Locus, Chi (the stat), df, and Prob.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples 
 #'  data(arapat)
 #'  sonora <- arapat[ arapat$Species=="Mainland",]
-#'  hwe_test( sonora )
+#'  hwe( sonora )
 
-hwe_test <- function( x, mode=c("Chi")[1] ){
+hwe <- function( x, mode=c("Chi")[1], supress_warnings=FALSE ){
   
   if( is(x,"locus") & length(x) > 1 )
     x <- data.frame(x)
