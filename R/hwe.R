@@ -15,8 +15,13 @@
 
 hwe_test <- function( x, mode=c("Chi")[1] ){
   
-  if(!is(x,"data.frame"))
-     stop("This function takes a data.frame as a primary argument")
+  if( is(x,"locus") & length(x) > 1 )
+    x <- data.frame(x)
+  
+  if(!is(x,"data.frame")) {
+    stop("This function takes a data.frame as a primary argument")
+  }
+    
   loci <- column_class( x, "locus")
   if( length(loci) < 1 )
     stop("You need to pass a data.frame to this function with a locus object in it...Hello?")
