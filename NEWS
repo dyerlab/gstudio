@@ -10,6 +10,7 @@ gstudio 1.5
 * [ADD] Added a continuity correction warning to genotype_frequencies()
 * [ADD] Added multilocus_assignment() function.
 
+
 * [FIX] Change pies_on_map to use leaflet and sp poly to make plots.
 * [FIX] Allow mate() to take vectors as well as data.frame objects for producing offspring
 * [FIX] Change selfing rate parameter F in mixed_mating() to s and check output.  Looks fishy right now.
