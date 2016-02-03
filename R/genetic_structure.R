@@ -44,7 +44,7 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
   if( !(stratum %in% names(x) ) ) 
     stop("You must specify which stratum to use for the estimation of genetic structure.")
 
-  if( !(mode %in% c("Gst", "Gst_prime", "Dest")) )
+  if( !(mode %in% c("Fst","Gst", "Gst_prime", "Dest")) )
     stop(paste("The structure mode",mode,"is not recognized") )
   
   # subsets of loci
@@ -91,6 +91,9 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
     
     else if( mode == "dest" ) 
       ret <- Dest( x, stratum, nperm, size.correct )
+    
+    else if( mode == "fst" ) 
+      ret <- Fst( x, stratum, nperm )
     
   }
   
