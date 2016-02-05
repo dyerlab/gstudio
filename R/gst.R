@@ -108,6 +108,7 @@ Gst <- function( x, stratum="Population", nperm=0, size.correct=TRUE ) {
     
     
     
+    ret <- data.frame( Gst=gst, Hs=hs.estimated, Ht=ht.estimated)
     
     
     if( nperm > 0 & ht > 0 ) {
@@ -131,13 +132,9 @@ Gst <- function( x, stratum="Population", nperm=0, size.correct=TRUE ) {
       
       perms <- perms[ !is.na(perms) ]
       P <- sum( perms >= gst ) / length(perms)
-
+      ret$P <- P
+    
     }
-    else 
-      P <- NA
-    
-    ret <- data.frame( Gst=gst, Hs=hs.estimated, Ht=ht.estimated, P=P)
-    
 
   }  
   return( ret ) 

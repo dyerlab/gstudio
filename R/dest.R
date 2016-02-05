@@ -101,6 +101,8 @@ Dest <- function( x, stratum="Population", nperm=0, size.correct=FALSE ) {
     
     D <- D / (k/(k-1))
     
+    ret <- data.frame( Dest=D, Hs=hs.estimated, Ht=ht.estimated)
+    
     if( nperm > 0 ) {
       
       perms <- rep(NA,nperm)
@@ -125,11 +127,10 @@ Dest <- function( x, stratum="Population", nperm=0, size.correct=FALSE ) {
       
       D.perm <- D.perm / (k/(k-1))
       P <- sum( D.perm >= D ) / length( D.perm )
+      
+      ret$P <- P
     }
-    else
-      P <- 0
-
-    ret <- data.frame( Dest=D, Hs=hs.estimated, Ht=ht.estimated, P=P)    
+    
   }
   
   return( ret )

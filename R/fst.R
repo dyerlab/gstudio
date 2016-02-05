@@ -8,7 +8,7 @@
 #'  the multilocus Fst (and do not even think of averaging the single locus estimates).
 #' @param stratum Either the name of the column representing strata in \code{x}.  By 
 #'  default, this function will use "Population".
-#' @param loci The set of loci to use (default=NULL and all are used).
+#' @param nperm The number of permutations to run to test Fst=0 hypothesis.
 #' @return An \code{data.frame} with Fst, sigma_p (variance among populations), and pq
 #'  the total variance at the locus. 
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -24,49 +24,26 @@
 #'  locus2 <- c(AA,AA,AA,AA,AA,BB,BB,BB,BB,BB)
 #'  df <- data.frame( Population, TPI=locus, PGM=locus2 )
 #'  Fst( df )
-Fst <- function( x, stratum="Population", loci=NULL ) {
+Fst <- function( x, stratum="Population", nperm=0  ) {
   if( !is(x,"data.frame"))
     stop("This function requires you to pass it a data.frame of data...")
   
-  if( is.null(loci))
-    loci <- column_class(x,"locus")
+  loci <- column_class(x,"locus")
   if( any(is.na(loci) ) || ( !( any( loci %in% names(x)))))
     stop("You need to pass this function a data.frame with some columns of type 'locus' to it...")
     
   if( !(stratum %in% names(x)))
     stop("You need to pass this function the name of the column to use as a locus")
   
-#   tot_freqs <- frequencies( x, loci=loci )
-#   pop_freqs <- frequencies( x, stratum, loci = loci)
-#   numpops <- length(unique(x[[stratum]]))
-#   ret <- data.frame( Locus=loci, Fst=0, sigma2=0, pq=0 )
-# FIX: What is freqs in line 51?  
-#   for( locus in loci){
-#     f <- frequencies( x[[locus]] ) 
-#     if( nrow(f) > 1){
-#       a <- f[1,1]
-#       p <- f[1,2]
-#       
-#       phat <- f$Frequency[ f$Allele==a & f$Locus==locus]
-#       if( length(phat) < numpops )
-#         phat <- c(phat, rep(0,numpops-length(phat)) )
-#       
-#       pbar <- mean(phat)
-#       pq <- pbar*(1-pbar)
-#       varp <- var(phat)
-#       
-#       ret$sigma2[ ret$Locus==locus ] <- varp
-#       ret$pq[ ret$Locus==locus ] <- pq
-#       ret$Fst[ ret$Locus==locus ] <- varp/pq
-#     }
-#   }
-
   hs <- He( x, stratum=stratum )
   ht <- Ht( x, stratum=stratum )
   ret <- merge( hs, ht)
   names(ret)[2] <- "Hs"
   ret$Fst <- 1 - ret$Hs/ret$Ht
   
-    
+  if( nperm > 0 ) {
+    ret$P <- NA
+  }
+  
   return( ret )
 }
