@@ -17,6 +17,7 @@ gstudio 1.5
 * [ADD] Added function self() to produce selfed individuals.
 * [ADD] Added heirfstat to genetic_structure to allow functional calling 
 * [ADD] Added hooks into genetic distances from pegas through genetic_distance() for other distance measures.
+* [FIX] Add permutation to Fst()
 
 
 
