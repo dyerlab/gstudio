@@ -33,7 +33,7 @@ Ho <- function( x, stratum=NULL ) {
       
       # as a weighted estimate by population after Nei
       else {
-        ret$Ho[i] <- mean( unlist( by( x[[locus_names[i]]], x[[stratum]], Ho) ) )
+        ret$Ho[i] <- mean( unlist( by( x[[locus_names[i]]], droplevels(x[[stratum]]), Ho) ) )
       }
     }
     
