@@ -19,7 +19,7 @@
 He <- function( x, small.sample.correction=FALSE, stratum=NULL ) { 
   
   if( is(x,"data.frame") ){
-    
+    x <- droplevels(x)
     if( !is.null(stratum) && !(stratum %in% names(x) ) )
       stop("If you are going to specify a column for stratum, make sure it is actually in the data.frame you pass...")
     
@@ -42,6 +42,7 @@ He <- function( x, small.sample.correction=FALSE, stratum=NULL ) {
       freqs <- frequencies( x, stratum=stratum)
       
       for( locus in locus_names ) {
+        
         nbar <-  harmonic_mean(cts[[locus]])
         xki <- freqs[ freqs$Locus==locus, ]
         x2ibar <- unlist(by( xki$Frequency, xki$Allele, function(x) sum(x^2/K) ))
