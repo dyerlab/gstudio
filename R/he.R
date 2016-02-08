@@ -42,7 +42,6 @@ He <- function( x, small.sample.correction=FALSE, stratum=NULL ) {
       freqs <- frequencies( x, stratum=stratum)
       
       for( locus in locus_names ) {
-        
         nbar <-  harmonic_mean(cts[[locus]])
         xki <- freqs[ freqs$Locus==locus, ]
         x2ibar <- unlist(by( xki$Frequency, xki$Allele, function(x) sum(x^2/K) ))
