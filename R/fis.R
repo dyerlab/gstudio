@@ -24,8 +24,10 @@ Fis <- function( x, small.sample.correction=FALSE, stratum=NULL ) {
     ho <- Ho( x, stratum=stratum )
     he <- He( x, stratum=stratum )
     loci <- column_class(x,"locus")
-    Fis <- 1.0 - ho$Ho[ho$Locus == loci]/he$He[he$Locus==loci]
-    ret <- data.frame( Locus=loci, Fis=1.0 - ho$Ho[ho$Locus == loci]/he$He[he$Locus==loci] )
+    ho <- ho[ ho$Locus %in% loci,]
+    he <- he[ he$Locus %in% loci,]
+    Fis <- 1.0 - ho$Ho/he$He
+    ret <- data.frame( Locus=loci, Fis )
   }
   else
     stop(paste("This function does not know how to handle data of type",class(x)))
