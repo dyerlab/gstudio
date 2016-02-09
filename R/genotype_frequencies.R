@@ -13,7 +13,7 @@
 #'   data <- make_population(f,N=20)
 #'   table(data$PGM)
 #'   genotype_frequencies( data$PGM )
-genotype_frequencies <- function( x ) {
+genotype_frequencies <- function( x, supress_warnings=FALSE ) {
   if( missing(x))
     stop("You need to pass this function a vector of locus objects.")
   
