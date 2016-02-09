@@ -58,7 +58,6 @@ He <- function( x, small.sample.correction=FALSE, stratum=NULL ) {
     df <- frequencies(x)
     he <- 1.0 - sum( df$Frequency**2 )
     Ninds <- sum( ploidy(x)>1 )
-    
     if( small.sample.correction )
       he <- he * 2 * (Ninds)/( 2 * Ninds - 1 )
     
