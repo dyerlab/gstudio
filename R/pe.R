@@ -17,9 +17,9 @@ Pe <- function( x  ) {
   if( is( x, "data.frame" ) ){
     locus_names <- column_class(x,"locus")
     if( length(locus_names)==0 )
-      stop("You must pass some loci to the Ae() function.")
+      stop("You must pass some loci to the Pe() function.")
     K <- length(locus_names)
-    ret <- data.frame( Locus=locus_names, Ae=0 )
+    ret <- data.frame( Locus=locus_names, Pe=0 )
     for( i in 1:K){
       data <- x[[locus_names[i]]]
       ret[i,2] <- Pe( data )
