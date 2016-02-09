@@ -15,10 +15,10 @@ test_that("checking",{
   
   expect_that( gst, is_a("data.frame"))
   expect_that( is.na( gst$Gst), is_true() )
-  expect_that( is.na( gst$P), is_true() )
+  #expect_that( is.na( gst$P), is_true() )
   expect_that( gst$Hs, equals(0) )
   expect_that( gst$Ht, equals(0) )
-  expect_that( names(gst), is_equivalent_to(c("Gst","Hs","Ht","P")))
+  expect_that( names(gst), is_equivalent_to(c("Gst","Hs","Ht")))
     
   loci <- c( locus( c(1,1) ),
                    locus( c(1,1) ),

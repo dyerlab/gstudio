@@ -33,7 +33,7 @@
 #'  df <- data.frame( Population, TPI=locus, PGM=locus2 )
 #'  genetic_diversity( df, mode="Ae")
 genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Ho", "Fis","Pe")[2] , ...){
-  mode <- tolower( mode )
+  
   
   if( missing(x) )
     stop("You must pass a data.frame to the genetic_diversity() function.")
@@ -52,7 +52,8 @@ genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Ho"
     ret <- ret[ !is.na(ret$Stratum),]
     return( ret )
   }
-
+  
+  mode <- tolower( mode )
     
   
   
