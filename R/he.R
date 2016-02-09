@@ -4,7 +4,7 @@
 #'  from the frequencies
 #' @param x Either a \code{data.frame} object with \code{locus} objects or 
 #'  a vector or \code{locus} objects.
-#' @param small.sample.correction Apply the 2N/(2N-1) correction to the data
+#' @param small.N Apply the 2N/(2N-1) correction to the data
 #'  for small sample sizes.
 #' @param stratum  This optional argument makes He estimate Nei's Hs parameter taking
 #'  into consideration population subdivision.  This is an unbiased estimator.
@@ -15,9 +15,9 @@
 #' @examples
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )
 #' He( loci )
-#' He( loci, small.sample.correction=TRUE )
-He <- function( x, small.sample.correction=FALSE, stratum=NULL ) { 
-  
+#' He( loci, small.N=TRUE )
+He <- function( x, small.N=FALSE, stratum=NULL, ... ) { 
+
   if( is(x,"data.frame") ){
     x <- droplevels(x)
     if( !is.null(stratum) && !(stratum %in% names(x) ) )
@@ -32,7 +32,7 @@ He <- function( x, small.sample.correction=FALSE, stratum=NULL ) {
     if( is.null( stratum ) ) {
       for( i in 1:k) {
         if( is.null(stratum) ){
-          ret$He[i] <- He( x[[locus_names[i]]], small.sample.correction )  
+          ret$He[i] <- He( x[[locus_names[i]]], small.N, ... )  
         }
       }
     } else {
@@ -55,10 +55,11 @@ He <- function( x, small.sample.correction=FALSE, stratum=NULL ) {
   }
   
   else if( is( x, "locus")){
+    
     df <- frequencies(x)
     he <- 1.0 - sum( df$Frequency**2 )
     Ninds <- sum( ploidy(x)>1 )
-    if( small.sample.correction )
+    if( small.N )
       he <- he * 2 * (Ninds)/( 2 * Ninds - 1 )
     
     return( he )    

@@ -4,7 +4,7 @@
 #'  a set of them if the value passed is a \code{data.frame} with locus objects.
 #'  
 #' @param x Either a \code{locus} object or a data.frame with locus objects.
-#' @param small.sample.correction Passes this along to He for small sample sizes.
+#' @param small.N Passes this along to He for small sample sizes.
 #' @param stratum An optional term for the estimation of inbreeding from samples of populations 
 #'  (default=NULL)
 #' @return The inbreeding F statistic as a \code{numeric} value or a \code{data.frame}
@@ -14,10 +14,10 @@
 #' @examples
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )
 #' Fis( loci )
-Fis <- function( x, small.sample.correction=FALSE, stratum=NULL ) {
+Fis <- function( x, small.N=FALSE, stratum=NULL ) {
   
   if( is(x,"locus") ) {
-    ret <- 1.0 - Ho(x) / He(x, small.sample.correction)
+    ret <- 1.0 - Ho(x) / He(x, small.N)
     names(ret) <- "Fis"
   }
   else if( is(x,"data.frame")) {

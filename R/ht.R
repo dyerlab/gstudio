@@ -8,7 +8,7 @@
 #' @examples
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )
 #' Ht( loci )
-#' Ht( loci, small.sample.correction=TRUE )
+#' Ht( loci, small.N=TRUE )
 Ht <- function( x, stratum ) { 
   
   if( missing(x) || missing(stratum) || !is(x,"data.frame") || !(stratum %in% names(x))) 
