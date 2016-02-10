@@ -43,7 +43,7 @@ genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Ho"
     pops <- partition(x,stratum)
     ret <- data.frame(Stratum=NA,Locus=NA, Diversity=NA)
     for( pop in names(pops) ){
-      gd <- genetic_diversity(pops[[pop]], mode=mode, small.sample.correction )
+      gd <- genetic_diversity(pops[[pop]], mode=mode, small.N=small.N, ... )
       gd$Stratum <- pop
       gd <- gd[, c(3,1,2)]
       names(ret)[3] <- mode
@@ -66,11 +66,11 @@ genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Ho"
   else if( mode == "a95")
     ret <- A(x,min_freq=0.05)
   else if( mode == "he")
-    ret <- He(x,stratum=stratum, small.sample.correction)
+    ret <- He(x,stratum=stratum, small.N=small.N)
   else if( mode == "ho")
     ret <- Ho(x,stratum=stratum)
   else if( mode == "fis")
-    ret <- Fis(x, stratum=stratum, small.sample.correction)
+    ret <- Fis(x, stratum=stratum, small.N, small.N = small.N)
   else if( mode == "pe")
     ret <- Pe(x)
   else

@@ -15,8 +15,8 @@ test_that("testing",{
   
   expect_that( genotype_frequencies(), throws_error() )
   expect_that( genotype_frequencies("bob"), throws_error() )
-  
-  ret <- genotype_frequencies( loci )
+  expect_that( genotype_frequencies(loci), gives_warning())
+  ret <- genotype_frequencies( loci,supress_warnings = TRUE )
   expect_that( ret, is_a("data.frame"))
   expect_that( dim(ret), is_equivalent_to(c(6,3)))
   expect_that( names(ret), is_equivalent_to(c("Genotype","Observed","Expected")))
