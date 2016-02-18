@@ -34,8 +34,11 @@ mate <- function( mom, dad, N=1 ){
   if( missing(mom)  )
     stop("You need to pass both parents to make an offspring using mate().")
     
-  if( missing(dad) )
+  if( missing(dad) ) {
     dad <- mom  
+    dad <- dad[ order(sample(1:nrow(mom),size=nrow(mom),replace=FALSE)),]
+  }
+    
   
   if( nrow(mom) != nrow(dad) )
     stop("You need to supply the same number of parental individuals (rowwise) for the matings.")

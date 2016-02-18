@@ -52,5 +52,9 @@ make_loci <- function( x, N=20, F=0 ) {
   else if(length(loci) < N ) {
     loci <- c( loci, sample(loci,size=N-length(loci),replace = TRUE))
   }
+  
+  # shuffle the loci
+  loci <- sample(loci,size=length(loci), replace=FALSE )
+  
   return( loci )
 }
