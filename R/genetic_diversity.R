@@ -70,7 +70,7 @@ genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Ho"
   else if( mode == "ho")
     ret <- Ho(x,stratum=stratum)
   else if( mode == "fis")
-    ret <- Fis(x, stratum=stratum, small.N, small.N = small.N)
+    ret <- Fis(x, stratum=stratum, small.N = small.N)
   else if( mode == "pe")
     ret <- Pe(x)
   else
