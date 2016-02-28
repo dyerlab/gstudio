@@ -19,8 +19,13 @@ A <- function(x, min_freq=0 ){
     ret <- data.frame( Locus=locus_names, A=0 )
     for( i in 1:K){
       data <- x[[locus_names[i]]]
-      ret[i,2] <- A( data )
+      ret[i,2] <- A( data, min_freq=min_freq )
     }  
+    if( min_freq > 0 ){
+      idx <- which( names(ret) == "A")
+      names(ret)[idx] <- "A95"
+    }
+      
   }
   
   else if( is(x,"locus") ) {
