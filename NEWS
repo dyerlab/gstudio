@@ -1,6 +1,9 @@
 gstudio 1.6
 -----------------
 * [REQ] Test for HWP and LD similar to that implemented in Genepop? I work with microsatellite loci that have many rare alleles, so a HWP/LD test with a MC algorithm similar to that used in Genepop would be ideal
+* [ADD] Added heirfstat to genetic_structure to allow functional calling 
+* [ADD] Added hooks into genetic distances from pegas through genetic_distance() for other distance measures.
+
 
 gstudio 1.5
 -----------------
@@ -13,16 +16,13 @@ gstudio 1.5
 * [ADD] Added frequency_matrix() function to reshape data.frame of allele frequencies across strata for a particular locus.
 * [ADD] Added a continuity correction warning to genotype_frequencies()
 * [ADD] Added multilocus_assignment() function.
-
+* [FIX] Check A & A95 parameters
 
 * [FIX] Change pies_on_map to use leaflet and sp poly to make plots.
 * [FIX] Allow mate() to take vectors as well as data.frame objects for producing offspring
 * [FIX] Change selfing rate parameter F in mixed_mating() to s and check output.  Looks fishy right now.
-* [ADD] Added function self() to produce selfed individuals.
-* [ADD] Added heirfstat to genetic_structure to allow functional calling 
-* [ADD] Added hooks into genetic distances from pegas through genetic_distance() for other distance measures.
 * [FIX] Add permutation to Fst()
-* [FIX] Check A & A95 parameters
+
 
 
 
