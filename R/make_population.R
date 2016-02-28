@@ -49,7 +49,7 @@ make_population <- function( x, N=20, F = 0 ){
   }
   
   else if( all(c("Allele","Frequency") %in% names(x) )) {
-    return( make_loci(x,N,F) )    
+    ret <- data.frame( ID=1:N, Locus=make_loci(x,N,F) )    
   }
   
   else
