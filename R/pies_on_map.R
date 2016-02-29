@@ -83,3 +83,23 @@ pies_on_map <- function( x, stratum="Population", locus=NA, longitude='Longitude
   
   invisible(NULL)  
 }
+
+
+
+
+pies_on_map_new <- function( x, stratum="Population", locus=NULL, longitude='Longitude',latitude='Latitude') {
+  if( !is(x,"data.frame"))
+    stop("Please pass a data frame to the pies_on_map() function.")
+  if( is.null(locus) || !(locus %in% names(x)))
+    stop("You must specify a locus to use in the analysis")
+  if( !(longitude %in% names(x)) || !(latitude %in% names(x)))
+    stop("You must specify the columns representing latitude and longitude in the data.frame")
+  
+  pts <- strata_coordinates(x,stratum=stratum,longitude=longitude,latitude=latitude,as.SpatialPoints = TRUE)
+
+  provider <- "http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png"
+                      
+  m <- leaflet(data=pts) %>% addTiles(urlTemplate=provider)
+  m
+  
+}
