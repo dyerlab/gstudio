@@ -159,6 +159,7 @@ frequencies.data.frame <- function( x, loci, stratum, ... ) {
       }
     }
   }
+
   
   return( ret )
 }
