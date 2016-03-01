@@ -95,9 +95,15 @@ pies_on_map_new <- function( x, stratum="Population", locus=NULL, longitude='Lon
   if( !(longitude %in% names(x)) || !(latitude %in% names(x)))
     stop("You must specify the columns representing latitude and longitude in the data.frame")
   
+  
+  
   pts <- strata_coordinates(x,stratum=stratum,longitude=longitude,latitude=latitude,as.SpatialPoints = TRUE)
   
-  freqs <- frequencies(x,loci=locus )
+  freqs <- frequency_matrix(x,stratum=stratum,locus=locus)
+  freqs$Stratum <- factor( freqs$Stratum )
+  
+  data <- merge( pts, freqs )  
+  
 
     
 #  install.packages("plotGoogleMaps")
