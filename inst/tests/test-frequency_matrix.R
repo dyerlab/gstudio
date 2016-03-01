@@ -11,7 +11,7 @@ test_that("frequency matrix", {
   CC <- locus( c("C","C") )
   CD <- locus( c("C","D") )
   DD <- locus( c("D","D") )
-  loc1 <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD)
+  loc1 <- c(AA,AB,AC,AA,BB,BC,BD,CC,CD,DD)
   loc2 <- c(AA,AA,AC,AA,CC,CC,AC,CC,AA,AC)
   
   df <- data.frame( Population=c(rep("A",5),rep("B",5)), TPI=loc1, PGM=loc2 )
