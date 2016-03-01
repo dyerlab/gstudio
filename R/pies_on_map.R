@@ -98,13 +98,15 @@ pies_on_map_new <- function( x, stratum="Population", locus=NULL, longitude='Lon
   
   
   pts <- strata_coordinates(x,stratum=stratum,longitude=longitude,latitude=latitude,as.SpatialPoints = TRUE)
+  proj4string(pts) <- CRS('+init=epsg:28992')
+  
   
   freqs <- frequency_matrix(x,stratum=stratum,locus=locus)
-  freqs$Stratum <- factor( freqs$Stratum )
   
-  data <- merge( pts, freqs )  
   
-
+  spdf <- SpatialPointsDataFrame(pts,freqs)
+  pies <- pieSP( spdf, zcol=2:length(spdf@data) )
+  
     
 #  install.packages("plotGoogleMaps")
 #   require(plotGoogleMaps)
