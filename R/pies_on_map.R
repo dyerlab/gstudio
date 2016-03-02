@@ -12,7 +12,7 @@
 #' @param ... Additional arguments to plotGoogleMaps function.
 #' @return Nothing
 #' @importFrom plotGoogleMaps pieSP plotGoogleMaps
-#' @importFrom sp proj4string<- CRS SpatialPointsDataFrame
+#' @import sp
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 pies_on_map <- function( x, stratum="Population", locus=NULL, longitude='Longitude',latitude='Latitude', max.rad=NULL, ...) {
@@ -34,7 +34,7 @@ pies_on_map <- function( x, stratum="Population", locus=NULL, longitude='Longitu
   
   
   if( is.null( max.rad) ) {
-    d <- strata_distance(pts)
+    d <- strata_distance(strata_coordinates(x,stratum=stratum,longitude=longitude,latitude=latitude))
     max.rad <- max(d)/50*1000
   }
   
