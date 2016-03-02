@@ -17,7 +17,7 @@
 #' @return nothing.
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
-write_population <- function( df, file,mode=c("text","genepop", "structure")[1], stratum=NULL ) {
+write_population <- function( df, file, mode=c("text","genepop", "structure")[1], stratum=NULL ) {
   
   if( missing(df) )
     stop("You need to pass a data.frame to this function.")

@@ -20,14 +20,30 @@ Fis <- function( x, small.N=FALSE, stratum=NULL ) {
     ret <- 1.0 - Ho(x) / He(x, small.N)
     names(ret) <- "Fis"
   }
-  else if( is(x,"data.frame")) {
-    ho <- Ho( x, stratum=stratum )
-    he <- He( x, stratum=stratum )
-    loci <- column_class(x,"locus")
-    ho <- ho[ ho$Locus %in% loci,]
-    he <- he[ he$Locus %in% loci,]
-    Fis <- 1.0 - ho$Ho/he$He
-    ret <- data.frame( Locus=loci, Fis )
+  else if( is(x,"data.frame")  ) {
+    if( is.null(stratum)){
+      ho <- Ho( x, stratum=stratum )
+      he <- He( x, stratum=stratum )
+      loci <- column_class(x,"locus")
+      ho <- ho[ ho$Locus %in% loci,]
+      he <- he[ he$Locus %in% loci,]
+      Fis <- 1.0 - ho$Ho/he$He
+      ret <- data.frame( Locus=loci, Fis )
+    }
+    else {
+      if( !(stratum %in% names(x)) )
+        stop("Cannot find this stratum in the data.frame...")
+      
+      pops <- partition(x,stratum)
+      ret <- NULL
+      for( pop in names(pops)){
+        ret1 <- Fis(pops[[pop]],small.N=small.N)
+        ret1[["Stratum"]] <- pop
+        ret <- rbind( ret, ret1 )
+      }
+      ret <- ret[,c(3,1,2)]
+      
+    }
   }
   else
     stop(paste("This function does not know how to handle data of type",class(x)))

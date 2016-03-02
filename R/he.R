@@ -31,15 +31,16 @@ He <- function( x, small.N=FALSE, stratum=NULL ) {
     k <- length(locus_names)
     if( is.null( stratum ) ) {
       for( i in 1:k) {
-        if( is.null(stratum) ){
-          ret$He[i] <- He( x[[locus_names[i]]], small.N, ... )  
-        }
+        ret$He[i] <- He( x[[locus_names[i]]], small.N=small.N )  
       }
     } else {
       ho <- Ho( x, stratum=stratum )
       cts <- genotype_counts(x, stratum)
       K <- nrow(cts)
-      freqs <- frequencies( x, stratum=stratum)
+      if( is.null(stratum))
+        freqs <- frequencies( x, stratum=stratum)
+      else
+        freqs <- frequencies( x )
       
       for( locus in locus_names ) {
         nbar <-  harmonic_mean(cts[[locus]])
