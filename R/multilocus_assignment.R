@@ -10,7 +10,8 @@
 #'  estimated using stratum!
 #' @param verbose Dump verbose output (default=FALSE)
 #' @return A \code{data.frame} consisting of assignment probabilities.
-#' 
+#' @export
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 
 multilocus_assignment <- function( individual, frequencies, verbose=FALSE ) {
   
