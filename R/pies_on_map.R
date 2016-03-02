@@ -95,18 +95,35 @@ pies_on_map_new <- function( x, stratum="Population", locus=NULL, longitude='Lon
   if( !(longitude %in% names(x)) || !(latitude %in% names(x)))
     stop("You must specify the columns representing latitude and longitude in the data.frame")
   
+  x <- arapat
+  stratum <- "Population"
+  locus="LTRS"
+  longitude="Longitude"
+  latitude="Latitude"
   
   
-  pts <- strata_coordinates(x,stratum=stratum,longitude=longitude,latitude=latitude,as.SpatialPoints = TRUE)
-  proj4string(pts) <- CRS('+init=epsg:28992')
   
-  
+  pts <- strata_coordinates(x,stratum=stratum,longitude=longitude,latitude=latitude)
   freqs <- frequency_matrix(x,stratum=stratum,locus=locus)
+  col_names <- names(freqs)[2:ncol(freqs)]
+  
+  data <- merge(pts,freqs)
+  coordinates(data) <- ~Longitude+Latitude
+  proj4string(data) <- CRS('+init=epsg:28992')
+  pies <- pieSP(data,zcol=col_names,max.radius=120)
+  pies$pie <- rep(col_names,nrow(pies@data))
+  m <- plotGoogleMaps(pies,zcol=col_names)
+  
+  
   
   
   spdf <- SpatialPointsDataFrame(pts,freqs)
-  pies <- pieSP( spdf, zcol=2:length(spdf@data) )
+  proj4string(spdf) <- CRS('+init=epsg:28992')
   
+  
+  pies <- pieSP( spdf, zcol=col_names, max.radius = 100 )
+  pies$pie <- rep( col_names, nrow(freqs))
+  m <- plotGoogleMaps(pies, zcol="pie")
     
 #  install.packages("plotGoogleMaps")
 #   require(plotGoogleMaps)
