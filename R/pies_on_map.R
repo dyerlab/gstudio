@@ -15,6 +15,11 @@
 #' @import sp
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples 
+#' \dontrun{
+#' data(arapat)
+#' pies_on_map(arapat,locus="LTRS")
+#' }
 pies_on_map <- function( x, stratum="Population", locus=NULL, longitude='Longitude',latitude='Latitude', max.rad=NULL, ...) {
   if( !is(x,"data.frame"))
     stop("Please pass a data frame to the pies_on_map() function.")
