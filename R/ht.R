@@ -2,16 +2,17 @@
 #'  
 #' Returns the general expected total heterozygosity parameter
 #' @param x A \code{data.frame} object with \code{locus} objects 
-#' @param stratum  The name of the column representing the stratum variable
+#' @param stratum  The name of the column representing the stratum variable (default=Population)
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
-#' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )
-#' Ht( loci )
-#' Ht( loci, small.N=TRUE )
-Ht <- function( x, stratum ) { 
+#' loci1 <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B")))
+#' loci2 <- c( locus( c("A","A") ), locus( c("A","B")), locus(c("B","B")))
+#' df <- data.frame( Population=c("One","One","One","Two","Two","Two"), Locus=c(loci1,loci2) )
+#' Ht( df )
+Ht <- function( x, stratum="Population" ) { 
   
-  if( missing(x) || missing(stratum) || !is(x,"data.frame") || !(stratum %in% names(x))) 
+  if( missing(x) || !(stratum %in% names(x))) 
     stop("You need to pass both a data.frame and the name of the stratum to this function")
   
   locus_names <- column_class(x,class="locus")

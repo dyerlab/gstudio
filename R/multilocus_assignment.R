@@ -5,7 +5,11 @@
 #' from multilocus genotype frequencies.
 #' @param individual A \code{data.frame} with a single row for an indiviudal with one or 
 #'  more \code{locus} objects
-#' @param frequencies
+#' @param frequencies A \code{data.frame} of allele frequencies from \code{frequencies()}
+#'  that will be used for assignment.  This MUST be a frequency data.frame 
+#'  estimated using stratum!
+#' @param verbose Dump verbose output (default=FALSE)
+#' @return A \code{data.frame} consisting of assignment probabilities.
 #' 
 
 multilocus_assignment <- function( individual, frequencies, verbose=FALSE ) {

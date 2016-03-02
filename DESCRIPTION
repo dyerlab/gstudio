@@ -18,11 +18,11 @@ Depends:
 Imports:
     raster,
     sp,
-    grid,
     reshape2,
     ggmap,
     popgraph,
-    adegenet
+    adegenet,
+    plotGoogleMaps
 Suggests:
     testthat,
     knitr
