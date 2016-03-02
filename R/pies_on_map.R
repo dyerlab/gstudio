@@ -12,7 +12,7 @@
 #' @param ... Additional arguments to plotGoogleMaps function.
 #' @return Nothing
 #' @importFrom plotGoogleMaps pieSP plotGoogleMaps
-#' @import sp
+#' @importFrom sp SpatialPointsDataFrame proj4string<- CRS
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples 

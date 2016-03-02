@@ -16,7 +16,7 @@
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )
 #' He( loci )
 #' He( loci, small.N=TRUE )
-He <- function( x, small.N=FALSE, stratum=NULL, ... ) { 
+He <- function( x, small.N=FALSE, stratum=NULL ) { 
 
   if( is(x,"data.frame") ){
     x <- droplevels(x)

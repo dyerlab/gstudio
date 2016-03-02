@@ -3,6 +3,8 @@
 #' Provides a summary of gentoype frequencies (observed and expected) from
 #'  a vector of \code{locus} objects.
 #' @param x An object of type \code{locus}
+#' @param supress_warnings A flag that will prevent warnings in output
+#'  for ease in simulation without loosing materials in the 50 warnings()
 #' @return A \code{data.frame} with genotype, observed, and expected as counts.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
