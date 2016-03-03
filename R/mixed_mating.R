@@ -22,7 +22,7 @@ mixed_mating <- function( data, N=1, s=0) {
   
   # Catch if s=0 ~ No selfing
   if( s==0 )
-    ret <- mate( data, data, N )
+    ret <- mate( data, N=N )
   
   # some degree of selfing
   else {

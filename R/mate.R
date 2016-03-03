@@ -29,12 +29,12 @@
 #' adults <- data.frame( ID=1:2, Locus=make_loci(f,N=2) )
 #' adults
 #' mate( adults[1,], adults[2,], N=10)
-mate <- function( mom, dad, N=1 ){
+mate <- function( mom, dad=NULL, N=1 ){
   
   if( missing(mom)  )
     stop("You need to pass both parents to make an offspring using mate().")
     
-  if( missing(dad) ) {
+  if( is.null(dad) ) {
     dad <- mom  
     dad <- dad[ order(sample(1:nrow(mom),size=nrow(mom),replace=FALSE)),]
   }
