@@ -28,6 +28,9 @@ Fst <- function( x, stratum="Population", nperm=0  ) {
   if( !is(x,"data.frame"))
     stop("This function requires you to pass it a data.frame of data...")
   
+  if(nperm>0)
+    warning("sorry, I just broke permutation for fst, check back when fixed.")
+  
   loci <- column_class(x,"locus")
   if( any(is.na(loci) ) || ( !( any( loci %in% names(x)))))
     stop("You need to pass this function a data.frame with some columns of type 'locus' to it...")

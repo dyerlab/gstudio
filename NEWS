@@ -3,28 +3,25 @@ gstudio 1.6
 * [REQ] Test for HWP and LD similar to that implemented in Genepop? I work with microsatellite loci that have many rare alleles, so a HWP/LD test with a MC algorithm similar to that used in Genepop would be ideal
 * [ADD] Added heirfstat to genetic_structure to allow functional calling 
 * [ADD] Added hooks into genetic distances from pegas through genetic_distance() for other distance measures.
+* [FIX] Add permutation to Fst() for significance
+
 
 
 gstudio 1.5
 -----------------
 * [ADD] Added option to specify inbreeding (F) in make_population() function
-* [ADD] Added Fst as random anova version.
 * [FIX] Fixed problem with wrapper function around Nei line 9 Stratum => stratum
+* [ADD] Added Fst as random anova version.
 * [FIX] Added ability to pass data.frame with one or more loci to it to genotype_frequency() function
 * [FIX] Refined make_population() specifying F!=0 with less suckiness.
 * [ADD] Added function make_loci() to make vectors of loci outside of making populations.  Fixed problem with specifying F for small N as well.
 * [ADD] Added frequency_matrix() function to reshape data.frame of allele frequencies across strata for a particular locus.
 * [ADD] Added a continuity correction warning to genotype_frequencies()
 * [ADD] Added multilocus_assignment() function.
-* [FIX] Check A & A95 parameters
-
-* [FIX] Change pies_on_map to use leaflet and sp poly to make plots.
-* [FIX] Allow mate() to take vectors as well as data.frame objects for producing offspring
+* [FIX] Fixed problem with A95 parameters when evaluating a data.frame of loci
+* [FIX] Fixed pies_on_map
+* [FIX] Changed mate() to add additional functionality
 * [FIX] Change selfing rate parameter F in mixed_mating() to s and check output.  Looks fishy right now.
-* [FIX] Add permutation to Fst()
-
-
-
 
 
 

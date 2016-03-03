@@ -9,12 +9,12 @@ test_that( "testing",{
   
   expect_that( mixed_mating(), throws_error())
   
-  o <- mixed_mating(df, F=0)
+  o <- mixed_mating(df, s=0)
   expect_that( o , is_a("data.frame") )
   expect_that( names(o), is_equivalent_to( c("ID","TPI")))
   expect_that( nrow(o), equals(2) )
   
-  o <- mixed_mating(df[1,], F=1, N=10)
+  o <- mixed_mating(df[1,], s=1, N=10)
   expect_that( nrow(o), equals(10) )
   expect_that( names(o), is_equivalent_to( c("ID","TPI")))
   expect_that( o$TPI[1], prints_text( "A:A") )
