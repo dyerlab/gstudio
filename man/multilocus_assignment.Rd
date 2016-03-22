@@ -4,7 +4,7 @@
 \alias{multilocus_assignment}
 \title{Returns multilocus assignment probability}
 \usage{
-multilocus_assignment(individual, frequencies, log_scale = TRUE,
+multilocus_assignment(individual, frequencies, F = 0, log_scale = TRUE,
   verbose = FALSE)
 }
 \arguments{
@@ -14,6 +14,8 @@ more \code{locus} objects}
 \item{frequencies}{A \code{data.frame} of allele frequencies from \code{frequencies()}
 that will be used for assignment.  This MUST be a frequency data.frame 
 estimated using stratum!}
+
+\item{F}{The inbreeding parameter (default=0)}
 
 \item{log_scale}{Depict posterior probability as log-likelihood (default=TRUE)}
 
