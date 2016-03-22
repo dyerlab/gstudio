@@ -8,7 +8,7 @@
 #' @param ... Ignored
 #' @return The effective number of alleles either as a \code{numeric} value
 #'  or as a \code{data.frame} if mutliple loci are passed.
-#' @export
+#' @export 
 #' @examples
 #' locus <- c( locus(1:2), locus(c(1,1)), locus(c(2,2)), locus(2:3) )
 #' Ae(locus)
