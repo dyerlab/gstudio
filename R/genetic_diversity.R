@@ -60,17 +60,17 @@ genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Ho"
   
   
   if( mode == "a")
-    ret <- A(x, ...)
+    ret <- A(x)
   else if( mode == "ae")
-    ret <- Ae(x, ...)
+    ret <- Ae(x)
   else if( mode == "a95")
-    ret <- A(x,min_freq=0.05, ...)
+    ret <- A(x,min_freq=0.05)
   else if( mode == "he")
-    ret <- He(x,stratum=stratum, small.N=small.N, ...)
+    ret <- He(x,stratum=stratum, small.N=small.N)
   else if( mode == "ho")
-    ret <- Ho(x,stratum=stratum, ...)
+    ret <- Ho(x,stratum=stratum)
   else if( mode == "fis")
-    ret <- Fis(x, stratum=stratum, small.N = small.N, ...)
+    ret <- Fis(x, stratum=stratum, small.N = small.N)
   else if( mode == "pe")
     ret <- Pe(x)
   else
