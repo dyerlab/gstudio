@@ -8,12 +8,13 @@
 #' @param frequencies A \code{data.frame} of allele frequencies from \code{frequencies()}
 #'  that will be used for assignment.  This MUST be a frequency data.frame 
 #'  estimated using stratum!
+#' @param F The inbreeding parameter (default=0)
 #' @param log_scale Depict posterior probability as log-likelihood (default=TRUE)
 #' @param verbose Dump verbose output (default=FALSE)
 #' @return A \code{data.frame} consisting of assignment probabilities.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-multilocus_assignment <- function( individual, frequencies, log_scale=TRUE, verbose=FALSE ) {
+multilocus_assignment <- function( individual, frequencies, F=0, log_scale=TRUE, verbose=FALSE ) {
   
   # Check to see correct type of data passed
   if( !is(individual,"data.frame") || length( column_class(individual,"locus")) < 1 )
@@ -49,8 +50,17 @@ multilocus_assignment <- function( individual, frequencies, log_scale=TRUE, verb
           
           if( all(all_alleles %in% popfreq$Allele ) ) {
             f <- prod(unlist(lapply( all_alleles, function(x) return( popfreq$Frequency[ popfreq$Allele==x]))))
-            if( is_heterozygote(loc) )
+            if( is_heterozygote(loc) ){
               f <- f*2
+            }
+            if( F > 0 ){
+              f <- f * (1-F)
+              if( !is_heterozygote(loc)){
+                f <- f + (popfreq$Frequency[ popfreq$Allele==all_alleles[1]] * F )
+              }
+            }
+
+              
           }
           else {
             f <- prob <- 0
