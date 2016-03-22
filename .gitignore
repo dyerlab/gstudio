@@ -15,9 +15,9 @@ gstudio.Rproj
 figure/
 gstudio.Rcheck/
 gstudio_*.tar.gz
-gstudio/man/*
-man/*
-*.Rd
+#gstudio/man/*
+#man/*
+#*.Rd
 
 
 README.html
