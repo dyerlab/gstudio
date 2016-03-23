@@ -29,6 +29,14 @@ geom_frequencies <- function(x, ...){
   if( !("Frequency" %in% names(x)) | !("Allele" %in% names(x)))
     stop("Cannot plot this data.frame, it does not appear to be from frequencies().")
   
+  alleles <- levels(x$Frequency)
+  t <- as.data.frame(table( x$Allele, x$Stratum ))
+  t$Locus <- x$Locus[1]
+  names(t) <- c("Allele","Stratum","Frequency","Locus")
+  t <- t[, c(2,4,1,3)]
+  t <- t[ t$Frequency < 1, ]
+  x <- rbind( x, t)
+  
   ret <- geom_bar( aes(x=Allele,y=Frequency,fill=Allele), stat="identity", data=x )
   
   return( ret )
