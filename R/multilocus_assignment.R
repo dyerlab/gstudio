@@ -9,12 +9,11 @@
 #'  that will be used for assignment.  This MUST be a frequency data.frame 
 #'  estimated using stratum!
 #' @param F The inbreeding parameter (default=0)
-#' @param log_scale Depict posterior probability as log-likelihood (default=TRUE)
 #' @param verbose Dump verbose output (default=FALSE)
 #' @return A \code{data.frame} consisting of assignment probabilities.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-multilocus_assignment <- function( individual, frequencies, F=0, log_scale=TRUE, verbose=FALSE ) {
+multilocus_assignment <- function( individual, frequencies, F=0, verbose=FALSE ) {
   
   # Check to see correct type of data passed
   if( !is(individual,"data.frame") || length( column_class(individual,"locus")) < 1 )
@@ -103,8 +102,7 @@ multilocus_assignment <- function( individual, frequencies, F=0, log_scale=TRUE,
   
   ret$Posterior <- ret$Probability / sum( ret$Probability ) 
   
-  if( log_scale )
-    ret$Posterior <- log( ret$Posterior )
+  
   
   return( ret )
   

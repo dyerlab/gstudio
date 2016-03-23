@@ -4,8 +4,7 @@
 \alias{multilocus_assignment}
 \title{Returns multilocus assignment probability}
 \usage{
-multilocus_assignment(individual, frequencies, F = 0, log_scale = TRUE,
-  verbose = FALSE)
+multilocus_assignment(individual, frequencies, F = 0, verbose = FALSE)
 }
 \arguments{
 \item{individual}{A \code{data.frame} with a single row for an indiviudal with one or 
@@ -16,8 +15,6 @@ that will be used for assignment.  This MUST be a frequency data.frame
 estimated using stratum!}
 
 \item{F}{The inbreeding parameter (default=0)}
-
-\item{log_scale}{Depict posterior probability as log-likelihood (default=TRUE)}
 
 \item{verbose}{Dump verbose output (default=FALSE)}
 }
