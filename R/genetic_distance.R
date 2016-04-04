@@ -72,7 +72,7 @@ genetic_distance <- function( x, stratum="Population", mode ){
     ret <- dist_euclidean(x,stratum=stratum)
   
   else if( mode == "cgd") 
-    ret <- dist_cgd(xv,stratum=stratum)
+    ret <- dist_cgd(x,stratum=stratum)
   
   else if( mode == "nei")
     ret <- dist_nei(x,stratum=stratum)
