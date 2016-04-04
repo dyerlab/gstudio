@@ -2,7 +2,7 @@
 % Please edit documentation in R/partition.R
 \name{partition}
 \alias{partition}
-\title{Subdivide , into a list of substrata}
+\title{Subdivide a \code{data.frame} of genetic information, into a list of substrata}
 \usage{
 partition(x, stratum = "Population")
 }
@@ -17,6 +17,9 @@ A partitioned list of objects, indexed by name
 \description{
 This function allows you to take a single \code{Population} object
  into a list of \code{Population} objects, one for each stratum.
+}
+\note{
+A quick routine for grabbing subsets of data.
 }
 \examples{
  AA <- locus( c("A","A") )

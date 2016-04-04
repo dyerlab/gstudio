@@ -10,7 +10,7 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 plot.locus <- function( x, mode=c("bar","pie")[1], ... ) {
-  #require(ggplot2)
+
   f <- frequencies( x )
   Allele <- Frequency <- NULL
   if( mode=="bar")

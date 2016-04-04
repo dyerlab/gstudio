@@ -1,10 +1,11 @@
-#' Subdivide , into a list of substrata
+#' Subdivide a \code{data.frame} of genetic information, into a list of substrata
 #' 
 #' This function allows you to take a single \code{Population} object
 #'  into a list of \code{Population} objects, one for each stratum.
 #' @param x Any object that can be column indexed by the function \code{names}
 #' @param stratum The column name of the stratum to partition on (default='Population').
 #' @return A partitioned list of objects, indexed by name
+#' @note A quick routine for grabbing subsets of data.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
