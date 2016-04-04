@@ -52,6 +52,6 @@ test_that("locus is na",{
   m <- to_mv( loci,leave.as.na=TRUE )
   expect_that( m, is_a("matrix"))
   expect_that( dim(m), is_equivalent_to(c(3,2)))
-  expect_that( m[2,], is_equivalent_to( c(NA,NA) ))
+  expect_that( all(is.na(m[2,])), is_true())
   
 })

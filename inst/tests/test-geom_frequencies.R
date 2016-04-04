@@ -14,8 +14,8 @@ test_that("shortest paths", {
   DD <- locus( c("D","D") )
   TPI <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD)
   
-  df <- data.frame( strata = c(rep("A",5),rep("B",5)), TPI  )
-  x <- frequencies( df, loci="TPI" )
+  df <- data.frame( Population = c(rep("A",5),rep("B",5)), TPI  )
+  x <- frequencies( df, loci="TPI", stratum="Population" )
   p <- geom_frequencies( x ) 
   expect_that( p, is_a("ggproto"))
   expect_that( p, is_a("LayerInstance"))
