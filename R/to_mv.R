@@ -55,7 +55,7 @@ to_mv.locus <- function( x, ploidy=2, alleles=NA, drop.allele=FALSE, leave.as.na
     
     ret <- unlist( ret )/ploidy
     
-    if( is.na(x))
+    if( is.na(x) && leave.as.na)
       ret <- rep(NA,length(ret))
   }
 
