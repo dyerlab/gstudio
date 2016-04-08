@@ -37,8 +37,9 @@ He <- function( x, small.N=FALSE, stratum=NULL ) {
       ho <- Ho( x, stratum=stratum )
       cts <- genotype_counts(x, stratum)
       K <- nrow(cts)
-      if( is.null(stratum))
+      if( !is.null(stratum)) {
         freqs <- frequencies( x, stratum=stratum)
+      }
       else
         freqs <- frequencies( x )
       
@@ -47,8 +48,15 @@ He <- function( x, small.N=FALSE, stratum=NULL ) {
         xki <- freqs[ freqs$Locus==locus, ]
         x2ibar <- unlist(by( xki$Frequency, xki$Allele, function(x) sum(x^2/K) ))
         hs <- nbar/(nbar-1) * ( 1 - sum(x2ibar) - ho$Ho[ ho$Locus==locus]/(2*nbar) )
-        ret$He[ ret$Locus == locus ] <- hs
+        if( !is.null(stratum)){
+          ret$Hs[ ret$Locus == locus ] <- hs 
+          ret$He <- NULL
+        }
+        else {
+          ret$He[ ret$Locus == locus ] <- hs
+        }
       }
+        
       
     }
     
