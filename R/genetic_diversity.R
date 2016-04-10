@@ -35,18 +35,23 @@
 #'  genetic_diversity( df, mode="Ae")
 genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Ho", "Fis","Pe")[2] , small.N=FALSE, ... ){
   
+  mode <- tolower(mode)
   
   if( missing(x) )
     stop("You must pass a data.frame to the genetic_diversity() function.")
   
   if( !is.null(stratum) & !(mode == "he" || mode == "ho") ) {
-    pops <- partition(x,stratum)
+    pops <- partition(x,stratum=stratum)
     ret <- data.frame(Stratum=NA,Locus=NA, Diversity=NA)
+    
     for( pop in names(pops) ){
       gd <- genetic_diversity(pops[[pop]], mode=mode, small.N=small.N, ... )
       gd$Stratum <- pop
       gd <- gd[, c(3,1,2)]
-      names(ret)[3] <- mode
+      
+      if( names(ret)[3] == "Diversity" )
+        names(ret)[3] <- names(gd)[3]
+      
       ret <- rbind( ret, gd )
     }
     
@@ -54,7 +59,7 @@ genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Ho"
     return( ret )
   }
   
-  mode <- tolower( mode )
+  
     
   
   

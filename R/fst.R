@@ -25,8 +25,11 @@
 #'  df <- data.frame( Population, TPI=locus, PGM=locus2 )
 #'  Fst( df )
 Fst <- function( x, stratum="Population", nperm=0  ) {
+  
   if( !is(x,"data.frame"))
     stop("This function requires you to pass it a data.frame of data...")
+  
+  x <- droplevels(x)
   
   if(nperm>0)
     warning("sorry, I just broke permutation for fst, check back when fixed.")
