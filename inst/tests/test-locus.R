@@ -6,7 +6,6 @@ test_that("creating new ones", {
   loci <- c(AB,AB,AB)
   locNULL <- locus()
   expect_that( AB, is_a("locus") )
-  expect_that( AB, prints_text("A:B"))  
   expect_that( nchar(locNULL), equals(0) )
 
   expect_that(loci, is_a("locus"))
@@ -19,11 +18,10 @@ test_that("creating new ones", {
 test_that("passing NA", {
   loc1 <- locus( NA )
   expect_that( is.na(loc1), is_true())
-  expect_that( loc1, prints_text(""))
   
   loc2 <- locus( "NA:NA", type="separated")
   expect_that( is.na(loc2), is_true())
-  expect_that( loc2, prints_text(""))
+
 })
 
 
@@ -50,11 +48,7 @@ test_that("SNP Creation", {
   expect_that( loc.snp1, is_a("locus") )
   expect_that( loc.snp2, is_a("locus") )
   expect_that( loc.snp3, is_a("locus") )
-  expect_that( loc.snp0, prints_text("A:A") )
-  expect_that( loc.snp1, prints_text("A:B") )
-  expect_that( loc.snp2, prints_text("B:B") )
-  expect_that( loc.snp3, prints_text("") )
- 
+  
   loci <- locus( c(0,1,2), type="snp")
   expect_that( loci, is_a("locus") )
   expect_that( loci[1], equals( locus(c("A","A"))))

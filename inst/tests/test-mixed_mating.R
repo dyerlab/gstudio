@@ -17,7 +17,7 @@ test_that( "testing",{
   o <- mixed_mating(df[1,], s=1, N=10)
   expect_that( nrow(o), equals(10) )
   expect_that( names(o), is_equivalent_to( c("ID","TPI")))
-  expect_that( o$TPI[1], prints_text( "A:A") )
+  
   expect_that( sum( is_heterozygote(o$TPI))==0, is_true() )
   
 })

@@ -22,7 +22,7 @@ test_that( "testing",{
   expect_that( names(o), is_equivalent_to( c("ID","OffID","TPI")))
   expect_that( as.character(o$ID[1]), equals("A"))
   expect_that( as.character(o$OffID[1]), equals("1"))
-  expect_that( o$TPI[1], prints_text( "A:A") )
+  
   
   
   
