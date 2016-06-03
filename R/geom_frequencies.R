@@ -41,7 +41,7 @@ geom_frequencies <- function(x, ...){
     x <- rbind( x, t)
   }
   
-  ret <- geom_bar( aes(x=Allele,y=Frequency,fill=Allele), stat="identity", data=x )
+  ret <- ggplot2::geom_bar( aes(x=Allele,y=Frequency,fill=Allele), stat="identity", data=x )
   
   return( ret )
 }

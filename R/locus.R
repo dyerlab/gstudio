@@ -37,8 +37,10 @@
 locus <- function( x, type, phased=FALSE ){
   
   # missing data
-  if( missing(x) || (length(x)==1 & nchar(x)==0) )
+  if( missing(x) || is.na(x) ) {
     ret <- ""
+  }
+    
   
   # default, sort and collapse em.
   else if( missing(type) ){  

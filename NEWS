@@ -5,6 +5,8 @@ gstudio 1.6
 * [ADD] Added hooks into genetic distances from pegas through genetic_distance() for other distance measures.
 * [FIX] Add permutation to Fst() for significance
 
+* [FIX] stratum He/Ho genetic_diversity Hs
+
 
 
 gstudio 1.5

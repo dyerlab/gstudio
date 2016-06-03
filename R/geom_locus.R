@@ -38,14 +38,14 @@ geom_locus <- function( mapping, data, ... ) {
   
   if( is.null(mapping$fill) ) {
     freqs <- frequencies( data, loci=as.character(mapping$x) )
-    ret <- geom_bar( aes(x=Allele,y=Frequency), stat="identity", data=freqs ) 
+    ret <- ggplot2::geom_bar( aes(x=Allele,y=Frequency), stat="identity", data=freqs ) 
   }
     
   else {
     freqs <- frequencies( data, loci=as.character(mapping$x), stratum=as.character(mapping$fill))
     vals <- expand.grid( Stratum=unique(freqs$Stratum), Locus=unique(freqs$Locus), Allele=unique(freqs$Allele))
     freqs <- merge( freqs, vals, all=TRUE)
-    ret <- geom_bar( aes(x=Allele,y=Frequency, fill=Stratum), stat="identity", data=freqs, position=position_dodge(), ... )
+    ret <- ggplot2::geom_bar( aes(x=Allele,y=Frequency, fill=Stratum), stat="identity", data=freqs, position=position_dodge(), ... )
   }
     
   

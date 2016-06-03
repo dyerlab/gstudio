@@ -41,11 +41,11 @@ optimal_sampling <- function( N, phi) {
   
   df <- data.frame(Strata=J, Var.Phi=var.phi )
   df1 <- data.frame( Strata=c(J,rev(J)), Var.Phi=c(var.low,rev(var.high)))
-  ret <- ggplot( df, aes(x=Strata,y=Var.Phi))   
-  ret <- ret + geom_polygon( data=df1, alpha=0.5 )
-  ret <- ret + geom_line() + geom_point(size=4,aes(color=Var.Phi)) 
-  ret <- ret + xlab("Number of Strata") + ylab("Variance in Interclass Correlation Parameter") 
-  ret <- ret + scale_color_gradient( low="#78C679", high="#B30000", guide="none")
+  ret <- ggplot2::ggplot( df, aes(x=Strata,y=Var.Phi))   
+  ret <- ret + ggplot2::geom_polygon( data=df1, alpha=0.5 )
+  ret <- ret + ggplot2::geom_line() + ggplot2::geom_point(size=4,aes(color=Var.Phi)) 
+  ret <- ret + ggplot2::xlab("Number of Strata") + ggplot2::ylab("Variance in Interclass Correlation Parameter") 
+  ret <- ret + ggplot2::scale_color_gradient( low="#78C679", high="#B30000", guide="none")
 
   return( ret )
 }

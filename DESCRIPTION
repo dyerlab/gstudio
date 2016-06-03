@@ -13,9 +13,10 @@ Date: 2016-03-03
 LazyLoad: true
 VignetteBuilder: knitr
 Depends:
-    R (>= 3.0),
-    ggplot2
+    R (>= 3.0)
 Imports:
+    ggplot2,
+    methods,
     raster,
     sp,
     reshape2,

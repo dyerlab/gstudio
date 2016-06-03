@@ -14,15 +14,15 @@ plot.locus <- function( x, mode=c("bar","pie")[1], ... ) {
   f <- frequencies( x )
   Allele <- Frequency <- NULL
   if( mode=="bar")
-    plot <- ggplot( f, aes(x=Allele,y=Frequency,fill=Allele)) + 
-            geom_bar(stat="identity") + 
-            ylim(c(0,1))
+    plot <- ggplot2::ggplot( f, aes(x=Allele,y=Frequency,fill=Allele)) + 
+    ggplot2::geom_bar(stat="identity") + 
+    ggplot2::ylim(c(0,1))
   else
-    plot <- ggplot( f, aes(x=1,y=Frequency,fill=Allele)) + 
-            geom_bar(stat="identity",aes(fill=Allele))  + 
-            coord_polar("y") + 
-            xlab("") + ylab("") + 
-            theme(axis.ticks=element_blank(), axis.text.y=element_blank())
+    plot <- ggplot2::ggplot( f, aes(x=1,y=Frequency,fill=Allele)) + 
+    ggplot2::geom_bar(stat="identity",aes(fill=Allele))  + 
+    ggplot2::coord_polar("y") + 
+    ggplot2::xlab("") + ggplot2::ylab("") + 
+    ggplot2::theme(axis.ticks=element_blank(), axis.text.y=element_blank())
   return(plot)
 }
 

@@ -41,8 +41,8 @@ plot_populations <- function( x,
     Longitude <- Latitude <- NULL
     coords <- strata_coordinates( x , stratum, longitude, latitude )
     map <- population_map( coords, map.source, map.type, zoom )
-    ret <- ggmap( map ) + geom_point( aes(x=Longitude, y=Latitude), data=coords, size=4, color=color ) 
-    ret <- ret + xlab("Longitude") + ylab("Latitude")
+    ret <- ggmap::ggmap( map ) + ggplot2::geom_point( aes(x=Longitude, y=Latitude), data=coords, size=4, color=color ) 
+    ret <- ret + ggplot2::xlab("Longitude") + ggplot2::ylab("Latitude")
     return( ret )    
   }
   

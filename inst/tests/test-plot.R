@@ -2,6 +2,7 @@ context("plot.R")
 
 
 test_that("locus",{
+  
   loci <- c( locus(1:2), locus(1:2), locus(1:2) )
   p <- plot.locus( loci )
   

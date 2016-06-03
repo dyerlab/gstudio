@@ -51,6 +51,6 @@ geom_strata <- function( mapping=NULL, data=NULL, ...){
   
   names(df)[1] <- as.character(mapping$stratum)
   
-  ret <- geom_point( mapping, data=df, ...)
+  ret <- ggplot2::geom_point( mapping, data=df, ...)
   return( ret )
 }

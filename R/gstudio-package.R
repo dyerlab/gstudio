@@ -37,6 +37,12 @@
 #' @import raster 
 #' @import ggplot2 
 #' @import ggmap
+#' @import graphics
+#' @importFrom graphics plot.default
+#' @importFrom methods is
+#' @importFrom stats pchisq
+#' @importFrom utils read.csv
+#' @importFrom utils read.table
 #' @name gstudio-package
 #' @rdname gstudio-package
 #'
