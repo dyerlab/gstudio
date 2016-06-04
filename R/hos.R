@@ -1,4 +1,4 @@
-#' Estimate observed heterozygosity
+#' Estimate observed heterozygosity corrected for sample size after Nei
 #'  
 #' Returns the general observed heterozygosity parameter
 #'  from the frequencies
@@ -14,34 +14,33 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )
-#' Ho( loci )
-Ho <- function( x, stratum=NULL ) {  
+#' Hos( loci )
+Hos <- function( x, stratum=NULL ) {  
   
   if( is(x,"data.frame") ){
     locus_names <- column_class(x,class="locus")
     if( length(locus_names)==0)
       stop("Cannot estimate expected heterozygosity if there are no loci...")
     
-    ret <- data.frame( Locus=locus_names, Ho=0 )
+    ret <- data.frame( Locus=locus_names, Hos=0 )
     k <- length(locus_names)
     for( i in 1:k) {
       
       # as a single sample estimate
       if( is.null(stratum)) {
-        ret$Ho[i] <- Ho( x[[locus_names[i]]] )
+        ret$Hos[i] <- Hos( x[[locus_names[i]]] )
       }
       
       # as a weighted estimate by population after Nei
       else {
         if( is( x[[stratum]], "factor"))
           x[[stratum]] <- droplevels(x[[stratum]])
-        
-        ret$Ho[i] <- mean( unlist( by( x[[locus_names[i]]], x[[stratum]], Ho) ) )
+        ret$Hos[i] <- mean( unlist( by( x[[locus_names[i]]], x[[stratum]], Hos) ) )
       }
     }
     
     if( !is.null(stratum ) ){
-      ret <- rbind( ret, data.frame(Locus="Multilocus",Ho=sum(ret$Ho)/k))
+      ret <- rbind( ret, data.frame(Locus="Multilocus",Ho=sum(ret$Hos)/k))
     }
     
 
@@ -59,7 +58,7 @@ Ho <- function( x, stratum=NULL ) {
     if( Ninds > 0)
       ret <- Nhets / Ninds
     
-    names(ret) <- "Ho"
+    names(ret) <- "Hos"
     return( ret )
   }
   

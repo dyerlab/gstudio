@@ -16,6 +16,8 @@
 #'      \item{A95}{Number of alleles with frequency at least five percent}
 #'      \item{He}{Expected heterozygosity}
 #'      \item{Ho}{Observed heterozygosity}
+#'      \item{Hes}{Expected subpopulation expected heterozygosity}
+#'      \item{Hos}{Expected subpopulation observed heterozygosity}
 #'      \item{Fis}{Wright's Inbreeding coefficient (size corrected).}
 #'      \item{Pe}{Locus polymorphic index.}
 #'    }
@@ -33,31 +35,42 @@
 #'  Population <- c(rep("Pop-A",5),rep("Pop-B",5))
 #'  df <- data.frame( Population, TPI=locus, PGM=locus2 )
 #'  genetic_diversity( df, mode="Ae")
-genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Ho", "Fis","Pe")[2] , small.N=FALSE, ... ){
-  
+genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Ho", "Hos", "Hes", "Fis","Pe")[2] , small.N=FALSE, locus=NULL, ... ){
   mode <- tolower(mode)
   
+  
+  if( is(x,"locus"))
+    x <- data.frame(Locus=x)
+  
+  if( !is(x,"data.frame") || length( column_class(x,"locus")) < 1 )
+    stop("Either pass a data.frame or an object of type locus to this function.")
+  if( !(mode %in% c("a","ae","a95","he", "ho", "hos", "hes", "fis","pe")))
+    stop("Unrecognized mode passed to genetic_diversity().")
   if( missing(x) )
     stop("You must pass a data.frame to the genetic_diversity() function.")
   
-  if( !is.null(stratum) & !(mode == "he" || mode == "ho") ) {
-    pops <- partition(x,stratum=stratum)
-    ret <- data.frame(Stratum=NA,Locus=NA, Diversity=NA)
+  
+  ## Passed with stratum 
+  if( !is.null(stratum) ) {
+    if( !(stratum %in% names(x)))
+      stop("Requested stratum is NOT in the data you passed to genetic_diversity()...")
     
-    for( pop in names(pops) ){
-      gd <- genetic_diversity(pops[[pop]], mode=mode, small.N=small.N, ... )
+    pops <- partition( x, stratum=stratum )
+    ret <- data.frame(Stratum=NA, Locus=NA, Diversity=NA )
+    
+    for( pop in pops){
+      gd <- genetic_diversity( pops[[pop]], mode=mode, small.N=small.N, ...)
       gd$Stratum <- pop
-      gd <- gd[, c(3,1,2)]
-      
+      gd <- gd[,c(3,1,2)]
       if( names(ret)[3] == "Diversity" )
         names(ret)[3] <- names(gd)[3]
       
       ret <- rbind( ret, gd )
     }
-    
     ret <- ret[ !is.na(ret$Stratum),]
     return( ret )
   }
+  
   
   
     
@@ -74,6 +87,8 @@ genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Ho"
     ret <- He(x, stratum=stratum, small.N=small.N, ...)
   else if( mode == "ho")
     ret <- Ho(x, stratum=stratum, ...)
+  else if( mode == "hs")
+    ret <- Hs(x,stratum=stratum, small.N=small.N, ...)
   else if( mode == "fis")
     ret <- Fis(x, stratum=stratum, small.N = small.N, ...)
   else if( mode == "pe")
