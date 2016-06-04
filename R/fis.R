@@ -14,35 +14,32 @@
 #' @examples
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )
 #' Fis( loci )
-Fis <- function( x, small.N=FALSE, stratum=NULL ) {
+Fis <- function( x, small.N=FALSE, stratum=NULL, loci=NULL ) {
   
   if( is(x,"locus") ) {
     ret <- 1.0 - Ho(x) / He(x, small.N)
     names(ret) <- "Fis"
   }
   else if( is(x,"data.frame")  ) {
-    if( is.null(stratum)){
-      ho <- Ho( x, stratum=stratum )
-      he <- He( x, stratum=stratum )
+    x <- droplevels(x)
+    
+    if( is.null(loci) )
       loci <- column_class(x,"locus")
-      ho <- ho[ ho$Locus %in% loci,]
-      he <- he[ he$Locus %in% loci,]
-      Fis <- 1.0 - ho$Ho/he$He
-      ret <- data.frame( Locus=loci, Fis )
+    
+    ho <- genetic_diversity( x, mode="Ho", small.N=small.N, stratum=stratum )
+    he <- genetic_diversity( x, mode="He", small.N=small.N, stratum=stratum )
+    ho <- ho[ ho$Locus %in% loci,]
+    he <- he[ he$Locus %in% loci,]
+    
+    if( is.null(stratum)) {
+      ret <- data.frame( Locus=ho$Locus, Fis = 1.0 - ho$Ho / he$He )
+      if( nrow( ret ) > 1 && is.null(stratum) )
+        ret <- rbind( ret, data.frame(Locus="Multilocus", Fis= (1.0 - sum(ho$Ho)/sum(he$He))))
     }
     else {
-      if( !(stratum %in% names(x)) )
-        stop("Cannot find this stratum in the data.frame...")
-      
-      pops <- partition(x,stratum)
-      ret <- NULL
-      for( pop in names(pops)){
-        ret1 <- Fis(pops[[pop]],small.N=small.N)
-        ret1[["Stratum"]] <- pop
-        ret <- rbind( ret, ret1 )
-      }
-      ret <- ret[,c(3,1,2)]
-      
+      strata <- unique( x[[stratum]] )
+      k <- length( strata )
+      ret <- data.frame( Stratum=rep(strata, each=length(loci)), Locus=ho$Locus, Fis = 1.0 - ho$Ho / he$He )
     }
   }
   else

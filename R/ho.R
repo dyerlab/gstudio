@@ -3,8 +3,6 @@
 #' Returns the general observed heterozygosity parameter
 #'  from the frequencies
 #' @param x An object of type \code{locus}
-#' @param stratum A flag indicating that you want to estimate Nei's unbiased Ho
-#'  across sampling locations.
 #' @return The expected heterozygosity
 #' @note This function can be called on a single vector of data, a \code{data.frame} of loci, 
 #'  or a \code{data.frame} of \code{locus} objects across strata.  If the estimating across
@@ -15,7 +13,7 @@
 #' @examples
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )
 #' Ho( loci )
-Ho <- function( x, stratum=NULL ) {  
+Ho <- function( x ) {  
   
   if( is(x,"data.frame") ){
     locus_names <- column_class(x,class="locus")
@@ -24,26 +22,12 @@ Ho <- function( x, stratum=NULL ) {
     
     ret <- data.frame( Locus=locus_names, Ho=0 )
     k <- length(locus_names)
-    for( i in 1:k) {
-      
-      # as a single sample estimate
-      if( is.null(stratum)) {
-        ret$Ho[i] <- Ho( x[[locus_names[i]]] )
-      }
-      
-      # as a weighted estimate by population after Nei
-      else {
-        if( is( x[[stratum]], "factor"))
-          x[[stratum]] <- droplevels(x[[stratum]])
-        
-        ret$Ho[i] <- mean( unlist( by( x[[locus_names[i]]], x[[stratum]], Ho) ) )
-      }
-    }
     
-    if( !is.null(stratum ) ){
-      ret <- rbind( ret, data.frame(Locus="Multilocus",Ho=sum(ret$Ho)/k))
-    }
+    for( i in 1:k) 
+      ret$Ho[i] <- Ho( x[[locus_names[i]]] )
     
+    if( k > 1 )
+      ret <- rbind( ret, data.frame(Locus="Multilocus",Ho=mean(ret$Ho,na.rm=TRUE)))
 
     return( ret )
   }
@@ -58,7 +42,7 @@ Ho <- function( x, stratum=NULL ) {
     
     if( Ninds > 0)
       ret <- Nhets / Ninds
-    
+
     names(ret) <- "Ho"
     return( ret )
   }

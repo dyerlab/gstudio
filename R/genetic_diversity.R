@@ -7,6 +7,7 @@
 #' @param stratum The strata by which the genetic distances are estimated.  This
 #'    can be an optional parameter when estimating distance measures calculated
 #'    among indiviudals (default='Population'). 
+#' @param loci The set of loci to use (default NULL will use all)
 #' @param mode The particular genetic diversity metric that you are going to use. 
 #'    The \code{gstudio} package currently includes the following individual distance 
 #'    measures:
@@ -16,8 +17,8 @@
 #'      \item{A95}{Number of alleles with frequency at least five percent}
 #'      \item{He}{Expected heterozygosity}
 #'      \item{Ho}{Observed heterozygosity}
-#'      \item{Hes}{Expected subpopulation expected heterozygosity}
-#'      \item{Hos}{Expected subpopulation observed heterozygosity}
+#'      \item{Hes}{Expected subpopulation heterozygosity (Nei's Corrected)}
+#'      \item{Hos}{Expected subpopulation heterozygosity (Nei's Corrected)}
 #'      \item{Fis}{Wright's Inbreeding coefficient (size corrected).}
 #'      \item{Pe}{Locus polymorphic index.}
 #'    }
@@ -35,13 +36,12 @@
 #'  Population <- c(rep("Pop-A",5),rep("Pop-B",5))
 #'  df <- data.frame( Population, TPI=locus, PGM=locus2 )
 #'  genetic_diversity( df, mode="Ae")
-genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Ho", "Hos", "Hes", "Fis","Pe")[2] , small.N=FALSE, locus=NULL, ... ){
+genetic_diversity <- function( x, stratum=NULL, loci=NULL, mode=c("A","Ae","A95","He", "Ho", "Hos", "Hes", "Fis","Pe")[2] , small.N=FALSE, ... ){
+  rmode <- mode
   mode <- tolower(mode)
-  
   
   if( is(x,"locus"))
     x <- data.frame(Locus=x)
-  
   if( !is(x,"data.frame") || length( column_class(x,"locus")) < 1 )
     stop("Either pass a data.frame or an object of type locus to this function.")
   if( !(mode %in% c("a","ae","a95","he", "ho", "hos", "hes", "fis","pe")))
@@ -52,50 +52,78 @@ genetic_diversity <- function( x, stratum=NULL, mode=c("A","Ae","A95","He", "Ho"
   
   ## Passed with stratum 
   if( !is.null(stratum) ) {
-    if( !(stratum %in% names(x)))
-      stop("Requested stratum is NOT in the data you passed to genetic_diversity()...")
     
-    pops <- partition( x, stratum=stratum )
-    ret <- data.frame(Stratum=NA, Locus=NA, Diversity=NA )
-    
-    for( pop in pops){
-      gd <- genetic_diversity( pops[[pop]], mode=mode, small.N=small.N, ...)
-      gd$Stratum <- pop
-      gd <- gd[,c(3,1,2)]
-      if( names(ret)[3] == "Diversity" )
-        names(ret)[3] <- names(gd)[3]
-      
-      ret <- rbind( ret, gd )
+    # Asking for Nei's corrected stratum estimates
+    if( mode %in% c("hos","hes")) {
+      if( mode == "hes")
+        return( Hes(x,stratum=stratum) )
+      else 
+        return( Hos(x,stratum=stratum) )
     }
-    ret <- ret[ !is.na(ret$Stratum),]
-    return( ret )
+    
+    # Not summarized across stratum
+    else {
+      
+      if( !(stratum %in% names(x)))
+        stop("Requested stratum is NOT in the data you passed to genetic_diversity()...")
+      
+      pops <- partition( x, stratum=stratum )
+      ret <- data.frame(Stratum=NA, Locus=NA, Value=NA )
+      
+      for( pop in names(pops)){
+        gd <- genetic_diversity( pops[[pop]], mode=mode, small.N=small.N, ...)
+        gd$Stratum <- pop
+        gd <- gd[,c(3,1,2)]
+        if( names(ret)[3] == "Value" )
+          names(ret)[3] <- names(gd)[3]
+        ret <- rbind( ret, gd )
+      }
+      ret <- ret[ !is.na(ret$Stratum),]
+      
+    }
   }
   
-  
-  
+  ## Passed without Stratum
+  else { 
+    if( is.null(loci) )
+      loci <- column_class(x,"locus")
+    if( !all( loci %in% names(x) ))
+      stop("You are asking for loci not present in the data.frame passed to genetic_diversity().")
     
-  
-  
-  
-  if( mode == "a")
-    ret <- A(x, ...)
-  else if( mode == "ae")
-    ret <- Ae(x, ...)
-  else if( mode == "a95")
-    ret <- A(x,min_freq=0.05, ...)
-  else if( mode == "he")
-    ret <- He(x, stratum=stratum, small.N=small.N, ...)
-  else if( mode == "ho")
-    ret <- Ho(x, stratum=stratum, ...)
-  else if( mode == "hs")
-    ret <- Hs(x,stratum=stratum, small.N=small.N, ...)
-  else if( mode == "fis")
-    ret <- Fis(x, stratum=stratum, small.N = small.N, ...)
-  else if( mode == "pe")
-    ret <- Pe(x)
-  else
-    stop(paste("The type of diversity measure '", mode, "' you requested was not recognized.", sep=""))
+    ret <- data.frame( Locus=NA, Value=NA )
     
+    
+    for( locus in loci ){
+      if( mode == "a")
+        val <- A(x[[locus]], ...)
+      else if( mode == "ae")
+        val <- Ae(x[[locus]], ...)
+      else if( mode == "a95")
+        val <- A(x[[locus]],min_freq=0.05, ...)
+      else if( mode == "he")
+        val <- He(x[[locus]], small.N=small.N, ...)
+      else if( mode == "ho")
+        val <- Ho(x[[locus]], ...)
+      else if( mode == "fis")
+        val <- Fis(x[[locus]], stratum=stratum, small.N = small.N, ...)
+      else if( mode == "pe")
+        val <- Pe(x[[locus]], ...)
+      else if( mode == "hes" || mode == "hos")
+        stop("Hes and Hos require you to specify a stratum.")
+      else
+        stop(paste("The type of diversity measure '", mode, "' you requested was not recognized.", sep=""))
+
+      ret <- rbind( ret, data.frame(Locus=locus, Value=val ) )
+
+    }
+    
+    names(ret)[2] <- mode
+    ret <- ret[ !is.na(ret$Locus), ]
+    rownames(ret) <- seq(1,nrow(ret))
+  }
+    
+  names(ret)[ncol(ret)] <- rmode
+  return( ret )     
   
-  return( ret )
+  
 }

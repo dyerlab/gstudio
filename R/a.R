@@ -38,6 +38,8 @@ A <- function(x, min_freq=0, loci = NULL, ...){
   else if( is(x,"locus") ) {
     f <- frequencies( x )
     ret <- dim(f[ f$Frequency>=min_freq,] )[1]
+    names(ret) <- ifelse(min_freq==0,"A",paste( "A",100*(1-min_freq),sep=""))
+    
   }
   
   else

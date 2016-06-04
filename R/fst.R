@@ -41,7 +41,7 @@ Fst <- function( x, stratum="Population", nperm=0  ) {
   if( !(stratum %in% names(x)))
     stop("You need to pass this function the name of the column to use as a locus")
   
-  hs <- He( x, stratum=stratum )
+  hs <- Hes( x, stratum=stratum )
   ht <- Ht( x, stratum=stratum )
   ret <- merge( hs, ht)
   names(ret)[2] <- "Hs"

@@ -33,11 +33,16 @@ Ae <- function( x, loci=NULL, ...  ) {
     }  
   }
   
-  else if( is(x,"locus") ) 
-    ret <- data.frame( Ae = 1 / ( 1 - He(x) ))
+  else if( is(x,"locus") ) {
+    ret <- 1 / ( 1 - He(x) )
+    names(ret) <- "Ae"
+  }
+    
   
   else
     stop("The function Ae() only works with objects of type 'locus'")
+  
+  
   
   return( ret )
 }

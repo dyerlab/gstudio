@@ -21,8 +21,8 @@ Ht <- function( x, stratum="Population" ) {
   
   ret <- data.frame( Locus=locus_names, Ht=0 )
 
-  ho <- Ho( x, stratum=stratum )
-  hs <- He( x, stratum=stratum )
+  ho <- Hos( x, stratum=stratum )
+  hs <- Hes( x, stratum=stratum )
   freqs <- frequencies( x, stratum=stratum)
   cts <- genotype_counts(x, stratum)
   K <- nrow(cts)

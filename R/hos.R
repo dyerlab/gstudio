@@ -13,11 +13,15 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
+#' data(arapat)
+#' Hos(arapat)
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )
 #' Hos( loci )
-Hos <- function( x, stratum=NULL ) {  
+Hos <- function( x, stratum="Population" ) {
   
   if( is(x,"data.frame") ){
+    if( !(stratum %in% names(x)))
+      stop("You need to specify a stratum in the data.frame for the Hos() function.")
     locus_names <- column_class(x,class="locus")
     if( length(locus_names)==0)
       stop("Cannot estimate expected heterozygosity if there are no loci...")
@@ -39,8 +43,10 @@ Hos <- function( x, stratum=NULL ) {
       }
     }
     
-    if( !is.null(stratum ) ){
-      ret <- rbind( ret, data.frame(Locus="Multilocus",Ho=sum(ret$Hos)/k))
+    if( length( locus_names ) > 1 ){
+      hos <- ret$Hos[ !is.na(ret$Hos)]
+      k <- length(hos)
+      ret <- rbind( ret, data.frame(Locus="Multilocus",Hos=sum(hos)/k))
     }
     
 

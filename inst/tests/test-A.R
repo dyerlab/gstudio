@@ -15,6 +15,6 @@ test_that("checking",{
 
   expect_that( A("Bob"), throws_error() )
   expect_that( A(loci), is_equivalent_to(3) )
-  expect_that( A(loci, min_freq=0.05), equals(2) )
+  expect_that( A(loci, min_freq=0.05), is_equivalent_to(2) )
 }
 )
