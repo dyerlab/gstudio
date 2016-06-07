@@ -30,8 +30,8 @@ pies_on_map <- function( x, stratum="Population", locus=NULL, longitude='Longitu
   if( !(stratum %in% names(x))) 
     stop("You must specify a population column in the data.frame to use for coordinates")
   
-  pts <- strata_coordinates(x,stratum=stratum,longitude=longitude,latitude=latitude,as.SpatialPoints = TRUE)
-  freqs <- frequency_matrix(x,stratum=stratum,locus=locus)
+  pts <- strata_coordinates(x, stratum=stratum, longitude=longitude, latitude=latitude, as.SpatialPoints = TRUE)
+  freqs <- frequency_matrix(x, stratum=stratum, locus=locus)
   col_names <- names(freqs)[2:ncol(freqs)]
   
   data <- SpatialPointsDataFrame( pts, freqs)
@@ -39,13 +39,13 @@ pies_on_map <- function( x, stratum="Population", locus=NULL, longitude='Longitu
   
   
   if( is.null( max.rad) ) {
-    d <- strata_distance(strata_coordinates(x,stratum=stratum,longitude=longitude,latitude=latitude))
+    d <- strata_distance(strata_coordinates(x, stratum=stratum, longitude=longitude, latitude=latitude))
     max.rad <- max(d)/50*1000
   }
   
-  pies <- pieSP(data,zcol=col_names,max.radius=max.rad)
-  pies$allele <- rep(col_names,nrow(freqs))
-  m <- plotGoogleMaps(pies,zcol='allele', ...)
+  pies <- pieSP(data, zcol=col_names, max.radius=max.rad)
+  pies$allele <- rep(col_names, nrow(freqs))
+  m <- plotGoogleMaps(pies, zcol='allele', ...)
   invisible(NULL)
   
 }
