@@ -4,7 +4,7 @@
 \alias{Fis}
 \title{Estimate simple inbreeding from frequencies}
 \usage{
-Fis(x, small.N = FALSE, stratum = NULL)
+Fis(x, small.N = FALSE, stratum = NULL, loci = NULL)
 }
 \arguments{
 \item{x}{Either a \code{locus} object or a data.frame with locus objects.}
@@ -13,6 +13,8 @@ Fis(x, small.N = FALSE, stratum = NULL)
 
 \item{stratum}{An optional term for the estimation of inbreeding from samples of populations 
 (default=NULL)}
+
+\item{loci}{The subset of loci to use (default = all)}
 }
 \value{
 The inbreeding F statistic as a \code{numeric} value or a \code{data.frame}

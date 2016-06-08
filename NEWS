@@ -3,9 +3,11 @@ gstudio 1.6
 * [REQ] Test for HWP and LD similar to that implemented in Genepop? I work with microsatellite loci that have many rare alleles, so a HWP/LD test with a MC algorithm similar to that used in Genepop would be ideal
 * [ADD] Added heirfstat to genetic_structure to allow functional calling 
 * [ADD] Added hooks into genetic distances from pegas through genetic_distance() for other distance measures.
-* [FIX] stratum He/Ho genetic_diversity Hs
 * [FIX] Add permutation to Fst() for significance
-* [FIX] pies_on_map apparently is broken
+
+* [FIX] stratum He/Ho genetic_diversity Hs
+
+
 
 gstudio 1.5
 -----------------

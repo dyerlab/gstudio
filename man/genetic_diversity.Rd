@@ -4,8 +4,8 @@
 \alias{genetic_diversity}
 \title{Estimate genetic diversity among strata in a Population,}
 \usage{
-genetic_diversity(x, stratum = NULL, mode = c("A", "Ae", "A95", "He", "Ho",
-  "Fis", "Pe")[2], small.N = FALSE, ...)
+genetic_diversity(x, stratum = NULL, loci = NULL, mode = c("A", "Ae",
+  "A95", "He", "Ho", "Hos", "Hes", "Fis", "Pe")[2], small.N = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{data.frame} object with \code{\link{locus}} columns.}
@@ -13,6 +13,8 @@ genetic_diversity(x, stratum = NULL, mode = c("A", "Ae", "A95", "He", "Ho",
 \item{stratum}{The strata by which the genetic distances are estimated.  This
 can be an optional parameter when estimating distance measures calculated
 among indiviudals (default='Population').}
+
+\item{loci}{The set of loci to use (default NULL will use all)}
 
 \item{mode}{The particular genetic diversity metric that you are going to use. 
 The \code{gstudio} package currently includes the following individual distance 
@@ -23,6 +25,8 @@ measures:
   \item{A95}{Number of alleles with frequency at least five percent}
   \item{He}{Expected heterozygosity}
   \item{Ho}{Observed heterozygosity}
+  \item{Hes}{Expected subpopulation heterozygosity (Nei's Corrected)}
+  \item{Hos}{Expected subpopulation heterozygosity (Nei's Corrected)}
   \item{Fis}{Wright's Inbreeding coefficient (size corrected).}
   \item{Pe}{Locus polymorphic index.}
 }}

@@ -4,11 +4,13 @@
 \alias{Pe}
 \title{Polymorphic index for loci}
 \usage{
-Pe(x)
+Pe(x, ...)
 }
 \arguments{
 \item{x}{A set of \code{locus} objects either as a vector or within a 
 \code{data.frame}.}
+
+\item{...}{Ignored (for consistency)}
 }
 \value{
 The polymorphic index for the locus, sum(pi(1-pi)) as a \code{numeric} value
