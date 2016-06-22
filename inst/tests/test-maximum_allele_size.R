@@ -10,7 +10,7 @@ test_that("checking",{
   expect_error( maximum_allele_size(23) )
   expect_error( maximum_allele_size( list() ) )
 
-  expect_that( A(loci), is_equivalent_to(4) )
+  expect_that( maximum_allele_size(loci), is_equivalent_to(4) )
 
 }
 )

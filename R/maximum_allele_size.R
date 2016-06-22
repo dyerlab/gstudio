@@ -30,8 +30,7 @@ maximum_allele_size <- function( x ) {
   }
   
   else if( is(x, "locus" ) ){
-    a <- as.character(alleles( x ))
-    return( max(nchar(z)))
+    return( max(nchar(as.character(alleles(loci)))) )
   }
   
   else {
