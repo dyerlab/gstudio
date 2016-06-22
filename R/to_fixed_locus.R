@@ -9,8 +9,9 @@
 to_fixed_locus <- function( x, digits=NULL ) {
   if( !inherits(x,"locus"))
     stop("You must pass an object of type locus to this function.")
+  
   if( is.null(digits))
-    stop("You must tell me how many digits to use to print out the fixed locus object") 
+    digits <- maximum_allele_size( x ) 
   
   if( is.na(x) ) 
     ret <- rep("0",2*digits)  
@@ -29,5 +30,5 @@ to_fixed_locus <- function( x, digits=NULL ) {
       ret <- c( ret, a )
     }
   }
-  return( paste(ret,collapse=""))
-}
+  return( paste(ret, collapse="" ))
+} 
