@@ -7,6 +7,7 @@
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 to_fixed_locus <- function( x, digits=NULL ) {
+  
   if( !inherits(x,"locus"))
     stop("You must pass an object of type locus to this function.")
   

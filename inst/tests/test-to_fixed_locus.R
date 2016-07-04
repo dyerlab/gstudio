@@ -5,7 +5,7 @@ test_that( "testing",{
   B <- locus( c("A","B") )
 
   expect_that( to_fixed_locus(), throws_error())
-  expect_that( to_fixed_locus(A), throws_error() )
+
   
   fl_A <- to_fixed_locus(A,digits=1)
   fl_B <- to_fixed_locus(B,digits=2)
