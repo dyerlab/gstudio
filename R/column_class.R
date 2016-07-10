@@ -26,7 +26,8 @@
 #' column_class(df,"locus",mode="index")
 column_class <- function( x, class, mode=c("label","index")[1] ) {
   if( !inherits(x,"data.frame") )
-    stop( paste("This function works on objects inherited from data.frame objects, you passed a ",class(x),sep="") )
+    stop( paste("This function works on objects inherited from data.frame objects, you passed a ",
+                class(x),sep="") )
   
   if( !(mode %in% c("label","index") ) )
     stop( paste("The mode for this class must be either 'label' or 'index'") )

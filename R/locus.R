@@ -34,7 +34,7 @@
 #' DD <- locus( c("D","D") )
 #' loci <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD) 
 #' loci
-locus <- function( x, type, phased=FALSE ){
+locus <- function( x, type="codom", phased=FALSE ){
   
   # missing data
   if( missing(x) || is.na(x) ) {
@@ -43,7 +43,7 @@ locus <- function( x, type, phased=FALSE ){
     
   
   # default, sort and collapse em.
-  else if( missing(type) ){  
+  else if( type=="codom" ) {  
     ret <- as.character(x)
     if( any(nchar(ret))) {
       if( !phased )
@@ -103,6 +103,7 @@ locus <- function( x, type, phased=FALSE ){
   
   
   class(ret) <- "locus"
+  attr(ret,"locus_type") <- rep( type, length( ret ) )
   return(ret)
 }
 
@@ -188,8 +189,12 @@ as.locus <- function( x ) {
 c.locus <- function(..., recursive = FALSE) {
   dots <- list(...)
   classes <- rep("locus", length(dots))
+  locus_type <- sapply( dots, function(x) return( attr(x,"locus_type")), simplify="array")
+  cat("Locus Type: ", length(locus_type),"\n")
   res <- structure(unlist(dots, recursive = recursive), class = classes)
+  cat("Res:", length(res), "\n")
   class(res) <- "locus"
+  attr(res,"locus_type") <- locus_type
   res
 }
 
@@ -284,6 +289,7 @@ is.locus <- function ( x ) {
 rep.locus <- function( x, times,... ){
   c <- as.character(x)
   ret <- rep(c,times=times)
+  attr(ret,"locus_type") <- rep( attr(x,"locus_type"), times=times )
   class(ret) <- "locus"
   return(ret)
 }
@@ -310,8 +316,8 @@ rep.locus <- function( x, times,... ){
 #'
 `[.locus` <- function (x, i) {
   y <- unclass(x)[i]
-  #class(y) <- "locus"
   attributes(y) <- attributes(x)
+  attr(y,"locus_type") <- attr(x,"locus_type")[i]
   return(y)  
 }
 
