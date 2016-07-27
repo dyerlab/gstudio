@@ -7,7 +7,6 @@
 #' @param small.N Passes this along to He for small sample sizes.
 #' @param stratum An optional term for the estimation of inbreeding from samples of populations 
 #'  (default=NULL)
-#' @param loci The subset of loci to use (default = all)
 #' @return The inbreeding F statistic as a \code{numeric} value or a \code{data.frame}
 #'  if you passed multiple loci to this function.
 #' @export

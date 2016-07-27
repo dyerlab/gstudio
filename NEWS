@@ -7,6 +7,9 @@ gstudio 1.6
 * [FIX] Add permutation to Fst() for significance
 * [FIX] pies_on_map apparently is broken
 
+* [FIX] Problem with having a misssing genotype for type="column" in first row.  Odd problem.
+
+
 gstudio 1.5
 -----------------
 * [ADD] Added option to specify inbreeding (F) in make_population() function
