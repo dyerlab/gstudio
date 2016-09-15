@@ -13,10 +13,8 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
-#' \donotrun{
 #' data(arapat)
 #' Hes( arapat )
-#' }
 Hes <- function( x, stratum="Population", small.N=FALSE ) { 
 
   if( is(x,"data.frame") ){

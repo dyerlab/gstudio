@@ -30,10 +30,8 @@ Returns the general expected heterozygosity parameter
  from the frequencies
 }
 \examples{
-\\donotrun{
 data(arapat)
 Hes( arapat )
-}
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

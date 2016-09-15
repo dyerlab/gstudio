@@ -8,8 +8,8 @@
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @examples 
-#' x <- c( locus(c(1,2)), locus(c(121,23)))
-#' maximum_allele_size( x )
+#' loci <- c( locus( c(1,12) ), locus( c(2,22) ), locus( c(2222,2) ))
+#' maximum_allele_size( loci )
 
 maximum_allele_size <- function( x ) {
   
@@ -30,7 +30,7 @@ maximum_allele_size <- function( x ) {
   }
   
   else if( is(x, "locus" ) ){
-    return( max(nchar(as.character(alleles(loci)))) )
+    return( max(nchar(as.character(alleles(x)))) )
   }
   
   else {

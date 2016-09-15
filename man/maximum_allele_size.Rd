@@ -18,8 +18,8 @@ This is a convienence function that returns the number of digits for a locus
  or set of loci.
 }
 \examples{
-x <- c( locus(c(1,2)), locus(c(121,23)))
-maximum_allele_size( x )
+loci <- c( locus( c(1,12) ), locus( c(2,22) ), locus( c(2222,2) ))
+maximum_allele_size( loci )
 }
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>

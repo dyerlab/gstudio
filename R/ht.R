@@ -31,7 +31,7 @@ Ht <- function( x, stratum="Population" ) {
     nbar <-  harmonic_mean(cts[[locus]])
     xki <- freqs[ freqs$Locus==locus, ]
     xibar <- unlist(by( xki$Frequency, xki$Allele, function(x) sum(x/K )))
-    ht <- 1 - sum(xibar^2) + hs$Hs[hs$Locus==locus]/(K*nbar) - ho$Ho[ho$Locus==locus]/(K*nbar*2)
+    ht <- 1 - sum(xibar^2) + hs$Hes[hs$Locus==locus]/(K*nbar) - ho$Hos[ho$Locus==locus]/(K*nbar*2)
     ret$Ht[ ret$Locus == locus ] <- ht
   }
   
