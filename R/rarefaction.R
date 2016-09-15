@@ -18,8 +18,11 @@ rarefaction <- function( x, mode="Ae", size=0, nperm=999 ) {
     warning("You are asking to permute populations larger than the observed... ")
   
   ret <- rep(NA, nperm)
-  for( i in 1:nperm )
-    ret[i] <- genetic_diversity( sample(x,size=size,replace=TRUE), mode=mode )
+  for( i in 1:nperm ) {
+    p <- genetic_diversity( sample(x,size=size,replace=TRUE), mode=mode )
+    ret[i] <- p[1,ncol(p)]
+  }
+    
   ret <- unlist(ret)
   
   return( ret )
