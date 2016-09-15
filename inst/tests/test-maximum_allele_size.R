@@ -11,7 +11,7 @@ test_that("checking",{
   expect_error( maximum_allele_size( list() ) )
 
   sz <- maximum_allele_size(loci)
-  expect_that( sz, is_equivalent_to(4) )
+  expect_that( sz, equals(4) )
 
 }
 )

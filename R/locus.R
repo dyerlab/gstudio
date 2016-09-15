@@ -103,7 +103,7 @@ locus <- function( x, type="codom", phased=FALSE ){
   
   
   class(ret) <- "locus"
-  attr(ret,"locus_type") <- rep( type, length( ret ) )
+  #attr(ret,"locus_type") <- rep( type, length( ret ) )
   return(ret)
 }
 
@@ -189,12 +189,12 @@ as.locus <- function( x ) {
 c.locus <- function(..., recursive = FALSE) {
   dots <- list(...)
   classes <- rep("locus", length(dots))
-  locus_type <- sapply( dots, function(x) return( attr(x,"locus_type")), simplify="array")
-  cat("Locus Type: ", length(locus_type),"\n")
+  #locus_type <- sapply( dots, function(x) return( attr(x,"locus_type")), simplify="array")
+  #cat("Locus Type: ", length(locus_type),"\n")
   res <- structure(unlist(dots, recursive = recursive), class = classes)
-  cat("Res:", length(res), "\n")
+  #cat("Res:", length(res), "\n")
   class(res) <- "locus"
-  attr(res,"locus_type") <- locus_type
+  #attr(res,"locus_type") <- locus_type
   res
 }
 
@@ -289,7 +289,7 @@ is.locus <- function ( x ) {
 rep.locus <- function( x, times,... ){
   c <- as.character(x)
   ret <- rep(c,times=times)
-  attr(ret,"locus_type") <- rep( attr(x,"locus_type"), times=times )
+  #attr(ret,"locus_type") <- rep( attr(x,"locus_type"), times=times )
   class(ret) <- "locus"
   return(ret)
 }
@@ -317,7 +317,8 @@ rep.locus <- function( x, times,... ){
 `[.locus` <- function (x, i) {
   y <- unclass(x)[i]
   attributes(y) <- attributes(x)
-  attr(y,"locus_type") <- attr(x,"locus_type")[i]
+  # if( "locus_type" %in% names(attributes(x) ) )
+  #   attr(y,"locus_type") <- attr(x,"locus_type")[i]
   return(y)  
 }
 
