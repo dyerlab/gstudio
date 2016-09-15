@@ -4,7 +4,7 @@
 \alias{locus}
 \title{General constructor for locus object}
 \usage{
-locus(x, type, phased = FALSE)
+locus(x, type = "codom", phased = FALSE)
 }
 \arguments{
 \item{x}{The data to be turned into a \code{locus} object}

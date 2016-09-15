@@ -13,8 +13,6 @@ Fis(x, small.N = FALSE, stratum = NULL, loci = NULL)
 
 \item{stratum}{An optional term for the estimation of inbreeding from samples of populations 
 (default=NULL)}
-
-\item{loci}{The subset of loci to use (default = all)}
 }
 \value{
 The inbreeding F statistic as a \code{numeric} value or a \code{data.frame}
