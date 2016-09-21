@@ -21,6 +21,7 @@ Imports:
     sp,
     reshape2,
     ggmap,
+    ggrepel,
     popgraph,
     adegenet,
     plotGoogleMaps

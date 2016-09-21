@@ -5,9 +5,12 @@
 #'  indicate shape and color attributes in the mapping (through \code{aes})
 #'  that will be carried through.
 #' @param mapping The aesthetic mapping, this MUST have values for 
-#'  x, y, and stratum
+#'  x, y, and stratum.  If you add one for label=COLUMN_NAME it will add
+#'  that as well.  You can also add color and shape as options in the
+#'  mapping.
 #' @param data The \code{data.frame} from which the coordinates and other
 #'  materials are to be pulled.
+#' @param label Flag (default=FALSE) to add labels to plot.
 #' @param ... Other parameters submitted to \code{geom_point()}.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -16,10 +19,10 @@
 #' data(arapat)
 #' ggplot() + geom_strata( aes(x=Longitude,y=Latitude,stratum=Population), data=arapat) + coord_equal()
 #' mapping <- aes(x=Longitude,y=Latitude,stratum=Population, color=Cluster, shape=Species)
-#' s <- geom_strata( mapping, data=arapat)
-#' ggplot() + s + coord_equal()
-#'  
-geom_strata <- function( mapping=NULL, data=NULL, ...){
+#' coords <- strata_coordinates( arapat )
+#' map <- population_map( coords ) 
+#' ggmap( map ) + geom_strata( aes(x=Longitude, y=Latitude,stratum=Population), data=arapat, label=TRUE ) 
+geom_strata <- function( mapping=NULL, data=NULL, label=FALSE, ...){
 
   if( is.null(mapping) )
     stop("You need to at least provide an aes(x,y) for this function.")
@@ -45,12 +48,19 @@ geom_strata <- function( mapping=NULL, data=NULL, ...){
     extra_data[[as.character(mapping$colour)]] <- data[, as.character(mapping$colour) ]
   if( "shape" %in% names(mapping))
     extra_data[[as.character(mapping$shape)]] <- data[,as.character(mapping$shape)]
-  
+
   if( ncol(extra_data) > 1 )
     df <- merge( df, extra_data )
   
   names(df)[1] <- as.character(mapping$stratum)
   
   ret <- ggplot2::geom_point( mapping, data=df, ...)
+  if( label ){
+    ret <- ret + ggrepel::geom_label_repel( mapping, data=df, ... )
+  }
+  
   return( ret )
 }
+
+
+
