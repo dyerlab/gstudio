@@ -1,4 +1,4 @@
-#' Returns ggplot layer for population data
+#' Returns ggplot layer for population data with labels
 #' 
 #' This function takes a \code{data.frame} of population data and
 #'  returns a \code{geom_point()} layer for plotting.  You can also
@@ -16,13 +16,12 @@
 #' @examples
 #' library(ggplot2)
 #' data(arapat)
-#' ggplot() + geom_strata( aes(x=Longitude,y=Latitude,stratum=Population), data=arapat) + coord_equal()
-#' mapping <- aes(x=Longitude,y=Latitude,stratum=Population, color=Cluster, shape=Species)
-#' coords <- strata_coordinates( arapat )
+#' ggplot() + geom_strata_label( aes(x=Longitude,y=Latitude,stratum=Population), data=arapat) + coord_equal()
 #' library(ggmap)
+#' coords <- strata_coordinates( arapat )
 #' map <- population_map( coords ) 
-#' ggmap( map ) + geom_strata( data=arapat ) 
-geom_strata <- function( mapping=NULL, data=NULL, ...){
+#' ggmap( map ) + geom_strata_label( data=arapat ) 
+geom_strata_label <- function( mapping=NULL, data=NULL, ...){
   x <- y <- stratum <- NULL
   
   if( is.null(data) )
@@ -65,7 +64,7 @@ geom_strata <- function( mapping=NULL, data=NULL, ...){
                             longitude = x, 
                             latitude = y )
   
-  ret <- geom_point( aes(x=Longitude, y=Latitude), data=df) 
+  ret <- ggrepel::geom_label_repel(aes(x=Longitude,y=Latitude,label=Stratum), data=df ) 
   return( ret )
 }
 
