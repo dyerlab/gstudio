@@ -137,6 +137,22 @@ NULL
 #' @keywords data
 NULL
 
+#' AFLP Arapat data
+#' 
+#' A set of genotypes for arapat from an AFLP dataset
+#' @name arapat_aflp
+#' @docType data
+#' @keywords data
+NULL
+
+#' Rice Canopy
+#' 
+#' A categorical raster of the rice center 
+#' @name rice
+#' @docType data
+#' @keywords data
+NULL
+
 
 
 
