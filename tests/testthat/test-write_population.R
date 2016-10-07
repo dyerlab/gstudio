@@ -7,6 +7,5 @@ test_that("test", {
   
   df <- data.frame()
   expect_that( write_population(df), throws_error() )
-  expect_that( write_population(df,file="bob"), throws_error())
 })
 

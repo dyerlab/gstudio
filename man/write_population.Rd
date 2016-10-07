@@ -4,8 +4,8 @@
 \alias{write_population}
 \title{Writes data frame with genotypes and other data to a file}
 \usage{
-write_population(df, file, mode = c("text", "genepop", "structure")[1],
-  stratum = NULL)
+write_population(df, file, mode = c("text", "genepop", "structure",
+  "dfdist")[1], stratum = NULL)
 }
 \arguments{
 \item{df}{The \code{data.frame} to be written to the output.}
@@ -19,6 +19,7 @@ write_population(df, file, mode = c("text", "genepop", "structure")[1],
  
  \item{genepop}{Saves genetic data into GENEPOP format. You must specify a stratum.}
  \item{structure}{Saves genetic data into the two-lined per individual STRUCTURE format.  You must specify a stratum.}
+ \item{dfdist}{Saves genetic data as a FDist, DFDist, DetSel file.  You must specify the stratum.}
 }}
 
 \item{stratum}{An optional argument if using genepop or structure formats.  By 

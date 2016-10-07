@@ -11,13 +11,14 @@
 #'  
 #'  \item{genepop}{Saves genetic data into GENEPOP format. You must specify a stratum.}
 #'  \item{structure}{Saves genetic data into the two-lined per individual STRUCTURE format.  You must specify a stratum.}
+#'  \item{dfdist}{Saves genetic data as a FDist, DFDist, DetSel file.  You must specify the stratum.}
 #' }
 #' @param stratum An optional argument if using genepop or structure formats.  By 
 #'  default, the 'text' option writes all data to file.
 #' @return nothing.
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
-write_population <- function( df, file, mode=c("text","genepop", "structure")[1], stratum=NULL ) {
+write_population <- function( df, file, mode=c("text","genepop", "structure","dfdist")[1], stratum=NULL ) {
   
   if( missing(df) )
     stop("You need to pass a data.frame to this function.")
@@ -25,10 +26,6 @@ write_population <- function( df, file, mode=c("text","genepop", "structure")[1]
     stop("You need to pass a file argument to this function.")
   if( !inherits(df,"data.frame"))
     stop("This function is designed to save data frames to file")
-  
-  if( !is.null(stratum) & !(stratum %in% names(df) ))
-    stop("You have specified a non-existant stratum to be used, how about one the data.frame actually has?")
-  
   if( mode != "text" & missing(stratum))
     stop("You need to specify which stratum to use for this output file format.")
   
@@ -36,11 +33,14 @@ write_population <- function( df, file, mode=c("text","genepop", "structure")[1]
     file_contents <- to_genepop(df,stratum)
   else if( mode == "structure" )
     file_contents <- to_structure(df, stratum )
+  else if( mode == "dfdist" )
+    file_contents <- to_dfdist(df,stratum=stratum )
   else {
     file_contents <- character(nrow(df))
     for( i in 1:nrow(df))
       file_contents <- paste( as.character(df[i,]),collapse=",")
   }
+  
   
   write(file_contents,file=file)
   invisible(0)
