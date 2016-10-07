@@ -140,7 +140,7 @@ NULL
 #' AFLP Arapat data
 #' 
 #' A set of genotypes for arapat from an AFLP dataset
-#' @name arapat_aflp
+#' @name aflp_arapat
 #' @docType data
 #' @keywords data
 NULL

@@ -15,10 +15,11 @@
 #' }
 #' @param stratum An optional argument if using genepop or structure formats.  By 
 #'  default, the 'text' option writes all data to file.
+#' @param ... Other options to pass along (e.g., verbose=TRUE)
 #' @return nothing.
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
-write_population <- function( df, file, mode=c("text","genepop", "structure","dfdist")[1], stratum=NULL ) {
+write_population <- function( df, file, mode=c("text","genepop", "structure","dfdist")[1], stratum=NULL, ... ) {
   
   if( missing(df) )
     stop("You need to pass a data.frame to this function.")
@@ -34,7 +35,7 @@ write_population <- function( df, file, mode=c("text","genepop", "structure","df
   else if( mode == "structure" )
     file_contents <- to_structure(df, stratum )
   else if( mode == "dfdist" )
-    file_contents <- to_dfdist(df,stratum=stratum )
+    file_contents <- to_dfdist(df,stratum=stratum, ...)
   else {
     file_contents <- character(nrow(df))
     for( i in 1:nrow(df))
