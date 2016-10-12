@@ -45,7 +45,8 @@ pies_on_map <- function( x, stratum="Population", locus=NULL, longitude='Longitu
   
   pies <- pieSP(data,zcol=col_names,max.radius=max.rad)
   pies$allele <- rep(col_names,nrow(freqs))
-  m <- plotGoogleMaps(pies,zcol='allele', ...)
+  api <- "https://maps.googleapis.com/maps/api/js??sensor=false&v=3.18&key=AIzaSyCVz08TBp-MDGikOTlpZEHkx5yL_LnlEUk"
+  m <- plotGoogleMaps(pies,zcol='allele', api=api, ...)
   invisible(NULL)
   
 }
