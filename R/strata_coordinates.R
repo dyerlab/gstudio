@@ -1,6 +1,6 @@
 #' Grab coordinates for strata
 #' 
-#' This function takes a , and a stratum and makes a data frame
+#' This function takes a \code{data.frame}, and a stratum and makes a data frame
 #'  consisting of Stratum, Latitide, and Longitude for each stratum
 #' @param x A \code{data.frame} object.
 #' @param stratum The name of the stratum to partition on (default="Population").
