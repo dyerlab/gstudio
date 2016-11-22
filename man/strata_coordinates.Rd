@@ -30,7 +30,7 @@ points within strata, Default=TRUE).}
 A data frame, with Stratum Latitude and Longitude, summarized by center of each stratum.
 }
 \description{
-This function takes a , and a stratum and makes a data frame
+This function takes a \code{data.frame}, and a stratum and makes a data frame
  consisting of Stratum, Latitide, and Longitude for each stratum
 }
 \author{

@@ -16,14 +16,18 @@
 #' @examples
 #' library(ggplot2)
 #' data(arapat)
-#' ggplot() + geom_strata( aes(x=Longitude,y=Latitude,stratum=Population), data=arapat) + coord_equal()
+#' ggplot() + 
+#'     geom_strata( aes( x=Longitude,
+#'                       y=Latitude,
+#'                       stratum=Population), data=arapat) + 
+#'    coord_equal()
 #' mapping <- aes(x=Longitude,y=Latitude,stratum=Population, color=Cluster, shape=Species)
 #' coords <- strata_coordinates( arapat )
 #' library(ggmap)
 #' map <- population_map( coords ) 
 #' ggmap( map ) + geom_strata( data=arapat ) 
 geom_strata <- function( mapping=NULL, data=NULL, ...){
-  x <- y <- stratum <- NULL
+  x <- y <- stratum <- Longitude <- Latitude <- NULL
   
   if( is.null(data) )
     stop("You need to pass a data.frame with populations and coordinates in it to this function.")

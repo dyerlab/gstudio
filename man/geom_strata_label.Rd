@@ -25,7 +25,11 @@ This function takes a \code{data.frame} of population data and
 \examples{
 library(ggplot2)
 data(arapat)
-ggplot() + geom_strata_label( aes(x=Longitude,y=Latitude,stratum=Population), data=arapat) + coord_equal()
+ggplot() + 
+  geom_strata_label( aes(x=Longitude, 
+                         y=Latitude,
+                         stratum=Population), data=arapat) + 
+  coord_equal()
 library(ggmap)
 coords <- strata_coordinates( arapat )
 map <- population_map( coords ) 
