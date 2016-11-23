@@ -16,12 +16,4 @@ A covariance matrix the same size as \code{X}
 This function takes a distance matrix and turns it into a 
   covariance matrix.
 }
-\examples{
-D <- matrix( c(0,7,6,7,7,0,13,8,6,13,0,4,7,8,4,0), nrow=4)
-C <- distance_to_covariance(D)
-C
-}
-\author{
-Rodney J. Dyer \email{rjdyer@vcu.edu}
-}
 
