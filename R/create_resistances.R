@@ -15,12 +15,14 @@
 #' create_resistances( r )
 #' }
 #' 
-create_resistances <- function( raster, feature_name="layer", costs=c(2,5,10,50,100), symmetric=TRUE){
-  if( !is(raster,"RasterLayer"))
+create_resistances <- function( x, feature_name="layer", costs=c(2,5,10,50,100), symmetric=TRUE){
+  if( !is(x,"RasterLayer"))
     stop("This function requires a base (binary) raster to work.")
-  r <- raster
-  r[ r != 0 ] <- 1
-  for( cost in costs) {
+  if( sum( x==0 ) == 0)
+    stop("You need to give this funciton a binary raster, stupid!")
+  r <- x
+  r[ r > 0 ] <- 1
+   for( cost in costs) {
     layer <- (cost-1)*r + 1
     ofile <- paste(feature_name, cost,"1","rda",sep=".")
     save(layer, file = ofile)
@@ -31,3 +33,5 @@ create_resistances <- function( raster, feature_name="layer", costs=c(2,5,10,50,
     }
   }
 }
+
+
