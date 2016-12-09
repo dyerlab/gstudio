@@ -7,7 +7,7 @@ For a complete overview of the package, see the full documentation at http://dye
 
 To install these packages from this repository, fire up R and 
 
-`install.packages( c("RgoogleMaps","geosphere","proto","sampling","seqinr","spdep"), dependencies=TRUE )`  
+`install.packages( c("RgoogleMaps","geosphere","proto","sampling","seqinr","spacetime","spdep"), dependencies=TRUE )`  
 `library(devtools)`  
 `install_github("dyerlab/gstudio")`
 
