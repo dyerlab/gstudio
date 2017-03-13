@@ -35,4 +35,3 @@ kronecker_delta( loc2, loc3 )
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }
-

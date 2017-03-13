@@ -27,4 +27,3 @@ This function is a bit of a wrapper around the \code{mate} function in that
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

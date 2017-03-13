@@ -36,4 +36,3 @@ D <- dist_bray(df)
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

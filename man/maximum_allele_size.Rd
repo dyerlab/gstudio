@@ -24,4 +24,3 @@ maximum_allele_size( loci )
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }
-

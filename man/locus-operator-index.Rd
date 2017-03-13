@@ -26,4 +26,3 @@ loci[2]
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

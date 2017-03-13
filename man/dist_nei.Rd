@@ -41,4 +41,3 @@ This is the bias corrected Nei's Standard genetic distance.
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

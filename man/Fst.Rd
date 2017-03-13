@@ -40,4 +40,3 @@ This function estimates Wright's Fst parameter, the one based upon the variance
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

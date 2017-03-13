@@ -21,4 +21,3 @@ A text object with data formatted for output.
 This converts a \code{data.frame} object with loci into a 
   format suitable for FDist, DFDist, & DetSel
 }
-

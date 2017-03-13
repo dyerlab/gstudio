@@ -36,4 +36,3 @@ This function takes a \code{data.frame}, and a stratum and makes a data frame
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

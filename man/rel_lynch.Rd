@@ -44,4 +44,3 @@ For missing data and for data comparing heterozygotes at a 2-allele locus
 \author{
 Rodney J. dyer <rjdyer@vcu.edu>
 }
-

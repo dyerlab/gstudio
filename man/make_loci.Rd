@@ -31,4 +31,3 @@ This function makes a vector of locus objects given a frequency array and an
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

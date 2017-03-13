@@ -27,10 +27,9 @@ chr.sep <- "A:A"
 as.locus( chr )
 
 }
-\author{
-Rodney J. Dyer \email{rjdyer@vcu.edu}
-}
 \seealso{
 \code{\link{locus}}
 }
-
+\author{
+Rodney J. Dyer \email{rjdyer@vcu.edu}
+}

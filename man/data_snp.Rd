@@ -8,4 +8,3 @@
 Example data for SNP data types
 }
 \keyword{data}
-

@@ -35,4 +35,3 @@ ggplot() + geom_frequencies( freqs ) + facet_grid(.~Stratum)
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

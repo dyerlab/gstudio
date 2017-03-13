@@ -25,4 +25,3 @@ This funciton subsamples the data with a smaller sample size and estimates the
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

@@ -18,4 +18,3 @@ Convienence function to determine if the \code{locus} object is NA
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

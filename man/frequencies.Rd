@@ -2,9 +2,9 @@
 % Please edit documentation in R/frequencies.R
 \name{frequencies}
 \alias{frequencies}
-\alias{frequencies.data.frame}
 \alias{frequencies.default}
 \alias{frequencies.locus}
+\alias{frequencies.data.frame}
 \title{Get allele frequencies}
 \usage{
 frequencies(x, loci, stratum, ...)
@@ -73,4 +73,3 @@ frequencies(df)
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

@@ -27,4 +27,3 @@ is_heterozygote( loc )
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

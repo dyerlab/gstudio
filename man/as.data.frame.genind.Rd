@@ -25,4 +25,3 @@ This is a conversion function to translate an object of type \code{genind} from
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }
-

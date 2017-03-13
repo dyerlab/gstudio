@@ -35,4 +35,3 @@ This function takes a \code{data.frame} of data and returns
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

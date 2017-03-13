@@ -8,4 +8,3 @@
 Example data for 2-column data types
 }
 \keyword{data}
-

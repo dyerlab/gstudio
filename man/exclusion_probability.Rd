@@ -25,4 +25,3 @@ exclusion_probability( freqs )
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

@@ -38,4 +38,3 @@ This function returns a measure of genetic distance based upon
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

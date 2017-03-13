@@ -31,4 +31,3 @@ cat(gp)
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }
-

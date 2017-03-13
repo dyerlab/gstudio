@@ -8,4 +8,3 @@
 Example data set for demonstrating parent/offspring data
 }
 \keyword{data}
-

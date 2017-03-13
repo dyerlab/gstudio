@@ -21,4 +21,3 @@ This function takes a raster and translates it into
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

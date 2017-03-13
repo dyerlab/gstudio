@@ -38,4 +38,3 @@ transition_probability( off, mom, dad3 )
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }
-

@@ -9,4 +9,3 @@ Example data set with adult multilocus gentoypes from
 Cornus florida at the Rice Center
 }
 \keyword{data}
-

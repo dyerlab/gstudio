@@ -40,4 +40,3 @@ column_class(df,"locus",mode="index")
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

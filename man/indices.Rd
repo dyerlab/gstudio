@@ -21,4 +21,3 @@ This is used in conjunction with apply to get around
  faster than expand.grid. This function was lifted
  from a discussion on stackoverflow.
 }
-

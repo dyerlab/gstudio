@@ -27,4 +27,3 @@ is.locus( 23 )
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

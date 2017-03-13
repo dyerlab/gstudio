@@ -36,4 +36,3 @@ Hes( arapat )
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

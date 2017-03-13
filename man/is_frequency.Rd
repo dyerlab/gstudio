@@ -22,4 +22,3 @@ This is a function that returns a flag indicating that the
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

@@ -19,4 +19,3 @@ This function returns the unique population size of the population
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

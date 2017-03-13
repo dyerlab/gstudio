@@ -40,4 +40,3 @@ This function estimates Nei's Gst parameter and potentially
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

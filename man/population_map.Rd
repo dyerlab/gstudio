@@ -43,4 +43,3 @@ This is a bit of a rough attempt and should be used only sparingly.  I have foun
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

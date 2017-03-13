@@ -29,4 +29,3 @@ from multilocus genotype frequencies.
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

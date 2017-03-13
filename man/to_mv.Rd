@@ -2,9 +2,9 @@
 % Please edit documentation in R/to_mv.R
 \name{to_mv}
 \alias{to_mv}
-\alias{to_mv.data.frame}
 \alias{to_mv.default}
 \alias{to_mv.locus}
+\alias{to_mv.data.frame}
 \title{Returns the passed itmes as multivariate data}
 \usage{
 to_mv(x, ploidy, alleles, drop.allele = FALSE, leave.as.na = FALSE, ...)
@@ -49,4 +49,3 @@ Rodney J. Dyer \email{rjdyer@vcu.edu}
 
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

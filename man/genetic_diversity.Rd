@@ -56,4 +56,3 @@ This function is the main one used for estimating genetic diversity among
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

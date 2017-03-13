@@ -23,4 +23,3 @@ Takes a locus and set of populations and returns matrix of
 \author{
 Rodney J. Dyer
 }
-

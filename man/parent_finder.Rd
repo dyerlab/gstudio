@@ -31,4 +31,3 @@ This is a general exclusion finder for a single parent. For dual
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }
-

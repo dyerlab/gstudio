@@ -9,4 +9,3 @@ This is a EPIC genetic dataset for the Sonoran desert
  beetle Araptus attenuatus
 }
 \keyword{data}
-

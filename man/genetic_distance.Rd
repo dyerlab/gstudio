@@ -61,4 +61,3 @@ genetic_distance(df, mode="Dps")
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

@@ -47,4 +47,3 @@ mate( adults[1,], adults[2,], N=10)
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

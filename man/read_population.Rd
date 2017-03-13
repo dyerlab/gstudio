@@ -48,4 +48,3 @@ The function reads in a text file and does the proper translations for
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

@@ -19,4 +19,3 @@ This function is just for quick plotting of frequencies
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

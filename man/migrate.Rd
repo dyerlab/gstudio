@@ -44,4 +44,3 @@ This is a simple transition matrix approach to migration.  The
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

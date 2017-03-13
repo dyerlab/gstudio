@@ -25,4 +25,3 @@ This function just reshapes the \code{data.frame} from \code{frequencies}.
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

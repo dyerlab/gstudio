@@ -36,4 +36,3 @@ This is a convienence function that takes the output of a \code{paternity()}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }
-

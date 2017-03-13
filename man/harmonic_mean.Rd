@@ -21,4 +21,3 @@ This estimates the harmonic mean.
  x <- c(1,2,3,4,5,0)
  harmonic_mean(x)
 }
-

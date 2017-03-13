@@ -19,4 +19,3 @@ A matrix with the count of objects in each bin category.
 \description{
 This function returns bin distances for spatial autocorrelation.
 }
-

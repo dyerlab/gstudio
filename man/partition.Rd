@@ -34,4 +34,3 @@ A quick routine for grabbing subsets of data.
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

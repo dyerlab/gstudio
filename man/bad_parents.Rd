@@ -29,4 +29,3 @@ This function takes a \code{data.frame} full of parents and offspring
  and checks to see if the offspring are actually assigned to a compatible
  adult.
 }
-

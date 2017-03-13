@@ -29,4 +29,3 @@ He(arapat, small.N = TRUE)
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

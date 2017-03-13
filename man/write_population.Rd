@@ -37,4 +37,3 @@ This is a basic output file formatter for saving files necessary for saving
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }
-

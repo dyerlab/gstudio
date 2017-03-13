@@ -36,4 +36,3 @@ This function takes a \code{frequencies()} object and
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

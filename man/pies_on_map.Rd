@@ -39,4 +39,3 @@ pies_on_map(arapat,locus="LTRS")
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

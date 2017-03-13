@@ -32,4 +32,3 @@ in the vignettes for this package.
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
 \keyword{package}
-

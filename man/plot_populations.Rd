@@ -49,4 +49,3 @@ Plots a data frame if that data frame has names indicated by the
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

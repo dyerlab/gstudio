@@ -23,4 +23,3 @@ This function provides a quick summary of the observed data, by stratum (optiona
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

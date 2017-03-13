@@ -26,4 +26,3 @@ This uses the mean radius of the earth to be 6371km as the latest estimate by US
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

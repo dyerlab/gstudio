@@ -29,4 +29,3 @@ rep(loc1, times=4)
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

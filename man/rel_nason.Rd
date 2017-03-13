@@ -31,4 +31,3 @@ This estimator will use missing data but it treats it as if the
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }
-

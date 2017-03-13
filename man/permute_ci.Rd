@@ -35,4 +35,3 @@ This function takes some data and does perumations on it and passes
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

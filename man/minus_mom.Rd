@@ -47,4 +47,3 @@ minus_mom( df )
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }
-

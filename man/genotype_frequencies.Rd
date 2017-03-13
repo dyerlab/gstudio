@@ -30,4 +30,3 @@ Provides a summary of gentoype frequencies (observed and expected) from
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

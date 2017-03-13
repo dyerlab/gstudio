@@ -8,4 +8,3 @@
 Example data for separated data types
 }
 \keyword{data}
-

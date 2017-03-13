@@ -33,4 +33,3 @@ ggplot() + geom_locus( aes(x=Locus, fill=Population), data=data )
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

@@ -8,4 +8,3 @@
 Example data for probabilistically calling snps
 }
 \keyword{data}
-

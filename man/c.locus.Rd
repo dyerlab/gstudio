@@ -7,9 +7,9 @@
 \method{c}{locus}(..., recursive = FALSE)
 }
 \arguments{
-\item{recursive}{A flag to do the concatenation recursively.}
-
 \item{\dots}{The \code{locus} objects to be concatenated.}
+
+\item{recursive}{A flag to do the concatenation recursively.}
 }
 \value{
 A vector of \code{locus} objects
@@ -26,4 +26,3 @@ loci
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

@@ -57,4 +57,3 @@ The multilocus estimation of these parameters is estimated following the
  genetic_structure( df, mode="Gst", pairwise=TRUE)
  genetic_structure( df, mode="Gst", pairwise=TRUE, locus="TPI" )
 }
-

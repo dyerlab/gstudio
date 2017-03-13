@@ -8,4 +8,3 @@
 A categorical raster of the rice center
 }
 \keyword{data}
-

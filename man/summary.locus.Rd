@@ -22,4 +22,3 @@ Provides an overload of the \code{summary} object so that when you
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

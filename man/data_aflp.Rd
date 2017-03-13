@@ -8,4 +8,3 @@
 This is an example of the AFLP data input types.
 }
 \keyword{data}
-

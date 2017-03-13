@@ -8,4 +8,3 @@
 A set of genotypes for arapat from an AFLP dataset
 }
 \keyword{data}
-

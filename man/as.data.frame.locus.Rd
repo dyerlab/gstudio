@@ -34,4 +34,3 @@ summary(df)
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

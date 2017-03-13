@@ -4,17 +4,17 @@
 \alias{create_resistances}
 \title{Estimates resistance rasters from binary feature raster.}
 \usage{
-create_resistances(raster, feature_name = "layer", costs = c(2, 5, 10, 50,
-  100), symmetric = TRUE)
+create_resistances(x, feature_name = "layer", costs = c(2, 5, 10, 50, 100),
+  symmetric = TRUE)
 }
 \arguments{
-\item{raster}{A base \code{raster} object from which to base others.}
-
 \item{feature_name}{The prefix for output files for this raster feature (default='layer').}
 
 \item{costs}{A vector of cost rasters to iterate across (default=c(2, 5, 10, 50, 100)).}
 
 \item{symmetric}{A flag indicating that costs out of as well as into features will be estimated.}
+
+\item{raster}{A base \code{raster} object from which to base others.}
 }
 \description{
 This function produces a
@@ -31,4 +31,3 @@ create_resistances( r )
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

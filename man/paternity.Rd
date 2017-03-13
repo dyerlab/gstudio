@@ -55,4 +55,3 @@ paternity( offs, adults[1,], adults )
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

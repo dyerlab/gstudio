@@ -4,16 +4,22 @@
 \alias{genetic_autocorrelation}
 \title{Performs 'Autocorrelation Analysis}
 \usage{
-genetic_autocorrelation(P, G, bins, mode = c("smouse", "moran")[1])
+genetic_autocorrelation(P, G, bins, perms = 0)
 }
 \arguments{
 \item{P}{A square physical distance matrix}
 
 \item{G}{A square genetic distance matrix (same size as P)}
 
-\item{binsize}{The distance bins to be estimated.  These will be taken sequentially 
+\item{bins}{The distance bins to be estimated.  These will be taken sequentially 
 such that the first bin will be all observations whose separation is greater than
 binsize[1] and less than binsize[2].}
+
+\item{perms}{The number of permutations to use to test significance
+at each distance bin.}
+}
+\value{
+A data.frame with bins and correlations.
 }
 \description{
 This function takes two distance matices, one for physical separation

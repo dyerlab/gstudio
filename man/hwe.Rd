@@ -30,4 +30,3 @@ This function tests for Hardy-Weinberg Equilibrium using the either
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

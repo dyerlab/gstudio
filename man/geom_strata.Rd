@@ -39,4 +39,3 @@ ggmap( map ) + geom_strata( data=arapat )
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

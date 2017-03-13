@@ -31,4 +31,3 @@ optimal_sampling( N, Phi )
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

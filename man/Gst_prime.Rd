@@ -44,4 +44,3 @@ This function estimates the parameter (and potentially the confidence
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }
-

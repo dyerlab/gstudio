@@ -26,4 +26,3 @@ locus2 <- c( locus(1:2), locus(c(1,1)), locus(c(2,2)), locus(2:3) )
 df <- data.frame( locus, locus2 )
 Pe(df)
 }
-

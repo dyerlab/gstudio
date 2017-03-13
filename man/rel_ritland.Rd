@@ -22,4 +22,3 @@ This function takes a \code{locus} vector or a \code{data.frame} of
 \author{
 Rodney J. dyer <rjdyer@vcu.edu>
 }
-
