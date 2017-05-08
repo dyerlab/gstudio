@@ -4,7 +4,7 @@
 \alias{genetic_autocorrelation}
 \title{Performs 'Autocorrelation Analysis}
 \usage{
-genetic_autocorrelation(P, G, bins, perms = 0)
+genetic_autocorrelation(P, G, bins, perms = 0, plot = FALSE)
 }
 \arguments{
 \item{P}{A square physical distance matrix}
@@ -17,6 +17,9 @@ binsize[1] and less than binsize[2].}
 
 \item{perms}{The number of permutations to use to test significance
 at each distance bin.}
+
+\item{plot}{A flag (default=FALSE) to show distribution of randomized 
+correlations.}
 }
 \value{
 A data.frame with bins and correlations.
