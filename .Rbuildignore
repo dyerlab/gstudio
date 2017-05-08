@@ -8,3 +8,4 @@ ggmapTemp.png
 inst/tests/gmapTemp.png
 index_cache
 index_files
+^cran-comments\.md$
