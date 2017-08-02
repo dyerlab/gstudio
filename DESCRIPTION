@@ -24,7 +24,8 @@ Imports:
     ggrepel,
     popgraph,
     adegenet,
-    plotGoogleMaps
+    plotGoogleMaps,
+    stringi
 Suggests:
     testthat,
     knitr
