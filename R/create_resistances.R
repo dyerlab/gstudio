@@ -8,12 +8,11 @@
 #' @param symmetric A flag indicating that costs out of as well as into features will be estimated.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @examples \donotrun{
+#' @examples 
 #' vals <- sample( c(0,1), size=49, replace=TRUE)
 #' m <- matrix( vals, nrow=7)
 #' r <- raster::raster( m )
 #' create_resistances( r )
-#' }
 #' 
 create_resistances <- function( x, feature_name="layer", costs=c(2,5,10,50,100), symmetric=TRUE){
   if( !is(x,"RasterLayer"))

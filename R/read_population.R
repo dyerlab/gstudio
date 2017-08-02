@@ -30,7 +30,7 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE, ...) {
   if( !missing(type) && !(type %in% c("aflp","column","separated","snp","zyme","genepop","cdpop","haploid")))
-    stop("Unrecognized 'type' submitted to read_population()")
+    stop("Unrecognized 'type' submitted to read_population().  Please specify which type of data file you are trying to load in.")
   
   # specify the haploid as separated, it will come out as a single column due to no separators
   if( type=="haploid"){
@@ -114,13 +114,17 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
 
 .read_genepop <- function( path ){
   
-  raw <- readLines( path, -1 )
+  raw <- readLines( path, -1, skipNul = TRUE )
+  raw <- stringi::stri_trans_general(raw, "latin-ascii")
+  raw <- raw[ nchar(raw)>0 ]
+  
+  # remove trailing and leading whitespaces
   raw <- unlist(lapply( raw, function(x) gsub("^\\s+|\\s+$", "", x)))
   
   
   
   N <- length(raw)
-  if( length(raw)<3)
+  if( N<3)
     stop("Cannot load a genepop file with no data in it...")
   
   #find designations
