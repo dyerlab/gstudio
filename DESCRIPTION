@@ -25,7 +25,8 @@ Imports:
     popgraph,
     adegenet,
     plotGoogleMaps,
-    stringi
+    stringi, 
+    DBI
 Suggests:
     testthat,
     knitr
