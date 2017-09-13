@@ -23,6 +23,7 @@ read_population(path, type, locus.columns, phased = FALSE, sep = ",",
  \item{zyme}{Alleles like zymes (e.g., 12 for '1' and '2' alleles).}
  \item{genepop}{Import data that is in 'genepop' format.}
  \item{cdpop}{Import genotypes encoded by CDPOP for subsequent analyses.}
+ \item{structure}{Import a STRUCTURE data file (2 rows per individual format).}
 }}
 
 \item{locus.columns}{A vector indicating the numerical column number for 

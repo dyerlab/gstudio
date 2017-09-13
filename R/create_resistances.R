@@ -1,8 +1,8 @@
 #' Estimates resistance rasters from binary feature raster.
 #' 
-#' This function produces a 
+#' This function produces a cost raster from a single value
 #' 
-#' @param raster A base \code{raster} object from which to base others.
+#' @param x A base \code{raster} object from which to base others.
 #' @param feature_name The prefix for output files for this raster feature (default='layer').
 #' @param costs A vector of cost rasters to iterate across (default=c(2, 5, 10, 50, 100)).  
 #' @param symmetric A flag indicating that costs out of as well as into features will be estimated.

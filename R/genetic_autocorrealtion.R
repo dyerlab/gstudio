@@ -16,6 +16,7 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 genetic_autocorrelation <- function( P, G, bins, perms=0, plot=FALSE ){
+  Bin <- To <- NA
   if( missing(P) || missing(G) || missing(bins)){
     stop("Need P, G, and binsize for autocorrelation.")
   }
