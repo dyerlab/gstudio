@@ -1,4 +1,4 @@
-gstudio 1.6
+gstudio 1.6 Planned
 -----------------
 * [REQ] Test for HWP and LD similar to that implemented in Genepop? I work with microsatellite loci that have many rare alleles, so a HWP/LD test with a MC algorithm similar to that used in Genepop would be ideal
 * [ADD] Added heirfstat to genetic_structure to allow functional calling 
@@ -6,12 +6,12 @@ gstudio 1.6
 * [FIX] stratum He/Ho genetic_diversity Hs
 * [FIX] Add permutation to Fst() for significance
 * [FIX] pies_on_map apparently is broken
-
 * [FIX] Problem with having a misssing genotype for type="column" in first row.  Odd problem.
 
 
 gstudio 1.5
 -----------------
+* [FIX] added 'structure' type of import for read_population().  Must be the two rows per individual type.
 * [ADD] Added option to specify inbreeding (F) in make_population() function
 * [FIX] Fixed problem with wrapper function around Nei line 9 Stratum => stratum
 * [ADD] Added Fst as random anova version.

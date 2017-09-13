@@ -16,6 +16,7 @@
 #'  \item{zyme}{Alleles like zymes (e.g., 12 for '1' and '2' alleles).}
 #'  \item{genepop}{Import data that is in 'genepop' format.}
 #'  \item{cdpop}{Import genotypes encoded by CDPOP for subsequent analyses.}
+#'  \item{structure}{Import a STRUCTURE data file (2 rows per individual format).}
 #' }
 #' @param phased A flag indicating the the alleles should are of
 #'  known gametic phase (default=FALSE).
@@ -29,7 +30,8 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE, ...) {
-  if( !missing(type) && !(type %in% c("aflp","column","separated","snp","zyme","genepop","cdpop","haploid")))
+  type <- tolower(type)
+  if( !missing(type) && !(type %in% c("aflp","column","separated","snp","zyme","genepop","cdpop","haploid","structure")))
     stop("Unrecognized 'type' submitted to read_population().  Please specify which type of data file you are trying to load in.")
   
   # specify the haploid as separated, it will come out as a single column due to no separators
@@ -45,6 +47,9 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   # do the cdpop readin
   else if( type=="cdpop")
     return( .read_cdpop(path, ...) )
+  
+  else if( type=="structure")
+    return( .read_structure( path, ...) )
   
   # default
   else 
@@ -227,7 +232,41 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
 
 
 
+.read_structure <- function( path, ... ) {
+  raw <- readLines(path)
+  
+  # clean up problems with mixed tabs and spaces, make all 
+  .cleanup_and_split <- function( row ) {
+    header <- gsub("\t",",",row )
+    header <- gsub(" ", ",", header )
+    columns <- strsplit(header,",",fixed=TRUE)[[1]]
+    return(columns)
+  }
 
+  #convert to matrix  
+  data <- matrix( unlist( lapply(raw, .cleanup_and_split )),nrow = length(raw) , byrow = TRUE)
+  colnames(data) <- data[1,]
+  df <- data.frame( data[2:nrow(data),])
+  IDPOP <- apply( df[ , 1:2 ] , 1 , paste , collapse = "-" )
+  
+  # Make new
+  loci <- names(df)[3:ncol(df)]
+  data <- data.frame( IDPOP=unique(IDPOP) )
+  for(col in names(df)[3:ncol(df)]){
+    data[[col]] <- rep(locus(),nrow(data))
+  }
+  
+  # make
+  for( i in seq(1,nrow(df),by=2) ) {
+    id <- IDPOP[i]
+    row <- which( data$IDPOP == id)
+    for( l in loci ){
+      alleles <- gsub("-9", NA, df[[l]][i:(i+1)])
+      data[[l]][row] <- locus( alleles )
+    }
+  }
+  return( data )
+}
 
 
 
