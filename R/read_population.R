@@ -265,6 +265,15 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
       data[[l]][row] <- locus( alleles )
     }
   }
+  
+  idpop <- matrix(unlist(strsplit(data$IDPOP,split = "-")), ncol=2, byrow=TRUE)
+  data$IDPOP <- NULL
+  data$ID <- idpop[,1]
+  data$Population <- idpop[,2]
+  
+  data <- data[ , c( (ncol(data)-1), ncol(data),1:(ncol(data)-2))]
+  data$Population <- factor( data$Population )
+  summary(data)
   return( data )
 }
 
