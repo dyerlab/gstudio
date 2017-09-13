@@ -273,7 +273,6 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   
   data <- data[ , c( (ncol(data)-1), ncol(data),1:(ncol(data)-2))]
   data$Population <- factor( data$Population )
-  summary(data)
   return( data )
 }
 
