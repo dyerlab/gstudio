@@ -7,7 +7,7 @@
 #' @param x A \code{data.frame} object with \code{\link{locus}} columns.
 #' @param stratum The strata by which the genetic distances are estimated.  This
 #'    can be an optional parameter when estimating distance measures calculated
-#'    among indiviudals (default='Population'). 
+#'    among individuals (default='Population'). 
 #' @param mode The particular genetic distance metric that you are going to use. 
 #' @return A matrix with the genetic distances 
 #' @note This function currently includes the following individual distance 

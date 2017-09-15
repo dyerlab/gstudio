@@ -11,8 +11,8 @@
 #'      \item{label}{The name of the column label with the specified class.}
 #'      \item{index}{The numerical index of the column with specified class.}
 #'    }
-#' @return A list of labels or indices indicating where
-#'  columns of the querried type exist or a list of all column classes.
+#' @return A list of labels or indicies indicating where
+#'  columns of the queried type exist or a list of all column classes.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu} 
 #' @examples

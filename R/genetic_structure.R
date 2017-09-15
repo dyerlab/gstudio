@@ -19,8 +19,8 @@
 #' @param locus An optional parameter specifying the locus or loci to be used
 #'  in the analysis.  If this is not specified, then all loci are used.
 #' @return An object of type \code{data.frame} containing estimates for each locus and a
-#'  multilocus estiamte.  If \code{pairwise=TRUE}, then it returns the multilocus (if more
-#'  than one locus) estiamte in a matrix format.
+#'  multilocus estimate.  If \code{pairwise=TRUE}, then it returns the multilocus (if more
+#'  than one locus) estimate in a matrix format.
 #' @note The multilocus estimation of these parameters is estimated following the
 #'  suggestions of Culley et al. (2001) A comparison of two methods of calculating Gst, 
 #'  a genetic measure of population differentiation.  American Journal of Botany 89(3): 460-465.
@@ -39,7 +39,7 @@
 genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime", "Dest")[1], nperm=0, size.correct=TRUE, pairwise=FALSE, locus ) {
   
   if( !inherits(x,"data.frame") )
-      stop("You need to pass a data frame to the funciton genetic_structure()...")
+      stop("You need to pass a data frame to the function genetic_structure()...")
     
   if( !(stratum %in% names(x) ) ) 
     stop("You must specify which stratum to use for the estimation of genetic structure.")

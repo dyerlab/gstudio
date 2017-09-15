@@ -5,7 +5,7 @@
 #' @param off A locus from the offspring
 #' @param mom A locus from one parent
 #' @param dad A locus from another parent
-#' @param multilocus A flag indicating that a single multilocus estiamte
+#' @param multilocus A flag indicating that a single multilocus estimate
 #'  of the transition probability should be passed (the default action).  
 #'  If \code{FALSE}, the results will be returned as a vector of individual
 #'  locus values.

@@ -6,7 +6,7 @@ Type: Package
 Author: Rodney J. Dyer <rjdyer@vcu.edu>
 Description: Classes and functions for the spatial analysis of marker
     data to include structure, diversity, distance, and
-    relatedness statistics.  Where approporiate, integration with existing
+    relatedness statistics.  Where appropriate, integration with existing
     libraries is included.
 Version: 1.5.0
 Date: 2016-03-03

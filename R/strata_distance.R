@@ -21,7 +21,7 @@ strata_distance <- function( 	x, mode=c("Euclidean","Circle")[2]) {
     stop("You need to pass a data frame to this function.")
   
   if( !is.na( column_class(x,"locus"))  )
-    stop("You need to pass the coordinate data.frame from strata_coordinates() to this funciton, not the raw data.")
+    stop("You need to pass the coordinate data.frame from strata_coordinates() to this function, not the raw data.")
   
   if( !( all(names(x) == c("Stratum","Longitude","Latitude"))))
     stop("You need to pass a coordinate matrix from strata_coordiantes() to this function")

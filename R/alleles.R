@@ -1,6 +1,6 @@
 #' Returns the alleles in a \code{locus} object
 #' 
-#' This function will provide the alelles within a \code{locus} object 
+#' This function will provide the alleles within a \code{locus} object 
 #'  for either a single locus or for a vector of loci
 #' @param x A \code{locus} object (single or vector)
 #' @param all A flag indicating that you want all alleles returned (default=TRUE)

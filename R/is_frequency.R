@@ -1,4 +1,4 @@
-#' Is-A function for Allele Frequences
+#' Is-A function for Allele Frequencies
 #' 
 #' This is a function that returns a flag indicating that the 
 #'  object passed has the qualities of a \code{data.frame} created

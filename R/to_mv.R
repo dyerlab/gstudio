@@ -1,6 +1,6 @@
-#' Returns the passed itmes as multivariate data
+#' Returns the passed items as multivariate data
 #' 
-#' This function will provide the alelles within a \code{locus} object 
+#' This function will provide the alleles within a \code{locus} object 
 #'  for either a single locus or for a vector of loci
 #' @param x A object to convert.
 #' @param ploidy The number of alleles at an individuals locus (default=2)

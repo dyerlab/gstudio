@@ -1,6 +1,6 @@
 #' Genotype Frequencies
 #' 
-#' Provides a summary of gentoype frequencies (observed and expected) from
+#' Provides a summary of genotype frequencies (observed and expected) from
 #'  a vector of \code{locus} objects.
 #' @param x An object of type \code{locus}
 #' @param supress_warnings A flag that will prevent warnings in output

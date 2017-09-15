@@ -41,13 +41,13 @@ gstudio 1.4
 
 gstudio 1.3
 -----------------
-* [ADD] Added ability to use RAD-seq style data to frequencies() function.  Here each locus is represented by the posterior likelihood of each genotype (e.g., three columns per locus).  Your locus columns will be numeric and labeled as 'LocusName_1', 'LocusName_2', and 'LocusName_3'.  It will split on the underscore and assume that the middle one (the _2) is the heterozygote.  Alleles will be A (estimated from _1 as homozygote + het) and B (estiamted from _3 + het).
+* [ADD] Added ability to use RAD-seq style data to frequencies() function.  Here each locus is represented by the posterior likelihood of each genotype (e.g., three columns per locus).  Your locus columns will be numeric and labeled as 'LocusName_1', 'LocusName_2', and 'LocusName_3'.  It will split on the underscore and assume that the middle one (the _2) is the heterozygote.  Alleles will be A (estimated from _1 as homozygote + het) and B (estimated from _3 + het).
 * [ADD] Filter to import CDPOP genotype files via read_population().
 * [ADD] Added 'haploid' type for read_population().
 * [ADD] Added ability to pass migration matrix to mate() function as well as constant migration.
 * [ADD] Ability to call mate() with vectors of individuals at once and to specify either uniform or variable numbers of offspring per pair.
 * [FIX] Problem with dist_bray() and dist_jaccard() with missing data.
-* [ADD] Added function to_mv_freq() to provide multilocus frequency estiamtes across strata in matrix format.
+* [ADD] Added function to_mv_freq() to provide multilocus frequency estimates across strata in matrix format.
 * [CUTOFF]  This is where new features for Dyer (2014) stopped.  
 
 gstudio 1.2

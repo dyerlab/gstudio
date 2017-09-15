@@ -3,7 +3,7 @@
 #' This function estimates the allele-wise relatedness statistic from
 #'  Queller & Goodnight (1989). 
 #'  
-#' This is an assymetric estimator using the formula:
+#' This is an asymmetric estimator using the formula:
 #'  
 #'  \deqn{ r_{XY} = \frac{\sum_{i=1}^L(\delta_{ac} + \delta_{ad} + \delta_{bd}  + \delta_{bd} -p_a - p_b - p_c - p_d) }{\sum_{i=1}^L (2 + \delta_{ab} + \delta_{cd} - p_a - p_b - p_c - p_d)} }
 #'  

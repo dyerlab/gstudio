@@ -1,12 +1,12 @@
 #' Estimate genetic diversity among strata in a Population,
 #' 
 #' This function is the main one used for estimating genetic diversity among 
-#'  stratua.  Given the large number of genetic diversity metrics, not all 
+#'  strata.  Given the large number of genetic diversity metrics, not all 
 #'  potential types are included.  
 #' @param x A \code{data.frame} object with \code{\link{locus}} columns.
 #' @param stratum The strata by which the genetic distances are estimated.  This
 #'    can be an optional parameter when estimating distance measures calculated
-#'    among indiviudals (default='Population'). 
+#'    among individuals (default='Population'). 
 #' @param loci The set of loci to use (default NULL will use all)
 #' @param mode The particular genetic diversity metric that you are going to use. 
 #'    The \code{gstudio} package currently includes the following individual distance 

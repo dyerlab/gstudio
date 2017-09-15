@@ -148,7 +148,7 @@ as.list.locus <- function( x, ... ) {
 #' As operator for locus
 #' 
 #' This takes several things and shoves it into the constructor
-#' @param x An object that is to be truned into a \code{locus}.
+#' @param x An object that is to be turned into a \code{locus}.
 #' @return An object of type \code{locus}
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}

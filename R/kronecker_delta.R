@@ -5,7 +5,7 @@
 #' @note The Kronecker operator is a vector consisting of values related
 #'  to the similarity of alleles among two loci.  For the genotypes AiAj and 
 #'  AkAl the Kronecker deltas are =0 of the subscripted alleles are different
-#'  and =1 if they are the same (e.g., dij = 0 if heterzygote, = 1 if homozygote)
+#'  and =1 if they are the same (e.g., dij = 0 if heterozygote, = 1 if homozygote)
 #' @param locus1 An object of type 'locus'
 #' @param locus2 An object of type 'locus' 
 #' @return a named vector of kronecker products.

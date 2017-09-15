@@ -1,7 +1,7 @@
 #' Plotting the locations of a 'population' 
 #' 
 #' Plots a data frame if that data frame has names indicated by the 
-#'  passed arguments stratum, Longtitude, and Latitude.  Otherwise
+#'  passed arguments stratum, Longitude, and Latitude.  Otherwise
 #'  it passes the object on to plot.default()
 #' @param x An object of type \code{data.frame} that has Longitude, Latitude, and Stratum variables.
 #' @param stratum The stratum to plot (default='Population').

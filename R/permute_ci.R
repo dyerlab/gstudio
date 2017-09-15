@@ -1,6 +1,6 @@
 #' Permute for confidence interval
 #' 
-#' This function takes some data and does perumations on it and passes
+#' This function takes some data and does permutations on it and passes
 #'  it along to the indicated function.  There are options for permuting
 #'  genotypes or permuting alleles.  Make sure you know the difference.
 #' @param x The \code{locus} data being used.

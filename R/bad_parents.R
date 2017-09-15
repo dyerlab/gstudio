@@ -6,7 +6,7 @@
 #' @param df A \code{data.frame} with identification and locus columns.
 #' @param AdultID The column header for id of the adults. All adults have unique
 #'  identification numbers and all offspring have the the same number as
-#'  the maternal/paternal indiviudal from which they were sampled or are being
+#'  the maternal/paternal individual from which they were sampled or are being
 #'  compared.  Default = "ID"
 #' @param OffID A column indicating offspring identification numbers.  By default
 #'  all adults have OffID=0 (this is how I tell if they are really adults and not

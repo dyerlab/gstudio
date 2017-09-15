@@ -4,12 +4,12 @@
 #'  alleles, stratum, frequencies, etc.
 #' @param x Either a vector of types \code{locus} or a \code{data.frame}
 #'  containing \code{locus} objects.
-#' @param loci The loci to get frquencies from (default is all).
+#' @param loci The loci to get frequencies from (default is all).
 #' @param stratum Partition of the data based upon this stratum
 #'  (default is no partitions).
 #' @param ... Ignored
 #' @return A data frame with Frequencies, Alleles, Loci, and perhaps 
-#'  Stratum columns (Allele and Frquencies are at a minimium).
+#'  Stratum columns (Allele and Frequencies are at a minimum).
 #' @note You can submit RAD-seq genotypes in a normal \code{data.frame} 
 #'  to this function BUT it must be formatted as follows.  Each locus
 #'  is represented by three columns of probabilities (must sum to 1).
@@ -41,7 +41,7 @@ frequencies <- function( x, loci, stratum, ... ) {
 }
 
 #' @return A data frame with Frequencies, Alleles, Loci, and perhaps 
-#'  Stratum columns (Allele and Frquencies are at a minimium).
+#'  Stratum columns (Allele and Frequencies are at a minimum).
 #' @method frequencies default
 #' @rdname frequencies
 #' @export
@@ -55,7 +55,7 @@ frequencies.default <- function( x, ... ) {
 
 
 #' @return A data frame with Frequencies, Alleles, Loci, and perhaps 
-#'  Stratum columns (Allele and Frquencies are at a minimium).
+#'  Stratum columns (Allele and Frequencies are at a minimum).
 #' @method frequencies locus
 #' @rdname frequencies
 #' @export
@@ -107,7 +107,7 @@ frequencies.locus <- function( x, loci, ... ) {
 # }
 
 #' @return A data frame with Frequencies, Alleles, Loci, and perhaps 
-#'  Stratum columns (Allele and Frquencies are at a minimium).
+#'  Stratum columns (Allele and Frequencies are at a minimum).
 #' @method frequencies data.frame
 #' @rdname frequencies
 #' @export

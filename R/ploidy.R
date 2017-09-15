@@ -1,6 +1,6 @@
 #' Returns the number of alleles in a \code{locus} object
 #' 
-#' This function will a count of the number of alelles within 
+#' This function will a count of the number of alleles within 
 #' a \code{locus} object for either a single locus or for a 
 #' vector of loci
 #' @param x A \code{locus} object (single or vector)

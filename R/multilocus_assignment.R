@@ -1,9 +1,9 @@
 #' Returns multilocus assignment probability
 #' 
 #' This function takes one or more individuals and estimates
-#' their probability of coming from indiviudal populations
+#' their probability of coming from individual populations
 #' from multilocus genotype frequencies.
-#' @param individual A \code{data.frame} with a single row for an indiviudal with one or 
+#' @param individual A \code{data.frame} with a single row for an individual with one or 
 #'  more \code{locus} objects
 #' @param frequencies A \code{data.frame} of allele frequencies from \code{frequencies()}
 #'  that will be used for assignment.  This MUST be a frequency data.frame 
@@ -19,8 +19,8 @@ multilocus_assignment <- function( individual, frequencies, F=0, verbose=FALSE )
   if( !is(individual,"data.frame") || length( column_class(individual,"locus")) < 1 )
     stop("You must pass a data frame of individuals with locus columns to this function")
   if( nrow(individual) > 1 ) {
-    warning("Only the first indiviudal will be used.")
-    indiviudal <- individual[1,]
+    warning("Only the first individual will be used.")
+    individual <- individual[1,]
   }
   
   if( !is( frequencies, "data.frame") || !(all( c("Stratum","Locus","Allele","Frequency") %in% names(frequencies))))
@@ -94,7 +94,7 @@ multilocus_assignment <- function( individual, frequencies, F=0, verbose=FALSE )
   ret <- ret[order(-ret$Probability),]
   
   if( has_missing ){
-    warning("This individual has missing genotypes, cannot compre assignment probability to indiviudals who do not have missing data.")
+    warning("This individual has missing genotypes, cannot compre assignment probability to individuals who do not have missing data.")
   }
   
   if( !verbose )

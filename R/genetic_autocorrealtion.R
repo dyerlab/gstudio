@@ -1,6 +1,6 @@
 #' Performs 'Autocorrelation Analysis
 #' 
-#' This function takes two distance matices, one for physical separation
+#' This function takes two distance matrices, one for physical separation
 #'  and the other for genetic separation as well as a bin size and performs
 #'  the spatial autocorrelation analysis of Smouse & Peakall (1999).
 #' @param P A square physical distance matrix

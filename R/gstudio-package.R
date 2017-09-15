@@ -114,7 +114,7 @@ NULL
 
 #' Cornus adult data
 #' 
-#' Example data set with adult multilocus gentoypes from
+#' Example data set with adult multilocus genotypes from
 #' Cornus florida at the Rice Center
 #' @name cornus
 #' @docType data

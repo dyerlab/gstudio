@@ -21,7 +21,7 @@ optimal_sampling <- function( N, phi) {
     stop("You need to provide the total sample size for this function to work.")
   
   if( missing( phi ) )
-    stop("You need to provide a mean estiamte of differentiation for this function to work.")
+    stop("You need to provide a mean estimate of differentiation for this function to work.")
   Strata <- Var.Phi <- NULL
   
   x <- seq(2,N-2)

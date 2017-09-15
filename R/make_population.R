@@ -4,7 +4,7 @@
 #'  returns a \code{data.frame} with the appropriate 
 #'  stratum and loci derived randomly.
 #' @param x A \code{data.frame} as returned by the \code{frequencies()}
-#'  funciton.  For a single locus, it has columns "Allele" and "Frequency"
+#'  function.  For a single locus, it has columns "Allele" and "Frequency"
 #'  for multiple loci, it has a "Locus" column, and if it is to be 
 #'  subdivided into strata, you have a "Strata" column.
 #' @param N The number of individuals to create (default = 20).  This is a 

@@ -1,11 +1,11 @@
 #' Produce the next generation but allow for some level of selfing.
 #' 
 #' This function is a bit of a wrapper around the \code{mate} function in that
-#'  it allows you to specify the inbreeding parameter F (the fraction of indiviuals
+#'  it allows you to specify the inbreeding parameter F (the fraction of individuals
 #'  that produce offspring via selfing).
-#' @param data A \code{data.frame} containing indiviudals with objects of type \code{locus}
+#' @param data A \code{data.frame} containing individuals with objects of type \code{locus}
 #' @param N The total number of individuals in the next generation to be produced by the mating
-#'  of each individual.  If empty, it will default to 1 offpspring per pair.
+#'  of each individual.  If empty, it will default to 1 offspring per pair.
 #' @param s The fraction of adults you want to be selected to produce selfed offspring, the 
 #'  default is 0 and this will produce a randomly mating population just like if you called
 #'  \code{mate()}.

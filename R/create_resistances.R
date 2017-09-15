@@ -18,7 +18,7 @@ create_resistances <- function( x, feature_name="layer", costs=c(2,5,10,50,100),
   if( !is(x,"RasterLayer"))
     stop("This function requires a base (binary) raster to work.")
   if( !any( values(x)==0))
-    stop("You need to give this funciton a binary raster, stupid!")
+    stop("You need to give this function a binary raster, stupid!")
   r <- x
   r[ r > 0 ] <- 1
    for( cost in costs) {
