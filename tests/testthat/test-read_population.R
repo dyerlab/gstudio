@@ -58,3 +58,16 @@ test_that("reading zyme data file",{
   expect_that( data, is_a("data.frame") )
   expect_that( length( column_class(data,"locus")), equals(4) )
 })
+
+
+test_that("reading structure data file", {
+  
+  path <- system.file("extdata","data_structure.str", package="gstudio")
+  data <- read_population(path, type="structure")
+  expect_that( data, is_a("data.frame") )
+  expect_that( length(column_class(data,"locus")), equals(15) )
+  
+})
+
+
+

@@ -247,11 +247,11 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   data <- matrix( unlist( lapply(raw, .cleanup_and_split )),nrow = length(raw) , byrow = TRUE)
   colnames(data) <- data[1,]
   df <- data.frame( data[2:nrow(data),])
-  IDPOP <- apply( df[ , 1:2 ] , 1 , paste , collapse = "-" )
+  IDPOP <- df$V1
   
   # Make new
   loci <- names(df)[3:ncol(df)]
-  data <- data.frame( IDPOP=unique(IDPOP) )
+  data <- data.frame( ID=unique(df[,1]) )
   for(col in names(df)[3:ncol(df)]){
     data[[col]] <- rep(locus(),nrow(data))
   }
@@ -259,21 +259,19 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   # make
   for( i in seq(1,nrow(df),by=2) ) {
     id <- IDPOP[i]
-    row <- which( data$IDPOP == id)
+    row <- which( data$ID == id)
     for( l in loci ){
       alleles <- gsub("-9", NA, df[[l]][i:(i+1)])
       data[[l]][row] <- locus( alleles )
     }
   }
   
-  idpop <- matrix(unlist(strsplit(data$IDPOP,split = "-")), ncol=2, byrow=TRUE)
-  data$IDPOP <- NULL
-  data$ID <- idpop[,1]
-  data$Population <- idpop[,2]
-  
-  data <- data[ , c( (ncol(data)-1), ncol(data),1:(ncol(data)-2))]
-  data$Population <- factor( data$Population )
-  return( data )
+  ret <- merge( data, df[,1:2], by.x="ID", by.y="V1")
+  ret <- ret[ , c(ncol(ret), 1:(ncol(ret)-1)) ]
+  names(ret)[1] <- "Population"
+  ret$Population <- factor( ret$Population )
+  ret$ID <- factor( ret$ID )
+  return( ret )
 }
 
 
