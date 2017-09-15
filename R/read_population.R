@@ -31,6 +31,18 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE, ...) {
   type <- tolower(type)
+  
+  if( !file.exists(path) ){
+    ans <- paste("You did not pass a valid path to this function.  What you passed", 
+                 path, 
+                 "is not the FILE that has data in it, it does not exist." )
+    stop(ans)    
+  }
+  
+  if( file.info(path)$isdir ){
+    stop("You passed a directory path, not a file path to read_population().  Pass a path to the actual FILE.")
+  }
+  
   if( !missing(type) && !(type %in% c("aflp","column","separated","snp","zyme","genepop","cdpop","haploid","structure")))
     stop("Unrecognized 'type' submitted to read_population().  Please specify which type of data file you are trying to load in.")
   
@@ -234,6 +246,8 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
 
 .read_structure <- function( path, ... ) {
   raw <- readLines(path)
+  if( length(raw) < 2 )
+    stop("There is a problem, you did not pass a valid path for the data file.")
   
   # clean up problems with mixed tabs and spaces, make all 
   .cleanup_and_split <- function( row ) {
@@ -247,7 +261,9 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   data <- matrix( unlist( lapply(raw, .cleanup_and_split )),nrow = length(raw) , byrow = TRUE)
   colnames(data) <- data[1,]
   df <- data.frame( data[2:nrow(data),])
-  IDPOP <- df$V1
+  if( nrow(df) < 2 )
+    stop("There is a problem, you did not pass a file that has more than 1 row in it...")
+  
   
   # Make new
   loci <- names(df)[3:ncol(df)]
