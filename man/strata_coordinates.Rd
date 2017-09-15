@@ -31,7 +31,7 @@ A data frame, with Stratum Latitude and Longitude, summarized by center of each 
 }
 \description{
 This function takes a \code{data.frame}, and a stratum and makes a data frame
- consisting of Stratum, Latitide, and Longitude for each stratum
+ consisting of Stratum, Latitude, and Longitude for each stratum
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

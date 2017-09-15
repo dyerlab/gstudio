@@ -29,7 +29,7 @@ Either a \code{matrix} or \code{vector} of alleles depending
  upon what was passed to the function.
 }
 \description{
-This function will provide the alelles within a \code{locus} object 
+This function will provide the alleles within a \code{locus} object 
  for either a single locus or for a vector of loci
 }
 \examples{

@@ -11,7 +11,7 @@ genetic_distance(x, stratum = "Population", mode)
 
 \item{stratum}{The strata by which the genetic distances are estimated.  This
 can be an optional parameter when estimating distance measures calculated
-among indiviudals (default='Population').}
+among individuals (default='Population').}
 
 \item{mode}{The particular genetic distance metric that you are going to use.}
 }

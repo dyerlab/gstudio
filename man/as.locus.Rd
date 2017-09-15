@@ -7,7 +7,7 @@
 as.locus(x)
 }
 \arguments{
-\item{x}{An object that is to be truned into a \code{locus}.}
+\item{x}{An object that is to be turned into a \code{locus}.}
 }
 \value{
 An object of type \code{locus}

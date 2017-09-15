@@ -34,8 +34,8 @@ in the analysis.  If this is not specified, then all loci are used.}
 }
 \value{
 An object of type \code{data.frame} containing estimates for each locus and a
- multilocus estiamte.  If \code{pairwise=TRUE}, then it returns the multilocus (if more
- than one locus) estiamte in a matrix format.
+ multilocus estimate.  If \code{pairwise=TRUE}, then it returns the multilocus (if more
+ than one locus) estimate in a matrix format.
 }
 \description{
 This function estimates common , genetic statistics.

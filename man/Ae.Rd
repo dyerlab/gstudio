@@ -17,7 +17,7 @@ is NULL).  If missing, all loci are used.}
 }
 \value{
 The effective number of alleles either as a \code{numeric} value
- or as a \code{data.frame} if mutliple loci are passed.
+ or as a \code{data.frame} if multiple loci are passed.
 }
 \description{
 This function returns the effective number of alleles in a sample.

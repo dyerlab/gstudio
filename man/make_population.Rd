@@ -8,7 +8,7 @@ make_population(x, N = 20, F = 0)
 }
 \arguments{
 \item{x}{A \code{data.frame} as returned by the \code{frequencies()}
-funciton.  For a single locus, it has columns "Allele" and "Frequency"
+function.  For a single locus, it has columns "Allele" and "Frequency"
 for multiple loci, it has a "Locus" column, and if it is to be 
 subdivided into strata, you have a "Strata" column.}
 

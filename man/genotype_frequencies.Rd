@@ -16,7 +16,7 @@ for ease in simulation without loosing materials in the 50 warnings()}
 A \code{data.frame} with genotype, observed, and expected as counts.
 }
 \description{
-Provides a summary of gentoype frequencies (observed and expected) from
+Provides a summary of genotype frequencies (observed and expected) from
  a vector of \code{locus} objects.
 }
 \examples{

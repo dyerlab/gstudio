@@ -43,7 +43,7 @@ A ggplot object that will be plotted by default.
 }
 \description{
 Plots a data frame if that data frame has names indicated by the 
- passed arguments stratum, Longtitude, and Latitude.  Otherwise
+ passed arguments stratum, Longitude, and Latitude.  Otherwise
  it passes the object on to plot.default()
 }
 \author{

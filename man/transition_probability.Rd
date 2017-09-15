@@ -13,7 +13,7 @@ transition_probability(off, mom, dad, multilocus = TRUE)
 
 \item{dad}{A locus from another parent}
 
-\item{multilocus}{A flag indicating that a single multilocus estiamte
+\item{multilocus}{A flag indicating that a single multilocus estimate
 of the transition probability should be passed (the default action).  
 If \code{FALSE}, the results will be returned as a vector of individual
 locus values.}

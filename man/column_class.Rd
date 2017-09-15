@@ -20,8 +20,8 @@ values are:
   }}
 }
 \value{
-A list of labels or indices indicating where
- columns of the querried type exist or a list of all column classes.
+A list of labels or indicies indicating where
+ columns of the queried type exist or a list of all column classes.
 }
 \description{
 This convienence function finds the data of a specified

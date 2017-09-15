@@ -19,7 +19,7 @@ frequencies(x, loci, stratum, ...)
 \item{x}{Either a vector of types \code{locus} or a \code{data.frame}
 containing \code{locus} objects.}
 
-\item{loci}{The loci to get frquencies from (default is all).}
+\item{loci}{The loci to get frequencies from (default is all).}
 
 \item{stratum}{Partition of the data based upon this stratum
 (default is no partitions).}
@@ -28,16 +28,16 @@ containing \code{locus} objects.}
 }
 \value{
 A data frame with Frequencies, Alleles, Loci, and perhaps 
- Stratum columns (Allele and Frquencies are at a minimium).
+ Stratum columns (Allele and Frequencies are at a minimum).
 
 A data frame with Frequencies, Alleles, Loci, and perhaps 
- Stratum columns (Allele and Frquencies are at a minimium).
+ Stratum columns (Allele and Frequencies are at a minimum).
 
 A data frame with Frequencies, Alleles, Loci, and perhaps 
- Stratum columns (Allele and Frquencies are at a minimium).
+ Stratum columns (Allele and Frequencies are at a minimum).
 
 A data frame with Frequencies, Alleles, Loci, and perhaps 
- Stratum columns (Allele and Frquencies are at a minimium).
+ Stratum columns (Allele and Frequencies are at a minimum).
 }
 \description{
 This function converts loci into data frames consisting of

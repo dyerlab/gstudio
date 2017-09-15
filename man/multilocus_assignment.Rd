@@ -7,7 +7,7 @@
 multilocus_assignment(individual, frequencies, F = 0, verbose = FALSE)
 }
 \arguments{
-\item{individual}{A \code{data.frame} with a single row for an indiviudal with one or 
+\item{individual}{A \code{data.frame} with a single row for an individual with one or 
 more \code{locus} objects}
 
 \item{frequencies}{A \code{data.frame} of allele frequencies from \code{frequencies()}
@@ -23,7 +23,7 @@ A \code{data.frame} consisting of assignment probabilities.
 }
 \description{
 This function takes one or more individuals and estimates
-their probability of coming from indiviudal populations
+their probability of coming from individual populations
 from multilocus genotype frequencies.
 }
 \author{

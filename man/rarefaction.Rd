@@ -19,7 +19,7 @@ rarefaction(x, mode = "Ae", size = 0, nperm = 999)
 A vector of permuted values.
 }
 \description{
-This funciton subsamples the data with a smaller sample size and estimates the 
+This function subsamples the data with a smaller sample size and estimates the 
  density of the diversity parameter.
 }
 \author{

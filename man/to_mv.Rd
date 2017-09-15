@@ -5,7 +5,7 @@
 \alias{to_mv.default}
 \alias{to_mv.locus}
 \alias{to_mv.data.frame}
-\title{Returns the passed itmes as multivariate data}
+\title{Returns the passed items as multivariate data}
 \usage{
 to_mv(x, ploidy, alleles, drop.allele = FALSE, leave.as.na = FALSE, ...)
 
@@ -41,7 +41,7 @@ Matrix representing the locus
 A matrix
 }
 \description{
-This function will provide the alelles within a \code{locus} object 
+This function will provide the alleles within a \code{locus} object 
  for either a single locus or for a vector of loci
 }
 \author{

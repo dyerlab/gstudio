@@ -12,7 +12,7 @@ genetic_diversity(x, stratum = NULL, loci = NULL, mode = c("A", "Ae",
 
 \item{stratum}{The strata by which the genetic distances are estimated.  This
 can be an optional parameter when estimating distance measures calculated
-among indiviudals (default='Population').}
+among individuals (default='Population').}
 
 \item{loci}{The set of loci to use (default NULL will use all)}
 
@@ -40,7 +40,7 @@ A \code{data.frame} with columns for strata, diversity (mode), and potentially P
 }
 \description{
 This function is the main one used for estimating genetic diversity among 
- stratua.  Given the large number of genetic diversity metrics, not all 
+ strata.  Given the large number of genetic diversity metrics, not all 
  potential types are included.
 }
 \examples{

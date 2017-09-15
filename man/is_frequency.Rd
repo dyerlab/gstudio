@@ -2,7 +2,7 @@
 % Please edit documentation in R/is_frequency.R
 \name{is_frequency}
 \alias{is_frequency}
-\title{Is-A function for Allele Frequences}
+\title{Is-A function for Allele Frequencies}
 \usage{
 is_frequency(x)
 }

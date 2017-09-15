@@ -19,7 +19,7 @@ This function estimates the allele-wise relatedness statistic from
  Lynch & Ritland (1999). It is very sensitive to the presence of 
  rare alleles.
  
-This is an symetric estimator using the formula:
+This is an symmetric estimator using the formula:
 }
 \details{
 \deqn{\hat{r}_{XY} = \frac{r_{XY} + r_{YX}}{2}}

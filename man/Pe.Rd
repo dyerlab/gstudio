@@ -14,7 +14,7 @@ Pe(x, ...)
 }
 \value{
 The polymorphic index for the locus, sum(pi(1-pi)) as a \code{numeric} value
- or as a \code{data.frame} if mutliple loci are passed.
+ or as a \code{data.frame} if multiple loci are passed.
 }
 \description{
 This function returns the effective number of alleles in a sample.
