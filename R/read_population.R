@@ -274,7 +274,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   
   # make
   for( i in seq(1,nrow(df),by=2) ) {
-    id <- IDPOP[i]
+    id <- df$V1[i]
     row <- which( data$ID == id)
     for( l in loci ){
       alleles <- gsub("-9", NA, df[[l]][i:(i+1)])
