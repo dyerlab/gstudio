@@ -37,7 +37,7 @@
 locus <- function( x, type="codom", phased=FALSE ){
   
   # missing data
-  if( missing(x) || is.na(x) ) {
+  if(  (missing(x) || all(is.na(x)) ) ) {
     ret <- ""
   }
     
@@ -89,15 +89,14 @@ locus <- function( x, type="codom", phased=FALSE ){
   } 
   
   else if( type == "zyme" ){
-    
     if( length(x) > 1 )
-      ret <- unlist( lapply(x, function(x) locus(x,type="zyme")))
+      ret <- unlist( lapply(x, function(x) locus(x,type="zyme") ) )
     else {
-      N <- nchar(x)
-      n <- N/2
-      l <- substr(x,1,n)
-      r <- substr(x,(n+1),N)
-      ret <- locus(c(l,r))
+        N <- nchar(x)
+        n <- N/2
+        l <- substr(x,1,n)
+        r <- substr(x,(n+1),N)
+        ret <- apply(cbind(l,r),MARGIN=1,FUN=locus)      
     }
   }
   

@@ -56,9 +56,11 @@ genetic_diversity <- function( x, stratum=NULL, loci=NULL, mode=c("A","Ae","A95"
     # Asking for Nei's corrected stratum estimates
     if( mode %in% c("hos","hes")) {
       if( mode == "hes")
-        return( Hes(x,stratum=stratum) )
+        ret <- Hes(x,stratum=stratum)
       else 
-        return( Hos(x,stratum=stratum) )
+        ret <- Hos(x,stratum=stratum) 
+      
+      
     }
     
     # Not summarized across stratum
@@ -123,6 +125,7 @@ genetic_diversity <- function( x, stratum=NULL, loci=NULL, mode=c("A","Ae","A95"
   }
     
   names(ret)[ncol(ret)] <- rmode
+  
   return( ret )     
   
   
