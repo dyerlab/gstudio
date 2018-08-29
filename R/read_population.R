@@ -151,7 +151,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   
   header <- raw[1:(popidx[1] - 1)]
   description <- header[1]
-  locus_names <- header[2:(length(header))]
+  locus_names <- strsplit(header[2:(length(header))], split=",")[[1]]
   K <- length(locus_names)
   if( K < 1 )
     stop("No loci?  What are you doing?")
@@ -161,7 +161,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
     ret[[locus]] <- locus(NA) 
     class( ret[[locus]]) <- "locus"
   }
-    
+  
   
   
   # go through the remaining data and work it out.
@@ -201,7 +201,6 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   }
   
   ret <- ret[ !is.na(ret$Population),]
-  
 
   return( ret )
 }

@@ -18,7 +18,7 @@ gstudio_*.tar.gz
 #gstudio/man/*
 #man/*
 #*.Rd
-
+data/radiator_test.txt
 
 README.html
 
