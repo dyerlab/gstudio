@@ -12,6 +12,7 @@
 #' @param ... Additional arguments to plotGoogleMaps function.
 #' @return Nothing
 #' @importFrom plotGoogleMaps pieSP plotGoogleMaps
+#' @importFrom ggmaps has_google_key google_key
 #' @importFrom sp SpatialPointsDataFrame proj4string<- CRS
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -30,6 +31,11 @@ pies_on_map <- function( x, stratum="Population", locus=NULL, longitude='Longitu
   if( !(stratum %in% names(x))) 
     stop("You must specify a population column in the data.frame to use for coordinates")
   
+  
+  if( !has_google_key() ) {
+    stop("To use the Google Javascript API, you must have an API key.  See ?ggmap::register_google for more information.")
+  }
+  
   pts <- strata_coordinates(x,stratum=stratum,longitude=longitude,latitude=latitude,as.SpatialPoints = TRUE)
   freqs <- frequency_matrix(x,stratum=stratum,locus=locus)
   col_names <- names(freqs)[2:ncol(freqs)]
@@ -45,7 +51,12 @@ pies_on_map <- function( x, stratum="Population", locus=NULL, longitude='Longitu
   
   pies <- pieSP(data,zcol=col_names,max.radius=max.rad)
   pies$allele <- rep(col_names,nrow(freqs))
-  api <- "https://maps.googleapis.com/maps/api/js??sensor=false&v=3.18&key=AIzaSyCVz08TBp-MDGikOTlpZEHkx5yL_LnlEUk"
+  
+  
+  api <- paste( "https://maps.googleapis.com/maps/api/js?key=",
+                google_key(),
+                "&callback=initMap", sep="" )
+  
   m <- plotGoogleMaps(pies,zcol='allele', api=api, ...)
   invisible(NULL)
   

@@ -4,8 +4,9 @@
 \alias{genetic_structure}
 \title{Estimation of , genetic structure statistics.}
 \usage{
-genetic_structure(x, stratum = "Population", mode = c("Gst", "Gst_prime",
-  "Dest")[1], nperm = 0, size.correct = TRUE, pairwise = FALSE, locus)
+genetic_structure(x, stratum = "Population", mode = c("Gst",
+  "Gst_prime", "Dest")[1], nperm = 0, size.correct = TRUE,
+  pairwise = FALSE, locus)
 }
 \arguments{
 \item{x}{An object of type \code{data.frame} with at least a single column

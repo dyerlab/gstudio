@@ -7,12 +7,13 @@
 \alias{to_mv.data.frame}
 \title{Returns the passed items as multivariate data}
 \usage{
-to_mv(x, ploidy, alleles, drop.allele = FALSE, leave.as.na = FALSE, ...)
+to_mv(x, ploidy, alleles, drop.allele = FALSE, leave.as.na = FALSE,
+  ...)
 
 \method{to_mv}{default}(x, ...)
 
-\method{to_mv}{locus}(x, ploidy = 2, alleles = NA, drop.allele = FALSE,
-  leave.as.na = FALSE, ...)
+\method{to_mv}{locus}(x, ploidy = 2, alleles = NA,
+  drop.allele = FALSE, leave.as.na = FALSE, ...)
 
 \method{to_mv}{data.frame}(x, ploidy = 2, alleles = NA,
   drop.allele = FALSE, leave.as.na = FALSE, ...)

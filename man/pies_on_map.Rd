@@ -5,7 +5,8 @@
 \title{Create a pie chart map of allele frequencies on google maps.}
 \usage{
 pies_on_map(x, stratum = "Population", locus = NULL,
-  longitude = "Longitude", latitude = "Latitude", max.rad = NULL, ...)
+  longitude = "Longitude", latitude = "Latitude", max.rad = NULL,
+  ...)
 }
 \arguments{
 \item{x}{An object of type \code{data.frame} containing \code{locus} objects.}
