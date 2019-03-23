@@ -26,7 +26,8 @@ Imports:
     adegenet,
     plotGoogleMaps,
     stringi, 
-    DBI
+    DBI,
+    ggmap
 Suggests:
     testthat,
     knitr
