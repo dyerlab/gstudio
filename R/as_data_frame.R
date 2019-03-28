@@ -44,7 +44,7 @@ as.data.frame.locus <- function( x, ... ) {
 #' @export
 as.data.frame.genind <- function( x, row.names, optional, ... ) {  
   ret <- genind2df( x, sep=":", usepop=TRUE, oneColPerAll=FALSE )
-  loci <- x$loc.names
+  loci <- names( x$all.names )
   for( col in loci ) 
     ret[[col]] <- locus( col, type="separated" )
   return( ret )
