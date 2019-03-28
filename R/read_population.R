@@ -111,15 +111,22 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   
   # read them in column-wise
   for( locCol in locus.columns ){
+    
     if( type=="column") {
       alleles <- df[,locCol:(locCol+1)]
+      tmp <- locus( alleles, type=type, phased=phased)  
     } else if( type=="separated")  {
-      alleles = strsplit(df[,locCol], split=delim, fixed=TRUE)[[1]]
+      changeback <- TRUE
+      genos <- df[,locCol]
+      genos[ is.na(genos) ] <- paste( c("NA","NA"), collapse=":")
+      a <- strsplit(genos, split=delim, fixed=TRUE)
+      alleles <- matrix( unlist(a), byrow = TRUE, ncol=2)
+      tmp <- locus( alleles, type="column", phased=phased)  
     } else {
       alleles <- df[,locCol]
+      tmp <- locus( alleles, type=type, phased=phased)  
     }
-      
-    tmp <- locus( alleles, type=type, phased=phased)  
+
     locus_name <- names(df)[locCol]
     ret[[locus_name]] <- tmp  
   }

@@ -12,6 +12,7 @@ Version: 1.5.0
 Date: 2016-03-03
 LazyLoad: true
 VignetteBuilder: knitr
+Encoding: UTF-8
 Depends:
     R (>= 3.0)
 Imports:

@@ -37,7 +37,7 @@ test_that("reading aflp data file",{
 
 test_that("reading separated data file",{
   path <- system.file("extdata","data_separated.csv",package="gstudio")
-  data <- read_population(path, type="separated", locus.columns=4:5 )
+  data <- read_population(path, type="separated", locus.columns=4:5, delim=":" )
   expect_that( data, is_a("data.frame") )
   expect_that( length( column_class(data,"locus")), equals(2) )
 })
