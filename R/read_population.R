@@ -114,7 +114,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
     if( type=="column") {
       alleles <- df[,locCol:(locCol+1)]
     } else if( type=="separated")  {
-      alleles = strsplit(locCol, split=delim, fixed=TRUE)[[1]]
+      alleles = strsplit(df[,locCol], split=delim, fixed=TRUE)[[1]]
     } else {
       alleles <- df[,locCol]
     }
