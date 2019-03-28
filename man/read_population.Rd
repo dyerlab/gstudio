@@ -5,7 +5,7 @@
 \title{Read a raw text file in and translate appropriate columns into genotypes}
 \usage{
 read_population(path, type, locus.columns, phased = FALSE, sep = ",",
-  header = TRUE, ...)
+  header = TRUE, delim = ":", ...)
 }
 \arguments{
 \item{path}{The path to the text file}
@@ -32,10 +32,12 @@ each data type that will be treated as a \code{locus} object.}
 \item{phased}{A flag indicating the the alleles should are of
 known gametic phase (default=FALSE).}
 
-\item{sep}{The field separator}
+\item{sep}{The field separator for each column of the data.}
 
 \item{header}{A logical flag indicating if there is a header row (a good
 idea).}
+
+\item{delim}{The (optional) delimiter for alleles separators (default=":")}
 
 \item{...}{Optional parameters you can pass to \code{read.csv} or \code{read.table}.}
 }

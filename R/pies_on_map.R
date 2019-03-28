@@ -37,7 +37,7 @@ pies_on_map <- function( x, stratum="Population", locus=NULL, longitude='Longitu
   }
   
   pts <- strata_coordinates(x,stratum=stratum,longitude=longitude,latitude=latitude,as.SpatialPoints = TRUE)
-  freqs <- frequency_matrix(x,stratum=stratum,locus=locus)
+  freqs <- frequency_matrix(x,stratum=stratum,loci=locus)
   col_names <- names(freqs)[2:ncol(freqs)]
   
   data <- SpatialPointsDataFrame( pts, freqs)

@@ -4,7 +4,7 @@
 \alias{frequency_matrix}
 \title{Create a matrix of allele frequencies for a single locus across many strata}
 \usage{
-frequency_matrix(x, stratum = "Population", locus = NULL)
+frequency_matrix(x, stratum = "Population", loci = NULL)
 }
 \arguments{
 \item{x}{A \code{data.frame} with locus and strata column(s)}

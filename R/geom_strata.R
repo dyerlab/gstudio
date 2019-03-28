@@ -40,7 +40,7 @@ geom_strata <- function( mapping=NULL, data=NULL, ...){
       stop("You need to either specify a column for the x coordinate OR have one named Longitude")
     } 
   } else {
-    x <- as.character(mapping$x)
+    x <- rlang::quo_text(quo = mapping$x)
   }
   
   if( is.null( mapping$y) ) {
@@ -50,7 +50,7 @@ geom_strata <- function( mapping=NULL, data=NULL, ...){
       stop("You need to either specify a column for the y coordinate OR have one named Latitude")
     }
   } else {
-    y <- as.character(mapping$y)
+    y <- rlang::quo_text(quo = mapping$y)
   }
     
 
@@ -61,7 +61,7 @@ geom_strata <- function( mapping=NULL, data=NULL, ...){
       stop("Usage: geom_stratum( aes(x,y,stratum), data )")  
     }
   } else {
-    stratum <- as.character(mapping$stratum)
+    stratum <- rlang::quo_text(quo = mapping$stratum)
   }
   
   df <- strata_coordinates( data, 

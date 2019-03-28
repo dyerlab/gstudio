@@ -20,7 +20,8 @@
 #' }
 #' @param phased A flag indicating the the alleles should are of
 #'  known gametic phase (default=FALSE).
-#' @param sep The field separator
+#' @param sep The field separator for each column of the data.
+#' @param delim The (optional) delimiter for alleles separators (default=":")
 #' @param header A logical flag indicating if there is a header row (a good
 #'    idea).  
 #' @param locus.columns A vector indicating the numerical column number for 
@@ -29,7 +30,7 @@
 #' @return A \code{data.frame} with \code{locus} columns pre-formatted.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE, ...) {
+read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE, delim=":",...) {
   type <- tolower(type)
   
   if( !file.exists(path) ){
@@ -65,7 +66,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   
   # default
   else 
-    return( .read_columns( path, type, locus.columns, phased, sep, header, ...))
+    return( .read_columns( path, type, locus.columns, phased, sep, header, delim, ...))
 
 }
 
@@ -74,7 +75,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
 
 
 # These are helper functions
-.read_columns <- function( path, type, locus.columns, phased, sep, header, ... ) {
+.read_columns <- function( path, type, locus.columns, phased, sep, header, delim, ... ) {
   
   # Catch obvious errors
   if( is.null(locus.columns) ) 
@@ -110,10 +111,14 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   
   # read them in column-wise
   for( locCol in locus.columns ){
-    if( type=="column")
+    if( type=="column") {
       alleles <- df[,locCol:(locCol+1)]
-    else
+    } else if( type=="separated")  {
+      alleles = strsplit(locCol, split=delim, fixed=TRUE)[[1]]
+    } else {
       alleles <- df[,locCol]
+    }
+      
     tmp <- locus( alleles, type=type, phased=phased)  
     locus_name <- names(df)[locCol]
     ret[[locus_name]] <- tmp  

@@ -8,6 +8,8 @@ gstudio 1.6 Planned
 * [FIX] pies_on_map apparently is broken
 * [FIX] Problem with having a misssing genotype for type="column" in first row.  Odd problem.
 
+* [FIX] Change 'locus' to 'loci' in frequency_matrix() to be consistent with the frequencies() function argument list.
+
 
 gstudio 1.5
 -----------------

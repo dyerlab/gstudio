@@ -20,13 +20,13 @@ test_that("frequency matrix", {
   expect_that( frequency_matrix(df,stratum="bob"), throws_error())
   expect_that( frequency_matrix(df,stratum="Population",locus="PGI"), throws_error())
   
-  f <- frequency_matrix(df, stratum="Population", locus="PGM")
+  f <- frequency_matrix(df, stratum="Population", loci="PGM")
   expect_that( f, is_a("data.frame"))
   expect_that( dim(f), is_equivalent_to(c(2,3)))
   expect_that( f[1,2] + f[1,3] == 1, is_true())
   expect_that( f[2,2] + f[2,3] == 1, is_true())
   
-  f <- frequency_matrix(df, stratum="Population", locus="TPI")
+  f <- frequency_matrix(df, stratum="Population", loci="TPI")
   expect_that( f, is_a("data.frame"))
   expect_that( dim(f), is_equivalent_to(c(2,5)))
   expect_that( f[1,2] + f[1,3] + f[1,4] + f[1,5], is_equivalent_to(1.0))
