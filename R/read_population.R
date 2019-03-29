@@ -167,6 +167,11 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   K <- length(locus_names)
   if( K < 1 )
     stop("No loci?  What are you doing?")
+  if( K == 1 ) {
+    locus_names <- header[ 2:(length(header)) ]
+    K <- length(locus_names)
+  }
+    
   
   ret <- data.frame(Population=rep(NA,N),ID=NA)
   for( locus in locus_names ){
@@ -196,6 +201,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
       # diploid loci
       if( all( nchar(raw_loci) > 3 ) )  {
         raw_loci[ raw_loci == "000000"] <- NA
+        raw_loci[ raw_loci == "0000" ] <- NA
         loci <- unlist( lapply( raw_loci, function( x ) locus(x, type="zyme"))) 
       }
       else {
