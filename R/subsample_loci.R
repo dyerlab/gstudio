@@ -16,8 +16,9 @@ subsample_loci <- function( x, numLoci ) {
   column_names <- column_class(x)
   locus_names <- names(x)[ column_names == "locus" ]
   
-  if( length(locus_names) <= numLoci ) {
-    stop("You cannot ask for a random sample of loci whose size is larger than the number of loci in the data.frame.  What am I supposed to do, make up data?  Come on!")
+  
+  if( numLoci >= length(locus_names) ) {
+    stop("You cannot ask for a random sample of loci whose size is larger than the number of loci in the data.frame.  What am I supposed to do, make up data?  Come on, help me out here!")
   }
 
   to_keep <- c( names(x)[ column_names != "locus"],
