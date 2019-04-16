@@ -22,6 +22,5 @@ subsample_loci <- function( x, numLoci ) {
 
   to_keep <- c( names(x)[ column_names != "locus"],
                 sort( sample( locus_names, size=numLoci) ) )
-
   return( x[,to_keep] )
 }
