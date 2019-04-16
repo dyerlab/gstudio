@@ -14,9 +14,18 @@ population_graph <- function( x, stratum="Population", numLoci=NULL, ...) {
   if( !is(x,"data.frame")){
     stop("Must pass a data.frame object to this function.")
   }
+  if( !(stratum %in% names(x))) {
+    stop("You provided an invalid (or non-existent) column to be used as strata.")
+  }
   
   
-  data <- to_mv( ifelse( is.null(numLoci), x, subsample_loci( x, numLoci ) ) )
+  if( is.null(numLoci) ) {
+    data <- to_mv(x)
+  } else {
+    df <- subsample_loci(x, numLoci=numLoci)
+    data <- to_mv( df )
+  }
+
   groups <- as.factor( x[[stratum]] )
   
   return( popgraph::popgraph(data,groups,...))
