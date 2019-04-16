@@ -4,7 +4,7 @@
 \alias{column_class}
 \title{Find columns of data in a data.frame for a type of class}
 \usage{
-column_class(x, class, mode = c("label", "index")[1])
+column_class(x, class = NULL, mode = c("label", "index")[1])
 }
 \arguments{
 \item{x}{An object of \code{data.frame} type.}
