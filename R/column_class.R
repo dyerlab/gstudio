@@ -24,7 +24,7 @@
 #' column_class(df,"numeric")
 #' column_class(df, "locus" )
 #' column_class(df,"locus",mode="index")
-column_class <- function( x, class, mode=c("label","index")[1] ) {
+column_class <- function( x, class=NULL, mode=c("label","index")[1] ) {
   if( !inherits(x,"data.frame") )
     stop( paste("This function works on objects inherited from data.frame objects, you passed a ",
                 class(x),sep="") )
@@ -32,7 +32,7 @@ column_class <- function( x, class, mode=c("label","index")[1] ) {
   if( !(mode %in% c("label","index") ) )
     stop( paste("The mode for this class must be either 'label' or 'index'") )
   
-  if( missing( class) ) {
+  if( is.null( class) ) {
     labels <- names(x)
     ret <- rep("",length(labels) )
     for( i in 1:length(labels) ){
