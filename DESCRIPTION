@@ -8,7 +8,7 @@ Description: Classes and functions for the spatial analysis of marker
     data to include structure, diversity, distance, and
     relatedness statistics.  Where appropriate, integration with existing
     libraries is included.
-Version: 1.5.1
+Version: 1.5.2
 Date: 2016-03-03
 LazyLoad: true
 VignetteBuilder: knitr
