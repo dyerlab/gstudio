@@ -22,6 +22,6 @@ install_github("dyerlab/popgraph")
 install_github("dyerlab/gstudio")
 ```
 
-If you would like to contribute to this package or have any questions regarding its construction, use, or additional functionalities, please contact [Rodney J. Dyer](mailto:rjdyer@vcu.edu) or visit his lab page http://dyerlab.bio.vcu.edu 
+If you would like to contribute to this package or have any questions regarding its construction, use, or additional functionalities, please contact [Rodney J. Dyer](mailto:rjdyer@vcu.edu) or visit his lab page http://dyerlab.org 
 
 
