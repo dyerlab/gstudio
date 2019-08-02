@@ -18,6 +18,6 @@ test_that( "testing",{
   expect_that( nrow(o), equals(10) )
   expect_that( names(o), is_equivalent_to( c("ID","TPI")))
   
-  expect_that( sum( is_heterozygote(o$TPI))==0, is_true() )
+  expect_true( sum( is_heterozygote(o$TPI))==0 )
   
 })

@@ -24,11 +24,11 @@ test_that("testing",{
   
   p <- paternity( offs, adults[1,], adults )
   expect_that( p, is_a("data.frame"))
-  expect_that( dim(p)[1]>0, is_true() )
+  expect_true( dim(p)[1]>0 )
   expect_that( names(p), is_equivalent_to(c("MomID","OffID","DadID","Fij")))
   expect_that( sum(p$Fij, na.rm=TRUE), equals(10) )
   
   p1 <- paternity( offs, adults[1,], adults, strict=TRUE )
-  expect_that( nrow(p)>nrow(p1), is_true())
+  expect_true( nrow(p)>nrow(p1))
   
 })

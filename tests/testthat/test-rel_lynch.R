@@ -13,7 +13,7 @@ test_that("Inbreeding",{
   expect_that( f <- rel_lynch("B"), throws_error() )
   
   f <- rel_lynch( x )
-  expect_that( is(f,"matrix"), is_true())
+  expect_true( is(f,"matrix"))
   expect_that( dim(f), is_equivalent_to( c(10,10)))
   expect_that( f[1,2], is_equivalent_to(1.0) ) 
 

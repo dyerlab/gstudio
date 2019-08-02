@@ -109,8 +109,20 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   if( type=="column" && all(diff(locus.columns)==1) )
     locus.columns <- seq(min(locus.columns), (max(locus.columns)-1), by=2 )
   
+  ctr <- 0
+  if( length(locus.columns) > 499 ) {
+    cat("gstudio: Big Column Import [ 0")
+  }
+  
   # read them in column-wise
   for( locCol in locus.columns ){
+    
+    if( ctr > 0 ) {
+      ctr <- ctr + 1       
+      if( (ctr %% 500 ) == 0 ) {
+        cat(" ",ctr)   
+      }
+    }
     
     if( type=="column") {
       alleles <- df[,locCol:(locCol+1)]
@@ -129,6 +141,10 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
 
     locus_name <- names(df)[locCol]
     ret[[locus_name]] <- tmp  
+  }
+  
+  if( ctr > 0 ) {
+    cat(" ]\n")
   }
   
   

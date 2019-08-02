@@ -17,10 +17,10 @@ test_that("creating new ones", {
 
 test_that("passing NA", {
   loc1 <- locus( NA )
-  expect_that( is.na(loc1), is_true())
+  expect_true( is.na(loc1))
   
   loc2 <- locus( "NA:NA", type="separated")
-  expect_that( is.na(loc2), is_true())
+  expect_true( is.na(loc2))
 
 })
 
@@ -101,27 +101,28 @@ test_that( "Operations", {
   BC <- locus( c("B","C") )
   
   
-  expect_that( AA==AA, is_true() )
-  expect_that( AA==BB, is_false() )
-  expect_that( AA!=AC, is_true() )
-  expect_that( AA!=AA, is_false())
+  expect_equal( AA, AA )
+  
+  expect_false( AA==BB )
+  expect_true( AA!=AC )
+  expect_false( AA!=AA)
 
   # addition operator
   off <- AA+BB
   expect_that( off, is_a("locus") )
   expect_that( ploidy(off), equals(2) )
-  expect_that( is_heterozygote(off), is_true() )
-  expect_that( as.character(off)=="A:B", is_true() ) 
+  expect_true( is_heterozygote(off) )
+  expect_true( as.character(off)=="A:B" ) 
   
   off <- AA-AA
   expect_that( off, is_a("locus"))
-  expect_that( as.character(off)=="A", is_true() ) 
+  expect_true( as.character(off)=="A" ) 
   
   off <- AB-AB
   expect_that( off, is_a("locus") )
-  expect_that( as.character(off)=="A:B", is_true() )
+  expect_true( as.character(off)=="A:B")
   
   off <- BB-AB
-  expect_that( as.character(off)=="B", is_true())
+  expect_true( as.character(off)=="B")
     
 })

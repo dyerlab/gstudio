@@ -25,12 +25,12 @@ test_that("checking",{
   d <- strata_distance(df)
   expect_that( d, is_a("matrix"))
   expect_that( dim(d), is_equivalent_to(c(2,2)))
-  expect_that( d[1,2] == d[2,1], is_true() )
+  expect_true( d[1,2] == d[2,1] )
   expect_that( sum(diag(d)), equals(0))
-  expect_that( ((d[1,2]-3793.538) < 0.02), is_true() )
+  expect_true( ((d[1,2]-3793.538) < 0.02) )
   
   d <- strata_distance( df, mode="Euclidean")
-  expect_that( ((d[1,2]-46.07806) < 1e-7) , is_true() )
+  expect_true( ((d[1,2]-46.07806) < 1e-7)  )
   
 })
 

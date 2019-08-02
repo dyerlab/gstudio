@@ -12,9 +12,9 @@ test_that("relatedness",{
   expect_that( f <- rel_queller( x,allele="X" ), throws_error() )
   
   f <- rel_queller( x )
-  expect_that( is(f,"matrix"), is_true())
+  expect_true( is(f,"matrix"))
   expect_that( dim(f), is_equivalent_to( c(10,10)) )
-  expect_that( is.na(f[1,1]), is_true() ) 
+  expect_true( is.na(f[1,1]) ) 
   expect_that( f[1,2], is_equivalent_to( 1 ) )
 
   f1 <- rel_nason( x )

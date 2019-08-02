@@ -23,8 +23,8 @@ test_that("frequency matrix", {
   f <- frequency_matrix(df, stratum="Population", loci="PGM")
   expect_that( f, is_a("data.frame"))
   expect_that( dim(f), is_equivalent_to(c(2,3)))
-  expect_that( f[1,2] + f[1,3] == 1, is_true())
-  expect_that( f[2,2] + f[2,3] == 1, is_true())
+  expect_true( f[1,2] + f[1,3] == 1)
+  expect_true( f[2,2] + f[2,3] == 1)
   
   f <- frequency_matrix(df, stratum="Population", loci="TPI")
   expect_that( f, is_a("data.frame"))

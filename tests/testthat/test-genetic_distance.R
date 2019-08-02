@@ -23,9 +23,8 @@ test_that("error checks",{
   stratum <- c(rep("A",3), rep("B",3), rep("C",4) )
   df <- data.frame( Population=stratum, Locus=loci)
   
-  expect_that( all(dist_amova( loci ) == genetic_distance(loci, mode="amova")), is_true() )
-  
-  expect_that( all(dist_jaccard(df) == genetic_distance(loci, stratum, "jaccard")), is_true() ) 
+  expect_true( all(dist_amova( loci ) == genetic_distance(loci, mode="amova")) )
+  expect_true( all(dist_jaccard(df) == genetic_distance(loci, stratum, "jaccard")) ) 
   
   
 })

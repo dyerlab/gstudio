@@ -21,6 +21,6 @@ test_that("individual",{
   expect_that( D, is_a("matrix") )
   expect_that( dim(D), is_equivalent_to(c(2,2)))
   expect_that( sum(diag(D)), equals(0) )
-  expect_that( D[1,2]==D[2,1], is_true() )
+  expect_true( D[1,2]==D[2,1] )
   expect_that( D[1,2], equals( 0.1 ) )
 })

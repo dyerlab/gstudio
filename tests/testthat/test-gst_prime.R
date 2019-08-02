@@ -14,7 +14,7 @@ test_that("checking",{
   
   pops <- factor( rep( c("A","B"), each=4 ) )
   gst <- Gst_prime( loci, pops,  size.correct=FALSE )
-  expect_that( is.na(gst$Gst), is_true() )
+  expect_true( is.na(gst$Gst) )
   expect_that( sum( gst[1,2:4]), is_equivalent_to(0) )
   
   loci <- c( locus( c(1,1) ),

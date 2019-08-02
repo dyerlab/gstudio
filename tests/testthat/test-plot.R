@@ -6,9 +6,9 @@ test_that("locus",{
   loci <- c( locus(1:2), locus(1:2), locus(1:2) )
   p <- plot.locus( loci )
   
-  expect_that( inherits(p,"ggplot"), is_true() )
+  expect_true( inherits(p,"ggplot"))
   expect_that( p$data, is_a("data.frame"))
-  expect_that( all(p$data$Frequency == 0.5), is_true() )
+  expect_true( all(p$data$Frequency == 0.5) )
 })
 
 

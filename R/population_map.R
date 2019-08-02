@@ -22,6 +22,7 @@
 #' @param zoom The default zoom level when using google maps (default NA).  If omitted
 #'  the code will attempt to define the map by the bounding box defined by the coords
 #' @return A map raster
+#' @importFrom ggmap has_google_key
 #' @export
 #' @import ggmap
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -29,12 +30,13 @@
 population_map <- function( coords, map.source="google", map.type="terrain", zoom=NA ){
   Longitude <- Latitude <- NULL
   
+  if( !ggmap::has_google_key()) {
+    return( NULL )
+  }
+  
   if( is.na(zoom) ) {
     location <- make_bbox( Longitude, Latitude, data=coords )
-#     lt.rng <- abs( location[1]-location[3] ) * 0.2
-#     ln.rng <- abs( location[2]-location[4] ) * 0.2
-#     location <- location + c(-lt.rng,-ln.rng,lt.rng,ln.rng)
-    map <- get_map( location=location, maptype=map.type, source=map.source )    
+    map <- get_map( location=location, maptype=map.type, source=map.source, )    
   }
   else {
     location <- c( lon=mean(coords$Longitude),lat=mean(coords$Latitude ) )

@@ -44,7 +44,7 @@ test_that("strata",{
   
   D <- dist_amova(loci)
   
-  expect_that( is(D,"matrix"), is_true())
+  expect_true( is(D,"matrix"))
   expect_that( dim(D), is_equivalent_to(c(7,7)))
   expect_that( diag(D), is_equivalent_to(rep(0,7)))
   expect_that( D[1,2], is_equivalent_to(1.0))

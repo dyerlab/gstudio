@@ -20,10 +20,10 @@ test_that("individual",{
   expect_that( Dc, is_a("matrix"))
   expect_that( dim(Dc), is_equivalent_to( c(2,2) ) )
   expect_that( sum(diag(Dc)), equals(0))
-  expect_that( Dc[1,2]==Dc[2,1], is_true() )
+  expect_true( Dc[1,2]==Dc[2,1])
   
   cat("?")
-  expect_that( Dc[1,2]>0.73, is_true() )
-  expect_that( Dc[1,2]<0.74, is_true() )
+  expect_true( Dc[1,2]>0.73 )
+  expect_true( Dc[1,2]<0.74 )
 
 })

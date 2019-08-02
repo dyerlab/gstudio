@@ -14,5 +14,5 @@ test_that("testing",{
   
   obs_freqs <- frequencies(adults)
   ssfreqs <- sum( (obs_freqs$Frequency - freqs)^2 )
-  expect_that( ssfreqs<0.01, is_true())
+  expect_true( ssfreqs<0.01)
 })

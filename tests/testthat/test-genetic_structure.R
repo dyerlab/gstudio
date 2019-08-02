@@ -32,13 +32,13 @@ test_that("checking",{
   expect_that( dim(gs), is_equivalent_to(c(3,5) ) )
   expect_that( names(gs), is_equivalent_to(c("Locus","Gst","Hs","Ht","P") ) )
   expect_that( gs$Locus, is_equivalent_to( c("TPI","PGM","Multilocus")))
-  expect_that( gs$Gst[1] < gs$Gst[2], is_true())
+  expect_true( gs$Gst[1] < gs$Gst[2])
   
   gs <- genetic_structure( df, pairwise=TRUE )
   expect_that( gs, is_a("matrix") )
   expect_that( dim(gs), is_equivalent_to( c(2,2)) ) 
-  expect_that( all( is.na(diag(gs))), is_true() ) 
-  expect_that( gs[1,2] == gs[2,1], is_true() )
+  expect_true( all( is.na(diag(gs))) ) 
+  expect_true( gs[1,2] == gs[2,1] )
   
   
   

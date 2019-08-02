@@ -29,13 +29,13 @@ test_that( "data.frame", {
 
   m <- to_mv( df[,3:4] )
   expect_that( m, is_a("matrix"))
-  expect_that( is.numeric(m), is_true() )
+  expect_true( is.numeric(m) )
   expect_that( ncol(m), equals(4))
   expect_that( m[1,], is_equivalent_to( c(1,0,0,1)))
    
   m <- to_mv( df[,3:4], drop.allele=TRUE)
   expect_that( m, is_a("matrix"))
-  expect_that( is.numeric(m), is_true())
+  expect_true( is.numeric(m))
   expect_that( ncol(m), equals(2) )
   expect_that( m[1,], is_equivalent_to( c(1,0)))
   
@@ -52,6 +52,6 @@ test_that("locus is na",{
   m <- to_mv( loci,leave.as.na=TRUE )
   expect_that( m, is_a("matrix"))
   expect_that( dim(m), is_equivalent_to(c(3,2)))
-  expect_that( all(is.na(m[2,])), is_true())
+  expect_true( all(is.na(m[2,])))
   
 })

@@ -10,13 +10,13 @@ test_that("checking",{
   
   
   A <- multilocus_assignment(individuals[1,],freqs)
-  expect_that( is(A,"data.frame"), is_true(), "Not a data.frame" )
+  expect_true( is(A,"data.frame"), "Not a data.frame" )
   expect_that( dim(A), is_equivalent_to(c(3,3)), "data.frame wrong size")
   expect_that( A[1,2], is_equivalent_to(0.49), "bad frequency")
   
 
   A <-   multilocus_assignment(individuals[2,],freqs, F=1)
-  expect_that( is(A,"data.frame"), is_true(), "Not a data.frame" )
+  expect_true( is(A,"data.frame"), "Not a data.frame" )
   expect_that( dim(A), is_equivalent_to(c(0,3)), "data.frame wrong size")
   
 

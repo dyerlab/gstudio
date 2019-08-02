@@ -11,13 +11,13 @@ test_that("general", {
   loci <- c(A, AA, AB, ZZ, AAAA, ABBB, ABCD )
 
 
-  expect_that( is_heterozygote(A), 		  is_false() )
-  expect_that( is_heterozygote(AA), 		is_false() )
-  expect_that( is_heterozygote(AB), 		is_true()  )
-  expect_that( is_heterozygote(ZZ), 		is_false() )
-  expect_that( is_heterozygote(AAAA), 	is_false() )
-  expect_that( is_heterozygote(ABBB), 	is_true()  )
-  expect_that( is_heterozygote(ABCD), 	is_true()  )
+  expect_false( is_heterozygote(A) )
+  expect_false( is_heterozygote(AA) )
+  expect_true( is_heterozygote(AB)  )
+  expect_false( is_heterozygote(ZZ) )
+  expect_false( is_heterozygote(AAAA) )
+  expect_true( is_heterozygote(ABBB)  )
+  expect_true( is_heterozygote(ABCD)  )
   expect_that( is_heterozygote(loci), 	is_equivalent_to( c(F, F, T, F, F, T, T)))
   
 })

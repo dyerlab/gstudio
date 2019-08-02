@@ -24,8 +24,8 @@ test_that("test",{
   expect_that( ncol(d), equals(2) )
   expect_that( sum(diag(d)), equals(0))
   
-  expect_that( d[1,2]==d[2,1], is_true() )
-  expect_that( (d[1,2]-0.3507115 < 2e-7), is_true() )
+  expect_true( d[1,2]==d[2,1] )
+  expect_true( (d[1,2]-0.3507115 < 2e-7) )
   
   
 

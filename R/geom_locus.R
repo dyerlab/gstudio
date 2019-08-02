@@ -9,6 +9,7 @@
 #' @return A formatted set of \code{ggplot} objects to be plot
 #' @note If using more than one stratum, use fill=STRATA_NAME for partitioning
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @importFrom rlang get_expr is_empty
 #' @export
 #' @examples
 #' require(ggplot2)
@@ -23,26 +24,25 @@ geom_locus <- function( mapping, data, ... ) {
   if( missing(mapping))
     stop("You need to pass a aesthetic mapping to this function.")
   
-  if( is.null( mapping$x ))
-    stop("Indicate which locus to use by setting aes(x=LOCUS).")
-  
-  if( !(as.character(mapping$x) %in% names(data)))
-    stop("The requested locus is not in the data.frame...")
-  
-  if( !is.null(mapping$fill) ) {
-    if( !(as.character(mapping$fill) %in% names(data)))
-      stop("The requested stratum is not in the data.frame...")
-  } 
-    
+  colname <- as.character(rlang::get_expr( mapping$x ))
   Allele <- Frequency <- Stratum <- NULL
   
-  if( is.null(mapping$fill) ) {
-    freqs <- frequencies( data, loci=as.character(mapping$x) )
+  if( !(colname %in% names(data))) {
+    stop("No locus in the data.frame by that name...  Come on now!  I'm not a magician.")
+  }
+  
+  if( rlang::is_empty( mapping$fill ) ) {
+    freqs <- frequencies( data, loci=colname )
     ret <- ggplot2::geom_bar( aes(x=Allele,y=Frequency), stat="identity", data=freqs ) 
   }
     
   else {
-    freqs <- frequencies( data, loci=as.character(mapping$x), stratum=as.character(mapping$fill))
+    
+    fillname <- as.character( rlang::get_expr( mapping$fill ) )
+    if( !(fillname %in% names(data) ) ){
+      stop("No strata with the name passed.  set fill= to a real column name.")
+    }
+    freqs <- frequencies( data, loci=colname, stratum=fillname)
     vals <- expand.grid( Stratum=unique(freqs$Stratum), Locus=unique(freqs$Locus), Allele=unique(freqs$Allele))
     freqs <- merge( freqs, vals, all=TRUE)
     ret <- ggplot2::geom_bar( aes(x=Allele,y=Frequency, fill=Stratum), stat="identity", data=freqs, position=position_dodge(), ... )
