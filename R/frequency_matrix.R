@@ -3,7 +3,7 @@
 #' This is a quick translation of locus data to a tabular stratum format.
 #' @param x A \code{data.frame} with locus and strata column(s)
 #' @param stratum The column name to use as the partitioning 
-#' @param locus The name of the locus to use
+#' @param loci The name of the locus to use
 #' @return A matrix (rows are strata, columns are alleles) of allele frequencies
 #' @note This function just reshapes the \code{data.frame} from \code{frequencies}.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}

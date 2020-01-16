@@ -4,8 +4,13 @@
 \alias{write_population}
 \title{Writes data frame with genotypes and other data to a file}
 \usage{
-write_population(df, file, mode = c("text", "genepop", "structure",
-  "dfdist")[1], stratum = NULL, ...)
+write_population(
+  df,
+  file,
+  mode = c("text", "genepop", "structure", "dfdist")[1],
+  stratum = NULL,
+  ...
+)
 }
 \arguments{
 \item{df}{The \code{data.frame} to be written to the output.}

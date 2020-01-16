@@ -4,8 +4,15 @@
 \alias{permute_ci}
 \title{Permute for confidence interval}
 \usage{
-permute_ci(x, stratum = NULL, allele_perm = TRUE, nperm = 99,
-  FUN = NULL, replace = FALSE, ...)
+permute_ci(
+  x,
+  stratum = NULL,
+  allele_perm = TRUE,
+  nperm = 99,
+  FUN = NULL,
+  replace = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{The \code{locus} data being used.}

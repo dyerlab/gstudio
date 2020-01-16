@@ -4,8 +4,14 @@
 \alias{spiderplot_data}
 \title{Translate paternity output into segments for geom_segments}
 \usage{
-spiderplot_data(pat, df, ID = "ID", OffID = "OffID",
-  longitude = "Longitude", latitude = "Latitude")
+spiderplot_data(
+  pat,
+  df,
+  ID = "ID",
+  OffID = "OffID",
+  longitude = "Longitude",
+  latitude = "Latitude"
+)
 }
 \arguments{
 \item{pat}{The output from the \code{paterntiy()} function.}

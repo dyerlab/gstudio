@@ -28,7 +28,7 @@ where
  
  \deqn{r_{XY} = \frac{1}{\sum_{i=1}^L w_i} \sum_{i=1}^L \frac{p_a(\delta_{bc}+\delta_{bd}) + p_b(\delta_{ac} + \delta_{ad}) - 4p_a p_b}{2p_a p_b} }
  
-and
+and 
 
 \deqn{w_i = \frac{((1+\delta_{ab})(p_a+p_b) - 4*p_a p_b)}{2p_a p_b}}
  

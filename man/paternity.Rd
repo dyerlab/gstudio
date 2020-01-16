@@ -4,8 +4,14 @@
 \alias{paternity}
 \title{Estimates fractional paternity probability}
 \usage{
-paternity(offspring, mother, fathers, ID = "ID", OffID = "OffID",
-  strict = FALSE)
+paternity(
+  offspring,
+  mother,
+  fathers,
+  ID = "ID",
+  OffID = "OffID",
+  strict = FALSE
+)
 }
 \arguments{
 \item{offspring}{A particular offspring. Often as a row

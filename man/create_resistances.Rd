@@ -4,8 +4,12 @@
 \alias{create_resistances}
 \title{Estimates resistance rasters from binary feature raster.}
 \usage{
-create_resistances(x, feature_name = "layer", costs = c(2, 5, 10, 50,
-  100), symmetric = TRUE)
+create_resistances(
+  x,
+  feature_name = "layer",
+  costs = c(2, 5, 10, 50, 100),
+  symmetric = TRUE
+)
 }
 \arguments{
 \item{x}{A base \code{raster} object from which to base others.}

@@ -4,8 +4,12 @@
 \alias{genetic_relatedness}
 \title{Estimates pair-wise relatedness}
 \usage{
-genetic_relatedness(x, loci = NA, mode = c("Nason", "LynchRitland")[1],
-  freqs = NA)
+genetic_relatedness(
+  x,
+  loci = NA,
+  mode = c("Nason", "LynchRitland")[1],
+  freqs = NA
+)
 }
 \arguments{
 \item{x}{A \code{data.frame} that has \code{locus} columns.}

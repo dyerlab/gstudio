@@ -4,9 +4,17 @@
 \alias{plot_populations}
 \title{Plotting the locations of a 'population'}
 \usage{
-plot_populations(x, stratum = "Population", longitude = "Longitude",
-  latitude = "Latitude", map.source = "google", map.type = "terrain",
-  color = "black", zoom = NA, ...)
+plot_populations(
+  x,
+  stratum = "Population",
+  longitude = "Longitude",
+  latitude = "Latitude",
+  map.source = "google",
+  map.type = "terrain",
+  color = "black",
+  zoom = NA,
+  ...
+)
 }
 \arguments{
 \item{x}{An object of type \code{data.frame} that has Longitude, Latitude, and Stratum variables.}

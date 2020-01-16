@@ -11,7 +11,7 @@ frequency_matrix(x, stratum = "Population", loci = NULL)
 
 \item{stratum}{The column name to use as the partitioning}
 
-\item{locus}{The name of the locus to use}
+\item{loci}{The name of the locus to use}
 }
 \value{
 A matrix (rows are strata, columns are alleles) of allele frequencies

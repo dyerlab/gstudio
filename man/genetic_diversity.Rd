@@ -4,8 +4,14 @@
 \alias{genetic_diversity}
 \title{Estimate genetic diversity among strata in a Population,}
 \usage{
-genetic_diversity(x, stratum = NULL, loci = NULL, mode = c("A", "Ae",
-  "A95", "He", "Ho", "Hos", "Hes", "Fis", "Pe")[2], small.N = FALSE, ...)
+genetic_diversity(
+  x,
+  stratum = NULL,
+  loci = NULL,
+  mode = c("A", "Ae", "A95", "He", "Ho", "Hos", "Hes", "Fis", "Pe")[2],
+  small.N = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{data.frame} object with \code{\link{locus}} columns.}

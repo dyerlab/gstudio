@@ -4,9 +4,15 @@
 \alias{strata_coordinates}
 \title{Grab coordinates for strata}
 \usage{
-strata_coordinates(x, stratum = "Population", longitude = "Longitude",
-  latitude = "Latitude", as.SpatialPoints = FALSE,
-  sort.output = FALSE, single.stratum = TRUE)
+strata_coordinates(
+  x,
+  stratum = "Population",
+  longitude = "Longitude",
+  latitude = "Latitude",
+  as.SpatialPoints = FALSE,
+  sort.output = FALSE,
+  single.stratum = TRUE
+)
 }
 \arguments{
 \item{x}{A \code{data.frame} object.}

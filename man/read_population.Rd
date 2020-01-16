@@ -4,8 +4,16 @@
 \alias{read_population}
 \title{Read a raw text file in and translate appropriate columns into genotypes}
 \usage{
-read_population(path, type, locus.columns, phased = FALSE, sep = ",",
-  header = TRUE, delim = ":", ...)
+read_population(
+  path,
+  type,
+  locus.columns,
+  phased = FALSE,
+  sep = ",",
+  header = TRUE,
+  delim = ":",
+  ...
+)
 }
 \arguments{
 \item{path}{The path to the text file}

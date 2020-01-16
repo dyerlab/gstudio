@@ -4,8 +4,7 @@
 \alias{population_map}
 \title{Retrieve a map for a set of populations.}
 \usage{
-population_map(coords, map.source = "google", map.type = "terrain",
-  zoom = NA)
+population_map(coords, map.source = "google", map.type = "terrain", zoom = NA)
 }
 \arguments{
 \item{coords}{A \code{data.frame} that has Strata, Latitude, and Longitude}
