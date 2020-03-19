@@ -33,17 +33,19 @@
 read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE, delim=":",...) {
   type <- tolower(type)
   
-  if( !file.exists(path) ){
-    ans <- paste("You did not pass a valid path to this function.  What you passed", 
-                 path, 
-                 "is not the FILE that has data in it, it does not exist." )
-    stop(ans)    
-  }
+  if (!("textConnection" %in% class(file))
+      {
+        if( !file.exists(path) ){
+        ans <- paste("You did not pass a valid path to this function.  What you passed", 
+                       path, 
+                     "is not the FILE that has data in it, it does not exist." )
+        stop(ans)    
+      }
   
   if( file.info(path)$isdir ){
     stop("You passed a directory path, not a file path to read_population().  Pass a path to the actual FILE.")
   }
-  
+}  
   if( !missing(type) && !(type %in% c("aflp","column","separated","snp","zyme","genepop","cdpop","haploid","structure")))
     stop("Unrecognized 'type' submitted to read_population().  Please specify which type of data file you are trying to load in.")
   
