@@ -33,7 +33,7 @@
 read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE, delim=":",...) {
   type <- tolower(type)
   
-  if (!("textConnection" %in% class(file))
+  if (!("textConnection" %in% class(file)))
       {
         if( !file.exists(path) ){
         ans <- paste("You did not pass a valid path to this function.  What you passed", 
