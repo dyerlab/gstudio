@@ -7,7 +7,10 @@ test_that("error checking", {
   # bad locus.columns
   expect_that( (data <- read.population(path, locus.columns="BOB")), throws_error() )
   # wrong value for locus.columns
-  expect_that( (data <- read.population(path, locus.columns=2:40)), throws_error() )  
+  expect_that( (data <- read.population(path, locus.columns=2:40)), throws_error() )
+  # non-file, non text connection
+  path=c(1,2,3)
+  expect_that( (data <- read.population(path, locus.columns=2:40)), throws_error() )
 })
 
 
@@ -50,7 +53,6 @@ test_that("reading snp data file",{
   expect_that( length( column_class(data,"locus")), equals(4) )
 })
 
-
 test_that("reading zyme data file",{
   path <- system.file("extdata","data_zymelike.csv",package="gstudio")
 
@@ -67,6 +69,15 @@ test_that("reading structure data file", {
   expect_that( data, is_a("data.frame") )
   expect_that( length(column_class(data,"locus")), equals(15) )
   
+})
+
+
+test_that("reading snp data from textConnection",{
+    df <- read.csv(system.file("extdata","data_snp.csv",package="gstudio"))
+    vec <- c(paste0(paste(names(df),collapse=","),"\n"),sapply(1:nrow(df),function(l){paste0(paste(df[l,],collapse=", "),"\n")}))
+    data <- read_population(path=textConnection(vec),type="snp",locus.columns=4:7,na.strings=c("NA"))
+    expect_that( data, is_a("data.frame") )
+    expect_that( length( column_class(data,"locus")), equals(4) )
 })
 
 

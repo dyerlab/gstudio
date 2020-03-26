@@ -2,7 +2,7 @@
 #' 
 #' The function reads in a text file and does the proper translations for 
 #'  genotypes and spatial coordinates.  
-#' @param path The path to the text file
+#' @param path The path to the text file OR a textConnection object that contains genotypes
 #' @param type An indication of what kind of loci that the data represent. The 
 #'  following kinds are recoginzed (n.b., if you have several types load them
 #'  separately and \code{merge} them).
@@ -30,25 +30,33 @@
 #' @return A \code{data.frame} with \code{locus} columns pre-formatted.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples
+#' #Use a text connection rather than file on disk
+#' #create 0,1,2 snp copy data frame, convert to vector, and use vector as input
+#' df <- as.data.frame(matrix(round(runif(50,min=0,max=2)),5,10))
+#' print(df)
+#' vec <- sapply(1:nrow(df),function(l){paste0(paste(df[l,],collapse=", "),"\n")})
+#' print(vec)
+#' pops <- read_population(path=textConnection(vec),type="snp",sep=",",header=F,locus.columns=1:5)
+#' print(pops)
 read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE, delim=":",...) {
-  type <- tolower(type)
-  
-  if (!("textConnection" %in% class(file)))
-      {
+    type <- tolower(type)
+    if (!("textConnection" %in% class(path)))
+    {
         if( !file.exists(path) ){
-        ans <- paste("You did not pass a valid path to this function.  What you passed", 
-                       path, 
-                     "is not the FILE that has data in it, it does not exist." )
-        stop(ans)    
-      }
-  
-  if( file.info(path)$isdir ){
-    stop("You passed a directory path, not a file path to read_population().  Pass a path to the actual FILE.")
-  }
-}  
-  if( !missing(type) && !(type %in% c("aflp","column","separated","snp","zyme","genepop","cdpop","haploid","structure")))
-    stop("Unrecognized 'type' submitted to read_population().  Please specify which type of data file you are trying to load in.")
-  
+            ans <- paste("You did not pass a valid path to this function.  What you passed", 
+                         path, 
+                         "is not the FILE that has data in it, it does not exist. Nor is it a textConnection" )
+            stop(ans)    
+        }
+        
+        if( file.info(path)$isdir ){
+            stop("You passed a directory path, not a file path to read_population().  Pass a path to the actual FILE or a textConnection")
+        }
+    } 
+    if( !missing(type) && !(type %in% c("aflp","column","separated","snp","zyme","genepop","cdpop","haploid","structure")))
+        stop("Unrecognized 'type' submitted to read_population().  Please specify which type of data file you are trying to load in.")
+    
   # specify the haploid as separated, it will come out as a single column due to no separators
   if( type=="haploid"){
     type <- "separated"
@@ -84,7 +92,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
     stop("You need to specify which columns are intended to be loci in this file.")
   if( !is(locus.columns, "numeric") )
     stop("Invalid value passed as 'locus.columns'")  
-  
+
   df <- read.table(path, sep=sep,header=header, stringsAsFactors=FALSE, ...)
   
   if( ncol(df)==1 )
@@ -115,7 +123,15 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   if( length(locus.columns) > 499 ) {
     cat("gstudio: Big Column Import [ 0")
   }
-  
+    #make sure that locus cols with missing data are imported from text connection as ints (AES 3/25/20)
+    if ("textConnection" %in% class(path))
+    {
+        for (l in locus.columns)
+            if (!"integer" %in% df[,l])
+                df[,l] <- suppressWarnings(as.integer(df[,l]))
+    }
+    
+    
   # read them in column-wise
   for( locCol in locus.columns ){
     
