@@ -57,8 +57,12 @@ minus_mom <- function( x, MomCol="ID", OffCol="OffID"  )  {
       momNum <- off[[MomCol]]
       mom <- moms[ moms[[MomCol]] == momNum , ]
       
-      for( locus in locus_names )
-        off[[locus]] <- off[[locus]] - mom[[locus]]
+      for( locus in locus_names ) {
+        if( ploidy( off[[locus]]) == ploidy( mom[[locus]]  )) {
+          off[[locus]] <- off[[locus]] - mom[[locus]]  
+        }
+      }
+        
       ret[i,] <- off
     }
     
