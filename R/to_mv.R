@@ -32,7 +32,7 @@ to_mv.default <- function( x, ... ) {
 #' @rdname to_mv
 to_mv.locus <- function( x, ploidy=2, alleles=NA, drop.allele=FALSE, leave.as.na=FALSE, ... ){
   ret <- 0
-  if( missing(alleles) || is.na(alleles) )
+  if( missing(alleles) || all(is.na(alleles)) )
     alleles <- sort(unique(as.vector(alleles(x)) ))
   
   # asking for vector of values
@@ -55,7 +55,7 @@ to_mv.locus <- function( x, ploidy=2, alleles=NA, drop.allele=FALSE, leave.as.na
     
     ret <- unlist( ret )/ploidy
     
-    if( is.na(x) && leave.as.na)
+    if( any(is.na(x)) && leave.as.na)
       ret <- rep(NA,length(ret))
   }
 

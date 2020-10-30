@@ -132,6 +132,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
     } else if( type=="separated")  {
       changeback <- TRUE
       genos <- df[,locCol]
+      genos[ nchar(genos)== 0] <- NA
       genos[ is.na(genos) ] <- paste( c("NA","NA"), collapse=":")
       a <- strsplit(genos, split=delim, fixed=TRUE)
       alleles <- matrix( unlist(a), byrow = TRUE, ncol=2)

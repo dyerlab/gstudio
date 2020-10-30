@@ -25,10 +25,9 @@ Imports:
     ggrepel,
     rlang,
     popgraph,
-    adegenet,
     stringi, 
     DBI
 Suggests:
     testthat,
     knitr
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1

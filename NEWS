@@ -9,8 +9,9 @@ gstudio 1.6 Planned
 * [FIX] Problem with having a misssing genotype for type="column" in first row.  Odd problem.
 * [ADD] Feedback for reading in columns for read_population() when > 500 loci to provide some level of feedback to the user showing it is doing something and not just sitting there.
 
-* [FIX] Change 'locus' to 'loci' in frequency_matrix() to be consistent with the frequencies() function argument list.
 
+* [FIX] Change 'locus' to 'loci' in frequency_matrix() to be consistent with the frequencies() function argument list.
+* [FIX] Catching problem where empty (instead of NA) data was causing locus(.,type="separated") to fail.
 
 gstudio 1.5
 -----------------
