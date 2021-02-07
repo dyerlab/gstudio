@@ -409,10 +409,14 @@ rep.locus <- function( x, times,... ){
   
   off <- alleles(e1)
   mom <- alleles(e2)
-  if( length(off)!=length(mom))
-    stop("Cannot subtract genotypes with different ploidy levels.")
+  if( length(off)!=length(mom)) {
+    warning("Cannot subtract genotypes with different ploidy levels.  Leaving offspring unreduced")
+    return( e1 )
+  }
+    
   if( length(off)<2 || length(mom)<2 )
     stop("Cannot subtract genotypes less than diploid")
+  
   if( length(off) %% 2 )
     stop("General subtraction is not supported for odd ploidy (too many assumptions), 
          you can write your own routine.")
