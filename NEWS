@@ -13,8 +13,13 @@ gstudio 1.6 Planned
 * [FIX] Change 'locus' to 'loci' in frequency_matrix() to be consistent with the frequencies() function argument list.
 * [FIX] Catching problem where empty (instead of NA) data was causing locus(.,type="separated") to fail.
 
-* [FIX] Reworked -.locus to return offpsring unreduced when ploidy mistake instead of stoping on error to help the user better understand where the problems are.  20210207
 
+
+
+
+gstudio 1.5.3 - 20210207
+-----------------
+* [FIX] Reworked -.locus to return offpsring unreduced when ploidy mistake instead of stoping on error to help the user better understand where the problems are. 
 
 
 gstudio 1.5
@@ -33,7 +38,6 @@ gstudio 1.5
 * [FIX] Fixed pies_on_map
 * [FIX] Changed mate() to add additional functionality
 * [FIX] Change selfing rate parameter F in mixed_mating() to s and check output.  Looks fishy right now.
-
 
 
 gstudio 1.4

@@ -30,12 +30,13 @@
 #' DD <- locus( c("D","D") ) 
 #' EE <- locus( c("E","E") )
 #' F  <- locus( c("F"))
+#' G  <- locus( )
 #' loci <- c(AA,AB,AC,AD,BB,BC,BD,CD,CD,DD) 
 #' offID <- c(0 ,1, 2, 3, 0, 1, 2, 1, 0, 2 )
 #' momID <- c(rep("A",4), rep("B",3), rep("C",3))
 #' df <- data.frame( ID=factor(momID), OffID=factor(offID), TPI=loci )
 #' minus_mom( df )
-#' loci <- c(AA,AB,BB,AD,BB,BC,BD,CD,EE,F) 
+#' loci <- c(AA,AB,BB,AD,BB,BC,G,CD,EE,F) 
 #' df <- data.frame( ID=factor(momID), OffID=factor(offID), TPI=loci )
 #' minus_mom( df, Check=TRUE )
 minus_mom <- function( x, MomCol="ID", OffCol="OffID", Check=FALSE  )  {
@@ -95,8 +96,8 @@ minus_mom <- function( x, MomCol="ID", OffCol="OffID", Check=FALSE  )  {
           }
           
         }
-        ## Bad Ploidy
-        else {
+        ## Bad Ploidy and not because of missing genotype
+        else if( !is.na( off[[locus]])  && !is.na( mom[[locus]]) ) {
           message(paste("Unable to subtract adult '",mom[[locus]],
                         "' from offspring '",off[[locus]],
                         "', result is unreduced.",sep=""))
