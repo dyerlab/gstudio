@@ -70,45 +70,48 @@ minus_mom <- function( x, MomCol="ID", OffCol="OffID", Check=FALSE  )  {
       momNum <- off[[MomCol]]
       mom <- moms[ moms[[MomCol]] == momNum , ]
       
-      for( locus in locus_names ) {
-        if( ploidy( off[[locus]]) == ploidy( mom[[locus]]  )) {
-          
-          loc <- off[[locus]] - mom[[locus]] 
-          off[[locus]] <-  loc  
-          
-          if( Check ) {
+      if( nrow(mom) == 1 && nrow(off) == 1 ) {
+        for( locus in locus_names ) {
+          if( ploidy( off[[locus]]) == ploidy( mom[[locus]]  )) {
             
-            # unreduced 
-            if( ploidy( loc ) > 1 ) {
+            loc <- off[[locus]] - mom[[locus]] 
+            off[[locus]] <-  loc  
+            
+            if( Check ) {
               
-              # homozygote
-              if (!is_heterozygote( loc ) ) {
-                off$Individual_OK[1] <- FALSE
-                off$Cause[1] <- paste(off$Cause[1], "Unreduced Homozygote", locus)
+              # unreduced 
+              if( ploidy( loc ) > 1 ) {
+                
+                # homozygote
+                if (!is_heterozygote( loc ) ) {
+                  off$Individual_OK[1] <- FALSE
+                  off$Cause[1] <- paste(off$Cause[1], "Unreduced Homozygote", locus)
+                }
+                # het and different from mom 
+                else if( loc != mom[[locus]]) {
+                  off$Individual_OK[1] <- FALSE
+                  off$Cause[1] <- paste(off$Cause[1], "Bad Match", locus)
+                }
               }
-              # het and different from mom 
-              else if( loc != mom[[locus]]) {
-                off$Individual_OK[1] <- FALSE
-                off$Cause[1] <- paste(off$Cause[1], "Bad Match", locus)
-              }
+              
             }
             
           }
-          
-        }
-        ## Bad Ploidy and not because of missing genotype
-        else if( !is.na( off[[locus]])  && !is.na( mom[[locus]]) ) {
-          message(paste("Unable to subtract adult '",mom[[locus]],
-                        "' from offspring '",off[[locus]],
-                        "', result is unreduced.",sep=""))
-          if( Check ) { 
-            off$Individual_OK[1] <- FALSE
-            off$Cause[1] <- paste( off$Cause[1], "Unequal Ploidy", locus) 
+          ## Bad Ploidy and not because of missing genotype
+          else if( !is.na( off[[locus]])  && !is.na( mom[[locus]]) ) {
+            message(paste("Unable to subtract adult '",mom[[locus]],
+                          "' from offspring '",off[[locus]],
+                          "', result is unreduced.",sep=""))
+            if( Check ) { 
+              off$Individual_OK[1] <- FALSE
+              off$Cause[1] <- paste( off$Cause[1], "Unequal Ploidy", locus) 
+            }
           }
-        }
-        
-        ret[i,] <- off
+          
+          ret[i,] <- off
+        }  
       }
+      
     }
     if( Check ) {
       ret <- ret[ !ret$Individual_OK,]
