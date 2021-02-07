@@ -86,8 +86,9 @@ minus_mom <- function( x, MomCol="ID", OffCol="OffID", Check=FALSE  )  {
                 off$Cause[1] <- paste(off$Cause[1], "Unreduced Homozygote", locus)
               }
               # het and different from mom 
-              else if( is_heterozygote(loc) && loc != mom[[locus]]) {
-                off$Cause[1] <- paste(off$Cause[1], "Bad Heterozygote", locus)
+              else if( loc != mom[[locus]]) {
+                off$Individual_OK[1] <- FALSE
+                off$Cause[1] <- paste(off$Cause[1], "Bad Match", locus)
               }
             }
             
