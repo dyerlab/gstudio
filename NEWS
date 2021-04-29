@@ -20,6 +20,7 @@ gstudio 1.6 Planned
 gstudio 1.5.3 - 20210207
 -----------------
 * [FIX] Reworked -.locus to return offpsring unreduced when ploidy mistake instead of stoping on error to help the user better understand where the problems are. 
+* [FIX] Fixed warning that was coming in from column_class() function.
 
 
 gstudio 1.5
