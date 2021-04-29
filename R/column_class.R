@@ -36,7 +36,8 @@ column_class <- function( x, class=NULL, mode=c("label","index")[1] ) {
     labels <- names(x)
     ret <- rep("",length(labels) )
     for( i in 1:length(labels) ){
-      ret[i] <- class( x[[labels[i]]])
+      val <- class( x[[labels[i]]])
+      ret[i] <- ifelse( length(val)>1, val[-1], val )
     }
     return( ret )
   }
@@ -44,7 +45,8 @@ column_class <- function( x, class=NULL, mode=c("label","index")[1] ) {
   nms <- names(x)
   cls <- rep( NA, length(nms) )
   for(i in 1:length(nms) ){
-    cls[i] <- class( x[,i] )
+    val <- class( x[,i])
+    cls[i] <- ifelse( length(val)>1, val[-1], val )
   }
   if( !(class %in% cls ) )
     return( NA )
