@@ -7,8 +7,8 @@
 #' @param Latitude The name of the column holding the latitude values (default = "Latitude")
 #' @param Longitude The name of the column holding the longitude (default = "Longitude")
 #' @param CRS The coordinate reference system (default = 4326)
-#' @imports sf 
-#' @imports raster 
+#' @import sf 
+#' @import raster 
 #' @export 
 raster_extract <- function( x, raster, Latitude = "Latitude", Longitude = "Longitude", CRS = 4326 ) {
   library( raster )
