@@ -20,7 +20,7 @@
 #'   loci <- c(AA,AA,AB,AA,BB,BC,CC,BB,BB,CC)
 #'   df <- data.frame( Population=c(rep("A",5),rep("B",5) ), TPI=loci )
 #'   to_mv_freq(df)
-to_mv_freq <- function( x, stratum="Population") {
+to_mv_freq <- function( x, stratum="Population", drop.allele=FALSE) {
   if(!is(x,"data.frame"))
     stop("This function only works with a data.frame object")
   if( !( stratum %in% names(x)))
@@ -33,7 +33,7 @@ to_mv_freq <- function( x, stratum="Population") {
     s <- factor(s)
   strata_names <- levels(s)
   K <- length(strata_names)
-  m <- to_mv( x )
+  m <- to_mv( x, drop.allele = drop.allele )
   ret <- matrix(0,nrow = K, ncol=ncol(m))
   rownames(ret) <- strata_names
   
