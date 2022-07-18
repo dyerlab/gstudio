@@ -11,6 +11,10 @@ to_mv_freq(x, stratum = "Population", drop.allele = FALSE)
 
 \item{stratum}{The stratum to use to partition the data (default
 "Population")}
+
+\item{drop.allele}{A flag (default \code{FALSE}) that drops the 
+lowest frequency allele from the result (so all rows do not sum)
+to the same value.}
 }
 \value{
 A matrix with as many rows as strata and columns as 

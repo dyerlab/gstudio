@@ -16,10 +16,8 @@
 #'  comparison of missing genotypes.
 #' @export
 #' @examples
-#' loci <- c( locus(1:2), locus(c(2,2)), locus(1:2) )
-#' genetic_relatedness( loci )
-#' genetic_relatedness( loci, freqs = data.frame( Allele=c("1","2"), Frequency=c(0.5,0.5)))
-
+#' x <- c( locus(1:2), locus(c(2,2)), locus(1:2) )
+#' genetic_relatedness( x )
 
 genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","LynchRitland")[1],freqs=NA ) {
   
@@ -29,7 +27,7 @@ genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","LynchRitland")[1],
     stop("Cannot perform relatedness estimates on data that is not either a data.frame or a locus vector.")
   if( any(is.na(column_class(x,"locus"))) )
     stop("You need to have genetic loci in the data.frame to estimate relatedness")
-  if( is.na(freqs) )
+  if( is.na(all(freqs)) )
     freqs <- frequencies( x )
   
   if( is.na(loci) )

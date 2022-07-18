@@ -7,20 +7,17 @@
 #' @param Latitude The name of the column holding the latitude values (default = "Latitude")
 #' @param Longitude The name of the column holding the longitude (default = "Longitude")
 #' @param CRS The coordinate reference system (default = 4326)
-#' @import sf 
-#' @import raster 
+#' @importFrom methods as
 #' @export 
 raster_extract <- function( x, raster, Latitude = "Latitude", Longitude = "Longitude", CRS = 4326 ) {
-  library( raster )
-  library( sf ) 
   if( !( Latitude %in% names(x) ) || !( Longitude %in% names(x)) )  {
     stop("The columns you need for Lat/Lon are not in the data.frame you are passing...")
   }
-  df <- st_as_sf( x, coords=c(Longitude,Latitude), crs=CRS ) 
+  df <- sf::st_as_sf( x, coords=c(Longitude,Latitude), crs=CRS ) 
   
-  if( st_crs(raster) != st_crs(df) ){
+  if( sf::st_crs(raster) != sf::st_crs(df) ){
     stop("You must have the data and the raster in the same projection... duh")
   }
-  vals <- extract( raster, as(df,"Spatial"))
+  vals <- raster::extract( raster, as(df,"Spatial"))
   return( vals )
 }

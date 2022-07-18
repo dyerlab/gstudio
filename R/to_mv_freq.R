@@ -6,6 +6,9 @@
 #' @param x A \code{data.frame} object with \code{locus} columns
 #' @param stratum The stratum to use to partition the data (default
 #'  "Population")
+#' @param drop.allele A flag (default \code{FALSE}) that drops the 
+#'  lowest frequency allele from the result (so all rows do not sum)
+#'  to the same value.
 #' @return A matrix with as many rows as strata and columns as 
 #'  alleles across all loci.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}

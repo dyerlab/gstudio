@@ -37,7 +37,6 @@ This only works on diploid data and will return NA for any
  comparison of missing genotypes.
 }
 \examples{
-loci <- c( locus(1:2), locus(c(2,2)), locus(1:2) )
-genetic_relatedness( loci )
-genetic_relatedness( loci, freqs = data.frame( Allele=c("1","2"), Frequency=c(0.5,0.5)))
+x <- c( locus(1:2), locus(c(2,2)), locus(1:2) )
+genetic_relatedness( x )
 }

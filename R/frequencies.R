@@ -114,7 +114,7 @@ frequencies.locus <- function( x, loci, ... ) {
 frequencies.data.frame <- function( x, loci, stratum, ... ) {
 
   # no loci specified so grab all of them
-  if( missing(loci) || is.na(loci) ) {
+  if( missing(loci) || all(is.na(loci)) ) {
     loci <- column_class( x, "locus" )
   }
   
@@ -151,7 +151,7 @@ frequencies.data.frame <- function( x, loci, stratum, ... ) {
     popnames <- names(pops)
     for( pop in popnames ){
       
-      strat <- frequencies( pops[[pop]], loci )
+      strat <- frequencies( pops[[pop]], loci=loci )
       
       if( nrow(strat) ){
         strat$Stratum <- pop
