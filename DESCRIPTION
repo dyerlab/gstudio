@@ -26,8 +26,7 @@ Imports:
     ggrepel,
     rlang,
     popgraph,
-    stringi, 
-    DBI
+    stringi
 Suggests:
     testthat,
     knitr
