@@ -24,7 +24,7 @@ het_data <- function() {
 }
 
 
-heteroscedasticity <- function(x, stratum="Population", N = 999, plot=FALSE) { 
+heteroscedasticity <- function(x, stratum="Population", N = 999, plot=FALSE, as.princomp = FALSE) { 
 
   if( missing(x) || !is(x, "data.frame") ) { 
     stop("You must pass a data.frame object to the heteroscedasticity function.")
@@ -36,13 +36,17 @@ heteroscedasticity <- function(x, stratum="Population", N = 999, plot=FALSE) {
 
   # Pull the frequency matrix
   
-  get_div <- function( data, stratum ) { 
+  get_div <- function( data, stratum, raw = FALSE ) { 
     frequency_matrix( data, 
                       stratum = stratum ) |> 
       base::merge( data, by.x = "Stratum", by.y = stratum ) %>%
       dplyr::select( !column_class(data,"locus"), -Stratum ) -> freqs
     divergence <- to_mv( data ) - freqs 
-    return( apply( divergence, 1, function(x) { return(sqrt( sum( (x)^2 )) ) } ) )
+    if( raw == TRUE ) { 
+      return(divergence)
+    } else { 
+      return( apply( divergence, 1, function(x) { return(sqrt( sum( (x)^2 )) ) } ) )
+    }
   }
   
   progress <- function (x, max = 100) {
@@ -54,42 +58,56 @@ heteroscedasticity <- function(x, stratum="Population", N = 999, plot=FALSE) {
       cat('\n')
   }
   
-  
-  results <- data.frame( Stratum = levels(x[[stratum]]),
-                         Type = "Observed",
-                         Value = as.numeric( by(get_div(x, stratum), x[[stratum]], mean, na.rm=TRUE) ) )
-  
-  for( i in 1:N) { 
-    progress(i,max=N)
-    tmp <- x[ sample(nrow(x)), 2:ncol(x)]
-    tmp[[stratum]] <- x[[stratum]]
+  if( as.princomp == TRUE ) {
+    vals <- get_div(x, stratum, raw=TRUE)
+    return(  prcomp( vals, center = TRUE, scale. = TRUE))
+  } 
+  else { 
     
-    results <- rbind( results, 
-                      data.frame( Stratum = levels(x[[stratum]]),
-                                 Type = "Permuted",
-                                 Value = as.numeric( by(get_div(tmp, stratum), x[[stratum]], mean, na.rm=TRUE) )
-                                 ) )
-  }                         
-  
-  
-  if( plot == TRUE ) { 
-  
-    results %>%
-      gplot( aes( y=Value, x=Stratum )) + 
-      geom_violin() + 
-      geom_jitter( height=0, 
-                   width=0.05, 
-                   data = df %>% 
-                     filter( Type=="Permuted"), 
-                   alpha=0.25, 
-                   shape=16) + 
-      geom_point( size=5, 
-                  color="red", 
-                  data = df %>% 
-                    filter( Type == "Observed"))
+    results <- data.frame( Stratum = levels(x[[stratum]]),
+                           Type = "Observed",
+                           Value = as.numeric( by(get_div(x, stratum), x[[stratum]], mean, na.rm=TRUE) ) )
+    
+    for( i in 1:N) { 
+      progress(i,max=N)
+      tmp <- x[ sample(nrow(x)), 2:ncol(x)]
+      tmp[[stratum]] <- x[[stratum]]
+      
+      results <- rbind( results, 
+                        data.frame( Stratum = levels(x[[stratum]]),
+                                    Type = "Permuted",
+                                    Value = as.numeric( by(get_div(tmp, stratum), x[[stratum]], mean, na.rm=TRUE) )
+                        ) )
+    }                         
+    
+    
+    if( plot == TRUE ) { 
+      
+      results %>%
+        gplot( aes( y=Value, x=Stratum )) + 
+        geom_violin() + 
+        geom_jitter( height=0, 
+                     width=0.05, 
+                     data = df %>% 
+                       filter( Type=="Permuted"), 
+                     alpha=0.25, 
+                     shape=16) + 
+        geom_point( size=5, 
+                    color="red", 
+                    data = df %>% 
+                      filter( Type == "Observed"))
+    }
+    else { 
+      return( results |> mutate( Type = factor(Type, ordered=TRUE),
+                                 Stratum = factor( Stratum) ) )
+    }
+    
+    
   }
-  return( results |> mutate( Type = factor(Type, ordered=TRUE),
-                             Stratum = factor( Stratum) ) )
+  
+  
+  
+                             
 }
 
 
