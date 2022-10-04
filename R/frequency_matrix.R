@@ -33,7 +33,7 @@ frequency_matrix <- function( x, stratum="Population", loci=NULL ) {
   m <- reshape2::melt( freqs, id.vars=c("Stratum","Allele") )
   ret <- reshape2::dcast( m, Stratum ~ Allele, value.var = "value",fill = 0)  
   
-  locus
+  #locus
   
   return( ret )
 }
