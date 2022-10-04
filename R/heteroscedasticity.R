@@ -45,18 +45,22 @@ heteroscedasticity <- function(x, stratum="Population", N = 999, plot=FALSE) {
     return( apply( divergence, 1, function(x) { return(sqrt( sum( (x)^2 )) ) } ) )
   }
   
+  progress <- function (x, max = 100) {
+    percent <- x / max * 100
+    cat(sprintf('\r Heteroscedasticity: [%-50s] %d%%',
+                paste(rep('=', percent / 2), collapse = ''),
+                floor(percent)))
+    if (x == max)
+      cat('\n')
+  }
+  
   
   results <- data.frame( Stratum = levels(x[[stratum]]),
                          Type = "Observed",
                          Value = as.numeric( by(get_div(x, stratum), x[[stratum]], mean, na.rm=TRUE) ) )
   
   for( i in 1:N) { 
-    extra <- nchar('||100%')
-    width <- options()$width
-    step <- round(i / N * (width - extra))
-    text <- sprintf('|%s%s|% 3s%%', strrep('=', step),
-                    strrep(' ', width - step - extra), round(i / N * 100))
-    cat(text)
+    progress(i,max=N)
     tmp <- x[ sample(nrow(x)), 2:ncol(x)]
     tmp[[stratum]] <- x[[stratum]]
     
@@ -65,8 +69,6 @@ heteroscedasticity <- function(x, stratum="Population", N = 999, plot=FALSE) {
                                  Type = "Permuted",
                                  Value = as.numeric( by(get_div(tmp, stratum), x[[stratum]], mean, na.rm=TRUE) )
                                  ) )
-    
-    cat(if (i == N) '\n' else '\014')
   }                         
   
   
