@@ -20,8 +20,6 @@ frequency_matrix <- function( x, stratum="Population", loci=NULL ) {
   if( is.null(loci))
     loci <- column_class(x,"locus")
   locus_names <- column_class(x,"locus")
-#  if( !is(x,"data.frame") || (length(locus_names) < 1) )
-#    stop( "You must pass the data.frame with some loci in it...  Duh.")
   if( !any(loci %in% locus_names) )
     stop( "Hello?  Thinking about giving the name of an actual locus in the data.frame" )
 
@@ -32,8 +30,6 @@ frequency_matrix <- function( x, stratum="Population", loci=NULL ) {
   freqs$Locus <- NULL
   m <- reshape2::melt( freqs, id.vars=c("Stratum","Allele") )
   ret <- reshape2::dcast( m, Stratum ~ Allele, value.var = "value",fill = 0)  
-  
-  #locus
   
   return( ret )
 }

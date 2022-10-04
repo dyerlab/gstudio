@@ -24,7 +24,7 @@ het_data <- function() {
 }
 
 
-heteroscedasticity <- function(x, stratum="Population", N = 999) { 
+heteroscedasticity <- function(x, stratum="Population", N = 999, plot=FALSE) { 
 
   if( missing(x) || !is(x, "data.frame") ) { 
     stop("You must pass a data.frame object to the heteroscedasticity function.")
@@ -69,6 +69,23 @@ heteroscedasticity <- function(x, stratum="Population", N = 999) {
     cat(if (i == N) '\n' else '\014')
   }                         
   
+  
+  if( plot == TRUE ) { 
+  
+    results %>%
+      gplot( aes( y=Value, x=Stratum )) + 
+      geom_violin() + 
+      geom_jitter( height=0, 
+                   width=0.05, 
+                   data = df %>% 
+                     filter( Type=="Permuted"), 
+                   alpha=0.25, 
+                   shape=16) + 
+      geom_point( size=5, 
+                  color="red", 
+                  data = df %>% 
+                    filter( Type == "Observed"))
+  }
   return( results |> mutate( Type = factor(Type, ordered=TRUE),
                              Stratum = factor( Stratum) ) )
 }
