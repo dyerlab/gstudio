@@ -12,8 +12,12 @@
 #' loc <- locus( 1:2 )
 #' is_heterozygote( loc )
 is_heterozygote <- function( x ) { 
-  if( !is(x,"locus") )
+  
+  
+  if( !is(x,"locus") ) {
     stop(paste("The function 'is_heterozygote' works on objects of type 'locus', not ",class(x),sep=""))
+  }
+    
   
   if( length(x)>1 )
     ret <- unlist(lapply( x, is_heterozygote ))
