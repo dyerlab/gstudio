@@ -3,7 +3,8 @@
 #' Returns the heterozygosity of loci within each individual.  This is a per-individual estiamte
 #' @param x A \code{data.frame} that has rows of individuals who have one or more \code{locus} 
 #' columns
-#' @return The average heterozygosity for non-missing loci per individual
+#' @return The average heterozygosity for non-missing loci per individual as a \code{data.frame} 
+#'  object with all non-locus columns identical to those passed.
 #' @note This function must be called on a \code{data.frame} of individuals, it will assume that
 #'  each row contains at least one column of type \code{locus}
 #' @export

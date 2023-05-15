@@ -2,8 +2,7 @@
 #' 
 #' This function takes a set of multilocus genotypes and estimates a vector divergence from stratum centroids.  It
 #'  can then 
-#' @imports dplyr
-#'  
+#' @import dplyr
 #' @examples 
 #' library( dplyr)  
 #' data(arapat)

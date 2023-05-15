@@ -30,10 +30,7 @@ ggplot() +
                          y=Latitude,
                          stratum=Population), data=arapat) + 
   coord_equal()
-library(ggmap)
 coords <- strata_coordinates( arapat )
-map <- population_map( coords ) 
-ggmap( map ) + geom_strata_label( data=arapat ) 
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

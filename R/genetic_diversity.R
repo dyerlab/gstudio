@@ -36,7 +36,7 @@
 #'  Population <- c(rep("Pop-A",5),rep("Pop-B",5))
 #'  df <- data.frame( Population, TPI=locus, PGM=locus2 )
 #'  genetic_diversity( df, mode="Ae")
-genetic_diversity <- function( x, stratum=NULL, loci=NULL, mode=c("A","Ae","A95","He", "Ho", "Hos", "Hes", "Fis","Pe")[2] , small.N=FALSE, ... ){
+genetic_diversity <- function( x, stratum=NULL, loci=NULL, mode=c("A","Ae","A95","He", "Ho", "Hi", "Hos", "Hes", "Fis","Pe")[2] , small.N=FALSE, ... ){
   rmode <- mode
   mode <- tolower(mode)
   

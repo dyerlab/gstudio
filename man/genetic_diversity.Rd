@@ -8,7 +8,7 @@ genetic_diversity(
   x,
   stratum = NULL,
   loci = NULL,
-  mode = c("A", "Ae", "A95", "He", "Ho", "Hos", "Hes", "Fis", "Pe")[2],
+  mode = c("A", "Ae", "A95", "He", "Ho", "Hi", "Hos", "Hes", "Fis", "Pe")[2],
   small.N = FALSE,
   ...
 )
