@@ -38,6 +38,7 @@ dist_amova <- function( x ) {
   
   # make data vectors for 2gener amova
   if( any( p$Ploidy != round(p$Ploidy))){
+    stop("PLOIDY WARNING: Assuming 2Gener Approximation.")
     data <- FALSE
     
     if( any( p$Ploidy > 2))

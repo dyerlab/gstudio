@@ -17,8 +17,11 @@ ploidy <- function ( x ) {
     loci <- column_class(x,"locus")
     K <- length(loci)
     ret <- data.frame(Locus=loci,Ploidy=0)
-    for( locus in loci )
-      ret$Ploidy[ ret$Locus==locus] <- mean(ploidy( x[[locus]] ))
+    for( locus in loci ) {
+      p <- ploidy( x[[locus]])
+      p[ p == 0 ] <- NA   # Fix for missing data
+      ret$Ploidy[ ret$Locus==locus] <- mean(p, na.rm=TRUE)
+    }
     return(ret)
   }
   else if( length(x)>1 )
