@@ -72,11 +72,12 @@ dist_amova <- function( x ) {
   
   # make data vectors as adult AMOVA
   else 
-    data <- to_mv( x, drop.allele=FALSE )
+    data <- to_mv( x, drop.allele=FALSE, leave.as.na = TRUE )
   
   
   for( i in 1:N) {
     x <- data[i,]
+    
     for( j in 1:i) {
       if( i != j ) {
         y <- data[j,]
