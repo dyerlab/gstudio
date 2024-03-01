@@ -1,3 +1,9 @@
+gstudio 2.0.0 - 20240301
+-----------------
+* [FIX] Removed all references to `raster` and `SpatialPoints`
+* [FIX] Updated `column_class()` to work when you pass a `tbl` instead of `data.frame`
+
+
 gstudio 1.6.0 - 20230515
 -----------------
 * [REQ] Test for HWP and LD similar to that implemented in Genepop? I work with microsatellite loci that have many rare alleles, so a HWP/LD test with a MC algorithm similar to that used in Genepop would be ideal

@@ -12,9 +12,6 @@ test_that("checking",{
   expect_that( coords$Longitude, is_equivalent_to( c(1,0) ) )
   expect_that( coords$Latitude, is_equivalent_to( c(0,1) ) )
   
-  coords.sp <- strata_coordinates( pop, as.SpatialPoints=TRUE)
-  expect_that( coords.sp, is_a("SpatialPoints"))
-  
   coords.sort <- strata_coordinates( pop, sort.output=TRUE )
   expect_that( as.character(coords.sort$Stratum), is_equivalent_to(c("A","B")))
   

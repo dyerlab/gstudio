@@ -10,7 +10,6 @@
 #' @param single.stratum A flag to indicate that you only want one entry per stratum (for collapsing
 #'  points within strata, Default=TRUE).
 #' @return A data frame, with Stratum Latitude and Longitude, summarized by center of each stratum.
-#' @importFrom sp SpatialPoints
 #' @export 
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 strata_coordinates <- function( x,
