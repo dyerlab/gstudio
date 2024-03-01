@@ -44,10 +44,23 @@ column_class <- function( x, class=NULL, mode=c("label","index")[1] ) {
   
   nms <- names(x)
   cls <- rep( NA, length(nms) )
-  for(i in 1:length(nms) ){
-    val <- class( x[,i])
-    cls[i] <- ifelse( length(val)>1, val[-1], val )
+  
+  if( is(x,"tbl") ) { 
+    for(i in 1:length(nms) ){
+      # catch for column class
+      val <- class( pull( x, nms[i]) )
+      cls[i] <- ifelse( length(val)>1, val[-1], val )
+    }
+  } 
+  else if( is(x,"data.frame")) { 
+    for(i in 1:length(nms) ){
+      # catch for column class
+      val <- class( x[,i])
+      cls[i] <- ifelse( length(val)>1, val[-1], val )
+    }
   }
+  
+
   if( !(class %in% cls ) )
     return( NA )
 

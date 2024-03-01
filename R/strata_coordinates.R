@@ -6,9 +6,6 @@
 #' @param stratum The name of the stratum to partition on (default="Population").
 #' @param longitude The column name of the longitude
 #' @param latitude The column name of the latitude
-#' @param as.SpatialPoints A flag indicating what kind of coordinates to return 
-#'  should be turned into a SpatialPoints object (TRUE) or as a \code{data.frame} (FALSE,
-#'  the default)
 #' @param sort.output A flag indicating if the results should be sorted alphabetically (default=FALSE)
 #' @param single.stratum A flag to indicate that you only want one entry per stratum (for collapsing
 #'  points within strata, Default=TRUE).
@@ -20,7 +17,6 @@ strata_coordinates <- function( x,
                                 stratum="Population", 
                                 longitude="Longitude", 
                                 latitude="Latitude",
-                                as.SpatialPoints=FALSE,
                                 sort.output=FALSE,
                                 single.stratum=TRUE) {
 
@@ -44,13 +40,6 @@ strata_coordinates <- function( x,
 
   if( sort.output )
     ret <- ret[ order(ret$Stratum),]
-  
-  if( as.SpatialPoints ) {
-    coords <- cbind( x=ret$Longitude,
-                     y=ret$Latitude) 
-    rownames( coords ) <- ret$Stratum
-    ret <- sp::SpatialPoints(coords)
-  }
   
   return( ret )
 }

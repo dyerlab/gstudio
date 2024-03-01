@@ -8,7 +8,7 @@ Description: Classes and functions for the spatial analysis of marker
     data to include structure, diversity, distance, and
     relatedness statistics.  Where appropriate, integration with existing
     libraries is included.
-Version: 1.6.0
+Version: 1.6.1
 Date: 2023-05-15
 LazyLoad: true
 VignetteBuilder: knitr
@@ -19,8 +19,6 @@ Imports:
     dplyr,
     ggplot2,
     methods,
-    raster,
-    sp,
     sf,
     reshape2,
     ggmap,
@@ -31,4 +29,4 @@ Imports:
 Suggests:
     testthat,
     knitr
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1

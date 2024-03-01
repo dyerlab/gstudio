@@ -9,7 +9,6 @@ strata_coordinates(
   stratum = "Population",
   longitude = "Longitude",
   latitude = "Latitude",
-  as.SpatialPoints = FALSE,
   sort.output = FALSE,
   single.stratum = TRUE
 )
@@ -22,10 +21,6 @@ strata_coordinates(
 \item{longitude}{The column name of the longitude}
 
 \item{latitude}{The column name of the latitude}
-
-\item{as.SpatialPoints}{A flag indicating what kind of coordinates to return 
-should be turned into a SpatialPoints object (TRUE) or as a \code{data.frame} (FALSE,
-the default)}
 
 \item{sort.output}{A flag indicating if the results should be sorted alphabetically (default=FALSE)}
 
