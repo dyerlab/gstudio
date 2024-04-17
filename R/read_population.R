@@ -33,19 +33,25 @@
 read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE, delim=":",...) {
   type <- tolower(type)
   
-  if (!("textConnection" %in% class(file)))
-      {
-        if( !file.exists(path) ){
-        ans <- paste("You did not pass a valid path to this function.  What you passed", 
-                       path, 
-                     "is not the FILE that has data in it, it does not exist." )
-        stop(ans)    
-      }
-  
-  if( file.info(path)$isdir ){
-    stop("You passed a directory path, not a file path to read_population().  Pass a path to the actual FILE.")
+  # catch if path is url
+  if( any( grepl("https://docs.google.com/spreadsheets/*", path)) {
+    
   }
-}  
+  
+  
+  if (!("textConnection" %in% class(file)))
+  {
+    if( !file.exists(path) ){
+      ans <- paste("You did not pass a valid path to this function.  What you passed", 
+                   path, 
+                   "is not the FILE that has data in it, it does not exist." )
+      stop(ans)    
+    }
+    
+    if( file.info(path)$isdir ){
+      stop("You passed a directory path, not a file path to read_population().  Pass a path to the actual FILE.")
+    }
+  }  
   if( !missing(type) && !(type %in% c("aflp","column","separated","snp","zyme","genepop","cdpop","haploid","structure")))
     stop("Unrecognized 'type' submitted to read_population().  Please specify which type of data file you are trying to load in.")
   
@@ -69,7 +75,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   # default
   else 
     return( .read_columns( path, type, locus.columns, phased, sep, header, delim, ...))
-
+  
 }
 
 
@@ -101,7 +107,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   else if( end.col.meta.data == 1) {
     ret <- data.frame( df[,end.col.meta.data])
     names(ret)[1] <- names(df)[1]
-
+    
   }
   else {
     ret <- df[,1:end.col.meta.data]
@@ -141,7 +147,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
       alleles <- df[,locCol]
       tmp <- locus( alleles, type=type, phased=phased)  
     }
-
+    
     locus_name <- names(df)[locCol]
     ret[[locus_name]] <- tmp  
   }
@@ -190,7 +196,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
     locus_names <- header[ 2:(length(header)) ]
     K <- length(locus_names)
   }
-    
+  
   
   ret <- data.frame(Population=rep(NA,N),ID=NA)
   for( locus in locus_names ){
@@ -238,7 +244,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   }
   
   ret <- ret[ !is.na(ret$Population),]
-
+  
   return( ret )
 }
 
@@ -292,7 +298,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
     columns <- strsplit(header,",",fixed=TRUE)[[1]]
     return(columns)
   }
-
+  
   #convert to matrix  
   data <- matrix( unlist( lapply(raw, .cleanup_and_split )),nrow = length(raw) , byrow = TRUE)
   colnames(data) <- data[1,]
@@ -329,4 +335,4 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
 
 
 
-  
+
