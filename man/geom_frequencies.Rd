@@ -24,14 +24,6 @@ This function does a pretty good job of plotting but if you have too many loci
  the function does NOTHING to prevent you from making crappy plots with too many 
  levels.  To plot a reduced number of loci/strata, use a subset of your data.
 }
-\examples{
-data(arapat)
-freqs <- frequencies( arapat )
-require(ggplot2)
-ggplot() + geom_frequencies( freqs )
-freqs <- frequencies( arapat, loci="EN", stratum="Cluster")
-ggplot() + geom_frequencies( freqs ) + facet_grid(.~Stratum)
-}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

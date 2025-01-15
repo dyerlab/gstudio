@@ -24,12 +24,6 @@ This function takes a data frame containing genetic data and returns a
 \note{
 If using more than one stratum, use fill=STRATA_NAME for partitioning
 }
-\examples{
-require(ggplot2)
-loci <- c( locus(1:2), locus(2:3), locus(c(1,1)), locus(1:2) )
-data <- data.frame( Population=c("A","A","B","B"), Locus=loci)
-ggplot() + geom_locus( aes(x=Locus, fill=Population), data=data )
-}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

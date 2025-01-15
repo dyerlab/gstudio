@@ -11,13 +11,6 @@
 #'  levels.  To plot a reduced number of loci/strata, use a subset of your data.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
-#' @examples
-#' data(arapat)
-#' freqs <- frequencies( arapat )
-#' require(ggplot2)
-#' ggplot() + geom_frequencies( freqs )
-#' freqs <- frequencies( arapat, loci="EN", stratum="Cluster")
-#' ggplot() + geom_frequencies( freqs ) + facet_grid(.~Stratum)
 geom_frequencies <- function(x, ...){
 
   if( !is(x,'data.frame'))

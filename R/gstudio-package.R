@@ -23,8 +23,8 @@
 #' \tabular{ll}{
 #' Package: \tab gstudio\cr
 #' Type: \tab Package\cr
-#' Version: \tab 1.1\cr
-#' Date: \tab 2013-06-07\cr
+#' Version: \tab 1.7\cr
+#' Date: \tab 2025-01-15\cr
 #' License: \tab GPL (>= 2)\cr
 #' LazyLoad: \tab yes\cr
 #' }
@@ -34,19 +34,16 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @docType package
 #' @keywords package
-#' @import raster 
 #' @import ggplot2 
-#' @import ggmap
 #' @import graphics
 #' @importFrom graphics plot.default
 #' @importFrom methods is
 #' @importFrom stats pchisq
 #' @importFrom utils read.csv
 #' @importFrom utils read.table
-#' @name gstudio-package
 #' @rdname gstudio-package
 #'
-NULL
+"_PACKAGE"
 
 #' Data for Araptus attenuatus
 #' 
@@ -144,16 +141,6 @@ NULL
 #' @docType data
 #' @keywords data
 NULL
-
-#' Rice Canopy
-#' 
-#' A categorical raster of the rice center 
-#' @name rice
-#' @docType data
-#' @keywords data
-NULL
-
-
 
 
 

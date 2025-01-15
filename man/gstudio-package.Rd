@@ -2,6 +2,7 @@
 % Please edit documentation in R/gstudio-package.R
 \docType{package}
 \name{gstudio-package}
+\alias{gstudio}
 \alias{gstudio-package}
 \title{Routines used in spatial analysis of genetic marker data}
 \description{
@@ -19,8 +20,8 @@ gstudio is a suite of tools used in the spatial analysis
 \tabular{ll}{
 Package: \tab gstudio\cr
 Type: \tab Package\cr
-Version: \tab 1.1\cr
-Date: \tab 2013-06-07\cr
+Version: \tab 1.7\cr
+Date: \tab 2025-01-15\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }

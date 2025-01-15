@@ -22,16 +22,6 @@ This function takes a \code{data.frame} of population data and
  indicate shape and color attributes in the mapping (through \code{aes})
  that will be carried through.
 }
-\examples{
-library(ggplot2)
-data(arapat)
-ggplot() + 
-  geom_strata_label( aes(x=Longitude, 
-                         y=Latitude,
-                         stratum=Population), data=arapat) + 
-  coord_equal()
-coords <- strata_coordinates( arapat )
-}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

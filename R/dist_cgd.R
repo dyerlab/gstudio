@@ -10,8 +10,6 @@
 #' @importFrom popgraph popgraph
 #' @export
 dist_cgd <- function( x, stratum="Population" ) {
-  #require(popgraph)
-  
   if( !is( x, "data.frame") )
     stop("You need to pass a data.frame to dist_cavalli() to work.")
   

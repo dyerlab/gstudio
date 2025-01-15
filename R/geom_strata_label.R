@@ -13,15 +13,6 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @import ggrepel
-#' @examples
-#' library(ggplot2)
-#' data(arapat)
-#' ggplot() + 
-#'   geom_strata_label( aes(x=Longitude, 
-#'                          y=Latitude,
-#'                          stratum=Population), data=arapat) + 
-#'   coord_equal()
-#' coords <- strata_coordinates( arapat )
 geom_strata_label <- function( mapping=NULL, data=NULL, ...){
   x <- y <- stratum <- Longitude <- Latitude <- Stratum <- NULL
   
