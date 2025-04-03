@@ -8,7 +8,7 @@
 #' @return A \code{data.frame} with Stratum (set to "All" if not passed as param) and the
 #'  number of observations without missing genetic data per column.
 #' @author Rodney J. Dyer \email{rjdyer@vcu.edu}
-#' 
+#' @export
 
 genotype_counts <- function( x, stratum=NULL ) {
   if( missing(x))
@@ -36,8 +36,6 @@ genotype_counts <- function( x, stratum=NULL ) {
       ret[ rownames(ret)==strata, colnames(ret)==locus ] <- sum( !is.na(df[[strata]][locus]))
     }
   }
-  ret
-  
   return( ret )
-  
 }
+

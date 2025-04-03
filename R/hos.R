@@ -39,7 +39,7 @@ Hos <- function( x, stratum="Population" ) {
       else {
         if( is( x[[stratum]], "factor"))
           x[[stratum]] <- droplevels(x[[stratum]])
-        ret$Hos[i] <- mean( unlist( by( x[[locus_names[i]]], x[[stratum]], Hos) ) )
+        ret$Hos[i] <- mean( unlist( by( x[[locus_names[i]]], x[[stratum]], Hos) ), na.rm=TRUE )
       }
     }
     
@@ -54,7 +54,7 @@ Hos <- function( x, stratum="Population" ) {
   }
   
   else if( is( x, "locus")) {
-    ret <- NA 
+    ret <- NA
     Ninds <- sum( ploidy(x)>1 )
     Nhets <- sum( is_heterozygote(x) )
     

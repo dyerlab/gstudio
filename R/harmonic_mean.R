@@ -11,7 +11,11 @@
 #'  harmonic_mean(x)
 harmonic_mean <- function(x) {
   if( any(x==0) ) {
-    warning("Estimating harmonic mean with a zero, this is an undefined operation.")
+    warning("Asking for harmonic mean with zero entry, I'm gonna drop it and give you the rest.")
+    x <- x[ x != 0]
+    return( 1/mean(1/x) )
+  } else { 
+    return( 1/mean(1/x) )
   }
-  return( 1/mean(1/x) )
+  
 } 

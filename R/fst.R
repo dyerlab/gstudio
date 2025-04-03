@@ -48,7 +48,18 @@ Fst <- function( x, stratum="Population", nperm=0  ) {
   ret$Fst <- 1 - ret$Hs/ret$Ht
   
   if( nperm > 0 ) {
-    ret$P <- NA
+    ret$P <- 0
+    tmp <- x
+
+    for( rep in seq(1,nperm) ) { 
+      tmp[[stratum]] <- sample( tmp[[stratum]], 
+                                nrow(tmp),
+                                replace = T)    
+      Fst <- 1.0 - Hes( tmp, stratum=stratum )$Hes / Ht( tmp, stratum = stratum )$Ht
+      bigger <- ifelse( ret$Fst >= Fst, 1, 0 )
+      ret$P <- ret$P + bigger 
+    }
+    ret$P <- ret$P / (1+nperm)
   }
   
   return( ret )

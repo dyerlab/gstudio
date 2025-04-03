@@ -45,11 +45,6 @@ Hes <- function( x, stratum="Population", small.N=FALSE ) {
       
       for( locus in locus_names ) {
         
-        if( any( cts[[locus]] == 0 )) {
-          ret$Hes[ ret$Locus == locus ] <- NA
-        }
-        
-        else {
           nbar <-  harmonic_mean(cts[[locus]])
           xki <- freqs[ freqs$Locus==locus, ]
           x2ibar <- unlist(by( xki$Frequency, xki$Allele, function(x) sum(x^2/K) ))
@@ -61,7 +56,7 @@ Hes <- function( x, stratum="Population", small.N=FALSE ) {
           else {
             ret$Hes[ ret$Locus == locus ] <- hs
           }
-        }
+        
       }
       
       if( length(locus_names) > 1 ){

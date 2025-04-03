@@ -20,14 +20,36 @@ Ht <- function( x, stratum="Population" ) {
     stop("Cannot estimate expected total heterozygosity if there are no loci...")
   
   ret <- data.frame( Locus=locus_names, Ht=0 )
-
-  ho <- Hos( x, stratum=stratum )
-  hs <- Hes( x, stratum=stratum )
-  freqs <- frequencies( x, stratum=stratum)
-  cts <- genotype_counts(x, stratum)
-  K <- nrow(cts)
   
+  
+  
+
   for( locus in locus_names ) {
+
+    # Catch strata of small size and delete.
+    x |> 
+      select( all_of(stratum), all_of(locus) ) -> tmp 
+    tmp <- tmp[ !is.na(tmp[,2]),]
+    
+    numSamples <- nrow(tmp)
+    if( nrow(x) != numSamples) { 
+      warning(paste(locus,"had missing data, dropped individuals.")) 
+    }
+    
+    t <- table( tmp[,1])
+    keep <- names(t[ t>2 ])
+    tmp <- droplevels( tmp[ (tmp[,1] %in% keep), ] )
+    
+    # issue warning
+    if( nrow( tmp ) != numSamples ) { 
+      warning(paste(locus, "dropped strata (must have at least 3 individuals)") )
+    }
+    
+    ho <- Hos( tmp, stratum=stratum )
+    hs <- Hes( tmp, stratum=stratum )
+    freqs <- frequencies( tmp, stratum=stratum)
+    cts <- genotype_counts(tmp, stratum)
+    K <- nrow(cts)
     nbar <-  harmonic_mean(cts[[locus]])
     xki <- freqs[ freqs$Locus==locus, ]
     xibar <- unlist(by( xki$Frequency, xki$Allele, function(x) sum(x/K )))
