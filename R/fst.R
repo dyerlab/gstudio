@@ -50,12 +50,18 @@ Fst <- function( x, stratum="Population", nperm=0  ) {
   if( nperm > 0 ) {
     ret$P <- 0
     tmp <- x
-
+    cat("permuting ")
     for( rep in seq(1,nperm) ) { 
+      
+      if( rep%%10 == 0 ) { 
+        cat(".") 
+      }
       tmp[[stratum]] <- sample( tmp[[stratum]], 
                                 nrow(tmp),
-                                replace = T)    
-      Fst <- 1.0 - Hes( tmp, stratum=stratum )$Hes / Ht( tmp, stratum = stratum )$Ht
+                                replace = T) 
+      suppressWarnings(
+        Fst <- 1.0 - Hes( tmp, stratum=stratum, do.multilocus=FALSE )$Hes / ht$Ht 
+      )
       bigger <- ifelse( ret$Fst >= Fst, 1, 0 )
       ret$P <- ret$P + bigger 
     }

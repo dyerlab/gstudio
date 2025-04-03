@@ -8,6 +8,7 @@
 #'  into consideration population subdivision.  This is an unbiased estimator.
 #' @param small.N Apply the 2N/(2N-1) correction to the data
 #'  for small sample sizes.
+#' @param do.multilocus Estimates multilocus heterozygosity as well (default TRUE).
 #' @return The expected heterozygosity as a numeric or a \code{data.frame} if 
 #'  several loci are passed.
 #' @export
@@ -15,7 +16,7 @@
 #' @examples
 #' data(arapat)
 #' Hes( arapat )
-Hes <- function( x, stratum="Population", small.N=FALSE ) { 
+Hes <- function( x, stratum="Population", small.N=FALSE, do.multilocus = TRUE ) { 
 
   if( is(x,"data.frame") ){
     x <- droplevels(x)
@@ -40,11 +41,11 @@ Hes <- function( x, stratum="Population", small.N=FALSE ) {
       if( !is.null(stratum)) {
         freqs <- frequencies( x, stratum=stratum)
       }
-      else
-        freqs <- frequencies( x )
-      
+      else {
+        freqs <- frequencies( x )        
+      }
+
       for( locus in locus_names ) {
-        
           nbar <-  harmonic_mean(cts[[locus]])
           xki <- freqs[ freqs$Locus==locus, ]
           x2ibar <- unlist(by( xki$Frequency, xki$Allele, function(x) sum(x^2/K) ))
@@ -56,14 +57,15 @@ Hes <- function( x, stratum="Population", small.N=FALSE ) {
           else {
             ret$Hes[ ret$Locus == locus ] <- hs
           }
-        
       }
       
       if( length(locus_names) > 1 ){
         if( !is.null( locus_names ) ){
           hes <- ret$Hes[ !is.na(ret$Hes)]
           k <- length(hes)
-          ret <- rbind( ret, data.frame(Locus="Multilocus",Hes=sum(hes)/k))
+          if( do.multilocus ) { 
+            ret <- rbind( ret, data.frame(Locus="Multilocus",Hes=sum(hes)/k))
+          }
         }
       }
         

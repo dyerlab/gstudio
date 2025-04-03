@@ -1,10 +1,13 @@
-gstudio 1.6.1 - 20250115
+gstudio 1.7 - 20250403
 -----------------
-* [FIX] Removed raster package references from the repository.
 * [FIX] Added locus-wise analysis and self-trimming for small population sizes for heterozygosities
 * [FIX] Dropped missing data from summary statistics and added warning to alert user rather than give NA.
 * [FIX] Reimplemented permutation for Fst
 
+
+gstudio 1.6.1 - 20250115
+-----------------
+* [FIX] Removed raster package references from the repository.
 
 
 gstudio 1.6.0 - 20230515
