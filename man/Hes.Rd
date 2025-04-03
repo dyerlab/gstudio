@@ -7,7 +7,7 @@
 Returns the general expected heterozygosity parameter
  from the frequencies}
 \usage{
-Hes(x, stratum = "Population", small.N = FALSE)
+Hes(x, stratum = "Population", small.N = FALSE, do.multilocus = TRUE)
 }
 \arguments{
 \item{x}{Either a \code{data.frame} object with \code{locus} objects or 
@@ -18,6 +18,8 @@ into consideration population subdivision.  This is an unbiased estimator.}
 
 \item{small.N}{Apply the 2N/(2N-1) correction to the data
 for small sample sizes.}
+
+\item{do.multilocus}{Estimates multilocus heterozygosity as well (default TRUE).}
 }
 \value{
 The expected heterozygosity as a numeric or a \code{data.frame} if 
