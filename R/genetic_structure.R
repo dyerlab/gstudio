@@ -84,13 +84,13 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
     ret <- data.frame()
     
     if( mode == "gst") 
-      ret <- Gst( x, stratum, nperm, size.correct )
+      ret <- Gst( x, stratum=stratum, nperm=nperm, size.correct=size.correct )
     
     else if( mode == "gst_prime") 
-      ret <- Gst_prime( x, stratum, nperm, size.correct )
+      ret <- Gst_prime( x, stratum=stratum, nperm=nperm, size.correct=size.correct )
     
     else if( mode == "dest" ) 
-      ret <- Dest( x, stratum, nperm, size.correct )
+      ret <- Dest( x, stratum=stratum, nperm=nperm, size.correct=size.correct )
     
     else if( mode == "fst" ) 
       ret <- Fst( x, stratum, nperm )

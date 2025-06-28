@@ -8,12 +8,12 @@ Description: Classes and functions for the spatial analysis of marker
     data to include structure, diversity, distance, and
     relatedness statistics.  Where appropriate, integration with existing
     libraries is included.
-Version: 1.8
-Date: 2025-04-03
+Version: 1.9
+Date: 2025-07-01
 LazyLoad: true
 Encoding: UTF-8
 Depends:
-    R (>= 4.0)
+    R (>= 4.1.0)
 Imports:
     ggplot2,
     methods,
@@ -22,7 +22,8 @@ Imports:
     ggrepel,
     rlang,
     popgraph,
-    stringi
+    stringi,
+    dplyr
 Suggests:
     testthat,
     knitr

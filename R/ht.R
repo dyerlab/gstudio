@@ -3,6 +3,7 @@
 #' Returns the general expected total heterozygosity parameter
 #' @param x A \code{data.frame} object with \code{locus} objects 
 #' @param stratum  The name of the column representing the stratum variable (default=Population)
+#' @importFrom dplyr select all_of
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
@@ -28,7 +29,7 @@ Ht <- function( x, stratum="Population" ) {
 
     # Catch strata of small size and delete.
     x |> 
-      select( all_of(stratum), all_of(locus) ) -> tmp 
+      dplyr::select( dplyr::all_of(stratum), dplyr::all_of(locus) ) -> tmp 
     tmp <- tmp[ !is.na(tmp[,2]),]
     
     numSamples <- nrow(tmp)
