@@ -20,7 +20,7 @@ of type \code{\link{locus}}}
 
 \item{stratum}{The stratum to use as groupings (default='Population').}
 
-\item{mode}{Whic statistic to estimate.  Current options include:
+\item{mode}{Which statistic to estimate.  Current options include:
 \describe{
  \item{Gst}{Nei's Gst (not Berg and Hamrick)}
  \item{Gst_prime}{Hedrick's correction of Nei's Gst for diverse loci}

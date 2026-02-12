@@ -9,3 +9,5 @@ inst/tests/gmapTemp.png
 index_cache
 index_files
 ^cran-comments\.md$
+^\.claude$
+^CLAUDE\.md$

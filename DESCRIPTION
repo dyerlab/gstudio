@@ -1,15 +1,17 @@
 Package: gstudio
-Maintainer: Rodney J. Dyer <rjdyer@vcu.edu>
 License: GPL (>= 2)
 Title: Tools Related to the Spatial Analysis of Genetic Marker Data
 Type: Package
-Author: Rodney J. Dyer <rjdyer@vcu.edu>
+Authors@R: person(given = c("Rodney", "J."),
+    family = "Dyer",
+    role = c("aut", "cre"),
+    email = "rjdyer@vcu.edu")
 Description: Classes and functions for the spatial analysis of marker
     data to include structure, diversity, distance, and
     relatedness statistics.  Where appropriate, integration with existing
     libraries is included.
 Version: 1.9
-Date: 2025-07-01
+Date: 2026-02-12
 LazyLoad: true
 Encoding: UTF-8
 Depends:
@@ -27,4 +29,4 @@ Imports:
 Suggests:
     testthat,
     knitr
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
