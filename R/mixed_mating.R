@@ -13,8 +13,8 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 mixed_mating <- function( data, N=1, s=0) {
-  if( F < 0.0 | F > 1.0) 
-    stop("F must be bound on [0,1] at this time.")
+  if( s < 0.0 | s > 1.0)
+    stop("s must be bound on [0,1] at this time.")
   if( !is(data,'data.frame'))
     stop("You must pass a data.frame object to use this function.")
   if( is.na( column_class(data,"locus")) )
