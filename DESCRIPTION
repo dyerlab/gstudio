@@ -28,5 +28,7 @@ Imports:
     dplyr
 Suggests:
     testthat,
-    knitr
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
 RoxygenNote: 7.3.3

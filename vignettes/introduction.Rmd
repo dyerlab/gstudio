@@ -1,0 +1,169 @@
+---
+title: "Introduction to gstudio"
+author: "Rodney J. Dyer"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to gstudio}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(gstudio)
+```
+
+The `gstudio` package provides classes and functions for the spatial analysis of
+genetic marker data, including structure, diversity, distance, and relatedness
+statistics. This vignette covers the core workflow: creating locus data,
+importing populations, and running standard analyses.
+
+For comprehensive narrative documentation, tutorials, and worked examples, visit
+the full documentation site at
+[dyerlab.github.io/gstudio](https://dyerlab.github.io/gstudio/).
+
+## The `locus` Class
+
+The fundamental data type in `gstudio` is the `locus` --- an S3 class
+representing a genotype as colon-separated allele strings.
+
+```{r locus-basics}
+# Create individual genotypes
+AA <- locus(c("A", "A"))
+AB <- locus(c("A", "B"))
+BB <- locus(c("B", "B"))
+AB
+```
+
+Locus objects support standard vector operations:
+
+```{r locus-vectors}
+loci <- c(AA, AB, BB, AB, AA)
+loci
+```
+
+Missing data is represented as an empty locus:
+
+```{r locus-missing}
+missing <- locus()
+is.na(missing)
+```
+
+## Importing Data
+
+The `read_population()` function reads CSV files (and other formats) into a
+`data.frame` with `locus` columns:
+
+```{r read-data}
+data(arapat)
+head(arapat[, 1:6])
+```
+
+You can also create populations from allele frequencies:
+
+```{r make-pop}
+freqs <- data.frame(
+  Population = rep(c("A", "B"), each = 4),
+  Locus = rep(c("Loc1", "Loc2"), each = 2, times = 2),
+  Allele = rep(c("01", "02"), times = 4),
+  Frequency = c(0.3, 0.7, 0.5, 0.5, 0.6, 0.4, 0.4, 0.6)
+)
+freqs$Population <- factor(freqs$Population, ordered = TRUE)
+pop <- make_populations(freqs, N = 20)
+head(pop)
+```
+
+## Allele Frequencies
+
+The `frequencies()` function computes allele frequencies at the locus or
+population level:
+
+```{r freqs}
+frequencies(arapat, loci = "LTRS")
+```
+
+## Genetic Diversity
+
+The `genetic_diversity()` wrapper dispatches to specific estimators based on
+the `mode` parameter:
+
+```{r diversity}
+# Expected heterozygosity by population
+genetic_diversity(arapat, mode = "He")
+```
+
+Available modes: `A` (allele count), `Ae` (effective alleles), `A95`,
+`He`, `Ho`, `Fis`, and others.
+
+## Genetic Structure
+
+Differentiation among populations:
+
+```{r structure}
+genetic_structure(arapat, mode = "Gst")
+```
+
+Available modes: `Gst`, `Gst_prime`, `Dest`, `Fst`.
+
+## Genetic Distance
+
+Pairwise population distances:
+
+```{r distance}
+D <- genetic_distance(arapat, mode = "Nei")
+D
+```
+
+Available modes: `AMOVA`, `Bray`, `Euclidean`, `cGD`, `Nei`, `Dps`, `Jaccard`.
+
+## Genetic Relatedness
+
+Pairwise individual relatedness:
+
+```{r relatedness}
+data(arapat)
+r <- genetic_relatedness(arapat[1:20, ], mode = "Nason")
+dim(r)
+```
+
+Available modes: `Lynch`, `Ritland`, `Queller`, `Nason`.
+
+## Forward-Time Simulation
+
+The `simulate_pop()` function runs multi-generation stochastic simulations with
+mutation, migration, and selfing:
+
+```{r simulation}
+# Set up a 2-population system
+freqs <- data.frame(
+  Population = rep(c("A", "B"), each = 4),
+  Locus = rep(c("Loc1", "Loc2"), each = 2, times = 2),
+  Allele = rep(c("01", "02"), times = 4),
+  Frequency = c(0.3, 0.7, 0.5, 0.5, 0.6, 0.4, 0.4, 0.6)
+)
+freqs$Population <- factor(freqs$Population, ordered = TRUE)
+pop <- make_populations(freqs, N = 30)
+
+# Define migration and mutation
+mig <- migration_event(
+  migration_matrix(c("A", "B"), model = "island", m = 0.05),
+  start = 1
+)
+mut <- mutation_model(rate = 0.001, model = "smm")
+
+# Run 10 generations
+set.seed(42)
+result <- simulate_pop(pop, ngen = 10, mutation = mut,
+                       migration = mig, verbose = FALSE)
+nrow(result)
+```
+
+## Learning More
+
+- Use `?function_name` for any exported function's help page
+- Full documentation: [dyerlab.github.io/gstudio](https://dyerlab.github.io/gstudio/)
+- Source code: [github.com/dyerlab/gstudio](https://github.com/dyerlab/gstudio)

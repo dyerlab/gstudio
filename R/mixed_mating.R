@@ -17,7 +17,7 @@ mixed_mating <- function( data, N=1, s=0) {
     stop("s must be bound on [0,1] at this time.")
   if( !is(data,'data.frame'))
     stop("You must pass a data.frame object to use this function.")
-  if( is.na( column_class(data,"locus")) )
+  if( anyNA( column_class(data,"locus")) )
     stop("Please pass at least one locus object to this function...")
   
   # Catch if s=0 ~ No selfing

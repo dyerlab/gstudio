@@ -11,3 +11,6 @@ index_files
 ^cran-comments\.md$
 ^\.claude$
 ^CLAUDE\.md$
+^docs$
+^doc$
+^Meta$
