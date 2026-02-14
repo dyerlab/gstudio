@@ -10,8 +10,8 @@ Description: Classes and functions for the spatial analysis of marker
     data to include structure, diversity, distance, and
     relatedness statistics.  Where appropriate, integration with existing
     libraries is included.
-Version: 1.9
-Date: 2026-02-12
+Version: 1.12
+Date: 2026-02-14
 LazyLoad: true
 Encoding: UTF-8
 Depends:
@@ -23,12 +23,17 @@ Imports:
     reshape2,
     ggrepel,
     rlang,
-    popgraph,
     stringi,
-    dplyr
+    dplyr,
+    igraph,
+    MASS,
+    sf,
+    sampling
 Suggests:
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    leaflet,
+    leaflet.minicharts
 VignetteBuilder: knitr
 RoxygenNote: 7.3.3

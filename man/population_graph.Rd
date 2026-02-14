@@ -14,10 +14,10 @@ population_graph(x, stratum = "Population", numLoci = NULL, ...)
 \item{numLoci}{If not \code{NULL} then how many randomly selected loci (fewer than the total)
 to use in the estimation.}
 
-\item{...}{Other parameters passed to the \code{popgraph::popgraph()} function.}
+\item{...}{Other parameters passed to the \code{popgraph()} function.}
 }
 \description{
 This function is a convience function that wraps together the subset_loci() (potentially)
-  function with the popgraph::popgraph() function (and translations from genotypes to 
+  function with the popgraph() function (and translations from genotypes to
   multivariate data).
 }

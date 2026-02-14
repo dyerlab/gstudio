@@ -34,13 +34,16 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @docType package
 #' @keywords package
-#' @import ggplot2 
+#' @import ggplot2
 #' @import graphics
-#' @importFrom graphics plot.default
+#' @import igraph
+#' @import sampling
+#' @importFrom graphics plot.default lines points text
 #' @importFrom methods is
-#' @importFrom stats pchisq
-#' @importFrom utils read.csv
-#' @importFrom utils read.table
+#' @importFrom stats pchisq cor.test cov prcomp qchisq var
+#' @importFrom utils read.csv read.table write.csv
+#' @importFrom sp Lines Line SpatialPoints SpatialLines bbox
+#' @importFrom MASS ginv
 #' @rdname gstudio-package
 #'
 "_PACKAGE"
@@ -135,9 +138,46 @@ NULL
 NULL
 
 #' AFLP Arapat data
-#' 
+#'
 #' A set of genotypes for arapat from an AFLP dataset
 #' @name aflp_arapat
+#' @docType data
+#' @keywords data
+NULL
+
+#' Sonoran desert altitude.
+#'
+#' This is a raster file for altitude in the Sonoran desert
+#'  region coincident with the Lophocereus and Upiga data
+#'  sets.
+#' @name alt
+#' @docType data
+#' @keywords data
+NULL
+
+#' Metadata for Baja Populations.
+#'
+#' This is metadata associated with the sampling locations
+#'  for the Lophocereus and Upiga data sets.
+#' @name baja
+#' @docType data
+#' @keywords data
+NULL
+
+#' Lophocereus population graph
+#'
+#' This is the population graph for the Lophocereus data
+#'  that is discussed in Dyer & Nason (2004).
+#' @name lopho
+#' @docType data
+#' @keywords data
+NULL
+
+#' Upiga population graph
+#'
+#' This is the population graph for the Upiga data
+#'  that is currently unpublished.
+#' @name upiga
 #' @docType data
 #' @keywords data
 NULL
