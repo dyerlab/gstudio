@@ -1,0 +1,206 @@
+# Visualization
+
+The `gstudio` package provides several `ggplot2` layers and mapping tools for visualizing genetic data. This chapter covers allele frequency plots, population maps, population graph visualization, and interactive leaflet maps.
+
+```{r}
+library(gstudio)
+library(ggplot2)
+data(arapat)
+```
+
+## Allele Frequency Plots
+
+### `geom_locus()`
+
+The `geom_locus()` function creates a bar chart of allele frequencies for a single locus. Map the locus to the `x` aesthetic:
+
+```{r}
+ggplot() +
+  geom_locus(aes(x = LTRS), data = arapat) +
+  labs(title = "Allele Frequencies at LTRS") +
+  theme_minimal()
+```
+
+Partition by population using the `fill` aesthetic:
+
+```{r}
+ggplot() +
+  geom_locus(aes(x = LTRS, fill = Species), data = arapat) +
+  labs(title = "LTRS Allele Frequencies by Species") +
+  theme_minimal()
+```
+
+### `geom_frequencies()`
+
+The `geom_frequencies()` function takes pre-computed frequency data (from `frequencies()`) and plots it. This gives you more control over faceting:
+
+```{r}
+freqs <- frequencies(arapat, loci = "LTRS", stratum = "Species")
+ggplot() +
+  geom_frequencies(freqs) +
+  facet_wrap(~Stratum) +
+  labs(title = "LTRS Frequencies by Species") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+## Spatial Sampling Maps
+
+### `geom_strata()`
+
+The `geom_strata()` function plots sampling locations as points on a map. It expects `Longitude` and `Latitude` columns in the data:
+
+```{r}
+ggplot() +
+  geom_strata(aes(x = Longitude, y = Latitude, fill = Species),
+              data = arapat) +
+  labs(title = "Araptus attenuatus Sampling Locations") +
+  theme_minimal()
+```
+
+### `geom_strata_label()`
+
+Add text labels to strata locations:
+
+```{r}
+#| eval: false
+ggplot() +
+  geom_strata(aes(x = Longitude, y = Latitude), data = arapat) +
+  geom_strata_label(aes(x = Longitude, y = Latitude,
+                         label = Species),
+                    data = arapat) +
+  theme_minimal()
+```
+
+## Population Graph Visualization
+
+### `geom_popgraph()`
+
+The `geom_popgraph()` function creates a complete population graph visualization (edges + nodes) in a single call:
+
+```{r}
+a <- matrix(c(0, 1, 0, 1,
+              1, 0, 1, 0,
+              0, 1, 0, 1,
+              1, 0, 1, 0), nrow = 4)
+rownames(a) <- colnames(a) <- LETTERS[1:4]
+graph <- as.popgraph(a)
+igraph::V(graph)$x <- c(1, 2, 1, 2)
+igraph::V(graph)$y <- c(1, 1, 2, 2)
+igraph::V(graph)$group <- c("X", "X", "Y", "Y")
+```
+
+Basic graph:
+
+```{r}
+ggplot() +
+  geom_popgraph(graph, aes(x = x, y = y)) +
+  theme_minimal()
+```
+
+Color nodes by group:
+
+```{r}
+ggplot() +
+  geom_popgraph(graph, aes(x = x, y = y, fill = group)) +
+  theme_minimal()
+```
+
+#### Customizing Appearance
+
+```{r}
+ggplot() +
+  geom_popgraph(graph, aes(x = x, y = y, fill = group),
+                node.size = 5,
+                edge.color = "darkgrey",
+                edge.width = 1) +
+  theme_void()
+```
+
+#### Auto Layout
+
+If `x` and `y` are not specified, a force-directed layout is computed automatically:
+
+```{r}
+ggplot() +
+  geom_popgraph(graph) +
+  theme_void()
+```
+
+### `geom_nodeset()` and `geom_edgeset()`
+
+For finer control, use the separate node and edge layers:
+
+```{r}
+#| eval: false
+ggplot() +
+  geom_edgeset(graph, aes(x = x, y = y)) +
+  geom_nodeset(graph, aes(x = x, y = y, fill = group)) +
+  theme_void()
+```
+
+### Edge Labels
+
+```{r}
+#| eval: false
+ggplot() +
+  geom_popgraph(graph, aes(x = x, y = y)) +
+  geom_edgelabels(graph, aes(x = x, y = y)) +
+  theme_void()
+```
+
+## Spatial Population Graphs
+
+A common workflow is to decorate a population graph with coordinates and then overlay it on a map:
+
+```{r}
+data(lopho)
+data(baja)
+lopho_dec <- decorate_graph(lopho, baja, stratum = "Population")
+```
+
+```{r}
+ggplot() +
+  geom_popgraph(lopho_dec,
+                aes(x = Longitude, y = Latitude),
+                node.size = 4) +
+  labs(title = "Lophocereus Population Graph",
+       x = "Longitude", y = "Latitude") +
+  theme_minimal()
+```
+
+## Spider Plots
+
+The `spiderplot_data()` function creates line segment data connecting each individual to its population centroid, useful for visualizing spatial dispersion:
+
+```{r}
+#| eval: false
+spider <- spiderplot_data(arapat,
+                          stratum = "Species",
+                          longitude = "Longitude",
+                          latitude = "Latitude")
+ggplot() +
+  geom_segment(aes(x = Longitude, y = Latitude,
+                   xend = cLongitude, yend = cLatitude,
+                   color = Species),
+               data = spider, alpha = 0.3) +
+  geom_point(aes(x = Longitude, y = Latitude, color = Species),
+             data = arapat) +
+  theme_minimal()
+```
+
+## Interactive Leaflet Maps
+
+The `addAlleleFrequencies()` function creates interactive leaflet maps with pie charts showing allele frequencies at each sampling location. This requires the `leaflet` and `leaflet.minicharts` packages:
+
+```{r}
+#| eval: false
+library(leaflet)
+library(leaflet.minicharts)
+
+addAlleleFrequencies(arapat,
+                     stratum = "Species",
+                     locus = "LTRS",
+                     longitude = "Longitude",
+                     latitude = "Latitude")
+```

@@ -1,0 +1,112 @@
+# Population Structure
+
+This chapter covers the estimation of genetic structure statistics --- measures of how genetic variation is partitioned among populations.
+
+```{r}
+library(gstudio)
+data(arapat)
+```
+
+## The `genetic_structure()` Wrapper
+
+The `genetic_structure()` function dispatches to specific structure estimators based on the `mode` parameter:
+
+| Mode | Statistic | Description |
+|------|-----------|-------------|
+| `"Gst"` | Nei's Gst | Proportion of total diversity among populations |
+| `"Gst_prime"` | Hedrick's G'st | Gst corrected for marker diversity |
+| `"Dest"` | Jost's D | True differentiation measure |
+| `"Fst"` | Wright's Fst | Fixation index |
+
+## Basic Usage
+
+Estimate Gst across species:
+
+```{r}
+genetic_structure(arapat, stratum = "Species", mode = "Gst")
+```
+
+The output provides per-locus estimates plus a multilocus estimate (last row). The multilocus estimate follows the approach of Culley et al. (2001).
+
+## Hedrick's Correction
+
+For highly polymorphic markers, `Gst` is constrained to small values. Hedrick's correction accounts for this:
+
+```{r}
+genetic_structure(arapat, stratum = "Species", mode = "Gst_prime")
+```
+
+## Jost's D
+
+An alternative differentiation measure that is independent of within-population diversity:
+
+```{r}
+genetic_structure(arapat, stratum = "Species", mode = "Dest")
+```
+
+## Permutation Testing
+
+Use the `nperm` parameter to test the null hypothesis that the structure parameter equals zero:
+
+```{r}
+genetic_structure(arapat, stratum = "Species",
+                  mode = "Gst", nperm = 99)
+```
+
+The resulting P column indicates the probability of observing a value as extreme as the estimate under random permutation of individuals among strata.
+
+## Pairwise Structure
+
+Set `pairwise = TRUE` to compute structure between all pairs of strata:
+
+```{r}
+pw <- genetic_structure(arapat, stratum = "Species",
+                        mode = "Gst", pairwise = TRUE)
+pw
+```
+
+This returns a symmetric matrix of pairwise multilocus estimates.
+
+## Restricting to Specific Loci
+
+Use the `locus` parameter to restrict the analysis:
+
+```{r}
+genetic_structure(arapat, stratum = "Species",
+                  mode = "Gst", locus = "LTRS")
+```
+
+```{r}
+genetic_structure(arapat, stratum = "Species",
+                  mode = "Gst", locus = c("LTRS", "WNT"))
+```
+
+## Multilocus Assignment
+
+The `multilocus_assignment()` function estimates the probability that an individual originates from each population based on multilocus genotype frequencies:
+
+```{r}
+# Compute stratum-level frequencies
+freqs <- frequencies(arapat, stratum = "Species")
+
+# Assign the first individual
+multilocus_assignment(arapat[1, ], freqs)
+```
+
+The `Posterior` column gives the relative probability of assignment to each stratum given the individual's multilocus genotype.
+
+## Individual Estimator Functions
+
+Each structure metric has a standalone function:
+
+```{r}
+Gst(arapat, stratum = "Species")
+```
+
+```{r}
+Gst_prime(arapat, stratum = "Species")
+```
+
+```{r}
+Dest(arapat, stratum = "Species")
+```

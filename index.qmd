@@ -1,0 +1,37 @@
+# Preface {.unnumbered}
+
+The `gstudio` package provides a comprehensive set of tools for the spatial analysis of genetic marker data in R. Originally developed to support research in landscape genetics and population genomics, it offers a unified framework for estimating genetic diversity, population structure, inter-individual and inter-population distances, relatedness, and population graph topology.
+
+At the core of the package is the `locus` S3 class, a flexible representation of genotypes that supports codominant markers, SNPs, AFLPs, and allozymes. Built around this data type, `gstudio` provides four main analytical entry points --- `genetic_diversity()`, `genetic_structure()`, `genetic_distance()`, and `genetic_relatedness()` --- each dispatching to a range of estimators. Population Graphs, a graph-theoretic approach to understanding among-population connectivity (Dyer & Nason 2004), are fully integrated with construction, analysis, and visualization tools.
+
+## Who This Book Is For
+
+This book is intended for population geneticists, landscape ecologists, and conservation biologists who want to analyze genetic marker data in R. It assumes basic familiarity with R and introductory population genetics concepts.
+
+## How to Use This Book
+
+Each chapter is self-contained and can be read independently, though they build on each other sequentially. Code examples use live R execution, so you can follow along by running the code in your own R session.
+
+## Quick Start
+
+```{r}
+library(gstudio)
+data(arapat)
+str(arapat, max.level = 1)
+```
+
+The `arapat` dataset contains multilocus microsatellite genotypes from the cactus beetle *Araptus attenuatus* and will serve as the primary example dataset throughout this book.
+
+```{r}
+head(arapat)
+```
+
+## Citation
+
+If you use `gstudio` in your research, please cite:
+
+> Dyer, R.J. 2009. GStudio: a suite of tools for the spatial analysis of genetic marker data. Molecular Ecology Resources 9(1): 110-113.
+
+## Source Code
+
+The source code for `gstudio` is available on GitHub at <https://github.com/dyerlab/gstudio>.

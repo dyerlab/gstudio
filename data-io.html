@@ -1,0 +1,2305 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; Importing &amp; Exporting Data – gstudio: Spatial Analysis of Genetic Marker Data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./allele-frequencies.html" rel="next">
+<link href="./locus-class.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-b5dd4a3d71b3a078c37fb2ee7b3c8dc8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data-io.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Importing &amp; Exporting Data</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">gstudio: Spatial Analysis of Genetic Marker Data</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/dyerlab/gstudio" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./getting-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Getting Started</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./locus-class.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">The Locus Class</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-io.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Importing &amp; Exporting Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./allele-frequencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Allele Frequencies &amp; HWE</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./genetic-diversity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Genetic Diversity</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./genetic-structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Population Structure</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./genetic-distance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Genetic Distance &amp; Relatedness</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./population-graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Population Graphs</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Visualization</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./simulation-parentage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Simulation &amp; Parentage</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#reading-population-data" id="toc-reading-population-data" class="nav-link active" data-scroll-target="#reading-population-data"><span class="header-section-number">3.1</span> Reading Population Data</a>
+  <ul class="collapse">
+  <li><a href="#function-signature" id="toc-function-signature" class="nav-link" data-scroll-target="#function-signature"><span class="header-section-number">3.1.1</span> Function Signature</a></li>
+  <li><a href="#separated-format" id="toc-separated-format" class="nav-link" data-scroll-target="#separated-format"><span class="header-section-number">3.1.2</span> Separated Format</a></li>
+  <li><a href="#column-format" id="toc-column-format" class="nav-link" data-scroll-target="#column-format"><span class="header-section-number">3.1.3</span> Column Format</a></li>
+  <li><a href="#snp-format" id="toc-snp-format" class="nav-link" data-scroll-target="#snp-format"><span class="header-section-number">3.1.4</span> SNP Format</a></li>
+  <li><a href="#aflp-format" id="toc-aflp-format" class="nav-link" data-scroll-target="#aflp-format"><span class="header-section-number">3.1.5</span> AFLP Format</a></li>
+  <li><a href="#allozyme-zyme-format" id="toc-allozyme-zyme-format" class="nav-link" data-scroll-target="#allozyme-zyme-format"><span class="header-section-number">3.1.6</span> Allozyme (Zyme) Format</a></li>
+  <li><a href="#genepop-format" id="toc-genepop-format" class="nav-link" data-scroll-target="#genepop-format"><span class="header-section-number">3.1.7</span> Genepop Format</a></li>
+  <li><a href="#structure-format" id="toc-structure-format" class="nav-link" data-scroll-target="#structure-format"><span class="header-section-number">3.1.8</span> Structure Format</a></li>
+  </ul></li>
+  <li><a href="#writing-population-data" id="toc-writing-population-data" class="nav-link" data-scroll-target="#writing-population-data"><span class="header-section-number">3.2</span> Writing Population Data</a></li>
+  <li><a href="#direct-format-conversion" id="toc-direct-format-conversion" class="nav-link" data-scroll-target="#direct-format-conversion"><span class="header-section-number">3.3</span> Direct Format Conversion</a></li>
+  <li><a href="#generating-synthetic-data" id="toc-generating-synthetic-data" class="nav-link" data-scroll-target="#generating-synthetic-data"><span class="header-section-number">3.4</span> Generating Synthetic Data</a>
+  <ul class="collapse">
+  <li><a href="#from-allele-frequencies" id="toc-from-allele-frequencies" class="nav-link" data-scroll-target="#from-allele-frequencies"><span class="header-section-number">3.4.1</span> From Allele Frequencies</a></li>
+  <li><a href="#multiple-populations" id="toc-multiple-populations" class="nav-link" data-scroll-target="#multiple-populations"><span class="header-section-number">3.4.2</span> Multiple Populations</a></li>
+  <li><a href="#from-individual-loci" id="toc-from-individual-loci" class="nav-link" data-scroll-target="#from-individual-loci"><span class="header-section-number">3.4.3</span> From Individual Loci</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/dyerlab/gstudio/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Importing &amp; Exporting Data</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This chapter covers reading genetic data from files, converting between formats, and generating synthetic populations.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="reading-population-data" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="reading-population-data"><span class="header-section-number">3.1</span> Reading Population Data</h2>
+<p>The <code>read_population()</code> function is the primary data import tool. It reads text files and converts specified columns to <code>locus</code> objects.</p>
+<section id="function-signature" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="function-signature"><span class="header-section-number">3.1.1</span> Function Signature</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_population</span>(path, type, locus.columns, <span class="at">phased =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">sep =</span> <span class="st">","</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">delim =</span> <span class="st">":"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The key parameters:</p>
+<ul>
+<li><code>path</code> — file path to the data</li>
+<li><code>type</code> — marker encoding format</li>
+<li><code>locus.columns</code> — integer vector indicating which columns contain genetic data</li>
+</ul>
+</section>
+<section id="separated-format" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="separated-format"><span class="header-section-number">3.1.2</span> Separated Format</h3>
+<p>The most common format uses colon-separated alleles (e.g., <code>"A:B"</code>):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"data_separated.csv"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data_sep <span class="ot">&lt;-</span> <span class="fu">read_population</span>(path, <span class="at">type =</span> <span class="st">"separated"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">locus.columns =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_sep)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Population Latitude Longitude  Loc1  Loc2
+1    Olympia    47.15   -122.89 12:14 15:15
+2 Bellingham    48.75   -122.49 12:12 15:17
+3  St. Louis    38.81    -89.98 10:12      
+4       Ames    42.26    -93.47 10:14      
+5   Richmond    37.74    -77.16 10:10 17:17</code></pre>
+</div>
+</div>
+</section>
+<section id="column-format" class="level3" data-number="3.1.3">
+<h3 data-number="3.1.3" class="anchored" data-anchor-id="column-format"><span class="header-section-number">3.1.3</span> Column Format</h3>
+<p>Two adjacent columns per locus (one column per allele):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"data_2_column.csv"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data_col <span class="ot">&lt;-</span> <span class="fu">read_population</span>(path, <span class="at">type =</span> <span class="st">"column"</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">locus.columns =</span> <span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_col)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Population Latitude Longitude  Loc1  Loc2
+1    Olympia    47.15   -122.89 12:14 15:15
+2 Bellingham    48.75   -122.49 12:12 15:17
+3  St. Louis    38.81    -89.98 10:12      
+4       Ames    42.26    -93.47 10:14      
+5   Richmond    37.74    -77.16 10:10 17:17</code></pre>
+</div>
+</div>
+</section>
+<section id="snp-format" class="level3" data-number="3.1.4">
+<h3 data-number="3.1.4" class="anchored" data-anchor-id="snp-format"><span class="header-section-number">3.1.4</span> SNP Format</h3>
+<p>Encoded as 0, 1, 2 (minor allele count):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"data_snp.csv"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>data_snp <span class="ot">&lt;-</span> <span class="fu">read_population</span>(path, <span class="at">type =</span> <span class="st">"snp"</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">locus.columns =</span> <span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_snp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Population Latitude Longitude snp1 snp2 snp3 snp4
+1    Olympia    47.15   -122.89  A:B  B:B  A:B  A:B
+2 Bellingham    48.75   -122.49  A:B  A:A  A:B  B:B
+3  St. Louis    38.81    -89.98  A:B  A:A          
+4       Ames    42.26    -93.47  A:A  A:B          
+5   Richmond    37.74    -77.16  A:A  B:B  A:B  B:B</code></pre>
+</div>
+</div>
+</section>
+<section id="aflp-format" class="level3" data-number="3.1.5">
+<h3 data-number="3.1.5" class="anchored" data-anchor-id="aflp-format"><span class="header-section-number">3.1.5</span> AFLP Format</h3>
+<p>Binary (0/1) presence-absence:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"data_aflp.csv"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>data_aflp <span class="ot">&lt;-</span> <span class="fu">read_population</span>(path, <span class="at">type =</span> <span class="st">"aflp"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">locus.columns =</span> <span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>))</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_aflp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Population Latitude Longitude Loc1 Loc2 Loc3 Loc4
+1    Olympia    47.15   -122.89    1    1    1    1
+2 Bellingham    48.75   -122.49    0    0    1    0
+3  St. Louis    38.81    -89.98    1    0          
+4       Ames    42.26    -93.47    0    1          
+5   Richmond    37.74    -77.16    0    0    1    1</code></pre>
+</div>
+</div>
+</section>
+<section id="allozyme-zyme-format" class="level3" data-number="3.1.6">
+<h3 data-number="3.1.6" class="anchored" data-anchor-id="allozyme-zyme-format"><span class="header-section-number">3.1.6</span> Allozyme (Zyme) Format</h3>
+<p>Concatenated integer alleles (e.g., “12” for alleles 1 and 2):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"data_zymelike.csv"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>data_zyme <span class="ot">&lt;-</span> <span class="fu">read_population</span>(path, <span class="at">type =</span> <span class="st">"zyme"</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">locus.columns =</span> <span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_zyme)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Population Latitude Longitude Loc1 Loc2 Loc3 Loc4
+1    Olympia    47.15   -122.89  1:2  1:4  1:5  1:5
+2 Bellingham    48.75   -122.49  1:2  1:2  1:5  1:7
+3  St. Louis    38.81    -89.98  1:2  1:3          
+4       Ames    42.26    -93.47  1:1  1:4          
+5   Richmond    37.74    -77.16  1:2  1:1  2:2  2:2</code></pre>
+</div>
+</div>
+</section>
+<section id="genepop-format" class="level3" data-number="3.1.7">
+<h3 data-number="3.1.7" class="anchored" data-anchor-id="genepop-format"><span class="header-section-number">3.1.7</span> Genepop Format</h3>
+<p>Genepop files have their own structure with <code>Pop</code> delimiters:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"genepop.txt"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>data_gp <span class="ot">&lt;-</span> <span class="fu">read_population</span>(path, <span class="at">type =</span> <span class="st">"genepop"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_gp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Population              ID Locus_A Locus_B Locus_C Locus_D Locus_E Locus_F
+16      Pop-1  Population-1.1 178:182 224:224 235:239 191:193 191:197 185:189
+17      Pop-1 Population-1.10 174:178 224:224 235:239 191:191 191:191 185:189
+18      Pop-1 Population-1.11 174:186 216:216 235:239 191:191 191:197 185:189
+19      Pop-1 Population-1.12 178:186 224:224 235:238 191:191 191:191 185:185
+20      Pop-1 Population-1.13 174:190 224:224 235:239 191:191 191:191 185:189
+21      Pop-1 Population-1.14 174:178 216:216 231:239 191:191 191:191 181:189
+   Locus_G Locus_H Locus_I Locus_J Locus_K Locus_L Locus_M
+16 223:223 187:190 131:160 232:232 257:257 184:184 243:268
+17 223:223 187:187 131:160 232:252 261:261 184:184 268:268
+18 223:223 187:187 131:131 232:232 257:261 182:182 243:268
+19 223:223 187:187 131:131 232:236 261:261 182:182 243:243
+20 231:231 187:187 131:160 228:232 257:261 182:182 243:243
+21 223:223 187:187         228:252 257:261 182:184 243:268</code></pre>
+</div>
+</div>
+</section>
+<section id="structure-format" class="level3" data-number="3.1.8">
+<h3 data-number="3.1.8" class="anchored" data-anchor-id="structure-format"><span class="header-section-number">3.1.8</span> Structure Format</h3>
+<p>Two-row-per-individual STRUCTURE format:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"data_structure.str"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>data_str <span class="ot">&lt;-</span> <span class="fu">read_population</span>(path, <span class="at">type =</span> <span class="st">"structure"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_str)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Population ID    LOC1  LOC1.1    LOC3    LOC4    LOC5    LOC6    LOC7    LOC8
+1          1 01 103:103 104:104 105:107 105:109 103:103 105:107 102:102 103:103
+2          1 01 103:103 104:104 105:107 105:109 103:103 105:107 102:102 103:103
+3          1 02 103:104 103:103 105:107 107:107 103:103 105:107 102:102 103:103
+4          1 02 103:104 103:103 105:107 107:107 103:103 105:107 102:102 103:103
+5          1 03 103:104 103:103 105:107 107:107 103:103 107:107 102:102 103:105
+6          1 03 103:104 103:103 105:107 107:107 103:103 107:107 102:102 103:105
+     LOC9   LOC10   LOC11   LOC12   LOC13   LOC14   LOC15
+1 104:104 103:103 102:105 102:108 102:104 105:105 103:103
+2 104:104 103:103 102:105 102:108 102:104 105:105 103:103
+3 104:104 103:103 105:105 105:108 102:104 105:105 103:103
+4 104:104 103:103 105:105 105:108 102:104 105:105 103:103
+5 104:104 103:103 102:105 105:108 102:105 105:105 103:105
+6 104:104 103:103 102:105 105:108 102:105 105:105 103:105</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="writing-population-data" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="writing-population-data"><span class="header-section-number">3.2</span> Writing Population Data</h2>
+<p>The <code>write_population()</code> function exports a data.frame to various formats:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plain text (colon-separated loci)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_population</span>(arapat, <span class="at">file =</span> <span class="st">"arapat.csv"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Genepop format</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_population</span>(arapat, <span class="at">file =</span> <span class="st">"arapat.gen"</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">mode =</span> <span class="st">"genepop"</span>, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Structure format</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write_population</span>(arapat, <span class="at">file =</span> <span class="st">"arapat.str"</span>,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">mode =</span> <span class="st">"structure"</span>, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="direct-format-conversion" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="direct-format-conversion"><span class="header-section-number">3.3</span> Direct Format Conversion</h2>
+<p>You can also convert data.frames directly without writing to disk:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>gp <span class="ot">&lt;-</span> <span class="fu">to_genepop</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(gp[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>], <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Data.frame exported from gstudio R package
+          LTRS, WNT, EN, EF, ZMP, AML, ATPS, MP20
+POP
+Cape, 0101 0202 0102 0101 0202 0304 0303 1818
+Cape, 0202 0202 0202 0101 0202 0404 0303 1818
+Cape, 0102 0202 0202 0101 0202 0404 0303 1818
+Cape, 0202 0202 0101 0101 0202 0303 0303 1919
+Cape, 0202 0202 0101 0101 0202 0404 0303 1818
+Cape, 0102 0101 0101 0102 0000 0000 0909 1818
+Cape, 0202 0202 0202 0101 0202 0404 0303 1819
+Cape, 0202 0202 0102 0101 0202 0304 0303 1818
+Cape, 0202 0202 0202 0101 0202 0303 0303 1818
+Cape, 0202 0202 0202 0101 0202 0304 0303 1818
+Cape, 0202 0202 0101 0101 0202 0404 0303 1818
+Cape, 0101 0102 0102 0101 0202 0304 0303 1818
+Cape, 0202 0202 0202 0101 0202 0305 0303 1818
+Cape, 0202 0202 0101 0101 0202 0505 0303 1819
+Cape, 0102 0000 0101 0202 0000 0000 0303 1818
+Cape, 0202 0202 0102 0102 0000 0000 0202 1818
+Cape, 0202 0202 0102 0101 0202 0404 0303 1818
+Cape, 0202 0202 0102 0101 0202 0505 0303 1718
+Cape, 0202 0202 0102 0101 0202 0505 0303 1717
+Cape, 0102 0202 0101 0102 0000 0000 0303 1718
+Cape, 0202 0202 0102 0101 0202 0404 0303 1717
+Cape, 0202 0202 0102 0101 0202 0505 0303 1818
+Cape, 0202 0202 0102 0101 0202 0404 0303 1818
+Cape, 0202 0202 0202 0101 0202 0305 0303 1818
+Cape, 0102 0202 0202 0101 0202 0305 0303 1818
+Cape, 0102 0202 0202 0101 0202 0303 0303 1818
+Cape, 0202 0202 0202 0101 0202 0404 0303 1818
+Cape, 0202 0202 0202 0101 0202 0505 0303 1818
+Cape, 0202 0202 0202 0101 0202 0404 0303 1818
+Cape, 0202 0202 0102 0101 0202 0404 0303 1818
+Cape, 0202 0102 0102 0101 0202 0404 0303 1818
+Cape, 0202 0102 0102 0101 0202 0404 0303 1717
+Cape, 0202 0202 0202 0101 0202 0404 0303 1818
+Cape, 0202 0202 0202 0101 0202 0404 0101 1717
+Cape, 0202 0202 0202 0101 0202 0404 0303 1818
+Cape, 0202 0202 0202 0101 0202 0404 0303 1818
+Cape, 0202 0202 0202 0101 0202 0404 0303 1818
+Cape, 0202 0202 0202 0101 0202 0404 0303 1818
+Cape, 0202 0202 0202 0101 0202 0404 0303 1718
+Cape, 0202 0202 0202 0101 0202 0404 0303 1717
+Cape, 0202 0202 0202 0101 0202 0505 0303 1818
+Cape, 0202 0202 0202 0101 0202 0404 0303 1818
+Cape, 0202 0202 0202 0101 0202 0505 0303 1818
+Cape, 0202 0202 0102 0101 0202 0404 0303 1717
+Cape, 0202 0202 0102 0101 0202 0404 0306 1818
+Cape, 0202 0202 0202 0101 0202 0404 0303 1818
+Cape, 0202 0101 0202 0101 0202 0404 0303 1617
+Cape, 0202 0202 0202 0101 0202 0505 0303 1718
+Cape, 0202 0202 0202 0101 0202 0505 0303 1718
+Cape, 0202 0202 0102 0101 0202 0404 0303 1718
+Cape, 0202 0202 0102 0101 0202 0404 0306 1717
+Cape, 0202 0202 0102 0101 0202 0404 0306 1818
+Cape, 0202 0202 0102 0101 0202 0404 0303 1818
+Cape, 0202 0202 0102 0101 0202 0404 0303 1818
+Cape, 0202 0202 0202 0101 0202 0404 0303 1718
+Cape, 0202 0202 0202 0101 0202 0404 0303 1717
+Cape, 0202 0202 0102 0101 0202 0404 0303 1818
+Cape, 0202 0202 0102 0101 0202 0505 0303 1819
+Cape, 0202 0202 0102 0101 0202 0505 0303 1717
+Cape, 0202 0202 0102 0101 0000 0505 0303 1818
+Cape, 0202 0202 0102 0101 0202 0404 0303 1818
+Cape, 0202 0202 0102 0101 0202 0404 0303 1818
+Cape, 0202 0202 0102 0101 0202 0505 0303 1818
+Cape, 0202 0202 0102 0101 0202 0505 0303 1818
+Cape, 0102 0202 0102 0101 0202 0505 0303 1818
+Cape, 0102 0202 0101 0101 0202 0404 0303 1819
+Cape, 0202 0202 0202 0101 0202 0404 0303 1818
+Cape, 0202 0202 0202 0101 0202 0404 0303 1818
+Cape, 0202 0101 0202 0101 0202 0404 0303 1818
+Cape, 0202 0102 0202 0101 0202 0404 0303 1818
+Cape, 0202 0101 0202 0101 0202 0505 0303 1718
+Cape, 0202 0101 0202 0101 0202 0505 0303 1818
+Cape, 0202 0101 0202 0101 0202 0505 0303 1818
+Cape, 0202 0101 0202 0101 0202 0505 0303 1818
+Cape, 0202 0101 0202 0101 0202 0505 0303 1818
+POP
+Mainland, 0102 0000 0101 0000 0000 0000 0202 0000
+Mainland, 0202 0101 0101 0101 0000 0000 0202 1313
+Mainland, 0102 0000 0101 0102 0000 0000 0909 0000
+Mainland, 0202 0101 0303 0102 0101 1111 0202 1314
+Mainland, 0102 0101 0101 0102 0000 0808 0404 1212
+Mainland, 0102 0101 0303 0102 0000 0000 0202 1212
+Mainland, 0202 0101 0303 0101 0000 0000 0202 0212
+Mainland, 0102 0000 0101 0000 0000 0000 0209 0000
+Mainland, 0202 0101 0103 0101 0000 0000 0209 1112
+Mainland, 0102 0103 0101 0102 0202 0000 0202 1213
+Mainland, 0202 0101 0303 0101 0202 1111 0204 1313
+Mainland, 0202 0101 0304 0101 0202 1111 0202 0312
+Mainland, 0102 0101 0303 0101 0202 1111 0202 0313
+Mainland, 0202 0101 0303 0101 0202 1111 0202 1212
+Mainland, 0202 0101 0303 0101 0202 1111 0202 1213
+Mainland, 0102 0101 0303 0101 0202 1111 0202 0214
+Mainland, 0202 0101 0303 0101 0202 1212 0203 1212
+Mainland, 0202 0101 0303 0101 0202 1212 0202 1313
+Mainland, 0202 0101 0303 0101 0202 1111 0202 0210
+Mainland, 0101 0101 0304 0101 0202 1212 0202 1113
+Mainland, 0102 0101 0304 0101 0202 0812 0204 0112
+Mainland, 0102 0101 0404 0101 0202 1111 0202 0313
+Mainland, 0202 0101 0304 0101 0202 1011 0202 1111
+Mainland, 0102 0101 0303 0101 0202 1212 0202 1013
+Mainland, 0202 0101 0303 0101 0202 1212 0202 0210
+Mainland, 0102 0101 0304 0101 0202 0811 0202 0214
+Mainland, 0202 0101 0303 0101 0202 1111 0202 0313
+Mainland, 0202 0101 0304 0101 0202 1111 0202 1112
+Mainland, 0202 0000 0103 0102 0000 0000 0209 0909
+Mainland, 0102 0101 0303 0102 0000 0000 0202 0312
+Mainland, 0102 0000 0000 0102 0000 0000 0202 0205
+Mainland, 0102 0101 0303 0101 0000 0000 0202 1112
+Mainland, 0102 0000 0303 0102 0000 1111 0202 1113
+Mainland, 0202 0101 0101 0101 0000 0000 0202 1212
+Mainland, 0102 0101 0303 0102 0000 0000 0202 1212
+Mainland, 0202 0101 0303 0102 0000 0000 0202 0313
+POP
+Peninsula, 0101 0000 0204 0102 0000 0000 0909 0707
+Peninsula, 0101 0103 0101 0101 0101 0809 0909 0707
+Peninsula, 0101 0103 0101 0101 0101 0809 0909 0507
+Peninsula, 0101 0101 0102 0101 0101 0809 0909 0707
+Peninsula, 0101 0103 0102 0101 0101 0809 0909 0505
+Peninsula, 0101 0101 0102 0101 0101 0909 0909 0707
+Peninsula, 0101 0101 0102 0101 0101 0709 0909 0507
+Peninsula, 0101 0101 0102 0101 0101 0707 0909 0507
+Peninsula, 0101 0103 0102 0101 0101 0910 0909 0707
+Peninsula, 0101 0101 0101 0101 0102 0708 0909 0707
+Peninsula, 0101 0101 0102 0101 0101 0609 0909 0707
+Peninsula, 0101 0101 0102 0101 0101 0909 0909 0707
+Peninsula, 0101 0101 0102 0101 0101 0909 0909 0707
+Peninsula, 0101 0101 0102 0101 0101 0606 0909 0707
+Peninsula, 0101 0103 0102 0101 0101 0909 0709 0507
+Peninsula, 0101 0101 0101 0101 0101 0909 0909 0707
+Peninsula, 0101 0103 0101 0101 0101 0910 0509 0707
+Peninsula, 0101 0101 0102 0101 0101 0709 0909 0707
+Peninsula, 0101 0103 0101 0101 0101 0909 0909 0707
+Peninsula, 0101 0103 0101 0101 0101 0909 0909 0507
+Peninsula, 0101 0101 0101 0101 0102 0809 0909 0515
+Peninsula, 0101 0101 0102 0101 0101 0709 0709 0707
+Peninsula, 0101 0000 0101 0102 0000 0000 0509 0707
+Peninsula, 0101 0101 0105 0101 0101 0707 0909 0707
+Peninsula, 0101 0101 0101 0101 0101 0909 0909 0707
+Peninsula, 0101 0101 0102 0101 0101 0709 0909 0505
+Peninsula, 0101 0101 0102 0101 0101 0909 0909 0507
+Peninsula, 0101 0103 0105 0101 0101 0909 0709 0707
+Peninsula, 0101 0101 0102 0101 0102 0809 0909 0507
+Peninsula, 0101 0101 0102 0101 0101 0909 0909 0507
+Peninsula, 0101 0101 0101 0101 0202 0909 0909 0505
+Peninsula, 0101 0103 0101 0101 0102 0609 0909 0707
+Peninsula, 0101 0101 0101 0101 0202 0809 0909 0507
+Peninsula, 0101 0101 0101 0101 0202 0808 0909 0707
+Peninsula, 0101 0303 0102 0101 0202 0910 0909 0507
+Peninsula, 0101 0103 0101 0101 0202 0707 0909 0507
+Peninsula, 0101 0101 0101 0101 0202 0609 0909 0507
+Peninsula, 0101 0103 0101 0101 0202 0709 0909 0707
+Peninsula, 0101 0103 0101 0101 0102 0608 0909 0707
+Peninsula, 0101 0101 0101 0101 0202 0809 0909 0707
+Peninsula, 0101 0103 0101 0101 0101 0910 0909 0707
+Peninsula, 0101 0103 0102 0101 0101 0909 0909 0707
+Peninsula, 0101 0101 0102 0101 0102 0609 0909 0707
+Peninsula, 0101 0101 0102 0101 0101 0909 0909 0505
+Peninsula, 0101 0101 0102 0101 0101 0709 0909 0508
+Peninsula, 0101 0303 0101 0101 0202 0808 0710 0707
+Peninsula, 0101 0303 0101 0101 0202 0909 0909 0707
+Peninsula, 0101 0303 0101 0101 0202 0708 0909 0507
+Peninsula, 0102 0303 0101 0101 0102 0709 0909 0505
+Peninsula, 0101 0303 0101 0101 0101 0708 0909 0607
+Peninsula, 0101 0303 0101 0101 0202 0707 0709 0507
+Peninsula, 0102 0303 0103 0101 0101 0707 0709 0507
+Peninsula, 0101 0103 0101 0101 0202 0808 0909 0507
+Peninsula, 0101 0303 0103 0101 0102 0809 0909 0407
+Peninsula, 0101 0103 0101 0101 0202 0808 0909 0607
+Peninsula, 0101 0303 0101 0101 0000 0809 0909 0506
+Peninsula, 0101 0101 0102 0101 0202 0709 0709 0505
+Peninsula, 0101 0103 0101 0101 0202 0808 0909 0507
+Peninsula, 0101 0101 0101 0101 0202 0707 0909 0505
+Peninsula, 0101 0103 0101 0101 0202 0909 0909 0707
+Peninsula, 0101 0103 0303 0101 0202 0808 0909 0505
+Peninsula, 0102 0303 0101 0101 0102 0708 0909 0707
+Peninsula, 0102 0103 0101 0101 0202 0808 0709 0707
+Peninsula, 0101 0103 0101 0101 0102 0809 0909 0707
+Peninsula, 0101 0103 0101 0101 0202 0808 0909 0507
+Peninsula, 0101 0303 0103 0101 0202 0709 0910 0507
+Peninsula, 0101 0303 0101 0101 0202 0909 0910 0507
+Peninsula, 0101 0303 0303 0101 0202 0809 0709 0708
+Peninsula, 0102 0303 0101 0101 0000 0710 0909 0707
+Peninsula, 0101 0303 0305 0101 0202 0708 0709 0507
+Peninsula, 0101 0303 0101 0101 0202 0809 0707 0507
+Peninsula, 0102 0303 0101 0101 0202 0709 0709 0507
+Peninsula, 0101 0303 0101 0101 0202 0709 0909 0507
+Peninsula, 0101 0303 0101 0101 0202 0707 0709 0507
+Peninsula, 0101 0103 0101 0101 0202 0707 0909 0707
+Peninsula, 0101 0103 0103 0101 0202 0809 0909 0507
+Peninsula, 0101 0103 0205 0101 0202 0708 0909 0407
+Peninsula, 0101 0103 0101 0101 0202 0708 0709 0507
+Peninsula, 0101 0103 0101 0101 0202 0811 0709 0507
+Peninsula, 0102 0103 0101 0101 0202 0808 0909 0407
+Peninsula, 0102 0303 0101 0101 0202 0708 0909 0507
+Peninsula, 0101 0303 0101 0102 0202 0809 0909 0507
+Peninsula, 0101 0303 0101 0101 0202 0809 0909 0507
+Peninsula, 0101 0303 0303 0101 0202 0808 0709 0507
+Peninsula, 0101 0303 0101 0102 0202 0707 0505 0507
+Peninsula, 0101 0303 0101 0202 0202 0608 0505 0507
+Peninsula, 0102 0303 0101 0102 0202 0809 0505 0707
+Peninsula, 0101 0303 0101 0102 0102 0708 0505 0607
+Peninsula, 0102 0303 0101 0102 0202 0707 0505 0505
+Peninsula, 0202 0303 0101 0202 0202 0607 0505 0707
+Peninsula, 0101 0103 0101 0102 0202 0909 0505 0507
+Peninsula, 0101 0103 0101 0102 0202 0808 0505 0708
+Peninsula, 0101 0303 0101 0202 0202 0707 0505 0707
+Peninsula, 0101 0303 0101 0202 0101 0808 0505 0607
+Peninsula, 0101 0303 0101 0202 0202 0709 0507 0506
+Peninsula, 0102 0303 0101 0202 0202 0909 0505 0505
+Peninsula, 0101 0303 0101 0101 0202 0909 0505 0507
+Peninsula, 0101 0103 0101 0202 0202 0209 0505 0408
+Peninsula, 0102 0303 0101 0202 0202 0707 0505 0505
+Peninsula, 0101 0104 0101 0101 0202 0808 0505 0506
+Peninsula, 0202 0303 0101 0202 0102 0708 0505 0708
+Peninsula, 0101 0101 0101 0101 0202 0607 0505 0505
+Peninsula, 0101 0303 0101 0102 0101 0708 0505 0707
+Peninsula, 0101 0101 0101 0101 0000 0707 0505 0606
+Peninsula, 0101 0103 0101 0101 0202 0713 0505 0505
+Peninsula, 0101 0303 0101 0102 0202 0808 0505 0707
+Peninsula, 0102 0101 0101 0202 0000 0708 0505 0606
+Peninsula, 0101 0303 0103 0202 0202 0708 0505 0507
+Peninsula, 0101 0103 0101 0101 0202 0808 0505 0608
+Peninsula, 0101 0103 0101 0102 0000 0707 0507 0506
+Peninsula, 0101 0303 0101 0202 0102 0808 0505 0507
+Peninsula, 0101 0101 0101 0202 0202 0707 0505 0507
+Peninsula, 0101 0103 0101 0101 0202 0507 0505 0506
+Peninsula, 0101 0103 0101 0101 0102 0810 0505 0505
+Peninsula, 0102 0103 0101 0202 0202 0707 0505 0507
+Peninsula, 0101 0103 0101 0202 0202 0708 0505 0508
+Peninsula, 0101 0303 0101 0202 0102 0808 0505 0406
+Peninsula, 0102 0303 0101 0202 0102 0808 0505 0507
+Peninsula, 0101 0103 0101 0202 0202 0808 0505 0707
+Peninsula, 0102 0103 0101 0101 0202 0607 0505 0505
+Peninsula, 0101 0303 0101 0101 0102 0107 0505 0708
+Peninsula, 0102 0103 0101 0101 0202 0707 0505 0506
+Peninsula, 0101 0303 0101 0102 0202 0808 0505 0505
+Peninsula, 0101 0303 0101 0102 0202 0709 0505 0507
+Peninsula, 0101 0103 0101 0102 0202 0809 0505 0406
+Peninsula, 0101 0303 0101 0102 0202 0708 0505 0607
+Peninsula, 0101 0303 0101 0102 0000 0708 0505 0506
+Peninsula, 0101 0103 0101 0202 0202 0808 0505 0508
+Peninsula, 0101 0103 0101 0102 0202 0808 0505 0506
+Peninsula, 0101 0103 0101 0102 0202 0709 0505 0608
+Peninsula, 0102 0103 0101 0202 0202 0708 0505 0707
+Peninsula, 0101 0304 0101 0202 0202 0810 0505 0508
+Peninsula, 0101 0101 0101 0102 0202 0708 0505 0507
+Peninsula, 0102 0303 0101 0101 0202 0707 0505 0708
+Peninsula, 0102 0303 0101 0101 0102 0609 0505 0506
+Peninsula, 0101 0303 0101 0102 0202 0709 0505 0507
+Peninsula, 0102 0303 0101 0202 0202 0708 0505 0606
+Peninsula, 0101 0103 0101 0102 0202 0808 0505 0607
+Peninsula, 0102 0303 0101 0102 0202 0708 0505 0507
+Peninsula, 0101 0303 0101 0102 0202 0808 0505 0505
+Peninsula, 0101 0101 0101 0202 0102 0808 0505 0505
+Peninsula, 0102 0303 0101 0101 0000 0809 0505 0707
+Peninsula, 0102 0101 0101 0202 0000 0808 0505 0505
+Peninsula, 0101 0303 0101 0102 0202 0808 0505 0606
+Peninsula, 0102 0103 0101 0101 0102 0710 0505 0707
+Peninsula, 0101 0101 0104 0202 0202 0708 0505 0507
+Peninsula, 0101 0104 0104 0202 0101 0708 0505 0607
+Peninsula, 0102 0101 0101 0101 0202 0708 0505 0507
+Peninsula, 0102 0101 0101 0202 0102 0707 0505 0506
+Peninsula, 0202 0104 0101 0202 0202 0808 0505 0508
+Peninsula, 0102 0304 0101 0102 0202 0710 0505 0505
+Peninsula, 0101 0103 0101 0202 0102 0808 0505 0506
+Peninsula, 0101 0303 0101 0202 0202 0709 0505 0506
+Peninsula, 0101 0104 0101 0202 0202 0707 0505 0505
+Peninsula, 0102 0303 0101 0102 0102 0707 0505 0505
+Peninsula, 0102 0303 0101 0202 0202 0708 0505 0507
+Peninsula, 0101 0304 0101 0202 0102 0708 0505 0506
+Peninsula, 0101 0103 0101 0102 0202 0709 0505 0505
+Peninsula, 0102 0304 0101 0101 0102 0808 0505 0507
+Peninsula, 0101 0303 0101 0102 0102 0809 0505 0507
+Peninsula, 0102 0103 0101 0102 0102 0707 0505 0707
+Peninsula, 0102 0103 0101 0102 0202 0708 0505 0508
+Peninsula, 0202 0101 0101 0202 0202 0809 0505 0507
+Peninsula, 0202 0303 0101 0202 0202 0707 0505 0507
+Peninsula, 0202 0103 0101 0202 0102 0909 0505 0507
+Peninsula, 0102 0103 0101 0202 0102 0808 0505 0505
+Peninsula, 0102 0303 0101 0202 0202 0707 0505 0507
+Peninsula, 0102 0303 0101 0202 0102 0808 0505 0507
+Peninsula, 0202 0101 0101 0202 0102 0809 0505 0505
+Peninsula, 0202 0303 0101 0202 0202 0707 0505 0508
+Peninsula, 0102 0303 0101 0202 0202 0707 0505 0505
+Peninsula, 0202 0303 0101 0202 0202 0708 0505 0507
+Peninsula, 0202 0103 0101 0101 0202 0709 0505 0505
+Peninsula, 0101 0303 0101 0202 0202 0509 0505 0508
+Peninsula, 0101 0103 0101 0202 0202 0708 0505 0606
+Peninsula, 0101 0103 0101 0202 0101 0808 0505 0505
+Peninsula, 0102 0303 0101 0202 0202 0708 0505 0508
+Peninsula, 0102 0303 0101 0202 0202 0708 0505 0507
+Peninsula, 0101 0303 0101 0202 0202 0505 0505 0507
+Peninsula, 0101 0303 0101 0202 0102 0707 0505 0505
+Peninsula, 0102 0303 0101 0202 0102 0707 0505 0707
+Peninsula, 0101 0103 0101 0202 0102 0707 0505 0707
+Peninsula, 0101 0103 0101 0202 0101 0606 0505 0707
+Peninsula, 0101 0103 0101 0202 0102 0608 0505 0707
+Peninsula, 0202 0103 0101 0202 0101 0707 0505 0707
+Peninsula, 0101 0303 0101 0202 0101 0708 0505 0507
+Peninsula, 0101 0103 0101 0202 0101 0709 0505 0607
+Peninsula, 0102 0303 0104 0202 0101 0707 0505 0606
+Peninsula, 0102 0303 0104 0202 0102 0708 0505 0707
+Peninsula, 0102 0303 0101 0202 0102 0709 0505 0607
+Peninsula, 0101 0303 0101 0202 0101 0808 0505 0506
+Peninsula, 0101 0304 0101 0202 0101 0808 0505 0507
+Peninsula, 0101 0304 0101 0202 0102 0709 0505 0707
+Peninsula, 0102 0103 0101 0202 0202 0808 0505 0505
+Peninsula, 0102 0103 0101 0202 0102 0707 0505 0606
+Peninsula, 0202 0305 0101 0202 0102 0808 0505 0505
+Peninsula, 0202 0305 0101 0202 0202 0607 0505 0507
+Peninsula, 0202 0304 0101 0202 0102 0808 0505 0506
+Peninsula, 0102 0303 0101 0202 0102 0708 0505 0505
+Peninsula, 0202 0303 0101 0202 0102 0707 0505 0505
+Peninsula, 0102 0303 0101 0202 0102 0808 0505 0507
+Peninsula, 0202 0303 0101 0202 0102 0808 0505 0505
+Peninsula, 0202 0101 0101 0101 0102 0808 0505 0507
+Peninsula, 0102 0101 0101 0202 0202 0708 0505 0505
+Peninsula, 0102 0104 0101 0102 0102 0808 0505 0505
+Peninsula, 0102 0304 0101 0101 0202 0707 0505 0606
+Peninsula, 0101 0303 0101 0202 0202 0707 0505 0506
+Peninsula, 0101 0303 0101 0101 0202 0707 0505 0606
+Peninsula, 0102 0303 0101 0102 0202 0708 0505 0506
+Peninsula, 0102 0303 0101 0101 0202 0707 0505 0606
+Peninsula, 0202 0303 0101 0202 0202 0708 0505 0506
+Peninsula, 0101 0303 0101 0101 0202 0708 0505 0607
+Peninsula, 0101 0303 0101 0101 0202 0707 0505 0606
+Peninsula, 0102 0303 0101 0101 0202 0909 0505 0506
+Peninsula, 0102 0104 0101 0202 0202 0808 0505 0506
+Peninsula, 0202 0101 0101 0102 0101 0808 0505 0505
+Peninsula, 0202 0104 0101 0101 0102 0708 0505 0505
+Peninsula, 0202 0101 0101 0202 0101 0708 0505 0505
+Peninsula, 0202 0404 0101 0102 0102 0808 0505 0506
+Peninsula, 0102 0103 0101 0202 0102 0808 0505 0505
+Peninsula, 0101 0103 0101 0102 0202 0808 0505 0505
+Peninsula, 0102 0404 0101 0202 0102 0808 0505 0505
+Peninsula, 0202 0303 0101 0101 0202 0606 0808 1010
+Peninsula, 0202 0303 0101 0101 0202 0606 0808 1011
+Peninsula, 0202 0303 0101 0101 0202 0606 0808 1111
+Peninsula, 0202 0303 0101 0101 0202 0606 0808 1111
+Peninsula, 0202 0303 0101 0101 0202 0606 0808 1111
+Peninsula, 0202 0303 0101 0101 0202 0606 0808 1111
+Peninsula, 0202 0303 0101 0101 0202 0606 0808 1011
+Peninsula, 0202 0303 0101 0101 0202 0606 0808 1111
+Peninsula, 0202 0303 0101 0101 0202 0606 0505 1111
+Peninsula, 0202 0303 0101 0101 0202 0606 0808 1011
+Peninsula, 0202 0103 0101 0202 0101 0708 0505 0707
+Peninsula, 0202 0303 0101 0202 0202 0707 0505 0505
+Peninsula, 0202 0103 0101 0202 0202 0709 0505 0505
+Peninsula, 0102 0103 0101 0202 0202 0707 0505 0505
+Peninsula, 0202 0303 0101 0202 0202 0707 0505 0505
+Peninsula, 0102 0103 0101 0202 0202 0707 0505 0507
+Peninsula, 0202 0103 0101 0202 0202 0808 0505 0505
+Peninsula, 0202 0103 0101 0202 0202 0808 0505 0505
+Peninsula, 0202 0103 0101 0202 0202 0708 0505 0508
+Peninsula, 0102 0103 0101 0202 0202 0708 0505 0506
+Peninsula, 0202 0103 0101 0101 0202 0606 0505 1111
+Peninsula, 0202 0303 0101 0101 0202 0606 0507 1111
+Peninsula, 0202 0303 0101 0101 0202 0607 0505 1111
+Peninsula, 0202 0303 0101 0101 0202 0607 0505 1011
+Peninsula, 0202 0303 0101 0101 0202 0606 0505 1111
+Peninsula, 0202 0303 0101 0101 0202 0606 0505 1010
+Peninsula, 0102 0000 0000 0102 0000 0000 0202 0000
+Peninsula, 0202 0303 0101 0101 0202 0506 0505 1111
+Peninsula, 0102 0000 0000 0102 0000 0000 0505 0000
+Peninsula, 0202 0303 0101 0101 0202 0606 0505 1011
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>st <span class="ot">&lt;-</span> <span class="fu">to_structure</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(st[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1 3 01 -9 02 01 -9 -9 09 07
+1 3 01 -9 04 02 -9 -9 09 07
+2 3 01 01 01 01 01 08 09 07
+2 3 01 03 01 01 01 09 09 07
+3 3 01 01 01 01 01 08 09 05
+3 3 01 03 01 01 01 09 09 07
+4 3 01 01 01 01 01 08 09 07
+4 3 01 01 02 01 01 09 09 07
+5 3 01 01 01 01 01 08 09 05
+5 3 01 03 02 01 01 09 09 05
+6 3 01 01 01 01 01 09 09 07
+6 3 01 01 02 01 01 09 09 07
+7 3 01 01 01 01 01 07 09 05
+7 3 01 01 02 01 01 09 09 07
+8 3 01 01 01 01 01 07 09 05
+8 3 01 01 02 01 01 07 09 07
+9 3 01 01 01 01 01 09 09 07
+9 3 01 03 02 01 01 10 09 07
+10 3 01 01 01 01 01 07 09 07
+10 3 01 01 01 01 02 08 09 07
+11 3 01 01 01 01 01 06 09 07
+11 3 01 01 02 01 01 09 09 07
+12 3 01 01 01 01 01 09 09 07
+12 3 01 01 02 01 01 09 09 07
+13 3 01 01 01 01 01 09 09 07
+13 3 01 01 02 01 01 09 09 07
+14 3 01 01 01 01 01 06 09 07
+14 3 01 01 02 01 01 06 09 07
+15 3 01 01 01 01 01 09 07 05
+15 3 01 03 02 01 01 09 09 07
+16 3 01 01 01 01 01 09 09 07
+16 3 01 01 01 01 01 09 09 07
+17 3 01 01 01 01 01 09 05 07
+17 3 01 03 01 01 01 10 09 07
+18 3 01 01 01 01 01 07 09 07
+18 3 01 01 02 01 01 09 09 07
+19 3 01 01 01 01 01 09 09 07
+19 3 01 03 01 01 01 09 09 07
+20 3 01 01 01 01 01 09 09 05
+20 3 01 03 01 01 01 09 09 07
+21 3 01 01 01 01 01 08 09 05
+21 3 01 01 01 01 02 09 09 15
+22 3 01 01 01 01 01 07 07 07
+22 3 01 01 02 01 01 09 09 07
+23 3 01 -9 01 01 -9 -9 05 07
+23 3 01 -9 01 02 -9 -9 09 07
+24 3 01 01 01 01 01 07 09 07
+24 3 01 01 05 01 01 07 09 07
+25 3 01 01 01 01 01 09 09 07
+25 3 01 01 01 01 01 09 09 07
+26 3 01 01 01 01 01 07 09 05
+26 3 01 01 02 01 01 09 09 05
+27 3 01 01 01 01 01 09 09 05
+27 3 01 01 02 01 01 09 09 07
+28 3 01 01 01 01 01 09 07 07
+28 3 01 03 05 01 01 09 09 07
+29 3 01 01 01 01 01 08 09 05
+29 3 01 01 02 01 02 09 09 07
+30 3 01 01 01 01 01 09 09 05
+30 3 01 01 02 01 01 09 09 07
+31 3 01 01 01 01 02 09 09 05
+31 3 01 01 01 01 02 09 09 05
+32 3 01 01 01 01 01 06 09 07
+32 3 01 03 01 01 02 09 09 07
+33 3 01 01 01 01 02 08 09 05
+33 3 01 01 01 01 02 09 09 07
+34 3 01 01 01 01 02 08 09 07
+34 3 01 01 01 01 02 08 09 07
+35 3 01 03 01 01 02 09 09 05
+35 3 01 03 02 01 02 10 09 07
+36 3 01 01 01 01 02 07 09 05
+36 3 01 03 01 01 02 07 09 07
+37 3 01 01 01 01 02 06 09 05
+37 3 01 01 01 01 02 09 09 07
+38 3 01 01 01 01 02 07 09 07
+38 3 01 03 01 01 02 09 09 07
+39 3 01 01 01 01 01 06 09 07
+39 3 01 03 01 01 02 08 09 07
+40 3 01 01 01 01 02 08 09 07
+40 3 01 01 01 01 02 09 09 07
+41 3 01 01 01 01 01 09 09 07
+41 3 01 03 01 01 01 10 09 07
+42 3 01 01 01 01 01 09 09 07
+42 3 01 03 02 01 01 09 09 07
+43 3 01 01 01 01 01 06 09 07
+43 3 01 01 02 01 02 09 09 07
+44 3 01 01 01 01 01 09 09 05
+44 3 01 01 02 01 01 09 09 05
+45 3 01 01 01 01 01 07 09 05
+45 3 01 01 02 01 01 09 09 08
+46 3 01 03 01 01 02 08 07 07
+46 3 01 03 01 01 02 08 10 07
+47 3 01 03 01 01 02 09 09 07
+47 3 01 03 01 01 02 09 09 07
+48 3 01 03 01 01 02 07 09 05
+48 3 01 03 01 01 02 08 09 07
+49 3 01 03 01 01 01 07 09 05
+49 3 02 03 01 01 02 09 09 05
+50 3 01 03 01 01 01 07 09 06
+50 3 01 03 01 01 01 08 09 07
+51 3 01 03 01 01 02 07 07 05
+51 3 01 03 01 01 02 07 09 07
+52 3 01 03 01 01 01 07 07 05
+52 3 02 03 03 01 01 07 09 07
+53 3 01 01 01 01 02 08 09 05
+53 3 01 03 01 01 02 08 09 07
+54 3 01 03 01 01 01 08 09 04
+54 3 01 03 03 01 02 09 09 07
+55 3 01 01 01 01 02 08 09 06
+55 3 01 03 01 01 02 08 09 07
+56 3 01 03 01 01 -9 08 09 05
+56 3 01 03 01 01 -9 09 09 06
+57 3 01 01 01 01 02 07 07 05
+57 3 01 01 02 01 02 09 09 05
+58 3 01 01 01 01 02 08 09 05
+58 3 01 03 01 01 02 08 09 07
+59 3 01 01 01 01 02 07 09 05
+59 3 01 01 01 01 02 07 09 05
+60 3 01 01 01 01 02 09 09 07
+60 3 01 03 01 01 02 09 09 07
+61 3 01 01 03 01 02 08 09 05
+61 3 01 03 03 01 02 08 09 05
+62 3 01 03 01 01 01 07 09 07
+62 3 02 03 01 01 02 08 09 07
+63 3 01 01 01 01 02 08 07 07
+63 3 02 03 01 01 02 08 09 07
+64 3 01 01 01 01 01 08 09 07
+64 3 01 03 01 01 02 09 09 07
+65 3 01 01 01 01 02 08 09 05
+65 3 01 03 01 01 02 08 09 07
+66 3 01 03 01 01 02 07 09 05
+66 3 01 03 03 01 02 09 10 07
+67 3 01 03 01 01 02 09 09 05
+67 3 01 03 01 01 02 09 10 07
+68 3 01 03 03 01 02 08 07 07
+68 3 01 03 03 01 02 09 09 08
+69 3 01 03 01 01 -9 07 09 07
+69 3 02 03 01 01 -9 10 09 07
+70 3 01 03 03 01 02 07 07 05
+70 3 01 03 05 01 02 08 09 07
+71 3 01 03 01 01 02 08 07 05
+71 3 01 03 01 01 02 09 07 07
+72 3 01 03 01 01 02 07 07 05
+72 3 02 03 01 01 02 09 09 07
+73 3 01 03 01 01 02 07 09 05
+73 3 01 03 01 01 02 09 09 07
+74 3 01 03 01 01 02 07 07 05
+74 3 01 03 01 01 02 07 09 07
+75 3 01 01 01 01 02 07 09 07
+75 3 01 03 01 01 02 07 09 07
+76 3 01 01 01 01 02 08 09 05
+76 3 01 03 03 01 02 09 09 07
+77 3 01 01 02 01 02 07 09 04
+77 3 01 03 05 01 02 08 09 07
+78 3 01 01 01 01 02 07 07 05
+78 3 01 03 01 01 02 08 09 07
+79 3 01 01 01 01 02 08 07 05
+79 3 01 03 01 01 02 11 09 07
+80 3 01 01 01 01 02 08 09 04
+80 3 02 03 01 01 02 08 09 07
+81 3 01 03 01 01 02 07 09 05
+81 3 02 03 01 01 02 08 09 07
+82 3 01 03 01 01 02 08 09 05
+82 3 01 03 01 02 02 09 09 07
+83 3 01 03 01 01 02 08 09 05
+83 3 01 03 01 01 02 09 09 07
+84 3 01 03 03 01 02 08 07 05
+84 3 01 03 03 01 02 08 09 07
+85 3 01 03 01 01 02 07 05 05
+85 3 01 03 01 02 02 07 05 07
+86 3 01 03 01 02 02 06 05 05
+86 3 01 03 01 02 02 08 05 07
+87 3 01 03 01 01 02 08 05 07
+87 3 02 03 01 02 02 09 05 07
+88 3 01 03 01 01 01 07 05 06
+88 3 01 03 01 02 02 08 05 07
+89 3 01 03 01 01 02 07 05 05
+89 3 02 03 01 02 02 07 05 05
+90 3 02 03 01 02 02 06 05 07
+90 3 02 03 01 02 02 07 05 07
+91 3 01 01 01 01 02 09 05 05
+91 3 01 03 01 02 02 09 05 07
+92 3 01 01 01 01 02 08 05 07
+92 3 01 03 01 02 02 08 05 08
+93 3 01 03 01 02 02 07 05 07
+93 3 01 03 01 02 02 07 05 07
+94 3 01 03 01 02 01 08 05 06
+94 3 01 03 01 02 01 08 05 07
+95 3 01 03 01 02 02 07 05 05
+95 3 01 03 01 02 02 09 07 06
+96 3 01 03 01 02 02 09 05 05
+96 3 02 03 01 02 02 09 05 05
+97 3 01 03 01 01 02 09 05 05
+97 3 01 03 01 01 02 09 05 07
+98 3 01 01 01 02 02 02 05 04
+98 3 01 03 01 02 02 09 05 08
+99 3 01 03 01 02 02 07 05 05
+99 3 02 03 01 02 02 07 05 05
+100 3 01 01 01 01 02 08 05 05
+100 3 01 04 01 01 02 08 05 06
+101 3 02 03 01 02 01 07 05 07
+101 3 02 03 01 02 02 08 05 08
+102 3 01 01 01 01 02 06 05 05
+102 3 01 01 01 01 02 07 05 05
+103 3 01 03 01 01 01 07 05 07
+103 3 01 03 01 02 01 08 05 07
+104 3 01 01 01 01 -9 07 05 06
+104 3 01 01 01 01 -9 07 05 06
+105 3 01 01 01 01 02 07 05 05
+105 3 01 03 01 01 02 13 05 05
+106 3 01 03 01 01 02 08 05 07
+106 3 01 03 01 02 02 08 05 07
+107 3 01 01 01 02 -9 07 05 06
+107 3 02 01 01 02 -9 08 05 06
+108 3 01 03 01 02 02 07 05 05
+108 3 01 03 03 02 02 08 05 07
+109 3 01 01 01 01 02 08 05 06
+109 3 01 03 01 01 02 08 05 08
+110 3 01 01 01 01 -9 07 05 05
+110 3 01 03 01 02 -9 07 07 06
+111 3 01 03 01 02 01 08 05 05
+111 3 01 03 01 02 02 08 05 07
+112 3 01 01 01 02 02 07 05 05
+112 3 01 01 01 02 02 07 05 07
+113 3 01 01 01 01 02 05 05 05
+113 3 01 03 01 01 02 07 05 06
+114 3 01 01 01 01 01 08 05 05
+114 3 01 03 01 01 02 10 05 05
+115 3 01 01 01 02 02 07 05 05
+115 3 02 03 01 02 02 07 05 07
+116 3 01 01 01 02 02 07 05 05
+116 3 01 03 01 02 02 08 05 08
+117 3 01 03 01 02 01 08 05 04
+117 3 01 03 01 02 02 08 05 06
+118 3 01 03 01 02 01 08 05 05
+118 3 02 03 01 02 02 08 05 07
+119 3 01 01 01 02 02 08 05 07
+119 3 01 03 01 02 02 08 05 07
+120 3 01 01 01 01 02 06 05 05
+120 3 02 03 01 01 02 07 05 05
+121 3 01 03 01 01 01 01 05 07
+121 3 01 03 01 01 02 07 05 08
+122 3 01 01 01 01 02 07 05 05
+122 3 02 03 01 01 02 07 05 06
+123 3 01 03 01 01 02 08 05 05
+123 3 01 03 01 02 02 08 05 05
+124 3 01 03 01 01 02 07 05 05
+124 3 01 03 01 02 02 09 05 07
+125 3 01 01 01 01 02 08 05 04
+125 3 01 03 01 02 02 09 05 06
+126 3 01 03 01 01 02 07 05 06
+126 3 01 03 01 02 02 08 05 07
+127 3 01 03 01 01 -9 07 05 05
+127 3 01 03 01 02 -9 08 05 06
+128 3 01 01 01 02 02 08 05 05
+128 3 01 03 01 02 02 08 05 08
+129 3 01 01 01 01 02 08 05 05
+129 3 01 03 01 02 02 08 05 06
+130 3 01 01 01 01 02 07 05 06
+130 3 01 03 01 02 02 09 05 08
+131 3 01 01 01 02 02 07 05 07
+131 3 02 03 01 02 02 08 05 07
+132 3 01 03 01 02 02 08 05 05
+132 3 01 04 01 02 02 10 05 08
+133 3 01 01 01 01 02 07 05 05
+133 3 01 01 01 02 02 08 05 07
+134 3 01 03 01 01 02 07 05 07
+134 3 02 03 01 01 02 07 05 08
+135 3 01 03 01 01 01 06 05 05
+135 3 02 03 01 01 02 09 05 06
+136 3 01 03 01 01 02 07 05 05
+136 3 01 03 01 02 02 09 05 07
+137 3 01 03 01 02 02 07 05 06
+137 3 02 03 01 02 02 08 05 06
+138 3 01 01 01 01 02 08 05 06
+138 3 01 03 01 02 02 08 05 07
+139 3 01 03 01 01 02 07 05 05
+139 3 02 03 01 02 02 08 05 07
+140 3 01 03 01 01 02 08 05 05
+140 3 01 03 01 02 02 08 05 05
+141 3 01 01 01 02 01 08 05 05
+141 3 01 01 01 02 02 08 05 05
+142 3 01 03 01 01 -9 08 05 07
+142 3 02 03 01 01 -9 09 05 07
+143 3 01 01 01 02 -9 08 05 05
+143 3 02 01 01 02 -9 08 05 05
+144 3 01 03 01 01 02 08 05 06
+144 3 01 03 01 02 02 08 05 06
+145 3 01 01 01 01 01 07 05 07
+145 3 02 03 01 01 02 10 05 07
+146 3 01 01 01 02 02 07 05 05
+146 3 01 01 04 02 02 08 05 07
+147 3 01 01 01 02 01 07 05 06
+147 3 01 04 04 02 01 08 05 07
+148 3 01 01 01 01 02 07 05 05
+148 3 02 01 01 01 02 08 05 07
+149 3 01 01 01 02 01 07 05 05
+149 3 02 01 01 02 02 07 05 06
+150 3 02 01 01 02 02 08 05 05
+150 3 02 04 01 02 02 08 05 08
+151 3 01 03 01 01 02 07 05 05
+151 3 02 04 01 02 02 10 05 05
+152 3 01 01 01 02 01 08 05 05
+152 3 01 03 01 02 02 08 05 06
+153 3 01 03 01 02 02 07 05 05
+153 3 01 03 01 02 02 09 05 06
+154 3 01 01 01 02 02 07 05 05
+154 3 01 04 01 02 02 07 05 05
+155 3 01 03 01 01 01 07 05 05
+155 3 02 03 01 02 02 07 05 05
+156 3 01 03 01 02 02 07 05 05
+156 3 02 03 01 02 02 08 05 07
+157 3 01 03 01 02 01 07 05 05
+157 3 01 04 01 02 02 08 05 06
+158 3 01 01 01 01 02 07 05 05
+158 3 01 03 01 02 02 09 05 05
+159 3 01 03 01 01 01 08 05 05
+159 3 02 04 01 01 02 08 05 07
+160 3 01 03 01 01 01 08 05 05
+160 3 01 03 01 02 02 09 05 07
+161 3 01 01 01 01 01 07 05 07
+161 3 02 03 01 02 02 07 05 07
+162 3 01 01 01 01 02 07 05 05
+162 3 02 03 01 02 02 08 05 08
+163 3 02 01 01 02 02 08 05 05
+163 3 02 01 01 02 02 09 05 07
+164 3 02 03 01 02 02 07 05 05
+164 3 02 03 01 02 02 07 05 07
+165 3 02 01 01 02 01 09 05 05
+165 3 02 03 01 02 02 09 05 07
+166 3 01 01 01 02 01 08 05 05
+166 3 02 03 01 02 02 08 05 05
+167 3 01 03 01 02 02 07 05 05
+167 3 02 03 01 02 02 07 05 07
+168 3 01 03 01 02 01 08 05 05
+168 3 02 03 01 02 02 08 05 07
+169 3 02 01 01 02 01 08 05 05
+169 3 02 01 01 02 02 09 05 05
+170 3 02 03 01 02 02 07 05 05
+170 3 02 03 01 02 02 07 05 08
+171 3 01 03 01 02 02 07 05 05
+171 3 02 03 01 02 02 07 05 05
+172 3 02 03 01 02 02 07 05 05
+172 3 02 03 01 02 02 08 05 07
+173 3 02 01 01 01 02 07 05 05
+173 3 02 03 01 01 02 09 05 05
+174 1 01 02 01 01 02 03 03 18
+174 1 01 02 02 01 02 04 03 18
+175 3 01 03 01 02 02 05 05 05
+175 3 01 03 01 02 02 09 05 08
+176 3 01 01 01 02 02 07 05 06
+176 3 01 03 01 02 02 08 05 06
+177 3 01 01 01 02 01 08 05 05
+177 3 01 03 01 02 01 08 05 05
+178 1 02 02 02 01 02 04 03 18
+178 1 02 02 02 01 02 04 03 18
+179 3 01 03 01 02 02 07 05 05
+179 3 02 03 01 02 02 08 05 08
+180 3 01 03 01 02 02 07 05 05
+180 3 02 03 01 02 02 08 05 07
+181 3 01 03 01 02 02 05 05 05
+181 3 01 03 01 02 02 05 05 07
+182 3 01 03 01 02 01 07 05 05
+182 3 01 03 01 02 02 07 05 05
+183 3 01 03 01 02 01 07 05 07
+183 3 02 03 01 02 02 07 05 07
+184 3 01 01 01 02 01 07 05 07
+184 3 01 03 01 02 02 07 05 07
+185 3 01 01 01 02 01 06 05 07
+185 3 01 03 01 02 01 06 05 07
+186 3 01 01 01 02 01 06 05 07
+186 3 01 03 01 02 02 08 05 07
+187 3 02 01 01 02 01 07 05 07
+187 3 02 03 01 02 01 07 05 07
+188 3 01 03 01 02 01 07 05 05
+188 3 01 03 01 02 01 08 05 07
+189 3 01 01 01 02 01 07 05 06
+189 3 01 03 01 02 01 09 05 07
+190 3 01 03 01 02 01 07 05 06
+190 3 02 03 04 02 01 07 05 06
+191 3 01 03 01 02 01 07 05 07
+191 3 02 03 04 02 02 08 05 07
+192 3 01 03 01 02 01 07 05 06
+192 3 02 03 01 02 02 09 05 07
+193 3 01 03 01 02 01 08 05 05
+193 3 01 03 01 02 01 08 05 06
+194 3 01 03 01 02 01 08 05 05
+194 3 01 04 01 02 01 08 05 07
+195 3 01 03 01 02 01 07 05 07
+195 3 01 04 01 02 02 09 05 07
+196 3 01 01 01 02 02 08 05 05
+196 3 02 03 01 02 02 08 05 05
+197 3 01 01 01 02 01 07 05 06
+197 3 02 03 01 02 02 07 05 06
+198 3 02 03 01 02 01 08 05 05
+198 3 02 05 01 02 02 08 05 05
+199 3 02 03 01 02 02 06 05 05
+199 3 02 05 01 02 02 07 05 07
+200 3 02 03 01 02 01 08 05 05
+200 3 02 04 01 02 02 08 05 06
+201 3 01 03 01 02 01 07 05 05
+201 3 02 03 01 02 02 08 05 05
+202 3 02 03 01 02 01 07 05 05
+202 3 02 03 01 02 02 07 05 05
+203 3 01 03 01 02 01 08 05 05
+203 3 02 03 01 02 02 08 05 07
+204 3 02 03 01 02 01 08 05 05
+204 3 02 03 01 02 02 08 05 05
+205 1 01 02 02 01 02 04 03 18
+205 1 02 02 02 01 02 04 03 18
+206 1 02 02 01 01 02 03 03 19
+206 1 02 02 01 01 02 03 03 19
+207 1 02 02 01 01 02 04 03 18
+207 1 02 02 01 01 02 04 03 18
+208 3 02 01 01 01 01 08 05 05
+208 3 02 01 01 01 02 08 05 07
+209 1 01 01 01 01 -9 -9 09 18
+209 1 02 01 01 02 -9 -9 09 18
+210 1 02 02 02 01 02 04 03 18
+210 1 02 02 02 01 02 04 03 19
+211 1 02 02 01 01 02 03 03 18
+211 1 02 02 02 01 02 04 03 18
+212 3 01 01 01 02 02 07 05 05
+212 3 02 01 01 02 02 08 05 05
+213 1 02 02 02 01 02 03 03 18
+213 1 02 02 02 01 02 03 03 18
+214 1 02 02 02 01 02 03 03 18
+214 1 02 02 02 01 02 04 03 18
+215 3 01 01 01 01 01 08 05 05
+215 3 02 04 01 02 02 08 05 05
+216 3 01 03 01 01 02 07 05 06
+216 3 02 04 01 01 02 07 05 06
+217 3 01 03 01 02 02 07 05 05
+217 3 01 03 01 02 02 07 05 06
+218 3 01 03 01 01 02 07 05 06
+218 3 01 03 01 01 02 07 05 06
+219 1 02 02 01 01 02 04 03 18
+219 1 02 02 01 01 02 04 03 18
+220 3 01 03 01 01 02 07 05 05
+220 3 02 03 01 02 02 08 05 06
+221 3 01 03 01 01 02 07 05 06
+221 3 02 03 01 01 02 07 05 06
+222 3 02 03 01 02 02 07 05 05
+222 3 02 03 01 02 02 08 05 06
+223 3 01 03 01 01 02 07 05 06
+223 3 01 03 01 01 02 08 05 07
+224 3 01 03 01 01 02 07 05 06
+224 3 01 03 01 01 02 07 05 06
+225 3 01 03 01 01 02 09 05 05
+225 3 02 03 01 01 02 09 05 06
+226 1 01 01 01 01 02 03 03 18
+226 1 01 02 02 01 02 04 03 18
+227 3 01 01 01 02 02 08 05 05
+227 3 02 04 01 02 02 08 05 06
+228 1 02 02 02 01 02 03 03 18
+228 1 02 02 02 01 02 05 03 18
+229 3 02 01 01 01 01 08 05 05
+229 3 02 01 01 02 01 08 05 05
+230 3 02 01 01 01 01 07 05 05
+230 3 02 04 01 01 02 08 05 05
+231 3 02 01 01 02 01 07 05 05
+231 3 02 01 01 02 01 08 05 05
+232 3 02 04 01 01 01 08 05 05
+232 3 02 04 01 02 02 08 05 06
+233 3 01 01 01 02 01 08 05 05
+233 3 02 03 01 02 02 08 05 05
+234 3 01 01 01 01 02 08 05 05
+234 3 01 03 01 02 02 08 05 05
+235 3 01 04 01 02 01 08 05 05
+235 3 02 04 01 02 02 08 05 05
+236 1 02 02 01 01 02 05 03 18
+236 1 02 02 01 01 02 05 03 19
+237 1 01 -9 01 02 -9 -9 03 18
+237 1 02 -9 01 02 -9 -9 03 18
+238 1 02 02 01 01 -9 -9 02 18
+238 1 02 02 02 02 -9 -9 02 18
+239 1 02 02 01 01 02 04 03 18
+239 1 02 02 02 01 02 04 03 18
+240 1 02 02 01 01 02 05 03 17
+240 1 02 02 02 01 02 05 03 18
+241 1 02 02 01 01 02 05 03 17
+241 1 02 02 02 01 02 05 03 17
+242 1 01 02 01 01 -9 -9 03 17
+242 1 02 02 01 02 -9 -9 03 18
+243 1 02 02 01 01 02 04 03 17
+243 1 02 02 02 01 02 04 03 17
+244 1 02 02 01 01 02 05 03 18
+244 1 02 02 02 01 02 05 03 18
+245 3 02 03 01 01 02 06 08 10
+245 3 02 03 01 01 02 06 08 10
+246 1 02 02 01 01 02 04 03 18
+246 1 02 02 02 01 02 04 03 18
+247 1 02 02 02 01 02 03 03 18
+247 1 02 02 02 01 02 05 03 18
+248 3 02 03 01 01 02 06 08 10
+248 3 02 03 01 01 02 06 08 11
+249 3 02 03 01 01 02 06 08 11
+249 3 02 03 01 01 02 06 08 11
+250 3 02 03 01 01 02 06 08 11
+250 3 02 03 01 01 02 06 08 11
+251 3 02 03 01 01 02 06 08 11
+251 3 02 03 01 01 02 06 08 11
+252 1 01 02 02 01 02 03 03 18
+252 1 02 02 02 01 02 05 03 18
+253 3 02 03 01 01 02 06 08 11
+253 3 02 03 01 01 02 06 08 11
+254 3 02 03 01 01 02 06 08 10
+254 3 02 03 01 01 02 06 08 11
+255 1 01 02 02 01 02 03 03 18
+255 1 02 02 02 01 02 03 03 18
+256 3 02 03 01 01 02 06 08 11
+256 3 02 03 01 01 02 06 08 11
+257 3 02 03 01 01 02 06 05 11
+257 3 02 03 01 01 02 06 05 11
+258 1 02 02 02 01 02 04 03 18
+258 1 02 02 02 01 02 04 03 18
+259 1 02 02 02 01 02 05 03 18
+259 1 02 02 02 01 02 05 03 18
+260 3 02 03 01 01 02 06 08 10
+260 3 02 03 01 01 02 06 08 11
+261 1 02 02 02 01 02 04 03 18
+261 1 02 02 02 01 02 04 03 18
+262 1 02 02 01 01 02 04 03 18
+262 1 02 02 02 01 02 04 03 18
+263 1 02 01 01 01 02 04 03 18
+263 1 02 02 02 01 02 04 03 18
+264 1 02 01 01 01 02 04 03 17
+264 1 02 02 02 01 02 04 03 17
+265 3 02 01 01 02 01 07 05 07
+265 3 02 03 01 02 01 08 05 07
+266 3 02 03 01 02 02 07 05 05
+266 3 02 03 01 02 02 07 05 05
+267 3 02 01 01 02 02 07 05 05
+267 3 02 03 01 02 02 09 05 05
+268 3 01 01 01 02 02 07 05 05
+268 3 02 03 01 02 02 07 05 05
+269 3 02 03 01 02 02 07 05 05
+269 3 02 03 01 02 02 07 05 05
+270 3 01 01 01 02 02 07 05 05
+270 3 02 03 01 02 02 07 05 07
+271 3 02 01 01 02 02 08 05 05
+271 3 02 03 01 02 02 08 05 05
+272 3 02 01 01 02 02 08 05 05
+272 3 02 03 01 02 02 08 05 05
+273 3 02 01 01 02 02 07 05 05
+273 3 02 03 01 02 02 08 05 08
+274 3 01 01 01 02 02 07 05 05
+274 3 02 03 01 02 02 08 05 06
+275 1 02 02 02 01 02 04 03 18
+275 1 02 02 02 01 02 04 03 18
+276 1 02 02 02 01 02 04 01 17
+276 1 02 02 02 01 02 04 01 17
+277 1 02 02 02 01 02 04 03 18
+277 1 02 02 02 01 02 04 03 18
+278 1 02 02 02 01 02 04 03 18
+278 1 02 02 02 01 02 04 03 18
+279 1 02 02 02 01 02 04 03 18
+279 1 02 02 02 01 02 04 03 18
+280 1 02 02 02 01 02 04 03 18
+280 1 02 02 02 01 02 04 03 18
+281 1 02 02 02 01 02 04 03 17
+281 1 02 02 02 01 02 04 03 18
+282 1 02 02 02 01 02 04 03 17
+282 1 02 02 02 01 02 04 03 17
+283 1 02 02 02 01 02 05 03 18
+283 1 02 02 02 01 02 05 03 18
+284 1 02 02 02 01 02 04 03 18
+284 1 02 02 02 01 02 04 03 18
+285 1 02 02 02 01 02 05 03 18
+285 1 02 02 02 01 02 05 03 18
+286 1 02 02 01 01 02 04 03 17
+286 1 02 02 02 01 02 04 03 17
+287 1 02 02 01 01 02 04 03 18
+287 1 02 02 02 01 02 04 06 18
+288 1 02 02 02 01 02 04 03 18
+288 1 02 02 02 01 02 04 03 18
+289 1 02 01 02 01 02 04 03 16
+289 1 02 01 02 01 02 04 03 17
+290 1 02 02 02 01 02 05 03 17
+290 1 02 02 02 01 02 05 03 18
+291 1 02 02 02 01 02 05 03 17
+291 1 02 02 02 01 02 05 03 18
+292 1 02 02 01 01 02 04 03 17
+292 1 02 02 02 01 02 04 03 18
+293 3 02 01 01 01 02 06 05 11
+293 3 02 03 01 01 02 06 05 11
+294 1 02 02 01 01 02 04 03 17
+294 1 02 02 02 01 02 04 06 17
+295 1 02 02 01 01 02 04 03 18
+295 1 02 02 02 01 02 04 06 18
+296 3 02 03 01 01 02 06 05 11
+296 3 02 03 01 01 02 06 07 11
+297 1 02 02 01 01 02 04 03 18
+297 1 02 02 02 01 02 04 03 18
+298 1 02 02 01 01 02 04 03 18
+298 1 02 02 02 01 02 04 03 18
+299 1 02 02 02 01 02 04 03 17
+299 1 02 02 02 01 02 04 03 18
+300 1 02 02 02 01 02 04 03 17
+300 1 02 02 02 01 02 04 03 17
+301 3 02 03 01 01 02 06 05 11
+301 3 02 03 01 01 02 07 05 11
+302 1 02 02 01 01 02 04 03 18
+302 1 02 02 02 01 02 04 03 18
+303 1 02 02 01 01 02 05 03 18
+303 1 02 02 02 01 02 05 03 19
+304 1 02 02 01 01 02 05 03 17
+304 1 02 02 02 01 02 05 03 17
+305 1 02 02 01 01 -9 05 03 18
+305 1 02 02 02 01 -9 05 03 18
+306 3 02 03 01 01 02 06 05 10
+306 3 02 03 01 01 02 07 05 11
+307 1 02 02 01 01 02 04 03 18
+307 1 02 02 02 01 02 04 03 18
+308 1 02 02 01 01 02 04 03 18
+308 1 02 02 02 01 02 04 03 18
+309 1 02 02 01 01 02 05 03 18
+309 1 02 02 02 01 02 05 03 18
+310 1 02 02 01 01 02 05 03 18
+310 1 02 02 02 01 02 05 03 18
+311 1 01 02 01 01 02 05 03 18
+311 1 02 02 02 01 02 05 03 18
+312 3 02 03 01 01 02 06 05 11
+312 3 02 03 01 01 02 06 05 11
+313 3 02 03 01 01 02 06 05 10
+313 3 02 03 01 01 02 06 05 10
+314 1 01 02 01 01 02 04 03 18
+314 1 02 02 01 01 02 04 03 19
+315 1 02 02 02 01 02 04 03 18
+315 1 02 02 02 01 02 04 03 18
+316 3 01 -9 -9 01 -9 -9 02 -9
+316 3 02 -9 -9 02 -9 -9 02 -9
+317 1 02 02 02 01 02 04 03 18
+317 1 02 02 02 01 02 04 03 18
+318 3 02 03 01 01 02 05 05 11
+318 3 02 03 01 01 02 06 05 11
+319 1 02 01 02 01 02 04 03 18
+319 1 02 01 02 01 02 04 03 18
+320 1 02 01 02 01 02 04 03 18
+320 1 02 02 02 01 02 04 03 18
+321 1 02 01 02 01 02 05 03 17
+321 1 02 01 02 01 02 05 03 18
+322 1 02 01 02 01 02 05 03 18
+322 1 02 01 02 01 02 05 03 18
+323 3 01 -9 -9 01 -9 -9 05 -9
+323 3 02 -9 -9 02 -9 -9 05 -9
+324 3 02 03 01 01 02 06 05 10
+324 3 02 03 01 01 02 06 05 11
+325 1 02 01 02 01 02 05 03 18
+325 1 02 01 02 01 02 05 03 18
+326 1 02 01 02 01 02 05 03 18
+326 1 02 01 02 01 02 05 03 18
+327 1 02 01 02 01 02 05 03 18
+327 1 02 01 02 01 02 05 03 18
+328 2 01 -9 01 -9 -9 -9 02 -9
+328 2 02 -9 01 -9 -9 -9 02 -9
+329 2 02 01 01 01 -9 -9 02 13
+329 2 02 01 01 01 -9 -9 02 13
+330 2 01 -9 01 01 -9 -9 09 -9
+330 2 02 -9 01 02 -9 -9 09 -9
+331 2 02 01 03 01 01 11 02 13
+331 2 02 01 03 02 01 11 02 14
+332 2 01 01 01 01 -9 08 04 12
+332 2 02 01 01 02 -9 08 04 12
+333 2 01 01 03 01 -9 -9 02 12
+333 2 02 01 03 02 -9 -9 02 12
+334 2 02 01 03 01 -9 -9 02 02
+334 2 02 01 03 01 -9 -9 02 12
+335 2 01 -9 01 -9 -9 -9 02 -9
+335 2 02 -9 01 -9 -9 -9 09 -9
+336 2 02 01 01 01 -9 -9 02 11
+336 2 02 01 03 01 -9 -9 09 12
+337 2 01 01 01 01 02 -9 02 12
+337 2 02 03 01 02 02 -9 02 13
+338 2 02 01 03 01 02 11 02 13
+338 2 02 01 03 01 02 11 04 13
+339 2 02 01 03 01 02 11 02 03
+339 2 02 01 04 01 02 11 02 12
+340 2 01 01 03 01 02 11 02 03
+340 2 02 01 03 01 02 11 02 13
+341 2 02 01 03 01 02 11 02 12
+341 2 02 01 03 01 02 11 02 12
+342 2 02 01 03 01 02 11 02 12
+342 2 02 01 03 01 02 11 02 13
+343 2 01 01 03 01 02 11 02 02
+343 2 02 01 03 01 02 11 02 14
+344 2 02 01 03 01 02 12 02 12
+344 2 02 01 03 01 02 12 03 12
+345 2 02 01 03 01 02 12 02 13
+345 2 02 01 03 01 02 12 02 13
+346 2 02 01 03 01 02 11 02 02
+346 2 02 01 03 01 02 11 02 10
+347 2 01 01 03 01 02 12 02 11
+347 2 01 01 04 01 02 12 02 13
+348 2 01 01 03 01 02 08 02 01
+348 2 02 01 04 01 02 12 04 12
+349 2 01 01 04 01 02 11 02 03
+349 2 02 01 04 01 02 11 02 13
+350 2 02 01 03 01 02 10 02 11
+350 2 02 01 04 01 02 11 02 11
+351 2 01 01 03 01 02 12 02 10
+351 2 02 01 03 01 02 12 02 13
+352 2 02 01 03 01 02 12 02 02
+352 2 02 01 03 01 02 12 02 10
+353 2 01 01 03 01 02 08 02 02
+353 2 02 01 04 01 02 11 02 14
+354 2 02 01 03 01 02 11 02 03
+354 2 02 01 03 01 02 11 02 13
+355 2 02 01 03 01 02 11 02 11
+355 2 02 01 04 01 02 11 02 12
+356 2 02 -9 01 01 -9 -9 02 09
+356 2 02 -9 03 02 -9 -9 09 09
+357 2 01 01 03 01 -9 -9 02 03
+357 2 02 01 03 02 -9 -9 02 12
+358 2 01 -9 -9 01 -9 -9 02 02
+358 2 02 -9 -9 02 -9 -9 02 05
+359 2 01 01 03 01 -9 -9 02 11
+359 2 02 01 03 01 -9 -9 02 12
+360 2 01 -9 03 01 -9 11 02 11
+360 2 02 -9 03 02 -9 11 02 13
+361 2 02 01 01 01 -9 -9 02 12
+361 2 02 01 01 01 -9 -9 02 12
+362 2 01 01 03 01 -9 -9 02 12
+362 2 02 01 03 02 -9 -9 02 12
+363 2 02 01 03 01 -9 -9 02 03
+363 2 02 01 03 02 -9 -9 02 13
+NA
+NA
+NA
+NA</code></pre>
+</div>
+</div>
+</section>
+<section id="generating-synthetic-data" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="generating-synthetic-data"><span class="header-section-number">3.4</span> Generating Synthetic Data</h2>
+<section id="from-allele-frequencies" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="from-allele-frequencies"><span class="header-section-number">3.4.1</span> From Allele Frequencies</h3>
+<p>The <code>make_population()</code> function creates a random population from a frequency table:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Locus =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"TPI"</span>, <span class="st">"PGM"</span>), <span class="at">each =</span> <span class="dv">3</span>),</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Allele =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"H"</span>, <span class="st">"I"</span>, <span class="st">"J"</span>),</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Frequency =</span> <span class="fu">c</span>(<span class="fl">0.55</span>, <span class="fl">0.30</span>, <span class="fl">0.15</span>, <span class="fl">0.34</span>, <span class="fl">0.34</span>, <span class="fl">0.32</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">make_population</span>(freqs, <span class="at">N =</span> <span class="dv">10</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pop)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID PGM TPI
+1  1 I:J A:C
+2  2 J:J B:B
+3  3 H:J A:B
+4  4 H:I A:B
+5  5 I:I B:C
+6  6 I:I A:A</code></pre>
+</div>
+</div>
+</section>
+<section id="multiple-populations" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="multiple-populations"><span class="header-section-number">3.4.2</span> Multiple Populations</h3>
+<p>The <code>make_populations()</code> function creates several populations at once from a frequency data.frame with a <code>Population</code> column:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>f1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Population =</span> <span class="st">"A"</span>,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Locus =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Loc1"</span>, <span class="st">"Loc2"</span>), <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Allele =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"01"</span>, <span class="st">"02"</span>), <span class="at">times =</span> <span class="dv">2</span>),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Frequency =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.8</span>, <span class="fl">0.3</span>, <span class="fl">0.7</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>f2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Population =</span> <span class="st">"B"</span>,</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Locus =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Loc1"</span>, <span class="st">"Loc2"</span>), <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">Allele =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"01"</span>, <span class="st">"02"</span>), <span class="at">times =</span> <span class="dv">2</span>),</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Frequency =</span> <span class="fu">c</span>(<span class="fl">0.7</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> <span class="fu">rbind</span>(f1, f2)</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>freqs<span class="sc">$</span>Population <span class="ot">&lt;-</span> <span class="fu">factor</span>(freqs<span class="sc">$</span>Population, <span class="at">ordered =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>pops <span class="ot">&lt;-</span> <span class="fu">make_populations</span>(freqs, <span class="at">N =</span> <span class="dv">15</span>)</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pops)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Population ID  Loc1  Loc2
+1          A  1 02:02 01:02
+2          A  2 01:02 01:02
+3          A  3 02:02 02:02
+4          A  4 01:02 01:02
+5          A  5 02:02 02:02
+6          A  6 02:02 02:02</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pops<span class="sc">$</span>Population)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ A  B 
+15 15 </code></pre>
+</div>
+</div>
+</section>
+<section id="from-individual-loci" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="from-individual-loci"><span class="header-section-number">3.4.3</span> From Individual Loci</h3>
+<p>The <code>make_loci()</code> function generates a vector of random locus objects:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Allele =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>), <span class="at">Frequency =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">0.4</span>))</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>loci <span class="ot">&lt;-</span> <span class="fu">make_loci</span>(f, <span class="at">N =</span> <span class="dv">10</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>loci</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "A:A" "B:B" "A:B" "A:A" "A:B" "A:B" "A:B" "A:A" "A:A" "A:B"</code></pre>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./locus-class.html" class="pagination-link" aria-label="The Locus Class">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">The Locus Class</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./allele-frequencies.html" class="pagination-link" aria-label="Allele Frequencies &amp; HWE">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Allele Frequencies &amp; HWE</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Importing &amp; Exporting Data</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>This chapter covers reading genetic data from files, converting between formats, and generating synthetic populations.</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reading Population Data</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>The <span class="in">`read_population()`</span> function is the primary data import tool. It reads text files and converts specified columns to <span class="in">`locus`</span> objects.</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Function Signature</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a><span class="fu">read_population</span>(path, type, locus.columns, <span class="at">phased =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>                <span class="at">sep =</span> <span class="st">","</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">delim =</span> <span class="st">":"</span>)</span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>The key parameters:</span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`path`</span> --- file path to the data</span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`type`</span> --- marker encoding format</span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`locus.columns`</span> --- integer vector indicating which columns contain genetic data</span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a><span class="fu">### Separated Format</span></span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>The most common format uses colon-separated alleles (e.g., <span class="in">`"A:B"`</span>):</span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"data_separated.csv"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>data_sep <span class="ot">&lt;-</span> <span class="fu">read_population</span>(path, <span class="at">type =</span> <span class="st">"separated"</span>,</span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>                            <span class="at">locus.columns =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>))</span>
+<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_sep)</span>
+<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a><span class="fu">### Column Format</span></span>
+<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a>Two adjacent columns per locus (one column per allele):</span>
+<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-50"><a href="#cb30-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"data_2_column.csv"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>data_col <span class="ot">&lt;-</span> <span class="fu">read_population</span>(path, <span class="at">type =</span> <span class="st">"column"</span>,</span>
+<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a>                            <span class="at">locus.columns =</span> <span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>))</span>
+<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_col)</span>
+<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a><span class="fu">### SNP Format</span></span>
+<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a>Encoded as 0, 1, 2 (minor allele count):</span>
+<span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"data_snp.csv"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a>data_snp <span class="ot">&lt;-</span> <span class="fu">read_population</span>(path, <span class="at">type =</span> <span class="st">"snp"</span>,</span>
+<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a>                            <span class="at">locus.columns =</span> <span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>))</span>
+<span id="cb30-67"><a href="#cb30-67" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_snp)</span>
+<span id="cb30-68"><a href="#cb30-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-69"><a href="#cb30-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-70"><a href="#cb30-70" aria-hidden="true" tabindex="-1"></a><span class="fu">### AFLP Format</span></span>
+<span id="cb30-71"><a href="#cb30-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-72"><a href="#cb30-72" aria-hidden="true" tabindex="-1"></a>Binary (0/1) presence-absence:</span>
+<span id="cb30-73"><a href="#cb30-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-76"><a href="#cb30-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-77"><a href="#cb30-77" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"data_aflp.csv"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb30-78"><a href="#cb30-78" aria-hidden="true" tabindex="-1"></a>data_aflp <span class="ot">&lt;-</span> <span class="fu">read_population</span>(path, <span class="at">type =</span> <span class="st">"aflp"</span>,</span>
+<span id="cb30-79"><a href="#cb30-79" aria-hidden="true" tabindex="-1"></a>                             <span class="at">locus.columns =</span> <span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>))</span>
+<span id="cb30-80"><a href="#cb30-80" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_aflp)</span>
+<span id="cb30-81"><a href="#cb30-81" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-82"><a href="#cb30-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-83"><a href="#cb30-83" aria-hidden="true" tabindex="-1"></a><span class="fu">### Allozyme (Zyme) Format</span></span>
+<span id="cb30-84"><a href="#cb30-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-85"><a href="#cb30-85" aria-hidden="true" tabindex="-1"></a>Concatenated integer alleles (e.g., "12" for alleles 1 and 2):</span>
+<span id="cb30-86"><a href="#cb30-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-89"><a href="#cb30-89" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-90"><a href="#cb30-90" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"data_zymelike.csv"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb30-91"><a href="#cb30-91" aria-hidden="true" tabindex="-1"></a>data_zyme <span class="ot">&lt;-</span> <span class="fu">read_population</span>(path, <span class="at">type =</span> <span class="st">"zyme"</span>,</span>
+<span id="cb30-92"><a href="#cb30-92" aria-hidden="true" tabindex="-1"></a>                             <span class="at">locus.columns =</span> <span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>))</span>
+<span id="cb30-93"><a href="#cb30-93" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_zyme)</span>
+<span id="cb30-94"><a href="#cb30-94" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-95"><a href="#cb30-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-96"><a href="#cb30-96" aria-hidden="true" tabindex="-1"></a><span class="fu">### Genepop Format</span></span>
+<span id="cb30-97"><a href="#cb30-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-98"><a href="#cb30-98" aria-hidden="true" tabindex="-1"></a>Genepop files have their own structure with <span class="in">`Pop`</span> delimiters:</span>
+<span id="cb30-99"><a href="#cb30-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-102"><a href="#cb30-102" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-103"><a href="#cb30-103" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"genepop.txt"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb30-104"><a href="#cb30-104" aria-hidden="true" tabindex="-1"></a>data_gp <span class="ot">&lt;-</span> <span class="fu">read_population</span>(path, <span class="at">type =</span> <span class="st">"genepop"</span>)</span>
+<span id="cb30-105"><a href="#cb30-105" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_gp)</span>
+<span id="cb30-106"><a href="#cb30-106" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-107"><a href="#cb30-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-108"><a href="#cb30-108" aria-hidden="true" tabindex="-1"></a><span class="fu">### Structure Format</span></span>
+<span id="cb30-109"><a href="#cb30-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-110"><a href="#cb30-110" aria-hidden="true" tabindex="-1"></a>Two-row-per-individual STRUCTURE format:</span>
+<span id="cb30-111"><a href="#cb30-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-114"><a href="#cb30-114" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-115"><a href="#cb30-115" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"data_structure.str"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb30-116"><a href="#cb30-116" aria-hidden="true" tabindex="-1"></a>data_str <span class="ot">&lt;-</span> <span class="fu">read_population</span>(path, <span class="at">type =</span> <span class="st">"structure"</span>)</span>
+<span id="cb30-117"><a href="#cb30-117" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_str)</span>
+<span id="cb30-118"><a href="#cb30-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-119"><a href="#cb30-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-120"><a href="#cb30-120" aria-hidden="true" tabindex="-1"></a><span class="fu">## Writing Population Data</span></span>
+<span id="cb30-121"><a href="#cb30-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-122"><a href="#cb30-122" aria-hidden="true" tabindex="-1"></a>The <span class="in">`write_population()`</span> function exports a data.frame to various formats:</span>
+<span id="cb30-123"><a href="#cb30-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-126"><a href="#cb30-126" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-127"><a href="#cb30-127" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb30-128"><a href="#cb30-128" aria-hidden="true" tabindex="-1"></a><span class="co"># Plain text (colon-separated loci)</span></span>
+<span id="cb30-129"><a href="#cb30-129" aria-hidden="true" tabindex="-1"></a><span class="fu">write_population</span>(arapat, <span class="at">file =</span> <span class="st">"arapat.csv"</span>)</span>
+<span id="cb30-130"><a href="#cb30-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-131"><a href="#cb30-131" aria-hidden="true" tabindex="-1"></a><span class="co"># Genepop format</span></span>
+<span id="cb30-132"><a href="#cb30-132" aria-hidden="true" tabindex="-1"></a><span class="fu">write_population</span>(arapat, <span class="at">file =</span> <span class="st">"arapat.gen"</span>,</span>
+<span id="cb30-133"><a href="#cb30-133" aria-hidden="true" tabindex="-1"></a>                 <span class="at">mode =</span> <span class="st">"genepop"</span>, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
+<span id="cb30-134"><a href="#cb30-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-135"><a href="#cb30-135" aria-hidden="true" tabindex="-1"></a><span class="co"># Structure format</span></span>
+<span id="cb30-136"><a href="#cb30-136" aria-hidden="true" tabindex="-1"></a><span class="fu">write_population</span>(arapat, <span class="at">file =</span> <span class="st">"arapat.str"</span>,</span>
+<span id="cb30-137"><a href="#cb30-137" aria-hidden="true" tabindex="-1"></a>                 <span class="at">mode =</span> <span class="st">"structure"</span>, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
+<span id="cb30-138"><a href="#cb30-138" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-139"><a href="#cb30-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-140"><a href="#cb30-140" aria-hidden="true" tabindex="-1"></a><span class="fu">## Direct Format Conversion</span></span>
+<span id="cb30-141"><a href="#cb30-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-142"><a href="#cb30-142" aria-hidden="true" tabindex="-1"></a>You can also convert data.frames directly without writing to disk:</span>
+<span id="cb30-143"><a href="#cb30-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-146"><a href="#cb30-146" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-147"><a href="#cb30-147" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb30-148"><a href="#cb30-148" aria-hidden="true" tabindex="-1"></a>gp <span class="ot">&lt;-</span> <span class="fu">to_genepop</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
+<span id="cb30-149"><a href="#cb30-149" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(gp[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>], <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb30-150"><a href="#cb30-150" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-151"><a href="#cb30-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-154"><a href="#cb30-154" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-155"><a href="#cb30-155" aria-hidden="true" tabindex="-1"></a>st <span class="ot">&lt;-</span> <span class="fu">to_structure</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
+<span id="cb30-156"><a href="#cb30-156" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(st[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb30-157"><a href="#cb30-157" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-158"><a href="#cb30-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-159"><a href="#cb30-159" aria-hidden="true" tabindex="-1"></a><span class="fu">## Generating Synthetic Data</span></span>
+<span id="cb30-160"><a href="#cb30-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-161"><a href="#cb30-161" aria-hidden="true" tabindex="-1"></a><span class="fu">### From Allele Frequencies</span></span>
+<span id="cb30-162"><a href="#cb30-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-163"><a href="#cb30-163" aria-hidden="true" tabindex="-1"></a>The <span class="in">`make_population()`</span> function creates a random population from a frequency table:</span>
+<span id="cb30-164"><a href="#cb30-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-167"><a href="#cb30-167" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-168"><a href="#cb30-168" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb30-169"><a href="#cb30-169" aria-hidden="true" tabindex="-1"></a>  <span class="at">Locus =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"TPI"</span>, <span class="st">"PGM"</span>), <span class="at">each =</span> <span class="dv">3</span>),</span>
+<span id="cb30-170"><a href="#cb30-170" aria-hidden="true" tabindex="-1"></a>  <span class="at">Allele =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"H"</span>, <span class="st">"I"</span>, <span class="st">"J"</span>),</span>
+<span id="cb30-171"><a href="#cb30-171" aria-hidden="true" tabindex="-1"></a>  <span class="at">Frequency =</span> <span class="fu">c</span>(<span class="fl">0.55</span>, <span class="fl">0.30</span>, <span class="fl">0.15</span>, <span class="fl">0.34</span>, <span class="fl">0.34</span>, <span class="fl">0.32</span>)</span>
+<span id="cb30-172"><a href="#cb30-172" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-173"><a href="#cb30-173" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">make_population</span>(freqs, <span class="at">N =</span> <span class="dv">10</span>)</span>
+<span id="cb30-174"><a href="#cb30-174" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pop)</span>
+<span id="cb30-175"><a href="#cb30-175" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-176"><a href="#cb30-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-177"><a href="#cb30-177" aria-hidden="true" tabindex="-1"></a><span class="fu">### Multiple Populations</span></span>
+<span id="cb30-178"><a href="#cb30-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-179"><a href="#cb30-179" aria-hidden="true" tabindex="-1"></a>The <span class="in">`make_populations()`</span> function creates several populations at once from a frequency data.frame with a <span class="in">`Population`</span> column:</span>
+<span id="cb30-180"><a href="#cb30-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-183"><a href="#cb30-183" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-184"><a href="#cb30-184" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb30-185"><a href="#cb30-185" aria-hidden="true" tabindex="-1"></a>f1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb30-186"><a href="#cb30-186" aria-hidden="true" tabindex="-1"></a>  <span class="at">Population =</span> <span class="st">"A"</span>,</span>
+<span id="cb30-187"><a href="#cb30-187" aria-hidden="true" tabindex="-1"></a>  <span class="at">Locus =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Loc1"</span>, <span class="st">"Loc2"</span>), <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb30-188"><a href="#cb30-188" aria-hidden="true" tabindex="-1"></a>  <span class="at">Allele =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"01"</span>, <span class="st">"02"</span>), <span class="at">times =</span> <span class="dv">2</span>),</span>
+<span id="cb30-189"><a href="#cb30-189" aria-hidden="true" tabindex="-1"></a>  <span class="at">Frequency =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.8</span>, <span class="fl">0.3</span>, <span class="fl">0.7</span>)</span>
+<span id="cb30-190"><a href="#cb30-190" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-191"><a href="#cb30-191" aria-hidden="true" tabindex="-1"></a>f2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb30-192"><a href="#cb30-192" aria-hidden="true" tabindex="-1"></a>  <span class="at">Population =</span> <span class="st">"B"</span>,</span>
+<span id="cb30-193"><a href="#cb30-193" aria-hidden="true" tabindex="-1"></a>  <span class="at">Locus =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Loc1"</span>, <span class="st">"Loc2"</span>), <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb30-194"><a href="#cb30-194" aria-hidden="true" tabindex="-1"></a>  <span class="at">Allele =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"01"</span>, <span class="st">"02"</span>), <span class="at">times =</span> <span class="dv">2</span>),</span>
+<span id="cb30-195"><a href="#cb30-195" aria-hidden="true" tabindex="-1"></a>  <span class="at">Frequency =</span> <span class="fu">c</span>(<span class="fl">0.7</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>)</span>
+<span id="cb30-196"><a href="#cb30-196" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-197"><a href="#cb30-197" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> <span class="fu">rbind</span>(f1, f2)</span>
+<span id="cb30-198"><a href="#cb30-198" aria-hidden="true" tabindex="-1"></a>freqs<span class="sc">$</span>Population <span class="ot">&lt;-</span> <span class="fu">factor</span>(freqs<span class="sc">$</span>Population, <span class="at">ordered =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb30-199"><a href="#cb30-199" aria-hidden="true" tabindex="-1"></a>pops <span class="ot">&lt;-</span> <span class="fu">make_populations</span>(freqs, <span class="at">N =</span> <span class="dv">15</span>)</span>
+<span id="cb30-200"><a href="#cb30-200" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pops)</span>
+<span id="cb30-201"><a href="#cb30-201" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pops<span class="sc">$</span>Population)</span>
+<span id="cb30-202"><a href="#cb30-202" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-203"><a href="#cb30-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-204"><a href="#cb30-204" aria-hidden="true" tabindex="-1"></a><span class="fu">### From Individual Loci</span></span>
+<span id="cb30-205"><a href="#cb30-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-206"><a href="#cb30-206" aria-hidden="true" tabindex="-1"></a>The <span class="in">`make_loci()`</span> function generates a vector of random locus objects:</span>
+<span id="cb30-207"><a href="#cb30-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-210"><a href="#cb30-210" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-211"><a href="#cb30-211" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Allele =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>), <span class="at">Frequency =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">0.4</span>))</span>
+<span id="cb30-212"><a href="#cb30-212" aria-hidden="true" tabindex="-1"></a>loci <span class="ot">&lt;-</span> <span class="fu">make_loci</span>(f, <span class="at">N =</span> <span class="dv">10</span>)</span>
+<span id="cb30-213"><a href="#cb30-213" aria-hidden="true" tabindex="-1"></a>loci</span>
+<span id="cb30-214"><a href="#cb30-214" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/dyerlab/gstudio/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

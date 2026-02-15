@@ -1,0 +1,130 @@
+# Genetic Diversity
+
+This chapter covers estimation of genetic diversity statistics using the `genetic_diversity()` wrapper and its underlying per-locus functions.
+
+```{r}
+library(gstudio)
+data(arapat)
+```
+
+## The `genetic_diversity()` Wrapper
+
+The `genetic_diversity()` function is the main entry point for diversity estimation. It dispatches to specific estimators based on the `mode` parameter:
+
+| Mode | Statistic | Description |
+|------|-----------|-------------|
+| `"A"` | Allelic richness | Number of alleles |
+| `"Ae"` | Effective alleles | $1 / \sum p_i^2$ |
+| `"A95"` | A (5% threshold) | Alleles with frequency >= 0.05 |
+| `"He"` | Expected heterozygosity | $1 - \sum p_i^2$ |
+| `"Ho"` | Observed heterozygosity | Proportion of heterozygotes |
+| `"Hes"` | Corrected He | Nei's small-sample corrected He |
+| `"Hos"` | Corrected Ho | Nei's small-sample corrected Ho |
+| `"Fis"` | Inbreeding coefficient | $1 - H_o/H_e$ |
+| `"Pe"` | Polymorphic index | Whether the locus is polymorphic |
+
+## Global (Unstratified) Estimates
+
+Without a stratum, diversity is estimated across all individuals:
+
+```{r}
+genetic_diversity(arapat, mode = "A")
+genetic_diversity(arapat, mode = "Ae")
+genetic_diversity(arapat, mode = "He")
+genetic_diversity(arapat, mode = "Ho")
+```
+
+## Per-Stratum Estimates
+
+Provide a `stratum` argument to compute diversity within each population:
+
+```{r}
+genetic_diversity(arapat, stratum = "Species", mode = "He")
+```
+
+```{r}
+genetic_diversity(arapat, stratum = "Species", mode = "Ae")
+```
+
+## Individual Estimator Functions
+
+Each diversity metric has a standalone function that operates on a single locus vector.
+
+### Allelic Richness
+
+```{r}
+A(arapat$LTRS)
+```
+
+### Effective Number of Alleles
+
+```{r}
+Ae(arapat$LTRS)
+```
+
+### Expected Heterozygosity
+
+```{r}
+He(arapat$LTRS)
+```
+
+### Observed Heterozygosity
+
+```{r}
+Ho(arapat$LTRS)
+```
+
+### Inbreeding Coefficient
+
+```{r}
+Fis(arapat$LTRS)
+```
+
+### Exclusion Probability
+
+```{r}
+Pe(arapat$LTRS)
+```
+
+## Corrected Heterozygosity (Nei's)
+
+The `Hes` and `Hos` modes require a stratum because they apply a small-sample correction per subpopulation:
+
+```{r}
+genetic_diversity(arapat, stratum = "Species", mode = "Hes")
+```
+
+## Multilocus Diversity
+
+The `multilocus_diversity()` function computes a summary across all loci:
+
+```{r}
+multilocus_diversity(arapat)
+```
+
+## Selecting Specific Loci
+
+You can restrict the analysis to a subset of loci:
+
+```{r}
+genetic_diversity(arapat, loci = c("LTRS", "WNT"), mode = "He")
+```
+
+## Comparing Populations
+
+A common workflow is to estimate diversity per population, then compare:
+
+```{r}
+he_by_pop <- genetic_diversity(arapat, stratum = "Species", mode = "He")
+he_by_pop
+```
+
+```{r}
+library(ggplot2)
+ggplot(he_by_pop, aes(x = Stratum, y = He, fill = Stratum)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Expected Heterozygosity by Species",
+       y = "He") +
+  theme(legend.position = "none")
+```

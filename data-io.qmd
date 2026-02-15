@@ -1,0 +1,184 @@
+# Importing & Exporting Data
+
+This chapter covers reading genetic data from files, converting between formats, and generating synthetic populations.
+
+```{r}
+library(gstudio)
+```
+
+## Reading Population Data
+
+The `read_population()` function is the primary data import tool. It reads text files and converts specified columns to `locus` objects.
+
+### Function Signature
+
+```{r}
+#| eval: false
+read_population(path, type, locus.columns, phased = FALSE,
+                sep = ",", header = TRUE, delim = ":")
+```
+
+The key parameters:
+
+- `path` --- file path to the data
+- `type` --- marker encoding format
+- `locus.columns` --- integer vector indicating which columns contain genetic data
+
+### Separated Format
+
+The most common format uses colon-separated alleles (e.g., `"A:B"`):
+
+```{r}
+path <- system.file("extdata", "data_separated.csv", package = "gstudio")
+data_sep <- read_population(path, type = "separated",
+                            locus.columns = c(4, 5))
+head(data_sep)
+```
+
+### Column Format
+
+Two adjacent columns per locus (one column per allele):
+
+```{r}
+path <- system.file("extdata", "data_2_column.csv", package = "gstudio")
+data_col <- read_population(path, type = "column",
+                            locus.columns = c(4:7))
+head(data_col)
+```
+
+### SNP Format
+
+Encoded as 0, 1, 2 (minor allele count):
+
+```{r}
+path <- system.file("extdata", "data_snp.csv", package = "gstudio")
+data_snp <- read_population(path, type = "snp",
+                            locus.columns = c(4:7))
+head(data_snp)
+```
+
+### AFLP Format
+
+Binary (0/1) presence-absence:
+
+```{r}
+path <- system.file("extdata", "data_aflp.csv", package = "gstudio")
+data_aflp <- read_population(path, type = "aflp",
+                             locus.columns = c(4:7))
+head(data_aflp)
+```
+
+### Allozyme (Zyme) Format
+
+Concatenated integer alleles (e.g., "12" for alleles 1 and 2):
+
+```{r}
+path <- system.file("extdata", "data_zymelike.csv", package = "gstudio")
+data_zyme <- read_population(path, type = "zyme",
+                             locus.columns = c(4:7))
+head(data_zyme)
+```
+
+### Genepop Format
+
+Genepop files have their own structure with `Pop` delimiters:
+
+```{r}
+path <- system.file("extdata", "genepop.txt", package = "gstudio")
+data_gp <- read_population(path, type = "genepop")
+head(data_gp)
+```
+
+### Structure Format
+
+Two-row-per-individual STRUCTURE format:
+
+```{r}
+path <- system.file("extdata", "data_structure.str", package = "gstudio")
+data_str <- read_population(path, type = "structure")
+head(data_str)
+```
+
+## Writing Population Data
+
+The `write_population()` function exports a data.frame to various formats:
+
+```{r}
+#| eval: false
+# Plain text (colon-separated loci)
+write_population(arapat, file = "arapat.csv")
+
+# Genepop format
+write_population(arapat, file = "arapat.gen",
+                 mode = "genepop", stratum = "Species")
+
+# Structure format
+write_population(arapat, file = "arapat.str",
+                 mode = "structure", stratum = "Species")
+```
+
+## Direct Format Conversion
+
+You can also convert data.frames directly without writing to disk:
+
+```{r}
+data(arapat)
+gp <- to_genepop(arapat, stratum = "Species")
+cat(gp[1:10], sep = "\n")
+```
+
+```{r}
+st <- to_structure(arapat, stratum = "Species")
+cat(st[1:5], sep = "\n")
+```
+
+## Generating Synthetic Data
+
+### From Allele Frequencies
+
+The `make_population()` function creates a random population from a frequency table:
+
+```{r}
+freqs <- data.frame(
+  Locus = rep(c("TPI", "PGM"), each = 3),
+  Allele = c("A", "B", "C", "H", "I", "J"),
+  Frequency = c(0.55, 0.30, 0.15, 0.34, 0.34, 0.32)
+)
+pop <- make_population(freqs, N = 10)
+head(pop)
+```
+
+### Multiple Populations
+
+The `make_populations()` function creates several populations at once from a frequency data.frame with a `Population` column:
+
+```{r}
+library(dplyr, warn.conflicts = FALSE)
+f1 <- data.frame(
+  Population = "A",
+  Locus = rep(c("Loc1", "Loc2"), each = 2),
+  Allele = rep(c("01", "02"), times = 2),
+  Frequency = c(0.2, 0.8, 0.3, 0.7)
+)
+f2 <- data.frame(
+  Population = "B",
+  Locus = rep(c("Loc1", "Loc2"), each = 2),
+  Allele = rep(c("01", "02"), times = 2),
+  Frequency = c(0.7, 0.3, 0.5, 0.5)
+)
+freqs <- rbind(f1, f2)
+freqs$Population <- factor(freqs$Population, ordered = TRUE)
+pops <- make_populations(freqs, N = 15)
+head(pops)
+table(pops$Population)
+```
+
+### From Individual Loci
+
+The `make_loci()` function generates a vector of random locus objects:
+
+```{r}
+f <- data.frame(Allele = c("A", "B"), Frequency = c(0.6, 0.4))
+loci <- make_loci(f, N = 10)
+loci
+```

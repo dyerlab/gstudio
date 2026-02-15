@@ -1,0 +1,116 @@
+# Allele Frequencies & HWE
+
+This chapter covers estimating allele and genotype frequencies, testing for Hardy-Weinberg Equilibrium, and rarefaction analysis.
+
+```{r}
+library(gstudio)
+data(arapat)
+```
+
+## Allele Frequencies
+
+The `frequencies()` function is an S3 generic that works on both individual locus vectors and entire data.frames.
+
+### Single Locus
+
+```{r}
+frequencies(arapat$LTRS)
+```
+
+### Entire Data Frame
+
+When applied to a data.frame, `frequencies()` returns frequencies for all locus columns:
+
+```{r}
+freqs <- frequencies(arapat)
+head(freqs, 12)
+```
+
+### By Stratum
+
+Add a `stratum` argument to partition frequencies by population:
+
+```{r}
+freqs_pop <- frequencies(arapat, stratum = "Species")
+head(freqs_pop, 12)
+```
+
+### Selecting Specific Loci
+
+```{r}
+freqs_sub <- frequencies(arapat, loci = c("LTRS", "WNT"))
+freqs_sub
+```
+
+## Frequency Matrix
+
+The `frequency_matrix()` function produces a wide-format matrix of allele frequencies:
+
+```{r}
+fm <- frequency_matrix(arapat, stratum = "Species")
+fm[, 1:8]
+```
+
+## Genotype Counts and Frequencies
+
+### Genotype Counts per Stratum
+
+The `genotype_counts()` function summarizes non-missing genotype counts per locus, optionally by stratum:
+
+```{r}
+genotype_counts(arapat)
+```
+
+```{r}
+genotype_counts(arapat, stratum = "Species")
+```
+
+### Genotype Frequencies
+
+The `genotype_frequencies()` function returns observed and expected genotype counts for a locus vector:
+
+```{r}
+genotype_frequencies(arapat$LTRS)
+```
+
+## Hardy-Weinberg Equilibrium
+
+The `hwe()` function tests for HWE using a chi-square approximation:
+
+```{r}
+mainland <- arapat[arapat$Species == "Mainland", ]
+hwe(mainland)
+```
+
+The output includes the chi-square statistic, degrees of freedom, and p-value for each locus. Significant p-values indicate departures from HWE expectations.
+
+### Interpreting Results
+
+Departures from HWE can arise from:
+
+- Non-random mating (inbreeding, assortative mating)
+- Population substructure (Wahlund effect)
+- Selection at or near the marker locus
+- Small population size (genetic drift)
+
+## Rarefaction
+
+The `rarefaction()` function subsamples the data repeatedly at a smaller sample size to estimate the distribution of a diversity statistic:
+
+```{r}
+rare_vals <- rarefaction(arapat$LTRS, mode = "Ae",
+                         size = 20, nperm = 199)
+hist(rare_vals, main = "Rarefied Ae at LTRS",
+     xlab = "Effective Alleles", col = "steelblue")
+```
+
+This is useful for comparing diversity across populations with unequal sample sizes.
+
+## Optimal Sampling
+
+The `optimal_sampling()` function estimates how many individuals are needed to capture a given proportion of allelic diversity:
+
+```{r}
+#| eval: false
+optimal_sampling(arapat$LTRS, nrep = 99)
+```
