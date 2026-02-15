@@ -37,3 +37,9 @@ CLAUDE.md
 
 /doc/
 /Meta/
+
+# Quarto
+docs/.quarto/
+
+/.quarto/
+**/*.quarto_ipynb

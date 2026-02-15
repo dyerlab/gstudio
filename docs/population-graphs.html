@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>8&nbsp; Population Graphs – gstudio: Spatial Analysis of Genetic Marker Data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./visualization.html" rel="next">
+<link href="./genetic-distance.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-597958c53c93a607afca12fd375c57ed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-25a4e8620ae17d49cd0c3861fdf92567.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./population-graphs.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Population Graphs</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">gstudio: Spatial Analysis of Genetic Marker Data</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/dyerlab/gstudio" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./getting-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Getting Started</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./locus-class.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">The Locus Class</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Importing &amp; Exporting Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./allele-frequencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Allele Frequencies &amp; HWE</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./genetic-diversity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Genetic Diversity</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./genetic-structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Population Structure</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./genetic-distance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Genetic Distance &amp; Relatedness</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./population-graphs.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Population Graphs</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Visualization</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./simulation-parentage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Simulation &amp; Parentage</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#constructing-a-population-graph" id="toc-constructing-a-population-graph" class="nav-link active" data-scroll-target="#constructing-a-population-graph"><span class="header-section-number">8.1</span> Constructing a Population Graph</a>
+  <ul class="collapse">
+  <li><a href="#from-a-data-frame" id="toc-from-a-data-frame" class="nav-link" data-scroll-target="#from-a-data-frame"><span class="header-section-number">8.1.1</span> From a Data Frame</a></li>
+  <li><a href="#from-a-multivariate-matrix" id="toc-from-a-multivariate-matrix" class="nav-link" data-scroll-target="#from-a-multivariate-matrix"><span class="header-section-number">8.1.2</span> From a Multivariate Matrix</a></li>
+  <li><a href="#from-an-adjacency-matrix" id="toc-from-an-adjacency-matrix" class="nav-link" data-scroll-target="#from-an-adjacency-matrix"><span class="header-section-number">8.1.3</span> From an Adjacency Matrix</a></li>
+  </ul></li>
+  <li><a href="#bundled-population-graphs" id="toc-bundled-population-graphs" class="nav-link" data-scroll-target="#bundled-population-graphs"><span class="header-section-number">8.2</span> Bundled Population Graphs</a></li>
+  <li><a href="#decorating-a-graph" id="toc-decorating-a-graph" class="nav-link" data-scroll-target="#decorating-a-graph"><span class="header-section-number">8.3</span> Decorating a Graph</a></li>
+  <li><a href="#graph-metrics" id="toc-graph-metrics" class="nav-link" data-scroll-target="#graph-metrics"><span class="header-section-number">8.4</span> Graph Metrics</a>
+  <ul class="collapse">
+  <li><a href="#node-properties" id="toc-node-properties" class="nav-link" data-scroll-target="#node-properties"><span class="header-section-number">8.4.1</span> Node Properties</a></li>
+  <li><a href="#centroid-distance" id="toc-centroid-distance" class="nav-link" data-scroll-target="#centroid-distance"><span class="header-section-number">8.4.2</span> Centroid Distance</a></li>
+  <li><a href="#centroid-variance" id="toc-centroid-variance" class="nav-link" data-scroll-target="#centroid-variance"><span class="header-section-number">8.4.3</span> Centroid Variance</a></li>
+  <li><a href="#shannon-entropy" id="toc-shannon-entropy" class="nav-link" data-scroll-target="#shannon-entropy"><span class="header-section-number">8.4.4</span> Shannon Entropy</a></li>
+  <li><a href="#edge-contortion" id="toc-edge-contortion" class="nav-link" data-scroll-target="#edge-contortion"><span class="header-section-number">8.4.5</span> Edge Contortion</a></li>
+  </ul></li>
+  <li><a href="#congruence-testing" id="toc-congruence-testing" class="nav-link" data-scroll-target="#congruence-testing"><span class="header-section-number">8.5</span> Congruence Testing</a>
+  <ul class="collapse">
+  <li><a href="#topology-congruence" id="toc-topology-congruence" class="nav-link" data-scroll-target="#topology-congruence"><span class="header-section-number">8.5.1</span> Topology Congruence</a></li>
+  <li><a href="#statistical-testing" id="toc-statistical-testing" class="nav-link" data-scroll-target="#statistical-testing"><span class="header-section-number">8.5.2</span> Statistical Testing</a></li>
+  <li><a href="#permutation" id="toc-permutation" class="nav-link" data-scroll-target="#permutation"><span class="header-section-number">8.5.3</span> Permutation</a></li>
+  </ul></li>
+  <li><a href="#subgraph-operations" id="toc-subgraph-operations" class="nav-link" data-scroll-target="#subgraph-operations"><span class="header-section-number">8.6</span> Subgraph Operations</a></li>
+  <li><a href="#export-formats" id="toc-export-formats" class="nav-link" data-scroll-target="#export-formats"><span class="header-section-number">8.7</span> Export Formats</a>
+  <ul class="collapse">
+  <li><a href="#to-adjacency-matrix" id="toc-to-adjacency-matrix" class="nav-link" data-scroll-target="#to-adjacency-matrix"><span class="header-section-number">8.7.1</span> To Adjacency Matrix</a></li>
+  <li><a href="#to-data-frame" id="toc-to-data-frame" class="nav-link" data-scroll-target="#to-data-frame"><span class="header-section-number">8.7.2</span> To Data Frame</a></li>
+  <li><a href="#to-json" id="toc-to-json" class="nav-link" data-scroll-target="#to-json"><span class="header-section-number">8.7.3</span> To JSON</a></li>
+  <li><a href="#to-spatial-formats" id="toc-to-spatial-formats" class="nav-link" data-scroll-target="#to-spatial-formats"><span class="header-section-number">8.7.4</span> To Spatial Formats</a></li>
+  <li><a href="#to-pgraph-format" id="toc-to-pgraph-format" class="nav-link" data-scroll-target="#to-pgraph-format"><span class="header-section-number">8.7.5</span> To pgraph Format</a></li>
+  <li><a href="#reading-a-population-graph" id="toc-reading-a-population-graph" class="nav-link" data-scroll-target="#reading-a-population-graph"><span class="header-section-number">8.7.6</span> Reading a Population Graph</a></li>
+  </ul></li>
+  <li><a href="#randomization" id="toc-randomization" class="nav-link" data-scroll-target="#randomization"><span class="header-section-number">8.8</span> Randomization</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/dyerlab/gstudio/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Population Graphs</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Population Graphs are a graph-theoretic approach to understanding among-population genetic connectivity (Dyer &amp; Nason 2004). Rather than assuming a specific model of gene flow (e.g., island or stepping-stone), population graphs estimate the conditional genetic covariance structure among populations, retaining only statistically significant edges.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'igraph'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    decompose, spectrum</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:base':
+
+    union</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="constructing-a-population-graph" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="constructing-a-population-graph"><span class="header-section-number">8.1</span> Constructing a Population Graph</h2>
+<section id="from-a-data-frame" class="level3" data-number="8.1.1">
+<h3 data-number="8.1.1" class="anchored" data-anchor-id="from-a-data-frame"><span class="header-section-number">8.1.1</span> From a Data Frame</h3>
+<p>The easiest way to create a population graph is with <code>population_graph()</code>, which handles the conversion from genotypes to multivariate data internally:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">population_graph</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in popgraph(data, groups, ...): 1 variables are collinear and being
+dropped from the discriminant rotation.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>graph</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>IGRAPH 45b720f UNW- 3 3 -- 
++ attr: name (v/c), size (v/n), weight (e/n)
++ edges from 45b720f (vertex names):
+[1] Cape    --Mainland  Cape    --Peninsula Mainland--Peninsula</code></pre>
+</div>
+</div>
+</section>
+<section id="from-a-multivariate-matrix" class="level3" data-number="8.1.2">
+<h3 data-number="8.1.2" class="anchored" data-anchor-id="from-a-multivariate-matrix"><span class="header-section-number">8.1.2</span> From a Multivariate Matrix</h3>
+<p>For more control, convert genotypes to multivariate format first, then call <code>popgraph()</code> directly:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> <span class="fu">to_mv</span>(arapat)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">factor</span>(arapat<span class="sc">$</span>Species)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">popgraph</span>(mv, groups)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in popgraph(mv, groups): 1 variables are collinear and being dropped
+from the discriminant rotation.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>graph</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>IGRAPH b02f179 UNW- 3 3 -- 
++ attr: name (v/c), size (v/n), weight (e/n)
++ edges from b02f179 (vertex names):
+[1] Cape    --Mainland  Cape    --Peninsula Mainland--Peninsula</code></pre>
+</div>
+</div>
+<p>The <code>alpha</code> parameter controls edge retention significance (default 0.05):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>graph_strict <span class="ot">&lt;-</span> <span class="fu">popgraph</span>(mv, groups, <span class="at">alpha =</span> <span class="fl">0.01</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in popgraph(mv, groups, alpha = 0.01): 1 variables are collinear and
+being dropped from the discriminant rotation.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>graph_strict</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>IGRAPH 35c848d UNW- 3 3 -- 
++ attr: name (v/c), size (v/n), weight (e/n)
++ edges from 35c848d (vertex names):
+[1] Cape    --Mainland  Cape    --Peninsula Mainland--Peninsula</code></pre>
+</div>
+</div>
+</section>
+<section id="from-an-adjacency-matrix" class="level3" data-number="8.1.3">
+<h3 data-number="8.1.3" class="anchored" data-anchor-id="from-an-adjacency-matrix"><span class="header-section-number">8.1.3</span> From an Adjacency Matrix</h3>
+<p>Use <code>as.popgraph()</code> to convert a pre-computed adjacency matrix:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>              <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">nrow =</span> <span class="dv">4</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(A) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(A) <span class="ot">&lt;-</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">as.popgraph</span>(A)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>IGRAPH ec84e43 UNW- 4 4 -- 
++ attr: name (v/c), weight (e/n)
++ edges from ec84e43 (vertex names):
+[1] A--B A--D B--C C--D</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="bundled-population-graphs" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="bundled-population-graphs"><span class="header-section-number">8.2</span> Bundled Population Graphs</h2>
+<p>The package includes two pre-computed population graphs:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(lopho)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>lopho</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This graph was created by an old(er) igraph version.
+ℹ Call `igraph::upgrade_graph()` on it to use with the current igraph version.
+For now we convert it on the fly...</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>IGRAPH 6af7beb UNW- 21 52 -- 
++ attr: name (v/c), size (v/n), color (v/c), Region (v/c), weight (e/n)
++ edges from 6af7beb (vertex names):
+ [1] BaC--LaV    BaC--Lig    BaC--PtC    BaC--PtP    BaC--SnE    BaC--SnI   
+ [7] BaC--StR    Ctv--PtP    Ctv--SLG    Ctv--SnF    Ctv--SenBas LaV--Lig   
+[13] LaV--PtC    LaV--SnE    LaV--SnF    LaV--TsS    Lig--PtC    Lig--SnI   
+[19] Lig--StR    Lig--TsS    PtC--SnE    PtC--StR    PtC--TsS    PtC--SenBas
+[25] PtP--SnF    PtP--SnI    PtP--SenBas SLG--SnF    SLG--SnI    SnE--StR   
+[31] SnE--TsS    SnF--SnI    SnI--StR    StR--TsS    StR--SenBas CP --Seri  
+[37] CP --SG     CP --SN     CP --TS     LF --PL     LF --SG     LF --SI    
+[43] PL --SenBas PL --SG     PL --SI     PL --SN    
++ ... omitted several edges</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(upiga)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>upiga</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This graph was created by an old(er) igraph version.
+ℹ Call `igraph::upgrade_graph()` on it to use with the current igraph version.
+For now we convert it on the fly...</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>IGRAPH 3157d53 UNW- 18 58 -- 
++ attr: name (v/c), size (v/n), color (v/c), weight (e/n)
++ edges from 3157d53 (vertex names):
+ [1] SI  --PL     SI  --LF     SI  --CP     SI  --Ctv    SI  --TrV   
+ [6] SI  --SenBas SG  --CP     SG  --Seri   SG  --EH     SG  --LaV   
+[11] PL  --LF     PL  --SN     PL  --Seri   PL  --EH     PL  --SenBas
+[16] TS  --CP     TS  --SN     TS  --Seri   TS  --EH     TS  --Ctv   
+[21] TS  --LaV    TS  --SnF    LF  --CP     LF  --SN     LF  --Ctv   
+[26] LF  --SLG    LF  --SnF    LF  --SnE    CP  --SN     CP  --EH    
+[31] CP  --LaV    CP  --SenBas SN  --Seri   SN  --SenBas Seri--SLG   
+[36] EH  --SLG    EH  --SenBas Ctv --SLG    Ctv --TrV    Ctv --BaC   
++ ... omitted several edges</code></pre>
+</div>
+</div>
+</section>
+<section id="decorating-a-graph" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="decorating-a-graph"><span class="header-section-number">8.3</span> Decorating a Graph</h2>
+<p>The <code>decorate_graph()</code> function merges external data into graph vertex attributes. This is essential for spatial visualization:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(baja)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(baja)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Region Population Latitude Longitude
+1   Baja        BaC    26.59   -111.79
+2   Baja        Ctv    29.73   -114.72
+3   Baja        LaV    24.04   -109.99
+4   Baja        Lig    25.73   -111.27
+5   Baja        PtC    24.19   -111.15
+6   Baja        PtP    29.03   -113.90</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>lopho_dec <span class="ot">&lt;-</span> <span class="fu">decorate_graph</span>(lopho, baja, <span class="at">stratum =</span> <span class="st">"Population"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vertex_attr_names</span>(lopho_dec)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "name"      "size"      "color"     "Region"    "Latitude"  "Longitude"</code></pre>
+</div>
+</div>
+<p>Now the graph nodes carry coordinate and metadata attributes.</p>
+</section>
+<section id="graph-metrics" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="graph-metrics"><span class="header-section-number">8.4</span> Graph Metrics</h2>
+<section id="node-properties" class="level3" data-number="8.4.1">
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="node-properties"><span class="header-section-number">8.4.1</span> Node Properties</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vertex names</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(lopho)<span class="sc">$</span>name</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "BaC"    "Ctv"    "LaV"    "Lig"    "PtC"    "PtP"    "SLG"    "SnE"   
+ [9] "SnF"    "SnI"    "StR"    "TsS"    "CP"     "LF"     "PL"     "SenBas"
+[17] "Seri"   "SG"     "SI"     "SN"     "TS"    </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Degree (number of edges)</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">degree</span>(lopho)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   BaC    Ctv    LaV    Lig    PtC    PtP    SLG    SnE    SnF    SnI    StR 
+     7      4      6      6      7      5      3      5      5      6      7 
+   TsS     CP     LF     PL SenBas   Seri     SG     SI     SN     TS 
+     5      4      3      5      5      3      5      5      5      3 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Betweenness centrality</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">betweenness</span>(lopho)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   BaC    Ctv    LaV    Lig    PtC    PtP    SLG    SnE    SnF    SnI    StR 
+     9     31      4      0      0     25      3      0     16      8     30 
+   TsS     CP     LF     PL SenBas   Seri     SG     SI     SN     TS 
+     0      2      0     92     98      1     32     15      0      0 </code></pre>
+</div>
+</div>
+</section>
+<section id="centroid-distance" class="level3" data-number="8.4.2">
+<h3 data-number="8.4.2" class="anchored" data-anchor-id="centroid-distance"><span class="header-section-number">8.4.2</span> Centroid Distance</h3>
+<p>The multivariate centroid distance between population centroids in discriminant space:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> <span class="fu">to_mv</span>(arapat)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">factor</span>(arapat<span class="sc">$</span>Species)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>cd <span class="ot">&lt;-</span> <span class="fu">centroid_distance</span>(mv, groups)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>cd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               [,1]      [,2]      [,3]      [,4]       [,5]       [,6]
+Cape      0.0800000 0.9200000 0.1333333 0.8533333 0.00000000 0.00000000
+Mainland  0.2638889 0.7361111 0.8194444 0.0000000 0.01388889 0.00000000
+Peninsula 0.6924603 0.3075397 0.3432540 0.0000000 0.59920635 0.03769841
+                 [,7]      [,8]       [,9]      [,10]       [,11]       [,12]
+Cape      0.000000000 0.3000000 0.70000000 0.00000000 0.000000000 0.000000000
+Mainland  0.000000000 0.2222222 0.00000000 0.63888889 0.111111111 0.000000000
+Peninsula 0.003968254 0.9007937 0.04960317 0.02380952 0.009920635 0.007936508
+              [,13]      [,14]      [,15]     [,16]       [,17]       [,18]
+Cape      0.9666667 0.03333333 0.00000000 0.9333333 0.000000000 0.000000000
+Mainland  0.7916667 0.15277778 0.02777778 0.5277778 0.000000000 0.000000000
+Peninsula 0.5714286 0.42857143 0.27976190 0.6726190 0.001984127 0.001984127
+               [,19]     [,20]       [,21]      [,22]     [,23]      [,24]
+Cape      0.08666667 0.5733333 0.286666667 0.00000000 0.0000000 0.00000000
+Mainland  0.00000000 0.0000000 0.000000000 0.00000000 0.0000000 0.05555556
+Peninsula 0.00000000 0.0000000 0.009920635 0.09722222 0.3174603 0.33730159
+              [,25]      [,26]       [,27]     [,28]       [,29]      [,30]
+Cape      0.0000000 0.00000000 0.000000000 0.0000000 0.000000000 0.01333333
+Mainland  0.0000000 0.01388889 0.361111111 0.1527778 0.000000000 0.00000000
+Peninsula 0.1964286 0.01785714 0.001984127 0.0000000 0.001984127 0.00000000
+                [,31]      [,32]      [,33] [,34] [,35]      [,36]      [,37]
+Cape      0.013333333 0.94000000 0.00000000 0.000  0.02 0.00000000 0.00000000
+Mainland  0.861111111 0.01388889 0.05555556 0.000  0.00 0.00000000 0.00000000
+Peninsula 0.003968254 0.00000000 0.00000000 0.625  0.00 0.03968254 0.03571429
+               [,38]       [,39]      [,40]      [,41]      [,42]      [,43]
+Cape      0.01333333 0.000000000 0.00000000 0.00000000 0.00000000 0.00000000
+Mainland  0.06944444 0.000000000 0.01388889 0.08333333 0.08333333 0.00000000
+Peninsula 0.28968254 0.005952381 0.00000000 0.00000000 0.00000000 0.01190476
+               [,44]     [,45]     [,46]      [,47]      [,48]      [,49]
+Cape      0.00000000 0.0000000 0.0000000 0.00000000 0.00000000 0.00000000
+Mainland  0.01388889 0.0000000 0.0000000 0.00000000 0.02777778 0.04166667
+Peninsula 0.38293651 0.1150794 0.3730159 0.03571429 0.00000000 0.01785714
+               [,50]     [,51]     [,52]      [,53]       [,54]       [,55]
+Cape      0.00000000 0.0000000 0.0000000 0.00000000 0.000000000 0.006666667
+Mainland  0.09722222 0.2916667 0.2222222 0.04166667 0.000000000 0.000000000
+Peninsula 0.05357143 0.0000000 0.0000000 0.00000000 0.001984127 0.000000000
+          [,56]     [,57] [,58]
+Cape       0.18 0.7733333  0.04
+Mainland   0.00 0.0000000  0.00
+Peninsula  0.00 0.0000000  0.00</code></pre>
+</div>
+</div>
+</section>
+<section id="centroid-variance" class="level3" data-number="8.4.3">
+<h3 data-number="8.4.3" class="anchored" data-anchor-id="centroid-variance"><span class="header-section-number">8.4.3</span> Centroid Variance</h3>
+<p>Multivariate variance around each population centroid:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>cv <span class="ot">&lt;-</span> <span class="fu">centroid_variance</span>(mv, groups)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>cv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Cape  Mainland Peninsula 
+ 1.519820  2.169841  2.886842 </code></pre>
+</div>
+</div>
+</section>
+<section id="shannon-entropy" class="level3" data-number="8.4.4">
+<h3 data-number="8.4.4" class="anchored" data-anchor-id="shannon-entropy"><span class="header-section-number">8.4.4</span> Shannon Entropy</h3>
+<p>Shannon entropy quantifies the uncertainty in a probability distribution:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Entropy of the degree distribution</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>deg <span class="ot">&lt;-</span> <span class="fu">degree</span>(lopho)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> deg <span class="sc">/</span> <span class="fu">sum</span>(deg)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">shannon_entropy</span>(p)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.344766</code></pre>
+</div>
+</div>
+</section>
+<section id="edge-contortion" class="level3" data-number="8.4.5">
+<h3 data-number="8.4.5" class="anchored" data-anchor-id="edge-contortion"><span class="header-section-number">8.4.5</span> Edge Contortion</h3>
+<p>A measure of how edges deviate from geographic expectations (requires decorated graph with coordinates):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">edge_contortion</span>(lopho_dec)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="congruence-testing" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="congruence-testing"><span class="header-section-number">8.5</span> Congruence Testing</h2>
+<section id="topology-congruence" class="level3" data-number="8.5.1">
+<h3 data-number="8.5.1" class="anchored" data-anchor-id="topology-congruence"><span class="header-section-number">8.5.1</span> Topology Congruence</h3>
+<p>Compare the topology of two population graphs:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(lopho)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(upiga)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="fu">congruence_topology</span>(lopho, upiga)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This graph was created by an old(er) igraph version.
+ℹ Call `igraph::upgrade_graph()` on it to use with the current igraph version.
+For now we convert it on the fly...
+This graph was created by an old(er) igraph version.
+ℹ Call `igraph::upgrade_graph()` on it to use with the current igraph version.
+For now we convert it on the fly...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in congruence_topology(lopho, upiga): These two topologies have
+non-overlapping node sets!  Careful on interpretation.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>IGRAPH 93b08a9 UN-- 16 19 -- 
++ attr: name (v/c)
++ edges from 93b08a9 (vertex names):
+ [1] BaC --LaV    BaC --SnE    BaC --StR    Ctv --SLG    Ctv --SnF   
+ [6] LaV --SnE    SLG --SnF    StR --SenBas CP  --SG     CP  --SN    
+[11] CP  --TS     LF  --PL     LF  --SI     PL  --SenBas PL  --SI    
+[16] PL  --SN     Seri--SG     Seri--SN     SN  --TS    </code></pre>
+</div>
+</div>
+</section>
+<section id="statistical-testing" class="level3" data-number="8.5.2">
+<h3 data-number="8.5.2" class="anchored" data-anchor-id="statistical-testing"><span class="header-section-number">8.5.2</span> Statistical Testing</h3>
+<p>Use <code>test_congruence()</code> to test whether two graphs are more similar in topology than expected by chance:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test_congruence</span>(lopho, upiga, <span class="at">method =</span> <span class="st">"combinatorial"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="permutation" class="level3" data-number="8.5.3">
+<h3 data-number="8.5.3" class="anchored" data-anchor-id="permutation"><span class="header-section-number">8.5.3</span> Permutation</h3>
+<p>The <code>permute_popgraph()</code> function creates a null distribution of graph topologies by permuting the data:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>null_graphs <span class="ot">&lt;-</span> <span class="fu">permute_popgraph</span>(mv, groups, <span class="at">nperm =</span> <span class="dv">99</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="subgraph-operations" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="subgraph-operations"><span class="header-section-number">8.6</span> Subgraph Operations</h2>
+<p>The <code>-</code> operator computes the difference between two popgraphs (removes edges in common). You can also extract subgraphs using igraph functions:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>smaller <span class="ot">&lt;-</span> <span class="fu">delete_vertices</span>(lopho, <span class="st">"SenBas"</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(smaller)<span class="sc">$</span>name</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "BaC"  "Ctv"  "LaV"  "Lig"  "PtC"  "PtP"  "SLG"  "SnE"  "SnF"  "SnI" 
+[11] "StR"  "TsS"  "CP"   "LF"   "PL"   "Seri" "SG"   "SI"   "SN"   "TS"  </code></pre>
+</div>
+</div>
+</section>
+<section id="export-formats" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="export-formats"><span class="header-section-number">8.7</span> Export Formats</h2>
+<section id="to-adjacency-matrix" class="level3" data-number="8.7.1">
+<h3 data-number="8.7.1" class="anchored" data-anchor-id="to-adjacency-matrix"><span class="header-section-number">8.7.1</span> To Adjacency Matrix</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="fu">to_matrix</span>(lopho)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>M[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    BaC Ctv LaV Lig PtC
+BaC   0   0   1   1   1
+Ctv   0   0   0   0   0
+LaV   1   0   0   1   1
+Lig   1   0   1   0   1
+PtC   1   0   1   1   0</code></pre>
+</div>
+</div>
+</section>
+<section id="to-data-frame" class="level3" data-number="8.7.2">
+<h3 data-number="8.7.2" class="anchored" data-anchor-id="to-data-frame"><span class="header-section-number">8.7.2</span> To Data Frame</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">to_df</span>(lopho)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  name      size   color Region
+1  BaC 12.158810 #FDAE61   Baja
+2  Ctv  3.880886 #FDAE61   Baja
+3  LaV  3.533757 #FDAE61   Baja
+4  Lig  4.731355 #FDAE61   Baja
+5  PtC  4.684652 #FDAE61   Baja
+6  PtP 10.925375 #FDAE61   Baja</code></pre>
+</div>
+</div>
+</section>
+<section id="to-json" class="level3" data-number="8.7.3">
+<h3 data-number="8.7.3" class="anchored" data-anchor-id="to-json"><span class="header-section-number">8.7.3</span> To JSON</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>json <span class="ot">&lt;-</span> <span class="fu">to_json</span>(lopho)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(json)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="to-spatial-formats" class="level3" data-number="8.7.4">
+<h3 data-number="8.7.4" class="anchored" data-anchor-id="to-spatial-formats"><span class="header-section-number">8.7.4</span> To Spatial Formats</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># As sf object</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>sf_obj <span class="ot">&lt;-</span> <span class="fu">to_sf</span>(lopho_dec)</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="co"># As KML</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="fu">to_kml</span>(lopho_dec, <span class="at">file =</span> <span class="st">"lopho.kml"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="to-pgraph-format" class="level3" data-number="8.7.5">
+<h3 data-number="8.7.5" class="anchored" data-anchor-id="to-pgraph-format"><span class="header-section-number">8.7.5</span> To pgraph Format</h3>
+<p>The <code>.pgraph</code> format is a simple text representation:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_popgraph</span>(lopho_dec, <span class="at">file =</span> <span class="st">"lopho.pgraph"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="reading-a-population-graph" class="level3" data-number="8.7.6">
+<h3 data-number="8.7.6" class="anchored" data-anchor-id="reading-a-population-graph"><span class="header-section-number">8.7.6</span> Reading a Population Graph</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"lopho.pgraph"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">read_popgraph</span>(path)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>IGRAPH 10edd5e UNW- 21 50 -- 
++ attr: name (v/c), size (v/n), color (v/c), weight (e/n)
++ edges from 10edd5e (vertex names):
+ [1] BaC --LaV    BaC --Lig    BaC --PtP    BaC --SnE    BaC --SnI   
+ [6] BaC --StR    BaC --SenBas Ctv --PtP    Ctv --SLG    Ctv --SnF   
+[11] Ctv --SenBas LaV --Lig    LaV --SnE    LaV --SnF    LaV --TsS   
+[16] Lig --PtC    Lig --SnE    Lig --SnI    Lig --StR    PtC --SnE   
+[21] PtC --StR    PtC --TsS    PtP --SnF    PtP --SnI    PtP --SenBas
+[26] SLG --SnF    SLG --SnI    SnE --StR    SnE --TsS    SnF --SnI   
+[31] SnI --StR    StR --TsS    StR --SenBas CP  --LF     CP  --Seri  
+[36] CP  --SG     CP  --SN     CP  --TS     LF  --PL     LF  --SG    
++ ... omitted several edges</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="randomization" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="randomization"><span class="header-section-number">8.8</span> Randomization</h2>
+<p>Generate a random graph with the same number of nodes and a specified number of edges:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>rg <span class="ot">&lt;-</span> <span class="fu">randomize_graph</span>(lopho)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>rg</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>IGRAPH ac565aa UN-- 21 52 -- 
++ attr: name (v/c)
++ edges from ac565aa (vertex names):
+ [1] BaC   --SnF    BaC   --SnE    BaC   --SenBas BaC   --SLG    BaC   --PL    
+ [6] BaC   --SI     BaC   --TsS    CP    --TS     CP    --SnI    TsS   --CP    
+[11] CP    --PtC    SnF   --Ctv    SenBas--Ctv    PtC   --Ctv    TS    --Ctv   
+[16] TS    --LaV    TsS   --LaV    LaV   --Lig    SenBas--LaV    LaV   --SN    
+[21] SnE   --LF     LF    --SG     SnI   --LF     Lig   --StR    TsS   --Lig   
+[26] Lig   --PtP    Lig   --SN     PL    --PtC    SnF   --PL     PL    --SI    
+[31] PL    --SN     PtC   --Lig    PtC   --SN     PtC   --SG     PtC   --PtP   
+[36] StR   --PtP    PtP   --Seri   SnI   --PtP    SenBas--Seri   SnE   --Seri  
++ ... omitted several edges</code></pre>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./genetic-distance.html" class="pagination-link" aria-label="Genetic Distance &amp; Relatedness">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Genetic Distance &amp; Relatedness</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./visualization.html" class="pagination-link" aria-label="Visualization">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Visualization</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb62" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Population Graphs</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>Population Graphs are a graph-theoretic approach to understanding among-population genetic connectivity (Dyer &amp; Nason 2004). Rather than assuming a specific model of gene flow (e.g., island or stepping-stone), population graphs estimate the conditional genetic covariance structure among populations, retaining only statistically significant edges.</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Constructing a Population Graph</span></span>
+<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### From a Data Frame</span></span>
+<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>The easiest way to create a population graph is with <span class="in">`population_graph()`</span>, which handles the conversion from genotypes to multivariate data internally:</span>
+<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-21"><a href="#cb62-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-22"><a href="#cb62-22" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">population_graph</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
+<span id="cb62-23"><a href="#cb62-23" aria-hidden="true" tabindex="-1"></a>graph</span>
+<span id="cb62-24"><a href="#cb62-24" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-25"><a href="#cb62-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-26"><a href="#cb62-26" aria-hidden="true" tabindex="-1"></a><span class="fu">### From a Multivariate Matrix</span></span>
+<span id="cb62-27"><a href="#cb62-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-28"><a href="#cb62-28" aria-hidden="true" tabindex="-1"></a>For more control, convert genotypes to multivariate format first, then call <span class="in">`popgraph()`</span> directly:</span>
+<span id="cb62-29"><a href="#cb62-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-32"><a href="#cb62-32" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-33"><a href="#cb62-33" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> <span class="fu">to_mv</span>(arapat)</span>
+<span id="cb62-34"><a href="#cb62-34" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">factor</span>(arapat<span class="sc">$</span>Species)</span>
+<span id="cb62-35"><a href="#cb62-35" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">popgraph</span>(mv, groups)</span>
+<span id="cb62-36"><a href="#cb62-36" aria-hidden="true" tabindex="-1"></a>graph</span>
+<span id="cb62-37"><a href="#cb62-37" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-38"><a href="#cb62-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-39"><a href="#cb62-39" aria-hidden="true" tabindex="-1"></a>The <span class="in">`alpha`</span> parameter controls edge retention significance (default 0.05):</span>
+<span id="cb62-40"><a href="#cb62-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-43"><a href="#cb62-43" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-44"><a href="#cb62-44" aria-hidden="true" tabindex="-1"></a>graph_strict <span class="ot">&lt;-</span> <span class="fu">popgraph</span>(mv, groups, <span class="at">alpha =</span> <span class="fl">0.01</span>)</span>
+<span id="cb62-45"><a href="#cb62-45" aria-hidden="true" tabindex="-1"></a>graph_strict</span>
+<span id="cb62-46"><a href="#cb62-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-47"><a href="#cb62-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-48"><a href="#cb62-48" aria-hidden="true" tabindex="-1"></a><span class="fu">### From an Adjacency Matrix</span></span>
+<span id="cb62-49"><a href="#cb62-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-50"><a href="#cb62-50" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`as.popgraph()`</span> to convert a pre-computed adjacency matrix:</span>
+<span id="cb62-51"><a href="#cb62-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-54"><a href="#cb62-54" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-55"><a href="#cb62-55" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>,</span>
+<span id="cb62-56"><a href="#cb62-56" aria-hidden="true" tabindex="-1"></a>              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>,</span>
+<span id="cb62-57"><a href="#cb62-57" aria-hidden="true" tabindex="-1"></a>              <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>,</span>
+<span id="cb62-58"><a href="#cb62-58" aria-hidden="true" tabindex="-1"></a>              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">nrow =</span> <span class="dv">4</span>)</span>
+<span id="cb62-59"><a href="#cb62-59" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(A) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(A) <span class="ot">&lt;-</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb62-60"><a href="#cb62-60" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">as.popgraph</span>(A)</span>
+<span id="cb62-61"><a href="#cb62-61" aria-hidden="true" tabindex="-1"></a>g</span>
+<span id="cb62-62"><a href="#cb62-62" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-63"><a href="#cb62-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-64"><a href="#cb62-64" aria-hidden="true" tabindex="-1"></a><span class="fu">## Bundled Population Graphs</span></span>
+<span id="cb62-65"><a href="#cb62-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-66"><a href="#cb62-66" aria-hidden="true" tabindex="-1"></a>The package includes two pre-computed population graphs:</span>
+<span id="cb62-67"><a href="#cb62-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-70"><a href="#cb62-70" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-71"><a href="#cb62-71" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(lopho)</span>
+<span id="cb62-72"><a href="#cb62-72" aria-hidden="true" tabindex="-1"></a>lopho</span>
+<span id="cb62-73"><a href="#cb62-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-74"><a href="#cb62-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-77"><a href="#cb62-77" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-78"><a href="#cb62-78" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(upiga)</span>
+<span id="cb62-79"><a href="#cb62-79" aria-hidden="true" tabindex="-1"></a>upiga</span>
+<span id="cb62-80"><a href="#cb62-80" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-81"><a href="#cb62-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-82"><a href="#cb62-82" aria-hidden="true" tabindex="-1"></a><span class="fu">## Decorating a Graph</span></span>
+<span id="cb62-83"><a href="#cb62-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-84"><a href="#cb62-84" aria-hidden="true" tabindex="-1"></a>The <span class="in">`decorate_graph()`</span> function merges external data into graph vertex attributes. This is essential for spatial visualization:</span>
+<span id="cb62-85"><a href="#cb62-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-88"><a href="#cb62-88" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-89"><a href="#cb62-89" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(baja)</span>
+<span id="cb62-90"><a href="#cb62-90" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(baja)</span>
+<span id="cb62-91"><a href="#cb62-91" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-92"><a href="#cb62-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-95"><a href="#cb62-95" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-96"><a href="#cb62-96" aria-hidden="true" tabindex="-1"></a>lopho_dec <span class="ot">&lt;-</span> <span class="fu">decorate_graph</span>(lopho, baja, <span class="at">stratum =</span> <span class="st">"Population"</span>)</span>
+<span id="cb62-97"><a href="#cb62-97" aria-hidden="true" tabindex="-1"></a><span class="fu">vertex_attr_names</span>(lopho_dec)</span>
+<span id="cb62-98"><a href="#cb62-98" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-99"><a href="#cb62-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-100"><a href="#cb62-100" aria-hidden="true" tabindex="-1"></a>Now the graph nodes carry coordinate and metadata attributes.</span>
+<span id="cb62-101"><a href="#cb62-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-102"><a href="#cb62-102" aria-hidden="true" tabindex="-1"></a><span class="fu">## Graph Metrics</span></span>
+<span id="cb62-103"><a href="#cb62-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-104"><a href="#cb62-104" aria-hidden="true" tabindex="-1"></a><span class="fu">### Node Properties</span></span>
+<span id="cb62-105"><a href="#cb62-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-108"><a href="#cb62-108" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-109"><a href="#cb62-109" aria-hidden="true" tabindex="-1"></a><span class="co"># Vertex names</span></span>
+<span id="cb62-110"><a href="#cb62-110" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(lopho)<span class="sc">$</span>name</span>
+<span id="cb62-111"><a href="#cb62-111" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-112"><a href="#cb62-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-115"><a href="#cb62-115" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-116"><a href="#cb62-116" aria-hidden="true" tabindex="-1"></a><span class="co"># Degree (number of edges)</span></span>
+<span id="cb62-117"><a href="#cb62-117" aria-hidden="true" tabindex="-1"></a><span class="fu">degree</span>(lopho)</span>
+<span id="cb62-118"><a href="#cb62-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-119"><a href="#cb62-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-122"><a href="#cb62-122" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-123"><a href="#cb62-123" aria-hidden="true" tabindex="-1"></a><span class="co"># Betweenness centrality</span></span>
+<span id="cb62-124"><a href="#cb62-124" aria-hidden="true" tabindex="-1"></a><span class="fu">betweenness</span>(lopho)</span>
+<span id="cb62-125"><a href="#cb62-125" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-126"><a href="#cb62-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-127"><a href="#cb62-127" aria-hidden="true" tabindex="-1"></a><span class="fu">### Centroid Distance</span></span>
+<span id="cb62-128"><a href="#cb62-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-129"><a href="#cb62-129" aria-hidden="true" tabindex="-1"></a>The multivariate centroid distance between population centroids in discriminant space:</span>
+<span id="cb62-130"><a href="#cb62-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-133"><a href="#cb62-133" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-134"><a href="#cb62-134" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> <span class="fu">to_mv</span>(arapat)</span>
+<span id="cb62-135"><a href="#cb62-135" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">factor</span>(arapat<span class="sc">$</span>Species)</span>
+<span id="cb62-136"><a href="#cb62-136" aria-hidden="true" tabindex="-1"></a>cd <span class="ot">&lt;-</span> <span class="fu">centroid_distance</span>(mv, groups)</span>
+<span id="cb62-137"><a href="#cb62-137" aria-hidden="true" tabindex="-1"></a>cd</span>
+<span id="cb62-138"><a href="#cb62-138" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-139"><a href="#cb62-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-140"><a href="#cb62-140" aria-hidden="true" tabindex="-1"></a><span class="fu">### Centroid Variance</span></span>
+<span id="cb62-141"><a href="#cb62-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-142"><a href="#cb62-142" aria-hidden="true" tabindex="-1"></a>Multivariate variance around each population centroid:</span>
+<span id="cb62-143"><a href="#cb62-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-146"><a href="#cb62-146" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-147"><a href="#cb62-147" aria-hidden="true" tabindex="-1"></a>cv <span class="ot">&lt;-</span> <span class="fu">centroid_variance</span>(mv, groups)</span>
+<span id="cb62-148"><a href="#cb62-148" aria-hidden="true" tabindex="-1"></a>cv</span>
+<span id="cb62-149"><a href="#cb62-149" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-150"><a href="#cb62-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-151"><a href="#cb62-151" aria-hidden="true" tabindex="-1"></a><span class="fu">### Shannon Entropy</span></span>
+<span id="cb62-152"><a href="#cb62-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-153"><a href="#cb62-153" aria-hidden="true" tabindex="-1"></a>Shannon entropy quantifies the uncertainty in a probability distribution:</span>
+<span id="cb62-154"><a href="#cb62-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-157"><a href="#cb62-157" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-158"><a href="#cb62-158" aria-hidden="true" tabindex="-1"></a><span class="co"># Entropy of the degree distribution</span></span>
+<span id="cb62-159"><a href="#cb62-159" aria-hidden="true" tabindex="-1"></a>deg <span class="ot">&lt;-</span> <span class="fu">degree</span>(lopho)</span>
+<span id="cb62-160"><a href="#cb62-160" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> deg <span class="sc">/</span> <span class="fu">sum</span>(deg)</span>
+<span id="cb62-161"><a href="#cb62-161" aria-hidden="true" tabindex="-1"></a><span class="fu">shannon_entropy</span>(p)</span>
+<span id="cb62-162"><a href="#cb62-162" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-163"><a href="#cb62-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-164"><a href="#cb62-164" aria-hidden="true" tabindex="-1"></a><span class="fu">### Edge Contortion</span></span>
+<span id="cb62-165"><a href="#cb62-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-166"><a href="#cb62-166" aria-hidden="true" tabindex="-1"></a>A measure of how edges deviate from geographic expectations (requires decorated graph with coordinates):</span>
+<span id="cb62-167"><a href="#cb62-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-170"><a href="#cb62-170" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-171"><a href="#cb62-171" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb62-172"><a href="#cb62-172" aria-hidden="true" tabindex="-1"></a><span class="fu">edge_contortion</span>(lopho_dec)</span>
+<span id="cb62-173"><a href="#cb62-173" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-174"><a href="#cb62-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-175"><a href="#cb62-175" aria-hidden="true" tabindex="-1"></a><span class="fu">## Congruence Testing</span></span>
+<span id="cb62-176"><a href="#cb62-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-177"><a href="#cb62-177" aria-hidden="true" tabindex="-1"></a><span class="fu">### Topology Congruence</span></span>
+<span id="cb62-178"><a href="#cb62-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-179"><a href="#cb62-179" aria-hidden="true" tabindex="-1"></a>Compare the topology of two population graphs:</span>
+<span id="cb62-180"><a href="#cb62-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-183"><a href="#cb62-183" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-184"><a href="#cb62-184" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(lopho)</span>
+<span id="cb62-185"><a href="#cb62-185" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(upiga)</span>
+<span id="cb62-186"><a href="#cb62-186" aria-hidden="true" tabindex="-1"></a><span class="fu">congruence_topology</span>(lopho, upiga)</span>
+<span id="cb62-187"><a href="#cb62-187" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-188"><a href="#cb62-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-189"><a href="#cb62-189" aria-hidden="true" tabindex="-1"></a><span class="fu">### Statistical Testing</span></span>
+<span id="cb62-190"><a href="#cb62-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-191"><a href="#cb62-191" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`test_congruence()`</span> to test whether two graphs are more similar in topology than expected by chance:</span>
+<span id="cb62-192"><a href="#cb62-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-195"><a href="#cb62-195" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-196"><a href="#cb62-196" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb62-197"><a href="#cb62-197" aria-hidden="true" tabindex="-1"></a><span class="fu">test_congruence</span>(lopho, upiga, <span class="at">method =</span> <span class="st">"combinatorial"</span>)</span>
+<span id="cb62-198"><a href="#cb62-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-199"><a href="#cb62-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-200"><a href="#cb62-200" aria-hidden="true" tabindex="-1"></a><span class="fu">### Permutation</span></span>
+<span id="cb62-201"><a href="#cb62-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-202"><a href="#cb62-202" aria-hidden="true" tabindex="-1"></a>The <span class="in">`permute_popgraph()`</span> function creates a null distribution of graph topologies by permuting the data:</span>
+<span id="cb62-203"><a href="#cb62-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-206"><a href="#cb62-206" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-207"><a href="#cb62-207" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb62-208"><a href="#cb62-208" aria-hidden="true" tabindex="-1"></a>null_graphs <span class="ot">&lt;-</span> <span class="fu">permute_popgraph</span>(mv, groups, <span class="at">nperm =</span> <span class="dv">99</span>)</span>
+<span id="cb62-209"><a href="#cb62-209" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-210"><a href="#cb62-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-211"><a href="#cb62-211" aria-hidden="true" tabindex="-1"></a><span class="fu">## Subgraph Operations</span></span>
+<span id="cb62-212"><a href="#cb62-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-213"><a href="#cb62-213" aria-hidden="true" tabindex="-1"></a>The <span class="in">`-`</span> operator computes the difference between two popgraphs (removes edges in common). You can also extract subgraphs using igraph functions:</span>
+<span id="cb62-214"><a href="#cb62-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-217"><a href="#cb62-217" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-218"><a href="#cb62-218" aria-hidden="true" tabindex="-1"></a>smaller <span class="ot">&lt;-</span> <span class="fu">delete_vertices</span>(lopho, <span class="st">"SenBas"</span>)</span>
+<span id="cb62-219"><a href="#cb62-219" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(smaller)<span class="sc">$</span>name</span>
+<span id="cb62-220"><a href="#cb62-220" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-221"><a href="#cb62-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-222"><a href="#cb62-222" aria-hidden="true" tabindex="-1"></a><span class="fu">## Export Formats</span></span>
+<span id="cb62-223"><a href="#cb62-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-224"><a href="#cb62-224" aria-hidden="true" tabindex="-1"></a><span class="fu">### To Adjacency Matrix</span></span>
+<span id="cb62-225"><a href="#cb62-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-228"><a href="#cb62-228" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-229"><a href="#cb62-229" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="fu">to_matrix</span>(lopho)</span>
+<span id="cb62-230"><a href="#cb62-230" aria-hidden="true" tabindex="-1"></a>M[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb62-231"><a href="#cb62-231" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-232"><a href="#cb62-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-233"><a href="#cb62-233" aria-hidden="true" tabindex="-1"></a><span class="fu">### To Data Frame</span></span>
+<span id="cb62-234"><a href="#cb62-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-237"><a href="#cb62-237" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-238"><a href="#cb62-238" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">to_df</span>(lopho)</span>
+<span id="cb62-239"><a href="#cb62-239" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span>
+<span id="cb62-240"><a href="#cb62-240" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-241"><a href="#cb62-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-242"><a href="#cb62-242" aria-hidden="true" tabindex="-1"></a><span class="fu">### To JSON</span></span>
+<span id="cb62-243"><a href="#cb62-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-246"><a href="#cb62-246" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-247"><a href="#cb62-247" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb62-248"><a href="#cb62-248" aria-hidden="true" tabindex="-1"></a>json <span class="ot">&lt;-</span> <span class="fu">to_json</span>(lopho)</span>
+<span id="cb62-249"><a href="#cb62-249" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(json)</span>
+<span id="cb62-250"><a href="#cb62-250" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-251"><a href="#cb62-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-252"><a href="#cb62-252" aria-hidden="true" tabindex="-1"></a><span class="fu">### To Spatial Formats</span></span>
+<span id="cb62-253"><a href="#cb62-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-256"><a href="#cb62-256" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-257"><a href="#cb62-257" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb62-258"><a href="#cb62-258" aria-hidden="true" tabindex="-1"></a><span class="co"># As sf object</span></span>
+<span id="cb62-259"><a href="#cb62-259" aria-hidden="true" tabindex="-1"></a>sf_obj <span class="ot">&lt;-</span> <span class="fu">to_sf</span>(lopho_dec)</span>
+<span id="cb62-260"><a href="#cb62-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-261"><a href="#cb62-261" aria-hidden="true" tabindex="-1"></a><span class="co"># As KML</span></span>
+<span id="cb62-262"><a href="#cb62-262" aria-hidden="true" tabindex="-1"></a><span class="fu">to_kml</span>(lopho_dec, <span class="at">file =</span> <span class="st">"lopho.kml"</span>)</span>
+<span id="cb62-263"><a href="#cb62-263" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-264"><a href="#cb62-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-265"><a href="#cb62-265" aria-hidden="true" tabindex="-1"></a><span class="fu">### To pgraph Format</span></span>
+<span id="cb62-266"><a href="#cb62-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-267"><a href="#cb62-267" aria-hidden="true" tabindex="-1"></a>The <span class="in">`.pgraph`</span> format is a simple text representation:</span>
+<span id="cb62-268"><a href="#cb62-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-271"><a href="#cb62-271" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-272"><a href="#cb62-272" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb62-273"><a href="#cb62-273" aria-hidden="true" tabindex="-1"></a><span class="fu">write_popgraph</span>(lopho_dec, <span class="at">file =</span> <span class="st">"lopho.pgraph"</span>)</span>
+<span id="cb62-274"><a href="#cb62-274" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-275"><a href="#cb62-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-276"><a href="#cb62-276" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reading a Population Graph</span></span>
+<span id="cb62-277"><a href="#cb62-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-280"><a href="#cb62-280" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-281"><a href="#cb62-281" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"lopho.pgraph"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span>)</span>
+<span id="cb62-282"><a href="#cb62-282" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">read_popgraph</span>(path)</span>
+<span id="cb62-283"><a href="#cb62-283" aria-hidden="true" tabindex="-1"></a>g</span>
+<span id="cb62-284"><a href="#cb62-284" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb62-285"><a href="#cb62-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-286"><a href="#cb62-286" aria-hidden="true" tabindex="-1"></a><span class="fu">## Randomization</span></span>
+<span id="cb62-287"><a href="#cb62-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-288"><a href="#cb62-288" aria-hidden="true" tabindex="-1"></a>Generate a random graph with the same number of nodes and a specified number of edges:</span>
+<span id="cb62-289"><a href="#cb62-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-292"><a href="#cb62-292" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb62-293"><a href="#cb62-293" aria-hidden="true" tabindex="-1"></a>rg <span class="ot">&lt;-</span> <span class="fu">randomize_graph</span>(lopho)</span>
+<span id="cb62-294"><a href="#cb62-294" aria-hidden="true" tabindex="-1"></a>rg</span>
+<span id="cb62-295"><a href="#cb62-295" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/dyerlab/gstudio/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

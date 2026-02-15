@@ -1,0 +1,134 @@
+# Genetic Distance & Relatedness
+
+This chapter covers inter-individual and inter-population distance estimation, pairwise relatedness, and spatial autocorrelation analysis.
+
+```{r}
+library(gstudio)
+data(arapat)
+```
+
+## Genetic Distance
+
+The `genetic_distance()` function computes distance matrices from genetic data. Some modes operate among individuals, others among populations (strata).
+
+### Available Distance Metrics
+
+| Mode | Level | Description |
+|------|-------|-------------|
+| `"AMOVA"` | Individual | Inter-individual AMOVA distance |
+| `"Bray"` | Individual | Proportion of shared alleles |
+| `"Euclidean"` | Population | Euclidean frequency distance |
+| `"cGD"` | Population | Conditional genetic distance |
+| `"Nei"` | Population | Nei's genetic distance (1978) |
+| `"Dps"` | Population | Shared allele distance (1 - Ps) |
+| `"Jaccard"` | Population | Jaccard set dissimilarity |
+
+### Individual-Level Distances
+
+AMOVA distance computes inter-individual genetic distances:
+
+```{r}
+# Subset for a manageable example
+sub <- arapat[1:20, ]
+D_amova <- genetic_distance(sub, mode = "AMOVA")
+dim(D_amova)
+D_amova[1:5, 1:5]
+```
+
+### Population-Level Distances
+
+Population-level distances require a stratum column:
+
+```{r}
+D_nei <- genetic_distance(arapat, stratum = "Species", mode = "Nei")
+D_nei
+```
+
+```{r}
+D_cgd <- genetic_distance(arapat, stratum = "Species", mode = "cGD")
+D_cgd
+```
+
+```{r}
+D_euc <- genetic_distance(arapat, stratum = "Species",
+                           mode = "Euclidean")
+D_euc
+```
+
+### Standalone Distance Functions
+
+Each distance metric also has a standalone function:
+
+```{r}
+D <- dist_nei(arapat, stratum = "Species")
+D
+```
+
+## Genetic Relatedness
+
+The `genetic_relatedness()` function computes pairwise relatedness among individuals.
+
+### Available Relatedness Estimators
+
+| Mode | Description |
+|------|-------------|
+| `"Nason"` | Nason's kinship coefficient (Fij) |
+| `"LynchRitland"` | Lynch & Ritland estimator |
+| `"Ritland"` | Ritland estimator |
+
+### Basic Usage
+
+```{r}
+sub <- arapat[1:10, ]
+R <- genetic_relatedness(sub, mode = "Nason")
+dim(R)
+R[1:5, 1:5]
+```
+
+### Standalone Relatedness Functions
+
+Per-locus relatedness can also be estimated directly:
+
+```{r}
+r_nason <- rel_nason(arapat$LTRS[1:10])
+r_nason[1:5, 1:5]
+```
+
+## Spatial Autocorrelation
+
+The `genetic_autocorrelation()` function performs the spatial autocorrelation analysis of Smouse & Peakall (1999). It requires two square distance matrices --- one physical, one genetic --- and a vector of distance bin boundaries:
+
+```{r}
+#| eval: false
+# Physical distance matrix
+P <- strata_distance(arapat,
+                     longitude = "Longitude",
+                     latitude = "Latitude")
+
+# Genetic distance matrix
+G <- genetic_distance(arapat, mode = "AMOVA")
+
+# Define distance bins
+bins <- seq(0, max(P), length.out = 6)
+
+# Run autocorrelation
+result <- genetic_autocorrelation(P, G, bins = bins, perms = 99)
+result
+```
+
+The output includes the spatial autocorrelation coefficient (R) for each distance class, the number of pairwise comparisons (N), and a p-value from the permutation test (P).
+
+## Strata Distances
+
+The `strata_coordinates()` function extracts per-stratum centroid coordinates, and `strata_distance()` computes physical (geographic) distances between them:
+
+```{r}
+coords <- strata_coordinates(arapat, stratum = "Species",
+                              longitude = "Longitude",
+                              latitude = "Latitude")
+coords
+```
+
+```{r}
+strata_distance(coords)
+```

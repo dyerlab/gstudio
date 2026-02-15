@@ -1,0 +1,93 @@
+# Getting Started
+
+This chapter covers the installation of `gstudio`, loading bundled datasets, and a quick tour of the package's core utilities.
+
+## Installation
+
+The `gstudio` package is available from GitHub and can be installed using the `devtools` package:
+
+```{r}
+#| eval: false
+install.packages("devtools")
+devtools::install_github("dyerlab/gstudio")
+```
+
+Once installed, load the package:
+
+```{r}
+library(gstudio)
+```
+
+## Bundled Datasets
+
+The package ships with several datasets for examples and testing:
+
+| Dataset | Description |
+|---------|-------------|
+| `arapat` | *Araptus attenuatus* multilocus microsatellite data across Baja California |
+| `aflp_arapat` | *Araptus attenuatus* AFLP marker data |
+| `cornus` | *Cornus florida* adult genotypes |
+| `cornus_florida` | *Cornus florida* mother-offspring pair data |
+| `lopho` | *Lophocereus schottii* population graph (Dyer & Nason 2004) |
+| `upiga` | *Upiga virescens* population graph |
+| `baja` | Baja California sampling location metadata |
+| `alt` | Sonoran desert altitude raster data |
+
+Load any dataset with the `data()` function:
+
+```{r}
+data(arapat)
+```
+
+## Exploring a Dataset
+
+The `arapat` dataset is a `data.frame` with both metadata columns and `locus` columns:
+
+```{r}
+names(arapat)
+dim(arapat)
+```
+
+### Identifying Locus Columns
+
+Use `column_class()` to find all columns of a particular class:
+
+```{r}
+column_class(arapat, "locus")
+```
+
+This returns the names of all columns that contain `locus` objects --- a function used extensively throughout the package.
+
+### Splitting by Stratum
+
+The `partition()` function splits a data.frame by a grouping column, returning a named list:
+
+```{r}
+pops <- partition(arapat, stratum = "Species")
+names(pops)
+sapply(pops, nrow)
+```
+
+### Ploidy
+
+Check the ploidy level of a locus column:
+
+```{r}
+ploidy(arapat$LTRS)
+```
+
+## A Quick Analysis
+
+With just a few lines, you can estimate genetic diversity across populations:
+
+```{r}
+genetic_diversity(arapat, stratum = "Species", mode = "He")
+```
+
+Or compute population structure:
+
+```{r}
+genetic_structure(arapat, stratum = "Species", mode = "Gst")
+```
+
+The following chapters cover each of these operations in detail.

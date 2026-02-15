@@ -1,0 +1,241 @@
+# Population Graphs
+
+Population Graphs are a graph-theoretic approach to understanding among-population genetic connectivity (Dyer & Nason 2004). Rather than assuming a specific model of gene flow (e.g., island or stepping-stone), population graphs estimate the conditional genetic covariance structure among populations, retaining only statistically significant edges.
+
+```{r}
+library(gstudio)
+library(igraph)
+data(arapat)
+```
+
+## Constructing a Population Graph
+
+### From a Data Frame
+
+The easiest way to create a population graph is with `population_graph()`, which handles the conversion from genotypes to multivariate data internally:
+
+```{r}
+graph <- population_graph(arapat, stratum = "Species")
+graph
+```
+
+### From a Multivariate Matrix
+
+For more control, convert genotypes to multivariate format first, then call `popgraph()` directly:
+
+```{r}
+mv <- to_mv(arapat)
+groups <- factor(arapat$Species)
+graph <- popgraph(mv, groups)
+graph
+```
+
+The `alpha` parameter controls edge retention significance (default 0.05):
+
+```{r}
+graph_strict <- popgraph(mv, groups, alpha = 0.01)
+graph_strict
+```
+
+### From an Adjacency Matrix
+
+Use `as.popgraph()` to convert a pre-computed adjacency matrix:
+
+```{r}
+A <- matrix(c(0, 1, 0, 1,
+              1, 0, 1, 0,
+              0, 1, 0, 1,
+              1, 0, 1, 0), nrow = 4)
+rownames(A) <- colnames(A) <- LETTERS[1:4]
+g <- as.popgraph(A)
+g
+```
+
+## Bundled Population Graphs
+
+The package includes two pre-computed population graphs:
+
+```{r}
+data(lopho)
+lopho
+```
+
+```{r}
+data(upiga)
+upiga
+```
+
+## Decorating a Graph
+
+The `decorate_graph()` function merges external data into graph vertex attributes. This is essential for spatial visualization:
+
+```{r}
+data(baja)
+head(baja)
+```
+
+```{r}
+lopho_dec <- decorate_graph(lopho, baja, stratum = "Population")
+vertex_attr_names(lopho_dec)
+```
+
+Now the graph nodes carry coordinate and metadata attributes.
+
+## Graph Metrics
+
+### Node Properties
+
+```{r}
+# Vertex names
+V(lopho)$name
+```
+
+```{r}
+# Degree (number of edges)
+degree(lopho)
+```
+
+```{r}
+# Betweenness centrality
+betweenness(lopho)
+```
+
+### Centroid Distance
+
+The multivariate centroid distance between population centroids in discriminant space:
+
+```{r}
+mv <- to_mv(arapat)
+groups <- factor(arapat$Species)
+cd <- centroid_distance(mv, groups)
+cd
+```
+
+### Centroid Variance
+
+Multivariate variance around each population centroid:
+
+```{r}
+cv <- centroid_variance(mv, groups)
+cv
+```
+
+### Shannon Entropy
+
+Shannon entropy quantifies the uncertainty in a probability distribution:
+
+```{r}
+# Entropy of the degree distribution
+deg <- degree(lopho)
+p <- deg / sum(deg)
+shannon_entropy(p)
+```
+
+### Edge Contortion
+
+A measure of how edges deviate from geographic expectations (requires decorated graph with coordinates):
+
+```{r}
+#| eval: false
+edge_contortion(lopho_dec)
+```
+
+## Congruence Testing
+
+### Topology Congruence
+
+Compare the topology of two population graphs:
+
+```{r}
+data(lopho)
+data(upiga)
+congruence_topology(lopho, upiga)
+```
+
+### Statistical Testing
+
+Use `test_congruence()` to test whether two graphs are more similar in topology than expected by chance:
+
+```{r}
+#| eval: false
+test_congruence(lopho, upiga, method = "combinatorial")
+```
+
+### Permutation
+
+The `permute_popgraph()` function creates a null distribution of graph topologies by permuting the data:
+
+```{r}
+#| eval: false
+null_graphs <- permute_popgraph(mv, groups, nperm = 99)
+```
+
+## Subgraph Operations
+
+The `-` operator computes the difference between two popgraphs (removes edges in common). You can also extract subgraphs using igraph functions:
+
+```{r}
+smaller <- delete_vertices(lopho, "SenBas")
+V(smaller)$name
+```
+
+## Export Formats
+
+### To Adjacency Matrix
+
+```{r}
+M <- to_matrix(lopho)
+M[1:5, 1:5]
+```
+
+### To Data Frame
+
+```{r}
+df <- to_df(lopho)
+head(df)
+```
+
+### To JSON
+
+```{r}
+#| eval: false
+json <- to_json(lopho)
+cat(json)
+```
+
+### To Spatial Formats
+
+```{r}
+#| eval: false
+# As sf object
+sf_obj <- to_sf(lopho_dec)
+
+# As KML
+to_kml(lopho_dec, file = "lopho.kml")
+```
+
+### To pgraph Format
+
+The `.pgraph` format is a simple text representation:
+
+```{r}
+#| eval: false
+write_popgraph(lopho_dec, file = "lopho.pgraph")
+```
+
+### Reading a Population Graph
+
+```{r}
+path <- system.file("extdata", "lopho.pgraph", package = "gstudio")
+g <- read_popgraph(path)
+g
+```
+
+## Randomization
+
+Generate a random graph with the same number of nodes and a specified number of edges:
+
+```{r}
+rg <- randomize_graph(lopho)
+rg
+```

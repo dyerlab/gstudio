@@ -1,0 +1,36 @@
+project:
+  type: book
+  output-dir: "."
+
+book:
+  title: "gstudio: Spatial Analysis of Genetic Marker Data"
+  author: "Rodney J. Dyer"
+  date: today
+  date-format: "MMMM D, YYYY"
+  repo-url: https://github.com/dyerlab/gstudio
+  repo-actions: [issue]
+  chapters:
+    - index.qmd
+    - getting-started.qmd
+    - locus-class.qmd
+    - data-io.qmd
+    - allele-frequencies.qmd
+    - genetic-diversity.qmd
+    - genetic-structure.qmd
+    - genetic-distance.qmd
+    - population-graphs.qmd
+    - visualization.qmd
+    - simulation-parentage.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+    code-tools: true
+    highlight-style: github
+
+execute:
+  freeze: auto
