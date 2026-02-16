@@ -78,20 +78,24 @@ The `genetic_relatedness()` function computes pairwise relatedness among individ
 
 ### Basic Usage
 
+The Nason estimator divides by the polymorphic index `Pe()`, so monomorphic loci (where `Pe = 0`) will produce `NaN`. In the `arapat` dataset, `LTRS` and `ATPS` can be monomorphic in small subsets. To avoid this, restrict the data to polymorphic loci:
+
 ```{r}
-sub <- arapat[1:10, ]
+# Use loci that are polymorphic in this subset
+poly_loci <- c("WNT", "EN", "EF", "ZMP", "AML", "MP20")
+sub <- arapat[1:10, c("Species", poly_loci)]
 R <- genetic_relatedness(sub, mode = "Nason")
 dim(R)
-R[1:5, 1:5]
+round(R[1:5, 1:5], 4)
 ```
 
 ### Standalone Relatedness Functions
 
-Per-locus relatedness can also be estimated directly:
+Per-locus relatedness can also be estimated directly. Choose a polymorphic locus:
 
 ```{r}
-r_nason <- rel_nason(arapat$LTRS[1:10])
-r_nason[1:5, 1:5]
+r_nason <- rel_nason(arapat$EN[1:10])
+round(r_nason[1:5, 1:5], 4)
 ```
 
 ## Spatial Autocorrelation
