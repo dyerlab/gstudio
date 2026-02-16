@@ -357,9 +357,8 @@ Peninsula 0.9244791 0.6851578 0.0000000</code></pre>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>D_cgd <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"cGD"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning in popgraph::popgraph(x = mv, groups =
-factor(as.character(x[[stratum]]))): 1 variables are collinear and being
-dropped from the discriminant rotation.</code></pre>
+<pre><code>Warning in popgraph(x = mv, groups = factor(as.character(x[[stratum]]))): 1
+variables are collinear and being dropped from the discriminant rotation.</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>D_cgd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -429,9 +428,12 @@ Peninsula 0.9244791 0.6851578 0.0000000</code></pre>
 </section>
 <section id="basic-usage" class="level3" data-number="7.2.2">
 <h3 data-number="7.2.2" class="anchored" data-anchor-id="basic-usage"><span class="header-section-number">7.2.2</span> Basic Usage</h3>
+<p>The Nason estimator divides by the polymorphic index <code>Pe()</code>, so monomorphic loci (where <code>Pe = 0</code>) will produce <code>NaN</code>. In the <code>arapat</code> dataset, <code>LTRS</code> and <code>ATPS</code> can be monomorphic in small subsets. To avoid this, restrict the data to polymorphic loci:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sub <span class="ot">&lt;-</span> arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, ]</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">genetic_relatedness</span>(sub, <span class="at">mode =</span> <span class="st">"Nason"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use loci that are polymorphic in this subset</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>poly_loci <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"WNT"</span>, <span class="st">"EN"</span>, <span class="st">"EF"</span>, <span class="st">"ZMP"</span>, <span class="st">"AML"</span>, <span class="st">"MP20"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>sub <span class="ot">&lt;-</span> arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="fu">c</span>(<span class="st">"Species"</span>, poly_loci)]</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">genetic_relatedness</span>(sub, <span class="at">mode =</span> <span class="st">"Nason"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Some of your loci are missing, Fij will treat these as loci with all alleles with likelihood equal to the population allele frequency.
 Some of your loci are missing, Fij will treat these as loci with all alleles with likelihood equal to the population allele frequency.
@@ -441,30 +443,30 @@ Some of your loci are missing, Fij will treat these as loci with all alleles wit
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 10 10</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>R[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(R[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     [,1] [,2] [,3] [,4] [,5]
-[1,]    1  NaN  NaN  NaN  NaN
-[2,]  NaN    1  NaN  NaN  NaN
-[3,]  NaN  NaN    1  NaN  NaN
-[4,]  NaN  NaN  NaN    1  NaN
-[5,]  NaN  NaN  NaN  NaN    1</code></pre>
+<pre><code>       [,1]   [,2]   [,3]   [,4]   [,5]
+[1,] 1.0000 0.2497 0.2431 0.2534 0.2403
+[2,] 0.2497 1.0000 0.2784 0.2725 0.2680
+[3,] 0.2431 0.2784 1.0000 0.2659 0.2877
+[4,] 0.2534 0.2725 0.2659 1.0000 0.2606
+[5,] 0.2403 0.2680 0.2877 0.2606 1.0000</code></pre>
 </div>
 </div>
 </section>
 <section id="standalone-relatedness-functions" class="level3" data-number="7.2.3">
 <h3 data-number="7.2.3" class="anchored" data-anchor-id="standalone-relatedness-functions"><span class="header-section-number">7.2.3</span> Standalone Relatedness Functions</h3>
-<p>Per-locus relatedness can also be estimated directly:</p>
+<p>Per-locus relatedness can also be estimated directly. Choose a polymorphic locus:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>r_nason <span class="ot">&lt;-</span> <span class="fu">rel_nason</span>(arapat<span class="sc">$</span>LTRS[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>])</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>r_nason[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>r_nason <span class="ot">&lt;-</span> <span class="fu">rel_nason</span>(arapat<span class="sc">$</span>EN[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>])</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(r_nason[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     [,1] [,2] [,3] [,4] [,5]
-[1,]   NA  NaN  NaN  NaN  NaN
-[2,]  NaN   NA  NaN  NaN  NaN
-[3,]  NaN  NaN   NA  NaN  NaN
-[4,]  NaN  NaN  NaN   NA  NaN
-[5,]  NaN  NaN  NaN  NaN   NA</code></pre>
+<pre><code>       [,1]   [,2]   [,3]   [,4]   [,5]
+[1,]     NA 0.0834 0.0834 0.1061 0.1061
+[2,] 0.0834     NA 0.1260 0.1029 0.1029
+[3,] 0.0834 0.1260     NA 0.1029 0.1029
+[4,] 0.1061 0.1029 0.1029     NA 0.1107
+[5,] 0.1061 0.1029 0.1029 0.1107     NA</code></pre>
 </div>
 </div>
 </section>
@@ -1064,60 +1066,64 @@ Mainland   239.8471 315.7868   0.0000</code></pre>
 <span id="cb31-90"><a href="#cb31-90" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-91"><a href="#cb31-91" aria-hidden="true" tabindex="-1"></a><span class="fu">### Basic Usage</span></span>
 <span id="cb31-92"><a href="#cb31-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-95"><a href="#cb31-95" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-96"><a href="#cb31-96" aria-hidden="true" tabindex="-1"></a>sub <span class="ot">&lt;-</span> arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, ]</span>
-<span id="cb31-97"><a href="#cb31-97" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">genetic_relatedness</span>(sub, <span class="at">mode =</span> <span class="st">"Nason"</span>)</span>
-<span id="cb31-98"><a href="#cb31-98" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(R)</span>
-<span id="cb31-99"><a href="#cb31-99" aria-hidden="true" tabindex="-1"></a>R[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
-<span id="cb31-100"><a href="#cb31-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-101"><a href="#cb31-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-102"><a href="#cb31-102" aria-hidden="true" tabindex="-1"></a><span class="fu">### Standalone Relatedness Functions</span></span>
-<span id="cb31-103"><a href="#cb31-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-104"><a href="#cb31-104" aria-hidden="true" tabindex="-1"></a>Per-locus relatedness can also be estimated directly:</span>
+<span id="cb31-93"><a href="#cb31-93" aria-hidden="true" tabindex="-1"></a>The Nason estimator divides by the polymorphic index <span class="in">`Pe()`</span>, so monomorphic loci (where <span class="in">`Pe = 0`</span>) will produce <span class="in">`NaN`</span>. In the <span class="in">`arapat`</span> dataset, <span class="in">`LTRS`</span> and <span class="in">`ATPS`</span> can be monomorphic in small subsets. To avoid this, restrict the data to polymorphic loci:</span>
+<span id="cb31-94"><a href="#cb31-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-97"><a href="#cb31-97" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-98"><a href="#cb31-98" aria-hidden="true" tabindex="-1"></a><span class="co"># Use loci that are polymorphic in this subset</span></span>
+<span id="cb31-99"><a href="#cb31-99" aria-hidden="true" tabindex="-1"></a>poly_loci <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"WNT"</span>, <span class="st">"EN"</span>, <span class="st">"EF"</span>, <span class="st">"ZMP"</span>, <span class="st">"AML"</span>, <span class="st">"MP20"</span>)</span>
+<span id="cb31-100"><a href="#cb31-100" aria-hidden="true" tabindex="-1"></a>sub <span class="ot">&lt;-</span> arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="fu">c</span>(<span class="st">"Species"</span>, poly_loci)]</span>
+<span id="cb31-101"><a href="#cb31-101" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">genetic_relatedness</span>(sub, <span class="at">mode =</span> <span class="st">"Nason"</span>)</span>
+<span id="cb31-102"><a href="#cb31-102" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(R)</span>
+<span id="cb31-103"><a href="#cb31-103" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(R[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="dv">4</span>)</span>
+<span id="cb31-104"><a href="#cb31-104" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb31-105"><a href="#cb31-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-108"><a href="#cb31-108" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-109"><a href="#cb31-109" aria-hidden="true" tabindex="-1"></a>r_nason <span class="ot">&lt;-</span> <span class="fu">rel_nason</span>(arapat<span class="sc">$</span>LTRS[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>])</span>
-<span id="cb31-110"><a href="#cb31-110" aria-hidden="true" tabindex="-1"></a>r_nason[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
-<span id="cb31-111"><a href="#cb31-111" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-112"><a href="#cb31-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-113"><a href="#cb31-113" aria-hidden="true" tabindex="-1"></a><span class="fu">## Spatial Autocorrelation</span></span>
-<span id="cb31-114"><a href="#cb31-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-115"><a href="#cb31-115" aria-hidden="true" tabindex="-1"></a>The <span class="in">`genetic_autocorrelation()`</span> function performs the spatial autocorrelation analysis of Smouse &amp; Peakall (1999). It requires two square distance matrices --- one physical, one genetic --- and a vector of distance bin boundaries:</span>
+<span id="cb31-106"><a href="#cb31-106" aria-hidden="true" tabindex="-1"></a><span class="fu">### Standalone Relatedness Functions</span></span>
+<span id="cb31-107"><a href="#cb31-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-108"><a href="#cb31-108" aria-hidden="true" tabindex="-1"></a>Per-locus relatedness can also be estimated directly. Choose a polymorphic locus:</span>
+<span id="cb31-109"><a href="#cb31-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-112"><a href="#cb31-112" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-113"><a href="#cb31-113" aria-hidden="true" tabindex="-1"></a>r_nason <span class="ot">&lt;-</span> <span class="fu">rel_nason</span>(arapat<span class="sc">$</span>EN[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>])</span>
+<span id="cb31-114"><a href="#cb31-114" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(r_nason[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="dv">4</span>)</span>
+<span id="cb31-115"><a href="#cb31-115" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb31-116"><a href="#cb31-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-119"><a href="#cb31-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-120"><a href="#cb31-120" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb31-121"><a href="#cb31-121" aria-hidden="true" tabindex="-1"></a><span class="co"># Physical distance matrix</span></span>
-<span id="cb31-122"><a href="#cb31-122" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">strata_distance</span>(arapat,</span>
-<span id="cb31-123"><a href="#cb31-123" aria-hidden="true" tabindex="-1"></a>                     <span class="at">longitude =</span> <span class="st">"Longitude"</span>,</span>
-<span id="cb31-124"><a href="#cb31-124" aria-hidden="true" tabindex="-1"></a>                     <span class="at">latitude =</span> <span class="st">"Latitude"</span>)</span>
-<span id="cb31-125"><a href="#cb31-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-126"><a href="#cb31-126" aria-hidden="true" tabindex="-1"></a><span class="co"># Genetic distance matrix</span></span>
-<span id="cb31-127"><a href="#cb31-127" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">mode =</span> <span class="st">"AMOVA"</span>)</span>
-<span id="cb31-128"><a href="#cb31-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-129"><a href="#cb31-129" aria-hidden="true" tabindex="-1"></a><span class="co"># Define distance bins</span></span>
-<span id="cb31-130"><a href="#cb31-130" aria-hidden="true" tabindex="-1"></a>bins <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(P), <span class="at">length.out =</span> <span class="dv">6</span>)</span>
-<span id="cb31-131"><a href="#cb31-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-132"><a href="#cb31-132" aria-hidden="true" tabindex="-1"></a><span class="co"># Run autocorrelation</span></span>
-<span id="cb31-133"><a href="#cb31-133" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">genetic_autocorrelation</span>(P, G, <span class="at">bins =</span> bins, <span class="at">perms =</span> <span class="dv">99</span>)</span>
-<span id="cb31-134"><a href="#cb31-134" aria-hidden="true" tabindex="-1"></a>result</span>
-<span id="cb31-135"><a href="#cb31-135" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-136"><a href="#cb31-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-137"><a href="#cb31-137" aria-hidden="true" tabindex="-1"></a>The output includes the spatial autocorrelation coefficient (R) for each distance class, the number of pairwise comparisons (N), and a p-value from the permutation test (P).</span>
-<span id="cb31-138"><a href="#cb31-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-139"><a href="#cb31-139" aria-hidden="true" tabindex="-1"></a><span class="fu">## Strata Distances</span></span>
+<span id="cb31-117"><a href="#cb31-117" aria-hidden="true" tabindex="-1"></a><span class="fu">## Spatial Autocorrelation</span></span>
+<span id="cb31-118"><a href="#cb31-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-119"><a href="#cb31-119" aria-hidden="true" tabindex="-1"></a>The <span class="in">`genetic_autocorrelation()`</span> function performs the spatial autocorrelation analysis of Smouse &amp; Peakall (1999). It requires two square distance matrices --- one physical, one genetic --- and a vector of distance bin boundaries:</span>
+<span id="cb31-120"><a href="#cb31-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-123"><a href="#cb31-123" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-124"><a href="#cb31-124" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-125"><a href="#cb31-125" aria-hidden="true" tabindex="-1"></a><span class="co"># Physical distance matrix</span></span>
+<span id="cb31-126"><a href="#cb31-126" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">strata_distance</span>(arapat,</span>
+<span id="cb31-127"><a href="#cb31-127" aria-hidden="true" tabindex="-1"></a>                     <span class="at">longitude =</span> <span class="st">"Longitude"</span>,</span>
+<span id="cb31-128"><a href="#cb31-128" aria-hidden="true" tabindex="-1"></a>                     <span class="at">latitude =</span> <span class="st">"Latitude"</span>)</span>
+<span id="cb31-129"><a href="#cb31-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-130"><a href="#cb31-130" aria-hidden="true" tabindex="-1"></a><span class="co"># Genetic distance matrix</span></span>
+<span id="cb31-131"><a href="#cb31-131" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">mode =</span> <span class="st">"AMOVA"</span>)</span>
+<span id="cb31-132"><a href="#cb31-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-133"><a href="#cb31-133" aria-hidden="true" tabindex="-1"></a><span class="co"># Define distance bins</span></span>
+<span id="cb31-134"><a href="#cb31-134" aria-hidden="true" tabindex="-1"></a>bins <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(P), <span class="at">length.out =</span> <span class="dv">6</span>)</span>
+<span id="cb31-135"><a href="#cb31-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-136"><a href="#cb31-136" aria-hidden="true" tabindex="-1"></a><span class="co"># Run autocorrelation</span></span>
+<span id="cb31-137"><a href="#cb31-137" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">genetic_autocorrelation</span>(P, G, <span class="at">bins =</span> bins, <span class="at">perms =</span> <span class="dv">99</span>)</span>
+<span id="cb31-138"><a href="#cb31-138" aria-hidden="true" tabindex="-1"></a>result</span>
+<span id="cb31-139"><a href="#cb31-139" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb31-140"><a href="#cb31-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-141"><a href="#cb31-141" aria-hidden="true" tabindex="-1"></a>The <span class="in">`strata_coordinates()`</span> function extracts per-stratum centroid coordinates, and <span class="in">`strata_distance()`</span> computes physical (geographic) distances between them:</span>
+<span id="cb31-141"><a href="#cb31-141" aria-hidden="true" tabindex="-1"></a>The output includes the spatial autocorrelation coefficient (R) for each distance class, the number of pairwise comparisons (N), and a p-value from the permutation test (P).</span>
 <span id="cb31-142"><a href="#cb31-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-145"><a href="#cb31-145" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-146"><a href="#cb31-146" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">strata_coordinates</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>,</span>
-<span id="cb31-147"><a href="#cb31-147" aria-hidden="true" tabindex="-1"></a>                              <span class="at">longitude =</span> <span class="st">"Longitude"</span>,</span>
-<span id="cb31-148"><a href="#cb31-148" aria-hidden="true" tabindex="-1"></a>                              <span class="at">latitude =</span> <span class="st">"Latitude"</span>)</span>
-<span id="cb31-149"><a href="#cb31-149" aria-hidden="true" tabindex="-1"></a>coords</span>
-<span id="cb31-150"><a href="#cb31-150" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-151"><a href="#cb31-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-154"><a href="#cb31-154" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-155"><a href="#cb31-155" aria-hidden="true" tabindex="-1"></a><span class="fu">strata_distance</span>(coords)</span>
-<span id="cb31-156"><a href="#cb31-156" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-143"><a href="#cb31-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## Strata Distances</span></span>
+<span id="cb31-144"><a href="#cb31-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-145"><a href="#cb31-145" aria-hidden="true" tabindex="-1"></a>The <span class="in">`strata_coordinates()`</span> function extracts per-stratum centroid coordinates, and <span class="in">`strata_distance()`</span> computes physical (geographic) distances between them:</span>
+<span id="cb31-146"><a href="#cb31-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-149"><a href="#cb31-149" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-150"><a href="#cb31-150" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">strata_coordinates</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>,</span>
+<span id="cb31-151"><a href="#cb31-151" aria-hidden="true" tabindex="-1"></a>                              <span class="at">longitude =</span> <span class="st">"Longitude"</span>,</span>
+<span id="cb31-152"><a href="#cb31-152" aria-hidden="true" tabindex="-1"></a>                              <span class="at">latitude =</span> <span class="st">"Latitude"</span>)</span>
+<span id="cb31-153"><a href="#cb31-153" aria-hidden="true" tabindex="-1"></a>coords</span>
+<span id="cb31-154"><a href="#cb31-154" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-155"><a href="#cb31-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-158"><a href="#cb31-158" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-159"><a href="#cb31-159" aria-hidden="true" tabindex="-1"></a><span class="fu">strata_distance</span>(coords)</span>
+<span id="cb31-160"><a href="#cb31-160" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
