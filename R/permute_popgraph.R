@@ -33,9 +33,9 @@ permute_popgraph <- function( data, groups, nboot=50, ...){
     B <- to_matrix(graph,mode = "adjacency")
     B[ B!=0 ] <- 1
     A <- A+B
-    cat(".")
+    message(".", appendLF = FALSE)
     if( !(rep %% 50))
-      cat(" [",rep,"/",nboot,"]\n",sep="")
+      message(" [", rep, "/", nboot, "]")
   }
   A <- A/nboot
   orig <- popgraph( data, groups )

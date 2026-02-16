@@ -12,7 +12,6 @@
 #' @param ... Options passed to \code{geom_text} like color, etc.
 #' @return A formatted geom_text object for addition to a ggplot()
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
-#' @import sampling
 #' @export
 #' @examples
 #' a <- matrix( c(0,1,0,1,1,0,0,1,0,0,0,1,1,1,1,0),nrow=4)

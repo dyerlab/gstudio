@@ -113,7 +113,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   
   ctr <- 0
   if( length(locus.columns) > 499 ) {
-    cat("gstudio: Big Column Import [ 0")
+    message("gstudio: Big Column Import [ 0", appendLF = FALSE)
   }
   
   # read them in column-wise
@@ -122,7 +122,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
     if( ctr > 0 ) {
       ctr <- ctr + 1       
       if( (ctr %% 500 ) == 0 ) {
-        cat(" ",ctr)   
+        message(" ", ctr, appendLF = FALSE)
       }
     }
     
@@ -147,7 +147,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   }
   
   if( ctr > 0 ) {
-    cat(" ]\n")
+    message(" ]")
   }
   
   

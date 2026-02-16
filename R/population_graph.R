@@ -8,6 +8,7 @@
 #' @param numLoci If not \code{NULL} then how many randomly selected loci (fewer than the total)
 #'   to use in the estimation.
 #' @param ... Other parameters passed to the \code{popgraph()} function.
+#' @return A \code{popgraph} object (an \code{igraph} graph).
 #' @export
 
 population_graph <- function( x, stratum="Population", numLoci=NULL, ...) {

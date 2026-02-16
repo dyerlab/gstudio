@@ -13,6 +13,9 @@
 
 \item{...}{Ignored}
 }
+\value{
+A \code{ggplot} object.
+}
 \description{
 This function is just for quick plotting of frequencies
 }

@@ -3,6 +3,7 @@
 #' Returns the general expected total heterozygosity parameter
 #' @param x A \code{data.frame} object with \code{locus} objects 
 #' @param stratum  The name of the column representing the stratum variable (default=Population)
+#' @return A \code{data.frame} with columns \code{Locus} and \code{Ht}.
 #' @importFrom dplyr select all_of
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}

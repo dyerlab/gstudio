@@ -30,7 +30,7 @@ to_dfdist <- function( x, stratum="Population", verbose=FALSE){
   ret <- c("0", K, length(loci),"" )
   for( locus in loci ){
     if( verbose )
-      cat(locus," ")
+      message(locus, " ", appendLF = FALSE)
     cts <- allele_counts( x, locus, stratum )
     cts <- cts[,2:ncol(cts)] # remove Stratum column
     ret <- c( ret, ncol(cts) )

@@ -50,15 +50,15 @@ Fst <- function( x, stratum="Population", nperm=0  ) {
   if( nperm > 0 ) {
     ret$P <- 0
     tmp <- x
-    cat("permuting ")
+    message("permuting ", appendLF = FALSE)
     for( rep in seq(1,nperm) ) { 
       
       if( rep%%10 == 0 ) { 
-        cat(".") 
+        message(".", appendLF = FALSE)
       }
       tmp[[stratum]] <- sample( tmp[[stratum]], 
                                 nrow(tmp),
-                                replace = T) 
+                                replace = TRUE)
       suppressWarnings(
         Fst <- 1.0 - Hes( tmp, stratum=stratum, do.multilocus=FALSE )$Hes / ht$Ht 
       )

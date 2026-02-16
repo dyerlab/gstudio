@@ -20,8 +20,8 @@ gstudio is a suite of tools used in the spatial analysis
 \tabular{ll}{
 Package: \tab gstudio\cr
 Type: \tab Package\cr
-Version: \tab 1.7\cr
-Date: \tab 2025-01-15\cr
+Version: \tab 1.12\cr
+Date: \tab 2026-02-14\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }

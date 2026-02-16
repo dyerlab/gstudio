@@ -16,6 +16,9 @@ materials are to be pulled.  This can be a dataframe from
 
 \item{...}{Other parameters submitted to \code{geom_text_repel()}.}
 }
+\value{
+A \code{ggplot2} layer (\code{geom_label_repel}).
+}
 \description{
 This function takes a \code{data.frame} of population data and
  returns a \code{geom_point()} layer for plotting.  You can also

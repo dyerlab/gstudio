@@ -6,6 +6,7 @@
 #' @param x A set of \code{locus} objects
 #' @param mode The type of plot to create, bar or pie (bar is default).
 #' @param ... Ignored
+#' @return A \code{ggplot} object.
 #' @method plot locus
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}

@@ -37,8 +37,8 @@ multilocus_assignment <- function( individual, frequencies, F=0, verbose=FALSE )
   for( pop in pops) {
     prob <- 1
     
-    if( verbose ) 
-      print(paste("######################################################   POPULATION:",pop))
+    if( verbose )
+      message("######################################################   POPULATION: ", pop)
     if( prob > 0 ) {
       for( locus in loci ) {
         popfreq <- frequencies[ frequencies$Stratum == pop & frequencies$Locus==locus ,]
@@ -64,7 +64,7 @@ multilocus_assignment <- function( individual, frequencies, F=0, verbose=FALSE )
           else {
             f <- prob <- 0
             if( verbose )
-              cat("-----------------------------------------------Excluded from",pop,"at locus",loc,"\n")
+              message("-----------------------------------------------Excluded from ", pop, " at locus ", loc)
           }
           
         }
@@ -73,8 +73,8 @@ multilocus_assignment <- function( individual, frequencies, F=0, verbose=FALSE )
         }
         
         if( verbose ){
-          print(paste("Locus: ",locus, f))
-          print(popfreq)
+          message("Locus: ", locus, " ", f)
+          message(paste(utils::capture.output(print(popfreq)), collapse = "\n"))
         }
         
         
@@ -82,7 +82,7 @@ multilocus_assignment <- function( individual, frequencies, F=0, verbose=FALSE )
         prob <- prob * f
         
         if( verbose )
-          cat( loc, popfreq$Allele, popfreq$Frequency, f, "\n")    
+          message(paste(loc, paste(popfreq$Allele, collapse = " "), paste(popfreq$Frequency, collapse = " "), f))
       }
       
     }

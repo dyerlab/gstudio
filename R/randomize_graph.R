@@ -7,6 +7,7 @@
 #'  which makes a new graph with the same number of edges as the 
 #'  original one, or "degree" which preserves the degree distribution
 #'  of the 
+#' @return An \code{igraph} object with randomized edges.
 #' @export
 
 randomize_graph <- function( graph=NULL, mode=c("full","degree")[2] ) {
@@ -42,7 +43,7 @@ randomize_graph <- function( graph=NULL, mode=c("full","degree")[2] ) {
     }
     
     if( any( duplicated(new_edges))){
-      print(cbind( new_edges,duplicated(new_edges)))
+      message(paste(utils::capture.output(print(cbind( new_edges,duplicated(new_edges)))), collapse = "\n"))
       stop("Problem reaching convergence, try again.")
     }
     

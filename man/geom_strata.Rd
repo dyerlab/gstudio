@@ -16,6 +16,9 @@ materials are to be pulled.  This can be a dataframe from
 
 \item{...}{Other parameters submitted to \code{geom_text_repel()}.}
 }
+\value{
+A \code{ggplot2} layer (\code{geom_point}).
+}
 \description{
 This function takes a \code{data.frame} of population data and
  returns a \code{geom_point()} layer for plotting.  You can also
@@ -25,10 +28,10 @@ This function takes a \code{data.frame} of population data and
 \examples{
 library(ggplot2)
 data(arapat)
-ggplot() + 
+ggplot() +
     geom_strata( aes( x=Longitude,
                       y=Latitude,
-                      stratum=Population), data=arapat) + 
+                      stratum=Population), data=arapat) +
    coord_equal()
 mapping <- aes(x=Longitude,y=Latitude,stratum=Population, color=Cluster, shape=Species)
 coords <- strata_coordinates( arapat )

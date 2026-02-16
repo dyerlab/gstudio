@@ -15,4 +15,5 @@ index_files
 ^doc$
 ^Meta$
 _quarto.yml
+^\.quarto$
 

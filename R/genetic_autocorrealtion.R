@@ -71,7 +71,7 @@ genetic_autocorrelation <- function( P, G, bins, perms=0, plot=FALSE ){
     R <- R[ !is.na(R$Bin),]
     p <- ggplot() + geom_violin(aes(x=Bin,y=R, group=Bin),data=R, trim=FALSE) +
       geom_line( aes(x=To,y=R),data=ret)
-    print(p)
+    print(p) # print method for ggplot object; appropriate here
   }
   
   

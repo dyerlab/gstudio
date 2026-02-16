@@ -1,3 +1,17 @@
+gstudio 1.12 - 20260214
+-----------------
+* [ADD] Integrated popgraph library into gstudio (previously separate package)
+* [ADD] Added geom_popgraph(), geom_nodeset(), geom_edgeset(), geom_edgelabels() ggplot2 layers
+* [ADD] Added population graph functions: popgraph(), population_graph(), as.popgraph()
+* [ADD] Added graph analysis: congruence_topology(), test_congruence(), permute_popgraph(), randomize_graph()
+* [ADD] Added graph metrics: centroid_distance(), centroid_variance(), edge_contortion(), shannon_entropy()
+* [ADD] Added export functions: to_matrix(), to_df(), to_json(), to_kml(), to_sf(), to_pgraph(), write_popgraph()
+* [ADD] Added addAlleleFrequencies() for leaflet pie charts
+* [ADD] Added introduction vignette
+* [FIX] Replaced cat()/print() with message() for CRAN compliance
+* [FIX] Added missing return value documentation for exported functions
+* [FIX] Converted blanket namespace imports to selective importFrom
+
 gstudio 1.7 - 20250403
 -----------------
 * [FIX] Added locus-wise analysis and self-trimming for small population sizes for heterozygosities

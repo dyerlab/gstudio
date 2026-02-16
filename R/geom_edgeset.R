@@ -10,7 +10,6 @@
 #' @param ... Largely ignored.
 #' @return A formatted geom_segment object for addition to a ggplot()
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
-#' @import sampling
 #' @importFrom rlang .data
 #' @export
 #' @examples

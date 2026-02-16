@@ -13,6 +13,9 @@ Ht(x, stratum = "Population")
 
 \item{stratum}{The name of the column representing the stratum variable (default=Population)}
 }
+\value{
+A \code{data.frame} with columns \code{Locus} and \code{Ht}.
+}
 \description{
 Estimate expected heterozygosity
  

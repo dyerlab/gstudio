@@ -16,6 +16,9 @@ to use in the estimation.}
 
 \item{...}{Other parameters passed to the \code{popgraph()} function.}
 }
+\value{
+A \code{popgraph} object (an \code{igraph} graph).
+}
 \description{
 This function is a convience function that wraps together the subset_loci() (potentially)
   function with the popgraph() function (and translations from genotypes to

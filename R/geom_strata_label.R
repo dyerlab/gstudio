@@ -10,9 +10,9 @@
 #'  materials are to be pulled.  This can be a dataframe from 
 #'  \code{strata_coordinates} or one with raw genotypes.
 #' @param ... Other parameters submitted to \code{geom_text_repel()}.
+#' @return A \code{ggplot2} layer (\code{geom_label_repel}).
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @import ggrepel
 geom_strata_label <- function( mapping=NULL, data=NULL, ...){
   x <- y <- stratum <- Longitude <- Latitude <- Stratum <- NULL
   

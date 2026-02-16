@@ -12,7 +12,6 @@
 #'  based upon sample sizes (default=TRUE).
 #' @return An \code{data.frame} with Gst, Ht, and Hs and optionally P
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @import ggplot2
 #' @export
 #' @examples
 #'  AA <- locus( c("A","A") )

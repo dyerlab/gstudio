@@ -23,8 +23,8 @@
 #' \tabular{ll}{
 #' Package: \tab gstudio\cr
 #' Type: \tab Package\cr
-#' Version: \tab 1.7\cr
-#' Date: \tab 2025-01-15\cr
+#' Version: \tab 1.12\cr
+#' Date: \tab 2026-02-14\cr
 #' License: \tab GPL (>= 2)\cr
 #' LazyLoad: \tab yes\cr
 #' }
@@ -34,11 +34,10 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @docType package
 #' @keywords package
-#' @import ggplot2
-#' @import graphics
-#' @import igraph
-#' @import sampling
+#' @importFrom ggplot2 aes ggplot geom_violin geom_line geom_point position_dodge element_blank
 #' @importFrom graphics plot.default lines points text
+#' @importFrom igraph V E "V<-" "E<-" as_edgelist as_adjacency_matrix as_data_frame vertex_attr edge_attr set_vertex_attr set_edge_attr induced_subgraph degree ends graph_from_adjacency_matrix gsize vertex_attr_names edge_attr_names layout_with_fr distances write.graph
+#' @importFrom sampling strata
 #' @importFrom methods is
 #' @importFrom stats pchisq cor.test cov prcomp qchisq var
 #' @importFrom utils read.csv read.table write.csv

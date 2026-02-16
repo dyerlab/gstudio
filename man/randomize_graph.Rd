@@ -14,6 +14,9 @@ which makes a new graph with the same number of edges as the
 original one, or "degree" which preserves the degree distribution
 of the}
 }
+\value{
+An \code{igraph} object with randomized edges.
+}
 \description{
 This function randomizes the edges in a popgraph and 
  returns a new graph.

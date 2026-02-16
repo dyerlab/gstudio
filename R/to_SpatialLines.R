@@ -51,5 +51,5 @@ to_SpatialLines <- function(
     edgeName <- paste("Edge", names[idx1], names[idx2])
     edgeList[[edgeName]] <- sp::Lines(list(sp::Line(coord)), ID = edgeName)
   }
-  return(SpatialLines(edgeList))
+  return(sp::SpatialLines(edgeList))
 }

@@ -10,16 +10,16 @@
 #'  materials are to be pulled.  This can be a dataframe from 
 #'  \code{strata_coordinates} or one with raw genotypes.
 #' @param ... Other parameters submitted to \code{geom_text_repel()}.
+#' @return A \code{ggplot2} layer (\code{geom_point}).
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @import ggrepel
 #' @examples
 #' library(ggplot2)
 #' data(arapat)
-#' ggplot() + 
+#' ggplot() +
 #'     geom_strata( aes( x=Longitude,
 #'                       y=Latitude,
-#'                       stratum=Population), data=arapat) + 
+#'                       stratum=Population), data=arapat) +
 #'    coord_equal()
 #' mapping <- aes(x=Longitude,y=Latitude,stratum=Population, color=Cluster, shape=Species)
 #' coords <- strata_coordinates( arapat )
