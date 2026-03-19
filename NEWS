@@ -1,3 +1,7 @@
+gstudio 1.13 - 20260216
+-----------------
+* [FIX] Removed alt raster dataset that required raster package (CRAN compliance)
+
 gstudio 1.12 - 20260214
 -----------------
 * [ADD] Integrated popgraph library into gstudio (previously separate package)

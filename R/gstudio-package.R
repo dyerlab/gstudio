@@ -144,16 +144,6 @@ NULL
 #' @keywords data
 NULL
 
-#' Sonoran desert altitude.
-#'
-#' This is a raster file for altitude in the Sonoran desert
-#'  region coincident with the Lophocereus and Upiga data
-#'  sets.
-#' @name alt
-#' @docType data
-#' @keywords data
-NULL
-
 #' Metadata for Baja Populations.
 #'
 #' This is metadata associated with the sampling locations

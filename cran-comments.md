@@ -1,12 +1,7 @@
 ## Resubmission
 
-This package was archived on CRAN on 2015-06-09. It has since been
-completely rewritten, incorporated additional functionality, and continues 
-to be actively maintained. All previous check errors
-have been resolved. Major changes include integration of the `popgraph`
-package, comprehensive test coverage (607 tests), a vignette, implementation of
-a simulation framework for individual-based forward time simulations, and
-conversion to selective namespace imports.
+This package was archived on CRAN on 2015-06-09. It has since been completely rewritten, incorporated additional functionality, and continues 
+to be actively maintained. All previous check errors have been resolved. Major changes include integration of the `popgraph` package, comprehensive test coverage (607 tests), a vignette, implementation of a simulation framework for individual-based forward time simulations, and conversion to selective namespace imports.
 
 ## Test environments
 
@@ -21,5 +16,4 @@ conversion to selective namespace imports.
 * checking CRAN incoming feasibility ... NOTE
   New submission. Package was archived on CRAN.
 
-This is a resubmission of a fully rewritten package addressing all
-original issues that led to archival.
+This is a resubmission of a fully rewritten package addressing all original issues that led to archival.  I had just submitted it and had an errant data set that referenced a library not in the DESCRIPTION, I just fixed that as well.
