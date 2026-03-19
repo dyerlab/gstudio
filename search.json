@@ -74,7 +74,7 @@
     "href": "getting-started.html#bundled-datasets",
     "title": "1  Getting Started",
     "section": "1.2 Bundled Datasets",
-    "text": "1.2 Bundled Datasets\nThe package ships with several datasets for examples and testing:\n\n\n\n\n\n\n\nDataset\nDescription\n\n\n\n\narapat\nAraptus attenuatus multilocus microsatellite data across Baja California\n\n\naflp_arapat\nAraptus attenuatus AFLP marker data\n\n\ncornus\nCornus florida adult genotypes\n\n\ncornus_florida\nCornus florida mother-offspring pair data\n\n\nlopho\nLophocereus schottii population graph (Dyer & Nason 2004)\n\n\nupiga\nUpiga virescens population graph\n\n\nbaja\nBaja California sampling location metadata\n\n\nalt\nSonoran desert altitude raster data\n\n\n\nLoad any dataset with the data() function:\n\ndata(arapat)",
+    "text": "1.2 Bundled Datasets\nThe package ships with several datasets for examples and testing:\n\n\n\n\n\n\n\nDataset\nDescription\n\n\n\n\narapat\nAraptus attenuatus multilocus microsatellite data across Baja California\n\n\naflp_arapat\nAraptus attenuatus AFLP marker data\n\n\ncornus\nCornus florida adult genotypes\n\n\ncornus_florida\nCornus florida mother-offspring pair data\n\n\nlopho\nLophocereus schottii population graph (Dyer & Nason 2004)\n\n\nupiga\nUpiga virescens population graph\n\n\nbaja\nBaja California sampling location metadata\n\n\n\nLoad any dataset with the data() function:\n\ndata(arapat)",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Getting Started</span>"
     ]
