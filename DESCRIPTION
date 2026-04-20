@@ -18,6 +18,7 @@ Depends:
     R (>= 4.1.0)
 Imports:
     ggplot2,
+    jsonlite,
     methods,
     sp,
     reshape2,
