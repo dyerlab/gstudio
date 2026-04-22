@@ -4,7 +4,14 @@
 \alias{write_popgraph}
 \title{Convenience function for file exports}
 \usage{
-write_popgraph(graph, file, format = "pgraph", ...)
+write_popgraph(
+  graph,
+  file,
+  format = "pgraph",
+  label = "Population Graph",
+  loci = NULL,
+  ...
+)
 }
 \arguments{
 \item{graph}{An object of type \code{popgraph}.}
@@ -13,6 +20,8 @@ write_popgraph(graph, file, format = "pgraph", ...)
 
 \item{format}{The type of output file to use.  Options are:
 \describe{
+  \item{jgf}{Save as JSON Graph Format, supporting graph-, node-, and
+    edge-level metadata (recommended for use with the Graphs visualizer)}
   \item{json}{Save as JSON format}
   \item{kml}{Save to KML format to view in GoogleEarth}
   \item{graphml}{Save as Graph Markup Language}
@@ -24,7 +33,14 @@ write_popgraph(graph, file, format = "pgraph", ...)
   \item{weights}{Saves as weighted adjacency matrix in csv format}
 }}
 
-\item{...}{Ignored}
+\item{label}{A graph label string used by the \code{jgf} format.}
+
+\item{loci}{Optional locus metadata for the \code{jgf} format.  Either a
+character vector of locus names, or a \code{data.frame} with a \code{name}
+column and optional \code{chromosome} and \code{position} columns for
+genomic coordinates.}
+
+\item{...}{Passed to format-specific helpers.}
 }
 \value{
 Nothing
