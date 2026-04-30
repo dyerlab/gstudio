@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Rodney J. Dyer" />
+
+<meta name="date" content="2026-04-22" />
+
+<title>Introduction to gstudio</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to gstudio</h1>
+<h4 class="author">Rodney J. Dyer</h4>
+<h4 class="date">2026-04-22</h4>
+
+
+
+<p>The <code>gstudio</code> package provides classes and functions for
+the spatial analysis of genetic marker data, including structure,
+diversity, distance, and relatedness statistics. This vignette covers
+the core workflow: creating locus data, importing populations, and
+running standard analyses.</p>
+<p>For comprehensive narrative documentation, tutorials, and worked
+examples, visit the full documentation site at <a href="https://dyerlab.github.io/gstudio/">dyerlab.github.io/gstudio</a>.</p>
+<div id="the-locus-class" class="section level2">
+<h2>The <code>locus</code> Class</h2>
+<p>The fundamental data type in <code>gstudio</code> is the
+<code>locus</code> — an S3 class representing a genotype as
+colon-separated allele strings.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Create individual genotypes</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>AA <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;A&quot;</span>))</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>AB <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>))</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>BB <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">&quot;B&quot;</span>, <span class="st">&quot;B&quot;</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>AB</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;A:B&quot;</span></span></code></pre></div>
+<p>Locus objects support standard vector operations:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>loci <span class="ot">&lt;-</span> <span class="fu">c</span>(AA, AB, BB, AB, AA)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>loci</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;A:A&quot; &quot;A:B&quot; &quot;B:B&quot; &quot;A:B&quot; &quot;A:A&quot;</span></span></code></pre></div>
+<p>Missing data is represented as an empty locus:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>missing <span class="ot">&lt;-</span> <span class="fu">locus</span>()</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">is.na</span>(missing)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+</div>
+<div id="importing-data" class="section level2">
+<h2>Importing Data</h2>
+<p>The <code>read_population()</code> function reads CSV files (and
+other formats) into a <code>data.frame</code> with <code>locus</code>
+columns:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">head</span>(arapat[, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>])</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;     Species Cluster Population     ID Latitude Longitude</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; 1 Peninsula   NBP-C         88 88_11A 29.32541 -114.2935</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; 2 Peninsula   NBP-C         88 88_12A 29.32541 -114.2935</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 3 Peninsula   NBP-C         88 88_13A 29.32541 -114.2935</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; 4 Peninsula   NBP-C         88 88_14A 29.32541 -114.2935</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 5 Peninsula   NBP-C         88 88_15A 29.32541 -114.2935</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 6 Peninsula   NBP-C         88 88_16A 29.32541 -114.2935</span></span></code></pre></div>
+<p>You can also create populations from allele frequencies:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">Population =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>), <span class="at">each =</span> <span class="dv">4</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">Locus =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Loc1&quot;</span>, <span class="st">&quot;Loc2&quot;</span>), <span class="at">each =</span> <span class="dv">2</span>, <span class="at">times =</span> <span class="dv">2</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">Allele =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;01&quot;</span>, <span class="st">&quot;02&quot;</span>), <span class="at">times =</span> <span class="dv">4</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="at">Frequency =</span> <span class="fu">c</span>(<span class="fl">0.3</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>freqs<span class="sc">$</span>Population <span class="ot">&lt;-</span> <span class="fu">factor</span>(freqs<span class="sc">$</span>Population, <span class="at">ordered =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">make_populations</span>(freqs, <span class="at">N =</span> <span class="dv">20</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="fu">head</span>(pop)</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;   Population ID  Loc1  Loc2</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; 1          A  1 02:02 01:02</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; 2          A  2 01:01 01:02</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; 3          A  3 01:01 01:02</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; 4          A  4 01:02 02:02</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; 5          A  5 02:02 01:01</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; 6          A  6 02:02 01:02</span></span></code></pre></div>
+</div>
+<div id="allele-frequencies" class="section level2">
+<h2>Allele Frequencies</h2>
+<p>The <code>frequencies()</code> function computes allele frequencies
+at the locus or population level:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">frequencies</span>(arapat, <span class="at">loci =</span> <span class="st">&quot;LTRS&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt;   Locus Allele Frequency</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; 1  LTRS     01  0.523416</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; 2  LTRS     02  0.476584</span></span></code></pre></div>
+</div>
+<div id="genetic-diversity" class="section level2">
+<h2>Genetic Diversity</h2>
+<p>The <code>genetic_diversity()</code> wrapper dispatches to specific
+estimators based on the <code>mode</code> parameter:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Expected heterozygosity by population</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="st">&quot;He&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt;   Locus        He</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; 1  LTRS 0.4989034</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; 2   WNT 0.6528320</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; 3    EN 0.4489313</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; 4    EF 0.4361538</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; 5   ZMP 0.3394444</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; 6   AML 0.8293685</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; 7  ATPS 0.7193649</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; 8  MP20 0.8185723</span></span></code></pre></div>
+<p>Available modes: <code>A</code> (allele count), <code>Ae</code>
+(effective alleles), <code>A95</code>, <code>He</code>, <code>Ho</code>,
+<code>Fis</code>, and others.</p>
+</div>
+<div id="genetic-structure" class="section level2">
+<h2>Genetic Structure</h2>
+<p>Differentiation among populations:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">genetic_structure</span>(arapat, <span class="at">mode =</span> <span class="st">&quot;Gst&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt;        Locus       Gst        Hs        Ht         P</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; 1       LTRS 0.5355592 0.2318696 0.4992447 0.5355592</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; 2        WNT 0.4364315 0.3682211 0.6533741 0.4364315</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; 3         EN 0.4283198 0.2568613 0.4493095 0.4283198</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; 4         EF 0.5549878 0.1942210 0.4364397 0.5549878</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; 5        ZMP 0.4724047 0.1792285 0.3397083 0.4724047</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; 6        AML 0.2953550 0.5850173 0.8302298 0.2953550</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; 7       ATPS 0.7102685 0.2085116 0.7196719 0.7102685</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; 8       MP20 0.3088480 0.5663341 0.8194061 0.3088480</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; 9 Multilocus 0.4543807 2.5902645 4.7473842        NA</span></span></code></pre></div>
+<p>Available modes: <code>Gst</code>, <code>Gst_prime</code>,
+<code>Dest</code>, <code>Fst</code>.</p>
+</div>
+<div id="genetic-distance" class="section level2">
+<h2>Genetic Distance</h2>
+<p>Pairwise population distances:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">mode =</span> <span class="st">&quot;Nei&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>D</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt;             101       102          12        153        156        157</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; 101   0.0000000 0.2268200 0.838516483 0.91777303 1.19671667 1.09526743</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; 102   0.2268200 0.0000000 1.258981274 1.18748716 1.29512009 1.25632140</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; 12    0.8385165 1.2589813 0.000000000 0.13408915 1.22979312 0.90185134</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; 153   0.9177730 1.1874872 0.134089153 0.00000000 1.14458359 0.86975864</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; 156   1.1967167 1.2951201 1.229793123 1.14458359 0.00000000 0.03459425</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; 157   1.0952674 1.2563214 0.901851336 0.86975864 0.03459425 0.00000000</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; 159   0.8128510 1.1273757 0.281272539 0.60966015 0.94609988 0.77296430</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt; 160   0.9076444 1.3311654 0.017943894 0.13640297 1.31281290 0.95203196</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt; 161   0.9992580 1.3258661 0.022803273 0.17937805 1.29071328 0.97127615</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; 162   0.8685779 1.1566335 0.029043635 0.19805279 1.20262155 0.92699588</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; 163   1.0414099 1.2419580 0.671453440 0.73670924 0.39173213 0.25070960</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; 164   0.5302228 0.9851916 0.152599326 0.15106508 0.73497641 0.60059843</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; 165   0.7274123 1.0966267 0.033647098 0.10725094 1.23322718 0.94895830</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt; 166   0.9728097 1.3100447 0.044403398 0.11399474 0.79650743 0.62046041</span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt; 168   0.8261681 1.4973401 0.117671530 0.18731658 2.08032036 1.49635336</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="co">#&gt; 169   0.8212642 1.2151332 0.019971816 0.07699837 1.21200110 0.89907982</span></span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">#&gt; 171   0.6790570 1.0465032 0.295945190 0.62610528 0.96259587 0.79870456</span></span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="co">#&gt; 173   0.7724053 1.2924490 0.279206726 0.64346873 1.09396809 0.85538703</span></span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="co">#&gt; 175   0.6247556 0.9890971 0.433836011 0.84153565 1.03555504 0.92338378</span></span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a><span class="co">#&gt; 177   0.5787318 0.9973934 0.469369310 0.91246956 1.13423886 0.99976114</span></span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a><span class="co">#&gt; 32    0.3443769 0.1691409 0.997315588 1.03657398 0.70872330 0.67672960</span></span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a><span class="co">#&gt; 48    1.4390164 1.5094574 1.439989383 1.34068093 0.01800446 0.05332053</span></span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a><span class="co">#&gt; 51    0.8743367 1.4489749 0.153598567 0.05271471 1.35339846 0.99054007</span></span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a><span class="co">#&gt; 58    0.9382263 1.2985481 0.113823441 0.01207775 1.24087242 0.92068637</span></span>
+<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a><span class="co">#&gt; 64    0.8176484 1.3505056 0.197980109 0.25473822 2.01005515 1.45348031</span></span>
+<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a><span class="co">#&gt; 73    1.0832648 1.2815674 0.802152039 0.77448546 0.06548865 0.04696092</span></span>
+<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a><span class="co">#&gt; 75    1.0719379 1.2559882 0.842993285 0.79691111 0.07081567 0.05684681</span></span>
+<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a><span class="co">#&gt; 77    1.1154852 1.4300090 0.114044854 0.24146895 0.82328231 0.58550705</span></span>
+<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a><span class="co">#&gt; 84    0.4614801 0.9721975 0.593304066 1.06663772 1.46225882 1.34238455</span></span>
+<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a><span class="co">#&gt; 88    0.4664530 1.0296110 0.604937493 1.13179775 1.38383429 1.31563698</span></span>
+<span id="cb9-34"><a href="#cb9-34" tabindex="-1"></a><span class="co">#&gt; 89    1.0682501 1.3151806 0.300870457 0.62316305 0.98035414 0.76985740</span></span>
+<span id="cb9-35"><a href="#cb9-35" tabindex="-1"></a><span class="co">#&gt; 9     0.5147500 1.0481552 0.716275555 1.34066013 1.43435679 1.33220314</span></span>
+<span id="cb9-36"><a href="#cb9-36" tabindex="-1"></a><span class="co">#&gt; 93    0.8590571 1.2661357 0.009049401 0.13347585 1.11252760 0.80650157</span></span>
+<span id="cb9-37"><a href="#cb9-37" tabindex="-1"></a><span class="co">#&gt; 98    0.8588945 0.9364247 0.863784231 0.81899662 0.18171849 0.22763647</span></span>
+<span id="cb9-38"><a href="#cb9-38" tabindex="-1"></a><span class="co">#&gt; Aqu   0.9859930 1.1516140 0.532406177 0.60347734 0.14346154 0.06307161</span></span>
+<span id="cb9-39"><a href="#cb9-39" tabindex="-1"></a><span class="co">#&gt; Const 0.7688573 1.0295498 0.559301575 0.55539678 0.11016845 0.08697670</span></span>
+<span id="cb9-40"><a href="#cb9-40" tabindex="-1"></a><span class="co">#&gt; ESan  1.0481972 1.1992873 0.865364529 0.83818920 0.04209422 0.01496104</span></span>
+<span id="cb9-41"><a href="#cb9-41" tabindex="-1"></a><span class="co">#&gt; Mat   0.9369721 0.9627601 1.062335020 0.98956920 0.11216667 0.19413021</span></span>
+<span id="cb9-42"><a href="#cb9-42" tabindex="-1"></a><span class="co">#&gt; SFr   1.1345145 1.4782781 0.037935390 0.15097186 1.26676145 0.91333804</span></span>
+<span id="cb9-43"><a href="#cb9-43" tabindex="-1"></a><span class="co">#&gt;              159        160        161        162       163       164</span></span>
+<span id="cb9-44"><a href="#cb9-44" tabindex="-1"></a><span class="co">#&gt; 101   0.81285101 0.90764439 0.99925800 0.86857787 1.0414099 0.5302228</span></span>
+<span id="cb9-45"><a href="#cb9-45" tabindex="-1"></a><span class="co">#&gt; 102   1.12737566 1.33116535 1.32586610 1.15663348 1.2419580 0.9851916</span></span>
+<span id="cb9-46"><a href="#cb9-46" tabindex="-1"></a><span class="co">#&gt; 12    0.28127254 0.01794389 0.02280327 0.02904364 0.6714534 0.1525993</span></span>
+<span id="cb9-47"><a href="#cb9-47" tabindex="-1"></a><span class="co">#&gt; 153   0.60966015 0.13640297 0.17937805 0.19805279 0.7367092 0.1510651</span></span>
+<span id="cb9-48"><a href="#cb9-48" tabindex="-1"></a><span class="co">#&gt; 156   0.94609988 1.31281290 1.29071328 1.20262155 0.3917321 0.7349764</span></span>
+<span id="cb9-49"><a href="#cb9-49" tabindex="-1"></a><span class="co">#&gt; 157   0.77296430 0.95203196 0.97127615 0.92699588 0.2507096 0.6005984</span></span>
+<span id="cb9-50"><a href="#cb9-50" tabindex="-1"></a><span class="co">#&gt; 159   0.00000000 0.31625408 0.29007837 0.27519121 0.5512694 0.4918342</span></span>
+<span id="cb9-51"><a href="#cb9-51" tabindex="-1"></a><span class="co">#&gt; 160   0.31625408 0.00000000 0.02911222 0.05053805 0.6920698 0.1909599</span></span>
+<span id="cb9-52"><a href="#cb9-52" tabindex="-1"></a><span class="co">#&gt; 161   0.29007837 0.02911222 0.00000000 0.01821226 0.7538370 0.2124189</span></span>
+<span id="cb9-53"><a href="#cb9-53" tabindex="-1"></a><span class="co">#&gt; 162   0.27519121 0.05053805 0.01821226 0.00000000 0.7405862 0.2091368</span></span>
+<span id="cb9-54"><a href="#cb9-54" tabindex="-1"></a><span class="co">#&gt; 163   0.55126941 0.69206982 0.75383701 0.74058618 0.0000000 0.6509719</span></span>
+<span id="cb9-55"><a href="#cb9-55" tabindex="-1"></a><span class="co">#&gt; 164   0.49183415 0.19095990 0.21241894 0.20913684 0.6509719 0.0000000</span></span>
+<span id="cb9-56"><a href="#cb9-56" tabindex="-1"></a><span class="co">#&gt; 165   0.39315058 0.04664194 0.03766515 0.03483766 0.8121509 0.1121293</span></span>
+<span id="cb9-57"><a href="#cb9-57" tabindex="-1"></a><span class="co">#&gt; 166   0.34752762 0.03821450 0.05760656 0.07634856 0.5653871 0.1515601</span></span>
+<span id="cb9-58"><a href="#cb9-58" tabindex="-1"></a><span class="co">#&gt; 168   0.60960877 0.08573583 0.14580320 0.16753185 1.1332340 0.2652303</span></span>
+<span id="cb9-59"><a href="#cb9-59" tabindex="-1"></a><span class="co">#&gt; 169   0.35455178 0.02158126 0.04955005 0.05354531 0.7178344 0.1226120</span></span>
+<span id="cb9-60"><a href="#cb9-60" tabindex="-1"></a><span class="co">#&gt; 171   0.01736705 0.33160214 0.30778295 0.27117886 0.6047625 0.4493287</span></span>
+<span id="cb9-61"><a href="#cb9-61" tabindex="-1"></a><span class="co">#&gt; 173   0.03518895 0.29104653 0.31917454 0.28985320 0.5630515 0.5433554</span></span>
+<span id="cb9-62"><a href="#cb9-62" tabindex="-1"></a><span class="co">#&gt; 175   0.10691404 0.44001044 0.42813456 0.38526231 0.7737609 0.5492371</span></span>
+<span id="cb9-63"><a href="#cb9-63" tabindex="-1"></a><span class="co">#&gt; 177   0.15110151 0.46416120 0.48377978 0.41773882 0.8098402 0.6361847</span></span>
+<span id="cb9-64"><a href="#cb9-64" tabindex="-1"></a><span class="co">#&gt; 32    0.70260714 1.11133237 0.99714565 0.86482578 0.6852034 0.8305752</span></span>
+<span id="cb9-65"><a href="#cb9-65" tabindex="-1"></a><span class="co">#&gt; 48    1.08894666 1.52684793 1.51068305 1.43120809 0.4614171 0.8617454</span></span>
+<span id="cb9-66"><a href="#cb9-66" tabindex="-1"></a><span class="co">#&gt; 51    0.66063284 0.15083676 0.23575645 0.28285590 0.7801362 0.1427648</span></span>
+<span id="cb9-67"><a href="#cb9-67" tabindex="-1"></a><span class="co">#&gt; 58    0.57433255 0.09886281 0.16366699 0.19839081 0.7331527 0.1717837</span></span>
+<span id="cb9-68"><a href="#cb9-68" tabindex="-1"></a><span class="co">#&gt; 64    0.67386852 0.17347486 0.23466647 0.23763955 1.0866662 0.4004303</span></span>
+<span id="cb9-69"><a href="#cb9-69" tabindex="-1"></a><span class="co">#&gt; 73    0.73174100 0.84572250 0.87123032 0.82304318 0.2300626 0.5391832</span></span>
+<span id="cb9-70"><a href="#cb9-70" tabindex="-1"></a><span class="co">#&gt; 75    0.75722137 0.86945516 0.87974223 0.85608344 0.2719534 0.5592170</span></span>
+<span id="cb9-71"><a href="#cb9-71" tabindex="-1"></a><span class="co">#&gt; 77    0.33422900 0.11483869 0.12146189 0.10076136 0.4537946 0.3073077</span></span>
+<span id="cb9-72"><a href="#cb9-72" tabindex="-1"></a><span class="co">#&gt; 84    0.32890071 0.55669839 0.64465115 0.54744444 1.1846425 0.6799134</span></span>
+<span id="cb9-73"><a href="#cb9-73" tabindex="-1"></a><span class="co">#&gt; 88    0.28189617 0.60301990 0.67280979 0.57767399 1.1639677 0.6907458</span></span>
+<span id="cb9-74"><a href="#cb9-74" tabindex="-1"></a><span class="co">#&gt; 89    0.05084658 0.29370068 0.31413937 0.28993125 0.5059028 0.6529113</span></span>
+<span id="cb9-75"><a href="#cb9-75" tabindex="-1"></a><span class="co">#&gt; 9     0.38148912 0.66494728 0.76569846 0.67534324 1.1532833 0.8433217</span></span>
+<span id="cb9-76"><a href="#cb9-76" tabindex="-1"></a><span class="co">#&gt; 93    0.26078498 0.01936866 0.02584242 0.03956561 0.5922929 0.1520451</span></span>
+<span id="cb9-77"><a href="#cb9-77" tabindex="-1"></a><span class="co">#&gt; 98    0.76728348 0.94152695 0.92077777 0.82489916 0.3110565 0.5675031</span></span>
+<span id="cb9-78"><a href="#cb9-78" tabindex="-1"></a><span class="co">#&gt; Aqu   0.54502916 0.55759602 0.58256212 0.56921008 0.1379556 0.4475496</span></span>
+<span id="cb9-79"><a href="#cb9-79" tabindex="-1"></a><span class="co">#&gt; Const 0.55611009 0.61685170 0.60547899 0.57046700 0.3173447 0.2883269</span></span>
+<span id="cb9-80"><a href="#cb9-80" tabindex="-1"></a><span class="co">#&gt; ESan  0.73289993 0.91541428 0.93795545 0.89333459 0.1943788 0.5786910</span></span>
+<span id="cb9-81"><a href="#cb9-81" tabindex="-1"></a><span class="co">#&gt; Mat   0.91984595 1.16188410 1.07610925 0.96281144 0.5003937 0.6388415</span></span>
+<span id="cb9-82"><a href="#cb9-82" tabindex="-1"></a><span class="co">#&gt; SFr   0.30362476 0.02847727 0.04255600 0.06592929 0.6419164 0.2837324</span></span>
+<span id="cb9-83"><a href="#cb9-83" tabindex="-1"></a><span class="co">#&gt;              165        166        168        169        171        173</span></span>
+<span id="cb9-84"><a href="#cb9-84" tabindex="-1"></a><span class="co">#&gt; 101   0.72741227 0.97280966 0.82616807 0.82126417 0.67905702 0.77240532</span></span>
+<span id="cb9-85"><a href="#cb9-85" tabindex="-1"></a><span class="co">#&gt; 102   1.09662675 1.31004472 1.49734006 1.21513319 1.04650321 1.29244902</span></span>
+<span id="cb9-86"><a href="#cb9-86" tabindex="-1"></a><span class="co">#&gt; 12    0.03364710 0.04440340 0.11767153 0.01997182 0.29594519 0.27920673</span></span>
+<span id="cb9-87"><a href="#cb9-87" tabindex="-1"></a><span class="co">#&gt; 153   0.10725094 0.11399474 0.18731658 0.07699837 0.62610528 0.64346873</span></span>
+<span id="cb9-88"><a href="#cb9-88" tabindex="-1"></a><span class="co">#&gt; 156   1.23322718 0.79650743 2.08032036 1.21200110 0.96259587 1.09396809</span></span>
+<span id="cb9-89"><a href="#cb9-89" tabindex="-1"></a><span class="co">#&gt; 157   0.94895830 0.62046041 1.49635336 0.89907982 0.79870456 0.85538703</span></span>
+<span id="cb9-90"><a href="#cb9-90" tabindex="-1"></a><span class="co">#&gt; 159   0.39315058 0.34752762 0.60960877 0.35455178 0.01736705 0.03518895</span></span>
+<span id="cb9-91"><a href="#cb9-91" tabindex="-1"></a><span class="co">#&gt; 160   0.04664194 0.03821450 0.08573583 0.02158126 0.33160214 0.29104653</span></span>
+<span id="cb9-92"><a href="#cb9-92" tabindex="-1"></a><span class="co">#&gt; 161   0.03766515 0.05760656 0.14580320 0.04955005 0.30778295 0.31917454</span></span>
+<span id="cb9-93"><a href="#cb9-93" tabindex="-1"></a><span class="co">#&gt; 162   0.03483766 0.07634856 0.16753185 0.05354531 0.27117886 0.28985320</span></span>
+<span id="cb9-94"><a href="#cb9-94" tabindex="-1"></a><span class="co">#&gt; 163   0.81215087 0.56538712 1.13323401 0.71783438 0.60476245 0.56305148</span></span>
+<span id="cb9-95"><a href="#cb9-95" tabindex="-1"></a><span class="co">#&gt; 164   0.11212928 0.15156007 0.26523027 0.12261203 0.44932866 0.54335543</span></span>
+<span id="cb9-96"><a href="#cb9-96" tabindex="-1"></a><span class="co">#&gt; 165   0.00000000 0.07107721 0.09640816 0.02536889 0.37365932 0.40561198</span></span>
+<span id="cb9-97"><a href="#cb9-97" tabindex="-1"></a><span class="co">#&gt; 166   0.07107721 0.00000000 0.14063226 0.04557458 0.37604899 0.35480109</span></span>
+<span id="cb9-98"><a href="#cb9-98" tabindex="-1"></a><span class="co">#&gt; 168   0.09640816 0.14063226 0.00000000 0.09880884 0.61629882 0.48877305</span></span>
+<span id="cb9-99"><a href="#cb9-99" tabindex="-1"></a><span class="co">#&gt; 169   0.02536889 0.04557458 0.09880884 0.00000000 0.35160527 0.34171673</span></span>
+<span id="cb9-100"><a href="#cb9-100" tabindex="-1"></a><span class="co">#&gt; 171   0.37365932 0.37604899 0.61629882 0.35160527 0.00000000 0.04357864</span></span>
+<span id="cb9-101"><a href="#cb9-101" tabindex="-1"></a><span class="co">#&gt; 173   0.40561198 0.35480109 0.48877305 0.34171673 0.04357864 0.00000000</span></span>
+<span id="cb9-102"><a href="#cb9-102" tabindex="-1"></a><span class="co">#&gt; 175   0.47298815 0.51564709 0.73296494 0.47284811 0.04736866 0.13309550</span></span>
+<span id="cb9-103"><a href="#cb9-103" tabindex="-1"></a><span class="co">#&gt; 177   0.50463482 0.56583017 0.67099124 0.49690227 0.08074051 0.13019835</span></span>
+<span id="cb9-104"><a href="#cb9-104" tabindex="-1"></a><span class="co">#&gt; 32    0.91948653 1.01990605 1.75215335 1.02033330 0.68936103 0.91154228</span></span>
+<span id="cb9-105"><a href="#cb9-105" tabindex="-1"></a><span class="co">#&gt; 48    1.46358910 0.90122134 2.42750793 1.42219736 1.13452137 1.25345568</span></span>
+<span id="cb9-106"><a href="#cb9-106" tabindex="-1"></a><span class="co">#&gt; 51    0.15620875 0.14574663 0.13798902 0.11149596 0.70733834 0.63102094</span></span>
+<span id="cb9-107"><a href="#cb9-107" tabindex="-1"></a><span class="co">#&gt; 58    0.10813042 0.09552957 0.12855351 0.06265791 0.60680901 0.56494181</span></span>
+<span id="cb9-108"><a href="#cb9-108" tabindex="-1"></a><span class="co">#&gt; 64    0.16981516 0.24365427 0.07770315 0.16300184 0.65428615 0.54355342</span></span>
+<span id="cb9-109"><a href="#cb9-109" tabindex="-1"></a><span class="co">#&gt; 73    0.85372669 0.53573405 1.31274651 0.79262453 0.75505877 0.78168048</span></span>
+<span id="cb9-110"><a href="#cb9-110" tabindex="-1"></a><span class="co">#&gt; 75    0.87404806 0.53599805 1.30315995 0.83054660 0.77654991 0.82401354</span></span>
+<span id="cb9-111"><a href="#cb9-111" tabindex="-1"></a><span class="co">#&gt; 77    0.15187486 0.11698124 0.26599128 0.13223555 0.36456662 0.28831549</span></span>
+<span id="cb9-112"><a href="#cb9-112" tabindex="-1"></a><span class="co">#&gt; 84    0.58379932 0.71375281 0.63041543 0.58260671 0.21571491 0.25359480</span></span>
+<span id="cb9-113"><a href="#cb9-113" tabindex="-1"></a><span class="co">#&gt; 88    0.61542655 0.73955071 0.64413835 0.62467280 0.18854494 0.21695925</span></span>
+<span id="cb9-114"><a href="#cb9-114" tabindex="-1"></a><span class="co">#&gt; 89    0.44011205 0.33879062 0.59049095 0.34920751 0.07902964 0.03880829</span></span>
+<span id="cb9-115"><a href="#cb9-115" tabindex="-1"></a><span class="co">#&gt; 9     0.71559014 0.85817696 0.71786424 0.72229418 0.26946493 0.29389072</span></span>
+<span id="cb9-116"><a href="#cb9-116" tabindex="-1"></a><span class="co">#&gt; 93    0.04387348 0.04935551 0.13556182 0.02845482 0.28075751 0.26505194</span></span>
+<span id="cb9-117"><a href="#cb9-117" tabindex="-1"></a><span class="co">#&gt; 98    0.84818585 0.65808292 1.46021014 0.86738340 0.75132571 0.90947398</span></span>
+<span id="cb9-118"><a href="#cb9-118" tabindex="-1"></a><span class="co">#&gt; Aqu   0.61330296 0.36850368 0.93304517 0.55892620 0.58497062 0.58039918</span></span>
+<span id="cb9-119"><a href="#cb9-119" tabindex="-1"></a><span class="co">#&gt; Const 0.54599245 0.38443058 0.93600140 0.54383147 0.53558526 0.64933609</span></span>
+<span id="cb9-120"><a href="#cb9-120" tabindex="-1"></a><span class="co">#&gt; ESan  0.92038595 0.59131577 1.44589551 0.87017234 0.75970836 0.81200758</span></span>
+<span id="cb9-121"><a href="#cb9-121" tabindex="-1"></a><span class="co">#&gt; Mat   0.97249430 0.75177507 1.73404003 1.04959990 0.88337478 1.15178247</span></span>
+<span id="cb9-122"><a href="#cb9-122" tabindex="-1"></a><span class="co">#&gt; SFr   0.07985499 0.06218951 0.12105423 0.04552955 0.34533143 0.28677633</span></span>
+<span id="cb9-123"><a href="#cb9-123" tabindex="-1"></a><span class="co">#&gt;              175        177        32         48         51         58</span></span>
+<span id="cb9-124"><a href="#cb9-124" tabindex="-1"></a><span class="co">#&gt; 101   0.62475560 0.57873184 0.3443769 1.43901637 0.87433673 0.93822631</span></span>
+<span id="cb9-125"><a href="#cb9-125" tabindex="-1"></a><span class="co">#&gt; 102   0.98909707 0.99739338 0.1691409 1.50945743 1.44897492 1.29854813</span></span>
+<span id="cb9-126"><a href="#cb9-126" tabindex="-1"></a><span class="co">#&gt; 12    0.43383601 0.46936931 0.9973156 1.43998938 0.15359857 0.11382344</span></span>
+<span id="cb9-127"><a href="#cb9-127" tabindex="-1"></a><span class="co">#&gt; 153   0.84153565 0.91246956 1.0365740 1.34068093 0.05271471 0.01207775</span></span>
+<span id="cb9-128"><a href="#cb9-128" tabindex="-1"></a><span class="co">#&gt; 156   1.03555504 1.13423886 0.7087233 0.01800446 1.35339846 1.24087242</span></span>
+<span id="cb9-129"><a href="#cb9-129" tabindex="-1"></a><span class="co">#&gt; 157   0.92338378 0.99976114 0.6767296 0.05332053 0.99054007 0.92068637</span></span>
+<span id="cb9-130"><a href="#cb9-130" tabindex="-1"></a><span class="co">#&gt; 159   0.10691404 0.15110151 0.7026071 1.08894666 0.66063284 0.57433255</span></span>
+<span id="cb9-131"><a href="#cb9-131" tabindex="-1"></a><span class="co">#&gt; 160   0.44001044 0.46416120 1.1113324 1.52684793 0.15083676 0.09886281</span></span>
+<span id="cb9-132"><a href="#cb9-132" tabindex="-1"></a><span class="co">#&gt; 161   0.42813456 0.48377978 0.9971456 1.51068305 0.23575645 0.16366699</span></span>
+<span id="cb9-133"><a href="#cb9-133" tabindex="-1"></a><span class="co">#&gt; 162   0.38526231 0.41773882 0.8648258 1.43120809 0.28285590 0.19839081</span></span>
+<span id="cb9-134"><a href="#cb9-134" tabindex="-1"></a><span class="co">#&gt; 163   0.77376089 0.80984023 0.6852034 0.46141710 0.78013616 0.73315273</span></span>
+<span id="cb9-135"><a href="#cb9-135" tabindex="-1"></a><span class="co">#&gt; 164   0.54923711 0.63618465 0.8305752 0.86174539 0.14276484 0.17178371</span></span>
+<span id="cb9-136"><a href="#cb9-136" tabindex="-1"></a><span class="co">#&gt; 165   0.47298815 0.50463482 0.9194865 1.46358910 0.15620875 0.10813042</span></span>
+<span id="cb9-137"><a href="#cb9-137" tabindex="-1"></a><span class="co">#&gt; 166   0.51564709 0.56583017 1.0199060 0.90122134 0.14574663 0.09552957</span></span>
+<span id="cb9-138"><a href="#cb9-138" tabindex="-1"></a><span class="co">#&gt; 168   0.73296494 0.67099124 1.7521533 2.42750793 0.13798902 0.12855351</span></span>
+<span id="cb9-139"><a href="#cb9-139" tabindex="-1"></a><span class="co">#&gt; 169   0.47284811 0.49690227 1.0203333 1.42219736 0.11149596 0.06265791</span></span>
+<span id="cb9-140"><a href="#cb9-140" tabindex="-1"></a><span class="co">#&gt; 171   0.04736866 0.08074051 0.6893610 1.13452137 0.70733834 0.60680901</span></span>
+<span id="cb9-141"><a href="#cb9-141" tabindex="-1"></a><span class="co">#&gt; 173   0.13309550 0.13019835 0.9115423 1.25345568 0.63102094 0.56494181</span></span>
+<span id="cb9-142"><a href="#cb9-142" tabindex="-1"></a><span class="co">#&gt; 175   0.00000000 0.01968420 0.7332807 1.21738993 0.97849213 0.81120848</span></span>
+<span id="cb9-143"><a href="#cb9-143" tabindex="-1"></a><span class="co">#&gt; 177   0.01968420 0.00000000 0.8176616 1.32947077 1.04201305 0.85212878</span></span>
+<span id="cb9-144"><a href="#cb9-144" tabindex="-1"></a><span class="co">#&gt; 32    0.73328071 0.81766158 0.0000000 0.83992690 1.43106941 1.18478030</span></span>
+<span id="cb9-145"><a href="#cb9-145" tabindex="-1"></a><span class="co">#&gt; 48    1.21738993 1.32947077 0.8399269 0.00000000 1.53468071 1.43486670</span></span>
+<span id="cb9-146"><a href="#cb9-146" tabindex="-1"></a><span class="co">#&gt; 51    0.97849213 1.04201305 1.4310694 1.53468071 0.00000000 0.03248179</span></span>
+<span id="cb9-147"><a href="#cb9-147" tabindex="-1"></a><span class="co">#&gt; 58    0.81120848 0.85212878 1.1847803 1.43486670 0.03248179 0.00000000</span></span>
+<span id="cb9-148"><a href="#cb9-148" tabindex="-1"></a><span class="co">#&gt; 64    0.70327241 0.57436838 1.6017641 2.40949340 0.25953218 0.19417388</span></span>
+<span id="cb9-149"><a href="#cb9-149" tabindex="-1"></a><span class="co">#&gt; 73    0.91047707 0.97544982 0.6990633 0.11178456 0.88548832 0.81474862</span></span>
+<span id="cb9-150"><a href="#cb9-150" tabindex="-1"></a><span class="co">#&gt; 75    0.91581855 0.99242031 0.7300949 0.11958240 0.90800875 0.83802009</span></span>
+<span id="cb9-151"><a href="#cb9-151" tabindex="-1"></a><span class="co">#&gt; 77    0.56980298 0.58826936 0.9086801 0.93782901 0.30261287 0.22988911</span></span>
+<span id="cb9-152"><a href="#cb9-152" tabindex="-1"></a><span class="co">#&gt; 84    0.09828475 0.04837842 1.0005789 1.71814097 1.12551086 0.96777658</span></span>
+<span id="cb9-153"><a href="#cb9-153" tabindex="-1"></a><span class="co">#&gt; 88    0.09442266 0.04611493 1.0369797 1.57376511 1.11877754 1.01855653</span></span>
+<span id="cb9-154"><a href="#cb9-154" tabindex="-1"></a><span class="co">#&gt; 89    0.18038901 0.19133025 0.7976383 1.11284623 0.70964537 0.55716026</span></span>
+<span id="cb9-155"><a href="#cb9-155" tabindex="-1"></a><span class="co">#&gt; 9     0.12429357 0.06046303 1.0773893 1.64142316 1.34836801 1.16586781</span></span>
+<span id="cb9-156"><a href="#cb9-156" tabindex="-1"></a><span class="co">#&gt; 93    0.42285153 0.47358314 0.9393584 1.30069188 0.14816483 0.10976648</span></span>
+<span id="cb9-157"><a href="#cb9-157" tabindex="-1"></a><span class="co">#&gt; 98    0.78103491 0.85077242 0.5061139 0.27301998 1.04116727 0.90626195</span></span>
+<span id="cb9-158"><a href="#cb9-158" tabindex="-1"></a><span class="co">#&gt; Aqu   0.72979077 0.78370867 0.6150825 0.17861154 0.67150595 0.61120560</span></span>
+<span id="cb9-159"><a href="#cb9-159" tabindex="-1"></a><span class="co">#&gt; Const 0.61638387 0.69783780 0.6043440 0.13909697 0.65774797 0.60862467</span></span>
+<span id="cb9-160"><a href="#cb9-160" tabindex="-1"></a><span class="co">#&gt; ESan  0.87968507 0.95089918 0.6386413 0.06081133 0.95963695 0.88560059</span></span>
+<span id="cb9-161"><a href="#cb9-161" tabindex="-1"></a><span class="co">#&gt; Mat   0.84763649 0.93816840 0.5484981 0.15462377 1.32140146 1.12147467</span></span>
+<span id="cb9-162"><a href="#cb9-162" tabindex="-1"></a><span class="co">#&gt; SFr   0.49352396 0.50320977 1.1222286 1.45410599 0.18836496 0.10932357</span></span>
+<span id="cb9-163"><a href="#cb9-163" tabindex="-1"></a><span class="co">#&gt;               64         73         75         77         84         88</span></span>
+<span id="cb9-164"><a href="#cb9-164" tabindex="-1"></a><span class="co">#&gt; 101   0.81764835 1.08326477 1.07193789 1.11548521 0.46148008 0.46645305</span></span>
+<span id="cb9-165"><a href="#cb9-165" tabindex="-1"></a><span class="co">#&gt; 102   1.35050557 1.28156738 1.25598820 1.43000904 0.97219746 1.02961096</span></span>
+<span id="cb9-166"><a href="#cb9-166" tabindex="-1"></a><span class="co">#&gt; 12    0.19798011 0.80215204 0.84299329 0.11404485 0.59330407 0.60493749</span></span>
+<span id="cb9-167"><a href="#cb9-167" tabindex="-1"></a><span class="co">#&gt; 153   0.25473822 0.77448546 0.79691111 0.24146895 1.06663772 1.13179775</span></span>
+<span id="cb9-168"><a href="#cb9-168" tabindex="-1"></a><span class="co">#&gt; 156   2.01005515 0.06548865 0.07081567 0.82328231 1.46225882 1.38383429</span></span>
+<span id="cb9-169"><a href="#cb9-169" tabindex="-1"></a><span class="co">#&gt; 157   1.45348031 0.04696092 0.05684681 0.58550705 1.34238455 1.31563698</span></span>
+<span id="cb9-170"><a href="#cb9-170" tabindex="-1"></a><span class="co">#&gt; 159   0.67386852 0.73174100 0.75722137 0.33422900 0.32890071 0.28189617</span></span>
+<span id="cb9-171"><a href="#cb9-171" tabindex="-1"></a><span class="co">#&gt; 160   0.17347486 0.84572250 0.86945516 0.11483869 0.55669839 0.60301990</span></span>
+<span id="cb9-172"><a href="#cb9-172" tabindex="-1"></a><span class="co">#&gt; 161   0.23466647 0.87123032 0.87974223 0.12146189 0.64465115 0.67280979</span></span>
+<span id="cb9-173"><a href="#cb9-173" tabindex="-1"></a><span class="co">#&gt; 162   0.23763955 0.82304318 0.85608344 0.10076136 0.54744444 0.57767399</span></span>
+<span id="cb9-174"><a href="#cb9-174" tabindex="-1"></a><span class="co">#&gt; 163   1.08666617 0.23006263 0.27195339 0.45379462 1.18464253 1.16396773</span></span>
+<span id="cb9-175"><a href="#cb9-175" tabindex="-1"></a><span class="co">#&gt; 164   0.40043032 0.53918315 0.55921702 0.30730771 0.67991341 0.69074577</span></span>
+<span id="cb9-176"><a href="#cb9-176" tabindex="-1"></a><span class="co">#&gt; 165   0.16981516 0.85372669 0.87404806 0.15187486 0.58379932 0.61542655</span></span>
+<span id="cb9-177"><a href="#cb9-177" tabindex="-1"></a><span class="co">#&gt; 166   0.24365427 0.53573405 0.53599805 0.11698124 0.71375281 0.73955071</span></span>
+<span id="cb9-178"><a href="#cb9-178" tabindex="-1"></a><span class="co">#&gt; 168   0.07770315 1.31274651 1.30315995 0.26599128 0.63041543 0.64413835</span></span>
+<span id="cb9-179"><a href="#cb9-179" tabindex="-1"></a><span class="co">#&gt; 169   0.16300184 0.79262453 0.83054660 0.13223555 0.58260671 0.62467280</span></span>
+<span id="cb9-180"><a href="#cb9-180" tabindex="-1"></a><span class="co">#&gt; 171   0.65428615 0.75505877 0.77654991 0.36456662 0.21571491 0.18854494</span></span>
+<span id="cb9-181"><a href="#cb9-181" tabindex="-1"></a><span class="co">#&gt; 173   0.54355342 0.78168048 0.82401354 0.28831549 0.25359480 0.21695925</span></span>
+<span id="cb9-182"><a href="#cb9-182" tabindex="-1"></a><span class="co">#&gt; 175   0.70327241 0.91047707 0.91581855 0.56980298 0.09828475 0.09442266</span></span>
+<span id="cb9-183"><a href="#cb9-183" tabindex="-1"></a><span class="co">#&gt; 177   0.57436838 0.97544982 0.99242031 0.58826936 0.04837842 0.04611493</span></span>
+<span id="cb9-184"><a href="#cb9-184" tabindex="-1"></a><span class="co">#&gt; 32    1.60176408 0.69906334 0.73009494 0.90868014 1.00057892 1.03697967</span></span>
+<span id="cb9-185"><a href="#cb9-185" tabindex="-1"></a><span class="co">#&gt; 48    2.40949340 0.11178456 0.11958240 0.93782901 1.71814097 1.57376511</span></span>
+<span id="cb9-186"><a href="#cb9-186" tabindex="-1"></a><span class="co">#&gt; 51    0.25953218 0.88548832 0.90800875 0.30261287 1.12551086 1.11877754</span></span>
+<span id="cb9-187"><a href="#cb9-187" tabindex="-1"></a><span class="co">#&gt; 58    0.19417388 0.81474862 0.83802009 0.22988911 0.96777658 1.01855653</span></span>
+<span id="cb9-188"><a href="#cb9-188" tabindex="-1"></a><span class="co">#&gt; 64    0.00000000 1.30092396 1.28619249 0.39687618 0.55378123 0.57485410</span></span>
+<span id="cb9-189"><a href="#cb9-189" tabindex="-1"></a><span class="co">#&gt; 73    1.30092396 0.00000000 0.02151793 0.50496755 1.30688039 1.30397679</span></span>
+<span id="cb9-190"><a href="#cb9-190" tabindex="-1"></a><span class="co">#&gt; 75    1.28619249 0.02151793 0.00000000 0.57665609 1.33260545 1.34494076</span></span>
+<span id="cb9-191"><a href="#cb9-191" tabindex="-1"></a><span class="co">#&gt; 77    0.39687618 0.50496755 0.57665609 0.00000000 0.79871236 0.83988729</span></span>
+<span id="cb9-192"><a href="#cb9-192" tabindex="-1"></a><span class="co">#&gt; 84    0.55378123 1.30688039 1.33260545 0.79871236 0.00000000 0.02057797</span></span>
+<span id="cb9-193"><a href="#cb9-193" tabindex="-1"></a><span class="co">#&gt; 88    0.57485410 1.30397679 1.34494076 0.83988729 0.02057797 0.00000000</span></span>
+<span id="cb9-194"><a href="#cb9-194" tabindex="-1"></a><span class="co">#&gt; 89    0.61207032 0.70902606 0.75628624 0.26067443 0.36135924 0.35283058</span></span>
+<span id="cb9-195"><a href="#cb9-195" tabindex="-1"></a><span class="co">#&gt; 9     0.56855081 1.33759196 1.37481823 0.93729679 0.02030980 0.02511553</span></span>
+<span id="cb9-196"><a href="#cb9-196" tabindex="-1"></a><span class="co">#&gt; 93    0.22816669 0.71855075 0.76645886 0.09081165 0.61748200 0.63304873</span></span>
+<span id="cb9-197"><a href="#cb9-197" tabindex="-1"></a><span class="co">#&gt; 98    1.32511164 0.15151034 0.21703722 0.67363250 1.09011043 1.06870655</span></span>
+<span id="cb9-198"><a href="#cb9-198" tabindex="-1"></a><span class="co">#&gt; Aqu   0.93452237 0.04985548 0.08102690 0.33464584 1.11310970 1.10960980</span></span>
+<span id="cb9-199"><a href="#cb9-199" tabindex="-1"></a><span class="co">#&gt; Const 0.96970664 0.08313488 0.09312608 0.45692411 0.89317924 0.88358075</span></span>
+<span id="cb9-200"><a href="#cb9-200" tabindex="-1"></a><span class="co">#&gt; ESan  1.39493305 0.03650840 0.05824029 0.55998087 1.28999955 1.25613670</span></span>
+<span id="cb9-201"><a href="#cb9-201" tabindex="-1"></a><span class="co">#&gt; Mat   1.57916632 0.19490213 0.23594574 0.86303919 1.13967889 1.09717626</span></span>
+<span id="cb9-202"><a href="#cb9-202" tabindex="-1"></a><span class="co">#&gt; SFr   0.14280695 0.80852550 0.84185730 0.11502338 0.67154766 0.69182565</span></span>
+<span id="cb9-203"><a href="#cb9-203" tabindex="-1"></a><span class="co">#&gt;               89          9          93         98        Aqu      Const</span></span>
+<span id="cb9-204"><a href="#cb9-204" tabindex="-1"></a><span class="co">#&gt; 101   1.06825006 0.51475003 0.859057089 0.85889449 0.98599296 0.76885726</span></span>
+<span id="cb9-205"><a href="#cb9-205" tabindex="-1"></a><span class="co">#&gt; 102   1.31518062 1.04815522 1.266135680 0.93642471 1.15161403 1.02954979</span></span>
+<span id="cb9-206"><a href="#cb9-206" tabindex="-1"></a><span class="co">#&gt; 12    0.30087046 0.71627556 0.009049401 0.86378423 0.53240618 0.55930157</span></span>
+<span id="cb9-207"><a href="#cb9-207" tabindex="-1"></a><span class="co">#&gt; 153   0.62316305 1.34066013 0.133475854 0.81899662 0.60347734 0.55539678</span></span>
+<span id="cb9-208"><a href="#cb9-208" tabindex="-1"></a><span class="co">#&gt; 156   0.98035414 1.43435679 1.112527599 0.18171849 0.14346154 0.11016845</span></span>
+<span id="cb9-209"><a href="#cb9-209" tabindex="-1"></a><span class="co">#&gt; 157   0.76985740 1.33220314 0.806501574 0.22763647 0.06307161 0.08697670</span></span>
+<span id="cb9-210"><a href="#cb9-210" tabindex="-1"></a><span class="co">#&gt; 159   0.05084658 0.38148912 0.260784980 0.76728348 0.54502916 0.55611009</span></span>
+<span id="cb9-211"><a href="#cb9-211" tabindex="-1"></a><span class="co">#&gt; 160   0.29370068 0.66494728 0.019368662 0.94152695 0.55759602 0.61685170</span></span>
+<span id="cb9-212"><a href="#cb9-212" tabindex="-1"></a><span class="co">#&gt; 161   0.31413937 0.76569846 0.025842421 0.92077777 0.58256212 0.60547899</span></span>
+<span id="cb9-213"><a href="#cb9-213" tabindex="-1"></a><span class="co">#&gt; 162   0.28993125 0.67534324 0.039565610 0.82489916 0.56921008 0.57046700</span></span>
+<span id="cb9-214"><a href="#cb9-214" tabindex="-1"></a><span class="co">#&gt; 163   0.50590277 1.15328328 0.592292946 0.31105651 0.13795565 0.31734468</span></span>
+<span id="cb9-215"><a href="#cb9-215" tabindex="-1"></a><span class="co">#&gt; 164   0.65291131 0.84332170 0.152045149 0.56750307 0.44754957 0.28832695</span></span>
+<span id="cb9-216"><a href="#cb9-216" tabindex="-1"></a><span class="co">#&gt; 165   0.44011205 0.71559014 0.043873480 0.84818585 0.61330296 0.54599245</span></span>
+<span id="cb9-217"><a href="#cb9-217" tabindex="-1"></a><span class="co">#&gt; 166   0.33879062 0.85817696 0.049355506 0.65808292 0.36850368 0.38443058</span></span>
+<span id="cb9-218"><a href="#cb9-218" tabindex="-1"></a><span class="co">#&gt; 168   0.59049095 0.71786424 0.135561825 1.46021014 0.93304517 0.93600140</span></span>
+<span id="cb9-219"><a href="#cb9-219" tabindex="-1"></a><span class="co">#&gt; 169   0.34920751 0.72229418 0.028454824 0.86738340 0.55892620 0.54383147</span></span>
+<span id="cb9-220"><a href="#cb9-220" tabindex="-1"></a><span class="co">#&gt; 171   0.07902964 0.26946493 0.280757513 0.75132571 0.58497062 0.53558526</span></span>
+<span id="cb9-221"><a href="#cb9-221" tabindex="-1"></a><span class="co">#&gt; 173   0.03880829 0.29389072 0.265051936 0.90947398 0.58039918 0.64933609</span></span>
+<span id="cb9-222"><a href="#cb9-222" tabindex="-1"></a><span class="co">#&gt; 175   0.18038901 0.12429357 0.422851528 0.78103491 0.72979077 0.61638387</span></span>
+<span id="cb9-223"><a href="#cb9-223" tabindex="-1"></a><span class="co">#&gt; 177   0.19133025 0.06046303 0.473583139 0.85077242 0.78370867 0.69783780</span></span>
+<span id="cb9-224"><a href="#cb9-224" tabindex="-1"></a><span class="co">#&gt; 32    0.79763827 1.07738934 0.939358357 0.50611389 0.61508250 0.60434399</span></span>
+<span id="cb9-225"><a href="#cb9-225" tabindex="-1"></a><span class="co">#&gt; 48    1.11284623 1.64142316 1.300691882 0.27301998 0.17861154 0.13909697</span></span>
+<span id="cb9-226"><a href="#cb9-226" tabindex="-1"></a><span class="co">#&gt; 51    0.70964537 1.34836801 0.148164825 1.04116727 0.67150595 0.65774797</span></span>
+<span id="cb9-227"><a href="#cb9-227" tabindex="-1"></a><span class="co">#&gt; 58    0.55716026 1.16586781 0.109766479 0.90626195 0.61120560 0.60862467</span></span>
+<span id="cb9-228"><a href="#cb9-228" tabindex="-1"></a><span class="co">#&gt; 64    0.61207032 0.56855081 0.228166689 1.32511164 0.93452237 0.96970664</span></span>
+<span id="cb9-229"><a href="#cb9-229" tabindex="-1"></a><span class="co">#&gt; 73    0.70902606 1.33759196 0.718550750 0.15151034 0.04985548 0.08313488</span></span>
+<span id="cb9-230"><a href="#cb9-230" tabindex="-1"></a><span class="co">#&gt; 75    0.75628624 1.37481823 0.766458859 0.21703722 0.08102690 0.09312608</span></span>
+<span id="cb9-231"><a href="#cb9-231" tabindex="-1"></a><span class="co">#&gt; 77    0.26067443 0.93729679 0.090811648 0.67363250 0.33464584 0.45692411</span></span>
+<span id="cb9-232"><a href="#cb9-232" tabindex="-1"></a><span class="co">#&gt; 84    0.36135924 0.02030980 0.617482001 1.09011043 1.11310970 0.89317924</span></span>
+<span id="cb9-233"><a href="#cb9-233" tabindex="-1"></a><span class="co">#&gt; 88    0.35283058 0.02511553 0.633048728 1.06870655 1.10960980 0.88358075</span></span>
+<span id="cb9-234"><a href="#cb9-234" tabindex="-1"></a><span class="co">#&gt; 89    0.00000000 0.41050769 0.277982846 0.82575190 0.51800032 0.63957192</span></span>
+<span id="cb9-235"><a href="#cb9-235" tabindex="-1"></a><span class="co">#&gt; 9     0.41050769 0.00000000 0.726141678 1.08077042 1.11495366 0.96850428</span></span>
+<span id="cb9-236"><a href="#cb9-236" tabindex="-1"></a><span class="co">#&gt; 93    0.27798285 0.72614168 0.000000000 0.78747338 0.46990364 0.51519929</span></span>
+<span id="cb9-237"><a href="#cb9-237" tabindex="-1"></a><span class="co">#&gt; 98    0.82575190 1.08077042 0.787473375 0.00000000 0.19289800 0.21259188</span></span>
+<span id="cb9-238"><a href="#cb9-238" tabindex="-1"></a><span class="co">#&gt; Aqu   0.51800032 1.11495366 0.469903640 0.19289800 0.00000000 0.10067980</span></span>
+<span id="cb9-239"><a href="#cb9-239" tabindex="-1"></a><span class="co">#&gt; Const 0.63957192 0.96850428 0.515199289 0.21259188 0.10067980 0.00000000</span></span>
+<span id="cb9-240"><a href="#cb9-240" tabindex="-1"></a><span class="co">#&gt; ESan  0.73117386 1.27329236 0.771963859 0.15719205 0.04462383 0.07464216</span></span>
+<span id="cb9-241"><a href="#cb9-241" tabindex="-1"></a><span class="co">#&gt; Mat   1.03674093 1.13495440 0.993764808 0.05718971 0.25531586 0.18075005</span></span>
+<span id="cb9-242"><a href="#cb9-242" tabindex="-1"></a><span class="co">#&gt; SFr   0.25742599 0.74594458 0.033861687 0.92422491 0.52711784 0.64050845</span></span>
+<span id="cb9-243"><a href="#cb9-243" tabindex="-1"></a><span class="co">#&gt;             ESan        Mat        SFr</span></span>
+<span id="cb9-244"><a href="#cb9-244" tabindex="-1"></a><span class="co">#&gt; 101   1.04819724 0.93697209 1.13451445</span></span>
+<span id="cb9-245"><a href="#cb9-245" tabindex="-1"></a><span class="co">#&gt; 102   1.19928734 0.96276010 1.47827806</span></span>
+<span id="cb9-246"><a href="#cb9-246" tabindex="-1"></a><span class="co">#&gt; 12    0.86536453 1.06233502 0.03793539</span></span>
+<span id="cb9-247"><a href="#cb9-247" tabindex="-1"></a><span class="co">#&gt; 153   0.83818920 0.98956920 0.15097186</span></span>
+<span id="cb9-248"><a href="#cb9-248" tabindex="-1"></a><span class="co">#&gt; 156   0.04209422 0.11216667 1.26676145</span></span>
+<span id="cb9-249"><a href="#cb9-249" tabindex="-1"></a><span class="co">#&gt; 157   0.01496104 0.19413021 0.91333804</span></span>
+<span id="cb9-250"><a href="#cb9-250" tabindex="-1"></a><span class="co">#&gt; 159   0.73289993 0.91984595 0.30362476</span></span>
+<span id="cb9-251"><a href="#cb9-251" tabindex="-1"></a><span class="co">#&gt; 160   0.91541428 1.16188410 0.02847727</span></span>
+<span id="cb9-252"><a href="#cb9-252" tabindex="-1"></a><span class="co">#&gt; 161   0.93795545 1.07610925 0.04255600</span></span>
+<span id="cb9-253"><a href="#cb9-253" tabindex="-1"></a><span class="co">#&gt; 162   0.89333459 0.96281144 0.06592929</span></span>
+<span id="cb9-254"><a href="#cb9-254" tabindex="-1"></a><span class="co">#&gt; 163   0.19437878 0.50039366 0.64191640</span></span>
+<span id="cb9-255"><a href="#cb9-255" tabindex="-1"></a><span class="co">#&gt; 164   0.57869104 0.63884149 0.28373239</span></span>
+<span id="cb9-256"><a href="#cb9-256" tabindex="-1"></a><span class="co">#&gt; 165   0.92038595 0.97249430 0.07985499</span></span>
+<span id="cb9-257"><a href="#cb9-257" tabindex="-1"></a><span class="co">#&gt; 166   0.59131577 0.75177507 0.06218951</span></span>
+<span id="cb9-258"><a href="#cb9-258" tabindex="-1"></a><span class="co">#&gt; 168   1.44589551 1.73404003 0.12105423</span></span>
+<span id="cb9-259"><a href="#cb9-259" tabindex="-1"></a><span class="co">#&gt; 169   0.87017234 1.04959990 0.04552955</span></span>
+<span id="cb9-260"><a href="#cb9-260" tabindex="-1"></a><span class="co">#&gt; 171   0.75970836 0.88337478 0.34533143</span></span>
+<span id="cb9-261"><a href="#cb9-261" tabindex="-1"></a><span class="co">#&gt; 173   0.81200758 1.15178247 0.28677633</span></span>
+<span id="cb9-262"><a href="#cb9-262" tabindex="-1"></a><span class="co">#&gt; 175   0.87968507 0.84763649 0.49352396</span></span>
+<span id="cb9-263"><a href="#cb9-263" tabindex="-1"></a><span class="co">#&gt; 177   0.95089918 0.93816840 0.50320977</span></span>
+<span id="cb9-264"><a href="#cb9-264" tabindex="-1"></a><span class="co">#&gt; 32    0.63864128 0.54849814 1.12222857</span></span>
+<span id="cb9-265"><a href="#cb9-265" tabindex="-1"></a><span class="co">#&gt; 48    0.06081133 0.15462377 1.45410599</span></span>
+<span id="cb9-266"><a href="#cb9-266" tabindex="-1"></a><span class="co">#&gt; 51    0.95963695 1.32140146 0.18836496</span></span>
+<span id="cb9-267"><a href="#cb9-267" tabindex="-1"></a><span class="co">#&gt; 58    0.88560059 1.12147467 0.10932357</span></span>
+<span id="cb9-268"><a href="#cb9-268" tabindex="-1"></a><span class="co">#&gt; 64    1.39493305 1.57916632 0.14280695</span></span>
+<span id="cb9-269"><a href="#cb9-269" tabindex="-1"></a><span class="co">#&gt; 73    0.03650840 0.19490213 0.80852550</span></span>
+<span id="cb9-270"><a href="#cb9-270" tabindex="-1"></a><span class="co">#&gt; 75    0.05824029 0.23594574 0.84185730</span></span>
+<span id="cb9-271"><a href="#cb9-271" tabindex="-1"></a><span class="co">#&gt; 77    0.55998087 0.86303919 0.11502338</span></span>
+<span id="cb9-272"><a href="#cb9-272" tabindex="-1"></a><span class="co">#&gt; 84    1.28999955 1.13967889 0.67154766</span></span>
+<span id="cb9-273"><a href="#cb9-273" tabindex="-1"></a><span class="co">#&gt; 88    1.25613670 1.09717626 0.69182565</span></span>
+<span id="cb9-274"><a href="#cb9-274" tabindex="-1"></a><span class="co">#&gt; 89    0.73117386 1.03674093 0.25742599</span></span>
+<span id="cb9-275"><a href="#cb9-275" tabindex="-1"></a><span class="co">#&gt; 9     1.27329236 1.13495440 0.74594458</span></span>
+<span id="cb9-276"><a href="#cb9-276" tabindex="-1"></a><span class="co">#&gt; 93    0.77196386 0.99376481 0.03386169</span></span>
+<span id="cb9-277"><a href="#cb9-277" tabindex="-1"></a><span class="co">#&gt; 98    0.15719205 0.05718971 0.92422491</span></span>
+<span id="cb9-278"><a href="#cb9-278" tabindex="-1"></a><span class="co">#&gt; Aqu   0.04462383 0.25531586 0.52711784</span></span>
+<span id="cb9-279"><a href="#cb9-279" tabindex="-1"></a><span class="co">#&gt; Const 0.07464216 0.18075005 0.64050845</span></span>
+<span id="cb9-280"><a href="#cb9-280" tabindex="-1"></a><span class="co">#&gt; ESan  0.00000000 0.14555174 0.87442463</span></span>
+<span id="cb9-281"><a href="#cb9-281" tabindex="-1"></a><span class="co">#&gt; Mat   0.14555174 0.00000000 1.16019476</span></span>
+<span id="cb9-282"><a href="#cb9-282" tabindex="-1"></a><span class="co">#&gt; SFr   0.87442463 1.16019476 0.00000000</span></span></code></pre></div>
+<p>Available modes: <code>AMOVA</code>, <code>Bray</code>,
+<code>Euclidean</code>, <code>cGD</code>, <code>Nei</code>,
+<code>Dps</code>, <code>Jaccard</code>.</p>
+</div>
+<div id="genetic-relatedness" class="section level2">
+<h2>Genetic Relatedness</h2>
+<p>Pairwise individual relatedness:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">genetic_relatedness</span>(arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, ], <span class="at">mode =</span> <span class="st">&quot;Nason&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; Some of your loci are missing, Fij will treat these as loci with all alleles with likelihood equal to the population allele frequency.</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; Some of your loci are missing, Fij will treat these as loci with all alleles with likelihood equal to the population allele frequency.</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; Some of your loci are missing, Fij will treat these as loci with all alleles with likelihood equal to the population allele frequency.</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="fu">dim</span>(r)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; [1] 20 20</span></span></code></pre></div>
+<p>Available modes: <code>Lynch</code>, <code>Ritland</code>,
+<code>Queller</code>, <code>Nason</code>.</p>
+</div>
+<div id="forward-time-simulation" class="section level2">
+<h2>Forward-Time Simulation</h2>
+<p>The <code>simulate_pop()</code> function runs multi-generation
+stochastic simulations with mutation, migration, and selfing:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Set up a 2-population system</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="at">Population =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>), <span class="at">each =</span> <span class="dv">4</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="at">Locus =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Loc1&quot;</span>, <span class="st">&quot;Loc2&quot;</span>), <span class="at">each =</span> <span class="dv">2</span>, <span class="at">times =</span> <span class="dv">2</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="at">Allele =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;01&quot;</span>, <span class="st">&quot;02&quot;</span>), <span class="at">times =</span> <span class="dv">4</span>),</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  <span class="at">Frequency =</span> <span class="fu">c</span>(<span class="fl">0.3</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>)</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>freqs<span class="sc">$</span>Population <span class="ot">&lt;-</span> <span class="fu">factor</span>(freqs<span class="sc">$</span>Population, <span class="at">ordered =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">make_populations</span>(freqs, <span class="at">N =</span> <span class="dv">30</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co"># Define migration and mutation</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>mig <span class="ot">&lt;-</span> <span class="fu">migration_event</span>(</span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>), <span class="at">model =</span> <span class="st">&quot;island&quot;</span>, <span class="at">m =</span> <span class="fl">0.05</span>),</span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>  <span class="at">start =</span> <span class="dv">1</span></span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>)</span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>mut <span class="ot">&lt;-</span> <span class="fu">mutation_model</span>(<span class="at">rate =</span> <span class="fl">0.001</span>, <span class="at">model =</span> <span class="st">&quot;smm&quot;</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="co"># Run 10 generations</span></span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">simulate_pop</span>(pop, <span class="at">ngen =</span> <span class="dv">10</span>, <span class="at">mutation =</span> mut,</span>
+<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a>                       <span class="at">migration =</span> mig, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a><span class="fu">nrow</span>(result)</span>
+<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a><span class="co">#&gt; [1] 60</span></span></code></pre></div>
+</div>
+<div id="learning-more" class="section level2">
+<h2>Learning More</h2>
+<ul>
+<li>Use <code>?function_name</code> for any exported function’s help
+page</li>
+<li>Full documentation: <a href="https://dyerlab.github.io/gstudio/">dyerlab.github.io/gstudio</a></li>
+<li>Source code: <a href="https://github.com/dyerlab/gstudio">github.com/dyerlab/gstudio</a></li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

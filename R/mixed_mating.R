@@ -23,24 +23,25 @@ mixed_mating <- function( data, N=1, s=0) {
   # Catch if s=0 ~ No selfing
   if( s==0 )
     ret <- mate( data, N=N )
-  
+
   # some degree of selfing
   else {
-    
-    Nselfed <- s*nrow(data)
+
+    Nselfed  <- round(s * nrow(data))
     Noutcross <- nrow(data) - Nselfed
+    ret <- data.frame()
 
     # index to selfing
-    if( Nselfed ) {
+    if( Nselfed > 0 ) {
       idx <- sample( 1:nrow(data), size=Nselfed, replace=TRUE)
-      ret <- mate( data[ idx,],data[idx,], N)      
+      ret <- rbind( ret, mate( data[ idx,],data[idx,], N) )
     }
-    
+
     # index to random mate pairs
-    if( Noutcross ){
+    if( Noutcross > 0 ){
       idx1 <- sample( 1:nrow(data), size=Noutcross, replace=TRUE )
       idx2 <- sample( 1:nrow(data), size=Noutcross, replace=TRUE )
-      ret <- rbind( ret, mate( data[idx1,], data[idx2,], N ) )       
+      ret <- rbind( ret, mate( data[idx1,], data[idx2,], N ) )
     }
     
     # fix up the ID column
