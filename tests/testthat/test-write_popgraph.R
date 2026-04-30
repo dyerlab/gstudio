@@ -76,7 +76,7 @@ test_that("to_jgf returns JSON string when no file given", {
   graph <- as.popgraph(a)
 
   result <- to_jgf(graph)
-  expect_is(result, "character")
+  expect_true(is.character(result))
   doc <- jsonlite::fromJSON(result, simplifyVector = FALSE)
   expect_true(!is.null(doc$graph$nodes$X))
   expect_true(!is.null(doc$graph$nodes$Y))

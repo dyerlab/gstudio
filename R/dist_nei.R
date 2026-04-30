@@ -33,33 +33,35 @@ dist_nei <- function( x, stratum="Population") {
   if( !(stratum %in% names(x) ) )
     stop( "You need to have a stratum column in the data.frame to indicate which sample is in which population.")
   
-  N <- dim(x)[1]
-  freqs <- frequencies( x, stratum=stratum) 
+  freqs <- frequencies( x, stratum=stratum)
   f <- dcast( freqs, Locus + Allele ~ Stratum, value.var="Frequency", fill=0)
   strata_names <- names(f)[3:length(names(f))]
   K <- length(strata_names)
   ret <- matrix( 0, K, K )
   colnames(ret) <- rownames(ret) <- strata_names
-  
+
+  # Per-population sample sizes for bias correction (Nei 1978)
+  n_per_pop <- as.integer(table(x[[stratum]])[strata_names])
+  names(n_per_pop) <- strata_names
+
   f.locus <- split( f, f$Locus )
-  
+
   for(i in 1:K){
-    f1 <- f[ , strata_names[i]]
+    ni <- n_per_pop[strata_names[i]]
     for( j in i:K) {
       if( i!=j){
-        f2 <- f[ , strata_names[j]]
-        top <- (2*N-1) * sum( f1*f2 )
-        bot1 <- bot2 <- 0.
+        nj <- n_per_pop[strata_names[j]]
+        Jxy <- 0.; Jx <- 0.; Jy <- 0.
         for( k in seq_along(f.locus) ){
           p1 <- f.locus[[k]][,strata_names[i]]
           p2 <- f.locus[[k]][,strata_names[j]]
-          bot1 <- bot1 + (2*N * sum( p1^2 ) - 1) 
-          bot2 <- bot2 + (2*N * sum( p2^2 ) - 1) 
-          
+          Jxy <- Jxy + sum( p1 * p2 )
+          Jx  <- Jx  + (2*ni * sum( p1^2 ) - 1) / (2*ni - 1)
+          Jy  <- Jy  + (2*nj * sum( p2^2 ) - 1) / (2*nj - 1)
         }
-        bot <- sqrt( bot1 * bot2 )
-        if( bot != 0 )
-          ret[j,i] <- ret[i,j] <- -1*log(top/bot) 
+        bot <- sqrt( Jx * Jy )
+        if( bot > 0 && Jxy > 0 )
+          ret[j,i] <- ret[i,j] <- -1*log(Jxy/bot)
       }
     }
   }

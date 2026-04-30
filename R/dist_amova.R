@@ -81,7 +81,7 @@ dist_amova <- function( x ) {
     for( j in 1:i) {
       if( i != j ) {
         y <- data[j,]
-        ret[i,j] <- ret[j,i] <- sum( 2*t(x-y) %*% (x-y) )
+        ret[i,j] <- ret[j,i] <- sum( t(x-y) %*% (x-y) )
       }
     }
   }

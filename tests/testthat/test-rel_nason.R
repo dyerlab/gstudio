@@ -14,7 +14,7 @@ test_that("Inbreeding",{
   f <- rel_nason( x,allele="A" )
   expect_true( is(f,"matrix"))
   expect_that( dim(f), is_equivalent_to( c(10,10)))
-  expect_that( f[1,10], is_equivalent_to( 0.1/3) )
+  expect_equal( f[1,10], -17/18, tolerance = 1e-6 )
 
   f1 <- rel_nason( x )
   x[2] <- NA

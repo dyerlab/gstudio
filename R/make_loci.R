@@ -41,17 +41,15 @@ make_loci <- function( x, N=20, F=0 ) {
     }
   }
   
-  P <- round(P*N)
+  # Use a multinomial draw so counts sum exactly to N with correct frequencies.
+  # round() can produce sums != N, causing systematic bias: the last genotype
+  # class (typically the rarest) is always dropped or oversampled by truncation.
+  P_counts <- as.integer(stats::rmultinom(1L, N, P))
   loci <- c()
-  for( i in 1:length(P)){
-    loci <- c( loci, rep(G[i],times=P[i]))
+  for( i in seq_along(P_counts)){
+    loci <- c( loci, rep(G[i], times=P_counts[i]))
   }
   loci <- locus( loci, type="separated")
-  if( length(loci) > N )
-    loci <- loci[1:N] 
-  else if(length(loci) < N ) {
-    loci <- c( loci, sample(loci,size=N-length(loci),replace = TRUE))
-  }
   
   # shuffle the loci
   loci <- sample(loci,size=length(loci), replace=FALSE )

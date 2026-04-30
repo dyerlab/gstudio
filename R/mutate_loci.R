@@ -74,6 +74,10 @@ mutate_loci <- function(data, mutation = NULL) {
   all_numeric <- suppressWarnings(as.numeric(all_alleles))
   all_numeric <- all_numeric[!is.na(all_numeric)]
 
+  # Separate counter for non-numeric IAM novel alleles so each mutation event
+  # produces a unique label rather than accumulating "*" suffixes
+  novel_count <- 0L
+
   for (i in seq_len(n)) {
     loc <- locus_vec[i]
     if (is.na(loc))
@@ -85,14 +89,15 @@ mutate_loci <- function(data, mutation = NULL) {
     changed <- FALSE
     for (j in seq_along(als)) {
       if (stats::runif(1) < mutation$rate) {
-        new_al <- .mutate_allele(als[j], mutation, all_numeric)
+        new_al <- .mutate_allele(als[j], mutation, all_numeric, novel_count)
         if (!is.null(new_al)) {
           als[j] <- new_al
           changed <- TRUE
-          # Update the running max for IAM
           nval <- suppressWarnings(as.numeric(new_al))
           if (!is.na(nval))
             all_numeric <- c(all_numeric, nval)
+          else
+            novel_count <- novel_count + 1L
         }
       }
     }
@@ -108,16 +113,19 @@ mutate_loci <- function(data, mutation = NULL) {
 #' @param allele Character string of the allele.
 #' @param mutation A \code{mutation_model} object.
 #' @param all_numeric Numeric vector of all alleles seen (for IAM).
+#' @param novel_count Integer count of non-numeric IAM novel alleles created so far.
 #' @return Character string of the new allele, or NULL if skipped.
 #' @keywords internal
-.mutate_allele <- function(allele, mutation, all_numeric) {
+.mutate_allele <- function(allele, mutation, all_numeric, novel_count = 0L) {
   num_val <- suppressWarnings(as.numeric(allele))
   nchar_allele <- nchar(allele)
 
   if (mutation$model == "iam") {
     if (is.na(num_val)) {
-      # Non-numeric: append a suffix
-      return(paste0(allele, "*"))
+      # Non-numeric: generate a unique novel label rather than appending "*"
+      # (star-suffix accumulation makes "A" -> "A*" -> "A**" across generations,
+      # violating IAM's requirement that every mutation event produces a new allele)
+      return(paste0("iam_", novel_count + 1L))
     }
     new_val <- max(all_numeric, na.rm = TRUE) + 1
     return(.zero_pad(new_val, nchar_allele))

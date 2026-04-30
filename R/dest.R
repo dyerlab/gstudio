@@ -56,7 +56,9 @@ Dest <- function( x, stratum="Population", nperm=0, size.correct=FALSE ) {
       k <- length(levels(strata))
       Hs.tot <- mean(ret$Hs, na.rm=TRUE )
       Ht.tot <- mean(ret$Ht, na.rm=TRUE )
-      Dest.tot <- 1.0 / ( mean( 1/ret$Dest, na.rm=TRUE))
+      d_vals <- ret$Dest
+      d_vals[ d_vals < 0 ] <- NA
+      Dest.tot <- 1.0 / ( mean( 1/d_vals, na.rm=TRUE))
       
       ret[K+1,1] <- "Multilocus"
       ret[K+1,2] <- Dest.tot

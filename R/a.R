@@ -43,7 +43,7 @@ A <- function(x, min_freq=0, loci = NULL, ...){
   }
   
   else
-    stop("The function Ae() only works with objects of type 'locus'")
+    stop("The function A() only works with objects of type 'locus'")
   
   return( ret )
 }

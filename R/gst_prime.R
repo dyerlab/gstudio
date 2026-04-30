@@ -41,7 +41,7 @@ Gst_prime <- function(  x, stratum="Population",  nperm=0, size.correct=TRUE ) {
       stop("If you pass a data.frame to Gst(), you need to indicate a stratum varaible column.")
     
     strata <- factor(as.character(x[[stratum]]))
-    k <- length(levels(stratum))
+    k <- length(levels(strata))
     K <- length(locus_names)
     ret <- data.frame(Locus=locus_names, Gst=numeric(K), Hs=numeric(K), Ht=numeric(K), P=numeric(K), stringsAsFactors=FALSE)
     

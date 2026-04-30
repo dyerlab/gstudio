@@ -50,6 +50,24 @@ test_that("IAM creates novel alleles", {
   expect_true(length(novel) > 0)
 })
 
+test_that("IAM non-numeric: successive generations do not accumulate star suffixes", {
+  # The bug: A -> A* -> A** -> A*** is wrong — each mutation should produce
+  # a truly novel allele name, not append to the prior one
+  set.seed(7)
+  loc_vec <- c(locus(c("A", "B")), locus(c("A", "B")), locus(c("A", "B")),
+               locus(c("A", "B")), locus(c("A", "B")))
+  pop <- data.frame(Population = rep("X", 5), Loc1 = loc_vec,
+                    stringsAsFactors = FALSE)
+  mm <- mutation_model(rate = 1.0, model = "iam")
+  # Run 5 generations of 100% mutation
+  for (g in seq_len(5))
+    pop <- mutate_loci(pop, mm)
+  all_als <- as.character(alleles(pop$Loc1, all = FALSE))
+  # No allele name should contain more than one "iam_" prefix or grow with "*"
+  expect_false(any(grepl("\\*", all_als)),
+               label = "no star-suffix accumulation after repeated IAM mutations")
+})
+
 test_that("SMM shifts numeric alleles by exactly 1", {
   set.seed(123)
   # Create a population with known alleles

@@ -57,20 +57,13 @@ simulate_pop <- function(pop, ngen, mutation = NULL, selfing_rate = 0,
   # --- main loop ---
   for (gen in seq_len(ngen)) {
 
-    # 1. Census
-    if (!is.null(census_interval) && !is.null(census_dir)) {
-      if (gen %% census_interval == 0) {
-        .save_census(pop, gen, census_dir)
-      }
-    }
-
-    # 2. Migrate
+    # 1. Migrate
     mig_mat <- .get_migration_matrix(gen, migration)
     if (!is.null(mig_mat)) {
       pop <- migrate(pop, stratum = stratum, m = mig_mat)
     }
 
-    # 3. Mate — per population, constant N
+    # 2. Mate — per population, constant N
     pops <- partition(pop, stratum)
     offspring_list <- list()
     for (pname in names(pops)) {
@@ -91,18 +84,26 @@ simulate_pop <- function(pop, ngen, mutation = NULL, selfing_rate = 0,
     pop <- do.call(rbind, offspring_list)
     rownames(pop) <- NULL
 
-    # 4. Mutate
+    # 3. Mutate
     if (!is.null(mutation)) {
       pop <- mutate_loci(pop, mutation)
+    }
+
+    # 4. Census — saved after all events so gen N label matches gen N state
+    if (!is.null(census_interval) && !is.null(census_dir)) {
+      if (gen %% census_interval == 0) {
+        .save_census(pop, gen, census_dir)
+      }
     }
 
     if (verbose && gen %% max(1, ngen %/% 10) == 0)
       message(paste0("Generation ", gen, "/", ngen))
   }
 
-  # Save final generation as census
+  # Save final generation as census if not already captured by census_interval
   if (!is.null(census_dir)) {
-    .save_census(pop, ngen, census_dir)
+    if (is.null(census_interval) || ngen %% census_interval != 0)
+      .save_census(pop, ngen, census_dir)
   }
 
   return(pop)

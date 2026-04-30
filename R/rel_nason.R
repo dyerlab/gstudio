@@ -19,7 +19,6 @@ rel_nason <- function( x, allele=NA, as.relatedness=FALSE ){
   if( !is(x,"locus"))
     stop("This function takes a vector of locus class objects as an argument.")
   N <- length(x)
-  k <- N*(N-1)/2
   ret <- matrix(0,N,N)
   diag(ret) <- 1
   
@@ -48,7 +47,7 @@ rel_nason <- function( x, allele=NA, as.relatedness=FALSE ){
     pi <- loci[i,]
     for( j in 1:i) {
         pj <- loci[j,]
-        fij <- mean( ((pi-pbar)*(pj-pbar))/(k*pbar*(1-pbar)) + 1/(2*(N-1)) )   
+        fij <- mean( ((pi-pbar)*(pj-pbar))/(pbar*(1-pbar)) + 1/(2*(N-1)) )
         ret[i,j] <- ret[j,i] <- fij
     }
   }
