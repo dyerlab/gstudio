@@ -4,7 +4,7 @@
 \alias{.mutate_allele}
 \title{Mutate a single allele}
 \usage{
-.mutate_allele(allele, mutation, all_numeric)
+.mutate_allele(allele, mutation, all_numeric, novel_count = 0L)
 }
 \arguments{
 \item{allele}{Character string of the allele.}
@@ -12,6 +12,8 @@
 \item{mutation}{A \code{mutation_model} object.}
 
 \item{all_numeric}{Numeric vector of all alleles seen (for IAM).}
+
+\item{novel_count}{Integer count of non-numeric IAM novel alleles created so far.}
 }
 \value{
 Character string of the new allele, or NULL if skipped.

@@ -31,15 +31,13 @@ This is a general function that moves migrants among strata
  no mating is conducted.
 }
 \note{
-This is a simple transition matrix approach to migration.  The
- migration rate times the population size MUST result in at least 
- a whole number or else no migrants are produced.  It uses \code{round()}
- to find the whole number of individuals to migrate.  This means that 
- if you have a migration rate that has less than one individual it 
- will NEVER occur, not that it will occur at a less than one individual
- per generation frequency.  You must adjust your migration rates 
- directly for that (e.g., the user has the entire power, not the 
- this function).
+This uses a multinomial draw to allocate each population's individuals
+ among destinations, which guarantees population sizes are exactly preserved
+ each generation.  Migration is stochastic: a rate of \code{m} means each
+ individual independently has probability \code{m} of leaving (split equally
+ among non-self populations in the island model, among neighbours in stepping
+ stone models).  Very small \code{m * N} values will frequently round to zero
+ migrants; adjust your rate or population size accordingly.
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
