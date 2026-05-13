@@ -1,4 +1,3 @@
-context("alleles.R")
 
 test_that("testing", {
 

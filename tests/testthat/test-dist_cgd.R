@@ -1,4 +1,3 @@
-context("dist_cgd.R")
 
 
 test_that("test",{

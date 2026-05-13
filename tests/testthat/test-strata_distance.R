@@ -1,4 +1,3 @@
-context("strata_distance.R")
 
 
 test_that("checking",{

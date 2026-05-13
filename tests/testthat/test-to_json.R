@@ -1,4 +1,3 @@
-context("as_json.R")
 
 test_that("tests", {
   a <- matrix( 0,nrow=4,ncol=4)

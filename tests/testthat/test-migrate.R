@@ -1,4 +1,3 @@
-context("migrate.R")
 
 # Helper: build a multi-population data frame
 .make_migpop <- function(pops = c("A", "B"), n = 10) {

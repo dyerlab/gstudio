@@ -1,4 +1,3 @@
-context("make_loci.R")
 
 test_that( "testing make_loci",{
 

@@ -1,4 +1,3 @@
-context("read_population.R")
 
 test_that("error checking", {
   path <- system.file("extdata","data_2_column.csv",package="gstudio")

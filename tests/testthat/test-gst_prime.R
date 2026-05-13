@@ -1,4 +1,3 @@
-context("gst_prime.R")
 
 
 test_that("checking",{

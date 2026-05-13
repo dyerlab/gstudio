@@ -1,4 +1,3 @@
-context("dist_amova.R adult")
 
 
 test_that("strata",{

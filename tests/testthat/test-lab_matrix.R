@@ -1,4 +1,3 @@
-context("lag_matrix.R")
 
 test_that("checking",{
   x <- matrix( 1:16, nrow=4, ncol=4)

@@ -1,4 +1,3 @@
-context("dist_nei.R")
 
 
 test_that("test",{

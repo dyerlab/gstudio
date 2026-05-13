@@ -1,4 +1,3 @@
-context("column_class.R")
 
 test_that("test",{
   

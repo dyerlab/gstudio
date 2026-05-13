@@ -1,4 +1,3 @@
-context("to_matrix.R")
 
 test_that("testing", {
   

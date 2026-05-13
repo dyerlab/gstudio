@@ -1,4 +1,3 @@
-context("dist_cavalli.R")
 
 
 test_that("individual",{

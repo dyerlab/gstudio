@@ -1,4 +1,3 @@
-context("write_population.R")
 
 test_that("test", {
 

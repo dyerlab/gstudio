@@ -1,4 +1,3 @@
-context("frequency_matrix.R")
 
 test_that("frequency matrix", {
   AA <- locus( c("A","A") )

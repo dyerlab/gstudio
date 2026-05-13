@@ -1,4 +1,3 @@
-context("Ae.R")
 
 test_that("checking",{
   loci <- c( locus( c(1,1) ),

@@ -1,4 +1,3 @@
-context("ploidy.R")
 
 test_that("test", {
 

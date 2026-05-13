@@ -1,4 +1,3 @@
-context("locus.R Diploid")
 
 test_that("creating new ones", {
 
@@ -37,7 +36,6 @@ test_that("List context",{
 
 
 
-context("locus.R SNPs")
 test_that("SNP Creation", {
   loc.snp0 <- locus( 0, type="snp" )
   loc.snp1 <- locus( 1, type="snp" ) 
@@ -58,7 +56,6 @@ test_that("SNP Creation", {
 )
 
 
-context("Locus.R columns ")
 test_that( "Separated", {
   x <- c( "A:B", "A:C", "B:C" )
   loc <- locus( x, type="separated" )
@@ -70,7 +67,6 @@ test_that( "Separated", {
 
 
 
-context("Locus.R separated ")
 test_that( "Columns", {
   twocol <- matrix( c(1,2,1,1,2,2), ncol=2, byrow=T)
   loc <- locus( twocol, type="column" )
@@ -81,7 +77,6 @@ test_that( "Columns", {
 
 
 
-context( "Locus.R zyme-play")
 test_that("testing",{
   zyme <- c( "AA","AB","BB")
   loc <- NULL
@@ -92,7 +87,6 @@ test_that("testing",{
 
 
 
-context("Locus.R operators")
 test_that( "Operations", {
   AA <- locus( c("A","A") )
   AB <- locus( c("A","B") )

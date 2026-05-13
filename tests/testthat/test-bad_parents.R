@@ -1,4 +1,3 @@
-context("bad_parents.R")
 
 test_that("testing",{
   ID <- c(1:4,rep(1,4))

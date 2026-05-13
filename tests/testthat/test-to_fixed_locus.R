@@ -1,4 +1,3 @@
-context("to_fixed_locus.R")
 
 test_that( "testing",{
   A <- locus( 1:2 )

@@ -1,4 +1,3 @@
-context("geom_popgraph.R")
 
 # Helper: create a small test graph
 make_test_graph <- function() {

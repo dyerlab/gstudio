@@ -1,4 +1,3 @@
-context("geom_strata.R")
 
 test_that("shortest paths", {
 

@@ -1,4 +1,3 @@
-context("genetic_diversity.R")
 
 
 test_that("error checks",{

@@ -1,4 +1,3 @@
-context("frequencies.R")
 
 test_that("frequencies.locus", {
   AA <- locus( c("A","A") )

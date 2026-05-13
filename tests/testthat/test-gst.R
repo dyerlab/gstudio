@@ -1,4 +1,3 @@
-context("gst.R")
 
 test_that("checking",{
   

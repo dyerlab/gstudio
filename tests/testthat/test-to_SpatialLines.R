@@ -1,4 +1,3 @@
-context("to_SpatialLines.R")
 
 test_that("testing", {
 

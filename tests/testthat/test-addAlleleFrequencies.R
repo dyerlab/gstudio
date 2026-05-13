@@ -1,4 +1,3 @@
-context("addAlleleFrequencies")
 
 test_that("errors on non-existent locus", {
   AA <- locus(c("A", "A"))

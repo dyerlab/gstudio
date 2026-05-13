@@ -1,4 +1,3 @@
-context("multilocus_assignment.R")
 
 test_that("checking",{
   

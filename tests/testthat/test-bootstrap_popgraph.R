@@ -1,4 +1,3 @@
-context("bootstrap_popgraph.R")
 
 test_that("testing", {
   

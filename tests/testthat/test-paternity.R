@@ -1,4 +1,3 @@
-context("paternity.R")
 
 test_that("testing",{
   freqs <- c(0.55, 0.30, 0.15, 0.34, 0.34, 0.32)

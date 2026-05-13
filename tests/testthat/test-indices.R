@@ -1,4 +1,3 @@
-context("indices.R")
 
 test_that("indices",{
   N <- 4

@@ -1,4 +1,3 @@
-context("geom_frequencies.R")
 
 test_that("shortest paths", {
 

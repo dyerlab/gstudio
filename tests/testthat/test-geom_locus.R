@@ -1,4 +1,3 @@
-context("geom_locus.R")
 
 test_that("making the locus object", {
 

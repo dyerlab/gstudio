@@ -1,4 +1,3 @@
-context("test_congruence.R")
 
 test_that("testing", {
 

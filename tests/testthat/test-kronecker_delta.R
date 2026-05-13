@@ -1,4 +1,3 @@
-context("kronecker_delta.R")
 
 test_that("checking",{
   locus1 <- locus( c(1,1) )

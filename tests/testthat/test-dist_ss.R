@@ -1,4 +1,3 @@
-context("dist_ss.R")
 
 
 test_that("error checks",{

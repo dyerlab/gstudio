@@ -1,4 +1,3 @@
-context("plot.R")
 
 
 test_that("locus",{

@@ -1,4 +1,3 @@
-context("multilocus_diversity.R")
 
 test_that("checking",{
   

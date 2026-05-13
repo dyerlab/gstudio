@@ -1,4 +1,3 @@
-context("rel_nason.R")
 
 test_that("Inbreeding",{
   AA <- locus( c("A","A") )

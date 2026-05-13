@@ -1,4 +1,3 @@
-context("he.R")
 
 test_that("expected heterozygosity",{
   AA <- locus( c("A","A") )

@@ -1,4 +1,3 @@
-context("randomize_graph.R")
 
 test_that("testing", {
   

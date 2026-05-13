@@ -1,4 +1,3 @@
-context("genetic_distance.R")
 
 
 test_that("error checks",{

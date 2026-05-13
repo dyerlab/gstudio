@@ -1,4 +1,3 @@
-context("to_genepop.R")
 
 test_that("text output", {
   A <- locus( c("1","1"))

@@ -1,4 +1,3 @@
-context("ho.R")
 
 test_that("Inbreeding",{
   AA <- locus( c("A","A") )
