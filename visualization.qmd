@@ -105,12 +105,13 @@ ggraph(lopho_dec, layout = "manual",
        y = igraph::V(lopho_dec)$Latitude) +
   geom_edge_link(aes(width = weight), color = "grey60", show.legend = FALSE) +
   scale_edge_width(range = c(0.3, 2.5), guide = "none") +
-  geom_node_point(aes(size = size, color = Region), shape = 21) +
+  geom_node_point(aes(size = size, color = Region), show.legend = FALSE) +
   geom_node_label(aes(label = name), repel = TRUE, size = 2.5) +
   coord_fixed() +
   labs(title = "Lophocereus Population Graph",
        x = "Longitude", y = "Latitude") +
-  theme_minimal()
+  theme_minimal() + 
+  coord_map()
 ```
 
 ### Directed (Asymmetric) Graphs
@@ -128,12 +129,13 @@ ggraph(lopho_asym, layout = "manual",
                 end_cap = circle(3, "mm"),
                 show.legend = FALSE) +
   scale_edge_width(range = c(0.3, 2), guide = "none") +
-  scale_edge_color_viridis(option = "magma", alpha = 0.4) +
+  scale_edge_color_viridis(option = "magma", alpha = 0.4, guide="none") +
   geom_node_point(size = 3, shape = 21, fill = "white", stroke = 0.8) +
   coord_fixed() +
   labs(title = "Asymmetric Gene Flow — Lophocereus",
        x = "Longitude", y = "Latitude") +
-  theme_minimal()
+  theme_minimal() + 
+  coord_map()
 ```
 
 ## Interactive Leaflet Maps

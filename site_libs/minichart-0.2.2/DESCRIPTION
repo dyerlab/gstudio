@@ -32,12 +32,6 @@ Author: Tatiana Vargas [aut, cre],
   Francois Guillem [aut],
   RTE [cph]
 Maintainer: Tatiana Vargas <tatiana.vargas@rte-france.com>
-Repository: RSPM
+Repository: CRAN
 Date/Publication: 2025-10-29 11:40:02 UTC
-Built: R 4.6.0; ; 2026-04-24 23:03:50 UTC; unix
-RemoteType: any
-RemotePkgRef: any::leaflet.minicharts
-RemoteRef: any::leaflet.minicharts
-RemoteRepos: https://packagemanager.posit.co/cran/__linux__/noble/latest
-RemotePkgPlatform: x86_64-pc-linux-gnu-ubuntu-24.04
-RemoteSha: 0.6.3
+Built: R 4.5.0; ; 2025-10-29 13:00:57 UTC; unix
