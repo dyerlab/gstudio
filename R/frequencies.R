@@ -139,6 +139,7 @@ frequencies.data.frame <- function( x, loci, stratum, ... ) {
         ret <- rbind( ret, loc[,c(3,1,2)] )
       }
     }
+    ret <- ret[order(ret$Locus, ret$Allele), ]
   }
   else if (!(stratum %in% names(x))){
     stop("Asking for non-existant stratum.")
@@ -150,17 +151,36 @@ frequencies.data.frame <- function( x, loci, stratum, ... ) {
     pops <- partition( x, stratum=stratum )
     popnames <- names(pops)
     for( pop in popnames ){
-      
+
       strat <- frequencies( pops[[pop]], loci=loci )
-      
+
       if( nrow(strat) ){
         strat$Stratum <- pop
-        ret <- rbind( ret, strat[,c(4,1,2,3)] )        
+        ret <- rbind( ret, strat[,c(4,1,2,3)] )
       }
     }
+
+    # Zero-fill: ensure every stratum has an entry for every allele observed
+    # at that locus across all strata. Missing combinations get Frequency = 0.
+    # Users who want only observed alleles can filter(Frequency > 0) afterwards.
+    all_strata <- unique(ret$Stratum)
+    ret <- do.call(rbind, lapply(unique(ret$Locus), function(loc) {
+      sub <- ret[ret$Locus == loc, ]
+      combos <- expand.grid(
+        Stratum   = all_strata,
+        Locus     = loc,
+        Allele    = unique(sub$Allele),
+        stringsAsFactors = FALSE
+      )
+      merged <- merge(combos, sub, by = c("Stratum", "Locus", "Allele"), all.x = TRUE)
+      merged$Frequency[is.na(merged$Frequency)] <- 0
+      merged
+    }))
+    rownames(ret) <- NULL
+    ret <- ret[order(ret$Stratum, ret$Locus, ret$Allele), ]
   }
 
-  
+
   return( ret )
 }
 

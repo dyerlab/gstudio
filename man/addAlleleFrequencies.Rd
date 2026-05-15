@@ -4,52 +4,47 @@
 \alias{addAlleleFrequencies}
 \title{Add allele frequency pie charts to a leaflet map}
 \usage{
-addAlleleFrequencies(
-  data,
-  locus,
-  stratum = "Population",
-  longitude = "Longitude",
-  latitude = "Latitude",
-  map = NULL,
-  width = 40,
-  height = 40,
-  ...
-)
+addAlleleFrequencies(map, freqs, locus = NULL, width = 40, height = 40, ...)
 }
 \arguments{
-\item{data}{A \code{data.frame} with locus columns, a stratum column,
-and coordinate columns.}
+\item{map}{A leaflet map created with \code{leaflet::leaflet(data = coords)},
+where \code{coords} is the output of \code{strata_coordinates()}. The
+coordinate data is read from \code{map$x$data}.}
 
-\item{locus}{Character string naming a single locus column (e.g., \code{"TPI"}).}
+\item{freqs}{A tidy data frame of allele frequencies as returned by
+\code{frequencies(data, stratum = "...")}.  Must have columns
+\code{Stratum}, \code{Locus}, \code{Allele}, and \code{Frequency}.}
 
-\item{stratum}{Column name for population grouping (default \code{"Population"}).}
-
-\item{longitude}{Column name for longitude coordinates (default \code{"Longitude"}).}
-
-\item{latitude}{Column name for latitude coordinates (default \code{"Latitude"}).}
-
-\item{map}{An optional existing leaflet map; if \code{NULL}, creates a new
-one with \code{addTiles()}.}
+\item{locus}{Character string naming a single locus to display. Defaults to
+\code{NULL}: if \code{freqs} contains exactly one locus it is used
+silently; if it contains several, the first is used with a warning.}
 
 \item{width}{Pie chart width in pixels (default 40).}
 
 \item{height}{Pie chart height in pixels (default 40).}
 
-\item{...}{Additional arguments passed to \code{leaflet.minicharts::addMinicharts()}
-(e.g., \code{opacity}, \code{colorPalette}).}
+\item{...}{Additional arguments passed to
+\code{leaflet.minicharts::addMinicharts()} (e.g., \code{opacity},
+\code{colorPalette}).}
 }
 \value{
-A leaflet widget with pie charts at each population location.
+The leaflet map with pie charts added.
 }
 \description{
-This function computes per-stratum allele frequencies for a named locus
- and renders them as pie charts on a leaflet map using
- \code{leaflet.minicharts::addMinicharts()}.
+Adds pie charts showing allele frequencies at each sampling location to an
+existing leaflet map. Designed for use in a pipe after building the map from
+\code{strata_coordinates()} output.
 }
 \examples{
 \dontrun{
+library(leaflet)
+library(leaflet.minicharts)
 data(arapat)
-addAlleleFrequencies(arapat, locus = "TPI", stratum = "Population")
+freqs <- frequencies(arapat, loci = "LTRS", stratum = "Population")
+strata_coordinates(arapat) |>
+  leaflet() |>
+  addTiles() |>
+  addAlleleFrequencies(freqs)
 }
 }
 \author{

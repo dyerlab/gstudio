@@ -22,8 +22,6 @@ Imports:
     methods,
     sp,
     reshape2,
-    ggrepel,
-    rlang,
     stringi,
     dplyr,
     igraph,
@@ -34,6 +32,7 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
+    ggraph,
     leaflet,
     leaflet.minicharts
 VignetteBuilder: knitr

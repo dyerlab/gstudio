@@ -5,20 +5,6 @@ context("as_data_frame.R")
 
 
 
-test_that( "genetic_structure",{
-  loci <- c( locus( c(1,1) ),
-             locus( c(1,2) ),
-             locus( c(1,2) ),
-             locus( c(1,1) ),
-             locus( c(2,2) ),
-             locus( c(2,1) ),
-             locus( c(2,1) ),
-             locus( c(2,2) ) )
-  pops <- rep( c("A","B"), each=4 )
-  df <- data.frame( Population=pops, TPI=loci )
-})
-
-
 
 test_that( "locus", {
   loci <- c( locus( c(1,1) ),

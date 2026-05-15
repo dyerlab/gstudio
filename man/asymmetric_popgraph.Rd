@@ -2,25 +2,33 @@
 % Please edit documentation in R/asymmetric_popgraph.R
 \name{asymmetric_popgraph}
 \alias{asymmetric_popgraph}
-\title{Asymmetric Population Graph Constructor}
+\title{Asymmetric Population Graph}
 \usage{
-asymmetric_popgraph(x, groups, alpha = 0.05, tol = 1e-04)
+asymmetric_popgraph(graph, perplexity = 4, tol = 1e-05, max_iter = 100)
 }
 \arguments{
-\item{x}{A numeric matrix of multivariate genetic data (e.g., from to_mv())}
+\item{graph}{An undirected \code{popgraph} object.}
 
-\item{groups}{A factor indicating population membership}
+\item{perplexity}{Target perplexity for the per-node bandwidth search (default 4).}
 
-\item{alpha}{Significance level for edge retention (default 0.05)}
+\item{tol}{Convergence tolerance for the binary search on sigma (default 1e-5).}
 
-\item{tol}{Tolerance for variance (default 1e-4)}
+\item{max_iter}{Maximum iterations for the sigma binary search (default 100).}
 }
 \value{
-A popgraph object with nascent b_i (node) and w_away/w_to (edge) attributes.
+A directed \code{popgraph} object with edge attribute \code{weight}
+  set to the directional partial distance (\code{dij} or \code{dji}).
 }
 \description{
-Constructs a population graph that includes parameters for asymmetry
-using entropy-based bandwidth estimation and directional edge weights.
+A convenience wrapper around \code{\link{asymmetric_weights}} that converts
+an undirected \code{popgraph} into a directed one.  Each undirected edge
+\eqn{(i,j)} becomes two directed edges whose weights (\code{dij} and
+\code{dji}) partition the original conditional genetic distance
+proportionally to the local Markov flow probabilities, so the total graph
+distance is preserved.
+}
+\seealso{
+\code{\link{asymmetric_weights}}
 }
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>

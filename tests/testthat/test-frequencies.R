@@ -48,9 +48,69 @@ test_that("frequencies.data.frame", {
   expect_that( f <- frequencies( df, loci="bob"), throws_error() )
   expect_that( f <- frequencies( df, loci=c("bob","TPI")), throws_error() )
   expect_that( f <- frequencies( df, stratum="bob"), throws_error() )
-  
-  
-  
+
+})
+
+
+test_that("frequencies with stratum returns correct columns and per-stratum sums", {
+  AA <- locus(c("A","A")); AB <- locus(c("A","B")); BB <- locus(c("B","B"))
+  df <- data.frame(Pop = c("A","A","B","B"), TPI = c(AA, AB, BB, AA))
+  f <- frequencies(df, loci = "TPI", stratum = "Pop")
+
+  expect_s3_class(f, "data.frame")
+  expect_equal(names(f), c("Stratum", "Locus", "Allele", "Frequency"))
+  expect_equal(sum(f$Frequency[f$Stratum == "A"]), 1)
+  expect_equal(sum(f$Frequency[f$Stratum == "B"]), 1)
+})
+
+
+test_that("frequencies zero-fills missing allele/stratum combinations", {
+  AA <- locus(c("A","A")); AB <- locus(c("A","B")); BB <- locus(c("B","B"))
+  # Pop A has alleles A and B; Pop B has only A
+  df <- data.frame(Pop = c("A","A","A","B","B"), TPI = c(AA, AB, BB, AA, AA))
+  f <- frequencies(df, loci = "TPI", stratum = "Pop")
+
+  # Every stratum must have a row for every allele
+  expect_equal(nrow(f[f$Stratum == "A", ]), nrow(f[f$Stratum == "B", ]))
+  expect_true(any(f$Stratum == "B" & f$Allele == "B" & f$Frequency == 0))
+  # Filtering to observed alleles still sums to 1 per stratum
+  expect_equal(sum(f$Frequency[f$Stratum == "B" & f$Frequency > 0]), 1)
+})
+
+
+test_that("frequencies (no stratum) is sorted by locus then allele", {
+  AA <- locus(c("A","A")); BB <- locus(c("B","B")); CC <- locus(c("C","C"))
+  # Column order TPI then PGM — output should reorder loci alphabetically
+  df <- data.frame(TPI = c(BB, AA, CC), PGM = c(CC, AA, BB))
+  f <- frequencies(df)
+
+  expect_equal(unique(f$Locus), sort(unique(f$Locus)))
+  for (loc in unique(f$Locus)) {
+    al <- f$Allele[f$Locus == loc]
+    expect_equal(al, sort(al))
+  }
+})
+
+
+test_that("frequencies (with stratum) is sorted by stratum then locus then allele", {
+  AA <- locus(c("A","A")); BB <- locus(c("B","B")); CC <- locus(c("C","C"))
+  # Input rows in scrambled stratum order
+  df <- data.frame(
+    Pop = c("B","A","B","A"),
+    TPI = c(BB, AA, AA, BB),
+    PGM = c(CC, AA, CC, AA)
+  )
+  f <- frequencies(df, stratum = "Pop")
+
+  expect_equal(f$Stratum, sort(f$Stratum))
+  for (s in unique(f$Stratum)) {
+    sub <- f[f$Stratum == s, ]
+    expect_equal(sub$Locus, sort(sub$Locus))
+    for (loc in unique(sub$Locus)) {
+      al <- sub$Allele[sub$Locus == loc]
+      expect_equal(al, sort(al))
+    }
+  }
 })
 
 # TODO: implement snp frequencies

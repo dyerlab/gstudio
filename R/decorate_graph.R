@@ -34,20 +34,21 @@ decorate_graph <- function( graph, data, stratum="Population" ) {
     
     #add null data
     cats <- setdiff( names(data), stratum )
-    
-    # go through the categories and fill them in with null 
+
+    # go through the categories and fill them in with null
     for( cat in cats ){
+      col <- data[[cat]]
+      if( is.factor(col) ) col <- as.character(col)
       vec <- rep( NA, num.nodes )
       for( i in 1:num.nodes ){
         node.name <- node.labels[i]
-        
-        # only use those 
+
+        # only use those
         if( node.name %in% data[[stratum]] ) {
-          val <- data[ data[[stratum]]==node.labels[i],cat ]
-          vec[i] <- val        
+          vec[i] <- col[ data[[stratum]] == node.labels[i] ]
         }
       }
-      graph <- set_vertex_attr(graph, cat, value=vec )    
+      graph <- set_vertex_attr(graph, cat, value=vec )
     }  
   }
   

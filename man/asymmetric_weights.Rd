@@ -4,27 +4,39 @@
 \alias{asymmetric_weights}
 \title{Asymmetric Edge Weights
  This uses a method inspired by t-distributed Stochastic Neighbor Embedding
- to estimate relative weights of edges in a population graph using local 
+ to estimate relative weights of edges in a population graph using local
  embedding and Markov properties.}
 \usage{
 asymmetric_weights(graph, perplexity = 4, tol = 1e-05, max_iter = 100)
 }
 \arguments{
-\item{graph}{An existing ``popgraph`` object.}
+\item{graph}{An existing \code{popgraph} object (undirected).}
 
-\item{perplexity}{A target perplexity value for the bandwidth search (default 4).}
+\item{perplexity}{Target perplexity for the per-node bandwidth search (default 4).}
 
-\item{tol}{A minimal tolerance for variance values}
+\item{tol}{Convergence tolerance for the binary search on sigma (default 1e-5).}
 
-\item{max_iter}{An upper limit on the iterations necessary for finding a solution.}
+\item{max_iter}{Maximum iterations for the sigma binary search (default 100).}
 }
 \value{
-A directional population graph.
+A data.frame with one row per undirected edge and columns:
+  \describe{
+    \item{i}{Name of the first node.}
+    \item{j}{Name of the second node.}
+    \item{pij}{Conditional probability of j given i (p_{j|i}), normalised across i's neighbours.}
+    \item{pji}{Conditional probability of i given j (p_{i|j}), normalised across j's neighbours.}
+    \item{cGD}{Conditional genetic distance (edge weight) from the input graph.}
+    \item{dij}{Share of cGD allocated in the i→j direction: \code{cGD * pij / (pij + pji)}.}
+    \item{dji}{Share of cGD allocated in the j→i direction: \code{cGD * pji / (pij + pji)}.}
+    \item{Delta}{Directional bias: \code{dij - dji} (positive favours i→j).}
+  }
+  By construction \code{dij + dji == cGD} for every edge, so the total graph
+  distance is preserved.
 }
 \description{
 Asymmetric Edge Weights
  This uses a method inspired by t-distributed Stochastic Neighbor Embedding
- to estimate relative weights of edges in a population graph using local 
+ to estimate relative weights of edges in a population graph using local
  embedding and Markov properties.
 }
 \author{
