@@ -7,26 +7,31 @@
 optimal_sampling(N, phi)
 }
 \arguments{
-\item{N}{The total sample size (number of strata * number of individuals 
-pre stratum)}
+\item{N}{The total sample size (number of strata × individuals per stratum).}
 
-\item{phi}{An estimate of the level of differentiation.}
+\item{phi}{An estimate of the expected level of differentiation.}
 }
 \value{
-A ggplot object with a plot of the variance in phi due to
- different sample sizes with a region of +/- 10% of the provided
- phi value
+A data frame with columns \code{Strata}, \code{Var.Phi},
+  \code{Var.Phi.Low}, and \code{Var.Phi.High}.
 }
 \description{
-This function returns a graphical representation of optimal sampling
- allocations given an estimate of the total number of samples you 
- are looking at genotyping and the amount of expected differentiation
- among strata.
+Returns a data frame of the variance in the interclass correlation
+parameter (Phi) across all integer factorizations of \code{N} strata ×
+individuals, together with a ±10 \% confidence band around the supplied
+\code{phi} estimate. Pass the result directly to \code{ggplot2}.
 }
 \examples{
-N <- 400
-Phi <- 0.25
-optimal_sampling( N, Phi )
+df <- optimal_sampling(400, 0.25)
+head(df)
+\dontrun{
+library(ggplot2)
+ggplot(df, aes(x = Strata, y = Var.Phi)) +
+  geom_ribbon(aes(ymin = Var.Phi.Low, ymax = Var.Phi.High), alpha = 0.3) +
+  geom_line() +
+  labs(x = "Number of Strata",
+       y = "Variance in Interclass Correlation Parameter")
+}
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

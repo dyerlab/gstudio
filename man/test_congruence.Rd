@@ -2,28 +2,22 @@
 % Please edit documentation in R/test_congruence.R
 \name{test_congruence}
 \alias{test_congruence}
-\title{Returns distance congruence between the two graphs}
+\title{Returns distance congruence between two graphs}
 \usage{
-test_congruence(graph1, graph2, method = c("distance", "combinatorial")[1])
+test_congruence(graph1, graph2)
 }
 \arguments{
-\item{graph1}{An object of type \code{igraph} or \code{popgraph}}
+\item{graph1}{An object of type \code{igraph} or \code{popgraph}.}
 
-\item{graph2}{An object of type \code{igraph} or \code{popgraph}}
-
-\item{method}{An option on how congruence is to be estimated
-possible values are 'distance' (a measure of similarity in 
-separation of nodes independent of connectivity, the default) 
-'structural' a measure of similarity in actual edges, and 
-'combinatorial' a combinatorial measure of similarity.}
+\item{graph2}{An object of type \code{igraph} or \code{popgraph}.}
 }
 \value{
-A non-parametric rank sum test
+An \code{htest} object as returned by \code{cor.test()}.
 }
 \description{
-This function makes the shortest path matrices for both
- graphs and determines the correlation between pairwise
- distance.
+Computes the shortest-path distance matrices for both graphs and returns the
+result of a Pearson correlation test between pairwise distances. Only nodes
+present in both graphs are used.
 }
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>

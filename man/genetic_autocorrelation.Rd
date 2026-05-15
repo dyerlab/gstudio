@@ -2,32 +2,57 @@
 % Please edit documentation in R/genetic_autocorrealtion.R
 \name{genetic_autocorrelation}
 \alias{genetic_autocorrelation}
-\title{Performs 'Autocorrelation Analysis}
+\title{Spatial Autocorrelation Analysis}
 \usage{
-genetic_autocorrelation(P, G, bins, perms = 0, plot = FALSE)
+genetic_autocorrelation(P, G, bins, perms = 0)
 }
 \arguments{
-\item{P}{A square physical distance matrix}
+\item{P}{A square physical distance matrix.}
 
-\item{G}{A square genetic distance matrix (same size as P)}
+\item{G}{A square genetic distance matrix (same dimensions as \code{P}).}
 
-\item{bins}{The distance bins to be estimated.  These will be taken sequentially 
-such that the first bin will be all observations whose separation is greater than
-binsize[1] and less than binsize[2].}
+\item{bins}{A numeric vector of bin boundaries. Pairs whose physical
+distance falls in \eqn{[\code{bins[i]}, \code{bins[i+1]})} are placed in
+lag \eqn{i}.}
 
-\item{perms}{The number of permutations to use to test significance
-at each distance bin.}
-
-\item{plot}{A flag (default=FALSE) to show distribution of randomized 
-correlations.}
+\item{perms}{Number of permutations used to estimate a p-value at each
+distance bin (default 0 = no permutation test).}
 }
 \value{
-A data.frame with bins and correlations.
+A data frame with one row per lag and columns \code{From},
+  \code{To}, \code{R} (autocorrelation coefficient), \code{N} (number of
+  pairs in the bin), and \code{P} (permutation p-value; \code{NA} when
+  \code{perms = 0}).
 }
 \description{
-This function takes two distance matrices, one for physical separation
- and the other for genetic separation as well as a bin size and performs
- the spatial autocorrelation analysis of Smouse & Peakall (1999).
+Performs the spatial genetic autocorrelation analysis of Smouse & Peakall
+(1999) given a physical distance matrix and a genetic distance matrix.
+Returns a tidy data frame of bin-level correlations that can be plotted
+directly with \code{ggplot2}.
+}
+\examples{
+\dontrun{
+data(arapat)
+P <- as.matrix(dist(arapat[, c("Longitude", "Latitude")]))
+G <- genetic_distance(arapat, mode = "Euclidean")
+bins <- c(0, 1, 2, 3, 5)
+ac <- genetic_autocorrelation(P, G, bins)
+
+library(ggplot2)
+ggplot(ac, aes(x = To, y = R)) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_line() +
+  geom_point() +
+  labs(x = "Distance (upper bin boundary)", y = "Autocorrelation (r)")
+}
+}
+\references{
+Smouse, P.E. & Peakall, R. (1999) Spatial autocorrelation
+  analysis of individual multiallele and multilocus genetic structure.
+  \emph{Heredity} 82, 561–573.
+}
+\seealso{
+\code{\link{genetic_distance}}
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

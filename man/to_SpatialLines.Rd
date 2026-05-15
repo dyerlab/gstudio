@@ -2,26 +2,34 @@
 % Please edit documentation in R/to_SpatialLines.R
 \name{to_SpatialLines}
 \alias{to_SpatialLines}
-\title{Converts edge set to SpatialLines object}
+\title{Convert popgraph edges to a SpatialLines object}
 \usage{
 to_SpatialLines(graph, latitude = "Latitude", longitude = "Longitude", ...)
 }
 \arguments{
-\item{graph}{An object of type \code{popgraph}. This graph must already
-be decroated with latitude and longitude attributes.}
+\item{graph}{A \code{popgraph} object decorated with \code{Latitude} and
+\code{Longitude} vertex attributes (see \code{\link{decorate_graph}}).}
 
-\item{latitude}{The name of the Latitude attribute (default="Latitude")}
+\item{latitude}{Name of the vertex attribute holding latitude values
+(default \code{"Latitude"}).}
 
-\item{longitude}{The name of the Longitude attribute (default="Longitude")}
+\item{longitude}{Name of the vertex attribute holding longitude values
+(default \code{"Longitude"}).}
 
-\item{...}{Ignored}
+\item{...}{Ignored.}
 }
 \value{
-A \code{SpatialLines} object
+A \code{sp::SpatialLines} object.
 }
 \description{
-This is a convienence function that takes the edge set and returns a
- SpatialLines object.
+`r lifecycle::badge("deprecated")`
+
+\code{to_SpatialLines()} is deprecated. The \code{sp} package is being
+superseded by \code{sf}. Use \code{\link{to_sf}} instead, which returns an
+\code{sf} object compatible with modern spatial workflows.
+}
+\seealso{
+\code{\link{to_sf}}
 }
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>

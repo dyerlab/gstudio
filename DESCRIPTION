@@ -10,7 +10,7 @@ Description: Classes and functions for the spatial analysis of marker
     data to include structure, diversity, distance, and
     relatedness statistics.  Where appropriate, integration with existing
     libraries is included.
-Version: 1.13
+Version: 1.14
 Date: 2026-02-16
 LazyLoad: true
 Encoding: UTF-8

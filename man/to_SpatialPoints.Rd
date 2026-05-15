@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_SpatialPoints.R
 \name{to_SpatialPoints}
 \alias{to_SpatialPoints}
-\title{Translate object into a SpatialPoints object}
+\title{Convert popgraph nodes to a SpatialPoints object}
 \usage{
 to_SpatialPoints(
   x,
@@ -13,22 +13,31 @@ to_SpatialPoints(
 )
 }
 \arguments{
-\item{x}{The object containin coordinates.}
+\item{x}{A \code{popgraph} object decorated with \code{Latitude} and
+\code{Longitude} vertex attributes (see \code{\link{decorate_graph}}).}
 
-\item{stratum}{The name of the variable in \code{x} that represents the
-stratum to be used as points.}
+\item{stratum}{Ignored (retained for backwards compatibility).}
 
-\item{longitude}{The key for the attribute representing Longitude (default="Longitude")}
+\item{longitude}{Name of the vertex attribute holding longitude values
+(default \code{"Longitude"}).}
 
-\item{latitude}{The key for the attribute representing Latitude (default="Latitude")}
+\item{latitude}{Name of the vertex attribute holding latitude values
+(default \code{"Latitude"}).}
 
-\item{...}{Optional arguments passed to overriden objects}
+\item{...}{Ignored.}
 }
 \value{
-An object of type SpatialPoints
+A \code{sp::SpatialPoints} object.
 }
 \description{
-Returns spatial points object
+`r lifecycle::badge("deprecated")`
+
+\code{to_SpatialPoints()} is deprecated. The \code{sp} package is being
+superseded by \code{sf}. Use \code{\link{to_sf}} instead, which returns an
+\code{sf} object compatible with modern spatial workflows.
+}
+\seealso{
+\code{\link{to_sf}}
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

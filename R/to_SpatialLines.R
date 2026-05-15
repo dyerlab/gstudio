@@ -1,55 +1,47 @@
-#' Converts edge set to SpatialLines object
+#' Convert popgraph edges to a SpatialLines object
 #'
-#' This is a convienence function that takes the edge set and returns a
-#'  SpatialLines object.
-#' @param graph An object of type \code{popgraph}. This graph must already
-#'  be decroated with latitude and longitude attributes.
-#' @param latitude The name of the Latitude attribute (default="Latitude")
-#' @param longitude The name of the Longitude attribute (default="Longitude")
-#' @param ... Ignored
-#' @return A \code{SpatialLines} object
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' \code{to_SpatialLines()} is deprecated. The \code{sp} package is being
+#' superseded by \code{sf}. Use \code{\link{to_sf}} instead, which returns an
+#' \code{sf} object compatible with modern spatial workflows.
+#'
+#' @param graph A \code{popgraph} object decorated with \code{Latitude} and
+#'   \code{Longitude} vertex attributes (see \code{\link{decorate_graph}}).
+#' @param latitude Name of the vertex attribute holding latitude values
+#'   (default \code{"Latitude"}).
+#' @param longitude Name of the vertex attribute holding longitude values
+#'   (default \code{"Longitude"}).
+#' @param ... Ignored.
+#' @return A \code{sp::SpatialLines} object.
+#' @seealso \code{\link{to_sf}}
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
-to_SpatialLines <- function(
-  graph,
-  latitude = "Latitude",
-  longitude = "Longitude",
-  ...
-) {
-  if (!inherits(graph, "popgraph")) {
+to_SpatialLines <- function(graph, latitude = "Latitude", longitude = "Longitude", ...) {
+  .Deprecated("to_sf", msg = "to_SpatialLines() is deprecated. Use to_sf() instead.")
+  if (!inherits(graph, "popgraph"))
     stop("This function requires a popgraph object to function")
-  }
 
-  names <- igraph::V(graph)$name
-
+  node.names <- igraph::V(graph)$name
   vertex.attr <- vertex_attr_names(graph)
-  if (!(latitude %in% vertex.attr) | !(longitude %in% vertex.attr)) {
-    stop(
-      "Your graph should have Latitude and Longitude in it before we can make it a Spatial* object."
-    )
-  }
+  if (!(latitude %in% vertex.attr) | !(longitude %in% vertex.attr))
+    stop("Your graph should have Latitude and Longitude vertex attributes before converting to a Spatial* object.")
 
   lat <- vertex_attr(graph, latitude)
   lon <- vertex_attr(graph, longitude)
 
-  edgeList <- list()
   all.edges <- as_edgelist(graph)
+  edgeList  <- vector("list", nrow(all.edges))
 
-  for (i in 1:nrow(all.edges)) {
-    name1 <- all.edges[i, 1]
-    name2 <- all.edges[i, 2]
-    idx1 <- which(names == name1)
-    idx2 <- which(names == name2)
-
-    coord <- matrix(
-      c(lon[idx1], lat[idx1], lon[idx2], lat[idx2]),
-      nrow = 2,
-      byrow = TRUE
-    )
-    colnames(coord) <- c("x", "y")
-    rownames(coord) <- c(names[idx1], names[idx2])
-    edgeName <- paste("Edge", names[idx1], names[idx2])
-    edgeList[[edgeName]] <- sp::Lines(list(sp::Line(coord)), ID = edgeName)
+  for (i in seq_len(nrow(all.edges))) {
+    idx1 <- which(node.names == all.edges[i, 1])
+    idx2 <- which(node.names == all.edges[i, 2])
+    coord <- matrix(c(lon[idx1], lat[idx1], lon[idx2], lat[idx2]),
+                    nrow = 2, byrow = TRUE,
+                    dimnames = list(c(node.names[idx1], node.names[idx2]), c("x", "y")))
+    edgeName      <- paste("Edge", node.names[idx1], node.names[idx2])
+    edgeList[[i]] <- sp::Lines(list(sp::Line(coord)), ID = edgeName)
   }
-  return(sp::SpatialLines(edgeList))
+  sp::SpatialLines(edgeList)
 }
