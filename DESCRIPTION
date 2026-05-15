@@ -8,10 +8,9 @@ Authors@R: person(given = c("Rodney", "J."),
     email = "rjdyer@vcu.edu")
 Description: Classes and functions for the spatial analysis of marker
     data to include structure, diversity, distance, and
-    relatedness statistics.  Where appropriate, integration with existing
-    libraries is included.
+    relatedness statistics.  
 Version: 1.14
-Date: 2026-02-16
+Date: 2026-05-15
 LazyLoad: true
 Encoding: UTF-8
 Depends:
@@ -36,4 +35,4 @@ Suggests:
     leaflet,
     leaflet.minicharts
 VignetteBuilder: knitr
-RoxygenNote: 7.3.3
+Config/roxygen2/version: 8.0.0

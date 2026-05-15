@@ -101,8 +101,8 @@
 #'   delta  = round(E(g2)$delta,  3)
 #' )
 #'
-#' @importFrom igraph is_igraph is_directed E V strength degree neighbors
-#'   get_edge_ids as_edgelist
+#' @importFrom igraph is_igraph is_directed E V strength degree neighbors get_edge_ids as_edgelist
+#' @importFrom stats setNames
 #' @export
 graph_asymmetries <- function(graph) {
   if (!igraph::is_igraph(graph))

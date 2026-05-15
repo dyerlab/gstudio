@@ -8,6 +8,7 @@
 #' @param graph2 An object of type \code{igraph} or \code{popgraph}.
 #' @return An \code{htest} object as returned by \code{cor.test()}.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @importFrom stats na.omit
 #' @export
 test_congruence <- function(graph1, graph2) {
   cong.nodes <- intersect(igraph::V(graph1)$name, igraph::V(graph2)$name)

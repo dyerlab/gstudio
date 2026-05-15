@@ -23,8 +23,8 @@ A data.frame with one row per undirected edge and columns:
   \describe{
     \item{i}{Name of the first node.}
     \item{j}{Name of the second node.}
-    \item{pij}{Conditional probability of j given i (p_{j|i}), normalised across i's neighbours.}
-    \item{pji}{Conditional probability of i given j (p_{i|j}), normalised across j's neighbours.}
+    \item{pij}{Conditional probability of j given i (\eqn{p_{j|i}}), normalised across i's neighbours.}
+    \item{pji}{Conditional probability of i given j (\eqn{p_{i|j}}), normalised across j's neighbours.}
     \item{cGD}{Conditional genetic distance (edge weight) from the input graph.}
     \item{dij}{Share of cGD allocated in the i→j direction: \code{cGD * pij / (pij + pji)}.}
     \item{dji}{Share of cGD allocated in the j→i direction: \code{cGD * pji / (pij + pji)}.}
