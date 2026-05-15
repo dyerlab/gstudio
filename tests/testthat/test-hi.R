@@ -1,4 +1,3 @@
-context("hi.R")
 
 test_that("individual heterozygosity",{
 

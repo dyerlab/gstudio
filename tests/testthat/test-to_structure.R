@@ -1,4 +1,3 @@
-context("to_structure.R")
 
 test_that("text output", {
   A <- locus( c("1","1"))

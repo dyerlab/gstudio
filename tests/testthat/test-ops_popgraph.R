@@ -1,4 +1,3 @@
-context("ops_popgraph.R")
 
 test_that("tests", {
   

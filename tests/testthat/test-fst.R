@@ -1,4 +1,3 @@
-context("fst.R")
 
 test_that("checking",{
   

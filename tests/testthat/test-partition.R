@@ -1,4 +1,3 @@
-context("partition.R")
 
 test_that("checking",{
   df <- data.frame( Pop=rep(c("A","B"),each=4), VAL=1:8 )

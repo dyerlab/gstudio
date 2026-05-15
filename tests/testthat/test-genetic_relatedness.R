@@ -1,4 +1,3 @@
-context("genetic_relatedness.R")
 
 
 test_that("error checks",{

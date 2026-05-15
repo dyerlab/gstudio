@@ -1,4 +1,3 @@
-context("Dest.R")
  
 test_that("checking",{
    

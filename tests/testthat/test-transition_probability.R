@@ -1,4 +1,3 @@
-context("transition_probability.R")
 
 test_that("testing",{
   off  <- locus( 1:2 )

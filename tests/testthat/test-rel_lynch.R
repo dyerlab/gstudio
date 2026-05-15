@@ -1,4 +1,3 @@
-context("rel_lynch.R")
 
 test_that("Inbreeding",{
   AA <- locus( c("A","A") )

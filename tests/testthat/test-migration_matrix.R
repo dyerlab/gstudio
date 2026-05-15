@@ -1,4 +1,3 @@
-context("migration_matrix.R")
 
 test_that("island model has correct structure and rows sum to 1", {
   mat <- migration_matrix(4, model = "island", m = 0.12)

@@ -1,4 +1,3 @@
-context("mate.R")
 
 test_that( "testing",{
   AA <- locus( c("A","A") )

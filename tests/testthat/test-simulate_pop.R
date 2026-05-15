@@ -1,4 +1,3 @@
-context("simulate_pop.R")
 
 # Helper: build a simple multi-pop test data.frame
 .make_sim_pop <- function() {

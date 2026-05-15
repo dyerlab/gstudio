@@ -1,4 +1,3 @@
-context("addAlleleFrequencies")
 
 # ---- shared test data -------------------------------------------------------
 

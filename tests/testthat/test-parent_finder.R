@@ -1,4 +1,3 @@
-context("parent_finder.R")
 
 test_that("testing",{
   

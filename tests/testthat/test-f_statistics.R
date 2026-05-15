@@ -1,4 +1,3 @@
-context("f_statistics.R")
 
 test_that("Inbreeding",{
   AA <- locus( c("A","A") )

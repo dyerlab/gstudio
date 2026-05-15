@@ -1,4 +1,3 @@
-context("strata_coordinates.R")
 
 
 test_that("checking",{

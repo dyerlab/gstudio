@@ -1,4 +1,3 @@
-context("permute_ci.R")
 
 test_that("catching errors", {
   AA <- locus( c("A","A") )

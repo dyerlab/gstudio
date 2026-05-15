@@ -1,4 +1,3 @@
-context("genetic_structure.R")
 
 
 test_that("checking",{

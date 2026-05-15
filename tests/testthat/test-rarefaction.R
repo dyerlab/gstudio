@@ -1,4 +1,3 @@
-context("rarefraction.R")
 
 test_that("Allelic Diversity",{
   

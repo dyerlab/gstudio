@@ -1,4 +1,3 @@
-context("ht.R")
 
 test_that("checking",{
   

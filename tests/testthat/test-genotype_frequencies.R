@@ -1,4 +1,3 @@
-context("genotype_frequencies.R")
 
 test_that("testing",{
   loci <- c( locus( c(1,1) ),

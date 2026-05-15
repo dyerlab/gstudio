@@ -1,4 +1,3 @@
-context("is_heterozygote.R")
 
 test_that("general", {
   A <- locus( "A")

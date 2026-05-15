@@ -1,4 +1,3 @@
-context("genotype_counts.R")
 
 test_that("testing",{
   Locus1 <- c( locus( c(1,1) ),

@@ -1,5 +1,7 @@
 gstudio 1.13 - 20260216
 -----------------
+* [ADD] Added graph_asymmetries() to estimate directional introgression pressure and asymmetry index for each edge in a weighted population graph
+* [ADD] Added binary= parameter to dist_amova() for binary presence/absence markers (e.g., AFLPs) using Excoffier (1992) formulation
 * [FIX] Removed alt raster dataset that required raster package (CRAN compliance)
 
 gstudio 1.12 - 20260214

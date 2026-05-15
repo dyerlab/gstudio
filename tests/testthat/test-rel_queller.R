@@ -1,4 +1,3 @@
-context("rel_queller.R")
 
 test_that("relatedness",{
   AA <- locus( c("A","A") )

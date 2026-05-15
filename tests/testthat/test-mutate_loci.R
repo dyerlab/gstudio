@@ -1,4 +1,3 @@
-context("mutate_loci.R")
 
 # Helper: build a small test population
 .make_test_pop <- function() {

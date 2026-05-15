@@ -1,4 +1,3 @@
-context("congruence_topology.R")
 
 test_that("testing", {
 

@@ -1,4 +1,3 @@
-context("maximum_allele_size.R")
 
 test_that("checking",{
   loci <- c( locus( c(1,12) ), locus( c(2,22) ), locus( c(2222,2) ))

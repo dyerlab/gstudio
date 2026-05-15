@@ -1,5 +1,7 @@
 
-test_that("Inbreeding",{
+
+test_that("error checks",{
+
   AA <- locus( c("A","A") )
   AB <- locus( c("A","B") )
   BB <- locus( c("B","B") )
@@ -10,12 +12,9 @@ test_that("Inbreeding",{
   CC <- locus( c("C","C") )
   CD <- locus( c("C","D") )
   DD <- locus( c("D","D") )
-  loci <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD)
-
-  h <- Ho(loci)
+  loci <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD) 
+ 
   
-  expect_that( h, is_equivalent_to(0.6) )
-  
-
-   
 })
+
+

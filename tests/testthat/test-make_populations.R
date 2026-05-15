@@ -1,4 +1,3 @@
-context("make_populations.R")
 
 test_that("testing", {
   f1 <- data.frame(

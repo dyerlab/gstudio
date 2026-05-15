@@ -1,4 +1,3 @@
-context("decorate_popgraph.R")
 
 test_that("testing", {
   

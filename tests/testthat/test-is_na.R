@@ -1,4 +1,3 @@
-context("is_na.R")
 
 test_that("locus",{
   loc1 <- locus()
