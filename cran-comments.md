@@ -18,4 +18,4 @@ This submission (v1.14) adds `asymmetric_weights()` for perplexity-based directi
 * checking CRAN incoming feasibility ... NOTE
   New submission. Package was archived on CRAN.
 
-This is a resubmission of a fully rewritten package addressing all original issues that led to archival.
+This is a resubmission of a fully rewritten package addressing all original issues that led to archival in 2015.
