@@ -48,5 +48,30 @@ test_that("checking",{
   
   expect_that( fst$Hs, equals( c(0, 0.475)))
   expect_that( fst$Ht, equals( c(0.5, 0.5175)))
-  
+
+})
+
+test_that("permutation P is a right-tail, strictly-positive p-value", {
+  set.seed(1)
+  AA <- locus( c("A","A") )
+  BB <- locus( c("B","B") )
+  AB <- locus( c("A","B") )
+
+  # Strong structure (pops fixed for alternate alleles) -> Fst = 1 -> P small.
+  strong <- data.frame(
+    Population = rep(c("A","B"), each = 8),
+    L = c(rep(AA, 8), rep(BB, 8))
+  )
+  fs <- Fst(strong, nperm = 99)
+  expect_true(all(fs$P > 0))                 # add-one => never exactly zero
+  expect_true(all(fs$P <= 1))
+  expect_true(fs$P[1] < 0.2)                  # strong structure => clearly significant
+
+  # No structure (identical allele makeup in both pops) -> Fst ~ 0 -> P large.
+  none <- data.frame(
+    Population = rep(c("A","B"), each = 8),
+    L = c(rep(AA, 4), rep(BB, 4), rep(AA, 4), rep(BB, 4))
+  )
+  fn <- Fst(none, nperm = 99)
+  expect_true(all(fn$P > fs$P))              # null is far less significant
 })

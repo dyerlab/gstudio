@@ -128,8 +128,11 @@ Dest <- function( x, stratum="Population", nperm=0, size.correct=FALSE ) {
         D.perm <- (ht-perms) /(1-perms)
       
       D.perm <- D.perm / (k/(k-1))
-      P <- sum( D.perm >= D ) / length( D.perm )
-      
+      D.perm <- D.perm[ !is.na( D.perm ) ]
+      # Add-one permutation p-value: (1 + #{perm >= obs}) / (1 + B), strictly
+      # positive (Phipson & Smyth 2010, Stat. Appl. Genet. Mol. Biol. 9:Article39).
+      P <- ( 1 + sum( D.perm >= D ) ) / ( 1 + length( D.perm ) )
+
       ret$P <- P
     }
     

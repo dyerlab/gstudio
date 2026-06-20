@@ -10,7 +10,9 @@
 #'  default, this function will use "Population".
 #' @param nperm The number of permutations to run to test Fst=0 hypothesis.
 #' @return An \code{data.frame} with Fst, sigma_p (variance among populations), and pq
-#'  the total variance at the locus. 
+#'  the total variance at the locus.  When \code{nperm > 0} it also has \code{P},
+#'  the right-tailed add-one permutation p-value for the null hypothesis Fst = 0
+#'  (small P indicates significant structure).
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
 #' @examples
@@ -56,16 +58,18 @@ Fst <- function( x, stratum="Population", nperm=0  ) {
       if( rep%%10 == 0 ) { 
         message(".", appendLF = FALSE)
       }
-      tmp[[stratum]] <- sample( tmp[[stratum]], 
-                                nrow(tmp),
-                                replace = TRUE)
+      # Label permutation (no replacement) for the H0: Fst = 0 null.
+      tmp[[stratum]] <- sample( tmp[[stratum]] )
       suppressWarnings(
-        Fst <- 1.0 - Hes( tmp, stratum=stratum, do.multilocus=FALSE )$Hes / ht$Ht 
+        Fst <- 1.0 - Hes( tmp, stratum=stratum, do.multilocus=FALSE )$Hes / ht$Ht
       )
-      bigger <- ifelse( ret$Fst >= Fst, 1, 0 )
-      ret$P <- ret$P + bigger 
+      # Right tail: count permutations whose Fst meets/exceeds the observed.
+      bigger <- ifelse( Fst >= ret$Fst, 1, 0 )
+      ret$P <- ret$P + bigger
     }
-    ret$P <- ret$P / (1+nperm)
+    # Add-one permutation p-value: (1 + #{perm >= obs}) / (1 + nperm), strictly
+    # positive (Phipson & Smyth 2010, Stat. Appl. Genet. Mol. Biol. 9:Article39).
+    ret$P <- ( 1 + ret$P ) / ( 1 + nperm )
   }
   
   return( ret )

@@ -145,7 +145,9 @@ Gst_prime <- function(  x, stratum="Population",  nperm=0, size.correct=TRUE ) {
         Gst_prime.perm <- Gst_prime.perm / ((k-1)*(1-perms))
       }
       Gst_prime.perm <- Gst_prime.perm[ !is.na( Gst_prime.perm) ]
-      P <- sum( Gst_prime.perm >= Gst_prime ) / length( Gst_prime.perm )
+      # Add-one permutation p-value: (1 + #{perm >= obs}) / (1 + B), strictly
+      # positive (Phipson & Smyth 2010, Stat. Appl. Genet. Mol. Biol. 9:Article39).
+      P <- ( 1 + sum( Gst_prime.perm >= Gst_prime ) ) / ( 1 + length( Gst_prime.perm ) )
     }
     else 
       P <- 0

@@ -77,7 +77,9 @@ genetic_autocorrelation <- function(P, G, bins, perms = 0) {
         rtop <- sum(cP * X) - rbot
         p[i] <- rtop / rbot
       }
-      ret$P[lag] <- sum(p >= r) / perms
+      # Add-one permutation p-value: (1 + #{perm >= obs}) / (1 + B), strictly
+      # positive (Phipson & Smyth 2010, Stat. Appl. Genet. Mol. Biol. 9:Article39).
+      ret$P[lag] <- (1 + sum(p >= r)) / (1 + perms)
       R <- rbind(R, data.frame(Bin = ret$To[lag], R = p))
     }
   }

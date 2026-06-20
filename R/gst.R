@@ -130,7 +130,9 @@ Gst <- function( x, stratum="Population", nperm=0, size.correct=TRUE ) {
         perms <- 1 - perms/ht
       
       perms <- perms[ !is.na(perms) ]
-      P <- sum( perms >= gst ) / length(perms)
+      # Add-one permutation p-value: (1 + #{perm >= obs}) / (1 + B), strictly
+      # positive (Phipson & Smyth 2010, Stat. Appl. Genet. Mol. Biol. 9:Article39).
+      P <- ( 1 + sum( perms >= gst ) ) / ( 1 + length(perms) )
       ret$P <- P
     
     }
