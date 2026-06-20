@@ -62,7 +62,10 @@ A \code{data.frame} with one row per retained edge (one row total for
     \item{statistic}{The test statistic actually compared to the null
       distribution.}
     \item{p_value}{Two-tailed permutation \emph{p}-value (\code{NA} for
-      \code{"jackknife"}).}
+      \code{"jackknife"}), computed with the add-one correction
+      \eqn{(1 + \#\{|\Delta_{\mathrm{null}}| \ge |\Delta_{\mathrm{obs}}|\}) /
+      (1 + B)} over \eqn{B} permutations, so it is strictly positive
+      (Phipson & Smyth 2010).}
     \item{ci_low, ci_high}{Resampling confidence bounds (\code{NA} except for
       \code{"jackknife"}).}
   }

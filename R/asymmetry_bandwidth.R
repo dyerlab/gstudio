@@ -38,7 +38,11 @@ asymmetry_bandwidth <- function(graph, nperm = 999, ...) {
   # replicate() returns a matrix (ne x nperm) when ne > 1; coerce for safety.
   null <- matrix(null, nrow = nrow(el))
 
-  p_value <- rowMeans(abs(null) >= abs(delta_obs), na.rm = TRUE)
+  # Add-one (biased-up) permutation p-value; see asymmetry_permutation() and
+  # Phipson & Smyth (2010, Stat. Appl. Genet. Mol. Biol. 9:Article39).
+  n_ge    <- rowSums(abs(null) >= abs(delta_obs), na.rm = TRUE)
+  B       <- rowSums(!is.na(null))
+  p_value <- (1 + n_ge) / (1 + B)
 
   data.frame(
     from      = el[, 1],

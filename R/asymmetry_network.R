@@ -59,7 +59,10 @@ asymmetry_network <- function(graph, nperm = 999,
     null[p] <- mean(abs(igraph::E(graph_asymmetries(gr))$delta))
   }
 
-  p_value <- mean(null >= obs_stat, na.rm = TRUE)
+  # Add-one (biased-up) permutation p-value; see asymmetry_permutation() and
+  # Phipson & Smyth (2010, Stat. Appl. Genet. Mol. Biol. 9:Article39).
+  B       <- sum(!is.na(null))
+  p_value <- (1 + sum(null >= obs_stat, na.rm = TRUE)) / (1 + B)
 
   data.frame(
     from      = NA_character_,

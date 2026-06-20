@@ -78,6 +78,18 @@ test_that("network mode returns a single graph-level row", {
   expect_true(res$p_value >= 0 && res$p_value <= 1)
 })
 
+test_that("permutation p-values are strictly positive (add-one correction)", {
+  # The add-one estimator (1 + #{>=}) / (1 + B) can never be exactly zero, even
+  # when no permutation exceeds the observed statistic.
+  g  <- make_triangle()
+  rb <- asymmetry_significance(g, mode = "bandwidth", nperm = 99)
+  rn <- asymmetry_significance(g, mode = "network",   nperm = 99)
+  expect_true(all(rb$p_value > 0))
+  expect_true(rn$p_value > 0)
+  # Smallest attainable value is 1 / (1 + nperm).
+  expect_true(all(rb$p_value >= 1 / (99 + 1) - 1e-12))
+})
+
 # ---------------------------------------------------------------------------
 # Data-driven modes on a small simulated graph
 # ---------------------------------------------------------------------------

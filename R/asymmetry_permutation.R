@@ -65,7 +65,13 @@ asymmetry_permutation <- function(graph, data, groups, nperm = 999, ...) {
     null[, p] <- igraph::E(graph_asymmetries(g_null))$delta
   }
 
-  p_value <- rowMeans(abs(null) >= abs(delta_obs), na.rm = TRUE)
+  # Add-one (biased-up) permutation p-value: (1 + #{|null| >= |obs|}) / (1 + B).
+  # Including the observed configuration in the reference set keeps the estimator
+  # valid and bounded away from zero, avoiding the anti-conservative bias of the
+  # raw fraction (Phipson & Smyth 2010, Stat. Appl. Genet. Mol. Biol. 9:Article39).
+  n_ge    <- rowSums(abs(null) >= abs(delta_obs), na.rm = TRUE)
+  B       <- rowSums(!is.na(null))
+  p_value <- (1 + n_ge) / (1 + B)
 
   data.frame(
     from      = el[, 1],
