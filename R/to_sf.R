@@ -16,17 +16,14 @@
 #' @importFrom dplyr group_by summarize mutate arrange
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @examples
-#' # library(igraph)
-#' # data(lopho)
-#' # data(baja)
-#' # graph <- decorate_graph(lopho, baja )
-#' # nodes <- to_sf( graph, what="nodes")
-#' # edges <- to_sf( graph, what="edges")
-#' # library( leaflet )
-#' # leaflet() |>
-#' #  addTiles() |>
-#' #  addMarkers( data=nodes ) |>
-#' #  addPolylines( data=edges )
+#' \donttest{
+#' library(igraph)
+#' data(lopho)
+#' data(baja)
+#' graph <- decorate_graph(lopho, baja )
+#' nodes <- to_sf( graph, what="nodes")
+#' edges <- to_sf( graph, what="edges")
+#' }
 
 to_sf <- function( x, what=c("nodes","edges")[1], Longitude = "Longitude", Latitude = "Latitude", CRS = 4326 ) { 
   

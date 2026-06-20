@@ -27,6 +27,15 @@ an undirected \code{popgraph} into a directed one.  Each undirected edge
 proportionally to the local Markov flow probabilities, so the total graph
 distance is preserved.
 }
+\examples{
+\donttest{
+data(arapat)
+mv <- to_mv(arapat)
+groups <- arapat$Population
+graph <- popgraph(mv, groups)
+asymmetric_popgraph(graph)
+}
+}
 \seealso{
 \code{\link{asymmetric_weights}}
 }

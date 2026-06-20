@@ -35,12 +35,14 @@ properties (including optional locus names and genomic coordinates) are
 written into a \code{metadata} object on the graph itself.
 }
 \examples{
-\dontrun{
+\donttest{
 data(arapat)
-graph <- popgraph(arapat[, c("Species", "Latitude", "Longitude")])
+mv <- to_mv(arapat)
+groups <- arapat$Population
+graph <- popgraph(mv, groups)
 
 # Basic export
-to_jgf(graph, "arapat.json")
+to_jgf(graph, tempfile(fileext = ".json"))
 
 # With locus metadata
 loci <- data.frame(
@@ -48,7 +50,7 @@ loci <- data.frame(
   chromosome = c("1", "3"),
   position   = c(12345, 98765)
 )
-to_jgf(graph, "arapat.json", label = "Arapat Network", loci = loci)
+to_jgf(graph, tempfile(fileext = ".json"), label = "Arapat Network", loci = loci)
 }
 }
 \author{

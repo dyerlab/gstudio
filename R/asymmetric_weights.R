@@ -21,6 +21,14 @@
 #'   distance is preserved.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
+#' @examples
+#' \donttest{
+#' data(arapat)
+#' mv <- to_mv(arapat)
+#' groups <- arapat$Population
+#' graph <- popgraph(mv, groups)
+#' asymmetric_weights(graph)
+#' }
 asymmetric_weights <- function(graph, perplexity = 4, tol = 1e-5, max_iter = 100) {
   if (!igraph::is_igraph(graph)) stop("Input must be an igraph object")
   if (igraph::is_directed(graph)) stop("Input graph must be undirected")

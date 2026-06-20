@@ -22,10 +22,10 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data(arapat)
 #' P <- as.matrix(dist(arapat[, c("Longitude", "Latitude")]))
-#' G <- genetic_distance(arapat, mode = "Euclidean")
+#' G <- genetic_distance(arapat, mode = "AMOVA")
 #' bins <- c(0, 1, 2, 3, 5)
 #' ac <- genetic_autocorrelation(P, G, bins)
 #'

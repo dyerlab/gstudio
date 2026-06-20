@@ -22,12 +22,14 @@
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data(arapat)
-#' graph <- popgraph(arapat[, c("Species", "Latitude", "Longitude")])
+#' mv <- to_mv(arapat)
+#' groups <- arapat$Population
+#' graph <- popgraph(mv, groups)
 #'
 #' # Basic export
-#' to_jgf(graph, "arapat.json")
+#' to_jgf(graph, tempfile(fileext = ".json"))
 #'
 #' # With locus metadata
 #' loci <- data.frame(
@@ -35,7 +37,7 @@
 #'   chromosome = c("1", "3"),
 #'   position   = c(12345, 98765)
 #' )
-#' to_jgf(graph, "arapat.json", label = "Arapat Network", loci = loci)
+#' to_jgf(graph, tempfile(fileext = ".json"), label = "Arapat Network", loci = loci)
 #' }
 to_jgf <- function(graph, file, label = "Population Graph", loci = NULL, ...) {
 

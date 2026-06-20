@@ -49,7 +49,7 @@ selfing, migration (with temporal regime changes), and census snapshots.
 Each generation cycle: census, migrate, mate, mutate.
 }
 \examples{
-\dontrun{
+\donttest{
 f <- data.frame(
   Population = rep(c("A","B"), each = 4),
   Locus = rep(c("L1","L1"), each = 4),

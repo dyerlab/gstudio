@@ -22,7 +22,7 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(leaflet)
 #' library(leaflet.minicharts)
 #' data(arapat)

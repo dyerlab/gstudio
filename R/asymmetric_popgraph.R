@@ -16,6 +16,14 @@
 #' @seealso \code{\link{asymmetric_weights}}
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
+#' @examples
+#' \donttest{
+#' data(arapat)
+#' mv <- to_mv(arapat)
+#' groups <- arapat$Population
+#' graph <- popgraph(mv, groups)
+#' asymmetric_popgraph(graph)
+#' }
 asymmetric_popgraph <- function(graph, perplexity = 4, tol = 1e-5, max_iter = 100) {
   if (!igraph::is_igraph(graph)) stop("Input must be an igraph object")
   if (igraph::is_directed(graph)) stop("Input graph must be undirected")

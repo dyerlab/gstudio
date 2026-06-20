@@ -39,6 +39,15 @@ Asymmetric Edge Weights
  to estimate relative weights of edges in a population graph using local
  embedding and Markov properties.
 }
+\examples{
+\donttest{
+data(arapat)
+mv <- to_mv(arapat)
+groups <- arapat$Population
+graph <- popgraph(mv, groups)
+asymmetric_weights(graph)
+}
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

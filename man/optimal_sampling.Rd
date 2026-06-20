@@ -24,7 +24,7 @@ individuals, together with a ±10 \% confidence band around the supplied
 \examples{
 df <- optimal_sampling(400, 0.25)
 head(df)
-\dontrun{
+\donttest{
 library(ggplot2)
 ggplot(df, aes(x = Strata, y = Var.Phi)) +
   geom_ribbon(aes(ymin = Var.Phi.Low, ymax = Var.Phi.High), alpha = 0.3) +

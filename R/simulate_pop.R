@@ -22,7 +22,7 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' f <- data.frame(
 #'   Population = rep(c("A","B"), each = 4),
 #'   Locus = rep(c("L1","L1"), each = 4),

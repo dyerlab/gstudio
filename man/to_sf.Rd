@@ -33,17 +33,14 @@ This function convers the popgraph object into an object that can be plot using
  the leaflet library.
 }
 \examples{
-# library(igraph)
-# data(lopho)
-# data(baja)
-# graph <- decorate_graph(lopho, baja )
-# nodes <- to_sf( graph, what="nodes")
-# edges <- to_sf( graph, what="edges")
-# library( leaflet )
-# leaflet() |>
-#  addTiles() |>
-#  addMarkers( data=nodes ) |>
-#  addPolylines( data=edges )
+\donttest{
+library(igraph)
+data(lopho)
+data(baja)
+graph <- decorate_graph(lopho, baja )
+nodes <- to_sf( graph, what="nodes")
+edges <- to_sf( graph, what="edges")
+}
 }
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>

@@ -36,7 +36,7 @@ existing leaflet map. Designed for use in a pipe after building the map from
 \code{strata_coordinates()} output.
 }
 \examples{
-\dontrun{
+\donttest{
 library(leaflet)
 library(leaflet.minicharts)
 data(arapat)

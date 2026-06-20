@@ -1,3 +1,7 @@
+gstudio 1.14 - 20260610
+-----------------
+* [ADD] Added asymmetry_significance() wrapper for testing the significance of the edge asymmetry index, with mode = c("permutation","jackknife","bandwidth","network") dispatching to new base functions asymmetry_permutation() (fixed-topology label permutation), asymmetry_jackknife() (within-stratum bootstrap stability CIs), asymmetry_bandwidth() (bandwidth-alignment permutation), and asymmetry_network() (rewiring null). Returns a tidy per-edge data.frame.
+
 gstudio 1.13 - 20260216
 -----------------
 * [ADD] Added graph_asymmetries() to estimate directional introgression pressure and asymmetry index for each edge in a weighted population graph

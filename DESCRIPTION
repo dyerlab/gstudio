@@ -6,9 +6,22 @@ Authors@R: person(given = c("Rodney", "J."),
     family = "Dyer",
     role = c("aut", "cre"),
     email = "rjdyer@vcu.edu")
-Description: Classes and functions for the spatial analysis of marker
-    data to include structure, diversity, distance, and
-    relatedness statistics.  
+Description: Provides classes and functions for the spatial analysis of
+    genetic marker data, including population structure, genetic diversity,
+    distance, and relatedness statistics. This package introduces the S3 'locus'
+    class (allowing loci to be in the same data frame as your non-genetic data)
+    for storing, manipulating, and querying multilocus genotype data. It
+    implements standard estimators for genetic diversity, genetic distance,
+    and population differentiation. Crucially, this version incorporates the
+    network construction and analysis capabilities of the previously separate 
+    'popgraph' package, representing population genetic structure as graph-theoretic 
+    networks as described in Dyer and Nason (2004) <doi:10.1111/j.1365-294X.2004.02177.x> 
+    and Dyer (2015) <doi:10.1146/annurev-ecolsys-112414-054150>. It also provides 
+    newly developed, state-of-the-art methods for evaluating network asymmetry, 
+    conditional introgression pressures, and directional gene flow using local Gaussian 
+    kernels and perplexity-tuned Markov flow partitioning. Integration with spatial 
+    and geographic data is provided via compatibility with 'sf', 'sp', 'ggplot2', 
+    and interactive leaflet maps.
 Version: 1.14
 Date: 2026-05-15
 LazyLoad: true
