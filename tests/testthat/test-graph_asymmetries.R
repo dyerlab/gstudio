@@ -230,3 +230,38 @@ test_that("delta is invariant to the scale of uniform edge weights", {
   expect_equal(igraph::E(g_w1)$delta, igraph::E(g_w5)$delta,
                tolerance = 1e-10)
 })
+
+# ---------------------------------------------------------------------------
+# Bandwidth override and scale (bandwidth-sensitivity support)
+# ---------------------------------------------------------------------------
+
+test_that("default bandwidth is the local estimator s_i / k_i", {
+  g <- graph_asymmetries(make_triangle())
+  # Vertex attributes come back unnamed (positional); attach names to index.
+  b <- stats::setNames(igraph::V(g)$bandwidth, igraph::V(g)$name)
+  expect_equal(unname(b[c("A", "B", "C")]), c(2.5, 1.5, 2.0), tolerance = 1e-10)
+})
+
+test_that("scalar bandwidth sets a single fixed global value", {
+  g <- graph_asymmetries(make_triangle(), bandwidth = 2)
+  expect_true(all(abs(igraph::V(g)$bandwidth - 2) < 1e-10))
+})
+
+test_that("scale multiplies the bandwidth", {
+  g0 <- graph_asymmetries(make_triangle())
+  g2 <- graph_asymmetries(make_triangle(), scale = 2)
+  expect_equal(igraph::V(g2)$bandwidth, 2 * igraph::V(g0)$bandwidth,
+               tolerance = 1e-10)
+})
+
+test_that("named vector bandwidth is matched by node", {
+  bw <- c(A = 1, B = 2, C = 3)
+  g  <- graph_asymmetries(make_triangle(), bandwidth = bw)
+  b  <- stats::setNames(igraph::V(g)$bandwidth, igraph::V(g)$name)
+  expect_equal(unname(b[c("A", "B", "C")]), c(1, 2, 3))
+})
+
+test_that("invalid (non-positive) bandwidth errors", {
+  expect_error(graph_asymmetries(make_triangle(), bandwidth = 0), "positive")
+  expect_error(graph_asymmetries(make_triangle(), scale = -1), "positive")
+})

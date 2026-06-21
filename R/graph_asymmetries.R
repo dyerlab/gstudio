@@ -44,6 +44,14 @@
 #'   numeric \code{weight} edge attribute representing pairwise genetic
 #'   distances between populations.  Isolated vertices (degree zero) are
 #'   permitted but contribute no edge attributes.
+#' @param bandwidth Optional override of the node bandwidth, for
+#'   bandwidth-sensitivity analysis.  \code{NULL} (default) uses the local
+#'   estimator \eqn{b_i = s_i / k_i}; a scalar applies a single fixed global
+#'   bandwidth to every node; a vector (named by node, or one entry per vertex
+#'   in \code{V(graph)} order) supplies a custom per-node bandwidth.
+#' @param scale Positive multiplier applied to the (local or supplied) bandwidth
+#'   (default \code{1}); useful for probing sensitivity to the absolute distance
+#'   scale.  All bandwidths must remain finite and positive.
 #'
 #' @return The input graph, unchanged in topology and edge weights, with the
 #'   following additions:
@@ -104,7 +112,7 @@
 #' @importFrom igraph is_igraph is_directed E V strength degree neighbors get_edge_ids as_edgelist
 #' @importFrom stats setNames
 #' @export
-graph_asymmetries <- function(graph) {
+graph_asymmetries <- function(graph, bandwidth = NULL, scale = 1) {
   if (!igraph::is_igraph(graph))
     stop("'graph' must be an igraph object")
   if (igraph::is_directed(graph))
@@ -114,9 +122,28 @@ graph_asymmetries <- function(graph) {
 
   nodes <- igraph::V(graph)$name
 
-  # Node bandwidth: mean edge weight over local neighborhood (b_i = s_i / k_i)
-  b <- igraph::strength(graph) / igraph::degree(graph)
+  # Node bandwidth. Default (bandwidth = NULL) is the local estimator
+  # b_i = s_i / k_i (mean retained-neighbour edge weight). A scalar sets a single
+  # fixed global bandwidth for every node; a vector (named by node, or one entry
+  # per vertex) supplies a custom per-node bandwidth. The result is multiplied by
+  # 'scale'. These overrides exist for bandwidth-sensitivity analysis; the default
+  # reproduces the canonical local kernel exactly.
+  b_local <- igraph::strength(graph) / igraph::degree(graph)
+  if (is.null(bandwidth)) {
+    b <- b_local
+  } else if (length(bandwidth) == 1L) {
+    b <- rep(as.numeric(bandwidth), length(nodes))
+  } else if (!is.null(names(bandwidth))) {
+    b <- as.numeric(bandwidth[nodes])
+  } else {
+    if (length(bandwidth) != length(nodes))
+      stop("'bandwidth' must be NULL, a scalar, or a vector named by node / one per vertex.")
+    b <- as.numeric(bandwidth)
+  }
+  b <- b * scale
   names(b) <- nodes
+  if (any(!is.finite(b)) || any(b <= 0))
+    stop("'bandwidth' must yield finite positive values for all nodes.")
   igraph::V(graph)$bandwidth <- b
 
   # Precompute the normalised Gaussian kernel for every node over its

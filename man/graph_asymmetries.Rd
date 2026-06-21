@@ -4,13 +4,23 @@
 \alias{graph_asymmetries}
 \title{Directional Asymmetry Indices for a Weighted Population Graph}
 \usage{
-graph_asymmetries(graph)
+graph_asymmetries(graph, bandwidth = NULL, scale = 1)
 }
 \arguments{
 \item{graph}{An undirected \code{popgraph} or \code{igraph} object with a
 numeric \code{weight} edge attribute representing pairwise genetic
 distances between populations.  Isolated vertices (degree zero) are
 permitted but contribute no edge attributes.}
+
+\item{bandwidth}{Optional override of the node bandwidth, for
+bandwidth-sensitivity analysis.  \code{NULL} (default) uses the local
+estimator \eqn{b_i = s_i / k_i}; a scalar applies a single fixed global
+bandwidth to every node; a vector (named by node, or one entry per vertex
+in \code{V(graph)} order) supplies a custom per-node bandwidth.}
+
+\item{scale}{Positive multiplier applied to the (local or supplied) bandwidth
+(default \code{1}); useful for probing sensitivity to the absolute distance
+scale.  All bandwidths must remain finite and positive.}
 }
 \value{
 The input graph, unchanged in topology and edge weights, with the
