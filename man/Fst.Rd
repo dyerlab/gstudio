@@ -18,7 +18,9 @@ default, this function will use "Population".}
 }
 \value{
 An \code{data.frame} with Fst, sigma_p (variance among populations), and pq
- the total variance at the locus.
+ the total variance at the locus.  When \code{nperm > 0} it also has \code{P},
+ the right-tailed add-one permutation p-value for the null hypothesis Fst = 0
+ (small P indicates significant structure).
 }
 \description{
 This function estimates Wright's Fst parameter, the one based upon the variance
