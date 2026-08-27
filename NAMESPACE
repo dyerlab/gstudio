@@ -145,75 +145,93 @@ export(transition_probability)
 export(write_popgraph)
 export(write_population)
 importFrom(MASS,ginv)
-importFrom(dplyr,all_of)
-importFrom(dplyr,arrange)
-importFrom(dplyr,filter)
-importFrom(dplyr,group_by)
-importFrom(dplyr,mutate)
-importFrom(dplyr,select)
-importFrom(dplyr,summarize)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,element_blank)
-importFrom(ggplot2,geom_line)
-importFrom(ggplot2,geom_point)
-importFrom(ggplot2,geom_violin)
-importFrom(ggplot2,ggplot)
-importFrom(ggplot2,position_dodge)
-importFrom(graphics,lines)
-importFrom(graphics,plot.default)
-importFrom(graphics,points)
-importFrom(graphics,text)
-importFrom(igraph,"E<-")
-importFrom(igraph,"V<-")
-importFrom(igraph,E)
-importFrom(igraph,V)
-importFrom(igraph,as_adjacency_matrix)
-importFrom(igraph,as_data_frame)
-importFrom(igraph,as_edgelist)
-importFrom(igraph,degree)
-importFrom(igraph,distances)
-importFrom(igraph,ecount)
-importFrom(igraph,edge_attr)
-importFrom(igraph,edge_attr_names)
-importFrom(igraph,ends)
-importFrom(igraph,get_edge_ids)
-importFrom(igraph,graph_from_adjacency_matrix)
-importFrom(igraph,gsize)
-importFrom(igraph,induced_subgraph)
-importFrom(igraph,is_directed)
-importFrom(igraph,is_igraph)
-importFrom(igraph,layout_with_fr)
-importFrom(igraph,neighbors)
-importFrom(igraph,set_edge_attr)
-importFrom(igraph,set_vertex_attr)
-importFrom(igraph,strength)
-importFrom(igraph,vcount)
-importFrom(igraph,vertex_attr)
-importFrom(igraph,vertex_attr_names)
-importFrom(igraph,write.graph)
+importFrom(dplyr,
+  all_of,
+  arrange,
+  filter,
+  group_by,
+  mutate,
+  select,
+  summarize
+)
+importFrom(ggplot2,
+  aes,
+  element_blank,
+  geom_line,
+  geom_point,
+  geom_violin,
+  ggplot,
+  position_dodge
+)
+importFrom(graphics,
+  lines,
+  plot.default,
+  points,
+  text
+)
+importFrom(igraph,
+  "E<-",
+  "V<-",
+  E,
+  V,
+  as_adjacency_matrix,
+  as_data_frame,
+  as_edgelist,
+  degree,
+  distances,
+  ecount,
+  edge_attr,
+  edge_attr_names,
+  ends,
+  get_edge_ids,
+  graph_from_adjacency_matrix,
+  gsize,
+  induced_subgraph,
+  is_directed,
+  is_igraph,
+  layout_with_fr,
+  neighbors,
+  set_edge_attr,
+  set_vertex_attr,
+  strength,
+  vcount,
+  vertex_attr,
+  vertex_attr_names,
+  write.graph
+)
 importFrom(methods,is)
-importFrom(reshape2,dcast)
-importFrom(reshape2,melt)
+importFrom(reshape2,
+  dcast,
+  melt
+)
 importFrom(sampling,strata)
-importFrom(sf,st_as_sf)
-importFrom(sf,st_cast)
-importFrom(sp,Line)
-importFrom(sp,Lines)
-importFrom(sp,SpatialLines)
-importFrom(sp,SpatialPoints)
-importFrom(sp,bbox)
-importFrom(stats,binom.test)
-importFrom(stats,cor.test)
-importFrom(stats,cov)
-importFrom(stats,median)
-importFrom(stats,na.omit)
-importFrom(stats,pchisq)
-importFrom(stats,prcomp)
-importFrom(stats,qchisq)
-importFrom(stats,quantile)
-importFrom(stats,setNames)
-importFrom(stats,var)
-importFrom(stats,wilcox.test)
-importFrom(utils,read.csv)
-importFrom(utils,read.table)
-importFrom(utils,write.csv)
+importFrom(sf,
+  st_as_sf,
+  st_cast
+)
+importFrom(sp,
+  Line,
+  Lines,
+  SpatialLines,
+  SpatialPoints,
+  bbox
+)
+importFrom(stats,
+  binom.test,
+  cor.test,
+  cov,
+  median,
+  na.omit,
+  pchisq,
+  prcomp,
+  qchisq,
+  quantile,
+  setNames,
+  var,
+  wilcox.test
+)
+importFrom(utils,
+  read.csv,
+  read.table,
+  write.csv
+)
