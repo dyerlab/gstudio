@@ -37,7 +37,6 @@
 #' @importFrom ggplot2 aes ggplot geom_violin geom_line geom_point position_dodge element_blank
 #' @importFrom graphics plot.default lines points text
 #' @importFrom igraph V E "V<-" "E<-" as_edgelist as_adjacency_matrix as_data_frame vertex_attr edge_attr set_vertex_attr set_edge_attr induced_subgraph degree ends graph_from_adjacency_matrix gsize vertex_attr_names edge_attr_names layout_with_fr distances write.graph
-#' @importFrom sampling strata
 #' @importFrom methods is
 #' @importFrom stats pchisq cor.test cov prcomp qchisq var
 #' @importFrom utils read.csv read.table write.csv

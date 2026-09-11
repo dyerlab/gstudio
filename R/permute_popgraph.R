@@ -22,14 +22,24 @@ permute_popgraph <- function( data, groups, nboot=50, ...){
   strata <- levels(groups)
   K <- length(strata)
   A <- matrix(0,K,K)
-  df <- data.frame(data)
-  rownames(A) <- colnames(A) <- levels(groups)
-  df$Stratum <- as.numeric(as.factor(groups))
-  nc <- ncol(df)-1
-  sz <- as.numeric( table(df$Stratum))
+  rownames(A) <- colnames(A) <- strata
+
+  # Resample individuals WITH replacement, independently within each stratum
+  # (a plain, per-stratum sample() rather than sampling::strata(method =
+  # "srswr")). The old sampling::strata() call required its input sorted by
+  # the stratification column and returned ID_unit as an index into that
+  # SORTED order; those indices were then used to subset `data`/`df`
+  # (unsorted) while pairing the result with the ORIGINAL, unsorted `groups`
+  # vector -- a silent row-alignment bug whenever `data`/`groups` weren't
+  # already stratum-sorted. Indexing within split(seq_along(groups), groups)
+  # keeps the resampled rows and their group labels correctly paired by
+  # construction, for any input order.
+  strata_idx <- split(seq_along(groups), groups)
+
   for( rep in 1:nboot){
-    ndata <- as.matrix(df[strata( df, stratanames = "Stratum",size=sz,method="srswr")$ID_unit,1:nc]  )
-    graph <- popgraph(ndata,groups)
+    idx <- unlist(lapply(strata_idx, function(ii) sample(ii, length(ii), replace = TRUE)),
+                  use.names = FALSE)
+    graph <- popgraph(data[idx, , drop = FALSE], groups[idx])
     B <- to_matrix(graph,mode = "adjacency")
     B[ B!=0 ] <- 1
     A <- A+B

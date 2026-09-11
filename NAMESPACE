@@ -204,7 +204,6 @@ importFrom(reshape2,
   dcast,
   melt
 )
-importFrom(sampling,strata)
 importFrom(sf,
   st_as_sf,
   st_cast

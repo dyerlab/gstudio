@@ -22,8 +22,8 @@ Description: Provides classes and functions for the spatial analysis of
     kernels and perplexity-tuned Markov flow partitioning. Integration with spatial 
     and geographic data is provided via compatibility with 'sf', 'sp', 'ggplot2', 
     and interactive leaflet maps.
-Version: 1.14
-Date: 2026-05-15
+Version: 1.14.1
+Date: 2026-09-11
 LazyLoad: true
 Encoding: UTF-8
 Depends:
@@ -38,8 +38,7 @@ Imports:
     dplyr,
     igraph,
     MASS,
-    sf,
-    sampling
+    sf
 Suggests:
     testthat,
     knitr,
