@@ -345,6 +345,14 @@ rep.locus <- function( x, times,... ){
 #' off
 #'
 `+.locus` <- function( e1, e2 ){
+  if( length(e1) > 1 ){
+    ret <- locus()
+    for( i in 1:length(e1)){
+      ret <- c( ret, e1[i] + e2[i] )
+    }
+    return( ret[-1] )
+  }
+
   if( is.na(e1) || is.na(e2))
     stop("Cannot add missing locus objects.")
   

@@ -15,7 +15,7 @@ to_dfdist <- function( x, stratum="Population", verbose=FALSE){
     stop("Please indicate the 'Population' column in your data frame.")
   
   loci <- column_class(x,"locus")
-  if( is.na(loci) || length(loci)==0 )
+  if( length(loci)==0 || (length(loci)==1 && is.na(loci)) )
     stop("You need to pass some data that actually has some locus objects in it...")
   
   # make sure the stratum is a factor

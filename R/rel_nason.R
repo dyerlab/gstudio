@@ -23,7 +23,7 @@ rel_nason <- function( x, allele=NA, as.relatedness=FALSE ){
   diag(ret) <- 1
   
   freq <- frequencies( x )
-  if( is.na(allele) ) 
+  if( length(allele) == 1 && is.na(allele) )
     allele <- freq$Allele
   else 
     freq <- freq[ freq$Allele %in% allele, ]

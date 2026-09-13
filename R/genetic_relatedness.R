@@ -30,7 +30,7 @@ genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","LynchRitland")[1],
   if( is.na(all(freqs)) )
     freqs <- frequencies( x )
   
-  if( is.na(loci) )
+  if( length(loci) == 1 && is.na(loci) )
     loci <- column_class(x,"locus")
   N <- nrow(x)
   

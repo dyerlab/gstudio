@@ -14,9 +14,9 @@ to_fixed_locus <- function( x, digits=NULL ) {
   if( is.null(digits))
     digits <- maximum_allele_size( x ) 
   
-  if( is.na(x) ) 
-    ret <- rep("0",2*digits)  
-  
+  if( length(x) == 1 && is.na(x) )
+    ret <- rep("0",2*digits)
+
   else {
     ret <- character(0)
     the_alleles <- as.character(alleles(x))
