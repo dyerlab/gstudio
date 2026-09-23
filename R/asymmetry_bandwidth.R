@@ -19,8 +19,7 @@
 #' @param ... Ignored; present for interface consistency.
 #'
 #' @return A \code{data.frame} with columns \code{from}, \code{to},
-#'   \code{delta}, \code{statistic}, \code{p_value}, \code{ci_low},
-#'   \code{ci_high} (the last two \code{NA} for this mode).
+#'   \code{delta}, \code{statistic}, and \code{p_value}.
 #'
 #' @seealso \code{\link{asymmetry_significance}}, \code{\link{graph_asymmetries}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -50,8 +49,6 @@ asymmetry_bandwidth <- function(graph, nperm = 999, ...) {
     delta     = delta_obs,
     statistic = delta_obs,
     p_value   = p_value,
-    ci_low    = NA_real_,
-    ci_high   = NA_real_,
     stringsAsFactors = FALSE
   )
 }

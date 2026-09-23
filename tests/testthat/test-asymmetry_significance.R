@@ -1,7 +1,8 @@
 # Tests for asymmetry_significance() and its base functions.
 # Graph-only modes ("mechanism", "existence") run on a hand-built popgraph.
-# Data-driven modes ("location", "support") are exercised on a small
-# simulated dataset and skipped if the simulation helpers are unavailable.
+# The data-driven "location" mode is exercised on a small simulated dataset
+# (see helper-asymmetry.R) and skipped if the simulation helpers are
+# unavailable.  Confidence intervals are tested in test-asymmetry_ci.R.
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -18,8 +19,7 @@ make_triangle <- function() {
   g
 }
 
-expected_cols <- c("from", "to", "delta", "statistic",
-                   "p_value", "ci_low", "ci_high")
+expected_cols <- c("from", "to", "delta", "statistic", "p_value")
 
 # ---------------------------------------------------------------------------
 # Input validation
@@ -41,15 +41,15 @@ test_that("asymmetry_significance() requires a weight attribute", {
   expect_error(asymmetry_significance(g, mode = "mechanism"), "weight")
 })
 
-test_that("data-driven modes require data and groups", {
+test_that("location mode requires data and groups", {
   g <- make_triangle()
   expect_error(asymmetry_significance(g, mode = "location"), "requires")
-  expect_error(asymmetry_significance(g, mode = "support"),   "requires")
 })
 
-test_that("unknown mode is rejected", {
+test_that("unknown mode is rejected, including the retired 'support' mode", {
   g <- make_triangle()
   expect_error(asymmetry_significance(g, mode = "nonsense"))
+  expect_error(asymmetry_significance(g, mode = "support"))
 })
 
 # ---------------------------------------------------------------------------
@@ -64,7 +64,6 @@ test_that("mechanism mode returns the standard columns and valid p-values", {
   expect_named(res, expected_cols)
   expect_equal(nrow(res), igraph::ecount(g))
   expect_true(all(res$p_value >= 0 & res$p_value <= 1))
-  expect_true(all(is.na(res$ci_low) & is.na(res$ci_high)))
   expect_identical(attr(res, "mode"), "mechanism")
 })
 
@@ -94,24 +93,6 @@ test_that("permutation p-values are strictly positive (add-one correction)", {
 # Data-driven modes on a small simulated graph
 # ---------------------------------------------------------------------------
 
-simulate_small_graph <- function() {
-  skip_if_not(exists("make_population"), "make_population() unavailable")
-  set.seed(1)
-  freqs <- data.frame(
-    Locus     = rep(c("L1", "L2", "L3"), each = 2),
-    Allele    = rep(c("A", "B"), times = 3),
-    Frequency = c(0.5, 0.5, 0.6, 0.4, 0.3, 0.7)
-  )
-  pops <- do.call(rbind, lapply(LETTERS[1:5], function(p) {
-    d <- make_population(freqs, N = 30)
-    d$Population <- p
-    d
-  }))
-  mv     <- to_mv(pops[, setdiff(names(pops), "Population")])
-  groups <- factor(pops$Population)
-  list(graph = popgraph(mv, groups), data = mv, groups = groups)
-}
-
 test_that("location mode returns valid per-edge p-values", {
   sg <- tryCatch(simulate_small_graph(), error = function(e) skip(conditionMessage(e)))
   res <- asymmetry_significance(sg$graph, data = sg$data, groups = sg$groups,
@@ -121,14 +102,6 @@ test_that("location mode returns valid per-edge p-values", {
   expect_true(all(res$p_value >= 0 & res$p_value <= 1))
 })
 
-test_that("support mode returns ordered confidence bounds", {
-  sg <- tryCatch(simulate_small_graph(), error = function(e) skip(conditionMessage(e)))
-  res <- asymmetry_significance(sg$graph, data = sg$data, groups = sg$groups,
-                                mode = "support", nperm = 49, pendants = "keep")
-  expect_named(res, expected_cols)
-  ok <- !is.na(res$ci_low) & !is.na(res$ci_high)
-  expect_true(all(res$ci_low[ok] <= res$ci_high[ok]))
-})
 
 # ---------------------------------------------------------------------------
 # Pendant (leaf) edge handling

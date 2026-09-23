@@ -15,8 +15,7 @@ asymmetry_bandwidth(graph, nperm = 999, ...)
 }
 \value{
 A \code{data.frame} with columns \code{from}, \code{to},
-  \code{delta}, \code{statistic}, \code{p_value}, \code{ci_low},
-  \code{ci_high} (the last two \code{NA} for this mode).
+  \code{delta}, \code{statistic}, and \code{p_value}.
 }
 \description{
 Tests whether the asymmetry on each edge arises from the specific alignment

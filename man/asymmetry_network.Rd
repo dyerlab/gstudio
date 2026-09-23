@@ -20,8 +20,7 @@ asymmetry_network(graph, nperm = 999, rewire = c("degree", "full"), ...)
 \value{
 A one-row \code{data.frame} with columns \code{from} and \code{to}
   equal to \code{NA}, \code{delta} and \code{statistic} equal to the observed
-  mean \eqn{|\Delta|}, the \code{p_value}, and \code{ci_low}/\code{ci_high}
-  equal to \code{NA}.
+  mean \eqn{|\Delta|}, and the \code{p_value}.
 }
 \description{
 Tests whether the overall amount of directional asymmetry in a Population

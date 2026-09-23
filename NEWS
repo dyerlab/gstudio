@@ -1,6 +1,9 @@
 gstudio 1.14 - 20260610
 -----------------
 * [ADD] Added asymmetry_significance() wrapper for testing the significance of the edge asymmetry index, with mode = c("permutation","jackknife","bandwidth","network") dispatching to new base functions asymmetry_permutation() (fixed-topology label permutation), asymmetry_jackknife() (within-stratum bootstrap stability CIs), asymmetry_bandwidth() (bandwidth-alignment permutation), and asymmetry_network() (rewiring null). Returns a tidy per-edge data.frame.
+* [CHANGE] (1.14.4) Reorganised asymmetry_significance() as a hierarchy of successively conditioned permutation tests, with mode = c("existence","location","mechanism") replacing the earlier mode names ("network","permutation","bandwidth"). Each mode is now documented by the ecological/evolutionary hypothesis it tests and what failing to reject it implies. Results no longer carry the always-NA ci_low/ci_high columns, and the three base functions asymmetry_network(), asymmetry_permutation(), and asymmetry_bandwidth() return the same five columns.
+* [ADD] (1.14.4) Added asymmetry_ci(), a within-stratum bootstrap confidence interval on each edge's asymmetry index for reporting its magnitude (e.g. Delta = X, 95% CI: low-high). Returns an edge_support column giving the proportion of resamples in which the edge was re-estimated, since the interval is conditional on the edge being present. Replaces asymmetry_jackknife() and the former "support"/"jackknife" mode of asymmetry_significance(); this is an estimate, not a hypothesis test, so it is no longer offered as a significance mode.
+* [FIX] (1.14.4) Bootstrap resampling of a stratum containing a single individual now resamples that individual rather than drawing from 1:n (base R sample() gotcha).
 
 gstudio 1.13 - 20260216
 -----------------

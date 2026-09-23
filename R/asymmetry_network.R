@@ -26,8 +26,7 @@
 #'
 #' @return A one-row \code{data.frame} with columns \code{from} and \code{to}
 #'   equal to \code{NA}, \code{delta} and \code{statistic} equal to the observed
-#'   mean \eqn{|\Delta|}, the \code{p_value}, and \code{ci_low}/\code{ci_high}
-#'   equal to \code{NA}.
+#'   mean \eqn{|\Delta|}, and the \code{p_value}.
 #'
 #' @seealso \code{\link{asymmetry_significance}}, \code{\link{randomize_graph}},
 #'   \code{\link{graph_asymmetries}}
@@ -70,8 +69,6 @@ asymmetry_network <- function(graph, nperm = 999,
     delta     = obs_stat,
     statistic = obs_stat,
     p_value   = p_value,
-    ci_low    = NA_real_,
-    ci_high   = NA_real_,
     stringsAsFactors = FALSE
   )
 }

@@ -8,7 +8,7 @@ asymmetry_significance(
   graph,
   data = NULL,
   groups = NULL,
-  mode = c("existence", "location", "mechanism", "support"),
+  mode = c("existence", "location", "mechanism"),
   nperm = 999,
   pendants = c("warn", "keep", "drop"),
   ...
@@ -20,18 +20,17 @@ a numeric \code{weight} edge attribute (the same input accepted by
 \code{\link{graph_asymmetries}}).}
 
 \item{data}{The multivariate genotype matrix originally passed to
-\code{\link{popgraph}} (via \code{\link{to_mv}}).  Required for the
-\code{"location"} and \code{"support"} modes, which recompute the
-graph from individuals; ignored otherwise.}
+\code{\link{popgraph}} (via \code{\link{to_mv}}).  Required for
+\code{mode = "location"}, which recomputes edge weights from individuals;
+ignored otherwise.}
 
 \item{groups}{A factor of stratum membership, one entry per row of
-\code{data}.  Required for the \code{"location"} and \code{"support"}
-modes; ignored otherwise.}
+\code{data}.  Required for \code{mode = "location"}; ignored otherwise.}
 
-\item{mode}{The resampling procedure to use.  One of \code{"existence"}
-(default), \code{"location"}, \code{"mechanism"}, or \code{"support"}.}
+\item{mode}{The permutation test to use.  One of \code{"existence"}
+(default), \code{"location"}, or \code{"mechanism"}.}
 
-\item{nperm}{Number of permutations / resamples (default 999).}
+\item{nperm}{Number of permutations (default 999).}
 
 \item{pendants}{How to treat \emph{pendant} (leaf) edges — edges incident to
 a degree-one node.  On such an edge the directional weight out of the leaf
@@ -48,8 +47,8 @@ leaf; to remove leaf influence entirely, prune the degree-one nodes from
 \code{graph} before calling.}
 
 \item{...}{Additional arguments passed to the dispatched base function
-(e.g. \code{conf} for \code{"support"}, \code{rewire} for
-\code{"existence"}, or \code{alpha} for the internal \code{popgraph} calls).}
+(e.g. \code{rewire} for \code{"existence"}, or \code{alpha} for the
+internal \code{popgraph} calls).}
 }
 \value{
 A \code{data.frame} with one row per retained edge (one row total for
@@ -61,68 +60,73 @@ A \code{data.frame} with one row per retained edge (one row total for
       mean \eqn{|\Delta|} for \code{"existence"}).}
     \item{statistic}{The test statistic actually compared to the null
       distribution.}
-    \item{p_value}{Two-tailed permutation \emph{p}-value (\code{NA} for
-      \code{"support"}), computed with the add-one correction
+    \item{p_value}{Two-tailed permutation \emph{p}-value, computed with the
+      add-one correction
       \eqn{(1 + \#\{|\Delta_{\mathrm{null}}| \ge |\Delta_{\mathrm{obs}}|\}) /
       (1 + B)} over \eqn{B} permutations, so it is strictly positive
       (Phipson & Smyth 2010).}
-    \item{ci_low, ci_high}{Resampling confidence bounds (\code{NA} except for
-      \code{"support"}).}
   }
 }
 \description{
 Unified interface for assessing the statistical significance of the
 directional asymmetry index \eqn{\Delta_{ij}} produced by
-\code{\link{graph_asymmetries}}.  Because \eqn{\Delta_{ij}} is a function of
-the full graph topology, edges are not independent observations and no
-closed-form null is available; the alternatives below are all resampling
-procedures, each targeting a different null hypothesis.  As with
-\code{\link{genetic_structure}} and \code{\link{genetic_distance}}, the
-particular procedure is selected with \code{mode}; the default is the
-omnibus, graph-wide test, since it requires only \code{graph} and answers
-the question that should be asked before any of the edge-level modes below
-are worth running.
+\code{\link{graph_asymmetries}}.  The asymmetry index is derived from the
+conditional genetic distances among strata, the topology of the Population
+Graph, and the node bandwidths estimated from them, none of which has a
+closed-form sampling distribution; inference must therefore rely on
+resampling.  As with \code{\link{genetic_structure}} and
+\code{\link{genetic_distance}}, the particular test is selected with
+\code{mode}; the default is the omnibus, graph-wide test, since it requires
+only \code{graph} and answers the question that should be asked before any
+of the edge-level modes are worth running.
 }
 \details{
-The four modes form a hierarchy of interest, from an omnibus test of the
-whole graph down to the evidentiary support for a single edge, and each
-level's question is narrower than -- and conditional on -- the one above it:
+Significance is assessed by permutation through a hierarchy of successively
+conditioned hypotheses: whether the graph shows any directional structure at
+all (\code{"existence"}), which edges carry it (\code{"location"}), and
+whether an edge's asymmetry reflects properties of the populations it
+connects (\code{"mechanism"}).  Each question is only worth asking once the
+one before it has been rejected.  For edges that survive this hierarchy,
+\code{\link{asymmetry_ci}} provides a bootstrap confidence interval on
+\eqn{\Delta_{ij}} for reporting its magnitude.
 \describe{
-  \item{existence}{\strong{(default) Is there any asymmetry?}  \eqn{H_0}:
-    \eqn{\Delta_{ij} = 0} for every edge in the graph -- is there any
-    asymmetry anywhere?  The graph is rewired to random graphs of the same
-    size or degree distribution and the observed graph-level mean
-    \eqn{|\Delta|} is compared to that null distribution.  Failing to
-    reject leaves no basis for treating any single edge as asymmetric, and
-    no reason to proceed to the edge-level modes below.  Operates on
-    \code{graph} alone.  See \code{\link{asymmetry_network}}.}
-  \item{location}{\strong{Which edge(s)?}  Given that asymmetry may exist
-    somewhere in the graph, \eqn{H_0} for a given edge is that its
-    \eqn{\Delta_{ij}} is no larger than fixed-topology sampling noise would
-    produce; the observed adjacency is held fixed while individual labels
-    are permuted across strata, edge weights are recomputed on the original
-    edge set, and \eqn{\Delta_{ij}} is recalculated.  Failing to reject
-    means this edge does not stand out as asymmetric, whatever the
-    existence result.  Requires \code{data} and \code{groups}.  See
-    \code{\link{asymmetry_permutation}}.}
-  \item{mechanism}{\strong{Why that edge?}  Given an edge that does stand
-    out, \eqn{H_0} is that the specific pairing of source- and sink-like
-    bandwidths on it is exchangeable with any other pairing; node
-    bandwidths \eqn{b_i} are permuted across nodes while the distances and
-    adjacency are held fixed.  Failing to reject means the edge's direction
-    is not explained by its endpoints' relative bandwidths -- if the
-    asymmetry is real, something other than node size is producing it.
-    Operates on \code{graph} alone.  See \code{\link{asymmetry_bandwidth}}.}
-  \item{support}{\strong{How much to trust it?}  For an edge you are
-    otherwise prepared to call asymmetric, the question is whether that
-    estimate itself has support: is \eqn{\Delta_{ij}}'s direction stable, or
-    an artifact of which individuals happened to be sampled?  Individuals
-    are resampled with replacement within each stratum, the graph is
-    re-estimated, and a confidence interval for \eqn{\Delta_{ij}} is formed
-    across resamples.  A confidence interval straddling zero means the
-    direction lacks the evidentiary support to be reported on its own,
-    however it fared on the modes above.  Requires \code{data} and
-    \code{groups}.  See \code{\link{asymmetry_jackknife}}.}
+  \item{existence}{\strong{(default) Is there any asymmetry?}  This
+    hypothesis tests whether gene flow across the whole system has
+    directional structure, such as source--sink dynamics, range expansion,
+    or movement along currents, winds or downstream corridors, beyond what
+    any network of populations with the same size and connectivity would
+    show.  The graph is rewired to random graphs of the same size or degree
+    distribution and the observed graph-level mean \eqn{|\Delta|} is
+    compared to that null distribution.  Failing to reject this null
+    indicates that the overall asymmetry in the graph is no greater than a
+    randomly connected set of populations would produce, so there is no
+    evidence that gene flow in this system has a preferred direction, and no
+    basis for asking which edges carry it.  Operates on \code{graph} alone.
+    See \code{\link{asymmetry_network}}.}
+  \item{location}{\strong{Which edge(s)?}  This hypothesis tests whether a
+    particular pair of connected populations exchanges genes in one
+    direction more than the other, marking that connection as a specific
+    corridor of directional gene flow rather than just part of the general
+    pattern of connectivity.  The observed adjacency is held fixed while
+    individual labels are permuted across strata, edge weights are
+    recomputed on the original edge set, and \eqn{\Delta_{ij}} is
+    recalculated.  Failing to reject this null indicates that the apparent
+    directionality between these two populations is no stronger than would
+    be seen if individuals were assigned to populations at random, so this
+    connection cannot be singled out as a directional corridor, even if gene
+    flow across the system as a whole has a preferred direction.  Requires
+    \code{data} and \code{groups}.  See \code{\link{asymmetry_permutation}}.}
+  \item{mechanism}{\strong{Why that edge?}  This hypothesis tests whether
+    the apparent direction of gene flow along an edge comes from differences
+    between the two populations themselves (how genetically close or
+    isolated each is from its own neighbours, the kind of difference that
+    separates a source from a sink) rather than from where they sit in the
+    wider network of connectivity.  Node bandwidths \eqn{b_i} are permuted
+    across nodes while the distances and adjacency are held fixed.  Failing
+    to reject this null indicates that the edge's asymmetry comes from the
+    fixed structure of the graph (its topology, node degrees and edge
+    distances), not from which bandwidth each endpoint carries.  Operates on
+    \code{graph} alone.  See \code{\link{asymmetry_bandwidth}}.}
 }
 }
 \examples{
@@ -132,33 +136,37 @@ mv     <- to_mv(arapat)
 groups <- arapat$Population
 graph  <- popgraph(mv, groups)
 
-# Existence: is there any asymmetry in the graph at all? (default)
+# Existence: is there any directional structure in the graph? (default)
 asymmetry_significance(graph, nperm = 199)
 
-# Location: which edge(s) are asymmetric?
+# Location: which edge(s) carry it?
 asymmetry_significance(graph, data = mv, groups = groups,
                        mode = "location", nperm = 99)
 
-# Mechanism: is a specific node bandwidth pairing driving an edge?
+# Mechanism: does an edge's asymmetry reflect its populations' bandwidths?
 asymmetry_significance(graph, mode = "mechanism", nperm = 199)
 
-# Support: how much confidence do we have in an edge's direction?
-asymmetry_significance(graph, data = mv, groups = groups,
-                       mode = "support", nperm = 99)
+# Then report the magnitude of a retained edge with a confidence interval
+asymmetry_ci(graph, data = mv, groups = groups, nboot = 99)
 }
 
 }
 \references{
 Dyer RJ, Nason JD (2004) Population Graphs: the graph theoretic shape of
 genetic structure. \emph{Evolution} \strong{58}: 1605--1615.
+
+Phipson B, Smyth GK (2010) Permutation p-values should never be zero:
+calculating exact p-values when permutations are randomly drawn.
+\emph{Statistical Applications in Genetics and Molecular Biology}
+\strong{9}: Article 39.
 }
 \seealso{
 \code{\link{graph_asymmetries}} for the asymmetry computation;
   \code{\link{asymmetry_network}} (\code{"existence"}),
-  \code{\link{asymmetry_permutation}} (\code{"location"}),
-  \code{\link{asymmetry_bandwidth}} (\code{"mechanism"}),
-  \code{\link{asymmetry_jackknife}} (\code{"support"}) for the individual
-  procedures.
+  \code{\link{asymmetry_permutation}} (\code{"location"}), and
+  \code{\link{asymmetry_bandwidth}} (\code{"mechanism"}) for the individual
+  tests; \code{\link{asymmetry_ci}} for confidence intervals on
+  \eqn{\Delta_{ij}}.
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
