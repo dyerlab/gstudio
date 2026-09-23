@@ -38,7 +38,7 @@ because rewiring destroys the identity of individual edges, a per-edge
 graphs).  The test therefore returns a single row summarising the whole
 graph.  For inference about specific edges of a graph already accepted as
 significant, prefer \code{\link{asymmetry_permutation}}.  Usually called
-through \code{\link{asymmetry_significance}} with \code{mode = "network"}.
+through \code{\link{asymmetry_significance}} with \code{mode = "existence"}.
 }
 \seealso{
 \code{\link{asymmetry_significance}}, \code{\link{randomize_graph}},

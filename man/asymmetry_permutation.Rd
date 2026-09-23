@@ -44,7 +44,7 @@ on the permuted labels with \code{alpha = 1}, which retains all node pairs so
 that the returned weighted adjacency is the full conditional-distance matrix;
 the observed edges then read their permuted weights from that matrix.  This is
 usually called through \code{\link{asymmetry_significance}} with
-\code{mode = "permutation"}.
+\code{mode = "location"}.
 }
 \seealso{
 \code{\link{asymmetry_significance}}, \code{\link{graph_asymmetries}}

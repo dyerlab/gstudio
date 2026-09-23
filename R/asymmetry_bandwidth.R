@@ -12,7 +12,7 @@
 #' @details
 #' Operates on the graph alone (no individual genotype data are required).
 #' Usually called through \code{\link{asymmetry_significance}} with
-#' \code{mode = "bandwidth"}.
+#' \code{mode = "mechanism"}.
 #'
 #' @param graph An undirected weighted \code{popgraph}/\code{igraph} object.
 #' @param nperm Number of bandwidth permutations (default 999).

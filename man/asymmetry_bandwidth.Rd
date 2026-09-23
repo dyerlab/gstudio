@@ -30,7 +30,7 @@ gravity," isolating the bandwidth assignment from both distance and topology.
 \details{
 Operates on the graph alone (no individual genotype data are required).
 Usually called through \code{\link{asymmetry_significance}} with
-\code{mode = "bandwidth"}.
+\code{mode = "mechanism"}.
 }
 \seealso{
 \code{\link{asymmetry_significance}}, \code{\link{graph_asymmetries}}

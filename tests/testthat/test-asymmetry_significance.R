@@ -1,6 +1,6 @@
 # Tests for asymmetry_significance() and its base functions.
-# Graph-only modes ("bandwidth", "network") run on a hand-built popgraph.
-# Data-driven modes ("permutation", "jackknife") are exercised on a small
+# Graph-only modes ("mechanism", "existence") run on a hand-built popgraph.
+# Data-driven modes ("location", "support") are exercised on a small
 # simulated dataset and skipped if the simulation helpers are unavailable.
 
 # ---------------------------------------------------------------------------
@@ -38,13 +38,13 @@ test_that("asymmetry_significance() rejects a directed graph", {
 test_that("asymmetry_significance() requires a weight attribute", {
   g <- igraph::make_ring(4)
   igraph::V(g)$name <- LETTERS[1:4]
-  expect_error(asymmetry_significance(g, mode = "bandwidth"), "weight")
+  expect_error(asymmetry_significance(g, mode = "mechanism"), "weight")
 })
 
 test_that("data-driven modes require data and groups", {
   g <- make_triangle()
-  expect_error(asymmetry_significance(g, mode = "permutation"), "requires")
-  expect_error(asymmetry_significance(g, mode = "jackknife"),   "requires")
+  expect_error(asymmetry_significance(g, mode = "location"), "requires")
+  expect_error(asymmetry_significance(g, mode = "support"),   "requires")
 })
 
 test_that("unknown mode is rejected", {
@@ -56,21 +56,21 @@ test_that("unknown mode is rejected", {
 # Graph-only modes: return shape and value ranges
 # ---------------------------------------------------------------------------
 
-test_that("bandwidth mode returns the standard columns and valid p-values", {
+test_that("mechanism mode returns the standard columns and valid p-values", {
   g   <- make_triangle()
-  res <- asymmetry_significance(g, mode = "bandwidth", nperm = 99)
+  res <- asymmetry_significance(g, mode = "mechanism", nperm = 99)
 
   expect_s3_class(res, "data.frame")
   expect_named(res, expected_cols)
   expect_equal(nrow(res), igraph::ecount(g))
   expect_true(all(res$p_value >= 0 & res$p_value <= 1))
   expect_true(all(is.na(res$ci_low) & is.na(res$ci_high)))
-  expect_identical(attr(res, "mode"), "bandwidth")
+  expect_identical(attr(res, "mode"), "mechanism")
 })
 
-test_that("network mode returns a single graph-level row", {
+test_that("existence mode returns a single graph-level row", {
   g   <- make_triangle()
-  res <- asymmetry_significance(g, mode = "network", nperm = 99)
+  res <- asymmetry_significance(g, mode = "existence", nperm = 99)
 
   expect_named(res, expected_cols)
   expect_equal(nrow(res), 1L)
@@ -82,8 +82,8 @@ test_that("permutation p-values are strictly positive (add-one correction)", {
   # The add-one estimator (1 + #{>=}) / (1 + B) can never be exactly zero, even
   # when no permutation exceeds the observed statistic.
   g  <- make_triangle()
-  rb <- asymmetry_significance(g, mode = "bandwidth", nperm = 99)
-  rn <- asymmetry_significance(g, mode = "network",   nperm = 99)
+  rb <- asymmetry_significance(g, mode = "mechanism", nperm = 99)
+  rn <- asymmetry_significance(g, mode = "existence",   nperm = 99)
   expect_true(all(rb$p_value > 0))
   expect_true(rn$p_value > 0)
   # Smallest attainable value is 1 / (1 + nperm).
@@ -112,19 +112,19 @@ simulate_small_graph <- function() {
   list(graph = popgraph(mv, groups), data = mv, groups = groups)
 }
 
-test_that("permutation mode returns valid per-edge p-values", {
+test_that("location mode returns valid per-edge p-values", {
   sg <- tryCatch(simulate_small_graph(), error = function(e) skip(conditionMessage(e)))
   res <- asymmetry_significance(sg$graph, data = sg$data, groups = sg$groups,
-                                mode = "permutation", nperm = 49, pendants = "keep")
+                                mode = "location", nperm = 49, pendants = "keep")
   expect_named(res, expected_cols)
   expect_equal(nrow(res), igraph::ecount(sg$graph))
   expect_true(all(res$p_value >= 0 & res$p_value <= 1))
 })
 
-test_that("jackknife mode returns ordered confidence bounds", {
+test_that("support mode returns ordered confidence bounds", {
   sg <- tryCatch(simulate_small_graph(), error = function(e) skip(conditionMessage(e)))
   res <- asymmetry_significance(sg$graph, data = sg$data, groups = sg$groups,
-                                mode = "jackknife", nperm = 49, pendants = "keep")
+                                mode = "support", nperm = 49, pendants = "keep")
   expect_named(res, expected_cols)
   ok <- !is.na(res$ci_low) & !is.na(res$ci_high)
   expect_true(all(res$ci_low[ok] <= res$ci_high[ok]))
@@ -151,14 +151,14 @@ make_pendant_graph <- function() {
 test_that("pendants = 'warn' (default) warns but keeps leaf edges", {
   g <- make_pendant_graph()
   expect_warning(
-    res <- asymmetry_significance(g, mode = "bandwidth", nperm = 49),
+    res <- asymmetry_significance(g, mode = "mechanism", nperm = 49),
     "pendant")
   expect_equal(nrow(res), igraph::ecount(g))
 })
 
 test_that("pendants = 'drop' removes leaf edges and records the count", {
   g   <- make_pendant_graph()
-  res <- asymmetry_significance(g, mode = "bandwidth", nperm = 49,
+  res <- asymmetry_significance(g, mode = "mechanism", nperm = 49,
                                 pendants = "drop")
   expect_false(any(res$from == "D" | res$to == "D"))
   expect_equal(attr(res, "pendants_dropped"), 1L)
@@ -168,7 +168,7 @@ test_that("pendants = 'drop' removes leaf edges and records the count", {
 test_that("pendants = 'keep' is silent and keeps every edge", {
   g <- make_pendant_graph()
   expect_warning(
-    res <- asymmetry_significance(g, mode = "bandwidth", nperm = 49,
+    res <- asymmetry_significance(g, mode = "mechanism", nperm = 49,
                                   pendants = "keep"),
     regexp = NA)
   expect_equal(nrow(res), igraph::ecount(g))
@@ -177,6 +177,6 @@ test_that("pendants = 'keep' is silent and keeps every edge", {
 test_that("a graph with no pendants does not warn", {
   g <- make_triangle()
   expect_warning(
-    asymmetry_significance(g, mode = "bandwidth", nperm = 49),
+    asymmetry_significance(g, mode = "mechanism", nperm = 49),
     regexp = NA)
 })

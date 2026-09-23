@@ -17,7 +17,7 @@
 #' interval.  Resampled edges are matched to the observed edges by unordered
 #' endpoint pair, and \eqn{\Delta} is sign-corrected to the observed
 #' orientation.  Usually called through \code{\link{asymmetry_significance}}
-#' with \code{mode = "jackknife"}.
+#' with \code{mode = "support"}.
 #'
 #' @param graph An undirected weighted \code{popgraph}/\code{igraph} object
 #'   (the observed graph, used to define the edge set and orientations).

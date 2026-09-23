@@ -15,7 +15,7 @@
 #' graphs).  The test therefore returns a single row summarising the whole
 #' graph.  For inference about specific edges of a graph already accepted as
 #' significant, prefer \code{\link{asymmetry_permutation}}.  Usually called
-#' through \code{\link{asymmetry_significance}} with \code{mode = "network"}.
+#' through \code{\link{asymmetry_significance}} with \code{mode = "existence"}.
 #'
 #' @param graph An undirected weighted \code{popgraph}/\code{igraph} object.
 #' @param nperm Number of rewired graphs to generate (default 999).

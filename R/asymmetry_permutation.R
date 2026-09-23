@@ -22,7 +22,7 @@
 #' that the returned weighted adjacency is the full conditional-distance matrix;
 #' the observed edges then read their permuted weights from that matrix.  This is
 #' usually called through \code{\link{asymmetry_significance}} with
-#' \code{mode = "permutation"}.
+#' \code{mode = "location"}.
 #'
 #' @param graph An undirected weighted \code{popgraph}/\code{igraph} object.
 #' @param data The multivariate genotype matrix passed to \code{\link{popgraph}}.
