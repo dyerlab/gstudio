@@ -30,23 +30,21 @@ asymmetric_popgraph <- function(graph, perplexity = 4, tol = 1e-5, max_iter = 10
 
   w <- asymmetric_weights(graph, perplexity = perplexity, tol = tol, max_iter = max_iter)
 
-  # Each undirected edge becomes two directed edges
-  edge_mat <- rbind(
-    cbind(as.character(w$i), as.character(w$j)),
-    cbind(as.character(w$j), as.character(w$i))
-  )
-  weights <- c(w$dij, w$dji)
-
-  g_dir <- igraph::graph_from_edgelist(edge_mat, directed = TRUE)
-  igraph::E(g_dir)$weight <- weights
-
-  # Carry over any vertex attributes (e.g. coordinates, labels)
-  v_names <- igraph::V(g_dir)$name
-  src_names <- igraph::V(graph)$name
+  # Start from the full vertex set (in the original order) so isolated nodes
+  # are retained, and carry over all vertex attributes (e.g. coordinates, labels)
+  g_dir <- igraph::make_empty_graph(n = igraph::vcount(graph), directed = TRUE)
   for (attr in igraph::vertex_attr_names(graph)) {
-    if (attr == "name") next
-    src_vals <- igraph::vertex_attr(graph, attr)
-    igraph::vertex_attr(g_dir, attr) <- src_vals[match(v_names, src_names)]
+    igraph::vertex_attr(g_dir, attr) <- igraph::vertex_attr(graph, attr)
+  }
+
+  # Each undirected edge becomes two directed edges
+  if (!is.null(w) && nrow(w) > 0) {
+    edge_mat <- rbind(
+      cbind(as.character(w$i), as.character(w$j)),
+      cbind(as.character(w$j), as.character(w$i))
+    )
+    g_dir <- igraph::add_edges(g_dir, as.vector(t(edge_mat)),
+                               weight = c(w$dij, w$dji))
   }
 
   return(as.popgraph(g_dir))

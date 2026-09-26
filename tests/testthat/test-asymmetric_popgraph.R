@@ -51,6 +51,18 @@ test_that("vertex attributes are carried over", {
   expect_equal(sort(igraph::V(result)$label), sort(igraph::V(g)$label))
 })
 
+test_that("isolated vertices are retained with their attributes", {
+  g <- make_test_graph()
+  g <- igraph::add_vertices(g, 1, name = "E", label = "pop_E")
+  result <- asymmetric_popgraph(g)
+
+  expect_equal(igraph::vcount(result), igraph::vcount(g))
+  expect_equal(igraph::V(result)$name, igraph::V(g)$name)
+  expect_equal(igraph::V(result)$label, igraph::V(g)$label)
+  expect_equal(unname(igraph::degree(result, "E")), 0)
+  expect_equal(igraph::ecount(result), 2 * igraph::ecount(g))
+})
+
 test_that("edge weights sum to twice the total undirected cGD", {
   g <- make_test_graph()
   result <- asymmetric_popgraph(g)
