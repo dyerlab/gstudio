@@ -44,6 +44,7 @@ Suggests:
     knitr,
     rmarkdown,
     ggraph,
+    gifski,
     leaflet,
     leaflet.minicharts
 VignetteBuilder: knitr

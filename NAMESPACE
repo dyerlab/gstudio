@@ -36,6 +36,7 @@ export(Pe)
 export(addAlleleFrequencies)
 export(allele_counts)
 export(alleles)
+export(animate_popgraphs)
 export(as.locus)
 export(as.popgraph)
 export(asymmetric_popgraph)
@@ -155,6 +156,7 @@ importFrom(dplyr,
   summarize
 )
 importFrom(ggplot2,
+  .data,
   aes,
   element_blank,
   geom_line,
