@@ -20,7 +20,9 @@ asymmetry_network(graph, nperm = 999, rewire = c("degree", "full"), ...)
 \value{
 A one-row \code{data.frame} with columns \code{from} and \code{to}
   equal to \code{NA}, \code{delta} and \code{statistic} equal to the observed
-  mean \eqn{|\Delta|}, and the \code{p_value}.
+  mean \eqn{|\Delta|}, and the \code{p_value}.  Rewired graphs for which the
+  asymmetry cannot be computed (e.g. those containing isolated nodes) are
+  excluded from the null distribution.
 }
 \description{
 Tests whether the overall amount of directional asymmetry in a Population

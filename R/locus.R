@@ -325,6 +325,21 @@ rep.locus <- function( x, times,... ){
 
 
 
+# Internal: align two locus vectors for element-wise arithmetic.  A length-one
+# operand is recycled; otherwise the lengths must match.
+#' @keywords internal
+#' @noRd
+.locus_pairs <- function( e1, e2 ){
+  n1 <- length(e1)
+  n2 <- length(e2)
+  if( n1 != n2 && n1 != 1 && n2 != 1 )
+    stop(sprintf("Cannot combine locus vectors of different lengths (%d and %d).", n1, n2))
+  n <- max(n1, n2)
+  list( e1 = e1[ if( n1 == 1 ) rep(1, n) else seq_len(n) ],
+        e2 = e2[ if( n2 == 1 ) rep(1, n) else seq_len(n) ] )
+}
+
+
 #' Overload '+' operator for pairs of \code{locus} objects
 #' 
 #' An overload of the \code{+} operator for \code{locus} objects that
@@ -345,12 +360,16 @@ rep.locus <- function( x, times,... ){
 #' off
 #'
 `+.locus` <- function( e1, e2 ){
-  if( length(e1) > 1 ){
-    ret <- locus()
-    for( i in 1:length(e1)){
-      ret <- c( ret, e1[i] + e2[i] )
-    }
-    return( ret[-1] )
+  if( length(e1) > 1 || length(e2) > 1 ){
+    p <- .locus_pairs( e1, e2 )
+    miss <- is.na(p$e1) | is.na(p$e2)
+    if( any(miss) )
+      warning(sprintf("%d missing locus pair(s) cannot be added; returning NA for those offspring.",
+                      sum(miss)))
+    ret <- lapply( seq_along(miss), function(i) {
+      if( miss[i] ) locus() else p$e1[i] + p$e2[i]
+    })
+    return( do.call( c, ret ) )
   }
 
   if( is.na(e1) || is.na(e2))
@@ -400,12 +419,10 @@ rep.locus <- function( x, times,... ){
 `-.locus` <- function( e1, e2 ){
   
   
-  if( length(e1) > 1 ){
-    ret <- locus()
-    for( i in 1:length(e1)){
-      ret <- c( ret, e1[i] - e2[i] )
-    }
-    return( ret[-1] )
+  if( length(e1) > 1 || length(e2) > 1 ){
+    p <- .locus_pairs( e1, e2 )
+    ret <- lapply( seq_along(p$e1), function(i) p$e1[i] - p$e2[i] )
+    return( do.call( c, ret ) )
   }
   
   

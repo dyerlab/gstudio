@@ -52,6 +52,42 @@ test_that("unknown mode is rejected, including the retired 'support' mode", {
   expect_error(asymmetry_significance(g, mode = "support"))
 })
 
+test_that("data/groups without mode = 'location' warns", {
+  g <- make_triangle()
+  expect_warning(asymmetry_significance(g, data = matrix(0, 3, 2), groups = 1:3,
+                                        nperm = 9),
+                 "only used by mode = 'location'")
+})
+
+test_that("location mode ignores alpha with a warning instead of failing", {
+  sg <- tryCatch(simulate_small_graph(), error = function(e) skip(conditionMessage(e)))
+  set.seed(1)
+  expect_warning(
+    res <- asymmetry_significance(sg$graph, data = sg$data, groups = sg$groups,
+                                  mode = "location", nperm = 5, alpha = 0.01,
+                                  pendants = "keep"),
+    "'alpha' is ignored")
+  expect_true(all(res$p_value > 0 & res$p_value <= 1))
+})
+
+test_that("groups that do not match the graph nodes are rejected", {
+  sg <- tryCatch(simulate_small_graph(), error = function(e) skip(conditionMessage(e)))
+  bad <- factor(rep(c("X", "Y", "Z"), length.out = length(sg$groups)))
+  expect_error(asymmetry_significance(sg$graph, data = sg$data, groups = bad,
+                                      mode = "location", nperm = 5),
+               "no individuals for these graph nodes")
+  expect_error(asymmetry_ci(sg$graph, sg$data, bad, nboot = 5),
+               "no individuals for these graph nodes")
+})
+
+test_that("existence mode survives rewired graphs with isolated nodes", {
+  g <- make_triangle()
+  set.seed(1)
+  res <- asymmetry_significance(g, nperm = 20, rewire = "full")
+  expect_equal(nrow(res), 1L)
+  expect_true(res$p_value > 0 && res$p_value <= 1)
+})
+
 # ---------------------------------------------------------------------------
 # Graph-only modes: return shape and value ranges
 # ---------------------------------------------------------------------------

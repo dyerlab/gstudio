@@ -45,11 +45,12 @@ A \code{data.frame} with one row per retained edge and the columns:
       which the edge was present.}
     \item{ci_low, ci_high}{Percentile bootstrap bounds at level
       \code{conf}.}
-    \item{edge_support}{Proportion of resamples in which the edge was
-      present (the denominator of the interval).}
+    \item{edge_support}{Proportion of successful resamples in which the
+      edge was present (the denominator of the interval).}
   }
-  The confidence level and number of resamples are stored in
-  \code{attr(x, "conf")} and \code{attr(x, "nboot")}.
+  The confidence level, number of resamples requested, and number of
+  resamples that failed are stored in \code{attr(x, "conf")},
+  \code{attr(x, "nboot")}, and \code{attr(x, "nboot_failed")}.
 }
 \description{
 Estimates how strongly, and how precisely, gene flow between two connected
@@ -85,6 +86,12 @@ proportion of resamples retaining the edge is returned as
 marks an edge whose very existence, not just its asymmetry, is unstable.
 Resampled edges are matched to observed edges by unordered endpoint pair,
 and \eqn{\Delta} is sign-corrected to the observed orientation.
+
+A resample for which the graph or its asymmetries cannot be estimated at
+all (for example because the re-estimated graph contains an isolated node)
+carries no information about any edge.  Such resamples are excluded from
+every interval and from the \code{edge_support} denominator, counted in
+\code{attr(x, "nboot_failed")}, and reported with a warning.
 }
 \examples{
 \donttest{

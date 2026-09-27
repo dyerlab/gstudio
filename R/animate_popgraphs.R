@@ -10,7 +10,8 @@
 #'
 #' @param graphs A list of \code{popgraph} (or \code{igraph}) objects.  If the
 #'  list is named, the names are used as frame titles.
-#' @param file The path of the GIF file to write (default "popgraphs.gif").
+#' @param file The path of the GIF file to write.  Defaults to a temporary
+#'  file, whose path is reported with a message and returned.
 #' @param layout How to place the nodes.  One of:
 #'  \itemize{
 #'    \item A character shorthand for an \code{igraph} layout: "fr" (the
@@ -32,32 +33,59 @@
 #' @param labels A flag indicating whether node names are drawn (default TRUE).
 #' @param loop Should the animation loop?  Either \code{TRUE} (the default)
 #'  to loop forever, \code{FALSE} to play once, or a number of repetitions.
+#' @param frame_plot An optional function used to draw each frame, taking
+#'  \code{(layout, title)} and returning a \code{ggplot}.  \code{layout} is a
+#'  \code{ggraph} layout (from \code{ggraph::create_layout()}) holding every
+#'  node at its fixed position, with node columns \code{name} and
+#'  \code{present} (\code{FALSE} for nodes absent from that graph), so it can
+#'  be drawn with \code{ggraph(layout) + geom_edge_link() + ...}.  The default
+#'  (\code{NULL}) draws edges, nodes (absent nodes faded), and, if
+#'  \code{labels = TRUE}, node names.  Keep the coordinate limits fixed across
+#'  frames if you want nodes to stay still.
 #' @return The path to the GIF file, invisibly.
 #' @importFrom ggplot2 .data
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' \donttest{
-#' if (requireNamespace("gifski", quietly = TRUE)) {
+#' if (requireNamespace("gifski", quietly = TRUE) &&
+#'     requireNamespace("ggraph", quietly = TRUE)) {
 #'   data(lopho)
 #'   data(upiga)
 #'   graphs <- list(Lophocereus = lopho, Upiga = upiga)
 #'   out <- file.path(tempdir(), "baja.gif")
 #'   set.seed(42)
 #'   animate_popgraphs(graphs, file = out, layout = "kk", delay = 2)
+#'
+#'   # Style the frames yourself with ggraph
+#'   if (requireNamespace("ggraph", quietly = TRUE)) {
+#'     my_frame <- function(layout, title) {
+#'       ggraph::ggraph(layout) +
+#'         ggraph::geom_edge_link(colour = "tomato") +
+#'         ggraph::geom_node_point(ggplot2::aes(alpha = present), size = 5) +
+#'         ggplot2::ggtitle(title) +
+#'         ggplot2::theme_void()
+#'     }
+#'     animate_popgraphs(graphs, file = out, frame_plot = my_frame)
+#'   }
 #' }
 #' }
 animate_popgraphs <- function(graphs,
-                              file = "popgraphs.gif",
+                              file = tempfile(fileext = ".gif"),
                               layout = "fr",
                               delay = 1,
                               width = 600,
                               height = 600,
                               labels = TRUE,
-                              loop = TRUE) {
+                              loop = TRUE,
+                              frame_plot = NULL) {
 
   if (!requireNamespace("gifski", quietly = TRUE))
     stop("The 'gifski' package is required. Install it with install.packages('gifski').")
+  if (!requireNamespace("ggraph", quietly = TRUE))
+    stop("The 'ggraph' package is required. Install it with install.packages('ggraph').")
+  if (!is.null(frame_plot) && !is.function(frame_plot))
+    stop("'frame_plot' must be NULL or a function(layout, title) returning a ggplot.")
 
   if (inherits(graphs, "igraph"))
     stop("Pass a list of graphs, e.g. list(graph1, graph2), not a single graph.")
@@ -96,7 +124,13 @@ animate_popgraphs <- function(graphs,
   frames <- file.path(frame_dir, sprintf("frame_%04d.png", seq_along(graphs)))
 
   for (i in seq_along(graphs)) {
-    p <- .animation_frame(graphs[[i]], coords, titles[i], labels, xlim, ylim)
+    lay <- .animation_frame_layout(graphs[[i]], coords)
+    p <- if (is.null(frame_plot))
+      .animation_frame(lay, titles[i], labels, xlim, ylim)
+    else
+      frame_plot(lay, titles[i])
+    if (!inherits(p, "ggplot"))
+      stop("'frame_plot' must return a ggplot object.")
     grDevices::png(frames[i], width = width, height = height, res = 96)
     tryCatch(print(p), finally = grDevices::dev.off())
   }
@@ -109,6 +143,8 @@ animate_popgraphs <- function(graphs,
                  loop = loop,
                  progress = FALSE)
 
+  if (missing(file))
+    message("Animation written to ", file)
   invisible(file)
 }
 
@@ -189,38 +225,47 @@ animate_popgraphs <- function(graphs,
 }
 
 
-#' Build the plot for a single animation frame
+#' Build the fixed-position ggraph layout for a single frame
 #'
-#' Draws one graph on the shared coordinates.  Nodes absent from
-#'  \code{graph} are drawn faded so the node set is visually stable.
+#' Adds any nodes missing from \code{graph} as isolated vertices so every frame
+#'  holds the full node set, marks them with \code{present = FALSE}, and places
+#'  all nodes at the shared coordinates.
 #' @param graph An \code{igraph} object with named nodes.
 #' @param coords The \code{data.frame} (name, x, y) from \code{.animation_layout()}.
+#' @return A \code{layout_ggraph} object.
+#' @keywords internal
+#' @noRd
+.animation_frame_layout <- function(graph, coords) {
+  el <- as_edgelist(graph, names = TRUE)
+  g <- igraph::graph_from_data_frame(
+    data.frame(from = el[, 1], to = el[, 2], stringsAsFactors = FALSE),
+    directed = FALSE,
+    vertices = data.frame(name = coords$name,
+                          present = coords$name %in% V(graph)$name,
+                          stringsAsFactors = FALSE))
+  ggraph::create_layout(g, layout = "manual",
+                        x = coords$x[match(V(g)$name, coords$name)],
+                        y = coords$y[match(V(g)$name, coords$name)])
+}
+
+
+#' Build the default plot for a single animation frame
+#'
+#' Draws one frame with ggraph on the shared coordinates.  Nodes absent from
+#'  the frame's graph are drawn faded so the node set is visually stable.
+#' @param layout The \code{layout_ggraph} from \code{.animation_frame_layout()}.
 #' @param title The frame title.
 #' @param labels A flag indicating whether node names are drawn.
 #' @param xlim,ylim Fixed plot limits shared by all frames.
 #' @return A \code{ggplot} object.
 #' @keywords internal
 #' @noRd
-.animation_frame <- function(graph, coords, title, labels, xlim, ylim) {
+.animation_frame <- function(layout, title, labels, xlim, ylim) {
 
-  present <- coords$name %in% V(graph)$name
-  nodes <- coords
-  nodes$alpha <- ifelse(present, 1, 0.2)
-
-  el <- as_edgelist(graph, names = TRUE)
-  edges <- data.frame(x = coords$x[match(el[, 1], coords$name)],
-                      y = coords$y[match(el[, 1], coords$name)],
-                      xend = coords$x[match(el[, 2], coords$name)],
-                      yend = coords$y[match(el[, 2], coords$name)])
-
-  p <- ggplot2::ggplot() +
-    ggplot2::geom_segment(data = edges,
-                          ggplot2::aes(x = .data$x, y = .data$y,
-                                       xend = .data$xend, yend = .data$yend),
-                          colour = "grey50") +
-    ggplot2::geom_point(data = nodes,
-                        ggplot2::aes(x = .data$x, y = .data$y, alpha = .data$alpha),
-                        size = 4, colour = "#2c7fb8") +
+  p <- ggraph::ggraph(layout) +
+    ggraph::geom_edge_link(colour = "grey50") +
+    ggraph::geom_node_point(ggplot2::aes(alpha = ifelse(.data$present, 1, 0.2)),
+                            size = 4, colour = "#2c7fb8") +
     ggplot2::scale_alpha_identity() +
     ggplot2::coord_fixed(xlim = xlim, ylim = ylim, expand = FALSE) +
     ggplot2::labs(title = title) +
@@ -229,10 +274,9 @@ animate_popgraphs <- function(graphs,
                    plot.background = ggplot2::element_rect(fill = "white", colour = NA))
 
   if (labels)
-    p <- p + ggplot2::geom_text(data = nodes,
-                                ggplot2::aes(x = .data$x, y = .data$y,
-                                             label = .data$name, alpha = .data$alpha),
-                                vjust = -1.1, size = 3.5)
+    p <- p + ggraph::geom_node_text(ggplot2::aes(label = .data$name,
+                                                 alpha = ifelse(.data$present, 1, 0.2)),
+                                    vjust = -1.1, size = 3.5)
 
   p
 }

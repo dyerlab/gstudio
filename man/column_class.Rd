@@ -21,7 +21,9 @@ values are:
 }
 \value{
 A list of labels or indicies indicating where
- columns of the queried type exist or a list of all column classes.
+ columns of the queried type exist or a list of all column classes.  If no
+ column has the queried class, a zero-length vector is returned
+ (\code{character(0)} for labels, \code{integer(0)} for indices).
 }
 \description{
 This convienence function finds the data of a specified

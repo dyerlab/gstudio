@@ -35,6 +35,12 @@
 #' Resampled edges are matched to observed edges by unordered endpoint pair,
 #' and \eqn{\Delta} is sign-corrected to the observed orientation.
 #'
+#' A resample for which the graph or its asymmetries cannot be estimated at
+#' all (for example because the re-estimated graph contains an isolated node)
+#' carries no information about any edge.  Such resamples are excluded from
+#' every interval and from the \code{edge_support} denominator, counted in
+#' \code{attr(x, "nboot_failed")}, and reported with a warning.
+#'
 #' @param graph An undirected weighted \code{popgraph}/\code{igraph} object with
 #'   a numeric \code{weight} edge attribute (the observed graph, used to define
 #'   the edge set and orientations).
@@ -58,11 +64,12 @@
 #'       which the edge was present.}
 #'     \item{ci_low, ci_high}{Percentile bootstrap bounds at level
 #'       \code{conf}.}
-#'     \item{edge_support}{Proportion of resamples in which the edge was
-#'       present (the denominator of the interval).}
+#'     \item{edge_support}{Proportion of successful resamples in which the
+#'       edge was present (the denominator of the interval).}
 #'   }
-#'   The confidence level and number of resamples are stored in
-#'   \code{attr(x, "conf")} and \code{attr(x, "nboot")}.
+#'   The confidence level, number of resamples requested, and number of
+#'   resamples that failed are stored in \code{attr(x, "conf")},
+#'   \code{attr(x, "nboot")}, and \code{attr(x, "nboot_failed")}.
 #'
 #' @seealso \code{\link{asymmetry_significance}} for the permutation tests;
 #'   \code{\link{graph_asymmetries}} for the asymmetry computation.
@@ -91,6 +98,7 @@ asymmetry_ci <- function(graph, data, groups, nboot = 999, conf = 0.95,
   if (!is.numeric(conf) || length(conf) != 1L || conf <= 0 || conf >= 1)
     stop("'conf' must be a single number strictly between 0 and 1.")
 
+  .validate_asymmetry_groups(graph, groups)
   groups    <- factor(as.character(groups))
   g_obs     <- graph_asymmetries(graph)
   el        <- igraph::as_edgelist(g_obs, names = TRUE)
@@ -102,6 +110,7 @@ asymmetry_ci <- function(graph, data, groups, nboot = 999, conf = 0.95,
 
   strata_idx <- split(seq_along(groups), groups)
   mat <- matrix(NA_real_, nrow = ne, ncol = nboot)
+  ok  <- logical(nboot)
 
   for (b in seq_len(nboot)) {
     idx <- unlist(lapply(strata_idx,
@@ -114,6 +123,7 @@ asymmetry_ci <- function(graph, data, groups, nboot = 999, conf = 0.95,
       error = function(e) NULL
     )
     if (is.null(gb)) next
+    ok[b] <- TRUE
 
     elb <- igraph::as_edgelist(gb, names = TRUE)
     if (nrow(elb) == 0) next
@@ -132,6 +142,15 @@ asymmetry_ci <- function(graph, data, groups, nboot = 999, conf = 0.95,
     mat[, b] <- val
   }
 
+  n_ok <- sum(ok)
+  if (n_ok == 0)
+    stop("None of the ", nboot, " bootstrap resamples produced a valid graph.")
+  if (n_ok < nboot)
+    warning(sprintf(paste0(
+      "%d of %d bootstrap resamples failed to produce a valid graph and were ",
+      "excluded; edge_support and the intervals are based on the remaining %d."),
+      nboot - n_ok, nboot, n_ok))
+
   n_present <- rowSums(!is.na(mat))
   a         <- (1 - conf) / 2
   edge_q    <- function(x, p) {
@@ -146,12 +165,13 @@ asymmetry_ci <- function(graph, data, groups, nboot = 999, conf = 0.95,
     boot_mean    = ifelse(n_present > 0, rowMeans(mat, na.rm = TRUE), NA_real_),
     ci_low       = apply(mat, 1, edge_q, p = a),
     ci_high      = apply(mat, 1, edge_q, p = 1 - a),
-    edge_support = n_present / nboot,
+    edge_support = n_present / n_ok,
     stringsAsFactors = FALSE
   )
 
   ret <- .handle_pendant_edges(ret, graph, pendants)
   attr(ret, "conf")  <- conf
   attr(ret, "nboot") <- nboot
+  attr(ret, "nboot_failed") <- nboot - n_ok
   return(ret)
 }

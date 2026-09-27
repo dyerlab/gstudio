@@ -12,4 +12,7 @@ test_that("test",{
   expect_that( column_class(df,"logical"), equals("Log"))
   expect_that( column_class(df,"logical",mode="index"), equals(3) )
   
+  expect_identical( column_class(df,"locus"), character(0) )
+  expect_identical( column_class(df,"locus",mode="index"), integer(0) )
+  
 })

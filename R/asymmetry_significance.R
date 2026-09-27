@@ -88,8 +88,13 @@
 #'   leaf; to remove leaf influence entirely, prune the degree-one nodes from
 #'   \code{graph} before calling.
 #' @param ... Additional arguments passed to the dispatched base function
-#'   (e.g. \code{rewire} for \code{"existence"}, or \code{alpha} for the
-#'   internal \code{popgraph} calls).
+#'   (e.g. \code{rewire} for \code{"existence"}, or \code{tol} for the
+#'   internal \code{popgraph} calls of \code{"location"}, which always use
+#'   \code{alpha = 1}).
+#'
+#'
+#' @note Only \code{mode = "location"} uses \code{data} and \code{groups};
+#'   supplying them with another mode gives a warning.
 #'
 #' @return A \code{data.frame} with one row per retained edge (one row total for
 #'   \code{mode = "existence"}) and the columns:
@@ -164,6 +169,9 @@ asymmetry_significance <- function(graph,
     if (is.null(data) || is.null(groups))
       stop("mode = 'location' requires both 'data' and 'groups'.")
     .validate_asymmetry_data(data, groups)
+  } else if (!is.null(data) || !is.null(groups)) {
+    warning("'data' and 'groups' are only used by mode = 'location' and are ",
+            "ignored by mode = '", mode, "'.", call. = FALSE)
   }
 
   ret <- switch(
@@ -204,6 +212,22 @@ asymmetry_significance <- function(graph,
     stop("'data' must be a numeric matrix (use to_mv() on your genotypes).")
   if (length(groups) != nrow(data))
     stop("'groups' must have one entry per row of 'data'.")
+  invisible(TRUE)
+}
+
+# Every node of 'graph' must be a level of 'groups'; otherwise resampled graphs
+# can never be matched back to the observed edges.
+#' @importFrom igraph V
+#' @keywords internal
+#' @noRd
+.validate_asymmetry_groups <- function(graph, groups) {
+  missing_nodes <- setdiff(igraph::V(graph)$name, unique(as.character(groups)))
+  if (length(missing_nodes))
+    stop("'groups' has no individuals for these graph nodes: ",
+         paste(missing_nodes[seq_len(min(10, length(missing_nodes)))],
+               collapse = ", "),
+         if (length(missing_nodes) > 10) ", ..." else "",
+         ". 'groups' must be the stratum variable used to build 'graph'.")
   invisible(TRUE)
 }
 

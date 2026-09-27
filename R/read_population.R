@@ -152,7 +152,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   
   
   loci <- column_class(ret,"locus")
-  if( any(is.na(column_class(ret,"locus")) ))
+  if( !length(loci) )
     warning("There were no Loci configured with these data, you may want to look at the parameters passed.")
   
   return(ret)

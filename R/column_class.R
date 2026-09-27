@@ -12,7 +12,9 @@
 #'      \item{index}{The numerical index of the column with specified class.}
 #'    }
 #' @return A list of labels or indicies indicating where
-#'  columns of the queried type exist or a list of all column classes.
+#'  columns of the queried type exist or a list of all column classes.  If no
+#'  column has the queried class, a zero-length vector is returned
+#'  (\code{character(0)} for labels, \code{integer(0)} for indices).
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu} 
 #' @examples
@@ -49,7 +51,7 @@ column_class <- function( x, class=NULL, mode=c("label","index")[1] ) {
     cls[i] <- ifelse( length(val)>1, val[-1], val )
   }
   if( !(class %in% cls ) )
-    return( NA )
+    return( if( mode=="index" ) integer(0) else character(0) )
 
   if( mode=="label" ){
     return( nms[ cls==class ] )

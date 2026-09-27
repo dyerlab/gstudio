@@ -26,7 +26,9 @@
 #'
 #' @return A one-row \code{data.frame} with columns \code{from} and \code{to}
 #'   equal to \code{NA}, \code{delta} and \code{statistic} equal to the observed
-#'   mean \eqn{|\Delta|}, and the \code{p_value}.
+#'   mean \eqn{|\Delta|}, and the \code{p_value}.  Rewired graphs for which the
+#'   asymmetry cannot be computed (e.g. those containing isolated nodes) are
+#'   excluded from the null distribution.
 #'
 #' @seealso \code{\link{asymmetry_significance}}, \code{\link{randomize_graph}},
 #'   \code{\link{graph_asymmetries}}
@@ -55,12 +57,18 @@ asymmetry_network <- function(graph, nperm = 999,
     igraph::E(gr)$weight <- sample(w, size = ne, replace = (length(w) != ne))
     class(gr) <- c("igraph", "popgraph")
 
-    null[p] <- mean(abs(igraph::E(graph_asymmetries(gr))$delta))
+    # Rewiring (especially rewire = "full") can leave isolated nodes, for which
+    # the bandwidth is undefined; record those graphs as NA rather than abort.
+    null[p] <- tryCatch(mean(abs(igraph::E(graph_asymmetries(gr))$delta)),
+                        error = function(e) NA_real_)
   }
 
   # Add-one (biased-up) permutation p-value; see asymmetry_permutation() and
   # Phipson & Smyth (2010, Stat. Appl. Genet. Mol. Biol. 9:Article39).
   B       <- sum(!is.na(null))
+  if (B == 0)
+    stop("None of the ", nperm, " rewired graphs yielded a valid asymmetry ",
+         "statistic; try rewire = \"degree\".")
   p_value <- (1 + sum(null >= obs_stat, na.rm = TRUE)) / (1 + B)
 
   data.frame(

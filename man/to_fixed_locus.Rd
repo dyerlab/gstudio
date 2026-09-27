@@ -12,7 +12,7 @@ to_fixed_locus(x, digits = NULL)
 \item{digits}{The number of digits that the alleles need to have}
 }
 \value{
-A character representation of the locus with
+A character representation of the locus, one element per entry of \code{x}.
 }
 \description{
 This function

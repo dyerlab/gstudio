@@ -13,4 +13,8 @@ test_that( "testing",{
   expect_that( nchar(fl_A), equals(2) )
   expect_that( nchar(fl_B), equals(4))             
   
+  # vectors are formatted element-wise, with missing loci zero-filled
+  v <- c( locus(c("1","2")), locus(c("3","4")), locus() )
+  expect_equal( to_fixed_locus(v, digits=2), c("0102", "0304", "0000") )
+  
 })

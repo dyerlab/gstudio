@@ -28,7 +28,9 @@
 #' @param data The multivariate genotype matrix passed to \code{\link{popgraph}}.
 #' @param groups A factor of stratum membership, one entry per row of \code{data}.
 #' @param nperm Number of label permutations (default 999).
-#' @param ... Additional arguments passed to \code{\link{popgraph}}.
+#' @param ... Additional arguments passed to \code{\link{popgraph}} (e.g.
+#'   \code{tol}).  \code{alpha} is ignored with a warning, since the test
+#'   requires \code{alpha = 1}.
 #'
 #' @return A \code{data.frame} with columns \code{from}, \code{to},
 #'   \code{delta}, \code{statistic}, and \code{p_value}.
@@ -40,11 +42,19 @@
 #' @export
 asymmetry_permutation <- function(graph, data, groups, nperm = 999, ...) {
 
+  .validate_asymmetry_groups(graph, groups)
   groups    <- factor(as.character(groups))
   g_obs     <- graph_asymmetries(graph)
   el        <- igraph::as_edgelist(g_obs, names = TRUE)
   delta_obs <- igraph::E(g_obs)$delta
   ne        <- nrow(el)
+
+  dots <- list(...)
+  if (!is.null(dots$alpha)) {
+    warning("'alpha' is ignored: the fixed-topology test always uses alpha = 1 ",
+            "so that every observed edge receives a permuted weight.")
+    dots$alpha <- NULL
+  }
 
   null <- matrix(NA_real_, nrow = ne, ncol = nperm)
 
@@ -52,16 +62,22 @@ asymmetry_permutation <- function(graph, data, groups, nperm = 999, ...) {
     perm_groups <- sample(groups)
 
     # alpha = 1 retains every pair, so the weighted adjacency is the full
-    # conditional-distance matrix under the permuted labels.
-    g_full <- suppressWarnings(popgraph(data, perm_groups, alpha = 1, ...))
-    Wp     <- to_matrix(g_full, mode = "edge weight")
+    # conditional-distance matrix under the permuted labels.  A permutation
+    # that fails leaves its column NA and is dropped from B below.
+    delta_p <- tryCatch({
+      g_full <- suppressWarnings(do.call(popgraph,
+                                         c(list(data, perm_groups, alpha = 1), dots)))
+      Wp     <- to_matrix(g_full, mode = "edge weight")
 
-    g_null <- graph
-    # Index the permuted distance matrix by the OBSERVED endpoint names so the
-    # adjacency of 'graph' is preserved exactly.
-    igraph::E(g_null)$weight <- Wp[el]
+      g_null <- graph
+      # Index the permuted distance matrix by the OBSERVED endpoint names so
+      # the adjacency of 'graph' is preserved exactly.
+      igraph::E(g_null)$weight <- Wp[el]
 
-    null[, p] <- igraph::E(graph_asymmetries(g_null))$delta
+      igraph::E(graph_asymmetries(g_null))$delta
+    }, error = function(e) NULL)
+
+    if (!is.null(delta_p)) null[, p] <- delta_p
   }
 
   # Add-one (biased-up) permutation p-value: (1 + #{|null| >= |obs|}) / (1 + B).

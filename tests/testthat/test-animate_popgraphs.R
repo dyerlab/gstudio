@@ -6,6 +6,7 @@ make_graph <- function(A) {
 
 test_that("animate_popgraphs writes a gif", {
   skip_if_not_installed("gifski")
+  skip_if_not_installed("ggraph")
 
   A <- matrix(0, 4, 4); A[1, 2] <- A[2, 3] <- A[3, 4] <- 1
   B <- matrix(0, 4, 4); B[1, 3] <- B[1, 4] <- B[2, 4] <- 1
@@ -21,6 +22,7 @@ test_that("animate_popgraphs writes a gif", {
 
 test_that("animate_popgraphs accepts user layouts", {
   skip_if_not_installed("gifski")
+  skip_if_not_installed("ggraph")
 
   A <- matrix(0, 4, 4); A[1, 2] <- A[2, 3] <- A[3, 4] <- 1
   B <- matrix(0, 3, 3); B[1, 2] <- B[2, 3] <- 1
@@ -40,6 +42,7 @@ test_that("animate_popgraphs accepts user layouts", {
 
 test_that("animate_popgraphs validates input", {
   skip_if_not_installed("gifski")
+  skip_if_not_installed("ggraph")
 
   A <- matrix(0, 4, 4); A[1, 2] <- A[2, 3] <- 1
   g <- make_graph(A)
@@ -52,4 +55,41 @@ test_that("animate_popgraphs validates input", {
   expect_error(animate_popgraphs(list(g), file = out, layout = "bogus"), "Unknown layout")
   xy <- matrix(0, 2, 2, dimnames = list(c("A", "B"), NULL))
   expect_error(animate_popgraphs(list(g), file = out, layout = xy), "no coordinates for: C, D")
+})
+
+test_that("animate_popgraphs defaults to a temporary file", {
+  skip_if_not_installed("gifski")
+  skip_if_not_installed("ggraph")
+
+  A <- matrix(0, 3, 3); A[1, 2] <- A[2, 3] <- 1
+  expect_message(res <- animate_popgraphs(list(make_graph(A)), width = 100, height = 100),
+                 "Animation written to")
+  expect_identical(dirname(normalizePath(res)), normalizePath(tempdir()))
+  expect_true(file.exists(res))
+  unlink(res)
+})
+
+test_that("animate_popgraphs accepts a custom ggraph frame function", {
+  skip_if_not_installed("gifski")
+  skip_if_not_installed("ggraph")
+
+  A <- matrix(0, 4, 4); A[1, 2] <- A[2, 3] <- A[3, 4] <- 1
+  B <- matrix(0, 3, 3); B[1, 2] <- B[2, 3] <- 1
+  graphs <- list(make_graph(A), make_graph(B))
+  seen <- list()
+  my_frame <- function(layout, title) {
+    seen[[length(seen) + 1]] <<- layout
+    ggraph::ggraph(layout) + ggraph::geom_edge_link() + ggraph::geom_node_point()
+  }
+  out <- tempfile(fileext = ".gif")
+  animate_popgraphs(graphs, file = out, frame_plot = my_frame, width = 100, height = 100)
+  expect_true(file.exists(out))
+  expect_equal(nrow(seen[[2]]), 4L)               # all nodes present in every frame
+  expect_equal(seen[[2]]$present, c(TRUE, TRUE, TRUE, FALSE))
+  expect_equal(seen[[1]]$x, seen[[2]]$x)           # positions fixed across frames
+  expect_equal(seen[[1]]$y, seen[[2]]$y)
+
+  expect_error(animate_popgraphs(graphs, file = out, frame_plot = "nope"), "frame_plot")
+  expect_error(animate_popgraphs(graphs, file = out, frame_plot = function(l, t) 1),
+               "ggplot")
 })

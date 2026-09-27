@@ -6,20 +6,22 @@
 \usage{
 animate_popgraphs(
   graphs,
-  file = "popgraphs.gif",
+  file = tempfile(fileext = ".gif"),
   layout = "fr",
   delay = 1,
   width = 600,
   height = 600,
   labels = TRUE,
-  loop = TRUE
+  loop = TRUE,
+  frame_plot = NULL
 )
 }
 \arguments{
 \item{graphs}{A list of \code{popgraph} (or \code{igraph}) objects.  If the
 list is named, the names are used as frame titles.}
 
-\item{file}{The path of the GIF file to write (default "popgraphs.gif").}
+\item{file}{The path of the GIF file to write.  Defaults to a temporary
+file, whose path is reported with a message and returned.}
 
 \item{layout}{How to place the nodes.  One of:
 \itemize{
@@ -47,6 +49,16 @@ reproducible arrangement.}
 
 \item{loop}{Should the animation loop?  Either \code{TRUE} (the default)
 to loop forever, \code{FALSE} to play once, or a number of repetitions.}
+
+\item{frame_plot}{An optional function used to draw each frame, taking
+\code{(layout, title)} and returning a \code{ggplot}.  \code{layout} is a
+\code{ggraph} layout (from \code{ggraph::create_layout()}) holding every
+node at its fixed position, with node columns \code{name} and
+\code{present} (\code{FALSE} for nodes absent from that graph), so it can
+be drawn with \code{ggraph(layout) + geom_edge_link() + ...}.  The default
+(\code{NULL}) draws edges, nodes (absent nodes faded), and, if
+\code{labels = TRUE}, node names.  Keep the coordinate limits fixed across
+frames if you want nodes to stay still.}
 }
 \value{
 The path to the GIF file, invisibly.
@@ -62,13 +74,26 @@ Renders each graph in a list as a frame and stitches the frames together
 }
 \examples{
 \donttest{
-if (requireNamespace("gifski", quietly = TRUE)) {
+if (requireNamespace("gifski", quietly = TRUE) &&
+    requireNamespace("ggraph", quietly = TRUE)) {
   data(lopho)
   data(upiga)
   graphs <- list(Lophocereus = lopho, Upiga = upiga)
   out <- file.path(tempdir(), "baja.gif")
   set.seed(42)
   animate_popgraphs(graphs, file = out, layout = "kk", delay = 2)
+
+  # Style the frames yourself with ggraph
+  if (requireNamespace("ggraph", quietly = TRUE)) {
+    my_frame <- function(layout, title) {
+      ggraph::ggraph(layout) +
+        ggraph::geom_edge_link(colour = "tomato") +
+        ggraph::geom_node_point(ggplot2::aes(alpha = present), size = 5) +
+        ggplot2::ggtitle(title) +
+        ggplot2::theme_void()
+    }
+    animate_popgraphs(graphs, file = out, frame_plot = my_frame)
+  }
 }
 }
 }

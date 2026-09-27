@@ -120,3 +120,23 @@ test_that( "Operations", {
   expect_true( as.character(off)=="B")
     
 })
+
+test_that( "Vectorized arithmetic", {
+  AA <- locus( c("A","A") )
+  BB <- locus( c("B","B") )
+
+  # recycling a length-one operand on either side
+  expect_equal( as.character( c(AA,AA) + BB ), c("A:B","A:B") )
+  expect_equal( as.character( BB + c(AA,AA) ), c("A:B","A:B") )
+  expect_equal( as.character( c(AA,BB) + c(BB,AA) ), c("A:B","A:B") )
+  expect_equal( as.character( c(AA,AA) - AA ), c("A","A") )
+
+  # mismatched lengths are an error, not silently truncated or NA-padded
+  expect_error( c(AA,BB,AA) + c(AA,BB), "different lengths" )
+  expect_error( c(AA,BB,AA) - c(AA,BB), "different lengths" )
+
+  # a missing genotype gives NA for that offspring only
+  expect_warning( off <- c(AA, locus()) + c(BB, BB), "1 missing" )
+  expect_equal( is.na(off), c(FALSE, TRUE) )
+  expect_equal( as.character(off[1]), "A:B" )
+})

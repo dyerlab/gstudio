@@ -15,7 +15,9 @@ asymmetry_permutation(graph, data, groups, nperm = 999, ...)
 
 \item{nperm}{Number of label permutations (default 999).}
 
-\item{...}{Additional arguments passed to \code{\link{popgraph}}.}
+\item{...}{Additional arguments passed to \code{\link{popgraph}} (e.g.
+\code{tol}).  \code{alpha} is ignored with a warning, since the test
+requires \code{alpha = 1}.}
 }
 \value{
 A \code{data.frame} with columns \code{from}, \code{to},

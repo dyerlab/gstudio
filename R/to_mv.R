@@ -74,7 +74,7 @@ to_mv.locus <- function( x, ploidy=2, alleles=NA, drop.allele=FALSE, leave.as.na
 to_mv.data.frame <- function (x, ploidy=2, alleles=NA, drop.allele=FALSE, leave.as.na=FALSE, ...)  {
   cols <- column_class(x, "locus", mode="index")
   
-  if(any(is.na(cols)))
+  if(!length(cols))
     stop("Cannot make loci to mv if there are no loci.")
   
   df <- x[,cols]  

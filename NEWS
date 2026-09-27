@@ -5,6 +5,15 @@ gstudio 1.14 - 20260610
 * [CHANGE] (1.14.4) Reorganised asymmetry_significance() as a hierarchy of successively conditioned permutation tests, with mode = c("existence","location","mechanism") replacing the earlier mode names ("network","permutation","bandwidth"). Each mode is now documented by the ecological/evolutionary hypothesis it tests and what failing to reject it implies. Results no longer carry the always-NA ci_low/ci_high columns, and the three base functions asymmetry_network(), asymmetry_permutation(), and asymmetry_bandwidth() return the same five columns.
 * [ADD] (1.14.4) Added asymmetry_ci(), a within-stratum bootstrap confidence interval on each edge's asymmetry index for reporting its magnitude (e.g. Delta = X, 95% CI: low-high). Returns an edge_support column giving the proportion of resamples in which the edge was re-estimated, since the interval is conditional on the edge being present. Replaces asymmetry_jackknife() and the former "support"/"jackknife" mode of asymmetry_significance(); this is an estimate, not a hypothesis test, so it is no longer offered as a significance mode.
 * [FIX] (1.14.4) Bootstrap resampling of a stratum containing a single individual now resamples that individual rather than drawing from 1:n (base R sample() gotcha).
+* [FIX] (1.14.4) asymmetry_significance(mode = "location") / asymmetry_permutation() no longer fail when 'alpha' is passed; it is ignored with a warning since the fixed-topology test requires alpha = 1. Failed permutations are dropped from the null rather than aborting.
+* [FIX] (1.14.4) asymmetry_ci() excludes bootstrap resamples that fail to produce a graph from edge_support and the intervals (previously counted as "edge absent"), warns about them, and records the count in attr(x, "nboot_failed").
+* [FIX] (1.14.4) asymmetry_network() / mode = "existence" records rewired graphs with isolated nodes as NA instead of aborting.
+* [FIX] (1.14.4) asymmetry_ci() and mode = "location" now error when 'groups' does not contain every graph node, instead of returning all-NA results.
+* [CHANGE] (1.14.4) asymmetry_significance() warns when 'data'/'groups' are supplied to a mode that ignores them.
+* [CHANGE] (1.14.4) animate_popgraphs() now writes to a temporary file by default (CRAN policy), draws frames with ggraph, and accepts a frame_plot = function(layout, title) for custom ggraph styling. Requires 'ggraph' (Suggests).
+* [FIX] (1.14.4) Vectorized `+` and `-` on locus vectors now recycle a length-one operand, error on mismatched lengths, and (for `+`) return NA for missing genotypes with a warning instead of stopping.
+* [FIX] (1.14.4) to_fixed_locus() formats locus vectors element-wise instead of concatenating them into one string.
+* [CHANGE] (1.14.4) column_class() returns character(0)/integer(0) instead of NA when no column matches; internal callers updated.
 
 gstudio 1.13 - 20260216
 -----------------

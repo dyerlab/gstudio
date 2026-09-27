@@ -47,8 +47,9 @@ leaf; to remove leaf influence entirely, prune the degree-one nodes from
 \code{graph} before calling.}
 
 \item{...}{Additional arguments passed to the dispatched base function
-(e.g. \code{rewire} for \code{"existence"}, or \code{alpha} for the
-internal \code{popgraph} calls).}
+(e.g. \code{rewire} for \code{"existence"}, or \code{tol} for the
+internal \code{popgraph} calls of \code{"location"}, which always use
+\code{alpha = 1}).}
 }
 \value{
 A \code{data.frame} with one row per retained edge (one row total for
@@ -128,6 +129,10 @@ one before it has been rejected.  For edges that survive this hierarchy,
     distances), not from which bandwidth each endpoint carries.  Operates on
     \code{graph} alone.  See \code{\link{asymmetry_bandwidth}}.}
 }
+}
+\note{
+Only \code{mode = "location"} uses \code{data} and \code{groups};
+  supplying them with another mode gives a warning.
 }
 \examples{
 \donttest{
