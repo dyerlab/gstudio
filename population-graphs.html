@@ -318,9 +318,9 @@ dropped from the discriminant rotation.</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>graph</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH a72f434 UNW- 3 3 -- 
+<pre><code>IGRAPH cdaefb3 UNW- 3 3 -- 
 + attr: name (v/c), size (v/n), weight (e/n)
-+ edges from a72f434 (vertex names):
++ edges from cdaefb3 (vertex names):
 [1] Cape    --Mainland  Cape    --Peninsula Mainland--Peninsula</code></pre>
 </div>
 </div>
@@ -338,9 +338,9 @@ from the discriminant rotation.</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>graph</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH fc76d5b UNW- 3 3 -- 
+<pre><code>IGRAPH f001dbc UNW- 3 3 -- 
 + attr: name (v/c), size (v/n), weight (e/n)
-+ edges from fc76d5b (vertex names):
++ edges from f001dbc (vertex names):
 [1] Cape    --Mainland  Cape    --Peninsula Mainland--Peninsula</code></pre>
 </div>
 </div>
@@ -353,9 +353,9 @@ being dropped from the discriminant rotation.</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>graph_strict</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 87c974a UNW- 3 3 -- 
+<pre><code>IGRAPH 9ed6c23 UNW- 3 3 -- 
 + attr: name (v/c), size (v/n), weight (e/n)
-+ edges from 87c974a (vertex names):
++ edges from 9ed6c23 (vertex names):
 [1] Cape    --Mainland  Cape    --Peninsula Mainland--Peninsula</code></pre>
 </div>
 </div>
@@ -372,9 +372,9 @@ being dropped from the discriminant rotation.</code></pre>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">as.popgraph</span>(A)</span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH ae2c713 UNW- 4 4 -- 
+<pre><code>IGRAPH 620ae58 UNW- 4 4 -- 
 + attr: name (v/c), weight (e/n)
-+ edges from ae2c713 (vertex names):
++ edges from 620ae58 (vertex names):
 [1] A--B A--D B--C C--D</code></pre>
 </div>
 </div>
@@ -596,9 +596,9 @@ For now we convert it on the fly...</code></pre>
 non-overlapping node sets!  Careful on interpretation.</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 6063d3b UN-- 16 19 -- 
+<pre><code>IGRAPH 4b7c94f UN-- 16 19 -- 
 + attr: name (v/c)
-+ edges from 6063d3b (vertex names):
++ edges from 4b7c94f (vertex names):
  [1] BaC --LaV    BaC --SnE    BaC --StR    Ctv --SLG    Ctv --SnF   
  [6] LaV --SnE    SLG --SnF    StR --SenBas CP  --SG     CP  --SN    
 [11] CP  --TS     LF  --PL     LF  --SI     PL  --SenBas PL  --SI    
@@ -697,9 +697,9 @@ PtC   1   0   1   1   0</code></pre>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">read_popgraph</span>(path)</span>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 22f5991 UNW- 21 50 -- 
+<pre><code>IGRAPH 794584f UNW- 21 50 -- 
 + attr: name (v/c), size (v/n), color (v/c), weight (e/n)
-+ edges from 22f5991 (vertex names):
++ edges from 794584f (vertex names):
  [1] BaC --LaV    BaC --Lig    BaC --PtP    BaC --SnE    BaC --SnI   
  [6] BaC --StR    BaC --SenBas Ctv --PtP    Ctv --SLG    Ctv --SnF   
 [11] Ctv --SenBas LaV --Lig    LaV --SnE    LaV --SnF    LaV --TsS   
@@ -715,22 +715,22 @@ PtC   1   0   1   1   0</code></pre>
 </section>
 <section id="randomization" class="level2" data-number="8.8">
 <h2 data-number="8.8" class="anchored" data-anchor-id="randomization"><span class="header-section-number">8.8</span> Randomization</h2>
-<p>Generate a random graph with the same number of nodes and a specified number of edges:</p>
+<p>Generate a random graph with the same nodes and degree sequence as the original (the default, <code>mode = "degree"</code>, uses degree-preserving edge swaps), or with the same number of edges placed at random (<code>mode = "full"</code>):</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>rg <span class="ot">&lt;-</span> <span class="fu">randomize_graph</span>(lopho)</span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>rg</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 37d33f5 UN-- 21 52 -- 
-+ attr: name (v/c)
-+ edges from 37d33f5 (vertex names):
- [1] BaC   --SG     BaC   --SnE    BaC   --SI     BaC   --StR    BaC   --SN    
- [6] BaC   --SenBas BaC   --LaV    CP    --TS     CP    --SnI    CP    --SLG   
-[11] CP    --TsS    SnE   --Ctv    SN    --Ctv    Ctv   --SnF    SG    --Ctv   
-[16] LaV   --TsS    SenBas--LaV    SN    --LaV    LaV   --SnF    LaV   --TS    
-[21] SenBas--LF     LF    --PtP    TsS   --LF     SI    --Lig    StR   --Lig   
-[26] SnF   --Lig    Lig   --PtC    StR   --PL     SnE   --PL     PtC   --PL    
-[31] SnI   --PL     SenBas--PtC    StR   --PtC    Lig   --PtC    SnI   --PtC   
-[36] SG    --PtP    PtP   --Seri   StR   --PtP    SnF   --Seri   SG    --Seri  
+<pre><code>IGRAPH 2b34ed3 UN-- 21 52 -- 
++ attr: name (v/c), size (v/n), color (v/c), Region (v/c)
++ edges from 2b34ed3 (vertex names):
+ [1] LaV   --LF     Lig   --SenBas Seri  --SI     PtP   --TsS    LaV   --SI    
+ [6] SLG   --StR    TsS   --SN     Lig   --SN     Ctv   --StR    Ctv   --SnE   
+[11] PtP   --SI     BaC   --SN     PtP   --LF     BaC   --SnE    PL    --SG    
+[16] Lig   --SLG    SnE   --SenBas Lig   --StR    LaV   --CP     BaC   --TS    
+[21] Ctv   --SnI    CP    --SN     SnI   --SI     TsS   --SG     LaV   --PL    
+[26] PtC   --SnF    PtC   --StR    SnF   --StR    SnI   --StR    SnF   --SN    
+[31] LF    --PL     BaC   --TsS    BaC   --LaV    SLG   --CP     Ctv   --SI    
+[36] BaC   --SG     SenBas--SG     BaC   --Seri   Lig   --PtC    LaV   --PtC   
 + ... omitted several edges</code></pre>
 </div>
 </div>
@@ -1439,7 +1439,7 @@ PtC   1   0   1   1   0</code></pre>
 <span id="cb62-285"><a href="#cb62-285" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-286"><a href="#cb62-286" aria-hidden="true" tabindex="-1"></a><span class="fu">## Randomization</span></span>
 <span id="cb62-287"><a href="#cb62-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb62-288"><a href="#cb62-288" aria-hidden="true" tabindex="-1"></a>Generate a random graph with the same number of nodes and a specified number of edges:</span>
+<span id="cb62-288"><a href="#cb62-288" aria-hidden="true" tabindex="-1"></a>Generate a random graph with the same nodes and degree sequence as the original (the default, <span class="in">`mode = "degree"`</span>, uses degree-preserving edge swaps), or with the same number of edges placed at random (<span class="in">`mode = "full"`</span>):</span>
 <span id="cb62-289"><a href="#cb62-289" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-292"><a href="#cb62-292" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb62-293"><a href="#cb62-293" aria-hidden="true" tabindex="-1"></a>rg <span class="ot">&lt;-</span> <span class="fu">randomize_graph</span>(lopho)</span>
