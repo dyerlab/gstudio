@@ -68,7 +68,8 @@ asymmetry_network <- function(graph, nperm = 999,
   B       <- sum(!is.na(null))
   if (B == 0)
     stop("None of the ", nperm, " rewired graphs yielded a valid asymmetry ",
-         "statistic; try rewire = \"degree\".")
+         "statistic",
+         if (rewire == "full") "; try rewire = \"degree\"" else "", ".")
   p_value <- (1 + sum(null >= obs_stat, na.rm = TRUE)) / (1 + B)
 
   data.frame(

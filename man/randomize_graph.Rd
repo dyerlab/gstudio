@@ -11,8 +11,10 @@ randomize_graph(graph = NULL, mode = c("full", "degree")[2])
 
 \item{mode}{The kind of randomization to conduct, can be "full"
 which makes a new graph with the same number of edges as the 
-original one, or "degree" which preserves the degree distribution
-of the}
+original one, or "degree" which preserves the degree sequence
+of the original graph by repeated degree-preserving edge swaps
+(\code{\link[igraph]{rewire}} with \code{\link[igraph]{keeping_degseq}}),
+never creating self-loops or multiple edges.}
 }
 \value{
 An \code{igraph} object with randomized edges.

@@ -60,12 +60,17 @@ A \code{data.frame} with one row per retained edge (one row total for
     \item{delta}{The observed asymmetry index \eqn{\Delta_{ij}} (or observed
       mean \eqn{|\Delta|} for \code{"existence"}).}
     \item{statistic}{The test statistic actually compared to the null
-      distribution.}
-    \item{p_value}{Two-tailed permutation \emph{p}-value, computed with the
-      add-one correction
-      \eqn{(1 + \#\{|\Delta_{\mathrm{null}}| \ge |\Delta_{\mathrm{obs}}|\}) /
-      (1 + B)} over \eqn{B} permutations, so it is strictly positive
-      (Phipson & Smyth 2010).}
+      distribution.  For \code{"location"} this is the centred deviation
+      \eqn{\Delta_{\mathrm{obs}} - \bar{\Delta}_{\mathrm{null}}} from the
+      edge's null mean.}
+    \item{p_value}{Permutation \emph{p}-value, computed with the add-one
+      correction \eqn{(1 + \#\{\mathrm{null} \ge \mathrm{obs}\}) / (1 + B)}
+      over \eqn{B} permutations, so it is strictly positive (Phipson & Smyth
+      2010).  \code{"existence"} is one-sided on mean \eqn{|\Delta|};
+      \code{"mechanism"} is two-tailed on \eqn{|\Delta|}; \code{"location"}
+      is two-tailed on the deviation from the edge's null mean,
+      \eqn{|\Delta - \bar{\Delta}_{\mathrm{null}}|}, because the fixed
+      topology shifts each edge's null away from zero.}
   }
 }
 \description{

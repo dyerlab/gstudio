@@ -21,7 +21,9 @@ requires \code{alpha = 1}.}
 }
 \value{
 A \code{data.frame} with columns \code{from}, \code{to},
-  \code{delta}, \code{statistic}, and \code{p_value}.
+  \code{delta} (observed \eqn{\Delta_{ij}}), \code{statistic} (the centred
+  deviation \eqn{\Delta_{\mathrm{obs}} - \bar{\Delta}_{\mathrm{null}}}), and
+  \code{p_value}.
 }
 \description{
 Tests whether the magnitude of each edge's asymmetry index
@@ -30,15 +32,19 @@ Population Graph.  The observed adjacency is held fixed; individual labels
 are permuted across strata, the conditional edge weights are recomputed on
 the \emph{original} edge set, and \eqn{\Delta_{ij}} is recalculated.  A
 two-tailed \emph{p}-value per edge is the fraction of permutations whose
-\eqn{|\Delta_{\mathrm{null}}|} meets or exceeds the observed
-\eqn{|\Delta_{\mathrm{obs}}|}.
+deviation from the edge's null mean \eqn{\bar{\Delta}_{\mathrm{null}}}
+meets or exceeds the observed deviation,
+\eqn{|\Delta_{\mathrm{null}} - \bar{\Delta}_{\mathrm{null}}| \ge
+|\Delta_{\mathrm{obs}} - \bar{\Delta}_{\mathrm{null}}|}.
 }
 \details{
 Because the edge set never changes across permutations, every retained edge
 receives a full, equally sized null distribution (avoiding the "denominator
 problem" of re-pruning the graph), and the purely topological component of
 \eqn{\Delta_{ij}} (for example the inflated values incident to low-degree
-nodes) is reproduced in the null rather than mistaken for signal.
+nodes) is reproduced in the null rather than mistaken for signal.  Because
+that component shifts each edge's null away from zero, the test is centred on
+the per-edge null mean rather than on zero.
 
 Fixed-topology edge weights are obtained by re-running \code{\link{popgraph}}
 on the permuted labels with \code{alpha = 1}, which retains all node pairs so

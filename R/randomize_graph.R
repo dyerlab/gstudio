@@ -5,8 +5,10 @@
 #' @param graph An object of type \code{popgraph} or \code{igraph}
 #' @param mode The kind of randomization to conduct, can be "full"
 #'  which makes a new graph with the same number of edges as the 
-#'  original one, or "degree" which preserves the degree distribution
-#'  of the 
+#'  original one, or "degree" which preserves the degree sequence
+#'  of the original graph by repeated degree-preserving edge swaps
+#'  (\code{\link[igraph]{rewire}} with \code{\link[igraph]{keeping_degseq}}),
+#'  never creating self-loops or multiple edges.
 #' @return An \code{igraph} object with randomized edges.
 #' @export
 
@@ -27,33 +29,20 @@ randomize_graph <- function( graph=NULL, mode=c("full","degree")[2] ) {
     return( g )
   } 
   else if( mode == "degree" ){
-    e <- igraph::as_edgelist(graph)
-    
-    v1 <- sort( e[,1] )
-    v2 <- sample( e[,2], size=length(v1), replace=FALSE)
-    
-    new_edges <- cbind( v1, v2 )
-    ctr <- 0 
-    while( any(duplicated(new_edges)) || any( new_edges[,1] == new_edges[,2]) ) {
-      new_edges <- cbind( v1, sample( v2, size=length(v2), replace=FALSE) )  
-      ctr <- ctr + 1
-      if( ctr > 10000 ) {
-        stop("Error: Over 100 iterations for finding permutations without duplication or self-loops.  This may not be a real enough graph to do this routine.")
-      }
-    }
-    
-    if( any( duplicated(new_edges))){
-      message(paste(utils::capture.output(print(cbind( new_edges,duplicated(new_edges)))), collapse = "\n"))
-      stop("Problem reaching convergence, try again.")
-    }
-    
-    g <- igraph::graph_from_edgelist( new_edges, directed=FALSE )
+    # Ten swap attempts per edge mixes the edge set well away from the
+    # original; swaps that would create a loop or multi-edge are rejected
+    # individually rather than discarding the whole configuration.
+    niter <- 10L * igraph::ecount(graph)
+    g <- igraph::rewire(graph, with = igraph::keeping_degseq(loops = FALSE,
+                                                             niter = niter))
+
+    # Swapped edges carry arbitrary attributes, so return a bare topology.
+    for (a in igraph::edge_attr_names(g))
+      g <- igraph::delete_edge_attr(g, a)
+    class(g) <- "igraph"
     return(g)
   }
   
   stop("Unknown mode to randomize_graph")
 
 }
-
-
-

@@ -233,7 +233,7 @@ g
 
 ## Randomization
 
-Generate a random graph with the same number of nodes and a specified number of edges:
+Generate a random graph with the same nodes and degree sequence as the original (the default, `mode = "degree"`, uses degree-preserving edge swaps), or with the same number of edges placed at random (`mode = "full"`):
 
 ```{r}
 rg <- randomize_graph(lopho)

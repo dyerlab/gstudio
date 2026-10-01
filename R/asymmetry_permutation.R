@@ -7,15 +7,19 @@
 #' are permuted across strata, the conditional edge weights are recomputed on
 #' the \emph{original} edge set, and \eqn{\Delta_{ij}} is recalculated.  A
 #' two-tailed \emph{p}-value per edge is the fraction of permutations whose
-#' \eqn{|\Delta_{\mathrm{null}}|} meets or exceeds the observed
-#' \eqn{|\Delta_{\mathrm{obs}}|}.
+#' deviation from the edge's null mean \eqn{\bar{\Delta}_{\mathrm{null}}}
+#' meets or exceeds the observed deviation,
+#' \eqn{|\Delta_{\mathrm{null}} - \bar{\Delta}_{\mathrm{null}}| \ge
+#' |\Delta_{\mathrm{obs}} - \bar{\Delta}_{\mathrm{null}}|}.
 #'
 #' @details
 #' Because the edge set never changes across permutations, every retained edge
 #' receives a full, equally sized null distribution (avoiding the "denominator
 #' problem" of re-pruning the graph), and the purely topological component of
 #' \eqn{\Delta_{ij}} (for example the inflated values incident to low-degree
-#' nodes) is reproduced in the null rather than mistaken for signal.
+#' nodes) is reproduced in the null rather than mistaken for signal.  Because
+#' that component shifts each edge's null away from zero, the test is centred on
+#' the per-edge null mean rather than on zero.
 #'
 #' Fixed-topology edge weights are obtained by re-running \code{\link{popgraph}}
 #' on the permuted labels with \code{alpha = 1}, which retains all node pairs so
@@ -33,7 +37,9 @@
 #'   requires \code{alpha = 1}.
 #'
 #' @return A \code{data.frame} with columns \code{from}, \code{to},
-#'   \code{delta}, \code{statistic}, and \code{p_value}.
+#'   \code{delta} (observed \eqn{\Delta_{ij}}), \code{statistic} (the centred
+#'   deviation \eqn{\Delta_{\mathrm{obs}} - \bar{\Delta}_{\mathrm{null}}}), and
+#'   \code{p_value}.
 #'
 #' @seealso \code{\link{asymmetry_significance}}, \code{\link{graph_asymmetries}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -80,11 +86,19 @@ asymmetry_permutation <- function(graph, data, groups, nperm = 999, ...) {
     if (!is.null(delta_p)) null[, p] <- delta_p
   }
 
-  # Add-one (biased-up) permutation p-value: (1 + #{|null| >= |obs|}) / (1 + B).
+  # With the topology fixed, each edge's null is centred on its topological
+  # component (roughly 1/k_i - 1/k_j), not on zero, so deviations are measured
+  # from the per-edge null mean.  Comparing raw |Delta| instead sends observed
+  # values lying between zero and that centre to p ~ 1.
+  centre    <- rowMeans(null, na.rm = TRUE)
+  stat_obs  <- delta_obs - centre
+
+  # Add-one (biased-up) permutation p-value:
+  # (1 + #{|null - centre| >= |obs - centre|}) / (1 + B).
   # Including the observed configuration in the reference set keeps the estimator
   # valid and bounded away from zero, avoiding the anti-conservative bias of the
   # raw fraction (Phipson & Smyth 2010, Stat. Appl. Genet. Mol. Biol. 9:Article39).
-  n_ge    <- rowSums(abs(null) >= abs(delta_obs), na.rm = TRUE)
+  n_ge    <- rowSums(abs(null - centre) >= abs(stat_obs), na.rm = TRUE)
   B       <- rowSums(!is.na(null))
   p_value <- (1 + n_ge) / (1 + B)
 
@@ -92,7 +106,7 @@ asymmetry_permutation <- function(graph, data, groups, nperm = 999, ...) {
     from      = el[, 1],
     to        = el[, 2],
     delta     = delta_obs,
-    statistic = delta_obs,
+    statistic = stat_obs,
     p_value   = p_value,
     stringsAsFactors = FALSE
   )

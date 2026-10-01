@@ -136,6 +136,9 @@ test_that("location mode returns valid per-edge p-values", {
   expect_named(res, expected_cols)
   expect_equal(nrow(res), igraph::ecount(sg$graph))
   expect_true(all(res$p_value >= 0 & res$p_value <= 1))
+  # statistic is Delta centred on each edge's null mean, not Delta itself
+  expect_true(all(is.finite(res$statistic)))
+  expect_false(isTRUE(all.equal(res$statistic, res$delta)))
 })
 
 
