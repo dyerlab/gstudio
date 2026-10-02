@@ -26,6 +26,12 @@
 #'
 #' @importFrom igraph as_edgelist neighbors get_edge_ids E V
 #' @export
+#' @examples
+#' data(lopho)
+#' \donttest{
+#'   res <- asymmetry_bandwidth(lopho, nperm = 19)
+#'   head(res)
+#' }
 asymmetry_bandwidth <- function(graph, nperm = 999, ...) {
 
   g_obs     <- graph_asymmetries(graph)

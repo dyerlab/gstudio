@@ -8,8 +8,10 @@
 #' @note This function just reshapes the \code{data.frame} from \code{frequencies}.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
-#' @importFrom reshape2 melt
-#' @importFrom reshape2 dcast
+#' @examples
+#' data(arapat)
+#' fm <- frequency_matrix(arapat, stratum = "Population", loci = "LTRS")
+#' head(fm)
 
 frequency_matrix <- function( x, stratum="Population", loci=NULL ) {
   
@@ -28,8 +30,9 @@ frequency_matrix <- function( x, stratum="Population", loci=NULL ) {
   if( length(loci)> 1 ) 
     freqs$Allele <- paste(freqs$Locus,freqs$Allele,sep="-")
   freqs$Locus <- NULL
-  m <- reshape2::melt( freqs, id.vars=c("Stratum","Allele") )
-  ret <- reshape2::dcast( m, Stratum ~ Allele, value.var = "value",fill = 0)  
+  mat <- as.matrix(stats::xtabs(Frequency ~ Stratum + Allele, data = freqs))
+  ret <- data.frame(Stratum = rownames(mat), unclass(mat), check.names = FALSE, stringsAsFactors = FALSE)
+  rownames(ret) <- NULL
   
   return( ret )
 }

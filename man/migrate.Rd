@@ -39,6 +39,11 @@ This uses a multinomial draw to allocate each population's individuals
  stone models).  Very small \code{m * N} values will frequently round to zero
  migrants; adjust your rate or population size accordingly.
 }
+\examples{
+data(arapat)
+arapat_mig <- migrate(arapat, stratum = "Population", m = 0.05)
+head(arapat_mig$Population)
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

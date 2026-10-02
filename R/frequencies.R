@@ -129,8 +129,11 @@ frequencies.data.frame <- function( x, loci, stratum, ... ) {
     stop("Asked for loci not in the data frame...")
   }
   
-  # all loci to do.
-  if( missing( stratum ) ){
+  # Detect stratum from arguments or dplyr grouping
+  stratum <- .detect_stratum(x, if (missing(stratum)) NULL else stratum, default = NULL)
+
+  # all loci to do (unstratified).
+  if( is.null( stratum ) ){
     ret <- data.frame( Locus=character(0), Allele=character(0), Frequency=numeric(0), stringsAsFactors=FALSE)
     for( locus in loci ) {
       loc <- frequencies.locus( x[[locus]] )

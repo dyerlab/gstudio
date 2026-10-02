@@ -128,7 +128,8 @@ graph_asymmetries <- function(graph, bandwidth = NULL, scale = 1) {
   # per vertex) supplies a custom per-node bandwidth. The result is multiplied by
   # 'scale'. These overrides exist for bandwidth-sensitivity analysis; the default
   # reproduces the canonical local kernel exactly.
-  b_local <- igraph::strength(graph) / igraph::degree(graph)
+  deg <- igraph::degree(graph)
+  b_local <- ifelse(deg > 0, igraph::strength(graph) / deg, NA_real_)
   if (is.null(bandwidth)) {
     b <- b_local
   } else if (length(bandwidth) == 1L) {
@@ -142,14 +143,16 @@ graph_asymmetries <- function(graph, bandwidth = NULL, scale = 1) {
   }
   b <- b * scale
   names(b) <- nodes
-  if (any(!is.finite(b)) || any(b <= 0))
-    stop("'bandwidth' must yield finite positive values for all nodes.")
+  conn <- deg > 0
+  if (any(!is.finite(b[conn])) || any(b[conn] <= 0))
+    stop("'bandwidth' must yield finite positive values for all connected nodes.")
   igraph::V(graph)$bandwidth <- b
 
   # Precompute the normalised Gaussian kernel for every node over its
   # neighborhood. Stored as a named list for O(1) edge-level lookup.
   node_kernels <- lapply(nodes, function(u) {
     nbs <- igraph::neighbors(graph, u, mode = "all")$name
+    if (length(nbs) == 0) return(numeric(0))
     d <- setNames(
       sapply(nbs, function(n) {
         igraph::E(graph)[igraph::get_edge_ids(graph, c(u, n),

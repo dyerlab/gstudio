@@ -8,6 +8,11 @@
 #'  with an extra class property)
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
+#' @examples
+#' \dontrun{
+#'   path <- system.file("extdata", "lopho.pgraph", package = "gstudio")
+#'   graph <- read_popgraph(path)
+#' }
 read_popgraph <- function( file, sep="\t" ) { 
     
   # load in the raw stuff
@@ -44,7 +49,7 @@ read_popgraph <- function( file, sep="\t" ) {
   igraph::V(graph)$size <- sizes 
   igraph::V(graph)$color <- colors
   
-  class(graph) <- c("igraph","popgraph")
+  class(graph) <- c("popgraph", "igraph")
   return( graph )
   
 }

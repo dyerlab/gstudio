@@ -49,6 +49,7 @@ genetic_diversity <- function( x, stratum=NULL, loci=NULL, mode=c("A","Ae","A95"
   if( missing(x) )
     stop("You must pass a data.frame to the genetic_diversity() function.")
   
+  stratum <- .detect_stratum(x, stratum, default = NULL)
   
   ## Passed with stratum 
   if( !is.null(stratum) ) {

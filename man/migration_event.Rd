@@ -22,6 +22,11 @@ A list of class \code{"migration_event"} with elements
 A migration event pairs a migration matrix with a generation interval
 during which it is active.
 }
+\examples{
+M <- migration_matrix(c("A", "B"), model = "island", m = 0.05)
+ev <- migration_event(M, start = 1, end = 50)
+ev
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

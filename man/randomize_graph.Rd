@@ -23,3 +23,8 @@ An \code{igraph} object with randomized edges.
 This function randomizes the edges in a popgraph and 
  returns a new graph.
 }
+\examples{
+data(lopho)
+g_rand <- randomize_graph(lopho, mode = "degree")
+g_rand
+}

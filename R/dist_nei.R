@@ -1,4 +1,4 @@
-#' Estimation of Bray-Curtis distance
+#' Estimation of Nei's Genetic distance
 #' 
 #' This function returns a measure of genetic distance based upon
 #'  the Nei's Genetic distance metric.  Assumes drift/mutation equilibrium
@@ -8,8 +8,7 @@
 #' @return The Nei Genetic distance
 #' @note This is the bias corrected Nei's Standard genetic distance.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @export
-#' @importFrom reshape2 dcast 
+#' @noRd
 #' @examples
 #'   AA <- locus( c("A","A") )
 #'   AB <- locus( c("A","B") )
@@ -34,7 +33,10 @@ dist_nei <- function( x, stratum="Population") {
     stop( "You need to have a stratum column in the data.frame to indicate which sample is in which population.")
   
   freqs <- frequencies( x, stratum=stratum)
-  f <- dcast( freqs, Locus + Allele ~ Stratum, value.var="Frequency", fill=0)
+  mat <- stats::xtabs(Frequency ~ paste(Locus, Allele, sep = "___") + Stratum, data = freqs)
+  parts <- do.call(rbind, strsplit(rownames(mat), "___", fixed = TRUE))
+  f <- data.frame(Locus = parts[, 1], Allele = parts[, 2], unclass(mat), check.names = FALSE, stringsAsFactors = FALSE)
+  rownames(f) <- NULL
   strata_names <- names(f)[3:length(names(f))]
   K <- length(strata_names)
   ret <- matrix( 0, K, K )

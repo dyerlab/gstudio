@@ -16,4 +16,17 @@ test_that("expected heterozygosity",{
   h <- He( loci )
   expect_that( h, is_equivalent_to(0.75) )
 
+  # small.N correction on single locus
+  h_small <- He( loci, small.N = TRUE )
+  expect_true( h_small > h )
+
+  # Data.frame test
+  df <- data.frame(TPI = loci, PGM = loci)
+  res_df <- He(df)
+  expect_s3_class(res_df, "data.frame")
+  expect_equal(res_df$He, c(0.75, 0.75))
+
+  # Data.frame with small.N
+  res_df_small <- He(df, small.N = TRUE)
+  expect_true(all(res_df_small$He > res_df$He))
 })

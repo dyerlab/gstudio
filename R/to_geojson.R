@@ -7,6 +7,12 @@
 #' @return A textual version of the popgraph
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @examples
+#' data(lopho)
+#' data(baja)
+#' graph <- decorate_graph(lopho, baja)
+#' json <- to_geojson(graph)
+#' cat(substr(json, 1, 100))
 to_geojson <- function( graph, file ) {
   if( !inherits( graph, "popgraph"))
     stop("This function requires a population graph to work.")
@@ -117,6 +123,9 @@ to_geojson <- function( graph, file ) {
   
   ret <- paste( ret, collapse="\n")
   
+  if( !missing(file) )
+    writeLines(ret, con = file)
+
   return( ret )
 }
 

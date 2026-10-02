@@ -13,7 +13,7 @@
 #' @return An \code{data.frame} with Gst, Ht, and Hs and optionally P.  If more than one locus is provided,
 #'  then a 'mutlilocus' estimate is shown using the harmonic mean of individual locus Gst_prime values.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @export
+#' @noRd
 #' @examples
 #'  a1 <- sample( LETTERS[1:5], size=20, replace=TRUE)
 #'  a2 <- sample( LETTERS[4:8], size=20, replace=TRUE)
@@ -31,6 +31,7 @@ Gst_prime <- function(  x, stratum="Population",  nperm=0, size.correct=TRUE ) {
   
   # Do this function recursively if a data.frame is passed as loci
   if( is(x,"data.frame") ) {
+    stratum <- .detect_stratum(x, stratum, default = "Population")
     
     locus_names <- column_class(x,"locus")
     
@@ -38,18 +39,21 @@ Gst_prime <- function(  x, stratum="Population",  nperm=0, size.correct=TRUE ) {
       stop("You must pass some loci to this function")
     
     if( !(stratum %in% names(x)) )
-      stop("If you pass a data.frame to Gst(), you need to indicate a stratum varaible column.")
+      stop("If you pass a data.frame to Gst_prime(), you need to indicate a stratum variable column.")
     
     strata <- factor(as.character(x[[stratum]]))
     k <- length(levels(strata))
     K <- length(locus_names)
-    ret <- data.frame(Locus=locus_names, Gst=numeric(K), Hs=numeric(K), Ht=numeric(K), P=numeric(K), stringsAsFactors=FALSE)
+    ret <- data.frame(Locus=locus_names, Gst=numeric(K), Hs=numeric(K), Ht=numeric(K), P=NA_real_, stringsAsFactors=FALSE)
     
     for( i in 1:length(locus_names) ){
       data <- x[[locus_names[i]]] 
       r <- Gst_prime( data, strata, nperm, size.correct)
-      ret[i,2:5] <- r
-      
+      ret$Gst[i] <- r$Gst[1]
+      ret$Hs[i]  <- r$Hs[1]
+      ret$Ht[i]  <- r$Ht[1]
+      if( nperm > 0 && "P" %in% names(r) )
+        ret$P[i] <- r$P[1]
     }
     
     if( length( locus_names) > 1 ) {
@@ -57,8 +61,8 @@ Gst_prime <- function(  x, stratum="Population",  nperm=0, size.correct=TRUE ) {
       #
       # TODO Determine if these can ever be differents length vectors?
       #
-      Hs.tot <- 1.0 / mean( 1/ret$Hs ,na.rm=TRUE)
-      Ht.tot <- 1.0 / mean( 1/ret$Ht ,na.rm=TRUE)
+      Hs.tot <- 1.0 / mean( 1/ret$Hs[1:K] ,na.rm=TRUE)
+      Ht.tot <- 1.0 / mean( 1/ret$Ht[1:K] ,na.rm=TRUE)
       
       # do the multiloucs as a summation
       #if( size.correct ) {
@@ -69,15 +73,16 @@ Gst_prime <- function(  x, stratum="Population",  nperm=0, size.correct=TRUE ) {
       #  Gst.tot <- Gst.tot / ((k-1)*(1-hs.estimated))
       #}
       #else {
-      x <- ret$Gst
+      x <- ret$Gst[1:K]
       x[ x < 0 ] <- NA
-        Gst.tot <- 1.0 / mean( 1/x ,na.rm=TRUE)
+      Gst.tot <- 1.0 / mean( 1/x ,na.rm=TRUE)
       #} 
       
       ret[K+1,1] <- "Multilocus"
       ret[K+1,2] <- Gst.tot
       ret[K+1,3] <- Hs.tot
-      ret[K+1,4] <- Ht.tot      
+      ret[K+1,4] <- Ht.tot
+      ret[K+1,5] <- NA_real_
     }
     
   }

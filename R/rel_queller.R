@@ -14,7 +14,7 @@
 #'  relatedness.
 #' @return A matrix of pairwise relatedness values.
 #' @author Rodney J. dyer <rjdyer@@vcu.edu>
-#' @export
+#' @noRd
 #' 
 rel_queller <- function( x ){
   if( is(x,"locus"))

@@ -1,4 +1,4 @@
-#' Estimation of Bray-Curtis distance
+#' Estimation of Cavalli-Sforza distance
 #' 
 #' This function returns a measure of genetic distance based upon
 #'  the Cavalli-Sforza & Edwards (1967)  distance metric.  Assuming 
@@ -8,8 +8,7 @@
 #'  object.  
 #' @return A matrix of Cavalli-Sforza Genetic distance estimates.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @export
-#' @importFrom reshape2 dcast 
+#' @noRd
 #' @examples
 #'   AA <- locus( c("A","A") )
 #'   AB <- locus( c("A","B") )
@@ -37,10 +36,13 @@ dist_cavalli <- function( x, stratum="Population" ) {
   if( K==0)
     stop("You need to pass objects of type 'locus' to use for dist_cavalli().")
   if( K > 1 )
-    message("Multilous estimates of Cavalli-Sforza distance are assumed to be additive.")
+    message("Multilocus estimates of Cavalli-Sforza distance are assumed to be additive.")
 
   freqs <- frequencies( x, stratum=stratum) 
-  f <- dcast( freqs, Locus + Allele ~ Stratum, value.var="Frequency", fill=0)
+  mat <- stats::xtabs(Frequency ~ paste(Locus, Allele, sep = "___") + Stratum, data = freqs)
+  parts <- do.call(rbind, strsplit(rownames(mat), "___", fixed = TRUE))
+  f <- data.frame(Locus = parts[, 1], Allele = parts[, 2], unclass(mat), check.names = FALSE, stringsAsFactors = FALSE)
+  rownames(f) <- NULL
   strata_names <- names(f)[3:length(names(f))]
   K <- length(strata_names)
   ret <- matrix( 0, K, K )

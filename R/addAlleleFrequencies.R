@@ -83,7 +83,9 @@ addAlleleFrequencies <- function(map, freqs, locus = NULL, width = 40, height = 
 
   # Subset to the chosen locus and pivot to wide (Stratum × Allele)
   sub <- freqs[freqs$Locus == locus, ]
-  wide <- reshape2::dcast(sub, Stratum ~ Allele, value.var = "Frequency", fill = 0)
+  mat <- as.matrix(stats::xtabs(Frequency ~ Stratum + Allele, data = sub))
+  wide <- data.frame(Stratum = rownames(mat), unclass(mat), check.names = FALSE, stringsAsFactors = FALSE)
+  rownames(wide) <- NULL
 
   # Join coordinates with the wide frequency matrix on Stratum
   joined <- merge(coords, wide, by = "Stratum")

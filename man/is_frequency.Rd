@@ -19,6 +19,10 @@ This is a function that returns a flag indicating that the
  object passed has the qualities of a \code{data.frame} created
  by the function \code{frequencies}.
 }
+\examples{
+df <- data.frame(Allele = c("A", "B"), Frequency = c(0.5, 0.5))
+is_frequency(df)
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

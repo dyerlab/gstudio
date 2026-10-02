@@ -16,6 +16,10 @@ The fraction of that data set that have unique multilocus genotypes.
 This function returns the unique population size of the population
  if all individuals were treated as multilocus individuals.
 }
+\examples{
+data(arapat)
+multilocus_diversity(arapat)
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

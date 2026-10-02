@@ -9,6 +9,11 @@
 #' @return The text of the html file to be saved or viewed in the appropriate browser.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
+#' @examples
+#' \dontrun{
+#'   data(lopho)
+#'   to_html(lopho, file = "lopho.html")
+#' }
 to_html <- function( graph, file ) {
   if( !inherits( graph, "popgraph") )
     stop("Cannot save a html file from a popgraph that is not made from a popgraph...")

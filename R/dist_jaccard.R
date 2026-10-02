@@ -7,7 +7,7 @@
 #' @param stratum The name of the stratum variable in \code{x}
 #' @return A matrix of Jaccard distance
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @export
+#' @noRd
 #' @examples
 #'   AA <- locus( c("A","A") )
 #'   AB <- locus( c("A","B") )
@@ -21,15 +21,15 @@
 dist_jaccard <- function( x, stratum="Population" ) {
   
   if( !is( x, "data.frame") )
-    stop("You need to pass a data.frame to dist_cavalli() to work.")
+    stop("You need to pass a data.frame to dist_jaccard() to work.")
   
   if( !(stratum %in% names(x)))
-    stop("You need to specify the correct stratum for dist_cavalli() to work.")
+    stop("You need to specify the correct stratum for dist_jaccard() to work.")
   
   locus_names <- column_class( x, "locus")
   K <- length( locus_names )
   if( K==0)
-    stop("You need to pass objects of type 'locus' to use for dist_cavalli().")
+    stop("You need to pass objects of type 'locus' to use for dist_jaccard().")
   else if( K > 1 )
     message("Jaccard distance will be assumed to be entirely additive across loci.")
   

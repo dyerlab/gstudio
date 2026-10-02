@@ -19,3 +19,8 @@ A matrix with the count of objects in each bin category.
 \description{
 This function returns bin distances for spatial autocorrelation.
 }
+\examples{
+D <- matrix(c(0, 2, 5, 2, 0, 3, 5, 3, 0), nrow = 3)
+lag_matrix(D, lower = 1, upper = 4)
+
+}

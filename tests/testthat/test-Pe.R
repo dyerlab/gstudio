@@ -17,5 +17,10 @@ test_that("checking",{
   expect_that( Pe("Bob"), throws_error() )
   expect_that( Pe(loci), is_equivalent_to( sum( p*(1-p) ) ) )
 
+  # Data.frame test
+  df <- data.frame(TPI = loci, PGM = loci)
+  res_df <- Pe(df)
+  expect_s3_class(res_df, "data.frame")
+  expect_equal(res_df$Pe, c(Pe(loci), Pe(loci)))
 }
 )

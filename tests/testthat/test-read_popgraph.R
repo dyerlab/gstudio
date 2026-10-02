@@ -2,10 +2,10 @@
 test_that("testing", {
 
   file <- system.file("extdata","lopho.pgraph",package="gstudio")
-  if( file == "")
-    file <- "/Users/rodney/Documents/Software/Packages/gstudio/inst/extdata/lopho.pgraph"
+  if( file == "" || !file.exists(file) )
+    file <- file.path("..", "..", "inst", "extdata", "lopho.pgraph")
   
-  require(igraph)
+  suppressWarnings(require(igraph, quietly = TRUE))
   graph <- read_popgraph( file )
   
   

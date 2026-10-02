@@ -39,6 +39,13 @@ This is a convienence function that takes the output of a \code{paternity()}
  function and the raw \code{data.frame} with the coordinates and turns it
  into a \code{data.frame} that can be used in \code{geom_segments}.
 }
+\examples{
+pat <- data.frame(MomID = 1, OffID = 101, DadID = 2, Fij = 1.0)
+df <- data.frame(ID = c(1, 2, 101), OffID = c(0, 0, 101),
+                 Longitude = c(-110, -111, -110.5), Latitude = c(25, 26, 25.5))
+sp <- spiderplot_data(pat, df)
+head(sp)
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

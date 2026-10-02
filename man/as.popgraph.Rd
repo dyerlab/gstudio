@@ -16,6 +16,11 @@ An object of type \code{popgraph}
 This is a simple conversion routine for \code{matrix} or \code{igraph} 
  objects into \code{popgraph} objects
 }
+\examples{
+m <- matrix(c(0, 1, 1, 0), nrow = 2)
+g <- as.popgraph(m)
+g
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

@@ -10,6 +10,10 @@
 #'  sets are the intersection of the two.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
+#' @examples
+#' data(lopho)
+#' g_cong <- congruence_topology(lopho, lopho)
+#' g_cong
 congruence_topology <- function( graph1, graph2, warn.nonoverlap=TRUE ) {
   
   if( !inherits(graph1, "popgraph") | !inherits(graph2, "igraph") )
@@ -34,7 +38,7 @@ congruence_topology <- function( graph1, graph2, warn.nonoverlap=TRUE ) {
   #b <- as.matrix( as_adjacency_matrix(graph2))
   
   cong <- graph_from_adjacency_matrix( a*b, mode="undirected" )
-  class(cong) <- c("igraph","popgraph")
+  class(cong) <- c("popgraph", "igraph")
   return( cong )
 
 }

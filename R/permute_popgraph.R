@@ -10,7 +10,12 @@
 #' @return A weighted graph where edge weights represent the proportion of times the 
 #'  edge was found in the perumuted data sets.
 #' @export
-#' 
+#' @examples
+#' data(arapat)
+#' mv <- to_mv(arapat)
+#' \donttest{
+#'   boot_g <- permute_popgraph(mv, arapat$Population, nboot = 5)
+#' } 
 permute_popgraph <- function( data, groups, nboot=50, ...){
   if( !is(data,"matrix"))
     stop("Cannot use non-matrix data to make a graph, let alone bootstrap it...")

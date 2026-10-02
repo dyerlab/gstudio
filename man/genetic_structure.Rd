@@ -2,12 +2,12 @@
 % Please edit documentation in R/genetic_structure.R
 \name{genetic_structure}
 \alias{genetic_structure}
-\title{Estimation of , genetic structure statistics.}
+\title{Estimation of genetic structure and differentiation statistics}
 \usage{
 genetic_structure(
   x,
   stratum = "Population",
-  mode = c("Gst", "Gst_prime", "Dest")[1],
+  mode = c("Gst", "Gst_prime", "Dest", "Fst")[1],
   nperm = 0,
   size.correct = TRUE,
   pairwise = FALSE,
@@ -16,41 +16,41 @@ genetic_structure(
 }
 \arguments{
 \item{x}{An object of type \code{data.frame} with at least a single column
-of type \code{\link{locus}}}
+of type \code{\link{locus}}.}
 
 \item{stratum}{The stratum to use as groupings (default='Population').}
 
-\item{mode}{Which statistic to estimate.  Current options include:
+\item{mode}{Which statistic to estimate. Current options include:
 \describe{
- \item{Gst}{Nei's Gst (not Berg and Hamrick)}
- \item{Gst_prime}{Hedrick's correction of Nei's Gst for diverse loci}
- \item{Dest}{Joost's estimate}
+ \item{Fst}{Wright's Fst parameter based upon variance in allele frequencies}
+ \item{Gst}{Nei's Gst parameter}
+ \item{Gst_prime}{Hedrick's (2005) standardized Gst' for diverse loci}
+ \item{Dest}{Jost's (2008) D_est differentiation estimate}
 }}
 
 \item{nperm}{The number of permutations used to test the hypothesis that
-the parameter = 0.}
+the parameter = 0 (default=0).}
 
-\item{size.correct}{A flag indicating that the estimate should be corrected for
+\item{size.correct}{A flag indicating that the estimate should be corrected
 based upon sample sizes (default=TRUE).}
 
 \item{pairwise}{A flag indicating that the analysis should be done among all pairs of 
-strata.}
+strata (default=FALSE).}
 
 \item{locus}{An optional parameter specifying the locus or loci to be used
-in the analysis.  If this is not specified, then all loci are used.}
+in the analysis. If this is not specified, then all loci are used.}
 }
 \value{
 An object of type \code{data.frame} containing estimates for each locus and a
- multilocus estimate.  If \code{pairwise=TRUE}, then it returns the multilocus (if more
- than one locus) estimate in a matrix format.
+ multilocus estimate. If \code{pairwise=TRUE}, then it returns a pairwise matrix.
 }
 \description{
-This function estimates common , genetic statistics.
+This function is the primary front-end for estimating common genetic structure
+ and differentiation statistics across loci and strata.
 }
 \note{
-The multilocus estimation of these parameters is estimated following the
- suggestions of Culley et al. (2001) A comparison of two methods of calculating Gst, 
- a genetic measure of population differentiation.  American Journal of Botany 89(3): 460-465.
+The multilocus estimation of Gst parameters is estimated following the
+ suggestions of Culley et al. (2001) American Journal of Botany 89(3): 460-465.
 }
 \examples{
  AA <- locus( c("A","A") )
@@ -60,7 +60,8 @@ The multilocus estimation of these parameters is estimated following the
  locus2 <- c(AB,BB,AA,BB,BB,AB,AB,AA,AA,BB)
  Population <- c(rep("Pop-A",5),rep("Pop-B",5))
  df <- data.frame( Population, TPI=locus, PGM=locus2 )
- genetic_structure( df, mode="Gst", nperm=999)
- genetic_structure( df, mode="Gst", pairwise=TRUE)
- genetic_structure( df, mode="Gst", pairwise=TRUE, locus="TPI" )
+ genetic_structure( df, mode="Gst")
+ genetic_structure( df, mode="Fst")
+ genetic_structure( df, mode="Dest")
+ genetic_structure( df, mode="Gst_prime", pairwise=TRUE)
 }

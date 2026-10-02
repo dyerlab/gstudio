@@ -19,6 +19,12 @@ A fully created popgraph file (e.g., an igraph object
 \description{
 This function imports a popgraph from the older text format
 }
+\examples{
+\dontrun{
+  path <- system.file("extdata", "lopho.pgraph", package = "gstudio")
+  graph <- read_popgraph(path)
+}
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

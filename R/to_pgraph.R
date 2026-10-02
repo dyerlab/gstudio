@@ -10,6 +10,10 @@
 #'  you do not provide a file object.
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @examples
+#' data(lopho)
+#' txt <- to_pgraph(lopho)
+#' cat(substr(txt, 1, 100))
 to_pgraph <- function( graph, file ) {
   if( !is(graph,"popgraph") )
     stop("This function only works using a popgraph object.")

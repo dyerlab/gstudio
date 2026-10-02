@@ -80,3 +80,41 @@ test_that("to_jgf returns JSON string when no file given", {
   expect_true(!is.null(doc$graph$nodes$X))
   expect_true(!is.null(doc$graph$nodes$Y))
 })
+
+test_that("write_popgraph exports other formats cleanly", {
+  a <- matrix(0, nrow = 3, ncol = 3)
+  a[1,2] <- a[2,3] <- 1
+  a <- a + t(a)
+  rownames(a) <- colnames(a) <- c("P1", "P2", "P3")
+  graph <- as.popgraph(a)
+
+  # Adjacency
+  tmp_adj <- tempfile(fileext = ".csv")
+  on.exit(unlink(tmp_adj), add = TRUE)
+  write_popgraph(graph, tmp_adj, format = "adjacency")
+  expect_true(file.exists(tmp_adj) && file.info(tmp_adj)$size > 0)
+
+  # Paths
+  tmp_paths <- tempfile(fileext = ".csv")
+  on.exit(unlink(tmp_paths), add = TRUE)
+  write_popgraph(graph, tmp_paths, format = "paths")
+  expect_true(file.exists(tmp_paths) && file.info(tmp_paths)$size > 0)
+
+  # Weights
+  tmp_wt <- tempfile(fileext = ".csv")
+  on.exit(unlink(tmp_wt), add = TRUE)
+  write_popgraph(graph, tmp_wt, format = "weights")
+  expect_true(file.exists(tmp_wt) && file.info(tmp_wt)$size > 0)
+
+  # JSON format
+  tmp_json <- tempfile(fileext = ".json")
+  on.exit(unlink(tmp_json), add = TRUE)
+  write_popgraph(graph, tmp_json, format = "json")
+  expect_true(file.exists(tmp_json) && file.info(tmp_json)$size > 0)
+
+  # pgraph format
+  tmp_pg <- tempfile(fileext = ".pgraph")
+  on.exit(unlink(tmp_pg), add = TRUE)
+  write_popgraph(graph, tmp_pg, format = "pgraph")
+  expect_true(file.exists(tmp_pg) && file.info(tmp_pg)$size > 0)
+})

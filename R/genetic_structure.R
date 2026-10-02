@@ -1,29 +1,29 @@
-#' Estimation of , genetic structure statistics.
+#' Estimation of genetic structure and differentiation statistics
 #' 
-#' This function estimates common , genetic statistics.
+#' This function is the primary front-end for estimating common genetic structure
+#'  and differentiation statistics across loci and strata.
 #' @param x An object of type \code{data.frame} with at least a single column
-#'  of type \code{\link{locus}}
+#'  of type \code{\link{locus}}.
 #' @param stratum The stratum to use as groupings (default='Population').
-#' @param mode Which statistic to estimate.  Current options include:
+#' @param mode Which statistic to estimate. Current options include:
 #' \describe{
-#'  \item{Gst}{Nei's Gst (not Berg and Hamrick)}
-#'  \item{Gst_prime}{Hedrick's correction of Nei's Gst for diverse loci}
-#'  \item{Dest}{Joost's estimate}
+#'  \item{Fst}{Wright's Fst parameter based upon variance in allele frequencies}
+#'  \item{Gst}{Nei's Gst parameter}
+#'  \item{Gst_prime}{Hedrick's (2005) standardized Gst' for diverse loci}
+#'  \item{Dest}{Jost's (2008) D_est differentiation estimate}
 #' }
 #' @param nperm The number of permutations used to test the hypothesis that
-#'  the parameter = 0.
-#' @param size.correct A flag indicating that the estimate should be corrected for
+#'  the parameter = 0 (default=0).
+#' @param size.correct A flag indicating that the estimate should be corrected
 #'  based upon sample sizes (default=TRUE).
 #' @param pairwise A flag indicating that the analysis should be done among all pairs of 
-#'  strata. 
+#'  strata (default=FALSE).
 #' @param locus An optional parameter specifying the locus or loci to be used
-#'  in the analysis.  If this is not specified, then all loci are used.
+#'  in the analysis. If this is not specified, then all loci are used.
 #' @return An object of type \code{data.frame} containing estimates for each locus and a
-#'  multilocus estimate.  If \code{pairwise=TRUE}, then it returns the multilocus (if more
-#'  than one locus) estimate in a matrix format.
-#' @note The multilocus estimation of these parameters is estimated following the
-#'  suggestions of Culley et al. (2001) A comparison of two methods of calculating Gst, 
-#'  a genetic measure of population differentiation.  American Journal of Botany 89(3): 460-465.
+#'  multilocus estimate. If \code{pairwise=TRUE}, then it returns a pairwise matrix.
+#' @note The multilocus estimation of Gst parameters is estimated following the
+#'  suggestions of Culley et al. (2001) American Journal of Botany 89(3): 460-465.
 #' @export
 #' @examples
 #'  AA <- locus( c("A","A") )
@@ -33,19 +33,23 @@
 #'  locus2 <- c(AB,BB,AA,BB,BB,AB,AB,AA,AA,BB)
 #'  Population <- c(rep("Pop-A",5),rep("Pop-B",5))
 #'  df <- data.frame( Population, TPI=locus, PGM=locus2 )
-#'  genetic_structure( df, mode="Gst", nperm=999)
-#'  genetic_structure( df, mode="Gst", pairwise=TRUE)
-#'  genetic_structure( df, mode="Gst", pairwise=TRUE, locus="TPI" )
-genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime", "Dest")[1], nperm=0, size.correct=TRUE, pairwise=FALSE, locus ) {
+#'  genetic_structure( df, mode="Gst")
+#'  genetic_structure( df, mode="Fst")
+#'  genetic_structure( df, mode="Dest")
+#'  genetic_structure( df, mode="Gst_prime", pairwise=TRUE)
+genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime", "Dest", "Fst")[1], nperm=0, size.correct=TRUE, pairwise=FALSE, locus ) {
   
   if( !inherits(x,"data.frame") )
       stop("You need to pass a data frame to the function genetic_structure()...")
+  
+  stratum <- .detect_stratum(x, stratum, default = "Population")
     
   if( !(stratum %in% names(x) ) ) 
     stop("You must specify which stratum to use for the estimation of genetic structure.")
 
-  if( !(mode %in% c("Fst","Gst", "Gst_prime", "Dest")) )
-    stop(paste("The structure mode",mode,"is not recognized") )
+  mode_clean <- tolower(mode)
+  if( !(mode_clean %in% c("fst", "gst", "gst_prime", "dest", "gst'")) )
+    stop(paste("The structure mode", mode, "is not recognized"))
   
   # subsets of loci
   if( !missing( locus ) ){
@@ -67,7 +71,7 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
       for( j in i:K){
         if( i!=j ){
           y <- rbind(x[x[[stratum]]==pops[i],], x[x[[stratum]]==pops[j],])
-          r <- genetic_structure( y, stratum, mode, nperm=0, size.correct )
+          r <- genetic_structure( y, stratum, mode_clean, nperm=0, size.correct )
           ret[i,j] <- ret[j,i] <-  r[nrow(r),2]
         } 
       }
@@ -76,25 +80,20 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
     return( ret )
   }
   
-  
   else {
-    
-    mode <- tolower( mode )
-    
     ret <- data.frame()
     
-    if( mode == "gst") 
+    if( mode_clean == "gst") 
       ret <- Gst( x, stratum=stratum, nperm=nperm, size.correct=size.correct )
     
-    else if( mode == "gst_prime") 
+    else if( mode_clean %in% c("gst_prime", "gst'") ) 
       ret <- Gst_prime( x, stratum=stratum, nperm=nperm, size.correct=size.correct )
     
-    else if( mode == "dest" ) 
+    else if( mode_clean == "dest" ) 
       ret <- Dest( x, stratum=stratum, nperm=nperm, size.correct=size.correct )
     
-    else if( mode == "fst" ) 
+    else if( mode_clean == "fst" ) 
       ret <- Fst( x, stratum, nperm )
-    
   }
   
 

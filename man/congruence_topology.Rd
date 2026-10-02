@@ -22,6 +22,11 @@ An object of type \code{popgraph} where the node and edge
 Takes two graphs and returns topology that is 
  the intersection of the edge sets.
 }
+\examples{
+data(lopho)
+g_cong <- congruence_topology(lopho, lopho)
+g_cong
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

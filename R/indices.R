@@ -9,6 +9,8 @@
 #'  both [i,j] and [j,i] values
 #' @return A matrix of indicies
 #' @export
+#' @examples
+#' indices(1:4)
 indices <- function( seq, only.unique=TRUE ) {
   ret <- cbind( c(t(matrix(rep.int(seq, length(seq)), nrow=length(seq)))), rep.int(seq, length(seq)) )
   if( only.unique)

@@ -15,6 +15,10 @@
 #' @return A matrix (KxK) in size (where K is the number of nodes)
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu> 
+#' @examples
+#' data(lopho)
+#' A <- to_matrix(lopho, mode = "adjacency")
+#' dim(A)
 to_matrix <- function( x, mode=c("adjacency","shortest path","edge weight")[1], ... ) { 
   
   if( !inherits(x,"popgraph"))
@@ -25,8 +29,10 @@ to_matrix <- function( x, mode=c("adjacency","shortest path","edge weight")[1], 
     ret <- distances( x, ... )
   else if( mode=="adjacency")
     ret <- as_adjacency_matrix( x, sparse=FALSE, ...)
-  else if( mode=="edge weight")
+  else if( mode %in% c("edge weight", "edge weights") )
     ret <- as_adjacency_matrix( x, attr="weight", sparse=FALSE,... ) 
+  else
+    stop("Unrecognized mode passed to to_matrix: ", mode)
   
   if( length( igraph::V(x)$name ))
     rownames(ret) <- colnames(ret) <- igraph::V(x)$name 

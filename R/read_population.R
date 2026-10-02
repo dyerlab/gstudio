@@ -30,6 +30,11 @@
 #' @return A \code{data.frame} with \code{locus} columns pre-formatted.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples
+#' \dontrun{
+#'   path <- system.file("extdata", "data_2_column.csv", package = "gstudio")
+#'   pop <- read_population(path, type = "column", locus.columns = 4:7)
+#' }
 read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE, delim=":",...) {
   type <- tolower(type)
   
@@ -163,7 +168,7 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
 .read_genepop <- function( path ){
   
   raw <- readLines( path, -1, skipNul = TRUE )
-  raw <- stringi::stri_trans_general(raw, "latin-ascii")
+  raw <- iconv(raw, to = "ASCII//TRANSLIT")
   raw <- raw[ nchar(raw)>0 ]
   
   # remove trailing and leading whitespaces
@@ -182,12 +187,12 @@ read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", h
   
   header <- raw[1:(popidx[1] - 1)]
   description <- header[1]
-  locus_names <- strsplit(header[2:(length(header))], split=",")[[1]]
+  locus_names <- trimws(strsplit(header[2:(length(header))], split=",")[[1]])
   K <- length(locus_names)
   if( K < 1 )
     stop("No loci?  What are you doing?")
   if( K == 1 ) {
-    locus_names <- header[ 2:(length(header)) ]
+    locus_names <- trimws(header[ 2:(length(header)) ])
     K <- length(locus_names)
   }
     

@@ -11,6 +11,10 @@
 #'  never creating self-loops or multiple edges.
 #' @return An \code{igraph} object with randomized edges.
 #' @export
+#' @examples
+#' data(lopho)
+#' g_rand <- randomize_graph(lopho, mode = "degree")
+#' g_rand
 
 randomize_graph <- function( graph=NULL, mode=c("full","degree")[2] ) {
   

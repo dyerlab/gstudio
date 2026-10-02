@@ -12,7 +12,7 @@ to_genepop(df, stratum = "Population")
 \item{stratum}{The stratum to use as "POP" (default="Population")}
 }
 \value{
-A string representation of the \code{data.frame} formatted as
+A string representation of the \code{data.frame} formatted for GENEPOP.
 }
 \description{
 This is a basic output file formatter for saving files necessary for saving

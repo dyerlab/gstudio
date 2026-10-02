@@ -18,6 +18,12 @@ An object of type data.frame
 Quick function to convert a population graph into a data.frame
   object for either the node or edge set with all attributes.
 }
+\examples{
+data(lopho)
+df_edges <- to_df(lopho, mode = "edges")
+head(df_edges)
+
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

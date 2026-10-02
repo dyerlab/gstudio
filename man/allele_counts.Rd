@@ -20,6 +20,12 @@ A matrix where each row is a strata and each column is a count of alleles
 Takes a locus and set of populations and returns matrix of
   allele counts
 }
+\examples{
+data(arapat)
+cts <- allele_counts(arapat, locus = "LTRS", stratum = "Population")
+head(cts) 
+
+}
 \author{
 Rodney J. Dyer
 }

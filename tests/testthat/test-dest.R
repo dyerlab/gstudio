@@ -60,5 +60,6 @@ test_that("checking",{
   expect_that( dim(est)[2], equals(5))
   expect_that( names(est), is_equivalent_to( c("Locus","Dest","Hs","Ht","P")))
   expect_that( est$Locus, is_equivalent_to( c("TPI","PGM","Multilocus")))
-  
+  # When nperm = 0, P should be NA rather than recycling Dest
+  expect_true( all( is.na(est$P) ) )
 })

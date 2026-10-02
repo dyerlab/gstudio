@@ -16,6 +16,10 @@ A distance matrix of the same size.
 This function takes a covariance matrix and turns it into a distance
   matrix following Gower (1966).
 }
+\examples{
+C <- matrix(c(1, 0.5, 0.5, 1), nrow = 2)
+cov2dist(C)
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

@@ -8,6 +8,10 @@
 #' @param verbose A flag to print locus names as you go (default=FALSE)
 #' @return A text object with data formatted for output.
 #' @export
+#' @examples
+#' data(arapat)
+#' txt <- to_dfdist(arapat[1:30, ], stratum = "Population")
+#' cat(substr(txt, 1, 100))
 to_dfdist <- function( x, stratum="Population", verbose=FALSE){
   if( !is(x,"data.frame"))
     stop("to_dfdist needs a data.frame to work with.")
@@ -32,9 +36,9 @@ to_dfdist <- function( x, stratum="Population", verbose=FALSE){
     if( verbose )
       message(locus, " ", appendLF = FALSE)
     cts <- allele_counts( x, locus, stratum )
-    cts <- cts[,2:ncol(cts)] # remove Stratum column
+    cts <- cts[, 2:ncol(cts), drop = FALSE] # remove Stratum column
     ret <- c( ret, ncol(cts) )
-    rows <- as.vector( apply( cts, 1, function(x) return(paste(x,collapse="     "))) )
+    rows <- as.vector( apply( as.matrix(cts), 1, function(x) return(paste(x,collapse="     "))) )
     ret <- c( ret, rows, "" )
   }
   

@@ -36,6 +36,12 @@
 #'
 #' @importFrom igraph E V ecount vcount
 #' @export
+#' @examples
+#' data(lopho)
+#' \donttest{
+#'   res <- asymmetry_network(lopho, nperm = 19)
+#'   res
+#' }
 asymmetry_network <- function(graph, nperm = 999,
                               rewire = c("degree", "full"), ...) {
 
@@ -55,7 +61,7 @@ asymmetry_network <- function(graph, nperm = 999,
 
     ne <- igraph::ecount(gr)
     igraph::E(gr)$weight <- sample(w, size = ne, replace = (length(w) != ne))
-    class(gr) <- c("igraph", "popgraph")
+    class(gr) <- c("popgraph", "igraph")
 
     # Rewiring (especially rewire = "full") can leave isolated nodes, for which
     # the bandwidth is undefined; record those graphs as NA rather than abort.

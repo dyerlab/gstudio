@@ -74,7 +74,10 @@ paternity <- function( offspring, mother, fathers, ID="ID", OffID="OffID", stric
           fij[[locus]] <- transition_probability(o,m,f)
 
       }
-      oret$Fij[i] <- prod(as.numeric(fij))
+      if( length(fij) > 0 )
+        oret$Fij[i] <- prod(as.numeric(fij))
+      else
+        oret$Fij[i] <- 0
     }
     if( sum(oret$Fij)>0)
       oret$Fij <- oret$Fij/ sum( oret$Fij )

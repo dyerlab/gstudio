@@ -17,6 +17,12 @@
 #'  \code{geom_segment}.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
+#' @examples
+#' pat <- data.frame(MomID = 1, OffID = 101, DadID = 2, Fij = 1.0)
+#' df <- data.frame(ID = c(1, 2, 101), OffID = c(0, 0, 101),
+#'                  Longitude = c(-110, -111, -110.5), Latitude = c(25, 26, 25.5))
+#' sp <- spiderplot_data(pat, df)
+#' head(sp)
 spiderplot_data <- function( pat, df, ID="ID", OffID="OffID", longitude="Longitude", latitude="Latitude"){
   
   if( !is(pat,"data.frame") | !all(names(pat) == c("MomID","OffID","DadID","Fij")))

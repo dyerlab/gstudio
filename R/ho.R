@@ -1,13 +1,10 @@
 #' Estimate observed heterozygosity
 #'  
 #' Returns the general observed heterozygosity parameter
-#'  from the frequencies
-#' @param x An object of type \code{locus}
-#' @return The expected heterozygosity
-#' @note This function can be called on a single vector of data, a \code{data.frame} of loci, 
-#'  or a \code{data.frame} of \code{locus} objects across strata.  If the estimating across
-#'  stratum, the unbiased estimator should be used to average across stratum and is performed
-#'  by passing the appropriate stratum= argument.
+#'  from the genotypes.
+#' @param x An object of type \code{locus} or a \code{data.frame} with locus columns.
+#' @return The observed heterozygosity.
+#' @note For stratified estimates across populations, use \code{\link{Hos}}.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples

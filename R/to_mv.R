@@ -12,6 +12,9 @@
 #' @return The matrix representation of \code{x}.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples
+#' loc <- c(locus(c("A","A")), locus(c("A","B")), locus(c("B","B")))
+#' to_mv(loc)
 to_mv <- function( x, ploidy, alleles, drop.allele=FALSE, leave.as.na=FALSE, ... ) { 
   UseMethod( "to_mv" )
 }

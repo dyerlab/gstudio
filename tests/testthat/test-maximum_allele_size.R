@@ -1,14 +1,14 @@
+test_that("maximum_allele_size finds max digit length across loci", {
+  expect_error(maximum_allele_size())
+  expect_error(maximum_allele_size("not_locus"))
 
-test_that("checking",{
-  loci <- c( locus( c(1,12) ), locus( c(2,22) ), locus( c(2222,2) ))
+  loc1 <- c(locus(c(1, 12)), locus(c(2, 22)))
+  expect_equal(maximum_allele_size(loc1), 2)
 
-  expect_error( maximum_allele_size() )
-  expect_error( maximum_allele_size("A") )
-  expect_error( maximum_allele_size(23) )
-  expect_error( maximum_allele_size( list() ) )
+  loc2 <- c(locus(c(101, 102)), locus(c(1001, 1002)))
+  expect_equal(maximum_allele_size(loc2), 4)
 
-  mx_size <- maximum_allele_size(loci)
-  expect_that( mx_size, is_equivalent_to(4) )
-
-}
-)
+  # Data.frame test
+  df <- data.frame(L1 = loc1, L2 = loc2)
+  expect_equal(maximum_allele_size(df), 4)
+})

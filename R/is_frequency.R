@@ -9,6 +9,9 @@
 #'  representing allele frequencies
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
+#' @examples
+#' df <- data.frame(Allele = c("A", "B"), Frequency = c(0.5, 0.5))
+#' is_frequency(df)
 is_frequency <- function( x ) {
   return( is(x,"data.frame") & ("Allele" %in% names(x)) & ("Frequency" %in% names(x) ))
 }

@@ -27,6 +27,11 @@
 #' @return Nothing
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @examples
+#' \dontrun{
+#'   data(lopho)
+#'   write_popgraph(lopho, file = "lopho.json", format = "json")
+#' }
 write_popgraph <- function(graph, file, format = "pgraph",
                             label = "Population Graph", loci = NULL, ...) {
 
@@ -55,7 +60,7 @@ write_popgraph <- function(graph, file, format = "pgraph",
       write.csv(a, file = file)
     },
     weights = {
-      a <- to_matrix(graph, mode = "edge weights")
+      a <- to_matrix(graph, mode = "edge weight")
       write.csv(a, file = file)
     },
     write.graph(graph, file, format = format)

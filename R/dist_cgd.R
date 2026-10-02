@@ -7,13 +7,13 @@
 #'  object.  
 #' @return A matrix of conditional genetic distance estimates.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @export
+#' @noRd
 dist_cgd <- function( x, stratum="Population" ) {
   if( !is( x, "data.frame") )
-    stop("You need to pass a data.frame to dist_cavalli() to work.")
+    stop("You need to pass a data.frame to dist_cgd() to work.")
   
   if( !(stratum %in% names(x)))
-    stop("You need to specify the correct stratum for dist_cavalli() to work.")
+    stop("You need to specify the correct stratum for dist_cgd() to work.")
 
 
   mv <- to_mv( x )

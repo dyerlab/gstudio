@@ -7,6 +7,11 @@
 #' @return The sum of the within stratum variance for each group
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
+#' @examples
+#' data(arapat)
+#' mv <- to_mv(arapat)
+#' cv <- centroid_variance(mv, arapat$Population)
+#' head(cv)
 centroid_variance <- function( x, grouping ){
   
   if( !is(grouping, "factor"))

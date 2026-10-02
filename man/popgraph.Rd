@@ -23,6 +23,12 @@ This function is the default constructor for \code{PopulationGraph} objects.  Me
  a \code{PopulationGraph} is a class that has some meta data and an \code{igraph} object 
  within it.
 }
+\examples{
+data(arapat)
+mv <- to_mv(arapat)
+graph <- popgraph(mv, groups = arapat$Population)
+graph
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

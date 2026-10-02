@@ -24,6 +24,11 @@ An object of type \code{data.frame} with all the node attributes.
 This is a quick conversion of vertex attributes to a \code{data.frame}, essentially
  the reverse operation as \code{decorate_graph} function.
 }
+\examples{
+data(lopho)
+df_nodes <- to_data.frame(lopho, mode = "nodes")
+head(df_nodes)
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

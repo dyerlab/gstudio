@@ -1,16 +1,16 @@
-#' Estimation of jaccard distance
+#' Estimation of Bray-Curtis distance
 #' 
 #' This function returns a measure of genetic distance based upon
-#'  the AMOVA distance metric.  
+#'  the Bray-Curtis distance metric (1 - proportion of shared alleles).  
 #' @param x Either a \code{data.frame} with both stratum and \code{locus} 
 #'  objects in them (for strata distance) OR a vector of \code{locus} 
 #'  objects and this will calculate distance based upon individual
 #'  genetic distances.
 #' @param stratum The name of the stratum variable in \code{x}
-#' @return A matrix of Jaccard distance
+#' @return A matrix of Bray-Curtis distance
 #' 
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @export
+#' @noRd
 #' @examples  
 #' AA <- locus( c("A","A") )
 #' AB <- locus( c("A","B") )
@@ -37,22 +37,21 @@ dist_bray <- function( x, stratum="Population" ) {
     stop("You need to specify the correct stratum for dist_bray() to work.")
   
   locus_names <- column_class( x, "locus")
-  K <- length( locus_names )
-  if( K==0)
+  num_loci <- length( locus_names )
+  if( num_loci == 0 )
     stop("You need to pass objects of type 'locus' to use for dist_bray().")
-  else if( K > 1 )
+  else if( num_loci > 1 )
     message("Bray distance will be assumed to be entirely additive across loci.")
  
-  
   f <- to_mv_freq(x,stratum)
   K <- nrow(f)
-  nloc <- ncol(f)
   ret <- matrix(0,K,K)
   rownames(ret) <- colnames(ret) <- rownames(f)
   for( i in 1:K){
     for( j in 1:i){
       if( i != j){
-        ret[i,j] <- ret[j,i] <- sum(apply(f[ c(i,j), ], 2, min)) / nloc
+        ps <- sum(pmin(f[i, ], f[j, ])) / num_loci
+        ret[i,j] <- ret[j,i] <- 1 - ps
       }
     }
   }

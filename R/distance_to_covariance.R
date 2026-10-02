@@ -18,8 +18,7 @@ distance_to_covariance <- function( X ) {
   
   Xi <- matrix( colSums(X), nrow=r, ncol=c, byrow = TRUE  )
   Xj <- matrix( rowSums(X), nrow=r, ncol=c )
-  X2 <- X^2
   
-  C = (-1*X + (Xi + Xj)/r - X2/r^2 )/2
+  C = (-1*X + (Xi + Xj)/r - sum(X)/r^2 )/2
   return( C )
 }

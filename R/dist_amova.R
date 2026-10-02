@@ -28,7 +28,7 @@
 #'   flow: improved power using conditional genetic distance derived from the
 #'   topology of population networks. Molecular Ecology 19: 3746–3759.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @export
+#' @noRd
 #' @examples
 #' AA <- locus( c("A","A") )
 #' AB <- locus( c("A","B") )
@@ -60,7 +60,7 @@ dist_amova <- function( x, binary = FALSE ) {
 
   # make data vectors for 2Gener amova
   if( any( p$Ploidy != round(p$Ploidy))){
-    stop("PLOIDY WARNING: Assuming 2Gener Approximation.")
+    warning("PLOIDY WARNING: Assuming 2Gener Approximation.")
     data <- FALSE
 
     if( any( p$Ploidy > 2))
@@ -97,15 +97,9 @@ dist_amova <- function( x, binary = FALSE ) {
   # For binary markers (binary=TRUE) no rescaling is needed.
   scale <- if (binary) 1 else 2
 
-  for( i in 1:N) {
-    xi <- data[i,]
-    for( j in 1:i) {
-      if( i != j ) {
-        yj <- data[j,]
-        ret[i,j] <- ret[j,i] <- scale * sum( t(xi-yj) %*% (xi-yj) )
-      }
-    }
-  }
+  ret <- as.matrix( stats::dist(data)^2 ) * scale
+  dimnames(ret) <- NULL
+  diag(ret) <- 0
 
   return( ret )
 }

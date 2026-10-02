@@ -56,6 +56,12 @@ A \code{data.frame} with \code{locus} columns pre-formatted.
 The function reads in a text file and does the proper translations for 
  genotypes and spatial coordinates.
 }
+\examples{
+\dontrun{
+  path <- system.file("extdata", "data_2_column.csv", package = "gstudio")
+  pop <- read_population(path, type = "column", locus.columns = 4:7)
+}
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

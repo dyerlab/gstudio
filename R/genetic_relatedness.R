@@ -1,25 +1,32 @@
 #' Estimates pair-wise relatedness
 #' 
-#' This function returns single relatedness estimates as a 
-#'  pairwise matrix.
-#' @param x A \code{data.frame} that has \code{locus} columns.
-#' @param loci The loci to use (if missing all loci are used).
-#' @param mode The kind of relatedness to be estimated.  Currently
-#'  Fij (the default) and LynchRitland are available.
-#' @param freqs An optional \code{data.frame} (as returned by the
-#'  function \code{frequencies()} with allele frequencies).  If this 
-#'  is not provided, it will be estimated from all the data.  This allows
-#'  you to estimate relatedness among subsets of individuals using 
-#'  more global measures of relatedness.
+#' This is the primary front-end function for estimating pairwise genetic relatedness
+#'  among individuals.
+#' @param x A \code{data.frame} with \code{locus} columns, or a single \code{locus} vector.
+#' @param loci The loci to use (if omitted, all loci are used).
+#' @param mode The relatedness metric to use:
+#'    \describe{
+#'      \item{Nason}{Fij estimator of coancestry (Nason)}
+#'      \item{LynchRitland}{Lynch & Ritland (1999) regression estimator}
+#'      \item{Ritland}{Ritland (1996) estimator}
+#'      \item{Queller}{Queller & Goodnight (1989) allele-wise relatedness}
+#'    }
+#' @param freqs An optional \code{data.frame} of allele frequencies as returned by \code{\link{frequencies}}.
+#'  If omitted, estimated from the data.
 #' @return A matrix of pairwise relatedness estimates.
-#' @note This only works on diploid data and will return NA for any 
+#' @note This function operates on diploid data and will return NA for any 
 #'  comparison of missing genotypes.
 #' @export
 #' @examples
-#' x <- c( locus(1:2), locus(c(2,2)), locus(1:2) )
-#' genetic_relatedness( x )
+#' loc1 <- c( locus(c("A","A")), locus(c("A","B")), locus(c("B","B")) )
+#' loc2 <- c( locus(c("1","1")), locus(c("1","2")), locus(c("2","2")) )
+#' df <- data.frame( TPI=loc1, PGM=loc2 )
+#' genetic_relatedness( df, mode="Nason" )
+#' genetic_relatedness( df, mode="LynchRitland" )
+#' genetic_relatedness( df, mode="Ritland" )
+#' genetic_relatedness( df, mode="Queller" )
 
-genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","LynchRitland")[1],freqs=NA ) {
+genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","LynchRitland","Ritland","Queller")[1],freqs=NA ) {
   
   if( is(x,"locus"))
     x <- data.frame(x)
@@ -36,20 +43,24 @@ genetic_relatedness  <- function( x, loci=NA, mode=c("Nason","LynchRitland")[1],
   
   ret <- matrix(0,nrow=N,ncol=N)
   
+  mode_clean <- tolower(mode)
   
-  if( mode=="Nason"){
+  if( mode_clean %in% c("nason", "fij") ){
     for( locus_name in loci)
       ret <- ret + rel_nason(x[[locus_name]])
     ret <- ret * 1/length(loci)
   }
-  else if( mode=="LynchRitland" || mode=="Ritland"){
-    for( locus in loci ){
-      freq <- frequencies( x[[locus]] )
-      val <- .relatedness_kronecker( x[[locus]], freq, length(loci)>1,mode )
-    }
+  else if( mode_clean %in% c("lynchritland", "lynch") ){
+    ret <- rel_lynch( x[, loci, drop=FALSE] )
+  }
+  else if( mode_clean == "ritland" ){
+    ret <- rel_ritland( x[, loci, drop=FALSE] )
+  }
+  else if( mode_clean %in% c("queller", "quellergoodnight") ){
+    ret <- rel_queller( x[, loci, drop=FALSE] )
   }
   else
-    stop("Unrecognized relatedness statistic requested")
+    stop("Unrecognized relatedness statistic requested: ", mode)
   
   
   diag(ret) <- 1

@@ -11,6 +11,10 @@
 #' @return An object of type \code{data.frame} with all the node attributes.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
+#' @examples
+#' data(lopho)
+#' df_nodes <- to_data.frame(lopho, mode = "nodes")
+#' head(df_nodes)
 to_data.frame <- function( x, mode=c("nodes","edges")[1], as.named=TRUE, ... ){
   if( !is(x,"popgraph") & !(is(x,"igraph")))
     stop("What are you passing to to_data.frame()?")

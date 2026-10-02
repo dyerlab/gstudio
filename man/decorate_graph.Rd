@@ -23,6 +23,12 @@ A populated igraph object with as much of the metadata in
 This function takes a data frame and a popgraph object and attempts to add
  the node data (from the data frame) to the graph as vertex attributes.
 }
+\examples{
+data(lopho)
+data(baja)
+g <- decorate_graph(lopho, baja)
+head(igraph::V(g)$Latitude)
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

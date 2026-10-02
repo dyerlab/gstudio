@@ -10,6 +10,11 @@
 #' @return An object of type \code{popgraph}.
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @examples
+#' data(arapat)
+#' mv <- to_mv(arapat)
+#' graph <- popgraph(mv, groups = arapat$Population)
+#' graph
 popgraph <- function( x, groups, alpha=0.05, tol=1.0e-4 ) {
   
   if( missing(x) )
@@ -128,7 +133,7 @@ popgraph <- function( x, groups, alpha=0.05, tol=1.0e-4 ) {
   
 
 
-  class( graph ) <- c("igraph", "popgraph")
+  class( graph ) <- c("popgraph", "igraph")
   
   return( graph )
 }

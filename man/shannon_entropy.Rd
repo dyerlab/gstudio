@@ -17,6 +17,10 @@ An estimate of entropy
 Shannon Entry Function
  The degree of uncertainty in a system based on probability and information theory.
 }
+\examples{
+p <- c(0.5, 0.25, 0.25)
+shannon_entropy(p)
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

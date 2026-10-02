@@ -13,6 +13,12 @@
 #' @return A \code{data.frame} consisting of assignment probabilities.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples
+#' data(arapat)
+#' freqs <- frequencies(arapat, stratum = "Population")
+#' ind <- arapat[1, ]
+#' res <- multilocus_assignment(ind, freqs)
+#' head(res)
 multilocus_assignment <- function( individual, frequencies, F=0, verbose=FALSE ) {
   
   # Check to see correct type of data passed

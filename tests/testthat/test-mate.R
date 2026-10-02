@@ -22,7 +22,10 @@ test_that( "testing",{
   expect_that( as.character(o$ID[1]), equals("A"))
   expect_that( as.character(o$OffID[1]), equals("1"))
   
-  
-  
-  
+  # Parent with missing genotype produces offspring with missing genotype
+  df_na <- df[1, ]
+  df_na$TPI <- locus()
+  o_na <- mate(df[1, ], df_na, N = 2)
+  expect_equal(nrow(o_na), 2)
+  expect_true(all(is.na(o_na$TPI)))
 })

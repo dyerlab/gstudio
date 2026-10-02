@@ -19,6 +19,11 @@ For each individual and each allele, a Bernoulli draw determines whether
 a mutation occurs. If so, the allele is replaced according to the specified
 model (IAM, KAM, or SMM). Missing genotypes are skipped.
 }
+\examples{
+data(arapat)
+mm <- mutation_model(rate = 0.01, model = "iam")
+arapat_mut <- mutate_loci(arapat[1:10, ], mutation = mm)
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

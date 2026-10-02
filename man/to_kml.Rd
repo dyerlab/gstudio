@@ -19,6 +19,13 @@ This function takes a population graph that has been 'decorated' with
  sufficient spatial data to make a KML file from it for viewing in 
  GoogleEarth.
 }
+\examples{
+data(lopho)
+data(baja)
+graph <- decorate_graph(lopho, baja)
+kml_txt <- to_kml(graph)
+cat(substr(kml_txt, 1, 100))
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

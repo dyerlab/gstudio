@@ -68,6 +68,10 @@ migration_matrix <- function(pops, model = c("island", "stepping_stone_1d",
 #'   \code{matrix}, \code{start}, and \code{end}.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples
+#' M <- migration_matrix(c("A", "B"), model = "island", m = 0.05)
+#' ev <- migration_event(M, start = 1, end = 50)
+#' ev
 migration_event <- function(matrix, start = 1, end = NULL) {
   if (!is.matrix(matrix))
     stop("matrix must be a matrix.")

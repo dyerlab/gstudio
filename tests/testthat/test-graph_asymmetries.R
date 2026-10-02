@@ -265,3 +265,11 @@ test_that("invalid (non-positive) bandwidth errors", {
   expect_error(graph_asymmetries(make_triangle(), bandwidth = 0), "positive")
   expect_error(graph_asymmetries(make_triangle(), scale = -1), "positive")
 })
+
+test_that("graph_asymmetries handles isolated vertices without crashing", {
+  g <- make_triangle()
+  g <- igraph::add_vertices(g, 1, name = "D")
+  expect_no_error(g2 <- graph_asymmetries(g))
+  expect_equal(igraph::vcount(g2), 4)
+  expect_true(is.na(igraph::V(g2)$bandwidth[igraph::V(g2)$name == "D"]))
+})

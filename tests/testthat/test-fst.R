@@ -74,4 +74,19 @@ test_that("permutation P is a right-tail, strictly-positive p-value", {
   )
   fn <- Fst(none, nperm = 99)
   expect_true(all(fn$P > fs$P))              # null is far less significant
+
+  # Multiple loci where column order differs from alphabetical order
+  set.seed(42)
+  multi <- data.frame(
+    Population = rep(c("A","B"), each = 10),
+    Z_loc = c(rep(AA, 10), rep(BB, 10)),   # Fst = 1
+    A_loc = c(rep(AA, 5), rep(BB, 5), rep(AA, 5), rep(BB, 5)) # Fst ~ 0
+  )
+  f_multi <- Fst(multi, nperm = 99)
+  # Z_loc has strong differentiation, A_loc has none
+  z_row <- f_multi[f_multi$Locus == "Z_loc", ]
+  a_row <- f_multi[f_multi$Locus == "A_loc", ]
+  expect_equal(z_row$Fst, 1.0)
+  expect_true(z_row$P < 0.2)
+  expect_true(a_row$P > 0.5)
 })

@@ -21,6 +21,11 @@ This is a simple function that takes the graph and
  converts it into a *.pgraph file for visualization 
  in other software.
 }
+\examples{
+data(lopho)
+txt <- to_pgraph(lopho)
+cat(substr(txt, 1, 100))
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

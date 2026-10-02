@@ -21,11 +21,7 @@ S3method(to_mv,default)
 S3method(to_mv,locus)
 export(A)
 export(Ae)
-export(Dest)
 export(Fis)
-export(Fst)
-export(Gst)
-export(Gst_prime)
 export(He)
 export(Hes)
 export(Hi)
@@ -55,14 +51,6 @@ export(cov2dist)
 export(decorate_graph)
 export(directional_test)
 export(dist2cov)
-export(dist_amova)
-export(dist_bray)
-export(dist_cavalli)
-export(dist_cgd)
-export(dist_euclidean)
-export(dist_jaccard)
-export(dist_nei)
-export(dist_ss)
 export(distance_to_covariance)
 export(edge_contortion)
 export(exclusion_probability)
@@ -113,10 +101,6 @@ export(randomize_graph)
 export(rarefaction)
 export(read_popgraph)
 export(read_population)
-export(rel_lynch)
-export(rel_nason)
-export(rel_queller)
-export(rel_ritland)
 export(shannon_entropy)
 export(simulate_pop)
 export(spiderplot_data)
@@ -124,8 +108,6 @@ export(strata_coordinates)
 export(strata_distance)
 export(subsample_loci)
 export(test_congruence)
-export(to_SpatialLines)
-export(to_SpatialPoints)
 export(to_data.frame)
 export(to_df)
 export(to_dfdist)
@@ -151,6 +133,7 @@ importFrom(dplyr,
   arrange,
   filter,
   group_by,
+  group_vars,
   mutate,
   select,
   summarize
@@ -202,20 +185,9 @@ importFrom(igraph,
   write.graph
 )
 importFrom(methods,is)
-importFrom(reshape2,
-  dcast,
-  melt
-)
 importFrom(sf,
   st_as_sf,
   st_cast
-)
-importFrom(sp,
-  Line,
-  Lines,
-  SpatialLines,
-  SpatialPoints,
-  bbox
 )
 importFrom(stats,
   binom.test,

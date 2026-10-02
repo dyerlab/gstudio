@@ -15,6 +15,12 @@
 #' @return The \code{data.frame} with a new column, Is.Parent with 
 #'  values of TRUE/FALSE/NA (the NA is for adults).
 #' @export
+#' @examples
+#' mom <- data.frame(ID = 1, OffID = 0, LOC = locus(c("A", "A")))
+#' off1 <- data.frame(ID = 1, OffID = 1, LOC = locus(c("A", "B")))
+#' off2 <- data.frame(ID = 1, OffID = 2, LOC = locus(c("B", "B")))
+#' df <- rbind(mom, off1, off2)
+#' bad_parents(df)
 bad_parents <- function( df, AdultID="ID", OffID="OffID", verbose=FALSE) {
   if( !length(column_class(df,"locus")) ) 
     stop("No need to try to identify bad parents when you do not have loci in the data")

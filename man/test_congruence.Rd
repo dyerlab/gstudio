@@ -19,6 +19,10 @@ Computes the shortest-path distance matrices for both graphs and returns the
 result of a Pearson correlation test between pairwise distances. Only nodes
 present in both graphs are used.
 }
+\examples{
+data(lopho)
+test_congruence(lopho, lopho)
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

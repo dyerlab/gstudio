@@ -13,7 +13,7 @@
 #'  loci are provided, the results also provide a multilocus estimate using the 
 #'  harmonic mean.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @export
+#' @noRd
 #' @examples
 #'  a1 <- sample( LETTERS[1:5], size=20, replace=TRUE)
 #'  a2 <- sample( LETTERS[4:8], size=20, replace=TRUE)
@@ -32,6 +32,7 @@ Dest <- function( x, stratum="Population", nperm=0, size.correct=FALSE ) {
   
   # Do this function recursively if a data.frame is passed as loci
   if( is(x,"data.frame") ) {
+    stratum <- .detect_stratum(x, stratum, default = "Population")
     
     locus_names <- column_class(x,"locus")
     
@@ -39,31 +40,35 @@ Dest <- function( x, stratum="Population", nperm=0, size.correct=FALSE ) {
       stop("You must pass some loci to this function")
     
     if( !(stratum %in% names(x)) )
-      stop("If you pass a data.frame to Gst(), you need to indicate a stratum varaible column.")
+      stop("If you pass a data.frame to Dest(), you need to indicate a stratum variable column.")
     
     strata <- factor(as.character(x[[stratum]]))
     K <- length(locus_names)
-    ret <- data.frame(Locus=locus_names, Dest=numeric(K), Hs=numeric(K), Ht=numeric(K), P=numeric(K), stringsAsFactors=FALSE)
+    ret <- data.frame(Locus=locus_names, Dest=numeric(K), Hs=numeric(K), Ht=numeric(K), P=NA_real_, stringsAsFactors=FALSE)
     
     for( i in 1:length(locus_names) ){
       data <- x[[locus_names[i]]] 
       r <- Dest( data, strata, nperm, size.correct)
-      ret[i,2:5] <- r
-      
+      ret$Dest[i] <- r$Dest[1]
+      ret$Hs[i]   <- r$Hs[1]
+      ret$Ht[i]   <- r$Ht[1]
+      if( nperm > 0 && "P" %in% names(r) )
+        ret$P[i]  <- r$P[1]
     }
     
     if( length(locus_names) > 1 ) {
       k <- length(levels(strata))
-      Hs.tot <- mean(ret$Hs, na.rm=TRUE )
-      Ht.tot <- mean(ret$Ht, na.rm=TRUE )
-      d_vals <- ret$Dest
+      Hs.tot <- mean(ret$Hs[1:K], na.rm=TRUE )
+      Ht.tot <- mean(ret$Ht[1:K], na.rm=TRUE )
+      d_vals <- ret$Dest[1:K]
       d_vals[ d_vals < 0 ] <- NA
       Dest.tot <- 1.0 / ( mean( 1/d_vals, na.rm=TRUE))
       
       ret[K+1,1] <- "Multilocus"
       ret[K+1,2] <- Dest.tot
       ret[K+1,3] <- Hs.tot
-      ret[K+1,4] <- Ht.tot      
+      ret[K+1,4] <- Ht.tot
+      ret[K+1,5] <- NA_real_
     }
     
   }

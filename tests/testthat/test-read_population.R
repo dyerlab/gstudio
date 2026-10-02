@@ -68,5 +68,29 @@ test_that("reading structure data file", {
   
 })
 
+test_that("reading genepop data file", {
+  AA <- locus(c("1", "1"))
+  AB <- locus(c("1", "2"))
+  BB <- locus(c("2", "2"))
+  pop <- data.frame(
+    Population = c(rep("A", 4), rep("B", 4)),
+    loc1 = c(AA, AA, BB, BB, BB, BB, AB, AB),
+    loc2 = c(AA, AB, BB, AB, AA, AB, AA, BB)
+  )
+  gp_txt <- to_genepop(pop)
+  tmp <- tempfile(fileext = ".gen")
+  on.exit(unlink(tmp))
+  writeLines(gp_txt, tmp)
+
+  gp_in <- read_population(tmp, type = "genepop")
+  expect_s3_class(gp_in, "data.frame")
+  expect_equal(column_class(gp_in, "locus"), c("loc1", "loc2"))
+  expect_equal(nrow(gp_in), 8)
+})
+
+test_that("from012 stub returns NULL", {
+  expect_null(from012("out.012"))
+})
+
 
 

@@ -12,8 +12,8 @@
 #'  standardized by the polymorphic index, \code{Pe()}.
 #' @param as.relatedness Return r instead of Fij (default=FALSE)
 #' @return A matrix of pairwise values for either the allele or for the full locus.
-#' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @noRd
 #' 
 rel_nason <- function( x, allele=NA, as.relatedness=FALSE ){
   if( !is(x,"locus"))
@@ -36,7 +36,8 @@ rel_nason <- function( x, allele=NA, as.relatedness=FALSE ){
   
   # correct for missing data by putting in freqs for allele so it is zero
   if( any( is.na(x))) {
-    loci[ is.na(x) ] <- freq$Frequency
+    missing_rows <- which(is.na(x))
+    loci[missing_rows, ] <- matrix(freq$Frequency, nrow=length(missing_rows), ncol=ncol(loci), byrow=TRUE)
     message("Some of your loci are missing, Fij will treat these as loci with all alleles with likelihood equal to the population allele frequency.")
   }
     

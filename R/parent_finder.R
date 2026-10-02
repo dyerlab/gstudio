@@ -16,6 +16,11 @@
 #'  probability associated with the offspring and parent.
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @examples
+#' adults <- data.frame(ID = 1:2, OffID = 0, LOC = c(locus(c("A","A")), locus(c("B","B"))))
+#' off <- data.frame(ID = 1, OffID = 1, LOC = locus(c("A","B")))
+#' df <- rbind(adults, off)
+#' parent_finder(df)
 parent_finder <- function( df, ID="ID", OffID="OffID"){
   
   if( !(ID %in% names(df)))

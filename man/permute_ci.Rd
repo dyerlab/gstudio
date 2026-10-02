@@ -39,6 +39,10 @@ This function takes some data and does permutations on it and passes
  it along to the indicated function.  There are options for permuting
  genotypes or permuting alleles.  Make sure you know the difference.
 }
+\examples{
+loc <- c(locus(1:2), locus(c(1,1)), locus(c(2,2)))
+permute_ci(loc, FUN = He, nperm = 19)
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

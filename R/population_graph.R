@@ -10,6 +10,10 @@
 #' @param ... Other parameters passed to the \code{popgraph()} function.
 #' @return A \code{popgraph} object (an \code{igraph} graph).
 #' @export
+#' @examples
+#' data(arapat)
+#' g <- population_graph(arapat, stratum = "Population")
+#' g
 
 population_graph <- function( x, stratum="Population", numLoci=NULL, ...) {
   if( !is(x,"data.frame")){

@@ -12,7 +12,7 @@
 #'  based upon sample sizes (default=TRUE).
 #' @return An \code{data.frame} with Gst, Ht, and Hs and optionally P
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @export
+#' @noRd
 #' @examples
 #'  AA <- locus( c("A","A") )
 #'  AB <- locus( c("A","B") )
@@ -27,6 +27,7 @@ Gst <- function( x, stratum="Population", nperm=0, size.correct=TRUE ) {
   
   # Do this function recursively if a data.frame is passed as loci
   if( is(x,"data.frame") ) {
+    stratum <- .detect_stratum(x, stratum, default = "Population")
     
     locus_names <- column_class(x,"locus")
     
@@ -38,23 +39,28 @@ Gst <- function( x, stratum="Population", nperm=0, size.correct=TRUE ) {
     
     strata <- factor( as.character( x[[stratum]]))
     K <- length(locus_names)
-    ret <- data.frame(Locus=locus_names, Gst=numeric(K), Hs=numeric(K), Ht=numeric(K), P=numeric(K), stringsAsFactors=FALSE)
+    ret <- data.frame(Locus=locus_names, Gst=numeric(K), Hs=numeric(K), Ht=numeric(K), P=NA_real_, stringsAsFactors=FALSE)
 
     for( i in 1:length(locus_names) ){
       data <- x[[locus_names[i]]] 
       r <- Gst( data, strata, nperm, size.correct)
-      ret[i,2:5] <- r
+      ret$Gst[i] <- r$Gst[1]
+      ret$Hs[i]  <- r$Hs[1]
+      ret$Ht[i]  <- r$Ht[1]
+      if( nperm > 0 && "P" %in% names(r) )
+        ret$P[i] <- r$P[1]
     }
     
     if( length(locus_names) > 1 ) {
-      Hs.tot <- sum(ret$Hs, na.rm=TRUE )
-      Ht.tot <- sum(ret$Ht, na.rm=TRUE )
+      Hs.tot <- sum(ret$Hs[1:K], na.rm=TRUE )
+      Ht.tot <- sum(ret$Ht[1:K], na.rm=TRUE )
       Gst.tot <- 1 - Hs.tot / Ht.tot
       
       ret[K+1,1] <- "Multilocus"
       ret[K+1,2] <- Gst.tot
       ret[K+1,3] <- Hs.tot
-      ret[K+1,4] <- Ht.tot      
+      ret[K+1,4] <- Ht.tot
+      ret[K+1,5] <- NA_real_
     }
 
   }

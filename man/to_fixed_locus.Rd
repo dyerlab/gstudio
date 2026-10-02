@@ -17,6 +17,10 @@ A character representation of the locus, one element per entry of \code{x}.
 \description{
 This function
 }
+\examples{
+loc <- locus(c(1, 12))
+to_fixed_locus(loc, digits = 2)
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

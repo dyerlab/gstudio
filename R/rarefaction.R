@@ -9,6 +9,10 @@
 #' @return A vector of permuted values.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
+#' @examples
+#' loc <- c(locus(1:2), locus(c(1,1)), locus(c(2,2)), locus(1:2))
+#' r <- rarefaction(loc, size = 2, nperm = 19)
+#' summary(r)
 rarefaction <- function( x, mode="Ae", size=0, nperm=999 ) {
   if( !is(x,"locus"))
     stop("This function only works with vectors of locus objects")

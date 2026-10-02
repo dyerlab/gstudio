@@ -9,6 +9,10 @@
 #'  number of observations without missing genetic data per column.
 #' @author Rodney J. Dyer \email{rjdyer@vcu.edu}
 #' @export
+#' @examples
+#' data(arapat)
+#' gc <- genotype_counts(arapat, stratum = "Population")
+#' head(gc)
 
 genotype_counts <- function( x, stratum=NULL ) {
   if( missing(x))
@@ -17,6 +21,8 @@ genotype_counts <- function( x, stratum=NULL ) {
   if( !is(x,"data.frame"))
     stop("This function works on data.frames")
   
+  stratum <- .detect_stratum(x, stratum, default = NULL)
+
   if( !is.null(stratum)) {
     if( !(stratum %in% names(x))) {
       stop("If you specify 'stratum=' you need to give it the name of a real column.")   

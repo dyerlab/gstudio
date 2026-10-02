@@ -31,6 +31,16 @@ A copy of the graph with new properties 'contortion' (the magnitude of differenc
 This function measure the deviation of edges in physical space from the expected 
   value given by the genetic distance.
 }
+\examples{
+data(lopho)
+data(baja)
+graph <- decorate_graph(lopho, baja)
+coords <- cbind(igraph::V(graph)$Longitude, igraph::V(graph)$Latitude)
+P <- as.matrix(dist(coords))
+rownames(P) <- colnames(P) <- igraph::V(graph)$name
+g_c <- edge_contortion(graph, P = P)
+head(igraph::E(g_c)$stretch)
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

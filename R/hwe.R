@@ -38,12 +38,12 @@ hwe <- function( x, mode=c("Chi")[1], supress_warnings=FALSE ){
     ell <- length( alleles )
     
     if( mode=="Chi") {
-      if( sum(data$Observed) < 50 ) {
+      if( sum(data$Observed) < 50 && !supress_warnings ) {
         warning(paste("Under 50 samples for",locus, "this may not be a good approximation."))
       }
       
       correction_factor <- 0
-      if( any(data$Expected < 5 ) ) {
+      if( any(data$Expected < 5 ) && !supress_warnings ) {
         warning(paste("Fewer than 5 genotypes expected at",locus,"consider collapsing alleles."))
         correction_factor <- 0.5 
       }

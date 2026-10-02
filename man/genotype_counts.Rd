@@ -20,6 +20,11 @@ A \code{data.frame} with Stratum (set to "All" if not passed as param) and the
 This function provides a quick summary of the observed data, by stratum (optional)
  of the number of samples without missing data.
 }
+\examples{
+data(arapat)
+gc <- genotype_counts(arapat, stratum = "Population")
+head(gc)
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

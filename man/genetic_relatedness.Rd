@@ -7,36 +7,43 @@
 genetic_relatedness(
   x,
   loci = NA,
-  mode = c("Nason", "LynchRitland")[1],
+  mode = c("Nason", "LynchRitland", "Ritland", "Queller")[1],
   freqs = NA
 )
 }
 \arguments{
-\item{x}{A \code{data.frame} that has \code{locus} columns.}
+\item{x}{A \code{data.frame} with \code{locus} columns, or a single \code{locus} vector.}
 
-\item{loci}{The loci to use (if missing all loci are used).}
+\item{loci}{The loci to use (if omitted, all loci are used).}
 
-\item{mode}{The kind of relatedness to be estimated.  Currently
-Fij (the default) and LynchRitland are available.}
+\item{mode}{The relatedness metric to use:
+\describe{
+  \item{Nason}{Fij estimator of coancestry (Nason)}
+  \item{LynchRitland}{Lynch & Ritland (1999) regression estimator}
+  \item{Ritland}{Ritland (1996) estimator}
+  \item{Queller}{Queller & Goodnight (1989) allele-wise relatedness}
+}}
 
-\item{freqs}{An optional \code{data.frame} (as returned by the
-function \code{frequencies()} with allele frequencies).  If this 
-is not provided, it will be estimated from all the data.  This allows
-you to estimate relatedness among subsets of individuals using 
-more global measures of relatedness.}
+\item{freqs}{An optional \code{data.frame} of allele frequencies as returned by \code{\link{frequencies}}.
+If omitted, estimated from the data.}
 }
 \value{
 A matrix of pairwise relatedness estimates.
 }
 \description{
-This function returns single relatedness estimates as a 
- pairwise matrix.
+This is the primary front-end function for estimating pairwise genetic relatedness
+ among individuals.
 }
 \note{
-This only works on diploid data and will return NA for any 
+This function operates on diploid data and will return NA for any 
  comparison of missing genotypes.
 }
 \examples{
-x <- c( locus(1:2), locus(c(2,2)), locus(1:2) )
-genetic_relatedness( x )
+loc1 <- c( locus(c("A","A")), locus(c("A","B")), locus(c("B","B")) )
+loc2 <- c( locus(c("1","1")), locus(c("1","2")), locus(c("2","2")) )
+df <- data.frame( TPI=loc1, PGM=loc2 )
+genetic_relatedness( df, mode="Nason" )
+genetic_relatedness( df, mode="LynchRitland" )
+genetic_relatedness( df, mode="Ritland" )
+genetic_relatedness( df, mode="Queller" )
 }

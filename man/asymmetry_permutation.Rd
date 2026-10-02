@@ -53,6 +53,15 @@ the observed edges then read their permuted weights from that matrix.  This is
 usually called through \code{\link{asymmetry_significance}} with
 \code{mode = "location"}.
 }
+\examples{
+data(arapat)
+mv <- to_mv(arapat)
+g <- popgraph(mv, groups = arapat$Population)
+\donttest{
+  res <- asymmetry_permutation(g, mv, arapat$Population, nperm = 19)
+  head(res)
+}
+}
 \seealso{
 \code{\link{asymmetry_significance}}, \code{\link{graph_asymmetries}}
 }

@@ -19,6 +19,7 @@
 Hes <- function( x, stratum="Population", small.N=FALSE, do.multilocus = TRUE ) { 
 
   if( is(x,"data.frame") ){
+    stratum <- .detect_stratum(x, stratum, default = "Population")
     x <- droplevels(x)
     
     if( !( stratum %in% names(x) ) )

@@ -7,6 +7,11 @@
 #' @return An NxN pairwise distance matrix.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
+#' @examples
+#' data(arapat)
+#' mv <- to_mv(arapat)
+#' cd <- centroid_distance(mv, arapat$Population)
+#' dim(cd)
 centroid_distance <- function( x, grouping ){
   if( !is(grouping, "factor"))
     grouping <- factor( grouping )

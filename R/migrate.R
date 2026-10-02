@@ -24,6 +24,10 @@
 #'  migrants; adjust your rate or population size accordingly.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
+#' @examples
+#' data(arapat)
+#' arapat_mig <- migrate(arapat, stratum = "Population", m = 0.05)
+#' head(arapat_mig$Population)
 migrate <- function( data, stratum="Population", m=0.1, relabel=TRUE){
   if( !is(data,"data.frame") )
     stop("You must pass a data.frame object to the migrate() function.")
@@ -34,10 +38,9 @@ migrate <- function( data, stratum="Population", m=0.1, relabel=TRUE){
   strata <- names(pops)
   K <- length(strata)
   if( !is(m,"matrix") ){
-    mat <- matrix( m, K, K)
+    mat <- matrix( m / (K - 1), K, K)
     rownames(mat) <- colnames(mat) <- strata
-    diag(mat) <- 0
-    diag(mat) <- 1 - rowSums( mat )
+    diag(mat) <- 1 - m
     m <- mat
   }
 

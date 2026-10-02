@@ -46,6 +46,14 @@
 #'
 #' @importFrom igraph as_edgelist E
 #' @export
+#' @examples
+#' data(arapat)
+#' mv <- to_mv(arapat)
+#' g <- popgraph(mv, groups = arapat$Population)
+#' \donttest{
+#'   res <- asymmetry_permutation(g, mv, arapat$Population, nperm = 19)
+#'   head(res)
+#' }
 asymmetry_permutation <- function(graph, data, groups, nperm = 999, ...) {
 
   .validate_asymmetry_groups(graph, groups)

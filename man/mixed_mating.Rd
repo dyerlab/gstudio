@@ -24,6 +24,11 @@ This function is a bit of a wrapper around the \code{mate} function in that
  it allows you to specify the inbreeding parameter F (the fraction of individuals
  that produce offspring via selfing).
 }
+\examples{
+data(arapat)
+next_gen <- mixed_mating(arapat[1:10, ], N = 1, s = 0.2)
+nrow(next_gen)
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

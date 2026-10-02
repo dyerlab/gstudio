@@ -18,6 +18,13 @@ A textual version of the popgraph
 This is a convienence function to convert a population graph
   object into GeoJSON format for inclusion into ArcGIS Online
 }
+\examples{
+data(lopho)
+data(baja)
+graph <- decorate_graph(lopho, baja)
+json <- to_geojson(graph)
+cat(substr(json, 1, 100))
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

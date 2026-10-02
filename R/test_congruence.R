@@ -10,6 +10,9 @@
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @importFrom stats na.omit
 #' @export
+#' @examples
+#' data(lopho)
+#' test_congruence(lopho, lopho)
 test_congruence <- function(graph1, graph2) {
   cong.nodes <- intersect(igraph::V(graph1)$name, igraph::V(graph2)$name)
 

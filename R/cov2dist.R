@@ -6,19 +6,16 @@
 #' @return A distance matrix of the same size.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples
+#' C <- matrix(c(1, 0.5, 0.5, 1), nrow = 2)
+#' cov2dist(C)
 cov2dist <- function( C ) {
   if( dim(C)[1] != dim(C)[2] )
     stop("Cannot use non-symmetric matrices for this...")
-  K <- dim(C)[1]
-
-  D <- matrix(0,nrow=K,ncol=K)
-  for( i in 1:K){
-    for( j in (i+1):K) {
-      if( j <= K )
-        D[i,j] <- C[i,i] + C[j,j] - 2.0*C[i,j]
-    }
-  }
-  return( D + t(D) )
+  d <- diag(C)
+  D <- outer(d, d, "+") - 2.0 * C
+  diag(D) <- 0
+  return( D )
 }
 
 

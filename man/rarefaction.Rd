@@ -22,6 +22,11 @@ A vector of permuted values.
 This function subsamples the data with a smaller sample size and estimates the 
  density of the diversity parameter.
 }
+\examples{
+loc <- c(locus(1:2), locus(c(1,1)), locus(c(2,2)), locus(1:2))
+r <- rarefaction(loc, size = 2, nperm = 19)
+summary(r)
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

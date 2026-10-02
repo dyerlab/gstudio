@@ -22,6 +22,11 @@ This is a quick translation of locus data to a tabular stratum format.
 \note{
 This function just reshapes the \code{data.frame} from \code{frequencies}.
 }
+\examples{
+data(arapat)
+fm <- frequency_matrix(arapat, stratum = "Population", loci = "LTRS")
+head(fm)
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

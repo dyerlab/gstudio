@@ -7,8 +7,7 @@
 #' @param stratum The groups among which you are going to estimate genetic distances.
 #' @return A matrix of euclidean distance estimates.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @export
-#' @importFrom reshape2 dcast 
+#' @noRd
 #' @examples
 #'   AA <- locus( c("A","A") )
 #'   AB <- locus( c("A","B") )
@@ -29,23 +28,11 @@ dist_euclidean <- function( x, stratum="Population" ) {
   if( K==0)
     stop("You need to pass objects of type 'locus' to use for dist_euclidean().")
   if( K > 1 )
-    message("Multilous estimates of Euclidean distance are assumed to be additive.")
+    message("Multilocus estimates of Euclidean distance are assumed to be additive.")
 
   freqs <- frequencies( x, stratum=stratum) 
-  f <- dcast( freqs, Locus + Allele ~ Stratum, value.var="Frequency", fill=0)
-  strata_names <- names(f)[3:length(names(f))]
-  K <- length(strata_names)
-  ret <- matrix( 0, K, K )
-  colnames(ret) <- rownames(ret) <- strata_names
-  
-  for( i in 1:K ) {
-    px <- f[, (i+2)]
-    for( j in 1:K){
-      py <- f[,(j+2)]
-      d <- sqrt( sum(  (px-py)^2 ) )      
-      ret[i,j] <- ret[j,i] <- d  
-    }
-  }
-  
+  mat <- as.matrix(stats::xtabs(Frequency ~ paste(Locus, Allele, sep = "___") + Stratum, data = freqs))
+  ret <- as.matrix(stats::dist(t(mat)))
+  colnames(ret) <- rownames(ret) <- colnames(mat)
   return(ret)
 }

@@ -42,6 +42,10 @@ mutation_model <- function(rate, model = c("iam", "kam", "smm"), k = NULL) {
 #' @return A \code{data.frame} with mutated locus columns.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples
+#' data(arapat)
+#' mm <- mutation_model(rate = 0.01, model = "iam")
+#' arapat_mut <- mutate_loci(arapat[1:10, ], mutation = mm)
 mutate_loci <- function(data, mutation = NULL) {
   if (is.null(mutation) || mutation$rate == 0)
     return(data)

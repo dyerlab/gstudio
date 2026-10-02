@@ -18,6 +18,12 @@ An NxN pairwise distance matrix.
 This is a convience function for a reduce and distance operation based upon
  multivariate predictor variables.
 }
+\examples{
+data(arapat)
+mv <- to_mv(arapat)
+cd <- centroid_distance(mv, arapat$Population)
+dim(cd)
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

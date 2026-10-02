@@ -8,6 +8,12 @@
 #' @return The text of the KML file to be saved or viewed in the appropriate editor.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
+#' @examples
+#' data(lopho)
+#' data(baja)
+#' graph <- decorate_graph(lopho, baja)
+#' kml_txt <- to_kml(graph)
+#' cat(substr(kml_txt, 1, 100))
 to_kml <- function( graph, file ) {
   if( !inherits( graph, "popgraph") )
     stop("Cannot save a kml file from a popgraph that is not made from a popgraph...")

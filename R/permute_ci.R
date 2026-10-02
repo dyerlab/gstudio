@@ -15,6 +15,9 @@
 #' @return A vector of permuted response values from the function.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
+#' @examples
+#' loc <- c(locus(1:2), locus(c(1,1)), locus(c(2,2)))
+#' permute_ci(loc, FUN = He, nperm = 19)
 permute_ci <- function( x, stratum=NULL, allele_perm=TRUE, nperm=99, FUN=NULL, replace=FALSE, ... ) {
   
   if( is.null(FUN) )

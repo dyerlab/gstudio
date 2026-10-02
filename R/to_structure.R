@@ -22,9 +22,9 @@ to_structure <- function( df, stratum="Population") {
   if( !inherits(df,"data.frame"))
     stop("This function is designed to save data frames to file")
   if( length(column_class(df,"locus")) < 1 )
-    stop("There are no loci in this data.frame...  How do you want me to translate it into a genepop file?")
+    stop("There are no loci in this data.frame...  How do you want me to translate it into a structure file?")
   if( is.null(stratum) || !(stratum %in% names(df)))
-    stop("You need to specify the correct stratum to make a genepop file.")
+    stop("You need to specify the correct stratum to make a structure file.")
 
   ret <- character(2*nrow(df))
   locus_names <- column_class(df,"locus")

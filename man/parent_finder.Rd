@@ -28,6 +28,12 @@ A \code{data.frame} with the following columns.  ID = the offspring id,
 This is a general exclusion finder for a single parent. For dual
  parent exclusion, you can use the \code{paternity()} function.
 }
+\examples{
+adults <- data.frame(ID = 1:2, OffID = 0, LOC = c(locus(c("A","A")), locus(c("B","B"))))
+off <- data.frame(ID = 1, OffID = 1, LOC = locus(c("A","B")))
+df <- rbind(adults, off)
+parent_finder(df)
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

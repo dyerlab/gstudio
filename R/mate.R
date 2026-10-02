@@ -76,10 +76,14 @@ mate <- function( mom, dad=NULL, N=1 ){
     
     
     for( locus in locus_names) {
-      l <- rep(NA,N)
-      for(i in 1:N)
-        l[i] <- mom[[locus]] + dad[[locus]]
-      ret[[locus]] <- locus( l, type="separated")
+      if( is.na(mom[[locus]]) || is.na(dad[[locus]]) ) {
+        ret[[locus]] <- rep(locus(), N)
+      } else {
+        l <- rep(NA,N)
+        for(i in 1:N)
+          l[i] <- mom[[locus]] + dad[[locus]]
+        ret[[locus]] <- locus( l, type="separated")
+      }
     }
     
     if( !("ID" %in% ext_names) )

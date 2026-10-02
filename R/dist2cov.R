@@ -6,6 +6,9 @@
 #' @return A covariance matrix of the same size.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples
+#' D <- matrix(c(0, 1, 1, 0), nrow = 2)
+#' dist2cov(D)
 dist2cov <- function( D ) {
   if( dim(D)[1] != dim(D)[2] )
     stop("Cannot use non-symmetric matrices for this...")

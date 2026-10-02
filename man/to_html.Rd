@@ -20,6 +20,12 @@ This function takes a population graph that has been 'decorated' with
  sufficient spatial data to make a html file that uses the D3 visualization
  javascript mateirals to view it interactively.
 }
+\examples{
+\dontrun{
+  data(lopho)
+  to_html(lopho, file = "lopho.html")
+}
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

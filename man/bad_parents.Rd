@@ -29,3 +29,10 @@ This function takes a \code{data.frame} full of parents and offspring
  and checks to see if the offspring are actually assigned to a compatible
  adult.
 }
+\examples{
+mom <- data.frame(ID = 1, OffID = 0, LOC = locus(c("A", "A")))
+off1 <- data.frame(ID = 1, OffID = 1, LOC = locus(c("A", "B")))
+off2 <- data.frame(ID = 1, OffID = 2, LOC = locus(c("B", "B")))
+df <- rbind(mom, off1, off2)
+bad_parents(df)
+}

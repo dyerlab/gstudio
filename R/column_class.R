@@ -34,30 +34,20 @@ column_class <- function( x, class=NULL, mode=c("label","index")[1] ) {
   if( !(mode %in% c("label","index") ) )
     stop( paste("The mode for this class must be either 'label' or 'index'") )
   
+  nms <- names(x)
   if( is.null( class) ) {
-    labels <- names(x)
-    ret <- rep("",length(labels) )
-    for( i in 1:length(labels) ){
-      val <- class( x[[labels[i]]])
-      ret[i] <- ifelse( length(val)>1, val[-1], val )
-    }
-    return( ret )
+    return( vapply(seq_along(x), function(i) class(x[[i]])[1], character(1)) )
   }
   
-  nms <- names(x)
-  cls <- rep( NA, length(nms) )
-  for(i in 1:length(nms) ){
-    val <- class( x[,i])
-    cls[i] <- ifelse( length(val)>1, val[-1], val )
-  }
-  if( !(class %in% cls ) )
+  matches <- vapply(seq_along(x), function(i) inherits(x[[i]], class), logical(1))
+  if( !any(matches) )
     return( if( mode=="index" ) integer(0) else character(0) )
 
   if( mode=="label" ){
-    return( nms[ cls==class ] )
+    return( nms[ matches ] )
   }
   else if( mode=="index"){
-    return( (1:length(cls))[ cls==class ] )
+    return( which( matches ) )
   }
   else
     return(NA)

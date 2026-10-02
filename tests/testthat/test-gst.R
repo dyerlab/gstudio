@@ -65,4 +65,7 @@ test_that("checking",{
   expect_that( names(gst), is_equivalent_to( c("Locus","Gst","Hs","Ht","P")))
   expect_that( gst$Locus, is_equivalent_to( c("TPI","PGM","Multilocus")))
   
+  # When nperm = 0, P should be NA rather than recycling Gst
+  gst0 <- Gst( loci, nperm=0 )
+  expect_true( all( is.na(gst0$P) ) )
 })

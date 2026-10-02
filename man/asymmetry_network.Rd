@@ -41,6 +41,13 @@ graph.  For inference about specific edges of a graph already accepted as
 significant, prefer \code{\link{asymmetry_permutation}}.  Usually called
 through \code{\link{asymmetry_significance}} with \code{mode = "existence"}.
 }
+\examples{
+data(lopho)
+\donttest{
+  res <- asymmetry_network(lopho, nperm = 19)
+  res
+}
+}
 \seealso{
 \code{\link{asymmetry_significance}}, \code{\link{randomize_graph}},
   \code{\link{graph_asymmetries}}

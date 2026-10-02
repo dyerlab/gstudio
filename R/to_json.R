@@ -9,6 +9,10 @@
 #' @return A textual json representation of the graph
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
+#' @examples
+#' data(lopho)
+#' json <- to_json(lopho)
+#' cat(substr(json, 1, 100))
 to_json <- function( graph, file, forJS=FALSE ) {
   
   if( !inherits(graph,"popgraph"))

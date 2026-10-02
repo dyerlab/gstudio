@@ -14,5 +14,11 @@ test_that("test",{
   
   expect_identical( column_class(df,"locus"), character(0) )
   expect_identical( column_class(df,"locus",mode="index"), integer(0) )
-  
+
+  # Tibble compatibility (tbl_df subclass)
+  df_tibble <- df
+  df_tibble$loc <- locus(1:2)
+  class(df_tibble) <- c("tbl_df", "tbl", "data.frame")
+  expect_equal( column_class(df_tibble, "locus"), "loc" )
+  expect_equal( column_class(df_tibble, "locus", mode = "index"), 4 )
 })

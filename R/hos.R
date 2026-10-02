@@ -20,6 +20,7 @@
 Hos <- function( x, stratum="Population" ) {
   
   if( is(x,"data.frame") ){
+    stratum <- .detect_stratum(x, stratum, default = "Population")
     if( !(stratum %in% names(x)))
       stop("You need to specify a stratum in the data.frame for the Hos() function.")
     locus_names <- column_class(x,class="locus")

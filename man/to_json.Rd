@@ -21,6 +21,11 @@ A textual json representation of the graph
 This is a nice function that takes a graph structure
  and converts it to a json format for use on the web.
 }
+\examples{
+data(lopho)
+json <- to_json(lopho)
+cat(substr(json, 1, 100))
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

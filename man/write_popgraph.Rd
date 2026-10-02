@@ -49,6 +49,12 @@ Nothing
 This function is a chokepoint for exporting
  \code{popgraph} objects to other formats.
 }
+\examples{
+\dontrun{
+  data(lopho)
+  write_popgraph(lopho, file = "lopho.json", format = "json")
+}
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

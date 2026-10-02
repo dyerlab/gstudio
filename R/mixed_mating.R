@@ -12,6 +12,10 @@
 #' @return A \code{data.frame} that has new individuals that are the result of mixed mating
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
+#' @examples
+#' data(arapat)
+#' next_gen <- mixed_mating(arapat[1:10, ], N = 1, s = 0.2)
+#' nrow(next_gen)
 mixed_mating <- function( data, N=1, s=0) {
   if( s < 0.0 | s > 1.0)
     stop("s must be bound on [0,1] at this time.")

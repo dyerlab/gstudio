@@ -27,6 +27,11 @@ A matrix (KxK) in size (where K is the number of nodes)
 This function translates a Population to a matrix representing either 
  the adjacency structure, the shortest path, or edge weights.
 }
+\examples{
+data(lopho)
+A <- to_matrix(lopho, mode = "adjacency")
+dim(A)
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

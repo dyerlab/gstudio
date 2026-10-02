@@ -23,6 +23,7 @@ Fis <- function( x, small.N=FALSE, stratum=NULL, loci=NULL ) {
     names(ret) <- "Fis"
   }
   else if( is(x,"data.frame")  ) {
+    stratum <- .detect_stratum(x, stratum, default = NULL)
     x <- droplevels(x)
     
     if( is.null(loci) )
@@ -35,13 +36,11 @@ Fis <- function( x, small.N=FALSE, stratum=NULL, loci=NULL ) {
     
     if( is.null(stratum)) {
       ret <- data.frame( Locus=ho$Locus, Fis = 1.0 - ho$Ho / he$He )
-      if( nrow( ret ) > 1 && is.null(stratum) )
+      if( nrow( ret ) > 1 )
         ret <- rbind( ret, data.frame(Locus="Multilocus", Fis= (1.0 - sum(ho$Ho)/sum(he$He))))
     }
     else {
-      strata <- unique( x[[stratum]] )
-      k <- length( strata )
-      ret <- data.frame( Stratum=rep(strata, each=length(loci)), Locus=ho$Locus, Fis = 1.0 - ho$Ho / he$He )
+      ret <- data.frame( Stratum=ho$Stratum, Locus=ho$Locus, Fis = 1.0 - ho$Ho / he$He )
     }
   }
   else

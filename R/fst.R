@@ -14,7 +14,7 @@
 #'  the right-tailed add-one permutation p-value for the null hypothesis Fst = 0
 #'  (small P indicates significant structure).
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @export
+#' @noRd
 #' @examples
 #'  AA <- locus( c("A","A") )
 #'  AB <- locus( c("A","B") )
@@ -31,6 +31,7 @@ Fst <- function( x, stratum="Population", nperm=0  ) {
   if( !is(x,"data.frame"))
     stop("This function requires you to pass it a data.frame of data...")
   
+  stratum <- .detect_stratum(x, stratum, default = "Population")
   x <- droplevels(x)
 
   loci <- column_class(x,"locus")
@@ -40,16 +41,17 @@ Fst <- function( x, stratum="Population", nperm=0  ) {
   if( !(stratum %in% names(x)))
     stop("You need to pass this function the name of the column to use as a locus")
   
-  hs <- Hes( x, stratum=stratum )
+  hs <- Hes( x, stratum=stratum, do.multilocus=FALSE )
   ht <- Ht( x, stratum=stratum )
-  ret <- merge( hs, ht)
-  names(ret)[2] <- "Hs"
+  ret <- merge( hs, ht, by="Locus" )
+  names(ret)[names(ret) == "Hes"] <- "Hs"
   ret$Fst <- 1 - ret$Hs/ret$Ht
   
   if( nperm > 0 ) {
     ret$P <- 0
     tmp <- x
     message("permuting ", appendLF = FALSE)
+    ht_vec <- ht$Ht[match(ret$Locus, ht$Locus)]
     for( rep in seq(1,nperm) ) { 
       
       if( rep%%10 == 0 ) { 
@@ -58,10 +60,12 @@ Fst <- function( x, stratum="Population", nperm=0  ) {
       # Label permutation (no replacement) for the H0: Fst = 0 null.
       tmp[[stratum]] <- sample( tmp[[stratum]] )
       suppressWarnings(
-        Fst <- 1.0 - Hes( tmp, stratum=stratum, do.multilocus=FALSE )$Hes / ht$Ht
+        hes_perm <- Hes( tmp, stratum=stratum, do.multilocus=FALSE )
       )
+      hs_vec <- hes_perm$Hes[match(ret$Locus, hes_perm$Locus)]
+      fst_perm <- 1.0 - hs_vec / ht_vec
       # Right tail: count permutations whose Fst meets/exceeds the observed.
-      bigger <- ifelse( Fst >= ret$Fst, 1, 0 )
+      bigger <- ifelse( fst_perm >= ret$Fst, 1, 0 )
       ret$P <- ret$P + bigger
     }
     # Add-one permutation p-value: (1 + #{perm >= obs}) / (1 + nperm), strictly

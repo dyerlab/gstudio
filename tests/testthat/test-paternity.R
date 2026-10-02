@@ -29,5 +29,11 @@ test_that("testing",{
   
   p1 <- paternity( offs, adults[1,], adults, strict=TRUE )
   expect_true( nrow(p)>nrow(p1))
-  
+
+  # Candidate father with all missing genotypes is not assigned paternity
+  adults_na <- adults
+  adults_na$TPI[3] <- locus()
+  adults_na$PGM[3] <- locus()
+  p_na <- paternity( offs[1, , drop = FALSE], adults[1, ], adults_na )
+  expect_false( adults_na$ID[3] %in% p_na$DadID )
 })

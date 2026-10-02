@@ -24,3 +24,8 @@ This function is a convience function that wraps together the subset_loci() (pot
   function with the popgraph() function (and translations from genotypes to
   multivariate data).
 }
+\examples{
+data(arapat)
+g <- population_graph(arapat, stratum = "Population")
+g
+}

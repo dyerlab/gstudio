@@ -41,12 +41,8 @@ to_mv_freq <- function( x, stratum="Population", drop.allele=FALSE) {
   rownames(ret) <- strata_names
   
   for( i in 1:K ){
-    d <- m[ s==strata_names[i],]
-    if( is(d,"numeric") ) 
-      ret[i,] <- d
-    else
-      ret[i,] <- colSums(d)/nrow(d)
-
+    d <- m[ s==strata_names[i], , drop=FALSE]
+    ret[i,] <- colSums(d)/nrow(d)
   }
   return( ret )
 }

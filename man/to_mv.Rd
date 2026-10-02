@@ -56,6 +56,10 @@ A matrix
 This function will provide the alleles within a \code{locus} object 
  for either a single locus or for a vector of loci
 }
+\examples{
+loc <- c(locus(c("A","A")), locus(c("A","B")), locus(c("B","B")))
+to_mv(loc)
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

@@ -21,3 +21,8 @@ A text object with data formatted for output.
 This converts a \code{data.frame} object with loci into a 
   format suitable for FDist, DFDist, & DetSel
 }
+\examples{
+data(arapat)
+txt <- to_dfdist(arapat[1:30, ], stratum = "Population")
+cat(substr(txt, 1, 100))
+}

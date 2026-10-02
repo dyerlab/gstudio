@@ -39,6 +39,12 @@ nothing.
 This is a basic output file formatter for saving files necessary for saving
  output in textual formats.
 }
+\examples{
+\dontrun{
+  data(arapat)
+  write_population(arapat, file = "arapat.txt", mode = "text")
+}
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

@@ -19,9 +19,15 @@
 #'  partition(df, stratum="Population")
 partition <- function( x, stratum="Population" ){
 
+  stratum <- .detect_stratum(x, stratum, default = "Population")
+
   if( !(stratum %in% names(x) ) )
     stop(paste("Cannot find '",stratum,"' in the column names of your Population."))
   
+  if( inherits(x, "grouped_df") ) {
+    x <- as.data.frame(x)
+  }
+
   ret <- list()
   lvls <- sort( unique( x[[stratum]]) )
   

@@ -6,6 +6,9 @@
 #' @return The fraction of that data set that have unique multilocus genotypes.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
+#' @examples
+#' data(arapat)
+#' multilocus_diversity(arapat)
 multilocus_diversity <- function( x ) {
   if( !is(x,'data.frame'))
     stop("You need to pass a data.frame to the multilocus_diversity() function.")

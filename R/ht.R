@@ -14,7 +14,12 @@
 #' Ht( df )
 Ht <- function( x, stratum="Population" ) { 
   
-  if( missing(x) || !(stratum %in% names(x))) 
+  if( missing(x) )
+    stop("You need to pass a data.frame to this function")
+
+  stratum <- .detect_stratum(x, stratum, default = "Population")
+  
+  if( !(stratum %in% names(x))) 
     stop("You need to pass both a data.frame and the name of the stratum to this function")
   
   locus_names <- column_class(x,class="locus")
@@ -22,25 +27,21 @@ Ht <- function( x, stratum="Population" ) {
     stop("Cannot estimate expected total heterozygosity if there are no loci...")
   
   ret <- data.frame( Locus=locus_names, Ht=0 )
-  
-  
-  
 
   for( locus in locus_names ) {
 
     # Catch strata of small size and delete.
-    x |> 
-      dplyr::select( dplyr::all_of(stratum), dplyr::all_of(locus) ) -> tmp 
-    tmp <- tmp[ !is.na(tmp[,2]),]
+    tmp <- as.data.frame(x[, c(stratum, locus)])
+    tmp <- tmp[ !is.na(tmp[[locus]]),]
     
     numSamples <- nrow(tmp)
     if( nrow(x) != numSamples) { 
       warning(paste(locus,"had missing data, dropped individuals.")) 
     }
     
-    t <- table( tmp[,1])
+    t <- table( tmp[[stratum]] )
     keep <- names(t[ t>2 ])
-    tmp <- droplevels( tmp[ (tmp[,1] %in% keep), ] )
+    tmp <- droplevels( tmp[ (tmp[[stratum]] %in% keep), ] )
     
     # issue warning
     if( nrow( tmp ) != numSamples ) { 

@@ -4,7 +4,7 @@
 #'  output in textual formats.
 #' @param df The \code{data.frame} to be written to the output.
 #' @param stratum The stratum to use as "POP" (default="Population")
-#' @return A string representation of the \code{data.frame} formatted as
+#' @return A string representation of the \code{data.frame} formatted for GENEPOP.
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @examples

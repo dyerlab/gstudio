@@ -20,7 +20,7 @@ Description: Provides classes and functions for the spatial analysis of
     newly developed, state-of-the-art methods for evaluating network asymmetry, 
     conditional introgression pressures, and directional gene flow using local Gaussian 
     kernels and perplexity-tuned Markov flow partitioning. Integration with spatial 
-    and geographic data is provided via compatibility with 'sf', 'sp', 'ggplot2', 
+    and geographic data is provided via compatibility with 'sf', 'ggplot2', 
     and interactive leaflet maps.
 Version: 1.14.5
 Date: 2026-09-27
@@ -32,9 +32,6 @@ Imports:
     ggplot2,
     jsonlite,
     methods,
-    sp,
-    reshape2,
-    stringi,
     dplyr,
     igraph,
     MASS,

@@ -26,6 +26,13 @@ This function takes one or more individuals and estimates
 their probability of coming from individual populations
 from multilocus genotype frequencies.
 }
+\examples{
+data(arapat)
+freqs <- frequencies(arapat, stratum = "Population")
+ind <- arapat[1, ]
+res <- multilocus_assignment(ind, freqs)
+head(res)
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

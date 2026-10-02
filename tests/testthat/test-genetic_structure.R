@@ -38,8 +38,28 @@ test_that("checking",{
   expect_that( dim(gs), is_equivalent_to( c(2,2)) ) 
   expect_true( all( is.na(diag(gs))) ) 
   expect_true( gs[1,2] == gs[2,1] )
-  
-  
-  
-  
+
+  # Test Fst mode
+  gs_fst <- genetic_structure( df, mode = "fst" )
+  expect_s3_class( gs_fst, "data.frame" )
+  expect_true( all(c("Locus", "Hs", "Ht", "Fst") %in% names(gs_fst)) )
+
+  # Test Gst_prime mode
+  gs_gstp <- genetic_structure( df, mode = "gst_prime" )
+  expect_s3_class( gs_gstp, "data.frame" )
+  expect_true( all(c("Locus", "Gst", "Hs", "Ht", "P") %in% names(gs_gstp)) )
+
+  # Test Dest mode
+  gs_dest <- genetic_structure( df, mode = "dest" )
+  expect_s3_class( gs_dest, "data.frame" )
+  expect_true( all(c("Locus", "Dest", "Hs", "Ht", "P") %in% names(gs_dest)) )
+
+  # Test pairwise Dest
+  gs_dest_pw <- genetic_structure( df, mode = "dest", pairwise = TRUE )
+  expect_true( is.matrix(gs_dest_pw) )
+  expect_equal( dim(gs_dest_pw), c(2, 2) )
+
+  # Case-insensitivity
+  gs_upper <- genetic_structure( df, mode = "FST" )
+  expect_equal( gs_fst$Fst, gs_upper$Fst )
 })

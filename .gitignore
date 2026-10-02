@@ -1,7 +1,6 @@
 # History files
 .Rhistory
-
-# Example code in package build process
+.RData 
 *-Ex.R
 
 .DS_Store
@@ -15,13 +14,8 @@ gstudio.Rproj
 figure/
 gstudio.Rcheck/
 gstudio_*.tar.gz
-#gstudio/man/*
-#man/*
-#*.Rd
 data/radiator_test.txt
-
 README.html
-
 gstudio/inst/doc/gstudio.pdf
 gstudio/inst/doc/gstudio.log
 gstudio/inst/doc/gstudio-concordance.tex
@@ -29,18 +23,12 @@ gstudio/inst/doc/gstudio.synctex.gz
 gstudio/inst/doc/gstudio.tex
 gstudio/inst/doc/figure/
 gstudio/inst/doc/cache/
-
-
 *.icloud
-
 CLAUDE.md
-
 /doc/
 /Meta/
-
-# Quarto
 docs/.quarto/
-
 /.quarto/
 **/*.quarto_ipynb
-
+.claude
+.tana

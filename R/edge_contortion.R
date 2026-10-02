@@ -13,6 +13,15 @@
 #'   between genetic and physical distances) and 'stretch' (as 'Compressed' or 'Extended')
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples
+#' data(lopho)
+#' data(baja)
+#' graph <- decorate_graph(lopho, baja)
+#' coords <- cbind(igraph::V(graph)$Longitude, igraph::V(graph)$Latitude)
+#' P <- as.matrix(dist(coords))
+#' rownames(P) <- colnames(P) <- igraph::V(graph)$name
+#' g_c <- edge_contortion(graph, P = P)
+#' head(igraph::E(g_c)$stretch)
 edge_contortion <- function( graph, latitude="Latitude", longitude="Longitude", P=NULL){
   if( is.null(P))
     stop("You must supply a physical distance matrix with this function.")
@@ -25,7 +34,7 @@ edge_contortion <- function( graph, latitude="Latitude", longitude="Longitude", 
   
   G <- as.matrix( as_adjacency_matrix(graph,attr = "weight") )
   
-  if( dim(G) != dim(P) )
+  if( any(dim(G) != dim(P)) )
     stop("Your physical and genetic distance matrices are not the same size.")
   
   G <- G / sum( G )

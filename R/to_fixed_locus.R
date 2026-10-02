@@ -6,6 +6,9 @@
 #' @return A character representation of the locus, one element per entry of \code{x}.
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @examples
+#' loc <- locus(c(1, 12))
+#' to_fixed_locus(loc, digits = 2)
 to_fixed_locus <- function( x, digits=NULL ) {
   
   if( !inherits(x,"locus"))

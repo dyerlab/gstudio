@@ -7,8 +7,8 @@
 #'  in it.  If you pass it a \code{data.frame} it will return the multilocus
 #'  relatedness.
 #' @return A matrix of relatedness statistics.
-#' @export
 #' @author Rodney J. dyer <rjdyer@@vcu.edu>
+#' @noRd
 #' 
 rel_ritland <- function( x ) {
   if( is(x,"locus"))
@@ -22,7 +22,7 @@ rel_ritland <- function( x ) {
   loci <- column_class( x, "locus") 
   if( !length(loci) )
     stop("Cannot estimate relatedness with no loci...  Am I supposed to make up the data for you?")
-  w <- 1
+  w <- 0
   
   for( locus_name in loci ){
     locus <- x[[locus_name]]
@@ -37,7 +37,7 @@ rel_ritland <- function( x ) {
         for( j in 1:N){
           if( i!=j){
             d <- kronecker_delta( locus[i], locus[j] )
-            r[i,j]  <-  ( ((d[2]-d[3])/p1) + ((d[4]+d[5])/p2) -1 ) / (4*(n-1)) 
+            r[i,j]  <-  ( ((d[2]+d[3])/p1) + ((d[4]+d[5])/p2) -1 ) / (4*(n-1)) 
           }
         }        
       }
@@ -48,12 +48,12 @@ rel_ritland <- function( x ) {
     if( length(loci) ) {
       wt <- length(freq$Allele)-1
       r <- r*wt
-      w <- w + (wt)
+      w <- w + wt
     }
     ret <- ret + r
   }
   
-  ret <- ret / wt
+  ret <- ret / w
   diag(ret) <- NA
   return(ret)
 }

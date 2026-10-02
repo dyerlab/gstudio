@@ -5,27 +5,24 @@
 \title{Estimate observed heterozygosity
  
 Returns the general observed heterozygosity parameter
- from the frequencies}
+ from the genotypes.}
 \usage{
 Ho(x)
 }
 \arguments{
-\item{x}{An object of type \code{locus}}
+\item{x}{An object of type \code{locus} or a \code{data.frame} with locus columns.}
 }
 \value{
-The expected heterozygosity
+The observed heterozygosity.
 }
 \description{
 Estimate observed heterozygosity
  
 Returns the general observed heterozygosity parameter
- from the frequencies
+ from the genotypes.
 }
 \note{
-This function can be called on a single vector of data, a \code{data.frame} of loci, 
- or a \code{data.frame} of \code{locus} objects across strata.  If the estimating across
- stratum, the unbiased estimator should be used to average across stratum and is performed
- by passing the appropriate stratum= argument.
+For stratified estimates across populations, use \code{\link{Hos}}.
 }
 \examples{
 loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )

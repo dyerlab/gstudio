@@ -6,9 +6,12 @@
 #' @param locus The name of the locus to use
 #' @param stratum The stratum to partition by.
 #' @return A matrix where each row is a strata and each column is a count of alleles
-#' @importFrom reshape2 dcast
 #' @export
 #' @author Rodney J. Dyer 
+#' @examples
+#' data(arapat)
+#' cts <- allele_counts(arapat, locus = "LTRS", stratum = "Population")
+#' head(cts) 
 #' 
 allele_counts <- function( x, locus, stratum="Population") {
   if( !is(x,"data.frame"))
@@ -41,6 +44,8 @@ allele_counts <- function( x, locus, stratum="Population") {
     ret <- rbind( ret, cts )
   }
   ret <- ret[ !is.na(ret$Stratum),]
-  ret <- dcast(ret, Stratum~Alleles,fill = 0, value.var = "Counts")
+  mat <- as.matrix(stats::xtabs(Counts ~ Stratum + Alleles, data = ret))
+  ret <- data.frame(Stratum = rownames(mat), unclass(mat), check.names = FALSE, stringsAsFactors = FALSE)
+  rownames(ret) <- NULL
   return( ret )
 }

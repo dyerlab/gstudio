@@ -18,6 +18,12 @@ The sum of the within stratum variance for each group
 This is a convience function for a reduce and distance operation based upon
  multivariate predictor variables.
 }
+\examples{
+data(arapat)
+mv <- to_mv(arapat)
+cv <- centroid_variance(mv, arapat$Population)
+head(cv)
+}
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>
 }

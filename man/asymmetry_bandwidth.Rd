@@ -31,6 +31,13 @@ Operates on the graph alone (no individual genotype data are required).
 Usually called through \code{\link{asymmetry_significance}} with
 \code{mode = "mechanism"}.
 }
+\examples{
+data(lopho)
+\donttest{
+  res <- asymmetry_bandwidth(lopho, nperm = 19)
+  head(res)
+}
+}
 \seealso{
 \code{\link{asymmetry_significance}}, \code{\link{graph_asymmetries}}
 }

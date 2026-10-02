@@ -11,6 +11,11 @@
 #'  the data.frame as possible stitched into the \code{igraph} object
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
+#' @examples
+#' data(lopho)
+#' data(baja)
+#' g <- decorate_graph(lopho, baja)
+#' head(igraph::V(g)$Latitude)
 decorate_graph <- function( graph, data, stratum="Population" ) {
   
   if( missing(graph) | missing(data) ) 

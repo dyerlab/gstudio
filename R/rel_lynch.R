@@ -26,8 +26,8 @@
 #'  in it.  If you pass it a \code{data.frame} it will return the multilocus
 #'  relatedness.
 #' @return A matrix of pairwise values
-#' @export
 #' @author Rodney J. dyer <rjdyer@@vcu.edu>
+#' @noRd
 #' 
 rel_lynch <- function( x ){
   if( is(x,"locus"))
@@ -59,8 +59,8 @@ rel_lynch <- function( x ){
               pc <- freqs$Frequency[ freqs$Allele==a[1] ]
               pd <- freqs$Frequency[ freqs$Allele==a[2] ]
               d <- kronecker_delta(locus[i],locus[j])
-              ret[i,j] <- (pa*(d[4]+d[5]) + pb*(d[2]+d[3])-4*pa*pb)/(2*pa*pb)
-              w[i,j] <- w[i,j] <- ((1+d[1])*(pa+pb)-4*pa*pb)/(2*pa*pb)
+              ret[i,j] <- ret[i,j] + (pa*(d[4]+d[5]) + pb*(d[2]+d[3])-4*pa*pb)/(2*pa*pb)
+              w[i,j]   <- w[i,j]   + ((1+d[1])*(pa+pb)-4*pa*pb)/(2*pa*pb)
             }
           }
         }        
@@ -70,7 +70,7 @@ rel_lynch <- function( x ){
   
   
   # Do the multilocus stuff
-  ret <- ret * (1/w)
+  ret <- ret / w
   ret <- (ret + t(ret)) / 2
   diag(ret) <- NA
   

@@ -6,10 +6,15 @@
 #' @param mode The type of distance to calculate.  Currently there are two 
 #'  available types of physical distance, Euclidean (straight-line) and
 #'  Great Circle (from the curvature of the earth)
-#' @return A data frame, with Stratum Latitude and Longitude, summarized by center of each stratum.
+#' @return A matrix of pairwise distances among strata.
 #' @note This uses the mean radius of the earth to be 6371km as the latest estimate by USGS.
 #' @export 
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples
+#' data(arapat)
+#' coords <- strata_coordinates(arapat)
+#' D_geo <- strata_distance(coords, mode = "Circle")
+#' D_geo[1:5, 1:5]
 strata_distance <- function( 	x, mode=c("Euclidean","Circle")[2]) {
   
   mode <- tolower(mode)

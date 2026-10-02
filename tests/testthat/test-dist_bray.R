@@ -21,5 +21,28 @@ test_that("individual",{
   expect_that( dim(D), is_equivalent_to(c(2,2)))
   expect_that( sum(diag(D)), equals(0) )
   expect_true( D[1,2]==D[2,1] )
-  expect_that( D[1,2], equals( 0.1 ) )
+  # Pop A: freq(A)=0.7, freq(B)=0.3. Pop B: freq(B)=0.5, freq(C)=0.5.
+  # Shared alleles Ps = min(0.3, 0.5) = 0.3. Distance = 1 - 0.3 = 0.7.
+  expect_equal( D[1,2], 0.7 )
+
+  # Identical populations have distance 0
+  df_ident <- data.frame(
+    Population = c(rep("P1", 4), rep("P2", 4)),
+    TPI = c(rep(AA, 2), rep(BB, 2), rep(AA, 2), rep(BB, 2))
+  )
+  expect_equal( dist_bray(df_ident)["P1", "P2"], 0 )
+
+  # Disjoint populations have distance 1
+  df_disj <- data.frame(
+    Population = c(rep("P1", 4), rep("P2", 4)),
+    TPI = c(rep(AA, 4), rep(CC, 4))
+  )
+  expect_equal( dist_bray(df_disj)["P1", "P2"], 1 )
+
+  # Monomorphic locus does not crash to_mv_freq or dist_bray
+  df_mono <- data.frame(
+    Population = c(rep("P1", 3), rep("P2", 3)),
+    TPI = rep(AA, 6)
+  )
+  expect_equal( dist_bray(df_mono)["P1", "P2"], 0 )
 })

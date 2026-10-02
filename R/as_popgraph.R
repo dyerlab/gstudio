@@ -6,6 +6,10 @@
 #' @return An object of type \code{popgraph}
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
+#' @examples
+#' m <- matrix(c(0, 1, 1, 0), nrow = 2)
+#' g <- as.popgraph(m)
+#' g
 as.popgraph <- function(graph) {
   ret <- NULL
   if( is(graph,"matrix")) {  

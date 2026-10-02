@@ -9,7 +9,6 @@ strata_coordinates(
   stratum = "Population",
   longitude = "Longitude",
   latitude = "Latitude",
-  as.SpatialPoints = FALSE,
   sort.output = FALSE,
   single.stratum = TRUE
 )
@@ -19,25 +18,26 @@ strata_coordinates(
 
 \item{stratum}{The name of the stratum to partition on (default="Population").}
 
-\item{longitude}{The column name of the longitude}
+\item{longitude}{The column name of the longitude (default="Longitude").}
 
-\item{latitude}{The column name of the latitude}
+\item{latitude}{The column name of the latitude (default="Latitude").}
 
-\item{as.SpatialPoints}{A flag indicating what kind of coordinates to return 
-should be turned into a SpatialPoints object (TRUE) or as a \code{data.frame} (FALSE,
-the default)}
-
-\item{sort.output}{A flag indicating if the results should be sorted alphabetically (default=FALSE)}
+\item{sort.output}{A flag indicating if the results should be sorted alphabetically (default=FALSE).}
 
 \item{single.stratum}{A flag to indicate that you only want one entry per stratum (for collapsing
-points within strata, Default=TRUE).}
+points within strata, default=TRUE).}
 }
 \value{
-A data frame, with Stratum Latitude and Longitude, summarized by center of each stratum.
+A data frame with Stratum, Longitude, and Latitude, summarized by center of each stratum.
 }
 \description{
 This function takes a \code{data.frame}, and a stratum and makes a data frame
- consisting of Stratum, Latitude, and Longitude for each stratum
+ consisting of Stratum, Latitude, and Longitude for each stratum.
+}
+\examples{
+data(arapat)
+coords <- strata_coordinates(arapat)
+head(coords)
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

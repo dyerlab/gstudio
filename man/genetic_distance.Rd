@@ -2,61 +2,46 @@
 % Please edit documentation in R/genetic_distance.R
 \name{genetic_distance}
 \alias{genetic_distance}
-\title{Estimate genetic distances among strata in a ,}
+\title{Estimate genetic distances among individuals or strata}
 \usage{
 genetic_distance(x, stratum = "Population", mode)
 }
 \arguments{
-\item{x}{A \code{data.frame} object with \code{\link{locus}} columns.}
+\item{x}{A \code{data.frame} object with \code{\link{locus}} columns, or a single \code{locus} vector.}
 
-\item{stratum}{The strata by which the genetic distances are estimated.  This
-can be an optional parameter when estimating distance measures calculated
-among individuals (default='Population').}
+\item{stratum}{The strata by which genetic distances are estimated (default="Population").
+Optional for individual-based distance metrics like AMOVA and Bray.}
 
-\item{mode}{The particular genetic distance metric that you are going to use.}
+\item{mode}{The genetic distance metric to use:
+\describe{
+  \item{amova}{Inter-individual squared Euclidean distance (Peakall et al. 1995, Smouse & Peakall 1999)}
+  \item{bray}{Inter-individual Bray-Curtis / shared allele distance (Bowcock et al. 1994)}
+  \item{dps}{Stratum-level shared allele distance (1 - Ps)}
+  \item{cavalli}{Cavalli-Sforza & Edwards (1967) chord distance}
+  \item{cgd}{Conditional Genetic Distance via Population Graphs (Dyer & Nason 2004)}
+  \item{euclidean}{Euclidean allele frequency distance}
+  \item{jaccard}{Jaccard set dissimilarity}
+  \item{nei}{Nei's unbiased genetic distance (1978)}
+  \item{ss}{Partitioned Sum of Squares distance from AMOVA}
+}}
 }
 \value{
-A matrix with the genetic distances
+A pairwise distance matrix.
 }
 \description{
-This function is the main one used for estimating genetic distances among 
- either individuals or stratum.  Given the large number of genetic distance
- metrics, some are recreated here, de novo, and some are estimated through 
- other existing R packages.
-}
-\note{
-This function currently includes the following individual distance 
-   measures:
-   \describe{
-     \item{AMOVA}{Inter-individual }
-     \item{Bray}{Proportion of shared alleles}
-   }
-   This function also supports genetic distances based upon stratum distances.  The
-   currently supported genetic distances are:
-   \describe{
-     \item{Euclidean}{Euclidean frequency distance}
-     \item{cGD}{Conditional Genetic Distance}
-     \item{Nei}{Nei's corrected genetic distance (1978)}
-     \item{Dps}{Shared allele distance = 1 - Ps}
-     \item{Jaccard}{Jaccard set dissimilarity}
-   }
+This is the primary front-end function for estimating genetic distances among
+ either individuals or strata.
 }
 \examples{
 AA <- locus( c("A","A") )
 AB <- locus( c("A","B") )
 BB <- locus( c("B","B") )
-AC <- locus( c("A","C") )
-AD <- locus( c("A","D") )
-BC <- locus( c("B","C") )
-BD <- locus( c("B","D") )
-CC <- locus( c("C","C") )
-CD <- locus( c("C","D") )
-DD <- locus( c("D","D") )
-loci <- c(AA,AB,AC,AD,BB,BC,BD,CC,CD,DD) 
-pops <- c(rep("A",5), rep("B",5))
-df <- data.frame( Population=pops, TPI=loci)
-genetic_distance(df, mode="AMOVA")
-genetic_distance(df, mode="Dps")
+loci <- c(AA,AB,AB,BB,BB,AA,AB,BB,AA,BB) 
+df <- data.frame( Population=c(rep("Pop-A",5), rep("Pop-B",5)), TPI=loci)
+genetic_distance(df, mode="amova")
+genetic_distance(df, mode="dps")
+genetic_distance(df, mode="cavalli")
+genetic_distance(df, mode="nei")
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

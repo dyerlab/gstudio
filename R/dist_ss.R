@@ -7,7 +7,7 @@
 #' @param stratum A factor indicating the stratum to use.
 #' @return The SS distance matrix
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @export
+#' @noRd
 dist_ss <- function( x, stratum="Population") {
   
   if( !is(x,"data.frame"))
@@ -34,6 +34,6 @@ dist_ss <- function( x, stratum="Population") {
         ret[j,i] <- val
     }
   }
-  rownames(ret) <- colnames(ret) <- labels
+  rownames(ret) <- colnames(ret) <- pop_names
   return( ret )  
 }

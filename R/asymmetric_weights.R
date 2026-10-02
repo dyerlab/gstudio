@@ -36,16 +36,21 @@ asymmetric_weights <- function(graph, perplexity = 4, tol = 1e-5, max_iter = 100
   nodes <- igraph::V(graph)$name
 
   find_sigma <- function(distances, target_perplexity) {
-    if (length(distances) == 1) return(1e-3)
-    sigma_min <- 1e-6
-    sigma_max <- 10
+    k <- length(distances)
+    if (k <= 1) return(1e-3)
+    eff_target <- min(target_perplexity, k - tol)
+    max_d <- max(distances)
+    pos_d <- distances[distances > 0]
+    min_d <- if (length(pos_d) > 0) min(pos_d) else 1
+    sigma_min <- max(1e-6, min_d / 100)
+    sigma_max <- max(10, max_d * 10)
     for (iter in 1:max_iter) {
       sigma <- (sigma_min + sigma_max) / 2
       p <- exp(-distances^2 / (2 * sigma^2))
       p <- p / sum(p)
       perp <- 2^shannon_entropy(p)
-      if (abs(perp - target_perplexity) < tol) break
-      if (perp > target_perplexity) sigma_max <- sigma else sigma_min <- sigma
+      if (abs(perp - eff_target) < tol) break
+      if (perp > eff_target) sigma_max <- sigma else sigma_min <- sigma
     }
     return(sigma)
   }
