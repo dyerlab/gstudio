@@ -18,7 +18,7 @@ Description: Provides classes and functions for the spatial analysis of
     networks as described in Dyer and Nason (2004) <doi:10.1111/j.1365-294X.2004.02177.x> 
     and Dyer (2015) <doi:10.1146/annurev-ecolsys-112414-054150>. It also provides 
     newly developed, state-of-the-art methods for evaluating network asymmetry, 
-    conditional introgression pressures, and directional gene flow using local Gaussian 
+    implements methods using genetic gravity, and directional gene flow using Gaussian 
     kernels and perplexity-tuned Markov flow partitioning. Integration with spatial 
     and geographic data is provided via compatibility with 'sf', 'ggplot2', 
     and interactive leaflet maps.

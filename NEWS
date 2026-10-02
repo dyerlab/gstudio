@@ -1,4 +1,15 @@
-gstudio 1.14 - 20260610
+gstudio 1.14.6 - 20261002
+-----------------
+* [CHANGE] Unified Core API: Consolidated all distance, relatedness, and differentiation estimators under three canonical front-ends: genetic_distance(), genetic_relatedness(), and genetic_structure(). Individual dist_*(), rel_*(), and Fst()/Gst() functions are now internal.
+* [CHANGE] Modernized Dependencies: Fully removed deprecated 'sp' dependency in favor of 'sf'. Replaced 'reshape2' and 'stringi' with base R equivalents (stats::xtabs, iconv).
+* [CHANGE] Standardized S3 Class Order: Graph constructors now consistently set class(graph) <- c("popgraph", "igraph") to ensure popgraph method dispatch precedence.
+* [ADD] Native Tidyverse Support: Added automatic stratum detection (.detect_stratum) so piped dplyr::group_by() workflows work seamlessly across frequencies(), genetic_diversity(), genetic_structure(), and all differentiation statistics.
+* [ADD] Documentation: Added working @examples to all public functions (using \dontrun{} for file I/O operations).
+* [PERF] Vectorization: Major performance optimizations in is.na.locus() (>900x speedup), dist_amova() (~100x speedup), cov2dist(), and column_class().
+* [FIX] Mathematical Corrections: Corrected permutation locus alignment in Fst(); eliminated silent column recycling in Gst()/Dest(); resolved stratum misordering in Fis(); fixed Gower centering in distance_to_covariance(); corrected shared allele distance direction in dist_bray(); fixed weighting and calculation in relatedness estimators (LynchRitland, Ritland, Nason); and handled missing data edge cases safely across paternity(), migrate(), and mate().
+* [TEST] Added >240 new unit test assertions, raising overall package test coverage to 85.4% across 1,134 passing tests.
+
+gstudio 1.14.1 - 1.14.5 - 20260610
 -----------------
 * [FIX] (1.14.5) asymmetry_significance(mode = "location") / asymmetry_permutation() now centre the two-tailed test on each edge's permutation null mean, |null - mean(null)| >= |obs - mean(null)|, instead of on zero. With a fixed topology each edge's null is shifted by its degree component (roughly 1/k_i - 1/k_j), so the old |Delta| comparison sent observed values lying between zero and that centre to p ~ 1. The 'statistic' column now reports the centred deviation Delta_obs - mean(null); 'delta' is unchanged.
 * [FIX] (1.14.5) randomize_graph(mode = "degree") now uses igraph::rewire(keeping_degseq()) edge swaps. The previous whole-configuration rejection sampler failed on dense graphs (above ~80 edges on 25 nodes), missed reversed duplicate pairs and so could return multi-edges, and reported the wrong iteration limit. Rewired graphs are always simple, preserve every node's degree, and keep the original vertex order. This changes the null draws of asymmetry_network() / mode = "existence", which no longer fails on dense graphs.
