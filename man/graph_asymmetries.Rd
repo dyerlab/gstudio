@@ -4,7 +4,7 @@
 \alias{graph_asymmetries}
 \title{Directional Asymmetry Indices for a Weighted Population Graph}
 \usage{
-graph_asymmetries(graph, bandwidth = NULL, scale = 1)
+graph_asymmetries(graph, bandwidth = NULL, scale = 1, gamma = NULL)
 }
 \arguments{
 \item{graph}{An undirected \code{popgraph} or \code{igraph} object with a
@@ -20,7 +20,16 @@ in \code{V(graph)} order) supplies a custom per-node bandwidth.}
 
 \item{scale}{Positive multiplier applied to the (local or supplied) bandwidth
 (default \code{1}); useful for probing sensitivity to the absolute distance
-scale.  All bandwidths must remain finite and positive.}
+scale.  \code{Inf} gives the flat kernel (every neighbourhood weight
+\eqn{1/k_i}), at which the index depends on degree alone.  Otherwise all
+bandwidths must remain finite and positive.}
+
+\item{gamma}{Alias for \code{scale}, the bandwidth multiplier
+\eqn{b_i = \gamma\, s_i/k_i} used throughout the genetic-gravity
+functions (\code{\link{source_sink_scores}} and relatives).  If given it
+overrides \code{scale}.  The default here stays \eqn{\gamma = 1} (the local
+mean, for describing connectivity); \eqn{\gamma = 1/2} (degree-neutral) is
+recommended for inferring direction.}
 }
 \value{
 The input graph, unchanged in topology and edge weights, with the

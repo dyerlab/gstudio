@@ -51,7 +51,15 @@
 #'   in \code{V(graph)} order) supplies a custom per-node bandwidth.
 #' @param scale Positive multiplier applied to the (local or supplied) bandwidth
 #'   (default \code{1}); useful for probing sensitivity to the absolute distance
-#'   scale.  All bandwidths must remain finite and positive.
+#'   scale.  \code{Inf} gives the flat kernel (every neighbourhood weight
+#'   \eqn{1/k_i}), at which the index depends on degree alone.  Otherwise all
+#'   bandwidths must remain finite and positive.
+#' @param gamma Alias for \code{scale}, the bandwidth multiplier
+#'   \eqn{b_i = \gamma\, s_i/k_i} used throughout the genetic-gravity
+#'   functions (\code{\link{source_sink_scores}} and relatives).  If given it
+#'   overrides \code{scale}.  The default here stays \eqn{\gamma = 1} (the local
+#'   mean, for describing connectivity); \eqn{\gamma = 1/2} (degree-neutral) is
+#'   recommended for inferring direction.
 #'
 #' @return The input graph, unchanged in topology and edge weights, with the
 #'   following additions:
@@ -112,7 +120,8 @@
 #' @importFrom igraph is_igraph is_directed E V strength degree neighbors get_edge_ids as_edgelist
 #' @importFrom stats setNames
 #' @export
-graph_asymmetries <- function(graph, bandwidth = NULL, scale = 1) {
+graph_asymmetries <- function(graph, bandwidth = NULL, scale = 1, gamma = NULL) {
+  if (!is.null(gamma)) scale <- gamma
   if (!igraph::is_igraph(graph))
     stop("'graph' must be an igraph object")
   if (igraph::is_directed(graph))
@@ -141,10 +150,13 @@ graph_asymmetries <- function(graph, bandwidth = NULL, scale = 1) {
       stop("'bandwidth' must be NULL, a scalar, or a vector named by node / one per vertex.")
     b <- as.numeric(bandwidth)
   }
+  if (!is.numeric(scale) || length(scale) != 1 || is.na(scale) || scale <= 0)
+    stop("'scale' (or 'gamma') must be a single positive number, or Inf for the flat kernel.")
+  flat <- is.infinite(scale)
   b <- b * scale
   names(b) <- nodes
   conn <- deg > 0
-  if (any(!is.finite(b[conn])) || any(b[conn] <= 0))
+  if (!flat && (any(!is.finite(b[conn])) || any(b[conn] <= 0)))
     stop("'bandwidth' must yield finite positive values for all connected nodes.")
   igraph::V(graph)$bandwidth <- b
 
@@ -160,7 +172,13 @@ graph_asymmetries <- function(graph, bandwidth = NULL, scale = 1) {
       }),
       nbs
     )
-    k <- exp(-d^2 / (2 * b[u]^2))
+    if (flat) return(setNames(rep(1 / length(d), length(d)), names(d)))
+    z <- d^2 / (2 * b[u]^2)
+    k <- exp(-z)
+    # Fall back to log-sum-exp (minimum exponent subtracted) only if the plain kernel
+    # underflows at very small bandwidths; otherwise values stay bit-identical to
+    # earlier versions (Swift parity).
+    if (!is.finite(sum(k)) || sum(k) <= 0 || any(k[z == min(z)] == 0)) k <- exp(-(z - min(z)))
     k / sum(k)
   })
   names(node_kernels) <- nodes

@@ -6,7 +6,8 @@
 \usage{
 migration_matrix(
   pops,
-  model = c("island", "stepping_stone_1d", "stepping_stone_2d", "distance", "custom"),
+  model = c("island", "stepping_stone_1d", "stepping_stone_1d_asym", "stepping_stone_2d",
+    "distance", "custom"),
   m = 0.1,
   ...
 )
@@ -15,7 +16,8 @@ migration_matrix(
 \item{pops}{Character vector of population names or an integer count.}
 
 \item{model}{One of \code{"island"}, \code{"stepping_stone_1d"},
-\code{"stepping_stone_2d"}, \code{"distance"}, or \code{"custom"}.}
+\code{"stepping_stone_1d_asym"}, \code{"stepping_stone_2d"},
+\code{"distance"}, or \code{"custom"}.}
 
 \item{m}{Base migration rate on \code{[0,1]}.}
 
@@ -25,6 +27,13 @@ migration_matrix(
   \item{coords}{Two-column matrix of coordinates for \code{"distance"}.}
   \item{decay}{Decay function for \code{"distance"} (default \code{function(d) 1/d}).}
   \item{custom_matrix}{A K x K matrix for \code{"custom"} (rows will be normalized).}
+  \item{m_fwd, m_rev}{For \code{"stepping_stone_1d_asym"}: per-generation rates of
+    migration from each population to its higher-indexed neighbour (\code{m_fwd})
+    and to its lower-indexed neighbour (\code{m_rev}); \code{m} is ignored.  Rates
+    are not split between neighbours, so an interior population sends
+    \code{m_fwd + m_rev} and an end population only one of them.  This is the
+    directional stepping stone of the genetic-gravity simulations
+    (e.g. \code{m_fwd = 0.04, m_rev = 0.01}).}
 }}
 }
 \value{
@@ -38,6 +47,7 @@ that comes from (or goes to) population j each generation.
 \examples{
 migration_matrix(3, model = "island", m = 0.05)
 migration_matrix(c("A","B","C","D"), model = "stepping_stone_1d", m = 0.1)
+migration_matrix(5, model = "stepping_stone_1d_asym", m_fwd = 0.04, m_rev = 0.01)
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

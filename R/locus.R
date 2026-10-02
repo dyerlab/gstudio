@@ -41,7 +41,6 @@ locus <- function( x, type="codom", phased=FALSE ){
     ret <- ""
   }
     
-  
   # default, sort and collapse em.
   else if( type=="codom" ) {  
     ret <- as.character(x)
@@ -75,7 +74,6 @@ locus <- function( x, type="codom", phased=FALSE ){
   else if( type == "column") 
     ret <- apply( x, 1, function(x) locus(as.character(x), phased=phased))
   
-  
   else if( type == "separated" ) {
     if( length(x) > 1)
       ret <- unlist(lapply(x,function(x) locus(x)))
@@ -100,22 +98,16 @@ locus <- function( x, type="codom", phased=FALSE ){
     }
   }
   
-  
   class(ret) <- "locus"
   #attr(ret,"locus_type") <- rep( type, length( ret ) )
   return(ret)
 }
-
-
-
-
 
 ##########################################################################
 #                                                                        #
 #                       Extending S3 Methods                             #
 #                                                                        #
 ##########################################################################
-
 
 #' Converts locus to a list
 #' 
@@ -141,35 +133,6 @@ as.list.locus <- function( x, ... ) {
   }
   ret
 }
-
-
-
-#' As operator for locus
-#' 
-#' This takes several things and shoves it into the constructor
-#' @param x An object that is to be turned into a \code{locus}.
-#' @return An object of type \code{locus}
-#' @export
-#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @seealso \code{\link{locus}}
-#' @examples
-#' 
-#' lst <- list( "A", "B" )
-#' as.locus( lst )
-#' vec <- 1:2
-#' as.locus( lst )
-#' chr <- "A"
-#' as.locus( chr )
-#' chr.sep <- "A:A"
-#' as.locus( chr )
-#' 
-as.locus <- function( x ) {
-  if( inherits(x,"list"))
-    x <- unlist(x)
-  return( locus(x) )
-}
-
-
 
 #' Concatinate \code{locus} objects
 #' 
@@ -197,9 +160,6 @@ c.locus <- function(..., recursive = FALSE) {
   res
 }
 
-
-
-
 #' Overload of \code{print} function for \code{locus} objects
 #' 
 #' Prints out the \code{locus} to stdout.
@@ -222,12 +182,6 @@ print.locus <- function(x, ... ) {
   invisible(x0)
 }
 
-
-
-
-
-
-
 #' Provides a summary of the \code{locus} object
 #' 
 #' Provides an overload of the \code{summary} object so that when you
@@ -245,30 +199,6 @@ summary.locus <- function(object,...) {
   genos[ genos==" " ] <- NA
   return( summary(factor(genos),maxsum=7))
 }
-
-
-
-
-
-#' An 'is-a' operator for \code{locus}
-#' 
-#' A quick convienence function to determine if an object is
-#'  inherited from the \code{locus} object.
-#' @param x An object to query
-#' @return A logical flag indicating if \code{x} is a type of \code{locus}
-#' @export
-#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @examples
-#' 
-#' loc1 <- locus( c("A","A") )
-#' is.locus( loc1 )
-#' is.locus( FALSE )
-#' is.locus( 23 )
-#' 
-is.locus <- function ( x ) { 
-  return( inherits(x,"locus"))
-}
-
 
 #' Replicate a locus
 #' 
@@ -293,11 +223,6 @@ rep.locus <- function( x, times,... ){
   return(ret)
 }
 
-
-
-
-
-
 #' Overload '[' for vectors of \code{locus} objects
 #' 
 #' An overload of the \code{[} function for \code{locus} objects.
@@ -321,10 +246,6 @@ rep.locus <- function( x, times,... ){
   return(y)  
 }
 
-
-
-
-
 # Internal: align two locus vectors for element-wise arithmetic.  A length-one
 # operand is recycled; otherwise the lengths must match.
 #' @keywords internal
@@ -338,7 +259,6 @@ rep.locus <- function( x, times,... ){
   list( e1 = e1[ if( n1 == 1 ) rep(1, n) else seq_len(n) ],
         e2 = e2[ if( n2 == 1 ) rep(1, n) else seq_len(n) ] )
 }
-
 
 #' Overload '+' operator for pairs of \code{locus} objects
 #' 
@@ -390,9 +310,6 @@ rep.locus <- function( x, times,... ){
   return(off)
 }
 
-
-
-
 #' Overload '-' operator for pairs of \code{locus} objects
 #' 
 #' An overload of the \code{-} operator for \code{locus} objects that
@@ -418,19 +335,16 @@ rep.locus <- function( x, times,... ){
 #'
 `-.locus` <- function( e1, e2 ){
   
-  
   if( length(e1) > 1 || length(e2) > 1 ){
     p <- .locus_pairs( e1, e2 )
     ret <- lapply( seq_along(p$e1), function(i) p$e1[i] - p$e2[i] )
     return( do.call( c, ret ) )
   }
   
-  
   if( is.na(e1) || is.na(e2)) {
     warning("Subtract missing locus objects.  Nothing subtracted.")
     return( e1 )
   }
-  
   
   off <- alleles(e1)
   mom <- alleles(e2)
@@ -479,13 +393,5 @@ rep.locus <- function( x, times,... ){
     }
   }
   
-  
 }
-
-
-
-
-
-
-
 

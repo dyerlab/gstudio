@@ -110,7 +110,9 @@ test_that("wide-matrix frequencies are correct", {
   df    <- make_test_data()
   freqs <- frequencies(df, loci = "TPI", stratum = "Population")
   sub   <- freqs[freqs$Locus == "TPI", ]
-  wide  <- reshape2::dcast(sub, Stratum ~ Allele, value.var = "Frequency", fill = 0)
+  mat   <- as.matrix(stats::xtabs(Frequency ~ Stratum + Allele, data = sub))
+  wide  <- data.frame(Stratum = rownames(mat), unclass(mat), check.names = FALSE, stringsAsFactors = FALSE)
+  rownames(wide) <- NULL
 
   # Pop1: AA + AB => A = 0.75, B = 0.25
   pop1 <- wide[wide$Stratum == "Pop1", ]

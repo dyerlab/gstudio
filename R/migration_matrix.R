@@ -6,7 +6,8 @@
 #'
 #' @param pops Character vector of population names or an integer count.
 #' @param model One of \code{"island"}, \code{"stepping_stone_1d"},
-#'   \code{"stepping_stone_2d"}, \code{"distance"}, or \code{"custom"}.
+#'   \code{"stepping_stone_1d_asym"}, \code{"stepping_stone_2d"},
+#'   \code{"distance"}, or \code{"custom"}.
 #' @param m Base migration rate on \code{[0,1]}.
 #' @param ... Additional arguments depending on model:
 #'   \describe{
@@ -14,6 +15,13 @@
 #'     \item{coords}{Two-column matrix of coordinates for \code{"distance"}.}
 #'     \item{decay}{Decay function for \code{"distance"} (default \code{function(d) 1/d}).}
 #'     \item{custom_matrix}{A K x K matrix for \code{"custom"} (rows will be normalized).}
+#'     \item{m_fwd, m_rev}{For \code{"stepping_stone_1d_asym"}: per-generation rates of
+#'       migration from each population to its higher-indexed neighbour (\code{m_fwd})
+#'       and to its lower-indexed neighbour (\code{m_rev}); \code{m} is ignored.  Rates
+#'       are not split between neighbours, so an interior population sends
+#'       \code{m_fwd + m_rev} and an end population only one of them.  This is the
+#'       directional stepping stone of the genetic-gravity simulations
+#'       (e.g. \code{m_fwd = 0.04, m_rev = 0.01}).}
 #'   }
 #' @return A named K x K numeric matrix with rows summing to 1.
 #' @export
@@ -21,7 +29,9 @@
 #' @examples
 #' migration_matrix(3, model = "island", m = 0.05)
 #' migration_matrix(c("A","B","C","D"), model = "stepping_stone_1d", m = 0.1)
+#' migration_matrix(5, model = "stepping_stone_1d_asym", m_fwd = 0.04, m_rev = 0.01)
 migration_matrix <- function(pops, model = c("island", "stepping_stone_1d",
+                                              "stepping_stone_1d_asym",
                                               "stepping_stone_2d", "distance",
                                               "custom"),
                              m = 0.1, ...) {
@@ -45,6 +55,7 @@ migration_matrix <- function(pops, model = c("island", "stepping_stone_1d",
   mat <- switch(model,
     island = .mm_island(K, m),
     stepping_stone_1d = .mm_ss1d(K, m),
+    stepping_stone_1d_asym = .mm_ss1d_asym(K, args),
     stepping_stone_2d = .mm_ss2d(K, m, args),
     distance = .mm_distance(K, m, args),
     custom = .mm_custom(K, args)
@@ -54,42 +65,22 @@ migration_matrix <- function(pops, model = c("island", "stepping_stone_1d",
   return(mat)
 }
 
-
-#' Create a migration event for temporal regime changes
-#'
-#' A migration event pairs a migration matrix with a generation interval
-#' during which it is active.
-#'
-#' @param matrix A migration matrix (as produced by \code{migration_matrix}).
-#' @param start Generation at which this event starts (>= 1).
-#' @param end Generation at which this event ends (>= start, or \code{NULL}
-#'   for indefinite).
-#' @return A list of class \code{"migration_event"} with elements
-#'   \code{matrix}, \code{start}, and \code{end}.
-#' @export
-#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
-#' @examples
-#' M <- migration_matrix(c("A", "B"), model = "island", m = 0.05)
-#' ev <- migration_event(M, start = 1, end = 50)
-#' ev
-migration_event <- function(matrix, start = 1, end = NULL) {
-  if (!is.matrix(matrix))
-    stop("matrix must be a matrix.")
-  if (nrow(matrix) != ncol(matrix))
-    stop("Migration matrix must be square.")
-  if (any(abs(rowSums(matrix) - 1) > 1e-8))
-    stop("Rows of migration matrix must sum to 1.")
-  if (start < 1)
-    stop("start must be >= 1.")
-  if (!is.null(end) && end < start)
-    stop("end must be >= start.")
-  ret <- list(matrix = matrix, start = start, end = end)
-  class(ret) <- "migration_event"
-  return(ret)
-}
-
-
 # ---------- internal model constructors ----------
+
+#' @keywords internal
+.mm_ss1d_asym <- function(K, args) {
+  if (is.null(args$m_fwd) || is.null(args$m_rev))
+    stop("model = 'stepping_stone_1d_asym' needs 'm_fwd' and 'm_rev'.")
+  mf <- args$m_fwd; mr <- args$m_rev
+  if (mf < 0 || mr < 0 || mf + mr > 1) stop("'m_fwd' and 'm_rev' must be >= 0 and sum to at most 1.")
+  mat <- matrix(0, K, K)
+  for (i in seq_len(K)) {
+    if (i > 1) mat[i, i - 1] <- mr
+    if (i < K) mat[i, i + 1] <- mf
+    mat[i, i] <- 1 - (i > 1) * mr - (i < K) * mf
+  }
+  mat
+}
 
 #' @keywords internal
 .mm_island <- function(K, m) {
