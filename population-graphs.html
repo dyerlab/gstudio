@@ -318,9 +318,9 @@ dropped from the discriminant rotation.</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>graph</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH cdaefb3 UNW- 3 3 -- 
+<pre><code>IGRAPH 3b563bf UNW- 3 3 -- 
 + attr: name (v/c), size (v/n), weight (e/n)
-+ edges from cdaefb3 (vertex names):
++ edges from 3b563bf (vertex names):
 [1] Cape    --Mainland  Cape    --Peninsula Mainland--Peninsula</code></pre>
 </div>
 </div>
@@ -338,9 +338,9 @@ from the discriminant rotation.</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>graph</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH f001dbc UNW- 3 3 -- 
+<pre><code>IGRAPH 4e19851 UNW- 3 3 -- 
 + attr: name (v/c), size (v/n), weight (e/n)
-+ edges from f001dbc (vertex names):
++ edges from 4e19851 (vertex names):
 [1] Cape    --Mainland  Cape    --Peninsula Mainland--Peninsula</code></pre>
 </div>
 </div>
@@ -353,9 +353,9 @@ being dropped from the discriminant rotation.</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>graph_strict</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 9ed6c23 UNW- 3 3 -- 
+<pre><code>IGRAPH 1444a62 UNW- 3 3 -- 
 + attr: name (v/c), size (v/n), weight (e/n)
-+ edges from 9ed6c23 (vertex names):
++ edges from 1444a62 (vertex names):
 [1] Cape    --Mainland  Cape    --Peninsula Mainland--Peninsula</code></pre>
 </div>
 </div>
@@ -372,9 +372,9 @@ being dropped from the discriminant rotation.</code></pre>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">as.popgraph</span>(A)</span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 620ae58 UNW- 4 4 -- 
+<pre><code>IGRAPH 9bf99d9 UNW- 4 4 -- 
 + attr: name (v/c), weight (e/n)
-+ edges from 620ae58 (vertex names):
++ edges from 9bf99d9 (vertex names):
 [1] A--B A--D B--C C--D</code></pre>
 </div>
 </div>
@@ -596,9 +596,9 @@ For now we convert it on the fly...</code></pre>
 non-overlapping node sets!  Careful on interpretation.</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 4b7c94f UN-- 16 19 -- 
+<pre><code>IGRAPH ff0387b UN-- 16 19 -- 
 + attr: name (v/c)
-+ edges from 4b7c94f (vertex names):
++ edges from ff0387b (vertex names):
  [1] BaC --LaV    BaC --SnE    BaC --StR    Ctv --SLG    Ctv --SnF   
  [6] LaV --SnE    SLG --SnF    StR --SenBas CP  --SG     CP  --SN    
 [11] CP  --TS     LF  --PL     LF  --SI     PL  --SenBas PL  --SI    
@@ -697,9 +697,9 @@ PtC   1   0   1   1   0</code></pre>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">read_popgraph</span>(path)</span>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 794584f UNW- 21 50 -- 
+<pre><code>IGRAPH 53299ab UNW- 21 50 -- 
 + attr: name (v/c), size (v/n), color (v/c), weight (e/n)
-+ edges from 794584f (vertex names):
++ edges from 53299ab (vertex names):
  [1] BaC --LaV    BaC --Lig    BaC --PtP    BaC --SnE    BaC --SnI   
  [6] BaC --StR    BaC --SenBas Ctv --PtP    Ctv --SLG    Ctv --SnF   
 [11] Ctv --SenBas LaV --Lig    LaV --SnE    LaV --SnF    LaV --TsS   
@@ -720,17 +720,17 @@ PtC   1   0   1   1   0</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>rg <span class="ot">&lt;-</span> <span class="fu">randomize_graph</span>(lopho)</span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>rg</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 2b34ed3 UN-- 21 52 -- 
+<pre><code>IGRAPH e923ede UN-- 21 52 -- 
 + attr: name (v/c), size (v/n), color (v/c), Region (v/c)
-+ edges from 2b34ed3 (vertex names):
- [1] LaV   --LF     Lig   --SenBas Seri  --SI     PtP   --TsS    LaV   --SI    
- [6] SLG   --StR    TsS   --SN     Lig   --SN     Ctv   --StR    Ctv   --SnE   
-[11] PtP   --SI     BaC   --SN     PtP   --LF     BaC   --SnE    PL    --SG    
-[16] Lig   --SLG    SnE   --SenBas Lig   --StR    LaV   --CP     BaC   --TS    
-[21] Ctv   --SnI    CP    --SN     SnI   --SI     TsS   --SG     LaV   --PL    
-[26] PtC   --SnF    PtC   --StR    SnF   --StR    SnI   --StR    SnF   --SN    
-[31] LF    --PL     BaC   --TsS    BaC   --LaV    SLG   --CP     Ctv   --SI    
-[36] BaC   --SG     SenBas--SG     BaC   --Seri   Lig   --PtC    LaV   --PtC   
++ edges from e923ede (vertex names):
+ [1] PtC --TsS    PtC --SLG    Seri--SN     Lig --SnE    LaV --SI    
+ [6] CP  --PL     PtC --StR    Lig --PtP    SnI --PL     BaC --LaV   
+[11] PtP --CP     Lig --SLG    BaC --Seri   TsS --SG     LaV --PtP   
+[16] PL  --TS     SnI --SN     Ctv --LaV    SnF --PL     TsS --CP    
+[21] PtC --SG     LaV --PtC    SnF --SI     PtC --SnF    BaC --Lig   
+[26] Ctv --LF     TsS --TS     BaC --SI     TsS --SI     SnI --SenBas
+[31] LF  --SenBas Ctv --SN     PtP --SenBas BaC --SnE    BaC --SG    
+[36] Lig --SnI    LaV --StR    SLG --SnF    PtC --SnI    CP  --TS    
 + ... omitted several edges</code></pre>
 </div>
 </div>
