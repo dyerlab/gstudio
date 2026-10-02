@@ -239,3 +239,96 @@ Generate a random graph with the same nodes and degree sequence as the original 
 rg <- randomize_graph(lopho)
 rg
 ```
+
+## Genetic Gravity: Direction from an Undirected Graph
+
+Each edge of a Population Graph is symmetric, but the two populations it joins are compared against different neighbourhoods. *Genetic gravity* reads direction from that difference. For population $i$, the neighbourhood weight $w_{j\mid i}$ is $j$'s share of a Gaussian kernel over $i$'s retained neighbours, with bandwidth $b_i = \gamma\, s_i/k_i$ (a multiple of $i$'s mean edge weight). The gravity asymmetry of an edge is $\Delta_{i\rightarrow j} = w_{i\mid j} - w_{j\mid i}$: positive when $i$ holds more weight in $j$'s neighbourhood than $j$ holds in $i$'s, marking $i$ as the genetic source. The source–sink score $S$ places every population on one scale, with $S_i - S_j \approx \Delta_{i\rightarrow j}$ over all edges. Throughout, **higher means more of a source**.
+
+### Choosing the bandwidth
+
+Two bandwidths answer different questions:
+
+- `gamma = 0.5`, the *degree-neutral* bandwidth (the default in the functions below), for **inferring direction**. At this bandwidth, source–sink scores carry essentially no degree signature under symmetric migration.
+- `gamma = 1`, the *local mean*, for **describing connectivity**. It keeps the contribution of degree, so hubs read as sources and leaves as sinks.
+
+`gamma = Inf` gives the flat kernel, where every quantity is set by degree alone. Whatever the bandwidth, report the *degree share*: the share of the variance in $\Delta$ explained by the degree-only term $\Delta^0_{i\rightarrow j} = 1/k_j - 1/k_i$.
+
+```{r}
+pops  <- population_graph(arapat, stratum = "Population")
+coords <- strata_coordinates(arapat)
+
+scores <- source_sink_scores(pops, gamma = 0.5)
+head(scores[order(-scores$S), c("node", "S", "gravity", "degree")])
+c(degree_share = attr(scores, "degree_share"), cor_S_degree = attr(scores, "cor_S_degree"))
+
+# the same graph at the local mean: degree carries much more of the index
+attr(source_sink_scores(pops, gamma = 1), "degree_share")
+```
+
+Edge-level quantities, in the same sign convention, come from `gravity_edges()`. The neighbourhood-weight matrix comes from `neighbourhood_weights()`:
+
+```{r}
+head(gravity_edges(pops))
+```
+
+### Mapping sources and sinks
+
+`plot_gravity_field()` interpolates $S$ over the node coordinates (red = source, blue = sink), draws the edges, and places an arrow at each edge midpoint, pointing from source to sink with length proportional to $|\Delta|$. A named list of graphs, or one graph at several bandwidths, is drawn on common scales. `mask_dist` sets how far from a node the surface extends (default 0.75 times the median nearest-neighbour distance); clustered sampling locations usually need a larger value:
+
+```{r}
+#| fig-width: 9
+#| fig-height: 5
+plot_gravity_field(list(`local mean (gamma = 1)` = pops, `degree-neutral (gamma = 1/2)` = pops),
+                   coords = coords, gamma = c(1, 0.5), mask_dist = 0.6)
+```
+
+The quantities behind the map are a `gravity_field` object. Compute it once, then print it, convert it with `as.data.frame()` (nodes or edges) for your own plots, or `plot()` it. A list of fields, or of fields and graphs mixed, can be passed to `plot_gravity_field()`; each field keeps its own coordinates and bandwidth:
+
+```{r}
+field <- gravity_field(pops, coords = coords, gamma = 0.5)
+field
+head(as.data.frame(field, what = "edges"))
+```
+
+### Testing for a directional gradient
+
+`source_sink_test()` asks whether $S$ changes monotonically along a hypothesized covariate, such as position along a river or, here, latitude along the peninsula. The statistic is Spearman's $r(S, x)$; $r < 0$ places the sources at low $x$. The default null is Moran spectral randomization on the graph's own topology (`msr_null()`, native to gstudio). It reproduces the node-level smoothness that $S$ inherits from drift; a plain permutation of $S$ does not, and is anti-conservative.
+
+```{r}
+lat <- setNames(coords$Latitude, coords$Stratum)
+set.seed(1)
+source_sink_test(pops, x = lat, nperm = 499)
+```
+
+### Directional isolation by graph distance
+
+`pgd()` splits each edge's conditional genetic distance into two directional parts in proportion to the neighbourhood weights. Because it is a distance, it is shorter in the direction of gene flow. `directional_ibgd()` asks whether isolation by graph distance is described better by these directed distances, with separate forward and reverse slopes along the hypothesized axis, than by the symmetric cGD. $\Delta R^2 > 0$ favours the directional description; the slope ratio $b_{fwd}/b_{rev} < 1$ means distance accumulates more slowly downstream.
+
+```{r}
+directional_ibgd(pops, x = lat)
+```
+
+The two tests answer different questions. Under strong drift the model comparison can prefer a directional fit by chance, so read it alongside the source–sink test. Edge-level permutation tests of $\Delta$ (`asymmetry_significance()` and its modes) are not recommended as tests of direction: under symmetric migration they are anti-conservative, or never reject.
+
+### Data quality: information loss
+
+As loci fix, graphs are estimated from fewer informative loci, which inflates $|\Delta|$ whatever the direction of gene flow. `locus_subsample_null()` rebuilds the graph from random subsets of polymorphic loci, to show how much $|\Delta|$ information loss alone can produce at a given level of polymorphism:
+
+```{r}
+#| eval: false
+locus_subsample_null(arapat, k = c(2, 3, 4, 6), nsub = 3)
+```
+
+### Simulating directional gene flow
+
+A directional stepping stone, with rates to the next population downstream (`m_fwd`) and upstream (`m_rev`), plugs into `simulate_pop()`:
+
+```{r}
+#| eval: false
+f <- data.frame(Population = rep(sprintf("Pop%02d", 1:10), each = 2), Locus = "L1",
+                Allele = rep(c("01", "02"), 10), Frequency = 0.5)
+pop <- make_populations(f, N = 50)
+mm  <- migration_matrix(sprintf("Pop%02d", 1:10), model = "stepping_stone_1d_asym",
+                        m_fwd = 0.04, m_rev = 0.01)
+out <- simulate_pop(pop, ngen = 200, migration = migration_event(mm), verbose = FALSE)
+```
