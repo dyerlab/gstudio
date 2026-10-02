@@ -4,19 +4,11 @@
 \alias{read_population}
 \title{Read a raw text file in and translate appropriate columns into genotypes}
 \usage{
-read_population(
-  path,
-  type,
-  locus.columns,
-  phased = FALSE,
-  sep = ",",
-  header = TRUE,
-  delim = ":",
-  ...
-)
+read_population(path, type, locus.columns, phased = FALSE, sep = ",",
+  header = TRUE, delim = ":", ...)
 }
 \arguments{
-\item{path}{The path to the text file}
+\item{path}{The path to the text file OR a textConnection object that contains genotypes}
 
 \item{type}{An indication of what kind of loci that the data represent. The 
  following kinds are recoginzed (n.b., if you have several types load them
@@ -55,6 +47,16 @@ A \code{data.frame} with \code{locus} columns pre-formatted.
 \description{
 The function reads in a text file and does the proper translations for 
  genotypes and spatial coordinates.
+}
+\examples{
+#Use a text connection rather than file on disk
+#create 0,1,2 snp copy data frame, convert to vector, and use vector as input
+df <- as.data.frame(matrix(round(runif(50,min=0,max=2)),5,10))
+print(df)
+vec <- sapply(1:nrow(df),function(l){paste0(paste(df[l,],collapse=", "),"\\n")})
+print(vec)
+pops <- read_population(path=textConnection(vec),type="snp",sep=",",header=F,locus.columns=1:5)
+print(pops)
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
