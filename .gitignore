@@ -24,6 +24,7 @@ gstudio/inst/doc/gstudio.tex
 gstudio/inst/doc/figure/
 gstudio/inst/doc/cache/
 *.icloud
+*.py
 CLAUDE.md
 /doc/
 /Meta/

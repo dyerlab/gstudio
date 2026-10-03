@@ -8,39 +8,48 @@ plot_gravity_field(
   x,
   coords = NULL,
   gamma = 0.5,
+  layout = NULL,
   surface = c("interpolate", "voronoi", "none"),
   arrows = TRUE,
   edges = TRUE,
-  node_labels = c("degree", "name", "none"),
+  node_labels = c("name", "degree", "size", "none"),
+  node_size = c("degree", "size", "constant"),
   palette = c("#2166ac", "#b2182b"),
   subtitle_stats = TRUE,
   mask_dist = NULL,
   arrow_scale = 1,
   min_delta = 0,
-  grid_n = 120
+  grid_n = 140
 )
 }
 \arguments{
 \item{x}{A \code{popgraph}/\code{igraph}, a \code{\link{gravity_field}} object, or a
 named list of either (one facet each; graphs and fields may be mixed).  A precomputed
 field is drawn as it is: its own coordinates and bandwidth are used and
-\code{coords} / \code{gamma} do not apply to it.}
+\code{coords} / \code{gamma} / \code{layout} do not apply to it.}
 
-\item{coords}{Node coordinates (see \code{\link{gravity_field}}), used for every graph.}
+\item{coords}{Node coordinates (see \code{\link{gravity_field}}), used for every graph.
+Can be a coordinate matrix/data.frame or a layout name (\code{"fr"} or \code{"kk"}).}
 
 \item{gamma}{Bandwidth multiplier, or a vector with one value per element of \code{x}
 (default \code{0.5}); ignored for precomputed fields.  Use \code{gamma = c(1, 0.5)} with
 \code{x = list(a = g, b = g)} to compare the local mean and degree-neutral fields.}
 
-\item{surface}{\code{"interpolate"} (inverse-distance weighting of \eqn{S} on a grid,
-with contours), \code{"voronoi"} (each grid cell takes its nearest node's \eqn{S}),
+\item{layout}{Optional layout algorithm (\code{"fr"}, \code{"kk"}, or a function) passed
+to \code{\link{gravity_field}}.}
+
+\item{surface}{\code{"interpolate"} (smooth Gaussian kernel interpolation of \eqn{S}
+with contour lines), \code{"voronoi"} (each grid cell takes its nearest node's \eqn{S}),
 or \code{"none"}.}
 
 \item{arrows}{Draw source-to-sink arrows (default \code{TRUE}).}
 
 \item{edges}{Draw edges in grey (default \code{TRUE}).}
 
-\item{node_labels}{\code{"degree"}, \code{"name"} or \code{"none"}.}
+\item{node_labels}{\code{"name"} (default), \code{"degree"}, \code{"size"}, or \code{"none"}.}
+
+\item{node_size}{\code{"degree"} (default), \code{"size"} (scale nodes by their vertex \code{size} attribute),
+or \code{"constant"}.}
 
 \item{palette}{Two colours, sink then source (default a colour-blind-safe blue/red pair).}
 
@@ -48,7 +57,7 @@ or \code{"none"}.}
 and cor(\eqn{S}, degree) to each facet label (default \code{TRUE}).}
 
 \item{mask_dist}{Surface cells farther than this from every node are left blank;
-default 0.75 times the median nearest-neighbour distance between nodes.}
+default 1.2 times the median nearest-neighbour distance between nodes.}
 
 \item{arrow_scale}{Arrow length multiplier (default 1).  The longest arrow over all
 facets is \code{arrow_scale} times the median edge length.}
@@ -56,7 +65,7 @@ facets is \code{arrow_scale} times the median edge length.}
 \item{min_delta}{Hide arrows whose \eqn{|\Delta|} is below this quantile of all
 \eqn{|\Delta|} (default 0, show all).}
 
-\item{grid_n}{Surface grid resolution per axis (default 120).}
+\item{grid_n}{Surface grid resolution per axis (default 140).}
 }
 \value{
 A \code{ggplot} object.
@@ -65,9 +74,10 @@ A \code{ggplot} object.
 Maps genetic gravity on node coordinates: an interpolated source-sink surface
 (red = source, blue = sink) with contour lines, the graph's edges, and an arrow at
 each edge midpoint pointing from source to sink with length proportional to
-\eqn{|\Delta|}.  Nodes are sized by degree.  A named list of graphs is drawn as
-facets on \strong{common} colour and arrow scales, so panels (for example the same
-graph at two bandwidths, or several censuses) are directly comparable.
+\eqn{|\Delta|}.  Nodes are drawn as crisp badges scaled to their own size (or
+degree) with labels inside.  A named list of graphs is drawn as facets on
+\strong{common} colour and arrow scales, so panels (for example the same graph at
+two bandwidths, or several censuses) are directly comparable.
 }
 \examples{
 library(igraph)

@@ -5,34 +5,40 @@
 #' Maps genetic gravity on node coordinates: an interpolated source-sink surface
 #' (red = source, blue = sink) with contour lines, the graph's edges, and an arrow at
 #' each edge midpoint pointing from source to sink with length proportional to
-#' \eqn{|\Delta|}.  Nodes are sized by degree.  A named list of graphs is drawn as
-#' facets on \strong{common} colour and arrow scales, so panels (for example the same
-#' graph at two bandwidths, or several censuses) are directly comparable.
+#' \eqn{|\Delta|}.  Nodes are drawn as crisp badges scaled to their own size (or
+#' degree) with labels inside.  A named list of graphs is drawn as facets on
+#' \strong{common} colour and arrow scales, so panels (for example the same graph at
+#' two bandwidths, or several censuses) are directly comparable.
 #'
 #' @param x A \code{popgraph}/\code{igraph}, a \code{\link{gravity_field}} object, or a
 #'   named list of either (one facet each; graphs and fields may be mixed).  A precomputed
 #'   field is drawn as it is: its own coordinates and bandwidth are used and
-#'   \code{coords} / \code{gamma} do not apply to it.
+#'   \code{coords} / \code{gamma} / \code{layout} do not apply to it.
 #' @param coords Node coordinates (see \code{\link{gravity_field}}), used for every graph.
+#'   Can be a coordinate matrix/data.frame or a layout name (\code{"fr"} or \code{"kk"}).
 #' @param gamma Bandwidth multiplier, or a vector with one value per element of \code{x}
 #'   (default \code{0.5}); ignored for precomputed fields.  Use \code{gamma = c(1, 0.5)} with
 #'   \code{x = list(a = g, b = g)} to compare the local mean and degree-neutral fields.
-#' @param surface \code{"interpolate"} (inverse-distance weighting of \eqn{S} on a grid,
-#'   with contours), \code{"voronoi"} (each grid cell takes its nearest node's \eqn{S}),
+#' @param layout Optional layout algorithm (\code{"fr"}, \code{"kk"}, or a function) passed
+#'   to \code{\link{gravity_field}}.
+#' @param surface \code{"interpolate"} (smooth Gaussian kernel interpolation of \eqn{S}
+#'   with contour lines), \code{"voronoi"} (each grid cell takes its nearest node's \eqn{S}),
 #'   or \code{"none"}.
 #' @param arrows Draw source-to-sink arrows (default \code{TRUE}).
 #' @param edges Draw edges in grey (default \code{TRUE}).
-#' @param node_labels \code{"degree"}, \code{"name"} or \code{"none"}.
+#' @param node_labels \code{"name"} (default), \code{"degree"}, \code{"size"}, or \code{"none"}.
+#' @param node_size \code{"degree"} (default), \code{"size"} (scale nodes by their vertex \code{size} attribute),
+#'   or \code{"constant"}.
 #' @param palette Two colours, sink then source (default a colour-blind-safe blue/red pair).
 #' @param subtitle_stats Add the degree share (\eqn{R^2} of \eqn{\Delta} on \eqn{\Delta^0})
 #'   and cor(\eqn{S}, degree) to each facet label (default \code{TRUE}).
 #' @param mask_dist Surface cells farther than this from every node are left blank;
-#'   default 0.75 times the median nearest-neighbour distance between nodes.
+#'   default 1.2 times the median nearest-neighbour distance between nodes.
 #' @param arrow_scale Arrow length multiplier (default 1).  The longest arrow over all
 #'   facets is \code{arrow_scale} times the median edge length.
 #' @param min_delta Hide arrows whose \eqn{|\Delta|} is below this quantile of all
 #'   \eqn{|\Delta|} (default 0, show all).
-#' @param grid_n Surface grid resolution per axis (default 120).
+#' @param grid_n Surface grid resolution per axis (default 140).
 #' @return A \code{ggplot} object.
 #' @seealso \code{\link{gravity_field}}, \code{\link{source_sink_scores}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -48,17 +54,22 @@
 #' plot_gravity_field(list(`local mean` = g, `degree-neutral` = g), coords = xy, gamma = c(1, 0.5))
 #' @importFrom ggplot2 .data
 #' @export
-plot_gravity_field <- function(x, coords = NULL, gamma = 0.5, surface = c("interpolate", "voronoi", "none"),
-                               arrows = TRUE, edges = TRUE, node_labels = c("degree", "name", "none"),
+plot_gravity_field <- function(x, coords = NULL, gamma = 0.5, layout = NULL,
+                               surface = c("interpolate", "voronoi", "none"),
+                               arrows = TRUE, edges = TRUE,
+                               node_labels = c("name", "degree", "size", "none"),
+                               node_size = c("degree", "size", "constant"),
                                palette = c("#2166ac", "#b2182b"), subtitle_stats = TRUE, mask_dist = NULL,
-                               arrow_scale = 1, min_delta = 0, grid_n = 120) {
-  surface <- match.arg(surface); node_labels <- match.arg(node_labels)
+                               arrow_scale = 1, min_delta = 0, grid_n = 140) {
+  surface <- match.arg(surface)
+  if (is.character(node_labels)) node_labels <- match.arg(node_labels)
+  if (is.character(node_size)) node_size <- match.arg(node_size)
   graphs <- if (igraph::is_igraph(x) || inherits(x, "gravity_field")) list(x) else x
   ok <- is.list(graphs) && all(vapply(graphs, function(g) igraph::is_igraph(g) || inherits(g, "gravity_field"), logical(1)))
   if (!ok) stop("'x' must be a graph, a gravity_field, or a list of them")
   if (is.null(names(graphs))) names(graphs) <- if (length(graphs) == 1) "" else paste("Graph", seq_along(graphs))
   gam <- rep_len(gamma, length(graphs))
-  fields <- Map(function(g, gm) if (inherits(g, "gravity_field")) g else gravity_field(g, coords, gm), graphs, gam)
+  fields <- Map(function(g, gm) if (inherits(g, "gravity_field")) g else gravity_field(g, coords = coords, gamma = gm, layout = layout), graphs, gam)
   lab <- vapply(seq_along(fields), function(i) {
     f <- fields[[i]]; base <- names(graphs)[i]
     if (!subtitle_stats) return(base)
@@ -75,46 +86,96 @@ plot_gravity_field <- function(x, coords = NULL, gamma = 0.5, surface = c("inter
   xy1 <- fields[[1]]$nodes[, c("x", "y")]
   dmat <- as.matrix(stats::dist(xy1)); diag(dmat) <- Inf
   nn <- stats::median(apply(dmat, 1, min))
-  if (is.null(mask_dist)) mask_dist <- 0.75 * nn
+  if (is.null(mask_dist)) mask_dist <- 1.2 * nn
   edge_len <- stats::median(sqrt((seg$xend - seg$x)^2 + (seg$yend - seg$y)^2))
   p <- ggplot2::ggplot()
   if (surface != "none") {
-    rx <- range(nd$x); ry <- range(nd$y); pad <- 0.08 * max(diff(rx), diff(ry), 1e-9)
+    rx <- range(nd$x); ry <- range(nd$y); pad <- 0.12 * max(diff(rx), diff(ry), 1e-9)
     gx <- seq(rx[1] - pad, rx[2] + pad, length.out = grid_n); gy <- seq(ry[1] - pad, ry[2] + pad, length.out = grid_n)
     gr <- expand.grid(x = gx, y = gy)
     surf <- do.call(rbind, Map(function(f, l) {
       n <- f$nodes; d <- sqrt(outer(gr$x, n$x, "-")^2 + outer(gr$y, n$y, "-")^2)
-      v <- if (surface == "voronoi") n$S[apply(d, 1, which.min)] else {
-        w <- 1 / pmax(d, 1e-9)^2; as.numeric((w %*% n$S) / rowSums(w)) }
+      v <- if (surface == "voronoi") {
+        n$S[apply(d, 1, which.min)]
+      } else {
+        h <- pmax(nn * 1.2, 1e-6)
+        w <- exp(-0.5 * (d / h)^2)
+        as.numeric((w %*% n$S) / pmax(rowSums(w), 1e-9))
+      }
       v[apply(d, 1, min) > mask_dist] <- NA
       data.frame(gr, S = v, panel = l) }, fields, lab))
     surf$panel <- factor(surf$panel, lab)
     p <- p + ggplot2::geom_raster(data = surf, ggplot2::aes(.data$x, .data$y, fill = .data$S), interpolate = TRUE, na.rm = TRUE)
     if (surface == "interpolate")
-      p <- p + ggplot2::geom_contour(data = surf[!is.na(surf$S), ], ggplot2::aes(.data$x, .data$y, z = .data$S),
-                                     colour = "grey35", linewidth = 0.2, bins = 8, na.rm = TRUE)
+      p <- p + ggplot2::geom_contour(data = surf, ggplot2::aes(.data$x, .data$y, z = .data$S),
+                                     colour = "grey35", linewidth = 0.25, bins = 10, na.rm = TRUE)
   }
   if (edges) p <- p + ggplot2::geom_segment(data = seg, ggplot2::aes(.data$x, .data$y, xend = .data$xend, yend = .data$yend),
-                                            colour = "grey55", linewidth = 0.35)
+                                            colour = "grey40", linewidth = 0.5, alpha = 0.7)
   if (arrows) {
     a <- ed; dmax <- max(abs(a$delta), na.rm = TRUE)
-    if (min_delta > 0) a <- a[abs(a$delta) >= stats::quantile(abs(ed$delta), min_delta), ]
+    a <- a[abs(a$delta) > 1e-6, ]
+    if (min_delta > 0 && nrow(a)) a <- a[abs(a$delta) >= stats::quantile(abs(ed$delta), min_delta), ]
     if (nrow(a) && dmax > 0) {
       L <- arrow_scale * abs(a$delta) / dmax * edge_len
       a$x0 <- a$x_mid - a$ux * L / 2; a$y0 <- a$y_mid - a$uy * L / 2; a$x1 <- a$x_mid + a$ux * L / 2; a$y1 <- a$y_mid + a$uy * L / 2
       p <- p + ggplot2::geom_segment(data = a, ggplot2::aes(.data$x0, .data$y0, xend = .data$x1, yend = .data$y1),
-                                     arrow = ggplot2::arrow(length = ggplot2::unit(0.12, "cm"), type = "closed"),
-                                     colour = "grey10", linewidth = 0.45)
+                                     arrow = ggplot2::arrow(length = ggplot2::unit(0.16, "cm"), type = "closed"),
+                                     colour = "black", linewidth = 0.65)
     }
   }
-  p <- p + ggplot2::geom_point(data = nd, ggplot2::aes(.data$x, .data$y, size = .data$degree, fill = .data$S), shape = 21, colour = "grey15")
-  if (node_labels != "none")
-    p <- p + ggplot2::geom_text(data = nd, ggplot2::aes(.data$x, .data$y, label = if (node_labels == "degree") .data$degree else .data$node),
-                                size = 2.4, colour = "black")
-  p + ggplot2::scale_fill_gradient2(low = palette[1], mid = "#f7f7f7", high = palette[2], midpoint = 0, limits = c(-lim, lim),
-                                    name = "S (source +)", na.value = NA) +
-    ggplot2::scale_size_continuous(range = c(2.5, 6), name = "Degree") +
+
+  use_size_scale <- TRUE
+  size_title <- "Degree"
+  if (is.numeric(node_size)) {
+    nd$plot_size <- node_size[1]
+    use_size_scale <- FALSE
+  } else if (identical(node_size, "constant")) {
+    nd$plot_size <- 4.5
+    use_size_scale <- FALSE
+  } else if (identical(node_size, "size")) {
+    has_size <- "size" %in% names(nd) && !all(is.na(nd$size)) && !all(nd$size == nd$degree)
+    nd$plot_size <- if ("size" %in% names(nd) && !all(is.na(nd$size))) nd$size else nd$degree
+    size_title <- if (has_size) "Size" else "Degree"
+  } else {
+    nd$plot_size <- nd$degree
+    size_title <- "Degree"
+  }
+
+  if (use_size_scale) {
+    p <- p + ggplot2::geom_point(data = nd, ggplot2::aes(.data$x, .data$y, size = .data$plot_size),
+                                 shape = 21, fill = "white", colour = "black", stroke = 0.8)
+    p <- p + ggplot2::scale_size_continuous(range = c(2.8, 6.5), name = size_title)
+  } else {
+    p <- p + ggplot2::geom_point(data = nd, ggplot2::aes(.data$x, .data$y), size = nd$plot_size[1],
+                                 shape = 21, fill = "white", colour = "black", stroke = 0.8)
+  }
+
+  if (node_labels != "none") {
+    lbl <- if (node_labels == "degree") nd$degree
+           else if (node_labels == "name") nd$node
+           else if (node_labels == "size") format(round(nd$size, 1), trim = TRUE)
+           else nd$node
+    nd$node_label <- lbl
+    if (requireNamespace("ggrepel", quietly = TRUE)) {
+      p <- p + ggrepel::geom_text_repel(data = nd, ggplot2::aes(.data$x, .data$y, label = .data$node_label),
+                                        size = 2.6, fontface = "bold", colour = "grey15",
+                                        box.padding = 0.25, point.padding = 0.35,
+                                        min.segment.length = 0.1,
+                                        segment.size = 0.3, segment.colour = "grey40",
+                                        max.overlaps = Inf)
+    } else {
+      p <- p + ggplot2::geom_text(data = nd, ggplot2::aes(.data$x, .data$y, label = .data$node_label),
+                                  size = 2.0, colour = "black", fontface = "bold")
+    }
+  }
+
+  p <- p + ggplot2::scale_fill_gradient2(low = palette[1], mid = "#f7f7f7", high = palette[2], midpoint = 0, limits = c(-lim, lim),
+                                         name = "Source\u2013sink score S\n(red = source, blue = sink)", na.value = NA) +
     ggplot2::facet_wrap(~panel) + ggplot2::coord_equal() +
     ggplot2::labs(x = NULL, y = NULL) + ggplot2::theme_minimal(base_size = 10) +
-    ggplot2::theme(panel.grid = ggplot2::element_blank())
+    ggplot2::theme(panel.grid = ggplot2::element_blank(),
+                   axis.text = ggplot2::element_blank(),
+                   axis.ticks = ggplot2::element_blank())
+  p
 }

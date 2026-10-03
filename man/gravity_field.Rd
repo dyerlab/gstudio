@@ -7,7 +7,7 @@
 \alias{as.data.frame.gravity_field}
 \title{Gravity field of a Population Graph: nodes and directed edge arrows with coordinates}
 \usage{
-gravity_field(graph, coords = NULL, gamma = 0.5)
+gravity_field(graph, coords = NULL, gamma = 0.5, layout = NULL)
 
 \method{print}{gravity_field}(x, n = 3, ...)
 
@@ -28,13 +28,18 @@ gravity_field(graph, coords = NULL, gamma = 0.5)
 \item{coords}{Node coordinates, in order of preference: a two-column matrix or
 \code{data.frame} (rows named by node, or in vertex order; columns \code{x}/\code{y},
 \code{Longitude}/\code{Latitude}, or the first two numeric columns); the output of
-\code{\link{strata_coordinates}}; or \code{NULL}, in which case vertex attributes
-\code{x}/\code{y} or \code{Longitude}/\code{Latitude} are used, and failing those a
-Fruchterman-Reingold layout with a fixed seed (with a message that the positions
-are not geographic).}
+\code{\link{strata_coordinates}}; a character string specifying a layout algorithm
+(\code{"fr"} or \code{"kk"}); or \code{NULL} (default), in which case vertex
+attributes \code{x}/\code{y} or \code{Longitude}/\code{Latitude} are used if present,
+and otherwise defaults to a Kamada-Kawai layout with bi-directional pGD weights.}
 
 \item{gamma}{Bandwidth multiplier (default \code{0.5}, degree-neutral; \code{1} local
 mean; \code{Inf} degree-only).  See \code{\link{source_sink_scores}}.}
+
+\item{layout}{Optional layout specification overriding or complementing \code{coords}:
+\code{"kk"} (Kamada-Kawai, default), \code{"fr"} (Fruchterman-Reingold), or a layout function.
+When a layout is computed, bi-directional arc weights from \code{\link{pgd}} are used
+to let directional gene flow shape the topology.}
 
 \item{x}{A \code{gravity_field} object.}
 
@@ -52,6 +57,7 @@ mean; \code{Inf} degree-only).  See \code{\link{source_sink_scores}}.}
 An object of class \code{"gravity_field"}: a list with
   \describe{
     \item{\code{nodes}}{\code{data.frame}: \code{node}, \code{x}, \code{y}, \code{degree},
+      \code{size} (vertex \code{size} attribute if present, else \code{degree}),
       \code{S} (source-sink score), \code{gravity}.}
     \item{\code{edges}}{\code{data.frame}: \code{from}, \code{to}, \code{weight},
       \code{delta} (\eqn{\Delta_{from \to to}}), \code{source}, \code{sink},

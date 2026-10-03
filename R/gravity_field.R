@@ -11,15 +11,20 @@
 #' @param coords Node coordinates, in order of preference: a two-column matrix or
 #'   \code{data.frame} (rows named by node, or in vertex order; columns \code{x}/\code{y},
 #'   \code{Longitude}/\code{Latitude}, or the first two numeric columns); the output of
-#'   \code{\link{strata_coordinates}}; or \code{NULL}, in which case vertex attributes
-#'   \code{x}/\code{y} or \code{Longitude}/\code{Latitude} are used, and failing those a
-#'   Fruchterman-Reingold layout with a fixed seed (with a message that the positions
-#'   are not geographic).
+#'   \code{\link{strata_coordinates}}; a character string specifying a layout algorithm
+#'   (\code{"fr"} or \code{"kk"}); or \code{NULL} (default), in which case vertex
+#'   attributes \code{x}/\code{y} or \code{Longitude}/\code{Latitude} are used if present,
+#'   and otherwise defaults to a Kamada-Kawai layout with bi-directional pGD weights.
 #' @param gamma Bandwidth multiplier (default \code{0.5}, degree-neutral; \code{1} local
 #'   mean; \code{Inf} degree-only).  See \code{\link{source_sink_scores}}.
+#' @param layout Optional layout specification overriding or complementing \code{coords}:
+#'   \code{"kk"} (Kamada-Kawai, default), \code{"fr"} (Fruchterman-Reingold), or a layout function.
+#'   When a layout is computed, bi-directional arc weights from \code{\link{pgd}} are used
+#'   to let directional gene flow shape the topology.
 #' @return An object of class \code{"gravity_field"}: a list with
 #'   \describe{
 #'     \item{\code{nodes}}{\code{data.frame}: \code{node}, \code{x}, \code{y}, \code{degree},
+#'       \code{size} (vertex \code{size} attribute if present, else \code{degree}),
 #'       \code{S} (source-sink score), \code{gravity}.}
 #'     \item{\code{edges}}{\code{data.frame}: \code{from}, \code{to}, \code{weight},
 #'       \code{delta} (\eqn{\Delta_{from \to to}}), \code{source}, \code{sink},
@@ -49,18 +54,19 @@
 #' head(as.data.frame(f, what = "edges"))
 #' plot(f)
 #' @export
-gravity_field <- function(graph, coords = NULL, gamma = 0.5) {
+gravity_field <- function(graph, coords = NULL, gamma = 0.5, layout = NULL) {
   graph <- .gravity_check(graph)
   nodes <- igraph::V(graph)$name
-  xy <- .gravity_coords(graph, coords, nodes); src_coords <- attr(xy, "source")
+  xy <- .gravity_coords(graph, coords, nodes, gamma = gamma, layout = layout); src_coords <- attr(xy, "source")
   sc <- source_sink_scores(graph, gamma)
   ed <- gravity_edges(graph, gamma)
   src <- ifelse(ed$Delta >= 0, ed$from, ed$to); snk <- ifelse(ed$Delta >= 0, ed$to, ed$from)
   sx <- xy[src, 1]; sy <- xy[src, 2]; tx <- xy[snk, 1]; ty <- xy[snk, 2]
   len <- sqrt((tx - sx)^2 + (ty - sy)^2); len[len == 0] <- 1
+  sz <- if ("size" %in% igraph::vertex_attr_names(graph)) igraph::V(graph)$size else sc$degree
   out <- list(
-    nodes = data.frame(node = nodes, x = xy[nodes, 1], y = xy[nodes, 2], degree = sc$degree, S = sc$S,
-                       gravity = sc$gravity, row.names = NULL, stringsAsFactors = FALSE),
+    nodes = data.frame(node = nodes, x = xy[nodes, 1], y = xy[nodes, 2], degree = sc$degree,
+                       size = sz, S = sc$S, gravity = sc$gravity, row.names = NULL, stringsAsFactors = FALSE),
     edges = data.frame(from = ed$from, to = ed$to, weight = ed$weight, delta = ed$Delta, source = src, sink = snk,
                        x_mid = (xy[ed$from, 1] + xy[ed$to, 1]) / 2, y_mid = (xy[ed$from, 2] + xy[ed$to, 2]) / 2,
                        ux = (tx - sx) / len, uy = (ty - sy) / len, row.names = NULL, stringsAsFactors = FALSE))
@@ -104,7 +110,7 @@ as.data.frame.gravity_field <- function(x, row.names = NULL, optional = FALSE, w
 }
 
 #' @keywords internal
-.gravity_coords <- function(graph, coords, nodes) {
+.gravity_coords <- function(graph, coords, nodes, gamma = 0.5, layout = NULL) {
   pick <- function(d) {
     d <- as.data.frame(d)
     nm <- names(d)
@@ -116,20 +122,50 @@ as.data.frame.gravity_field <- function(x, row.names = NULL, optional = FALSE, w
     else if (nrow(m) != length(nodes)) stop("'coords' must have one row per node (or be keyed by node)")
     m
   }
+
+  calc_layout <- function(lay_type) {
+    dg <- pgd(graph, gamma = gamma, output = "graph")
+    old <- if (exists(".Random.seed", envir = globalenv())) get(".Random.seed", envir = globalenv()) else NULL
+    set.seed(1)
+    on.exit({ if (!is.null(old)) assign(".Random.seed", old, envir = globalenv()) })
+    if (is.function(lay_type)) {
+      m <- lay_type(dg)
+    } else {
+      lay_str <- tolower(as.character(lay_type)[1])
+      if (lay_str %in% c("kk", "kamada", "kamada-kawai", "kamada_kawai")) {
+        m <- igraph::layout_with_kk(dg, weights = igraph::E(dg)$weight)
+      } else {
+        ew <- igraph::E(dg)$weight
+        med_ew <- stats::median(ew)
+        if (!is.finite(med_ew) || med_ew <= 0) med_ew <- 1
+        w_attr <- 1 / (ew + med_ew * 0.25)
+        m <- igraph::layout_with_fr(dg, weights = w_attr)
+      }
+    }
+    m
+  }
+
   src <- "supplied"
-  if (!is.null(coords)) m <- pick(coords)
-  else {
-    src <- "vertex attributes"
+  if (!is.null(layout)) {
+    src <- "layout"
+    m <- calc_layout(layout)
+  } else if (is.character(coords) && length(coords) == 1L && tolower(coords) %in% c("fr", "fruchterman", "kk", "kamada", "kamada-kawai", "kamada_kawai")) {
+    src <- "layout"
+    m <- calc_layout(coords)
+  } else if (!is.null(coords)) {
+    m <- pick(coords)
+  } else {
     va <- igraph::vertex_attr_names(graph)
-    if (all(c("x", "y") %in% va)) m <- cbind(igraph::V(graph)$x, igraph::V(graph)$y)
-    else if (all(c("Longitude", "Latitude") %in% va)) m <- cbind(igraph::V(graph)$Longitude, igraph::V(graph)$Latitude)
-    else {
+    if (all(c("x", "y") %in% va)) {
+      src <- "vertex attributes"
+      m <- cbind(igraph::V(graph)$x, igraph::V(graph)$y)
+    } else if (all(c("Longitude", "Latitude") %in% va)) {
+      src <- "vertex attributes"
+      m <- cbind(igraph::V(graph)$Longitude, igraph::V(graph)$Latitude)
+    } else {
       src <- "layout"
-      message("No coordinates supplied: using a Fruchterman-Reingold layout (positions are not geographic).")
-      old <- if (exists(".Random.seed", envir = globalenv())) get(".Random.seed", envir = globalenv()) else NULL
-      set.seed(1)
-      m <- igraph::layout_with_fr(graph, weights = 1 / igraph::E(graph)$weight)
-      if (!is.null(old)) assign(".Random.seed", old, envir = globalenv())
+      message("No coordinates supplied: using a Kamada-Kawai layout (positions are not geographic).")
+      m <- calc_layout("kk")
     }
   }
   m <- matrix(as.numeric(m), ncol = 2, dimnames = list(nodes, c("x", "y")))

@@ -11,11 +11,6 @@
 #'   \item{Vertex attribute \code{deme}}{Position along the one-dimensional stepping stone,
 #'     1 (upstream end) to 25.  Use it as the covariate \code{x} in
 #'     \code{\link{source_sink_test}} and \code{\link{directional_ibgd}}.}
-#'   \item{Vertex attributes \code{x}, \code{y}}{Display coordinates: the demes laid along
-#'     a gently curving \dQuote{river}, \eqn{x = deme}, \eqn{y = 2 \sin(deme\,\pi/12)}, so that
-#'     long edges and arrows separate visually.  Picked up automatically by
-#'     \code{\link{gravity_field}} and \code{\link{plot_gravity_field}}.  They are not part
-#'     of the simulation.}
 #'   \item{Graph attributes}{\code{scenario} (\code{"Symmetric"}), \code{replicate} (5),
 #'     \code{generation} (2804), \code{m_fwd} and \code{m_rev} (0.025 each), \code{source}.}
 #' }

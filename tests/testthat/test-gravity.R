@@ -163,7 +163,7 @@ test_that("manuscript example graphs load and reproduce their documented values"
   for (g in list(gravity_symmetric, gravity_redistributed)) {
     expect_s3_class(g, "popgraph"); expect_equal(igraph::vcount(g), 25)
     expect_equal(sort(igraph::V(g)$deme), 1:25)
-    expect_equal(suppressMessages(gravity_field(g))$coords_source, "vertex attributes")
+    expect_equal(suppressMessages(gravity_field(g))$coords_source, "layout")
   }
   set.seed(1); ts <- source_sink_test(gravity_symmetric, x = igraph::V(gravity_symmetric)$deme)
   set.seed(1); tr <- source_sink_test(gravity_redistributed, x = igraph::V(gravity_redistributed)$deme)
@@ -171,4 +171,10 @@ test_that("manuscript example graphs load and reproduce their documented values"
   expect_equal(round(tr$r, 3), -0.955); expect_lt(tr$p, 0.01)
   expect_gt(directional_ibgd(gravity_redistributed, x = igraph::V(gravity_redistributed)$deme)$delta_r2, 0)
   expect_lt(directional_ibgd(gravity_symmetric, x = igraph::V(gravity_symmetric)$deme)$delta_r2, 0)
+
+  # Test layout override and node_size
+  f_kk <- gravity_field(gravity_symmetric, layout = "kk")
+  expect_equal(f_kk$coords_source, "layout")
+  p_kk <- plot_gravity_field(f_kk, node_size = "degree", node_labels = "degree")
+  expect_s3_class(p_kk, "ggplot")
 })

@@ -12,9 +12,6 @@
 #'   \item{Vertex attribute \code{deme}}{Position along the one-dimensional stepping stone,
 #'     1 (upstream end) to 25; migration is biased toward higher values.  Use it as the
 #'     covariate \code{x} in \code{\link{source_sink_test}} and \code{\link{directional_ibgd}}.}
-#'   \item{Vertex attributes \code{x}, \code{y}}{Display coordinates along a curving
-#'     \dQuote{river}, \eqn{x = deme}, \eqn{y = 2 \sin(deme\,\pi/12)}; not part of the
-#'     simulation.}
 #'   \item{Graph attributes}{\code{scenario} (\code{"Redistributed"}), \code{replicate} (4),
 #'     \code{generation} (2504), \code{m_fwd} (0.04), \code{m_rev} (0.01), \code{source}.}
 #' }
