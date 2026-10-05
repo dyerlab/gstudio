@@ -19,6 +19,7 @@ book:
     - genetic-structure.qmd
     - genetic-distance.qmd
     - population-graphs.qmd
+    - genetic-gravity.qmd
     - visualization.qmd
     - simulation-parentage.qmd
 

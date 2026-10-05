@@ -3,7 +3,10 @@
 This chapter covers estimating allele and genotype frequencies, testing for Hardy-Weinberg Equilibrium, and rarefaction analysis.
 
 ```{r}
+#| message: false
 library(gstudio)
+library(dplyr)
+library(ggplot2)
 data(arapat)
 ```
 
@@ -14,7 +17,9 @@ The `frequencies()` function is an S3 generic that works on both individual locu
 ### Single Locus
 
 ```{r}
-frequencies(arapat$LTRS)
+arapat |>
+  pull(LTRS) |>
+  frequencies()
 ```
 
 ### Entire Data Frame
@@ -22,8 +27,11 @@ frequencies(arapat$LTRS)
 When applied to a data.frame, `frequencies()` returns frequencies for all locus columns:
 
 ```{r}
-freqs <- frequencies(arapat)
-head(freqs, 12)
+freqs <- arapat |>
+  frequencies()
+
+freqs |>
+  head(12)
 ```
 
 ### By Stratum
@@ -31,15 +39,28 @@ head(freqs, 12)
 Add a `stratum` argument to partition frequencies by population:
 
 ```{r}
-freqs_pop <- frequencies(arapat, stratum = "Species")
-head(freqs_pop, 12)
+freqs_pop <- arapat |>
+  frequencies(stratum = "Species")
+
+freqs_pop |>
+  head(12)
+```
+
+Because the result is a tidy data frame, dplyr summaries follow directly, for
+example the most common allele at each locus in each species:
+
+```{r}
+freqs_pop |>
+  group_by(Stratum, Locus) |>
+  slice_max(Frequency, n = 1, with_ties = FALSE) |>
+  filter(Locus %in% c("LTRS", "WNT"))
 ```
 
 ### Selecting Specific Loci
 
 ```{r}
-freqs_sub <- frequencies(arapat, loci = c("LTRS", "WNT"))
-freqs_sub
+arapat |>
+  frequencies(loci = c("LTRS", "WNT"))
 ```
 
 ## Frequency Matrix
@@ -47,7 +68,9 @@ freqs_sub
 The `frequency_matrix()` function produces a wide-format matrix of allele frequencies:
 
 ```{r}
-fm <- frequency_matrix(arapat, stratum = "Species")
+fm <- arapat |>
+  frequency_matrix(stratum = "Species")
+
 fm[, 1:8]
 ```
 
@@ -58,11 +81,13 @@ fm[, 1:8]
 The `genotype_counts()` function summarizes non-missing genotype counts per locus, optionally by stratum:
 
 ```{r}
-genotype_counts(arapat)
+arapat |>
+  genotype_counts()
 ```
 
 ```{r}
-genotype_counts(arapat, stratum = "Species")
+arapat |>
+  genotype_counts(stratum = "Species")
 ```
 
 ### Genotype Frequencies
@@ -70,7 +95,9 @@ genotype_counts(arapat, stratum = "Species")
 The `genotype_frequencies()` function returns observed and expected genotype counts for a locus vector:
 
 ```{r}
-genotype_frequencies(arapat$LTRS)
+arapat |>
+  pull(LTRS) |>
+  genotype_frequencies()
 ```
 
 ## Hardy-Weinberg Equilibrium
@@ -78,8 +105,9 @@ genotype_frequencies(arapat$LTRS)
 The `hwe()` function tests for HWE using a chi-square approximation:
 
 ```{r}
-mainland <- arapat[arapat$Species == "Mainland", ]
-hwe(mainland)
+arapat |>
+  filter(Species == "Mainland") |>
+  hwe()
 ```
 
 The output includes the chi-square statistic, degrees of freedom, and p-value for each locus. Significant p-values indicate departures from HWE expectations.
@@ -98,10 +126,15 @@ Departures from HWE can arise from:
 The `rarefaction()` function subsamples the data repeatedly at a smaller sample size to estimate the distribution of a diversity statistic:
 
 ```{r}
-rare_vals <- rarefaction(arapat$LTRS, mode = "Ae",
-                         size = 20, nperm = 199)
-hist(rare_vals, main = "Rarefied Ae at LTRS",
-     xlab = "Effective Alleles", col = "steelblue")
+rare_vals <- arapat |>
+  pull(LTRS) |>
+  rarefaction(mode = "Ae", size = 20, nperm = 199)
+
+data.frame(Ae = rare_vals) |>
+  ggplot(aes(Ae)) +
+  geom_histogram(bins = 20, fill = "steelblue") +
+  labs(title = "Rarefied Ae at LTRS", x = "Effective alleles", y = "Count") +
+  theme_minimal()
 ```
 
 This is useful for comparing diversity across populations with unequal sample sizes.
@@ -112,5 +145,23 @@ The `optimal_sampling()` function estimates how many individuals are needed to c
 
 ```{r}
 #| eval: false
+arapat |>
+  pull(LTRS) |>
+  optimal_sampling(nrep = 99)
+```
+
+## Without Pipes
+
+```{r}
+#| eval: false
+frequencies(arapat$LTRS)
+frequencies(arapat, stratum = "Species")
+frequencies(arapat, loci = c("LTRS", "WNT"))
+frequency_matrix(arapat, stratum = "Species")
+genotype_counts(arapat, stratum = "Species")
+genotype_frequencies(arapat$LTRS)
+hwe(arapat[arapat$Species == "Mainland", ])
+rare_vals <- rarefaction(arapat$LTRS, mode = "Ae", size = 20, nperm = 199)
+hist(rare_vals)
 optimal_sampling(arapat$LTRS, nrep = 99)
 ```

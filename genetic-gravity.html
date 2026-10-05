@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>9&nbsp; Genetic Gravity – gstudio: Spatial Analysis of Genetic Marker Data</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./visualization.html" rel="next">
+<link href="./population-graphs.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-b2746a89c3d897b2f18a702d262c4287.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./genetic-gravity.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Genetic Gravity</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">gstudio: Spatial Analysis of Genetic Marker Data</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/dyerlab/gstudio" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./getting-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Getting Started</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./locus-class.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">The Locus Class</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Importing &amp; Exporting Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./allele-frequencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Allele Frequencies &amp; HWE</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./genetic-diversity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Genetic Diversity</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./genetic-structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Population Structure</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./genetic-distance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Genetic Distance &amp; Relatedness</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./population-graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Population Graphs</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./genetic-gravity.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Genetic Gravity</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Visualization</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./simulation-parentage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Simulation &amp; Parentage</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-model-in-brief" id="toc-the-model-in-brief" class="nav-link active" data-scroll-target="#the-model-in-brief"><span class="header-section-number">9.1</span> The model in brief</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="header-section-number">9.2</span> The data</a></li>
+  <li><a href="#from-genotypes-to-a-population-graph" id="toc-from-genotypes-to-a-population-graph" class="nav-link" data-scroll-target="#from-genotypes-to-a-population-graph"><span class="header-section-number">9.3</span> From genotypes to a Population Graph</a></li>
+  <li><a href="#neighbourhood-weights-and-edge-asymmetries" id="toc-neighbourhood-weights-and-edge-asymmetries" class="nav-link" data-scroll-target="#neighbourhood-weights-and-edge-asymmetries"><span class="header-section-number">9.4</span> Neighbourhood weights and edge asymmetries</a></li>
+  <li><a href="#source-sink-scores-and-the-bandwidth" id="toc-source-sink-scores-and-the-bandwidth" class="nav-link" data-scroll-target="#source-sink-scores-and-the-bandwidth"><span class="header-section-number">9.5</span> Source-sink scores and the bandwidth</a></li>
+  <li><a href="#testing-for-a-directional-gradient" id="toc-testing-for-a-directional-gradient" class="nav-link" data-scroll-target="#testing-for-a-directional-gradient"><span class="header-section-number">9.6</span> Testing for a directional gradient</a>
+  <ul class="collapse">
+  <li><a href="#source-sink-gradient-test" id="toc-source-sink-gradient-test" class="nav-link" data-scroll-target="#source-sink-gradient-test"><span class="header-section-number">9.6.1</span> Source-sink gradient test</a></li>
+  <li><a href="#directional-isolation-by-graph-distance" id="toc-directional-isolation-by-graph-distance" class="nav-link" data-scroll-target="#directional-isolation-by-graph-distance"><span class="header-section-number">9.6.2</span> Directional isolation by graph distance</a></li>
+  </ul></li>
+  <li><a href="#mapping-the-gravity-field" id="toc-mapping-the-gravity-field" class="nav-link" data-scroll-target="#mapping-the-gravity-field"><span class="header-section-number">9.7</span> Mapping the gravity field</a></li>
+  <li><a href="#default-behaviour-on-a-real-graph" id="toc-default-behaviour-on-a-real-graph" class="nav-link" data-scroll-target="#default-behaviour-on-a-real-graph"><span class="header-section-number">9.8</span> Default behaviour on a real graph</a></li>
+  <li><a href="#without-pipes" id="toc-without-pipes" class="nav-link" data-scroll-target="#without-pipes"><span class="header-section-number">9.9</span> Without pipes</a></li>
+  <li><a href="#empirical-data-araptus-attenuatus" id="toc-empirical-data-araptus-attenuatus" class="nav-link" data-scroll-target="#empirical-data-araptus-attenuatus"><span class="header-section-number">9.10</span> Empirical data: <em>Araptus attenuatus</em></a></li>
+  <li><a href="#data-quality-information-loss" id="toc-data-quality-information-loss" class="nav-link" data-scroll-target="#data-quality-information-loss"><span class="header-section-number">9.11</span> Data quality: information loss</a></li>
+  <li><a href="#simulating-directional-gene-flow" id="toc-simulating-directional-gene-flow" class="nav-link" data-scroll-target="#simulating-directional-gene-flow"><span class="header-section-number">9.12</span> Simulating directional gene flow</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">9.13</span> Summary</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9.14</span> References</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/dyerlab/gstudio/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-genetic-gravity" class="quarto-section-identifier"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Genetic Gravity</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- The walkthrough below is shared with the package vignette
+     (vignette("genetic_gravity")); edit it in vignettes/children/genetic_gravity_body.Rmd
+     and vignettes/children/genetic_gravity_summary.Rmd, not here. -->
+<!-- Shared body of the genetic gravity walkthrough.  Included by
+     vignettes/genetic_gravity.Rmd (knitr child) and docs/genetic-gravity.qmd
+     (Quarto include); edit here so the vignette and the website stay identical. -->
+<p>A Population Graph is undirected: each edge is a single, symmetric conditional genetic distance between two populations. <em>Genetic gravity</em> reads direction out of that symmetric graph by asking, for every edge, how near it looks from each of its two ends. The few quantities involved are set out first, followed by a complete analysis, from raw genotypes to a Population Graph, source-sink scores, tests for a directional gradient and a map of the gravity field.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The code below is written as pipelines, with each function on its own line. Every gstudio function takes its data as the first argument, so the same calls also work in the older style, with options such as <code>stratum =</code> passed as arguments; those versions are collected at the end, under <em>Without pipes</em>.</p>
+<section id="the-model-in-brief" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="the-model-in-brief"><span class="header-section-number">9.1</span> The model in brief</h2>
+<p>Let <span class="math inline">\(e_{ij}\)</span> be the weight (conditional genetic distance, cGD) of the edge between populations <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, <span class="math inline">\(N(i)\)</span> the populations connected to <span class="math inline">\(i\)</span>, <span class="math inline">\(k_i = |N(i)|\)</span> its degree and <span class="math inline">\(s_i = \sum_{j \in N(i)} e_{ij}\)</span> its strength.</p>
+<p><strong>Neighbourhood weights.</strong> Population <span class="math inline">\(j\)</span>’s weight in <span class="math inline">\(i\)</span>’s neighbourhood is a Gaussian kernel over <span class="math inline">\(i\)</span>’s retained neighbours only, so by the Markov properties of the graph nothing beyond them contributes:</p>
+<p><span class="math display">\[
+w_{j\mid i} = \frac{\exp\left(-e_{ij}^2 / 2b_i^2\right)}
+                   {\sum_{k \in N(i)} \exp\left(-e_{ik}^2 / 2b_i^2\right)},
+\qquad b_i = \gamma \, \frac{s_i}{k_i}.
+\]</span></p>
+<p>The bandwidth <span class="math inline">\(b_i\)</span> is a multiple <span class="math inline">\(\gamma\)</span> of the mean edge weight around <span class="math inline">\(i\)</span>, so rescaling every edge weight leaves everything below unchanged.</p>
+<p><strong>Gravity asymmetry.</strong> Every edge is read from both ends. The signed difference</p>
+<p><span class="math display">\[
+\Delta_{i \to j} = w_{i\mid j} - w_{j\mid i}
+\]</span></p>
+<p>is <span class="math inline">\(i\)</span>’s pull on <span class="math inline">\(j\)</span> minus <span class="math inline">\(j\)</span>’s pull on <span class="math inline">\(i\)</span>. Positive values make <span class="math inline">\(i\)</span> the genetic source and <span class="math inline">\(j\)</span> the sink; throughout, <strong>higher means more of a source</strong>.</p>
+<p><strong>Gravity and source-sink scores.</strong> The gravity of population <span class="math inline">\(i\)</span> is the total weight it holds in its neighbours’ neighbourhoods, <span class="math inline">\(g_i = \sum_{j \in N(i)} w_{i\mid j}\)</span>. Because each neighbourhood sums to one, <span class="math inline">\(\sum_i g_i = K\)</span>, so the balance <span class="math inline">\(g_i - 1\)</span> sums to zero: every source is offset by sinks. The source-sink score <span class="math inline">\(S\)</span> puts all populations on one scale, as the values whose differences best reproduce the asymmetries on every edge:</p>
+<p><span class="math display">\[
+\hat{S} = \arg\min_S \sum_{(i,j) \in E} \left[\Delta_{i \to j} - (S_i - S_j)\right]^2,
+\qquad \textstyle\sum_i S_i = 0 \text{ within each connected component.}
+\]</span></p>
+<p><strong>Degree and the bandwidth.</strong> As the kernel flattens, <span class="math inline">\(w_{j\mid i} \to 1/k_i\)</span> and the asymmetry falls to a floor set by degree alone, <span class="math inline">\(\Delta^0_{i \to j} = 1/k_j - 1/k_i\)</span>. The share of the variance in <span class="math inline">\(\Delta\)</span> explained by <span class="math inline">\(\Delta^0\)</span> (the <em>degree share</em>) reports how much of an analysis is topology rather than genetics. Two bandwidths answer different questions: <span class="math inline">\(\gamma = 1/2\)</span> (the default) is <em>degree-neutral</em> and is used for inferring direction; <span class="math inline">\(\gamma = 1\)</span>, the local mean, keeps the contribution of degree and describes each population’s overall pull in the network.</p>
+<p><strong>Partitioned distance.</strong> The same weights split each edge into two directed shares, the partitioned conditional genetic distance (pGD):</p>
+<p><span class="math display">\[
+p_{ij} = e_{ij} \, \frac{w_{j\mid i}}{w_{j\mid i} + w_{i\mid j}}, \qquad p_{ij} + p_{ji} = e_{ij}.
+\]</span></p>
+<p>Being a distance, pGD is <em>shorter</em> in the direction of gene flow. It turns the undirected graph into a directed one for downstream analyses such as isolation by graph distance.</p>
+</section>
+<section id="the-data" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="the-data"><span class="header-section-number">9.2</span> The data</h2>
+<p><code>gravity</code> holds genotypes from one census of an individual-based simulation: 25 populations of 100 diploids on a one-dimensional stepping stone, scored at 20 biallelic loci. Gene flow runs four times more strongly toward higher-numbered populations than back (<code>Pop01</code> is the upstream end), so the answer is known in advance. See <code>?gravity</code> for how the census was chosen.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(gravity)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(gravity)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2500   22</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>gravity <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Population, L01<span class="sc">:</span>L04) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Population   L01   L02   L03   L04
+1      Pop01 02:02 02:02 02:02 01:01
+2      Pop01 02:02 02:02 02:02 01:01
+3      Pop01 02:02 02:02 02:02 01:01
+4      Pop01 02:02 02:02 02:02 01:01</code></pre>
+</div>
+</div>
+</section>
+<section id="from-genotypes-to-a-population-graph" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="from-genotypes-to-a-population-graph"><span class="header-section-number">9.3</span> From genotypes to a Population Graph</h2>
+<p><code>population_graph()</code> encodes the genotypes and builds the graph among the strata in the <code>Population</code> column (its default <code>stratum</code>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> gravity <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population_graph</span>()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>graph</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>IGRAPH f9a6152 UNW- 25 81 -- 
++ attr: name (v/c), size (v/n), weight (e/n)
++ edges from f9a6152 (vertex names):
+ [1] Pop01--Pop02 Pop01--Pop05 Pop02--Pop04 Pop02--Pop05 Pop03--Pop04
+ [6] Pop03--Pop05 Pop03--Pop06 Pop03--Pop07 Pop03--Pop09 Pop04--Pop05
+[11] Pop04--Pop06 Pop05--Pop06 Pop05--Pop09 Pop06--Pop07 Pop06--Pop09
+[16] Pop07--Pop08 Pop07--Pop09 Pop07--Pop10 Pop07--Pop12 Pop08--Pop09
+[21] Pop08--Pop10 Pop08--Pop11 Pop08--Pop12 Pop09--Pop10 Pop09--Pop11
+[26] Pop10--Pop11 Pop10--Pop12 Pop11--Pop12 Pop11--Pop13 Pop11--Pop14
+[31] Pop11--Pop20 Pop12--Pop13 Pop12--Pop14 Pop12--Pop15 Pop12--Pop18
+[36] Pop12--Pop20 Pop13--Pop14 Pop13--Pop15 Pop13--Pop16 Pop13--Pop17
++ ... omitted several edges</code></pre>
+</div>
+</div>
+<p>The hypothesized axis of flow is position along the stepping stone, which here is the population number:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">V</span>(graph)<span class="sc">$</span>name</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>deme <span class="ot">&lt;-</span> nodes <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sub</span>(<span class="at">pattern =</span> <span class="st">"Pop"</span>, <span class="at">replacement =</span> <span class="st">""</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.integer</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(nodes)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>plot()</code> draws the graph. Without coordinates it uses a Kamada-Kawai layout. <code>population_graph()</code> stores each population’s within-population genetic variability as the <code>size</code> vertex attribute, and nodes are sized by it.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>graph <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="genetic-gravity_files/figure-html/plot-graph-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="neighbourhood-weights-and-edge-asymmetries" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="neighbourhood-weights-and-edge-asymmetries"><span class="header-section-number">9.4</span> Neighbourhood weights and edge asymmetries</h2>
+<p><code>neighbourhood_weights()</code> returns <span class="math inline">\(W_{ij} = w_{j\mid i}\)</span>; each row sums to one over that population’s neighbours.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>W <span class="ot">&lt;-</span> graph <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">neighbourhood_weights</span>()</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(W[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Pop01 Pop02 Pop03 Pop04 Pop05
+Pop01    NA 0.996 0.000 0.000 0.004
+Pop02 0.733    NA 0.000 0.000 0.267
+Pop03 0.000 0.000    NA 0.318 0.096
+Pop04 0.000 0.342 0.025    NA 0.343
+Pop05 0.374 0.377 0.004 0.208    NA</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rowSums</span>(W, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Pop01 Pop02 Pop03 Pop04 Pop05 
+    1     1     1     1     1 </code></pre>
+</div>
+</div>
+<p><code>gravity_edges()</code> gives one row per edge with both weights, <span class="math inline">\(\Delta\)</span> and the degree-only floor <span class="math inline">\(\Delta^0\)</span>. Supplying the covariate <code>x</code> orients every edge from the lower to the higher value of <code>x</code>, so a positive <code>Delta</code> means the upstream population is the source.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">&lt;-</span> graph <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gravity_edges</span>(<span class="at">x =</span> deme)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>edges <span class="sc">|&gt;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   from    to     weight      w_from         w_to       Delta      Delta0
+1 Pop01 Pop02 0.02099175 0.733094993 9.963076e-01 -0.26321259 -0.16666667
+2 Pop01 Pop05 0.11882358 0.374119222 3.692420e-03  0.37042680 -0.33333333
+3 Pop02 Pop04 0.33586803 0.342011895 7.814182e-05  0.34193375 -0.08333333
+4 Pop02 Pop05 0.11338874 0.376951325 2.668269e-01  0.11012446 -0.16666667
+5 Pop03 Pop04 0.56677730 0.024682811 3.180852e-01 -0.29340238  0.05000000
+6 Pop03 Pop05 0.89011577 0.003576448 9.573413e-02 -0.09215768 -0.03333333</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>edges <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">edges =</span> <span class="fu">n</span>(),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">upstream_source =</span> <span class="fu">mean</span>(Delta <span class="sc">&gt;</span> <span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  edges upstream_source
+1    81       0.8518519</code></pre>
+</div>
+</div>
+</section>
+<section id="source-sink-scores-and-the-bandwidth" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="source-sink-scores-and-the-bandwidth"><span class="header-section-number">9.5</span> Source-sink scores and the bandwidth</h2>
+<p><code>source_sink_scores()</code> returns each population’s gravity, balance and <span class="math inline">\(S\)</span>, with the degree diagnostics attached.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> graph <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">source_sink_scores</span>(<span class="at">x =</span> deme)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>scores <span class="sc">|&gt;</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Stratum, S, gravity, balance, degree) <span class="sc">|&gt;</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Stratum          S   gravity     balance degree
+Pop01   Pop01 0.46451674 1.1072142  0.10721422      2
+Pop02   Pop02 0.56364022 1.7152708  0.71527080      3
+Pop03   Pop03 0.09368236 0.5494002 -0.45059984      5
+Pop04   Pop04 0.25295405 0.9242989 -0.07570106      4
+Pop05   Pop05 0.25817905 0.8782849 -0.12171506      6
+Pop06   Pop06 0.17201565 1.0194000  0.01939995      5</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(scores, <span class="st">"degree_share"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02422223</code></pre>
+</div>
+</div>
+<p>Plotted against position, <span class="math inline">\(S\)</span> falls steadily downstream: sources upstream, sinks downstream.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>scores <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">deme =</span> deme[Stratum]) <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(deme, S)) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"grey60"</span>) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> degree)) <span class="sc">+</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Position along the stepping stone (upstream to downstream)"</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Source-sink score S"</span>) <span class="sc">+</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="genetic-gravity_files/figure-html/scores-plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The degree share says how much of <span class="math inline">\(\Delta\)</span> is set by the number of neighbours. At the degree-neutral bandwidth it is small; at the local mean, degree carries more of the signal. A gravity field computed at both bandwidths reports the diagnostics side by side:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>graph <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gravity_field</span>(<span class="at">gamma =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(<span class="at">what =</span> <span class="st">"diagnostics"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(gamma, degree_share, cor_S_degree, gradient_share)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  gamma degree_share cor_S_degree gradient_share
+1   0.5   0.02422223   -0.7391258      0.6832610
+2   1.0   0.11470901   -0.6176602      0.7443709</code></pre>
+</div>
+</div>
+<p>Report the bandwidth and the degree share with any directional result.</p>
+</section>
+<section id="testing-for-a-directional-gradient" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="testing-for-a-directional-gradient"><span class="header-section-number">9.6</span> Testing for a directional gradient</h2>
+<p>Two complementary procedures test for direction. Neither permutes parts of the graph freely: <span class="math inline">\(\Delta\)</span> and <span class="math inline">\(S\)</span> inherit smooth, node-level structure from drift on the graph, and nulls that ignore it are anti-conservative.</p>
+<section id="source-sink-gradient-test" class="level3" data-number="9.6.1">
+<h3 data-number="9.6.1" class="anchored" data-anchor-id="source-sink-gradient-test"><span class="header-section-number">9.6.1</span> Source-sink gradient test</h3>
+<p>The statistic is Spearman’s <span class="math inline">\(r(S, x)\)</span>. The null is Moran spectral randomization of <span class="math inline">\(S\)</span> on the graph itself, which reproduces the smoothness <span class="math inline">\(S\)</span> inherits from the topology. A negative <span class="math inline">\(r\)</span> places the sources at low <span class="math inline">\(x\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>graph <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">source_sink_test</span>(<span class="at">x =</span> deme)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Source-sink gradient test (Spearman r(S, x); Moran spectral
+    randomization on the graph)
+
+data:  graph and deme
+r = -0.95538, nodes = 25, nperm = 999, p-value = 0.001
+alternative hypothesis: true r is not equal to 0
+sample estimates:
+degree share 
+  0.02422223 
+
+Bandwidth gamma = 0.5.  Sources at low values of x.</code></pre>
+</div>
+</div>
+</section>
+<section id="directional-isolation-by-graph-distance" class="level3" data-number="9.6.2">
+<h3 data-number="9.6.2" class="anchored" data-anchor-id="directional-isolation-by-graph-distance"><span class="header-section-number">9.6.2</span> Directional isolation by graph distance</h3>
+<p>The second procedure asks whether modelling direction improves isolation by graph distance. It regresses all-pairs cGD on spatial separation (<span class="math inline">\(R^2_{cGD}\)</span>), then regresses all-pairs directed pGD on separation with separate forward and reverse slopes (<span class="math inline">\(R^2_{pGD}\)</span>, adjusted). <span class="math inline">\(\Delta R^2 = R^2_{pGD} - R^2_{cGD} &gt; 0\)</span> means the directional description fits better; the forward-to-reverse slope ratio gives the direction and strength (below one: genetic distance accumulates more slowly downstream). This is not a nested-model test, and <span class="math inline">\(\Delta R^2 \le 0\)</span> is an absence of evidence for asymmetry, not evidence of symmetry.</p>
+<p><code>ibgd()</code> does both steps and prints each as a standard test. The default, <code>mode = "cgd"</code>, is ordinary isolation by graph distance, with a Mantel permutation test of the correlation between cGD and separation; <code>mode = "pgd"</code> adds the directional model and reports <span class="math inline">\(\Delta R^2\)</span> with the forward and reverse slopes. It gives no p-value for <span class="math inline">\(\Delta R^2\)</span>, because the two fits are not nested.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>graph <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> deme)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Isolation by graph distance (cGD; Mantel permutation test)
+
+data:  graph and deme
+r = 0.82018, pairs = 300, nperm = 999, p-value = 0.001
+alternative hypothesis: true r is greater than 0
+sample estimates:
+       R2     slope 
+0.6727021 0.5559210 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>graph <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> deme, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Directional isolation by graph distance (pGD at gamma = 0.5 vs cGD)
+
+data:  graph and deme
+delta R2 = 0.15551, pairs = 600
+sample estimates:
+       R2 cGD    adj R2 pGD forward slope reverse slope   slope ratio 
+  0.672702107   0.828208585   0.008784513   0.508581302   0.017272583 
+
+Directional description preferred (delta R2 &gt; 0); slope ratio 0.0173: genetic
+distance accumulates more slowly in the forward direction.
+No p-value: the fits are not nested (see ?ibgd); corroborate with source_sink_test().</code></pre>
+</div>
+</div>
+<p>Both procedures recover the imposed direction: a strong negative gradient in <span class="math inline">\(S\)</span> (sources upstream), and a directional isolation model that fits better than the symmetric one with far shallower downstream than upstream isolation.</p>
+<p>pGD is available directly for other downstream analyses. From the genotypes, <code>genetic_distance()</code> returns all-pairs directed shortest-path pGD alongside the other distance metrics, where <code>P[i, j]</code> is the distance from <span class="math inline">\(i\)</span> to <span class="math inline">\(j\)</span>; from an existing graph, <code>pgd()</code> gives the same matrix (<code>output = "matrix"</code>) or the directed graph of edge shares (<code>output = "graph"</code>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> gravity <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">mode =</span> <span class="st">"pgd"</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(P[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Pop01 Pop02 Pop03 Pop04
+Pop01 0.000 0.012 0.033 0.012
+Pop02 0.009 0.000 0.041 0.000
+Pop03 0.659 0.650 0.000 0.375
+Pop04 0.284 0.275 0.041 0.000</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="mapping-the-gravity-field" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="mapping-the-gravity-field"><span class="header-section-number">9.7</span> Mapping the gravity field</h2>
+<p><code>gravity_field()</code> collects every population-level and edge-level quantity; <code>plot()</code> interpolates <span class="math inline">\(S\)</span> over the node positions (red = source, blue = sink) and draws an arrow on each edge from source to sink, with length proportional to <span class="math inline">\(|\Delta|\)</span>. Node placement is a drawing choice made in <code>plot()</code>; without coordinates, layouts are computed on the directed pGD graph so that gene flow shapes the picture.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>field <span class="ot">&lt;-</span> graph <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gravity_field</span>()</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>field</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Gravity field: 25 populations, 81 edges, gamma = 0.5
+  degree share 0.024, cor(S, degree) -0.739, gradient share 0.683
+  strongest sources: Pop02 (0.564), Pop01 (0.465), Pop05 (0.258)
+  strongest sinks:   Pop25 (-0.292), Pop24 (-0.206), Pop23 (-0.202)</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>field <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="genetic-gravity_files/figure-html/field-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Fields with several panels are drawn on common scales. Here the same graph at the local-mean and degree-neutral bandwidths:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>graph <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gravity_field</span>(<span class="at">gamma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">node_labels =</span> <span class="st">"none"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="genetic-gravity_files/figure-html/field-gamma-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>All the quantities behind the map are available as tidy tables for your own figures:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>field <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(<span class="at">what =</span> <span class="st">"edges"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="fu">abs</span>(delta))) <span class="sc">|&gt;</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  panel  from    to     weight      delta source  sink
+1       Pop01 Pop05 0.11882358  0.3704268  Pop01 Pop05
+2       Pop02 Pop04 0.33586803  0.3419338  Pop02 Pop04
+3       Pop03 Pop04 0.56677730 -0.2934024  Pop04 Pop03
+4       Pop24 Pop25 5.27754332  0.2746088  Pop24 Pop25
+5       Pop01 Pop02 0.02099175 -0.2632126  Pop02 Pop01
+6       Pop08 Pop11 1.56982291  0.2300892  Pop08 Pop11</code></pre>
+</div>
+</div>
+</section>
+<section id="default-behaviour-on-a-real-graph" class="level2" data-number="9.8">
+<h2 data-number="9.8" class="anchored" data-anchor-id="default-behaviour-on-a-real-graph"><span class="header-section-number">9.8</span> Default behaviour on a real graph</h2>
+<p>Nothing above is specific to simulated data. For an existing Population Graph the defaults give a complete picture in one line, here for <code>lopho</code>, the Population Graph of the Sonoran Desert cactus <em>Lophocereus</em>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(lopho)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>lopho <span class="sc">|&gt;</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gravity_field</span>() <span class="sc">|&gt;</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="genetic-gravity_files/figure-html/lopho-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="without-pipes" class="level2" data-number="9.9">
+<h2 data-number="9.9" class="anchored" data-anchor-id="without-pipes"><span class="header-section-number">9.9</span> Without pipes</h2>
+<p>The pipelines above are the recommended style. Every call also works with its options passed as arguments, without dplyr; these are the equivalents of the steps above, shown here but not run:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>graph  <span class="ot">&lt;-</span> <span class="fu">popgraph</span>(<span class="fu">to_mv</span>(gravity), <span class="at">groups =</span> gravity<span class="sc">$</span>Population)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>deme   <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">sub</span>(<span class="st">"Pop"</span>, <span class="st">""</span>, igraph<span class="sc">::</span><span class="fu">V</span>(graph)<span class="sc">$</span>name))</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(deme) <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">V</span>(graph)<span class="sc">$</span>name</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>W      <span class="ot">&lt;-</span> <span class="fu">neighbourhood_weights</span>(graph, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>edges  <span class="ot">&lt;-</span> <span class="fu">gravity_edges</span>(graph, <span class="at">gamma =</span> <span class="fl">0.5</span>, <span class="at">x =</span> deme)</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">source_sink_scores</span>(graph, <span class="at">gamma =</span> <span class="fl">0.5</span>, <span class="at">x =</span> deme)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="fu">source_sink_test</span>(graph, <span class="at">x =</span> deme, <span class="at">gamma =</span> <span class="fl">0.5</span>, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(graph, <span class="at">x =</span> deme, <span class="at">mode =</span> <span class="st">"cgd"</span>, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(graph, <span class="at">x =</span> deme, <span class="at">mode =</span> <span class="st">"pgd"</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>P      <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(gravity, <span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">mode =</span> <span class="st">"pgd"</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>field  <span class="ot">&lt;-</span> <span class="fu">gravity_field</span>(graph, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(field, <span class="at">layout =</span> <span class="st">"kk"</span>, <span class="at">surface =</span> <span class="st">"interpolate"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="empirical-data-araptus-attenuatus" class="level2" data-number="9.10">
+<h2 data-number="9.10" class="anchored" data-anchor-id="empirical-data-araptus-attenuatus"><span class="header-section-number">9.10</span> Empirical data: <em>Araptus attenuatus</em></h2>
+<p>The same analysis applies directly to field data. Here the Population Graph is built from the <code>arapat</code> genotypes with <code>population_graph()</code>, and the populations’ geographic centroids give both the map layout and a covariate to test against: latitude along the Baja California peninsula.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>beetles <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population_graph</span>()</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">strata_coordinates</span>()</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> coords <span class="sc">|&gt;</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Latitude, <span class="at">name =</span> Stratum)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Passing the centroids as <code>layout</code> draws the gravity field on geographic coordinates. Sampling locations are clustered, so the surface is extended with <code>mask_dist</code> (by default it reaches 1.2 times the median nearest-neighbour distance between populations). Comparing the two bandwidths shows how much of the local-mean picture is degree:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>both <span class="ot">&lt;-</span> beetles <span class="sc">|&gt;</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gravity_field</span>(<span class="at">gamma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>))</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>both <span class="sc">|&gt;</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(<span class="at">what =</span> <span class="st">"diagnostics"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        panel gamma degree_share cor_S_degree  cor_S_S0 gradient_share
+1   gamma = 1   1.0    0.8007861    0.6726810 0.8610787      0.9730979
+2 gamma = 0.5   0.5    0.3775389    0.4977765 0.4525419      0.9625214</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>both <span class="sc">|&gt;</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">layout =</span> coords, <span class="at">mask_dist =</span> <span class="fl">0.6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="genetic-gravity_files/figure-html/arapat-field-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Both tests take latitude as the hypothesized axis:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>beetles <span class="sc">|&gt;</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">source_sink_test</span>(<span class="at">x =</span> lat, <span class="at">nperm =</span> <span class="dv">499</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Source-sink gradient test (Spearman r(S, x); Moran spectral
+    randomization on the graph)
+
+data:  beetles and lat
+r = 0.34668, nodes = 39, nperm = 499, p-value = 0.356
+alternative hypothesis: true r is not equal to 0
+sample estimates:
+degree share 
+   0.3775389 
+
+Bandwidth gamma = 0.5.  Sources at high values of x.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>beetles <span class="sc">|&gt;</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> lat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Isolation by graph distance (cGD; Mantel permutation test)
+
+data:  beetles and lat
+r = 0.51152, pairs = 340, nperm = 999, p-value = 0.001
+alternative hypothesis: true r is greater than 0
+sample estimates:
+       R2     slope 
+0.2616567 5.9675455 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>beetles <span class="sc">|&gt;</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Directional isolation by graph distance (pGD at gamma = 0.5 vs cGD)
+
+data:  beetles and lat
+delta R2 = -0.0024306, pairs = 680
+sample estimates:
+       R2 cGD    adj R2 pGD forward slope reverse slope   slope ratio 
+    0.2616567     0.2592261     3.4625088     2.4044852     1.4400208 
+
+Symmetric description sufficient (delta R2 &lt;= 0): no evidence for asymmetry.
+No p-value: the fits are not nested (see ?ibgd); corroborate with source_sink_test().</code></pre>
+</div>
+</div>
+<p>Without pipes, the same steps are:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>beetles   <span class="ot">&lt;-</span> <span class="fu">population_graph</span>(arapat, <span class="at">stratum =</span> <span class="st">"Population"</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">strata_coordinates</span>(arapat, <span class="at">stratum =</span> <span class="st">"Population"</span>)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>lat    <span class="ot">&lt;-</span> <span class="fu">setNames</span>(coords<span class="sc">$</span>Latitude, coords<span class="sc">$</span>Stratum)</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">gravity_field</span>(beetles, <span class="at">gamma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>)), <span class="at">layout =</span> coords, <span class="at">mask_dist =</span> <span class="fl">0.6</span>)</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="fu">source_sink_test</span>(beetles, <span class="at">x =</span> lat, <span class="at">nperm =</span> <span class="dv">499</span>)</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"cgd"</span>)</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The two tests answer different questions. Under strong drift the model comparison can prefer a directional fit by chance, so read it alongside the source-sink test. Edge-level permutation tests of <span class="math inline">\(\Delta\)</span> (<code>asymmetry_significance()</code> and its modes) are not recommended as tests of direction: under symmetric migration they are anti-conservative, or never reject.</p>
+</section>
+<section id="data-quality-information-loss" class="level2" data-number="9.11">
+<h2 data-number="9.11" class="anchored" data-anchor-id="data-quality-information-loss"><span class="header-section-number">9.11</span> Data quality: information loss</h2>
+<p>As loci fix, graphs are estimated from fewer informative loci, which inflates <span class="math inline">\(|\Delta|\)</span> whatever the direction of gene flow. <code>locus_subsample_null()</code> rebuilds the graph from random subsets of polymorphic loci, to show how much <span class="math inline">\(|\Delta|\)</span> information loss alone can produce at a given level of polymorphism:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus_subsample_null</span>(<span class="at">k =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>), <span class="at">nsub =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="simulating-directional-gene-flow" class="level2" data-number="9.12">
+<h2 data-number="9.12" class="anchored" data-anchor-id="simulating-directional-gene-flow"><span class="header-section-number">9.12</span> Simulating directional gene flow</h2>
+<p>A directional stepping stone, with rates to the next population downstream (<code>m_fwd</code>) and upstream (<code>m_rev</code>), plugs into <code>simulate_pop()</code>; this is how the <code>gravity</code> data were generated (at a much larger scale):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>demes <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"Pop%02d"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> demes <span class="sc">|&gt;</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"stepping_stone_1d_asym"</span>, <span class="at">m_fwd =</span> <span class="fl">0.04</span>, <span class="at">m_rev =</span> <span class="fl">0.01</span>)</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Population =</span> <span class="fu">rep</span>(demes, <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Locus =</span> <span class="st">"L1"</span>,</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Allele =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"01"</span>, <span class="st">"02"</span>), <span class="dv">10</span>),</span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Frequency =</span> <span class="fl">0.5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_populations</span>(<span class="at">N =</span> <span class="dv">50</span>) <span class="sc">|&gt;</span></span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">200</span>, <span class="at">migration =</span> <span class="fu">migration_event</span>(mm), <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<!-- Shared closing sections of the genetic gravity walkthrough (see
+     genetic_gravity_body.Rmd). -->
+</section>
+<section id="summary" class="level2" data-number="9.13">
+<h2 data-number="9.13" class="anchored" data-anchor-id="summary"><span class="header-section-number">9.13</span> Summary</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Population Graph from genotypes</td>
+<td><code>population_graph()</code></td>
+</tr>
+<tr class="even">
+<td>Neighbourhood weights <span class="math inline">\(w_{j\mid i}\)</span></td>
+<td><code>neighbourhood_weights()</code></td>
+</tr>
+<tr class="odd">
+<td>Edge asymmetry <span class="math inline">\(\Delta\)</span> and degree floor <span class="math inline">\(\Delta^0\)</span></td>
+<td><code>gravity_edges()</code></td>
+</tr>
+<tr class="even">
+<td>Gravity, balance and source-sink score <span class="math inline">\(S\)</span>; degree diagnostics</td>
+<td><code>source_sink_scores()</code></td>
+</tr>
+<tr class="odd">
+<td>Partitioned distance pGD</td>
+<td><code>genetic_distance(mode = "pgd")</code>, <code>pgd()</code></td>
+</tr>
+<tr class="even">
+<td>Gradient test, <span class="math inline">\(r(S, x)\)</span></td>
+<td><code>source_sink_test()</code></td>
+</tr>
+<tr class="odd">
+<td>Isolation by graph distance (Mantel); directional isolation, <span class="math inline">\(\Delta R^2\)</span></td>
+<td><code>ibgd(mode = "cgd")</code>, <code>ibgd(mode = "pgd")</code></td>
+</tr>
+<tr class="even">
+<td>Everything for mapping; the map</td>
+<td><code>gravity_field()</code>, <code>plot()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Use <span class="math inline">\(\gamma = 1/2\)</span> for inferring direction and <span class="math inline">\(\gamma = 1\)</span> for describing connectivity, and report the degree share with every directional analysis.</p>
+</section>
+<section id="references" class="level2" data-number="9.14">
+<h2 data-number="9.14" class="anchored" data-anchor-id="references"><span class="header-section-number">9.14</span> References</h2>
+<p>Dyer RJ, Nason JD (2004) Population Graphs: the graph theoretic shape of genetic structure. <em>Molecular Ecology</em> <strong>13</strong>: 1713–1727.</p>
+<p>Dyer RJ (in prep.) Genetic Gravity I: Extracting directional gene flow from Population Graphs.</p>
+<p>Hinton GE, Roweis ST (2003) Stochastic neighbor embedding. <em>Advances in Neural Information Processing Systems</em> <strong>15</strong>: 857–864.</p>
+<p>Wagner HH, Dray S (2015) Generating spatially constrained null models for irregularly spaced data using Moran spectral randomization methods. <em>Methods in Ecology and Evolution</em> <strong>6</strong>: 1169–1178.</p>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./population-graphs.html" class="pagination-link" aria-label="Population Graphs">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Population Graphs</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./visualization.html" class="pagination-link" aria-label="Visualization">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Visualization</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb54" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Genetic Gravity {#sec-genetic-gravity}</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- The walkthrough below is shared with the package vignette</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="co">     (vignette("genetic_gravity")); edit it in vignettes/children/genetic_gravity_body.Rmd</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="co">     and vignettes/children/genetic_gravity_summary.Rmd, not here. --&gt;</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>{{&lt; include ../vignettes/children/genetic_gravity_body.Rmd &gt;}}</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Empirical data: *Araptus attenuatus*</span></span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>The same analysis applies directly to field data.  Here the Population Graph</span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a>is built from the <span class="in">`arapat`</span> genotypes with <span class="in">`population_graph()`</span>, and the</span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a>populations' geographic centroids give both the map layout and a covariate to</span>
+<span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a>test against: latitude along the Baja California peninsula.</span>
+<span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{r arapat-graph}</span></span>
+<span id="cb54-17"><a href="#cb54-17" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb54-18"><a href="#cb54-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-19"><a href="#cb54-19" aria-hidden="true" tabindex="-1"></a>beetles <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb54-20"><a href="#cb54-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population_graph</span>()</span>
+<span id="cb54-21"><a href="#cb54-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-22"><a href="#cb54-22" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb54-23"><a href="#cb54-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">strata_coordinates</span>()</span>
+<span id="cb54-24"><a href="#cb54-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-25"><a href="#cb54-25" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> coords <span class="sc">|&gt;</span></span>
+<span id="cb54-26"><a href="#cb54-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Latitude, <span class="at">name =</span> Stratum)</span>
+<span id="cb54-27"><a href="#cb54-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb54-28"><a href="#cb54-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-29"><a href="#cb54-29" aria-hidden="true" tabindex="-1"></a>Passing the centroids as <span class="in">`layout`</span> draws the gravity field on geographic</span>
+<span id="cb54-30"><a href="#cb54-30" aria-hidden="true" tabindex="-1"></a>coordinates.  Sampling locations are clustered, so the surface is extended with</span>
+<span id="cb54-31"><a href="#cb54-31" aria-hidden="true" tabindex="-1"></a><span class="in">`mask_dist`</span> (by default it reaches 1.2 times the median nearest-neighbour</span>
+<span id="cb54-32"><a href="#cb54-32" aria-hidden="true" tabindex="-1"></a>distance between populations).  Comparing the two bandwidths shows how much of</span>
+<span id="cb54-33"><a href="#cb54-33" aria-hidden="true" tabindex="-1"></a>the local-mean picture is degree:</span>
+<span id="cb54-34"><a href="#cb54-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-35"><a href="#cb54-35" aria-hidden="true" tabindex="-1"></a><span class="in">```{r arapat-field}</span></span>
+<span id="cb54-36"><a href="#cb54-36" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
+<span id="cb54-37"><a href="#cb54-37" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 5</span></span>
+<span id="cb54-38"><a href="#cb54-38" aria-hidden="true" tabindex="-1"></a>both <span class="ot">&lt;-</span> beetles <span class="sc">|&gt;</span></span>
+<span id="cb54-39"><a href="#cb54-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gravity_field</span>(<span class="at">gamma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>))</span>
+<span id="cb54-40"><a href="#cb54-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-41"><a href="#cb54-41" aria-hidden="true" tabindex="-1"></a>both <span class="sc">|&gt;</span></span>
+<span id="cb54-42"><a href="#cb54-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(<span class="at">what =</span> <span class="st">"diagnostics"</span>)</span>
+<span id="cb54-43"><a href="#cb54-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-44"><a href="#cb54-44" aria-hidden="true" tabindex="-1"></a>both <span class="sc">|&gt;</span></span>
+<span id="cb54-45"><a href="#cb54-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">layout =</span> coords, <span class="at">mask_dist =</span> <span class="fl">0.6</span>)</span>
+<span id="cb54-46"><a href="#cb54-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb54-47"><a href="#cb54-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-48"><a href="#cb54-48" aria-hidden="true" tabindex="-1"></a>Both tests take latitude as the hypothesized axis:</span>
+<span id="cb54-49"><a href="#cb54-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-50"><a href="#cb54-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{r arapat-tests}</span></span>
+<span id="cb54-51"><a href="#cb54-51" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb54-52"><a href="#cb54-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-53"><a href="#cb54-53" aria-hidden="true" tabindex="-1"></a>beetles <span class="sc">|&gt;</span></span>
+<span id="cb54-54"><a href="#cb54-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">source_sink_test</span>(<span class="at">x =</span> lat, <span class="at">nperm =</span> <span class="dv">499</span>)</span>
+<span id="cb54-55"><a href="#cb54-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-56"><a href="#cb54-56" aria-hidden="true" tabindex="-1"></a>beetles <span class="sc">|&gt;</span></span>
+<span id="cb54-57"><a href="#cb54-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> lat)</span>
+<span id="cb54-58"><a href="#cb54-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-59"><a href="#cb54-59" aria-hidden="true" tabindex="-1"></a>beetles <span class="sc">|&gt;</span></span>
+<span id="cb54-60"><a href="#cb54-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span>
+<span id="cb54-61"><a href="#cb54-61" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb54-62"><a href="#cb54-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-63"><a href="#cb54-63" aria-hidden="true" tabindex="-1"></a>Without pipes, the same steps are:</span>
+<span id="cb54-64"><a href="#cb54-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-65"><a href="#cb54-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{r arapat-no-pipes}</span></span>
+<span id="cb54-66"><a href="#cb54-66" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb54-67"><a href="#cb54-67" aria-hidden="true" tabindex="-1"></a>beetles   <span class="ot">&lt;-</span> <span class="fu">population_graph</span>(arapat, <span class="at">stratum =</span> <span class="st">"Population"</span>)</span>
+<span id="cb54-68"><a href="#cb54-68" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">strata_coordinates</span>(arapat, <span class="at">stratum =</span> <span class="st">"Population"</span>)</span>
+<span id="cb54-69"><a href="#cb54-69" aria-hidden="true" tabindex="-1"></a>lat    <span class="ot">&lt;-</span> <span class="fu">setNames</span>(coords<span class="sc">$</span>Latitude, coords<span class="sc">$</span>Stratum)</span>
+<span id="cb54-70"><a href="#cb54-70" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">gravity_field</span>(beetles, <span class="at">gamma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>)), <span class="at">layout =</span> coords, <span class="at">mask_dist =</span> <span class="fl">0.6</span>)</span>
+<span id="cb54-71"><a href="#cb54-71" aria-hidden="true" tabindex="-1"></a><span class="fu">source_sink_test</span>(beetles, <span class="at">x =</span> lat, <span class="at">nperm =</span> <span class="dv">499</span>)</span>
+<span id="cb54-72"><a href="#cb54-72" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"cgd"</span>)</span>
+<span id="cb54-73"><a href="#cb54-73" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span>
+<span id="cb54-74"><a href="#cb54-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb54-75"><a href="#cb54-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-76"><a href="#cb54-76" aria-hidden="true" tabindex="-1"></a>The two tests answer different questions.  Under strong drift the model</span>
+<span id="cb54-77"><a href="#cb54-77" aria-hidden="true" tabindex="-1"></a>comparison can prefer a directional fit by chance, so read it alongside the</span>
+<span id="cb54-78"><a href="#cb54-78" aria-hidden="true" tabindex="-1"></a>source-sink test.  Edge-level permutation tests of $\Delta$</span>
+<span id="cb54-79"><a href="#cb54-79" aria-hidden="true" tabindex="-1"></a>(<span class="in">`asymmetry_significance()`</span> and its modes) are not recommended as tests of</span>
+<span id="cb54-80"><a href="#cb54-80" aria-hidden="true" tabindex="-1"></a>direction: under symmetric migration they are anti-conservative, or never</span>
+<span id="cb54-81"><a href="#cb54-81" aria-hidden="true" tabindex="-1"></a>reject.</span>
+<span id="cb54-82"><a href="#cb54-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-83"><a href="#cb54-83" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data quality: information loss</span></span>
+<span id="cb54-84"><a href="#cb54-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-85"><a href="#cb54-85" aria-hidden="true" tabindex="-1"></a>As loci fix, graphs are estimated from fewer informative loci, which inflates</span>
+<span id="cb54-86"><a href="#cb54-86" aria-hidden="true" tabindex="-1"></a>$|\Delta|$ whatever the direction of gene flow.  <span class="in">`locus_subsample_null()`</span></span>
+<span id="cb54-87"><a href="#cb54-87" aria-hidden="true" tabindex="-1"></a>rebuilds the graph from random subsets of polymorphic loci, to show how much</span>
+<span id="cb54-88"><a href="#cb54-88" aria-hidden="true" tabindex="-1"></a>$|\Delta|$ information loss alone can produce at a given level of polymorphism:</span>
+<span id="cb54-89"><a href="#cb54-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-90"><a href="#cb54-90" aria-hidden="true" tabindex="-1"></a><span class="in">```{r info-loss}</span></span>
+<span id="cb54-91"><a href="#cb54-91" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb54-92"><a href="#cb54-92" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb54-93"><a href="#cb54-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus_subsample_null</span>(<span class="at">k =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>), <span class="at">nsub =</span> <span class="dv">3</span>)</span>
+<span id="cb54-94"><a href="#cb54-94" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb54-95"><a href="#cb54-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-96"><a href="#cb54-96" aria-hidden="true" tabindex="-1"></a><span class="fu">## Simulating directional gene flow</span></span>
+<span id="cb54-97"><a href="#cb54-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-98"><a href="#cb54-98" aria-hidden="true" tabindex="-1"></a>A directional stepping stone, with rates to the next population downstream</span>
+<span id="cb54-99"><a href="#cb54-99" aria-hidden="true" tabindex="-1"></a>(<span class="in">`m_fwd`</span>) and upstream (<span class="in">`m_rev`</span>), plugs into <span class="in">`simulate_pop()`</span>; this is how the</span>
+<span id="cb54-100"><a href="#cb54-100" aria-hidden="true" tabindex="-1"></a><span class="in">`gravity`</span> data were generated (at a much larger scale):</span>
+<span id="cb54-101"><a href="#cb54-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-102"><a href="#cb54-102" aria-hidden="true" tabindex="-1"></a><span class="in">```{r simulate}</span></span>
+<span id="cb54-103"><a href="#cb54-103" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb54-104"><a href="#cb54-104" aria-hidden="true" tabindex="-1"></a>demes <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"Pop%02d"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb54-105"><a href="#cb54-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-106"><a href="#cb54-106" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> demes <span class="sc">|&gt;</span></span>
+<span id="cb54-107"><a href="#cb54-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"stepping_stone_1d_asym"</span>, <span class="at">m_fwd =</span> <span class="fl">0.04</span>, <span class="at">m_rev =</span> <span class="fl">0.01</span>)</span>
+<span id="cb54-108"><a href="#cb54-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-109"><a href="#cb54-109" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Population =</span> <span class="fu">rep</span>(demes, <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb54-110"><a href="#cb54-110" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Locus =</span> <span class="st">"L1"</span>,</span>
+<span id="cb54-111"><a href="#cb54-111" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Allele =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"01"</span>, <span class="st">"02"</span>), <span class="dv">10</span>),</span>
+<span id="cb54-112"><a href="#cb54-112" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Frequency =</span> <span class="fl">0.5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb54-113"><a href="#cb54-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_populations</span>(<span class="at">N =</span> <span class="dv">50</span>) <span class="sc">|&gt;</span></span>
+<span id="cb54-114"><a href="#cb54-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">200</span>, <span class="at">migration =</span> <span class="fu">migration_event</span>(mm), <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb54-115"><a href="#cb54-115" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb54-116"><a href="#cb54-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-117"><a href="#cb54-117" aria-hidden="true" tabindex="-1"></a>{{&lt; include ../vignettes/children/genetic_gravity_summary.Rmd &gt;}}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/dyerlab/gstudio/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

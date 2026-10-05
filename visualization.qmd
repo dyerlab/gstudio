@@ -3,7 +3,9 @@
 The `gstudio` package returns analysis results as standard `data.frame` objects, which plug directly into ggplot2. This chapter shows the recommended plotting patterns for allele frequency data, population maps, and population graphs.
 
 ```{r}
+#| message: false
 library(gstudio)
+library(dplyr)
 library(ggplot2)
 library(ggraph)
 data(arapat)
@@ -16,8 +18,9 @@ data(arapat)
 ### Single locus
 
 ```{r}
-freqs <- frequencies(arapat, loci = "LTRS")
-ggplot(freqs, aes(x = Allele, y = Frequency)) +
+arapat |>
+  frequencies(loci = "LTRS") |>
+  ggplot(aes(x = Allele, y = Frequency)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   labs(title = "Allele Frequencies at LTRS") +
   theme_minimal()
@@ -28,8 +31,11 @@ ggplot(freqs, aes(x = Allele, y = Frequency)) +
 When `stratum` is supplied, `frequencies()` zero-fills missing allele/stratum combinations so dodged and faceted plots are correctly aligned. Filter with `Frequency > 0` beforehand if you prefer to show only observed alleles.
 
 ```{r}
-freqs <- frequencies(arapat, loci = "LTRS", stratum = "Species")
-ggplot(freqs, aes(x = Allele, y = Frequency, fill = Stratum)) +
+freqs <- arapat |>
+  frequencies(loci = "LTRS", stratum = "Species")
+
+freqs |>
+  ggplot(aes(x = Allele, y = Frequency, fill = Stratum)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "LTRS Allele Frequencies by Species") +
   theme_minimal()
@@ -37,8 +43,12 @@ ggplot(freqs, aes(x = Allele, y = Frequency, fill = Stratum)) +
 
 ### Faceted across strata
 
+Here the zero-filled alleles are dropped with `filter()` before plotting:
+
 ```{r}
-ggplot(freqs, aes(x = Allele, y = Frequency, fill = Allele)) +
+freqs |>
+  filter(Frequency > 0) |>
+  ggplot(aes(x = Allele, y = Frequency, fill = Allele)) +
   geom_bar(stat = "identity") +
   facet_wrap(~Stratum) +
   labs(title = "LTRS Frequencies by Species") +
@@ -51,8 +61,11 @@ ggplot(freqs, aes(x = Allele, y = Frequency, fill = Allele)) +
 `strata_coordinates()` aggregates individual records to population centroids, returning a data frame with `Stratum`, `Longitude`, and `Latitude` columns ready for `geom_point()`.
 
 ```{r}
-coords <- strata_coordinates(arapat)
-ggplot(coords, aes(x = Longitude, y = Latitude)) +
+coords <- arapat |>
+  strata_coordinates()
+
+coords |>
+  ggplot(aes(x = Longitude, y = Latitude)) +
   geom_point(size = 3, shape = 21, fill = "steelblue") +
   labs(title = "Araptus attenuatus Sampling Locations") +
   coord_fixed() +
@@ -62,7 +75,8 @@ ggplot(coords, aes(x = Longitude, y = Latitude)) +
 Individual-level data works just as well when you want within-population spread:
 
 ```{r}
-ggplot(arapat, aes(x = Longitude, y = Latitude, fill = Species)) +
+arapat |>
+  ggplot(aes(x = Longitude, y = Latitude, fill = Species)) +
   geom_point(size = 2, shape = 21, alpha = 0.7) +
   coord_fixed() +
   theme_minimal()
@@ -70,17 +84,20 @@ ggplot(arapat, aes(x = Longitude, y = Latitude, fill = Species)) +
 
 ## Population Graph Visualization
 
-Population graphs are best visualized with the [ggraph](https://ggraph.data-imaginist.com) package, which extends ggplot2 for graph objects and works natively with `popgraph`/`igraph` objects. Install it once with `install.packages("ggraph")`.
+For a quick look, `plot()` on a Population Graph returns a ggplot (nodes sized by their `size` attribute — within-population genetic variability for graphs from `popgraph()` — or by degree when there is none, and filled by a `Region` attribute when present; geographic coordinates used when the graph carries them, arrows for directed graphs); see the Population Graphs article for its options. For fully custom figures, use the [ggraph](https://ggraph.data-imaginist.com) package, which extends ggplot2 for graph objects and works natively with `popgraph`/`igraph` objects. Install it once with `install.packages("ggraph")`.
 
 ### Force-Directed Layout
 
 Build a population graph from the `arapat` dataset and plot it with a Fruchterman-Reingold layout. Node and edge aesthetics map directly to vertex and edge attributes.
 
 ```{r}
-graph <- population_graph(arapat, stratum = "Species")
+graph <- arapat |>
+  population_graph(stratum = "Species")
+
 igraph::V(graph)$degree <- igraph::degree(graph)
 
-ggraph(graph, layout = "fr") +
+graph |>
+  ggraph(layout = "fr") +
   geom_edge_link(color = "grey60", linewidth = 0.5) +
   geom_node_point(aes(fill = degree), size = 5, shape = 21) +
   geom_node_label(aes(label = name), repel = TRUE, size = 2.5) +
@@ -98,11 +115,14 @@ Use `scale_edge_width(range = c(min, max))` to control the rendered line width i
 ```{r}
 data(lopho)
 data(baja)
-lopho_dec <- decorate_graph(lopho, baja, stratum = "Population")
 
-ggraph(lopho_dec, layout = "manual",
-       x = igraph::V(lopho_dec)$Longitude,
-       y = igraph::V(lopho_dec)$Latitude) +
+lopho_dec <- lopho |>
+  decorate_graph(baja, stratum = "Population")
+
+lopho_dec |>
+  ggraph(layout = "manual",
+         x = igraph::V(lopho_dec)$Longitude,
+         y = igraph::V(lopho_dec)$Latitude) +
   geom_edge_link(aes(width = weight), color = "grey60", show.legend = FALSE) +
   scale_edge_width(range = c(0.3, 2.5), guide = "none") +
   geom_node_point(aes(size = size, color = Region), show.legend = FALSE) +
@@ -119,11 +139,13 @@ ggraph(lopho_dec, layout = "manual",
 `asymmetric_popgraph()` produces a directed graph where each undirected edge becomes two directed edges with weights reflecting the net introgression pressure. `geom_edge_fan()` automatically curves parallel edges so both directions are visible.
 
 ```{r}
-lopho_asym <- asymmetric_popgraph(lopho_dec)
+lopho_asym <- lopho_dec |>
+  asymmetric_popgraph()
 
-ggraph(lopho_asym, layout = "manual",
-       x = igraph::V(lopho_asym)$Longitude,
-       y = igraph::V(lopho_asym)$Latitude) +
+lopho_asym |>
+  ggraph(layout = "manual",
+         x = igraph::V(lopho_asym)$Longitude,
+         y = igraph::V(lopho_asym)$Latitude) +
   geom_edge_fan(aes(color = weight, width = weight),
                 arrow = arrow(length = unit(2.5, "mm"), type = "closed"),
                 end_cap = circle(3, "mm"),
@@ -146,12 +168,33 @@ ggraph(lopho_asym, layout = "manual",
 library(leaflet)
 library(leaflet.minicharts)
 
-freqs <- frequencies(arapat, loci = "LTRS", stratum = "Species")
+freqs <- arapat |>
+  frequencies(loci = "LTRS", stratum = "Species")
 
-strata_coordinates(arapat, stratum = "Species") |>
+arapat |>
+  strata_coordinates(stratum = "Species") |>
   leaflet() |>
   addTiles() |>
   addAlleleFrequencies(freqs)
 ```
 
 Pass `locus =` explicitly when `freqs` contains more than one locus. Width and height of the pie charts (in pixels) are controlled with `width =` and `height =`.
+
+## Without Pipes
+
+```{r}
+#| eval: false
+freqs <- frequencies(arapat, loci = "LTRS", stratum = "Species")
+ggplot(freqs, aes(x = Allele, y = Frequency, fill = Stratum)) +
+  geom_col(position = "dodge")
+
+coords <- strata_coordinates(arapat)
+ggplot(coords, aes(x = Longitude, y = Latitude)) +
+  geom_point()
+
+lopho_dec <- decorate_graph(lopho, baja, stratum = "Population")
+ggraph(lopho_dec, layout = "manual",
+       x = igraph::V(lopho_dec)$Longitude, y = igraph::V(lopho_dec)$Latitude) +
+  geom_edge_link() +
+  geom_node_point()
+```
