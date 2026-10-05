@@ -1,6 +1,6 @@
 # Genetic Diversity
 
-This chapter covers estimation of genetic diversity statistics using the `genetic_diversity()` wrapper and its underlying per-locus functions.
+This chapter covers estimation of genetic diversity statistics using `genetic_diversity()`.  As with `genetic_structure()`, `genetic_distance()` and `genetic_relatedness()`, this front-end function is the only way to reach the individual estimators; there are no standalone `A()`, `He()` or `Fis()` functions.
 
 ```{r}
 #| message: false
@@ -21,10 +21,12 @@ The `genetic_diversity()` function is the main entry point for diversity estimat
 | `"A95"` | A (5% threshold) | Alleles with frequency >= 0.05 |
 | `"He"` | Expected heterozygosity | $1 - \sum p_i^2$ |
 | `"Ho"` | Observed heterozygosity | Proportion of heterozygotes |
-| `"Hes"` | Corrected He | Nei's small-sample corrected He |
-| `"Hos"` | Corrected Ho | Nei's small-sample corrected Ho |
+| `"Hi"` | Individual heterozygosity | Proportion of an individual's loci that are heterozygous |
+| `"Hes"` | Corrected He | Nei's unbiased within-stratum $H_S$ (needs `stratum`) |
+| `"Hos"` | Corrected Ho | Ho averaged across strata after Nei (needs `stratum`) |
+| `"Ht"` | Total He | Nei's unbiased total $H_T$ (needs `stratum`) |
 | `"Fis"` | Inbreeding coefficient | $1 - H_o/H_e$ |
-| `"Pe"` | Polymorphic index | Whether the locus is polymorphic |
+| `"Pe"` | Polymorphic index | $\sum p_i(1-p_i)$ |
 
 ## Global (Unstratified) Estimates
 
@@ -38,12 +40,11 @@ arapat |>
   genetic_diversity(mode = "He")
 ```
 
-Several statistics at once, joined into one table:
+Pass several modes to get one table with a column for each:
 
 ```{r}
-c("A", "Ae", "He", "Ho") |>
-  lapply(\(m) genetic_diversity(arapat, mode = m)) |>
-  Reduce(f = \(x, y) inner_join(x, y, by = "Locus"))
+arapat |>
+  genetic_diversity(mode = c("A", "Ae", "He", "Ho"))
 ```
 
 ## Per-Stratum Estimates
@@ -57,59 +58,28 @@ arapat |>
 
 ```{r}
 arapat |>
-  genetic_diversity(stratum = "Species", mode = "Ae")
+  genetic_diversity(stratum = "Species", mode = c("Ae", "He", "Fis"))
 ```
 
-## Individual Estimator Functions
+## Single Loci
 
-Each diversity metric has a standalone function that operates on a single locus vector.
-
-### Allelic Richness
+A bare `locus` vector can be passed in place of a data frame:
 
 ```{r}
 arapat |>
   pull(LTRS) |>
-  A()
+  genetic_diversity(mode = "Fis")
 ```
 
-### Effective Number of Alleles
+## Individual Heterozygosity
+
+The `Hi` mode is estimated per individual rather than per locus.  It returns one row for each individual, keeping the non-locus columns, so it can be summarized by any grouping you like:
 
 ```{r}
 arapat |>
-  pull(LTRS) |>
-  Ae()
-```
-
-### Expected Heterozygosity
-
-```{r}
-arapat |>
-  pull(LTRS) |>
-  He()
-```
-
-### Observed Heterozygosity
-
-```{r}
-arapat |>
-  pull(LTRS) |>
-  Ho()
-```
-
-### Inbreeding Coefficient
-
-```{r}
-arapat |>
-  pull(LTRS) |>
-  Fis()
-```
-
-### Exclusion Probability
-
-```{r}
-arapat |>
-  pull(LTRS) |>
-  Pe()
+  genetic_diversity(mode = "Hi") |>
+  group_by(Species) |>
+  summarize(mean_Hi = mean(Hi))
 ```
 
 ## Corrected Heterozygosity (Nei's)
@@ -119,6 +89,14 @@ The `Hes` and `Hos` modes require a stratum because they apply a small-sample co
 ```{r}
 arapat |>
   genetic_diversity(stratum = "Species", mode = "Hes")
+```
+
+`Ht` gives the matching total expected heterozygosity (the $H_S$ and $H_T$ that `genetic_structure()` builds $G_{ST}$ from).  These pooled modes return one row per locus, so they combine with each other but not with per-stratum modes:
+
+```{r}
+#| warning: false
+arapat |>
+  genetic_diversity(stratum = "Species", mode = c("Hos", "Hes", "Ht"))
 ```
 
 ## Multilocus Diversity
@@ -132,7 +110,7 @@ arapat |>
 
 ## Selecting Specific Loci
 
-You can restrict the analysis to a subset of loci:
+You can restrict the analysis to a subset of loci, with or without a stratum:
 
 ```{r}
 arapat |>
@@ -175,9 +153,11 @@ he_by_pop |>
 ```{r}
 #| eval: false
 genetic_diversity(arapat, mode = "He")
+genetic_diversity(arapat, mode = c("A", "Ae", "He", "Ho"))
 genetic_diversity(arapat, stratum = "Species", mode = "He")
 genetic_diversity(arapat, loci = c("LTRS", "WNT"), mode = "He")
-He(arapat$LTRS)
+genetic_diversity(arapat$LTRS, mode = "Fis")
+genetic_diversity(arapat, mode = "Hi")
 multilocus_diversity(arapat)
 he_by_pop <- genetic_diversity(arapat, stratum = "Species", mode = "He")
 ggplot(he_by_pop, aes(x = Stratum, y = He, fill = Stratum)) +

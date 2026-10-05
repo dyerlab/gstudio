@@ -456,7 +456,7 @@ Peninsula 2.494205 2.140258  0.000000</code></pre>
 </section>
 <section id="basic-usage" class="level3" data-number="7.2.2">
 <h3 data-number="7.2.2" class="anchored" data-anchor-id="basic-usage"><span class="header-section-number">7.2.2</span> Basic Usage</h3>
-<p>The Nason estimator divides by the polymorphic index <code>Pe()</code>, so monomorphic loci (where <code>Pe = 0</code>) will produce <code>NaN</code>. In the <code>arapat</code> dataset, <code>LTRS</code> and <code>ATPS</code> can be monomorphic in small subsets. To avoid this, restrict the data to polymorphic loci:</p>
+<p>The Nason estimator divides by the polymorphic index (<code>genetic_diversity(mode = "Pe")</code>), so monomorphic loci (where <code>Pe = 0</code>) will produce <code>NaN</code>. In the <code>arapat</code> dataset, <code>LTRS</code> and <code>ATPS</code> can be monomorphic in small subsets. To avoid this, restrict the data to polymorphic loci:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use loci that are polymorphic in this subset</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
@@ -1116,7 +1116,7 @@ Mainland   239.8471 315.7868   0.0000</code></pre>
 <span id="cb34-96"><a href="#cb34-96" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-97"><a href="#cb34-97" aria-hidden="true" tabindex="-1"></a><span class="fu">### Basic Usage</span></span>
 <span id="cb34-98"><a href="#cb34-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-99"><a href="#cb34-99" aria-hidden="true" tabindex="-1"></a>The Nason estimator divides by the polymorphic index <span class="in">`Pe()`</span>, so monomorphic loci (where <span class="in">`Pe = 0`</span>) will produce <span class="in">`NaN`</span>. In the <span class="in">`arapat`</span> dataset, <span class="in">`LTRS`</span> and <span class="in">`ATPS`</span> can be monomorphic in small subsets. To avoid this, restrict the data to polymorphic loci:</span>
+<span id="cb34-99"><a href="#cb34-99" aria-hidden="true" tabindex="-1"></a>The Nason estimator divides by the polymorphic index (<span class="in">`genetic_diversity(mode = "Pe")`</span>), so monomorphic loci (where <span class="in">`Pe = 0`</span>) will produce <span class="in">`NaN`</span>. In the <span class="in">`arapat`</span> dataset, <span class="in">`LTRS`</span> and <span class="in">`ATPS`</span> can be monomorphic in small subsets. To avoid this, restrict the data to polymorphic loci:</span>
 <span id="cb34-100"><a href="#cb34-100" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-103"><a href="#cb34-103" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb34-104"><a href="#cb34-104" aria-hidden="true" tabindex="-1"></a><span class="co"># Use loci that are polymorphic in this subset</span></span>

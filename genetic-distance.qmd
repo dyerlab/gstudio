@@ -84,7 +84,7 @@ The `genetic_relatedness()` function computes pairwise relatedness among individ
 
 ### Basic Usage
 
-The Nason estimator divides by the polymorphic index `Pe()`, so monomorphic loci (where `Pe = 0`) will produce `NaN`. In the `arapat` dataset, `LTRS` and `ATPS` can be monomorphic in small subsets. To avoid this, restrict the data to polymorphic loci:
+The Nason estimator divides by the polymorphic index (`genetic_diversity(mode = "Pe")`), so monomorphic loci (where `Pe = 0`) will produce `NaN`. In the `arapat` dataset, `LTRS` and `ATPS` can be monomorphic in small subsets. To avoid this, restrict the data to polymorphic loci:
 
 ```{r}
 # Use loci that are polymorphic in this subset
