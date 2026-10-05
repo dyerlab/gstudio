@@ -1,7 +1,7 @@
 gstudio 1.15.0 - 20261005
 -----------------
 * [BREAKING] (1.15.0) This release marks the interface changes below; they break code written for 1.14 (installed from GitHub) and have no deprecation period.
-* [BREAKING] (1.15.0) Removed exports: Fst(), Gst(), Gst_prime() and Dest() (use genetic_structure(mode = ...)); dist_amova(), dist_bray(), dist_cavalli(), dist_cgd(), dist_euclidean(), dist_jaccard(), dist_nei() and dist_ss() (use genetic_distance(mode = ...)); rel_lynch(), rel_nason(), rel_queller() and rel_ritland() (use genetic_relatedness(mode = ...)); to_SpatialPoints() and to_SpatialLines() (use to_sf()).
+* [BREAKING] (1.15.0) Removed exports: A(), Ae(), He(), Hes(), Hi(), Ho(), Hos(), Ht(), Fis() and Pe() (use genetic_diversity(mode = ...)); Fst(), Gst(), Gst_prime() and Dest() (use genetic_structure(mode = ...)); dist_amova(), dist_bray(), dist_cavalli(), dist_cgd(), dist_euclidean(), dist_jaccard(), dist_nei() and dist_ss() (use genetic_distance(mode = ...)); rel_lynch(), rel_nason(), rel_queller() and rel_ritland() (use genetic_relatedness(mode = ...)); to_SpatialPoints() and to_SpatialLines() (use to_sf()).
 * [BREAKING] (1.15.0) hwe() columns Chi and Prob are now statistic and p.value, and p.value is numeric (Prob was a character string).
 * [BREAKING] (1.15.0) genetic_structure() column P is now p.value; with nperm > 0 the Multilocus row is now tested too.
 * [BREAKING] (1.15.0) genetic_autocorrelation() column P is now p.value.
@@ -10,6 +10,7 @@ gstudio 1.15.0 - 20261005
 * [BREAKING] (1.15.0) to_df() node tables name the node column Stratum (was name) and edge tables use from and to (were From and To).
 * [BREAKING] (1.15.0) centroid_variance() returns a data.frame with columns Stratum and variance (was a named vector).
 * [BREAKING] (1.15.0) plot() on a popgraph returns a ggplot (was igraph base graphics; igraph::plot.igraph() is still available).
+* [CHANGE] (1.15.0) genetic_diversity() gains modes Hi (per-individual heterozygosity) and Ht (Nei's total heterozygosity), so every diversity estimator is reachable from it; mode = can take several values (e.g. c("A", "Ae", "He")) and returns one table with a column for each; loci= is now honoured when a stratum is given; Hes, Hos and Ht give a clear error without a stratum.
 * [CHANGE] (1.15.0) Output columns follow one convention: populations keyed by 'Stratum', edges by 'from'/'to', and tables of tests use broom::tidy() names (statistic, df, p.value, conf.low/conf.high).  See the [BREAKING] entries above for the renamed columns.  source_sink_scores() and gravity_field() (new in this release) key populations by 'Stratum' (was 'node' during development).
 * [FIX] (1.15.0) hwe() returns numeric p-values (they were formatted as character strings).
 * [ADD] (1.15.0) genetic_structure(nperm = ) now tests the Multilocus row of Gst, Gst' and Dest by permuting strata across individuals (shared by all loci); it was always NA.

@@ -8,7 +8,7 @@ genetic_diversity(
   x,
   stratum = NULL,
   loci = NULL,
-  mode = c("A", "Ae", "A95", "He", "Ho", "Hi", "Hos", "Hes", "Fis", "Pe")[2],
+  mode = c("A", "Ae", "A95", "He", "Ho", "Hi", "Hos", "Hes", "Ht", "Fis", "Pe")[2],
   small.N = FALSE,
   ...
 )
@@ -16,33 +16,54 @@ genetic_diversity(
 \arguments{
 \item{x}{A \code{data.frame} object with \code{\link{locus}} columns.}
 
-\item{stratum}{The strata by which the genetic distances are estimated.  This
-can be an optional parameter when estimating distance measures calculated
-among individuals (default='Population').}
+\item{stratum}{The name of the column holding strata.  If given, each
+statistic is estimated within each stratum (the \code{Hes}, \code{Hos}
+and \code{Ht} modes require it and pool across strata instead).  If not
+given, it is taken from \code{dplyr::group_by()} when \code{x} is grouped;
+otherwise all individuals are treated as one sample.}
 
 \item{loci}{The set of loci to use (default NULL will use all)}
 
-\item{mode}{The particular genetic diversity metric that you are going to use. 
-The \code{gstudio} package currently includes the following individual distance 
-measures:
+\item{mode}{The genetic diversity metric(s) to estimate.  This is
+the only interface to these estimators; there are no standalone
+\code{A()}, \code{He()}, \code{Fis()}, ... functions.  Pass several
+(e.g. \code{c("A","Ae","He")}) to get one table with a column for each,
+joined by \code{Stratum} and \code{Locus}.  \code{Hi} cannot be combined
+with other modes and, with a stratum, the pooled modes (\code{Hes},
+\code{Hos}, \code{Ht}) can only be combined with each other.  Options:
 \describe{
   \item{A}{Number of alleles}
   \item{Ae}{Effective number of alleles (default)}
   \item{A95}{Number of alleles with frequency at least five percent}
   \item{He}{Expected heterozygosity}
   \item{Ho}{Observed heterozygosity}
-  \item{Hes}{Expected subpopulation heterozygosity (Nei's Corrected)}
-  \item{Hos}{Expected subpopulation heterozygosity (Nei's Corrected)}
-  \item{Fis}{Wright's Inbreeding coefficient (size corrected).}
-  \item{Pe}{Locus polymorphic index.}
+  \item{Hi}{Individual heterozygosity, the fraction of non-missing loci
+    that are heterozygous in each individual.  Returns one row per
+    individual with the non-locus columns of \code{x} and \code{stratum}
+    is ignored.}
+  \item{Hes}{Expected subpopulation heterozygosity, Nei's unbiased Hs
+    (requires \code{stratum}).}
+  \item{Hos}{Observed heterozygosity averaged across strata after Nei
+    (requires \code{stratum}).}
+  \item{Ht}{Nei's unbiased total expected heterozygosity (requires
+    \code{stratum}).}
+  \item{Fis}{Wright's inbreeding coefficient, 1 - Ho/He.}
+  \item{Pe}{Locus polymorphic index, sum(p(1-p)).}
 }}
 
-\item{small.N}{Apply small N correction}
+\item{small.N}{Apply the 2N/(2N-1) small sample size correction to the
+expected heterozygosity (modes \code{He}, \code{Fis}).}
 
 \item{...}{Other parameters}
 }
 \value{
-A \code{data.frame} with columns for strata, diversity (mode), and potentially P(mode=0).
+A \code{data.frame} with columns \code{Locus} and one named for the
+   mode, plus \code{Stratum} if estimated within strata.  \code{Hes} and
+   \code{Hos} add a \code{Multilocus} row when several loci are used.
+   \code{Hi} returns one row per individual (see above).  With several
+   modes there is one column per mode, in the order requested; rows present
+   for only some modes (e.g. the \code{Multilocus} row) are \code{NA} for
+   the others.
 }
 \description{
 This function is the main one used for estimating genetic diversity among 
@@ -58,6 +79,11 @@ This function is the main one used for estimating genetic diversity among
  Population <- c(rep("Pop-A",5),rep("Pop-B",5))
  df <- data.frame( Population, TPI=locus, PGM=locus2 )
  genetic_diversity( df, mode="Ae")
+ genetic_diversity( df, mode=c("A","Ae","He","Ho") )
+ genetic_diversity( df, stratum="Population", mode="He")
+ genetic_diversity( df, stratum="Population", mode="Hes")
+ genetic_diversity( df, mode="Hi")
+ genetic_diversity( locus, mode="Fis")
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

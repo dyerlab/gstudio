@@ -10,7 +10,7 @@
 #'  or a \code{data.frame} of \code{locus} objects across strata.  If the estimating across
 #'  stratum, the unbiased estimator should be used to average across stratum and is performed
 #'  by passing the appropriate stratum= argument.
-#' @export
+#' @noRd
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' data(arapat)

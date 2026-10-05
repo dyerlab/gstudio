@@ -11,7 +11,7 @@
 #'  all loci.
 #' @return The inbreeding F statistic as a \code{numeric} value or a \code{data.frame}
 #'  if you passed multiple loci to this function.
-#' @export
+#' @noRd
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )

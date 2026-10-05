@@ -11,7 +11,7 @@
 #' @param do.multilocus Estimates multilocus heterozygosity as well (default TRUE).
 #' @return The expected heterozygosity as a numeric or a \code{data.frame} if 
 #'  several loci are passed.
-#' @export
+#' @noRd
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' data(arapat)

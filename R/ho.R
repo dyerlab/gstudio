@@ -5,7 +5,7 @@
 #' @param x An object of type \code{locus} or a \code{data.frame} with locus columns.
 #' @return The observed heterozygosity.
 #' @note For stratified estimates across populations, use \code{\link{Hos}}.
-#' @export
+#' @noRd
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' loci <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B") ) )

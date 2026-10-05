@@ -7,7 +7,7 @@
 #'  object with all non-locus columns identical to those passed.
 #' @note This function must be called on a \code{data.frame} of individuals, it will assume that
 #'  each row contains at least one column of type \code{locus}
-#' @export
+#' @noRd
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' loc1 <- c( locus( c("A","A") ), locus( c("A","B") ), locus( c("A","B") ) )
@@ -28,10 +28,10 @@ Hi <- function( x ) {
     stop("Cannot estimate expected heterozygosity if there are no loci...")
   }
   
-  ret <- length( locus_names) - apply( apply( x[,locus_names],1, is.na), 2, sum )  
+  ret <- length( locus_names) - rowSums( is.na( x[,locus_names,drop=FALSE] ) )  
   
   for( i in 1:nrow(x)){ 
-    row <- x[i,locus_names]
+    row <- x[i,locus_names,drop=FALSE]
     nHet <- sum(is_heterozygote(locus(as.vector(unlist( row )), type="separated") ))
     if( ret[i] > 0 ) { 
       ret[i] <- nHet/ret[i]

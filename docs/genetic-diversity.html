@@ -262,20 +262,13 @@ window.Quarto = {
   <li><a href="#the-genetic_diversity-wrapper" id="toc-the-genetic_diversity-wrapper" class="nav-link active" data-scroll-target="#the-genetic_diversity-wrapper"><span class="header-section-number">5.1</span> The <code>genetic_diversity()</code> Wrapper</a></li>
   <li><a href="#global-unstratified-estimates" id="toc-global-unstratified-estimates" class="nav-link" data-scroll-target="#global-unstratified-estimates"><span class="header-section-number">5.2</span> Global (Unstratified) Estimates</a></li>
   <li><a href="#per-stratum-estimates" id="toc-per-stratum-estimates" class="nav-link" data-scroll-target="#per-stratum-estimates"><span class="header-section-number">5.3</span> Per-Stratum Estimates</a></li>
-  <li><a href="#individual-estimator-functions" id="toc-individual-estimator-functions" class="nav-link" data-scroll-target="#individual-estimator-functions"><span class="header-section-number">5.4</span> Individual Estimator Functions</a>
-  <ul class="collapse">
-  <li><a href="#allelic-richness" id="toc-allelic-richness" class="nav-link" data-scroll-target="#allelic-richness"><span class="header-section-number">5.4.1</span> Allelic Richness</a></li>
-  <li><a href="#effective-number-of-alleles" id="toc-effective-number-of-alleles" class="nav-link" data-scroll-target="#effective-number-of-alleles"><span class="header-section-number">5.4.2</span> Effective Number of Alleles</a></li>
-  <li><a href="#expected-heterozygosity" id="toc-expected-heterozygosity" class="nav-link" data-scroll-target="#expected-heterozygosity"><span class="header-section-number">5.4.3</span> Expected Heterozygosity</a></li>
-  <li><a href="#observed-heterozygosity" id="toc-observed-heterozygosity" class="nav-link" data-scroll-target="#observed-heterozygosity"><span class="header-section-number">5.4.4</span> Observed Heterozygosity</a></li>
-  <li><a href="#inbreeding-coefficient" id="toc-inbreeding-coefficient" class="nav-link" data-scroll-target="#inbreeding-coefficient"><span class="header-section-number">5.4.5</span> Inbreeding Coefficient</a></li>
-  <li><a href="#exclusion-probability" id="toc-exclusion-probability" class="nav-link" data-scroll-target="#exclusion-probability"><span class="header-section-number">5.4.6</span> Exclusion Probability</a></li>
-  </ul></li>
-  <li><a href="#corrected-heterozygosity-neis" id="toc-corrected-heterozygosity-neis" class="nav-link" data-scroll-target="#corrected-heterozygosity-neis"><span class="header-section-number">5.5</span> Corrected Heterozygosity (Nei’s)</a></li>
-  <li><a href="#multilocus-diversity" id="toc-multilocus-diversity" class="nav-link" data-scroll-target="#multilocus-diversity"><span class="header-section-number">5.6</span> Multilocus Diversity</a></li>
-  <li><a href="#selecting-specific-loci" id="toc-selecting-specific-loci" class="nav-link" data-scroll-target="#selecting-specific-loci"><span class="header-section-number">5.7</span> Selecting Specific Loci</a></li>
-  <li><a href="#comparing-populations" id="toc-comparing-populations" class="nav-link" data-scroll-target="#comparing-populations"><span class="header-section-number">5.8</span> Comparing Populations</a></li>
-  <li><a href="#without-pipes" id="toc-without-pipes" class="nav-link" data-scroll-target="#without-pipes"><span class="header-section-number">5.9</span> Without Pipes</a></li>
+  <li><a href="#single-loci" id="toc-single-loci" class="nav-link" data-scroll-target="#single-loci"><span class="header-section-number">5.4</span> Single Loci</a></li>
+  <li><a href="#individual-heterozygosity" id="toc-individual-heterozygosity" class="nav-link" data-scroll-target="#individual-heterozygosity"><span class="header-section-number">5.5</span> Individual Heterozygosity</a></li>
+  <li><a href="#corrected-heterozygosity-neis" id="toc-corrected-heterozygosity-neis" class="nav-link" data-scroll-target="#corrected-heterozygosity-neis"><span class="header-section-number">5.6</span> Corrected Heterozygosity (Nei’s)</a></li>
+  <li><a href="#multilocus-diversity" id="toc-multilocus-diversity" class="nav-link" data-scroll-target="#multilocus-diversity"><span class="header-section-number">5.7</span> Multilocus Diversity</a></li>
+  <li><a href="#selecting-specific-loci" id="toc-selecting-specific-loci" class="nav-link" data-scroll-target="#selecting-specific-loci"><span class="header-section-number">5.8</span> Selecting Specific Loci</a></li>
+  <li><a href="#comparing-populations" id="toc-comparing-populations" class="nav-link" data-scroll-target="#comparing-populations"><span class="header-section-number">5.9</span> Comparing Populations</a></li>
+  <li><a href="#without-pipes" id="toc-without-pipes" class="nav-link" data-scroll-target="#without-pipes"><span class="header-section-number">5.10</span> Without Pipes</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyerlab/gstudio/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -301,7 +294,7 @@ window.Quarto = {
 </header>
 
 
-<p>This chapter covers estimation of genetic diversity statistics using the <code>genetic_diversity()</code> wrapper and its underlying per-locus functions.</p>
+<p>This chapter covers estimation of genetic diversity statistics using <code>genetic_diversity()</code>. As with <code>genetic_structure()</code>, <code>genetic_distance()</code> and <code>genetic_relatedness()</code>, this front-end function is the only way to reach the individual estimators; there are no standalone <code>A()</code>, <code>He()</code> or <code>Fis()</code> functions.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
@@ -312,6 +305,11 @@ window.Quarto = {
 <h2 data-number="5.1" class="anchored" data-anchor-id="the-genetic_diversity-wrapper"><span class="header-section-number">5.1</span> The <code>genetic_diversity()</code> Wrapper</h2>
 <p>The <code>genetic_diversity()</code> function is the main entry point for diversity estimation. It dispatches to specific estimators based on the <code>mode</code> parameter:</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 36%">
+<col style="width: 43%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Mode</th>
@@ -346,14 +344,24 @@ window.Quarto = {
 <td>Proportion of heterozygotes</td>
 </tr>
 <tr class="even">
-<td><code>"Hes"</code></td>
-<td>Corrected He</td>
-<td>Nei’s small-sample corrected He</td>
+<td><code>"Hi"</code></td>
+<td>Individual heterozygosity</td>
+<td>Proportion of an individual’s loci that are heterozygous</td>
 </tr>
 <tr class="odd">
+<td><code>"Hes"</code></td>
+<td>Corrected He</td>
+<td>Nei’s unbiased within-stratum <span class="math inline">\(H_S\)</span> (needs <code>stratum</code>)</td>
+</tr>
+<tr class="even">
 <td><code>"Hos"</code></td>
 <td>Corrected Ho</td>
-<td>Nei’s small-sample corrected Ho</td>
+<td>Ho averaged across strata after Nei (needs <code>stratum</code>)</td>
+</tr>
+<tr class="odd">
+<td><code>"Ht"</code></td>
+<td>Total He</td>
+<td>Nei’s unbiased total <span class="math inline">\(H_T\)</span> (needs <code>stratum</code>)</td>
 </tr>
 <tr class="even">
 <td><code>"Fis"</code></td>
@@ -363,7 +371,7 @@ window.Quarto = {
 <tr class="odd">
 <td><code>"Pe"</code></td>
 <td>Polymorphic index</td>
-<td>Whether the locus is polymorphic</td>
+<td><span class="math inline">\(\sum p_i(1-p_i)\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -399,11 +407,10 @@ window.Quarto = {
 8  MP20 0.8185723</code></pre>
 </div>
 </div>
-<p>Several statistics at once, joined into one table:</p>
+<p>Pass several modes to get one table with a column for each:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Ho"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(\(m) <span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> m)) <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Reduce</span>(<span class="at">f =</span> \(x, y) <span class="fu">inner_join</span>(x, y, <span class="at">by =</span> <span class="st">"Locus"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Ho"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Locus  A       Ae        He         Ho
 1  LTRS  2 1.995623 0.4989034 0.23691460
@@ -453,117 +460,73 @@ window.Quarto = {
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Ae"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Fis"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     Stratum Locus       Ae
-2       Cape  LTRS 1.172608
-3       Cape   WNT 1.305052
-4       Cape    EN 1.724138
-5       Cape    EF 1.068884
-6       Cape   ZMP 1.000000
-7       Cape   AML 2.141916
-8       Cape  ATPS 1.130540
-9       Cape  MP20 1.582056
-10  Mainland  LTRS 1.635331
-11  Mainland   WNT 1.033889
-12  Mainland    EN 2.011494
-13  Mainland    EF 1.372107
-14  Mainland   ZMP 1.104972
-15  Mainland   AML 2.167076
-16  Mainland  ATPS 1.334020
-17  Mainland  MP20 5.173397
-18 Peninsula  LTRS 1.741912
-19 Peninsula   WNT 2.024856
-20 Peninsula    EN 1.208161
-21 Peninsula    EF 1.960000
-22 Peninsula   ZMP 1.709173
-23 Peninsula   AML 3.682213
-24 Peninsula  ATPS 2.094494
-25 Peninsula  MP20 3.241365</code></pre>
+<pre><code>     Stratum Locus       Ae         He         Fis
+1       Cape  LTRS 1.172608 0.14720000  0.27536232
+2       Cape   WNT 1.305052 0.23374726  0.76875000
+3       Cape    EN 1.724138 0.42000000  0.07936508
+4       Cape    EF 1.068884 0.06444444  0.37931034
+5       Cape   ZMP 1.000000 0.00000000         NaN
+6       Cape   AML 2.141916 0.53312835  0.81506977
+7       Cape  ATPS 1.130540 0.11546667  0.65357968
+8       Cape  MP20 1.582056 0.36791111  0.52887171
+9   Mainland  LTRS 1.635331 0.38850309 -0.21549156
+10  Mainland   WNT 1.033889 0.03277778 -0.01694915
+11  Mainland    EN 2.011494 0.50285714  0.54545455
+12  Mainland    EF 1.372107 0.27119377 -0.19298246
+13  Mainland   ZMP 1.104972 0.09500000  1.00000000
+14  Mainland   AML 2.167076 0.53854875  0.73473684
+15  Mainland  ATPS 1.334020 0.25038580  0.33436055
+16  Mainland  MP20 5.173397 0.80670340  0.17359135
+17 Peninsula  LTRS 1.741912 0.42591805  0.43166651
+18 Peninsula   WNT 2.024856 0.50613781  0.25909507
+19 Peninsula    EN 1.208161 0.17229600  0.14101314
+20 Peninsula    EF 1.960000 0.48979592  0.69212963
+21 Peninsula   ZMP 1.709173 0.41492187  0.48785539
+22 Peninsula   AML 3.682213 0.72842417  0.35787148
+23 Peninsula  ATPS 2.094494 0.52255763  0.83293405
+24 Peninsula  MP20 3.241365 0.69148800  0.27692165</code></pre>
 </div>
 </div>
 </section>
-<section id="individual-estimator-functions" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="individual-estimator-functions"><span class="header-section-number">5.4</span> Individual Estimator Functions</h2>
-<p>Each diversity metric has a standalone function that operates on a single locus vector.</p>
-<section id="allelic-richness" class="level3" data-number="5.4.1">
-<h3 data-number="5.4.1" class="anchored" data-anchor-id="allelic-richness"><span class="header-section-number">5.4.1</span> Allelic Richness</h3>
+<section id="single-loci" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="single-loci"><span class="header-section-number">5.4</span> Single Loci</h2>
+<p>A bare <code>locus</code> vector can be passed in place of a data frame:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">A</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"Fis"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>A 
-2 </code></pre>
+<pre><code>  Locus       Fis
+1 Locus 0.5251293</code></pre>
 </div>
 </div>
 </section>
-<section id="effective-number-of-alleles" class="level3" data-number="5.4.2">
-<h3 data-number="5.4.2" class="anchored" data-anchor-id="effective-number-of-alleles"><span class="header-section-number">5.4.2</span> Effective Number of Alleles</h3>
+<section id="individual-heterozygosity" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="individual-heterozygosity"><span class="header-section-number">5.5</span> Individual Heterozygosity</h2>
+<p>The <code>Hi</code> mode is estimated per individual rather than per locus. It returns one row for each individual, keeping the non-locus columns, so it can be summarized by any grouping you like:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Ae</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"Hi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Species) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_Hi =</span> <span class="fu">mean</span>(Hi))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>      Ae 
-1.995623 </code></pre>
+<pre><code># A tibble: 3 × 2
+  Species   mean_Hi
+  &lt;fct&gt;       &lt;dbl&gt;
+1 Cape        0.117
+2 Mainland    0.301
+3 Peninsula   0.275</code></pre>
 </div>
 </div>
 </section>
-<section id="expected-heterozygosity" class="level3" data-number="5.4.3">
-<h3 data-number="5.4.3" class="anchored" data-anchor-id="expected-heterozygosity"><span class="header-section-number">5.4.3</span> Expected Heterozygosity</h3>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">He</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       He 
-0.4989034 </code></pre>
-</div>
-</div>
-</section>
-<section id="observed-heterozygosity" class="level3" data-number="5.4.4">
-<h3 data-number="5.4.4" class="anchored" data-anchor-id="observed-heterozygosity"><span class="header-section-number">5.4.4</span> Observed Heterozygosity</h3>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Ho</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       Ho 
-0.2369146 </code></pre>
-</div>
-</div>
-</section>
-<section id="inbreeding-coefficient" class="level3" data-number="5.4.5">
-<h3 data-number="5.4.5" class="anchored" data-anchor-id="inbreeding-coefficient"><span class="header-section-number">5.4.5</span> Inbreeding Coefficient</h3>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Fis</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>      Fis 
-0.5251293 </code></pre>
-</div>
-</div>
-</section>
-<section id="exclusion-probability" class="level3" data-number="5.4.6">
-<h3 data-number="5.4.6" class="anchored" data-anchor-id="exclusion-probability"><span class="header-section-number">5.4.6</span> Exclusion Probability</h3>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Pe</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.4989034</code></pre>
-</div>
-</div>
-</section>
-</section>
-<section id="corrected-heterozygosity-neis" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="corrected-heterozygosity-neis"><span class="header-section-number">5.5</span> Corrected Heterozygosity (Nei’s)</h2>
+<section id="corrected-heterozygosity-neis" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="corrected-heterozygosity-neis"><span class="header-section-number">5.6</span> Corrected Heterozygosity (Nei’s)</h2>
 <p>The <code>Hes</code> and <code>Hos</code> modes require a stratum because they apply a small-sample correction per subpopulation:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Hes"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Hes"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Locus       Hes
 1       LTRS 0.3233431
@@ -577,24 +540,41 @@ window.Quarto = {
 9 Multilocus 0.3679022</code></pre>
 </div>
 </div>
+<p><code>Ht</code> gives the matching total expected heterozygosity (the <span class="math inline">\(H_S\)</span> and <span class="math inline">\(H_T\)</span> that <code>genetic_structure()</code> builds <span class="math inline">\(G_{ST}\)</span> from). These pooled modes return one row per locus, so they combine with each other but not with per-stratum modes:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"Hos"</span>, <span class="st">"Hes"</span>, <span class="st">"Ht"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Locus        Hos       Hes        Ht
+1       LTRS 0.27365079 0.3233431 0.4531627
+2        WNT 0.15412913 0.2606681 0.6350801
+3         EN 0.25441270 0.3687470 0.6561538
+4         EF 0.17144102 0.2781409 0.3303420
+5        ZMP 0.07083333 0.1731159 0.2039553
+6        AML 0.23639688 0.6108282 0.8619706
+7       ATPS 0.09798942 0.2999070 0.7548774
+8       MP20 0.44666667 0.6284672 0.8734015
+9 Multilocus 0.21318999 0.3679022        NA</code></pre>
+</div>
+</div>
 </section>
-<section id="multilocus-diversity" class="level2" data-number="5.6">
-<h2 data-number="5.6" class="anchored" data-anchor-id="multilocus-diversity"><span class="header-section-number">5.6</span> Multilocus Diversity</h2>
+<section id="multilocus-diversity" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="multilocus-diversity"><span class="header-section-number">5.7</span> Multilocus Diversity</h2>
 <p>The <code>multilocus_diversity()</code> function computes a summary across all loci:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">multilocus_diversity</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">multilocus_diversity</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.8374656</code></pre>
 </div>
 </div>
 </section>
-<section id="selecting-specific-loci" class="level2" data-number="5.7">
-<h2 data-number="5.7" class="anchored" data-anchor-id="selecting-specific-loci"><span class="header-section-number">5.7</span> Selecting Specific Loci</h2>
-<p>You can restrict the analysis to a subset of loci:</p>
+<section id="selecting-specific-loci" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="selecting-specific-loci"><span class="header-section-number">5.8</span> Selecting Specific Loci</h2>
+<p>You can restrict the analysis to a subset of loci, with or without a stratum:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">loci =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>), <span class="at">mode =</span> <span class="st">"He"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">loci =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>), <span class="at">mode =</span> <span class="st">"He"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Locus        He
 1  LTRS 0.4989034
@@ -603,9 +583,9 @@ window.Quarto = {
 </div>
 <p>or select the columns first:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Species, LTRS, WNT) <span class="sc">|&gt;</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Species, LTRS, WNT) <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    Stratum Locus         He
 2      Cape  LTRS 0.14720000
@@ -617,16 +597,16 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="comparing-populations" class="level2" data-number="5.8">
-<h2 data-number="5.8" class="anchored" data-anchor-id="comparing-populations"><span class="header-section-number">5.8</span> Comparing Populations</h2>
+<section id="comparing-populations" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="comparing-populations"><span class="header-section-number">5.9</span> Comparing Populations</h2>
 <p>A common workflow is to estimate diversity per population, then compare:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="sc">|&gt;</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Stratum) <span class="sc">|&gt;</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_He =</span> <span class="fu">mean</span>(He), <span class="at">sd_He =</span> <span class="fu">sd</span>(He))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="sc">|&gt;</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Stratum) <span class="sc">|&gt;</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_He =</span> <span class="fu">mean</span>(He), <span class="at">sd_He =</span> <span class="fu">sd</span>(He))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 3
   Stratum   mean_He sd_He
@@ -637,33 +617,35 @@ window.Quarto = {
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="sc">|&gt;</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum)) <span class="sc">+</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Expected Heterozygosity by Species"</span>,</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"He"</span>) <span class="sc">+</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum)) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Expected Heterozygosity by Species"</span>,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"He"</span>) <span class="sc">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="genetic-diversity_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="genetic-diversity_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="without-pipes" class="level2" data-number="5.9">
-<h2 data-number="5.9" class="anchored" data-anchor-id="without-pipes"><span class="header-section-number">5.9</span> Without Pipes</h2>
+<section id="without-pipes" class="level2" data-number="5.10">
+<h2 data-number="5.10" class="anchored" data-anchor-id="without-pipes"><span class="header-section-number">5.10</span> Without Pipes</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">loci =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>), <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">He</span>(arapat<span class="sc">$</span>LTRS)</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="fu">multilocus_diversity</span>(arapat)</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="ot">&lt;-</span> <span class="fu">genetic_diversity</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(he_by_pop, <span class="fu">aes</span>(<span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum)) <span class="sc">+</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Ho"</span>))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">loci =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>), <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat<span class="sc">$</span>LTRS, <span class="at">mode =</span> <span class="st">"Fis"</span>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="st">"Hi"</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">multilocus_diversity</span>(arapat)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="ot">&lt;-</span> <span class="fu">genetic_diversity</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(he_by_pop, <span class="fu">aes</span>(<span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum)) <span class="sc">+</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
@@ -1135,191 +1117,171 @@ window.Quarto = {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Genetic Diversity</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>This chapter covers estimation of genetic diversity statistics using the <span class="in">`genetic_diversity()`</span> wrapper and its underlying per-locus functions.</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `genetic_diversity()` Wrapper</span></span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>The <span class="in">`genetic_diversity()`</span> function is the main entry point for diversity estimation. It dispatches to specific estimators based on the <span class="in">`mode`</span> parameter:</span>
-<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mode <span class="pp">|</span> Statistic <span class="pp">|</span> Description <span class="pp">|</span></span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|-----------|-------------|</span></span>
-<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"A"`</span> <span class="pp">|</span> Allelic richness <span class="pp">|</span> Number of alleles <span class="pp">|</span></span>
-<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Ae"`</span> <span class="pp">|</span> Effective alleles <span class="pp">|</span> $1 / \sum p_i^2$ <span class="pp">|</span></span>
-<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"A95"`</span> <span class="pp">|</span> A (5% threshold) <span class="pp">|</span> Alleles with frequency &gt;= 0.05 <span class="pp">|</span></span>
-<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"He"`</span> <span class="pp">|</span> Expected heterozygosity <span class="pp">|</span> $1 - \sum p_i^2$ <span class="pp">|</span></span>
-<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Ho"`</span> <span class="pp">|</span> Observed heterozygosity <span class="pp">|</span> Proportion of heterozygotes <span class="pp">|</span></span>
-<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Hes"`</span> <span class="pp">|</span> Corrected He <span class="pp">|</span> Nei's small-sample corrected He <span class="pp">|</span></span>
-<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Hos"`</span> <span class="pp">|</span> Corrected Ho <span class="pp">|</span> Nei's small-sample corrected Ho <span class="pp">|</span></span>
-<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Fis"`</span> <span class="pp">|</span> Inbreeding coefficient <span class="pp">|</span> $1 - H_o/H_e$ <span class="pp">|</span></span>
-<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Pe"`</span> <span class="pp">|</span> Polymorphic index <span class="pp">|</span> Whether the locus is polymorphic <span class="pp">|</span></span>
-<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a><span class="fu">## Global (Unstratified) Estimates</span></span>
-<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a>Without a stratum, diversity is estimated across all individuals:</span>
-<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"A"</span>)</span>
-<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-41"><a href="#cb36-41" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-42"><a href="#cb36-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb36-43"><a href="#cb36-43" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-44"><a href="#cb36-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-45"><a href="#cb36-45" aria-hidden="true" tabindex="-1"></a>Several statistics at once, joined into one table:</span>
-<span id="cb36-46"><a href="#cb36-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-49"><a href="#cb36-49" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-50"><a href="#cb36-50" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Ho"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb36-51"><a href="#cb36-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(\(m) <span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> m)) <span class="sc">|&gt;</span></span>
-<span id="cb36-52"><a href="#cb36-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Reduce</span>(<span class="at">f =</span> \(x, y) <span class="fu">inner_join</span>(x, y, <span class="at">by =</span> <span class="st">"Locus"</span>))</span>
-<span id="cb36-53"><a href="#cb36-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-54"><a href="#cb36-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-55"><a href="#cb36-55" aria-hidden="true" tabindex="-1"></a><span class="fu">## Per-Stratum Estimates</span></span>
-<span id="cb36-56"><a href="#cb36-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-57"><a href="#cb36-57" aria-hidden="true" tabindex="-1"></a>Provide a <span class="in">`stratum`</span> argument to compute diversity within each population:</span>
-<span id="cb36-58"><a href="#cb36-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-61"><a href="#cb36-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-62"><a href="#cb36-62" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-63"><a href="#cb36-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb36-64"><a href="#cb36-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-65"><a href="#cb36-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-68"><a href="#cb36-68" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-69"><a href="#cb36-69" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-70"><a href="#cb36-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Ae"</span>)</span>
-<span id="cb36-71"><a href="#cb36-71" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-72"><a href="#cb36-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-73"><a href="#cb36-73" aria-hidden="true" tabindex="-1"></a><span class="fu">## Individual Estimator Functions</span></span>
-<span id="cb36-74"><a href="#cb36-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-75"><a href="#cb36-75" aria-hidden="true" tabindex="-1"></a>Each diversity metric has a standalone function that operates on a single locus vector.</span>
-<span id="cb36-76"><a href="#cb36-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-77"><a href="#cb36-77" aria-hidden="true" tabindex="-1"></a><span class="fu">### Allelic Richness</span></span>
-<span id="cb36-78"><a href="#cb36-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-81"><a href="#cb36-81" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-82"><a href="#cb36-82" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-83"><a href="#cb36-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
-<span id="cb36-84"><a href="#cb36-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">A</span>()</span>
-<span id="cb36-85"><a href="#cb36-85" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-86"><a href="#cb36-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-87"><a href="#cb36-87" aria-hidden="true" tabindex="-1"></a><span class="fu">### Effective Number of Alleles</span></span>
-<span id="cb36-88"><a href="#cb36-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-91"><a href="#cb36-91" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-92"><a href="#cb36-92" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-93"><a href="#cb36-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
-<span id="cb36-94"><a href="#cb36-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Ae</span>()</span>
-<span id="cb36-95"><a href="#cb36-95" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-96"><a href="#cb36-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-97"><a href="#cb36-97" aria-hidden="true" tabindex="-1"></a><span class="fu">### Expected Heterozygosity</span></span>
-<span id="cb36-98"><a href="#cb36-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-101"><a href="#cb36-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-102"><a href="#cb36-102" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-103"><a href="#cb36-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
-<span id="cb36-104"><a href="#cb36-104" aria-hidden="true" tabindex="-1"></a>  <span class="fu">He</span>()</span>
-<span id="cb36-105"><a href="#cb36-105" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-106"><a href="#cb36-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-107"><a href="#cb36-107" aria-hidden="true" tabindex="-1"></a><span class="fu">### Observed Heterozygosity</span></span>
-<span id="cb36-108"><a href="#cb36-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-111"><a href="#cb36-111" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-112"><a href="#cb36-112" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-113"><a href="#cb36-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
-<span id="cb36-114"><a href="#cb36-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Ho</span>()</span>
-<span id="cb36-115"><a href="#cb36-115" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-116"><a href="#cb36-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-117"><a href="#cb36-117" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inbreeding Coefficient</span></span>
-<span id="cb36-118"><a href="#cb36-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-121"><a href="#cb36-121" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-122"><a href="#cb36-122" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-123"><a href="#cb36-123" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
-<span id="cb36-124"><a href="#cb36-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Fis</span>()</span>
-<span id="cb36-125"><a href="#cb36-125" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-126"><a href="#cb36-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-127"><a href="#cb36-127" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exclusion Probability</span></span>
-<span id="cb36-128"><a href="#cb36-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-131"><a href="#cb36-131" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-132"><a href="#cb36-132" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-133"><a href="#cb36-133" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
-<span id="cb36-134"><a href="#cb36-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Pe</span>()</span>
-<span id="cb36-135"><a href="#cb36-135" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-136"><a href="#cb36-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-137"><a href="#cb36-137" aria-hidden="true" tabindex="-1"></a><span class="fu">## Corrected Heterozygosity (Nei's)</span></span>
-<span id="cb36-138"><a href="#cb36-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-139"><a href="#cb36-139" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Hes`</span> and <span class="in">`Hos`</span> modes require a stratum because they apply a small-sample correction per subpopulation:</span>
-<span id="cb36-140"><a href="#cb36-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-143"><a href="#cb36-143" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-144"><a href="#cb36-144" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-145"><a href="#cb36-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Hes"</span>)</span>
-<span id="cb36-146"><a href="#cb36-146" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-147"><a href="#cb36-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-148"><a href="#cb36-148" aria-hidden="true" tabindex="-1"></a><span class="fu">## Multilocus Diversity</span></span>
-<span id="cb36-149"><a href="#cb36-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-150"><a href="#cb36-150" aria-hidden="true" tabindex="-1"></a>The <span class="in">`multilocus_diversity()`</span> function computes a summary across all loci:</span>
-<span id="cb36-151"><a href="#cb36-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-154"><a href="#cb36-154" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-155"><a href="#cb36-155" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-156"><a href="#cb36-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">multilocus_diversity</span>()</span>
-<span id="cb36-157"><a href="#cb36-157" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-158"><a href="#cb36-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-159"><a href="#cb36-159" aria-hidden="true" tabindex="-1"></a><span class="fu">## Selecting Specific Loci</span></span>
-<span id="cb36-160"><a href="#cb36-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-161"><a href="#cb36-161" aria-hidden="true" tabindex="-1"></a>You can restrict the analysis to a subset of loci:</span>
-<span id="cb36-162"><a href="#cb36-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-165"><a href="#cb36-165" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-166"><a href="#cb36-166" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-167"><a href="#cb36-167" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">loci =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>), <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb36-168"><a href="#cb36-168" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-169"><a href="#cb36-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-170"><a href="#cb36-170" aria-hidden="true" tabindex="-1"></a>or select the columns first:</span>
-<span id="cb36-171"><a href="#cb36-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-174"><a href="#cb36-174" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-175"><a href="#cb36-175" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-176"><a href="#cb36-176" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Species, LTRS, WNT) <span class="sc">|&gt;</span></span>
-<span id="cb36-177"><a href="#cb36-177" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb36-178"><a href="#cb36-178" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-179"><a href="#cb36-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-180"><a href="#cb36-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## Comparing Populations</span></span>
-<span id="cb36-181"><a href="#cb36-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-182"><a href="#cb36-182" aria-hidden="true" tabindex="-1"></a>A common workflow is to estimate diversity per population, then compare:</span>
-<span id="cb36-183"><a href="#cb36-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-186"><a href="#cb36-186" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-187"><a href="#cb36-187" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-188"><a href="#cb36-188" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb36-189"><a href="#cb36-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-190"><a href="#cb36-190" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="sc">|&gt;</span></span>
-<span id="cb36-191"><a href="#cb36-191" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Stratum) <span class="sc">|&gt;</span></span>
-<span id="cb36-192"><a href="#cb36-192" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_He =</span> <span class="fu">mean</span>(He), <span class="at">sd_He =</span> <span class="fu">sd</span>(He))</span>
-<span id="cb36-193"><a href="#cb36-193" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-194"><a href="#cb36-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-197"><a href="#cb36-197" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-198"><a href="#cb36-198" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="sc">|&gt;</span></span>
-<span id="cb36-199"><a href="#cb36-199" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum)) <span class="sc">+</span></span>
-<span id="cb36-200"><a href="#cb36-200" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb36-201"><a href="#cb36-201" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb36-202"><a href="#cb36-202" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Expected Heterozygosity by Species"</span>,</span>
-<span id="cb36-203"><a href="#cb36-203" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"He"</span>) <span class="sc">+</span></span>
-<span id="cb36-204"><a href="#cb36-204" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
-<span id="cb36-205"><a href="#cb36-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-206"><a href="#cb36-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-207"><a href="#cb36-207" aria-hidden="true" tabindex="-1"></a><span class="fu">## Without Pipes</span></span>
-<span id="cb36-208"><a href="#cb36-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-211"><a href="#cb36-211" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-212"><a href="#cb36-212" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb36-213"><a href="#cb36-213" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb36-214"><a href="#cb36-214" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb36-215"><a href="#cb36-215" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">loci =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>), <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb36-216"><a href="#cb36-216" aria-hidden="true" tabindex="-1"></a><span class="fu">He</span>(arapat<span class="sc">$</span>LTRS)</span>
-<span id="cb36-217"><a href="#cb36-217" aria-hidden="true" tabindex="-1"></a><span class="fu">multilocus_diversity</span>(arapat)</span>
-<span id="cb36-218"><a href="#cb36-218" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="ot">&lt;-</span> <span class="fu">genetic_diversity</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb36-219"><a href="#cb36-219" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(he_by_pop, <span class="fu">aes</span>(<span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum)) <span class="sc">+</span></span>
-<span id="cb36-220"><a href="#cb36-220" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span>
-<span id="cb36-221"><a href="#cb36-221" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Genetic Diversity</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>This chapter covers estimation of genetic diversity statistics using <span class="in">`genetic_diversity()`</span>.  As with <span class="in">`genetic_structure()`</span>, <span class="in">`genetic_distance()`</span> and <span class="in">`genetic_relatedness()`</span>, this front-end function is the only way to reach the individual estimators; there are no standalone <span class="in">`A()`</span>, <span class="in">`He()`</span> or <span class="in">`Fis()`</span> functions.</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `genetic_diversity()` Wrapper</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>The <span class="in">`genetic_diversity()`</span> function is the main entry point for diversity estimation. It dispatches to specific estimators based on the <span class="in">`mode`</span> parameter:</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mode <span class="pp">|</span> Statistic <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|-----------|-------------|</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"A"`</span> <span class="pp">|</span> Allelic richness <span class="pp">|</span> Number of alleles <span class="pp">|</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Ae"`</span> <span class="pp">|</span> Effective alleles <span class="pp">|</span> $1 / \sum p_i^2$ <span class="pp">|</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"A95"`</span> <span class="pp">|</span> A (5% threshold) <span class="pp">|</span> Alleles with frequency &gt;= 0.05 <span class="pp">|</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"He"`</span> <span class="pp">|</span> Expected heterozygosity <span class="pp">|</span> $1 - \sum p_i^2$ <span class="pp">|</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Ho"`</span> <span class="pp">|</span> Observed heterozygosity <span class="pp">|</span> Proportion of heterozygotes <span class="pp">|</span></span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Hi"`</span> <span class="pp">|</span> Individual heterozygosity <span class="pp">|</span> Proportion of an individual's loci that are heterozygous <span class="pp">|</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Hes"`</span> <span class="pp">|</span> Corrected He <span class="pp">|</span> Nei's unbiased within-stratum $H_S$ (needs <span class="in">`stratum`</span>) <span class="pp">|</span></span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Hos"`</span> <span class="pp">|</span> Corrected Ho <span class="pp">|</span> Ho averaged across strata after Nei (needs <span class="in">`stratum`</span>) <span class="pp">|</span></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Ht"`</span> <span class="pp">|</span> Total He <span class="pp">|</span> Nei's unbiased total $H_T$ (needs <span class="in">`stratum`</span>) <span class="pp">|</span></span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Fis"`</span> <span class="pp">|</span> Inbreeding coefficient <span class="pp">|</span> $1 - H_o/H_e$ <span class="pp">|</span></span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Pe"`</span> <span class="pp">|</span> Polymorphic index <span class="pp">|</span> $\sum p_i(1-p_i)$ <span class="pp">|</span></span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Global (Unstratified) Estimates</span></span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>Without a stratum, diversity is estimated across all individuals:</span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"A"</span>)</span>
+<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a>Pass several modes to get one table with a column for each:</span>
+<span id="cb30-48"><a href="#cb30-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Ho"</span>))</span>
+<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Per-Stratum Estimates</span></span>
+<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a>Provide a <span class="in">`stratum`</span> argument to compute diversity within each population:</span>
+<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-69"><a href="#cb30-69" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-70"><a href="#cb30-70" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb30-71"><a href="#cb30-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Fis"</span>))</span>
+<span id="cb30-72"><a href="#cb30-72" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-73"><a href="#cb30-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-74"><a href="#cb30-74" aria-hidden="true" tabindex="-1"></a><span class="fu">## Single Loci</span></span>
+<span id="cb30-75"><a href="#cb30-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-76"><a href="#cb30-76" aria-hidden="true" tabindex="-1"></a>A bare <span class="in">`locus`</span> vector can be passed in place of a data frame:</span>
+<span id="cb30-77"><a href="#cb30-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-80"><a href="#cb30-80" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-81"><a href="#cb30-81" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb30-82"><a href="#cb30-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
+<span id="cb30-83"><a href="#cb30-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"Fis"</span>)</span>
+<span id="cb30-84"><a href="#cb30-84" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-85"><a href="#cb30-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-86"><a href="#cb30-86" aria-hidden="true" tabindex="-1"></a><span class="fu">## Individual Heterozygosity</span></span>
+<span id="cb30-87"><a href="#cb30-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-88"><a href="#cb30-88" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Hi`</span> mode is estimated per individual rather than per locus.  It returns one row for each individual, keeping the non-locus columns, so it can be summarized by any grouping you like:</span>
+<span id="cb30-89"><a href="#cb30-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-92"><a href="#cb30-92" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-93"><a href="#cb30-93" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb30-94"><a href="#cb30-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"Hi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb30-95"><a href="#cb30-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Species) <span class="sc">|&gt;</span></span>
+<span id="cb30-96"><a href="#cb30-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_Hi =</span> <span class="fu">mean</span>(Hi))</span>
+<span id="cb30-97"><a href="#cb30-97" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-98"><a href="#cb30-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-99"><a href="#cb30-99" aria-hidden="true" tabindex="-1"></a><span class="fu">## Corrected Heterozygosity (Nei's)</span></span>
+<span id="cb30-100"><a href="#cb30-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-101"><a href="#cb30-101" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Hes`</span> and <span class="in">`Hos`</span> modes require a stratum because they apply a small-sample correction per subpopulation:</span>
+<span id="cb30-102"><a href="#cb30-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-105"><a href="#cb30-105" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-106"><a href="#cb30-106" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb30-107"><a href="#cb30-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Hes"</span>)</span>
+<span id="cb30-108"><a href="#cb30-108" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-109"><a href="#cb30-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-110"><a href="#cb30-110" aria-hidden="true" tabindex="-1"></a><span class="in">`Ht`</span> gives the matching total expected heterozygosity (the $H_S$ and $H_T$ that <span class="in">`genetic_structure()`</span> builds $G_{ST}$ from).  These pooled modes return one row per locus, so they combine with each other but not with per-stratum modes:</span>
+<span id="cb30-111"><a href="#cb30-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-114"><a href="#cb30-114" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-115"><a href="#cb30-115" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb30-116"><a href="#cb30-116" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb30-117"><a href="#cb30-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"Hos"</span>, <span class="st">"Hes"</span>, <span class="st">"Ht"</span>))</span>
+<span id="cb30-118"><a href="#cb30-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-119"><a href="#cb30-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-120"><a href="#cb30-120" aria-hidden="true" tabindex="-1"></a><span class="fu">## Multilocus Diversity</span></span>
+<span id="cb30-121"><a href="#cb30-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-122"><a href="#cb30-122" aria-hidden="true" tabindex="-1"></a>The <span class="in">`multilocus_diversity()`</span> function computes a summary across all loci:</span>
+<span id="cb30-123"><a href="#cb30-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-126"><a href="#cb30-126" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-127"><a href="#cb30-127" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb30-128"><a href="#cb30-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">multilocus_diversity</span>()</span>
+<span id="cb30-129"><a href="#cb30-129" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-130"><a href="#cb30-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-131"><a href="#cb30-131" aria-hidden="true" tabindex="-1"></a><span class="fu">## Selecting Specific Loci</span></span>
+<span id="cb30-132"><a href="#cb30-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-133"><a href="#cb30-133" aria-hidden="true" tabindex="-1"></a>You can restrict the analysis to a subset of loci, with or without a stratum:</span>
+<span id="cb30-134"><a href="#cb30-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-137"><a href="#cb30-137" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-138"><a href="#cb30-138" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb30-139"><a href="#cb30-139" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">loci =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>), <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb30-140"><a href="#cb30-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-141"><a href="#cb30-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-142"><a href="#cb30-142" aria-hidden="true" tabindex="-1"></a>or select the columns first:</span>
+<span id="cb30-143"><a href="#cb30-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-146"><a href="#cb30-146" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-147"><a href="#cb30-147" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb30-148"><a href="#cb30-148" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Species, LTRS, WNT) <span class="sc">|&gt;</span></span>
+<span id="cb30-149"><a href="#cb30-149" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb30-150"><a href="#cb30-150" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-151"><a href="#cb30-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-152"><a href="#cb30-152" aria-hidden="true" tabindex="-1"></a><span class="fu">## Comparing Populations</span></span>
+<span id="cb30-153"><a href="#cb30-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-154"><a href="#cb30-154" aria-hidden="true" tabindex="-1"></a>A common workflow is to estimate diversity per population, then compare:</span>
+<span id="cb30-155"><a href="#cb30-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-158"><a href="#cb30-158" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-159"><a href="#cb30-159" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb30-160"><a href="#cb30-160" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb30-161"><a href="#cb30-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-162"><a href="#cb30-162" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="sc">|&gt;</span></span>
+<span id="cb30-163"><a href="#cb30-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Stratum) <span class="sc">|&gt;</span></span>
+<span id="cb30-164"><a href="#cb30-164" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_He =</span> <span class="fu">mean</span>(He), <span class="at">sd_He =</span> <span class="fu">sd</span>(He))</span>
+<span id="cb30-165"><a href="#cb30-165" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-166"><a href="#cb30-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-169"><a href="#cb30-169" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-170"><a href="#cb30-170" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="sc">|&gt;</span></span>
+<span id="cb30-171"><a href="#cb30-171" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum)) <span class="sc">+</span></span>
+<span id="cb30-172"><a href="#cb30-172" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb30-173"><a href="#cb30-173" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb30-174"><a href="#cb30-174" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Expected Heterozygosity by Species"</span>,</span>
+<span id="cb30-175"><a href="#cb30-175" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"He"</span>) <span class="sc">+</span></span>
+<span id="cb30-176"><a href="#cb30-176" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
+<span id="cb30-177"><a href="#cb30-177" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-178"><a href="#cb30-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-179"><a href="#cb30-179" aria-hidden="true" tabindex="-1"></a><span class="fu">## Without Pipes</span></span>
+<span id="cb30-180"><a href="#cb30-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-183"><a href="#cb30-183" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-184"><a href="#cb30-184" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb30-185"><a href="#cb30-185" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb30-186"><a href="#cb30-186" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Ho"</span>))</span>
+<span id="cb30-187"><a href="#cb30-187" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb30-188"><a href="#cb30-188" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">loci =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>), <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb30-189"><a href="#cb30-189" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat<span class="sc">$</span>LTRS, <span class="at">mode =</span> <span class="st">"Fis"</span>)</span>
+<span id="cb30-190"><a href="#cb30-190" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="st">"Hi"</span>)</span>
+<span id="cb30-191"><a href="#cb30-191" aria-hidden="true" tabindex="-1"></a><span class="fu">multilocus_diversity</span>(arapat)</span>
+<span id="cb30-192"><a href="#cb30-192" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="ot">&lt;-</span> <span class="fu">genetic_diversity</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb30-193"><a href="#cb30-193" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(he_by_pop, <span class="fu">aes</span>(<span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum)) <span class="sc">+</span></span>
+<span id="cb30-194"><a href="#cb30-194" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span>
+<span id="cb30-195"><a href="#cb30-195" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

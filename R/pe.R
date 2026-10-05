@@ -6,7 +6,7 @@
 #' @param ... Ignored (for consistency)
 #' @return The polymorphic index for the locus, sum(pi(1-pi)) as a \code{numeric} value
 #'  or as a \code{data.frame} if multiple loci are passed.
-#' @export
+#' @noRd
 #' @examples
 #' locus <- c( locus(1:2), locus(c(1,1)), locus(c(2,2)), locus(2:3) )
 #' Pe(locus)

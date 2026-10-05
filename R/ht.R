@@ -5,7 +5,7 @@
 #' @param stratum  The name of the column representing the stratum variable (default=Population)
 #' @return A \code{data.frame} with columns \code{Locus} and \code{Ht}.
 #' @importFrom dplyr select all_of
-#' @export
+#' @noRd
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' loci1 <- c( locus( c("A","A") ), locus( c("A","A") ), locus( c("A","B")))

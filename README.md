@@ -25,7 +25,7 @@ library(dplyr)
 data(arapat)
 
 arapat |>
-  genetic_diversity(mode = "He")                       # He, Ho, Ae, Fis, ...
+  genetic_diversity(mode = "He")                       # A, Ae, He, Ho, Hi, Fis, ...
 
 arapat |>
   genetic_structure(stratum = "Species", mode = "Gst") # Gst, Gst_prime, Dest, Fst
@@ -146,8 +146,8 @@ arapat |>
 ## Changes in 1.15
 
 Version 1.15 consolidates the interface, and some changes break code written
-for 1.14: the standalone estimators (`Fst()`, `Gst()`, `dist_nei()`,
-`rel_nason()`, ...) are reached through the gateway functions, `sp`-based
+for 1.14: the standalone estimators (`He()`, `Fis()`, `Fst()`, `Gst()`,
+`dist_nei()`, `rel_nason()`, ...) are reached through the gateway functions, `sp`-based
 exports are replaced by `to_sf()`, tests return `htest` objects, and table
 columns follow one naming convention (`Stratum`, `from`/`to`, `statistic`,
 `p.value`).  See `NEWS` for the full list, with old and new names.

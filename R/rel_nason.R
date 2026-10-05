@@ -9,7 +9,7 @@
 #' @param x A vector of loci to use.
 #' @param allele The allele to estimate.  If this is left blank, a locus-wide
 #'  estimator is provided.  That is the average of the allele-wise estimators
-#'  standardized by the polymorphic index, \code{Pe()}.
+#'  standardized by the polymorphic index, \code{Pe()} (internal).
 #' @param as.relatedness Return r instead of Fij (default=FALSE)
 #' @return A matrix of pairwise values for either the allele or for the full locus.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
