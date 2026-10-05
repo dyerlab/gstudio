@@ -36,7 +36,7 @@ g <- graph_from_adjacency_matrix(A, mode = "undirected", weighted = TRUE)
 pgd(g, output = "matrix")
 }
 \seealso{
-\code{\link{directional_ibgd}}
+\code{\link{ibgd}}, \code{\link{genetic_distance}}
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

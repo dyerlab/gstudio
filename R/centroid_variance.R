@@ -4,7 +4,8 @@
 #'  multivariate predictor variables.
 #' @param x The NxP matrix of raw data.
 #' @param grouping The Nx1 vector of grouping factors.
-#' @return The sum of the within stratum variance for each group
+#' @return A \code{data.frame} with one row per group: \code{Stratum} and
+#'   \code{variance}, the sum of the within-stratum variances.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
 #' @examples
@@ -33,5 +34,5 @@ centroid_variance <- function( x, grouping ){
     ret[i] <- sum(diag(cov(xp)))
   }
 
-  return( ret )
+  data.frame( Stratum = grps, variance = unname(ret), stringsAsFactors = FALSE )
 } 

@@ -40,8 +40,8 @@ asymmetric_popgraph <- function(graph, perplexity = 4, tol = 1e-5, max_iter = 10
   # Each undirected edge becomes two directed edges
   if (!is.null(w) && nrow(w) > 0) {
     edge_mat <- rbind(
-      cbind(as.character(w$i), as.character(w$j)),
-      cbind(as.character(w$j), as.character(w$i))
+      cbind(as.character(w$from), as.character(w$to)),
+      cbind(as.character(w$to), as.character(w$from))
     )
     g_dir <- igraph::add_edges(g_dir, as.vector(t(edge_mat)),
                                weight = c(w$dij, w$dji))

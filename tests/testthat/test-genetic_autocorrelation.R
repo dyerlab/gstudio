@@ -20,14 +20,14 @@ test_that("genetic_autocorrelation calculates autocorrelation and permutations",
 
   expect_s3_class(res, "data.frame")
   expect_equal(nrow(res), 3)
-  expect_equal(names(res), c("From", "To", "R", "N", "P"))
+  expect_equal(names(res), c("From", "To", "R", "N", "p.value"))
   expect_equal(res$From, c(0, 2, 5))
   expect_equal(res$To, c(2, 5, 10))
-  expect_true(all(is.na(res$P)))
+  expect_true(all(is.na(res$p.value)))
   expect_true(all(res$N > 0))
 
   # Permutation test
   res_perm <- genetic_autocorrelation(P, G, bins, perms = 19)
-  expect_true(all(!is.na(res_perm$P)))
-  expect_true(all(res_perm$P > 0 & res_perm$P <= 1))
+  expect_true(all(!is.na(res_perm$p.value)))
+  expect_true(all(res_perm$p.value > 0 & res_perm$p.value <= 1))
 })

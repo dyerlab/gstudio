@@ -12,11 +12,46 @@ install.packages("devtools")
 devtools::install_github("dyerlab/gstudio")
 ```
 
-Once installed, load the package:
+Once installed, load the package, along with dplyr for the pipelines used throughout this book:
 
 ```{r}
+#| message: false
 library(gstudio)
+library(dplyr)
 ```
+
+## Code Style in This Book
+
+Every `gstudio` function takes its data as the first argument, so analyses are written as pipelines with the native pipe `|>`, one function per line:
+
+```{r}
+#| eval: false
+arapat |>
+  genetic_diversity(stratum = "Species", mode = "He")
+```
+
+The older style, with the data and every option passed as arguments, works exactly the same and needs no other packages:
+
+```{r}
+#| eval: false
+genetic_diversity(arapat, stratum = "Species", mode = "He")
+```
+
+Grouped data frames work too: when no `stratum` is given, the grouping variable is used, so these two calls are the same (an explicit `stratum =` always takes precedence over the grouping):
+
+```{r}
+#| eval: false
+arapat |>
+  group_by(Species) |>
+  genetic_diversity(mode = "He")
+
+arapat |>
+  genetic_diversity(stratum = "Species", mode = "He")
+```
+
+Tests (`source_sink_test()`, `ibgd()`, `directional_test()`, the graph-level `asymmetry_significance()` and others) return standard `htest` objects, so they print like `t.test()` and can be turned into a one-row data frame with `broom::tidy()`.
+
+Each chapter uses pipelines in its running examples and ends with a short, non-evaluated *Without pipes* block giving the argument-style equivalents. The help pages (`?genetic_diversity` and so on) use the argument style throughout.
 
 ## Bundled Datasets
 
@@ -31,6 +66,7 @@ The package ships with several datasets for examples and testing:
 | `lopho` | *Lophocereus schottii* population graph (Dyer & Nason 2004) |
 | `upiga` | *Upiga virescens* population graph |
 | `baja` | Baja California sampling location metadata |
+| `gravity` | Simulated genotypes under directional gene flow (Genetic Gravity) |
 
 Load any dataset with the `data()` function:
 
@@ -43,8 +79,11 @@ data(arapat)
 The `arapat` dataset is a `data.frame` with both metadata columns and `locus` columns:
 
 ```{r}
-names(arapat)
-dim(arapat)
+arapat |>
+  names()
+
+arapat |>
+  dim()
 ```
 
 ### Identifying Locus Columns
@@ -52,7 +91,8 @@ dim(arapat)
 Use `column_class()` to find all columns of a particular class:
 
 ```{r}
-column_class(arapat, "locus")
+arapat |>
+  column_class("locus")
 ```
 
 This returns the names of all columns that contain `locus` objects --- a function used extensively throughout the package.
@@ -62,9 +102,18 @@ This returns the names of all columns that contain `locus` objects --- a functio
 The `partition()` function splits a data.frame by a grouping column, returning a named list:
 
 ```{r}
-pops <- partition(arapat, stratum = "Species")
-names(pops)
-sapply(pops, nrow)
+pops <- arapat |>
+  partition(stratum = "Species")
+
+pops |>
+  sapply(nrow)
+```
+
+With dplyr, the same counts come from grouping:
+
+```{r}
+arapat |>
+  count(Species)
 ```
 
 ### Ploidy
@@ -72,7 +121,9 @@ sapply(pops, nrow)
 Check the ploidy level of a locus column:
 
 ```{r}
-ploidy(arapat$LTRS)
+arapat |>
+  pull(LTRS) |>
+  ploidy()
 ```
 
 ## A Quick Analysis
@@ -80,13 +131,28 @@ ploidy(arapat$LTRS)
 With just a few lines, you can estimate genetic diversity across populations:
 
 ```{r}
-genetic_diversity(arapat, stratum = "Species", mode = "He")
+arapat |>
+  genetic_diversity(stratum = "Species", mode = "He")
 ```
 
 Or compute population structure:
 
 ```{r}
-genetic_structure(arapat, stratum = "Species", mode = "Gst")
+arapat |>
+  genetic_structure(stratum = "Species", mode = "Gst")
 ```
 
 The following chapters cover each of these operations in detail.
+
+## Without Pipes
+
+```{r}
+#| eval: false
+names(arapat)
+column_class(arapat, "locus")
+pops <- partition(arapat, stratum = "Species")
+sapply(pops, nrow)
+ploidy(arapat$LTRS)
+genetic_diversity(arapat, stratum = "Species", mode = "He")
+genetic_structure(arapat, stratum = "Species", mode = "Gst")
+```

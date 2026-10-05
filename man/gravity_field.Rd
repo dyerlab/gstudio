@@ -2,83 +2,78 @@
 % Please edit documentation in R/gravity_field.R
 \name{gravity_field}
 \alias{gravity_field}
+\alias{c.gravity_field}
 \alias{print.gravity_field}
-\alias{plot.gravity_field}
 \alias{as.data.frame.gravity_field}
-\title{Gravity field of a Population Graph: nodes and directed edge arrows with coordinates}
+\title{Gravity field of one or more Population Graphs}
 \usage{
-gravity_field(graph, coords = NULL, gamma = 0.5, layout = NULL)
+gravity_field(graph, gamma = 0.5)
+
+\method{c}{gravity_field}(...)
 
 \method{print}{gravity_field}(x, n = 3, ...)
-
-\method{plot}{gravity_field}(x, y, ...)
 
 \method{as.data.frame}{gravity_field}(
   x,
   row.names = NULL,
   optional = FALSE,
-  what = c("nodes", "edges"),
+  what = c("nodes", "edges", "diagnostics"),
   ...
 )
 }
 \arguments{
 \item{graph}{An undirected \code{popgraph}/\code{igraph} with a numeric
-\code{weight} edge attribute.}
+\code{weight} edge attribute, or a named list of them (one panel each).}
 
-\item{coords}{Node coordinates, in order of preference: a two-column matrix or
-\code{data.frame} (rows named by node, or in vertex order; columns \code{x}/\code{y},
-\code{Longitude}/\code{Latitude}, or the first two numeric columns); the output of
-\code{\link{strata_coordinates}}; a character string specifying a layout algorithm
-(\code{"fr"} or \code{"kk"}); or \code{NULL} (default), in which case vertex
-attributes \code{x}/\code{y} or \code{Longitude}/\code{Latitude} are used if present,
-and otherwise defaults to a Kamada-Kawai layout with bi-directional pGD weights.}
+\item{gamma}{Bandwidth multiplier (default \code{0.5}, degree-neutral;
+\code{1} local mean; \code{Inf} degree-only), recycled over the panels.
+See \code{\link{source_sink_scores}}.  Giving one graph and several values,
+e.g. \code{gamma = c(1, 0.5)}, makes one panel per value.}
 
-\item{gamma}{Bandwidth multiplier (default \code{0.5}, degree-neutral; \code{1} local
-mean; \code{Inf} degree-only).  See \code{\link{source_sink_scores}}.}
-
-\item{layout}{Optional layout specification overriding or complementing \code{coords}:
-\code{"kk"} (Kamada-Kawai, default), \code{"fr"} (Fruchterman-Reingold), or a layout function.
-When a layout is computed, bi-directional arc weights from \code{\link{pgd}} are used
-to let directional gene flow shape the topology.}
+\item{...}{For \code{c()}, \code{gravity_field} objects to combine; argument
+names become panel names (prefixed to the existing names of multi-panel
+fields).  Ignored by \code{print()} and \code{as.data.frame()}.}
 
 \item{x}{A \code{gravity_field} object.}
 
 \item{n}{Number of strongest sources and sinks to list (default 3).}
 
-\item{...}{Passed on (to \code{\link{plot_gravity_field}} for \code{plot()}).}
-
-\item{y}{Ignored.}
-
 \item{row.names, optional}{Ignored.}
 
-\item{what}{\code{"nodes"} (default) or \code{"edges"}.}
+\item{what}{\code{"nodes"} (default), \code{"edges"} or \code{"diagnostics"}.}
 }
 \value{
 An object of class \code{"gravity_field"}: a list with
   \describe{
-    \item{\code{nodes}}{\code{data.frame}: \code{node}, \code{x}, \code{y}, \code{degree},
-      \code{size} (vertex \code{size} attribute if present, else \code{degree}),
-      \code{S} (source-sink score), \code{gravity}.}
-    \item{\code{edges}}{\code{data.frame}: \code{from}, \code{to}, \code{weight},
-      \code{delta} (\eqn{\Delta_{from \to to}}), \code{source}, \code{sink},
-      \code{x_mid}, \code{y_mid}, and the unit vector \code{ux}, \code{uy} from source
-      to sink.}
-    \item{\code{gamma}}{The bandwidth multiplier used.}
-    \item{\code{diagnostics}}{Named numeric: \code{degree_share} (\eqn{R^2} of
-      \eqn{\Delta} on \eqn{\Delta^0}), \code{cor_S_degree}, \code{cor_S_S0},
+    \item{\code{nodes}}{\code{data.frame}: \code{panel}, \code{Stratum},
+      \code{degree}, \code{size} (vertex \code{size} attribute if present,
+      else \code{degree}), \code{S} (source-sink score), \code{gravity}.}
+    \item{\code{edges}}{\code{data.frame}: \code{panel}, \code{from}, \code{to},
+      \code{weight}, \code{delta} (\eqn{\Delta_{from \to to}}), \code{source},
+      \code{sink}.}
+    \item{\code{diagnostics}}{\code{data.frame}, one row per panel:
+      \code{panel}, \code{gamma}, \code{degree_share} (\eqn{R^2} of \eqn{\Delta}
+      on \eqn{\Delta^0}), \code{cor_S_degree}, \code{cor_S_S0},
       \code{gradient_share} (see \code{\link{source_sink_scores}}).}
-    \item{\code{coords_source}}{Where the coordinates came from: \code{"supplied"},
-      \code{"vertex attributes"} or \code{"layout"} (not geographic).}
+    \item{\code{graphs}}{The input graphs, named by panel, used for layouts.}
   }
-  Methods: \code{print()} summarizes the field (bandwidth, size, degree diagnostics and
-  the strongest sources and sinks); \code{plot()} draws it with
-  \code{\link{plot_gravity_field}}; \code{as.data.frame()} returns the node or edge table.
+  \code{panel} is \code{""} for a single unnamed graph.  Methods:
+  \code{print()} summarizes each panel (bandwidth, size, degree diagnostics and
+  the strongest sources and sinks); \code{plot()} draws it (see
+  \code{\link{plot.gravity_field}}); \code{as.data.frame()} returns the node,
+  edge or diagnostics table; \code{c()} combines fields into one multi-panel
+  field.
 }
 \description{
-Assembles everything needed to map genetic gravity: node coordinates, degree,
-source-sink score \eqn{S} and gravity, and for every edge its asymmetry
-\eqn{\Delta}, which endpoint is the source, the edge midpoint and the unit
-vector pointing from source to sink.  Used by \code{\link{plot_gravity_field}}.
+Assembles everything needed to map genetic gravity: for every population its
+degree, source-sink score \eqn{S} and gravity, and for every edge its
+asymmetry \eqn{\Delta} and which endpoint is the source.  A field can hold
+several panels (several graphs, or one graph at several bandwidths), which
+\code{plot()} draws as facets on common colour and arrow scales.
+
+A field holds no coordinates: node placement is a drawing choice, made with
+the \code{layout} argument of \code{\link{plot.gravity_field}}, which works
+as it does for \code{\link{plot.popgraph}}.
 }
 \examples{
 library(igraph)
@@ -87,13 +82,17 @@ A["A", "B"] <- A["B", "A"] <- 1; A["B", "C"] <- A["C", "B"] <- 1.5
 A["C", "D"] <- A["D", "C"] <- 0.8; A["D", "E"] <- A["E", "D"] <- 2
 A["B", "D"] <- A["D", "B"] <- 2.5
 g <- graph_from_adjacency_matrix(A, mode = "undirected", weighted = TRUE)
-f <- gravity_field(g, coords = cbind(x = 1:5, y = c(0, 1, 0, 1, 0)))
+f <- gravity_field(g)
 f
 head(as.data.frame(f, what = "edges"))
-plot(f)
+plot(f, layout = cbind(x = 1:5, y = c(0, 1, 0, 1, 0)))
+
+# One graph at two bandwidths, or several fields combined, as facets
+f2 <- gravity_field(g, gamma = c(1, 0.5))
+f3 <- c(local = gravity_field(g, gamma = 1), neutral = gravity_field(g))
 }
 \seealso{
-\code{\link{plot_gravity_field}}, \code{\link{source_sink_scores}}
+\code{\link{plot.gravity_field}}, \code{\link{source_sink_scores}}
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

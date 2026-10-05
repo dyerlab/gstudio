@@ -12,8 +12,8 @@ optimal_sampling(N, phi)
 \item{phi}{An estimate of the expected level of differentiation.}
 }
 \value{
-A data frame with columns \code{Strata}, \code{Var.Phi},
-  \code{Var.Phi.Low}, and \code{Var.Phi.High}.
+A data frame with columns \code{Stratum}, \code{var_phi}, and its
+  interval bounds \code{conf.low} and \code{conf.high}.
 }
 \description{
 Returns a data frame of the variance in the interclass correlation
@@ -26,8 +26,8 @@ df <- optimal_sampling(400, 0.25)
 head(df)
 \donttest{
 library(ggplot2)
-ggplot(df, aes(x = Strata, y = Var.Phi)) +
-  geom_ribbon(aes(ymin = Var.Phi.Low, ymax = Var.Phi.High), alpha = 0.3) +
+ggplot(df, aes(x = Stratum, y = var_phi)) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.3) +
   geom_line() +
   labs(x = "Number of Strata",
        y = "Variance in Interclass Correlation Parameter")

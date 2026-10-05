@@ -1,0 +1,345 @@
+<!-- Shared body of the genetic gravity walkthrough.  Included by
+     vignettes/genetic_gravity.Rmd (knitr child) and docs/genetic-gravity.qmd
+     (Quarto include); edit here so the vignette and the website stay identical. -->
+
+A Population Graph is undirected: each edge is a single, symmetric conditional
+genetic distance between two populations.  *Genetic gravity* reads direction
+out of that symmetric graph by asking, for every edge, how near it looks from
+each of its two ends.  The few quantities involved are set out first, followed by a complete analysis, from raw genotypes to a Population Graph,
+source-sink scores, tests for a directional gradient and a map of the gravity
+field.
+
+```{r libraries, message = FALSE}
+library(gstudio)
+library(dplyr)
+library(ggplot2)
+```
+
+The code below is written as pipelines, with each function on its own line.
+Every gstudio function takes its data as the first argument, so the same calls
+also work in the older style, with options such as `stratum =` passed as
+arguments; those versions are collected at the end, under *Without pipes*.
+
+## The model in brief
+
+Let $e_{ij}$ be the weight (conditional genetic distance, cGD) of the edge
+between populations $i$ and $j$, $N(i)$ the populations connected to $i$,
+$k_i = |N(i)|$ its degree and $s_i = \sum_{j \in N(i)} e_{ij}$ its strength.
+
+**Neighbourhood weights.**  Population $j$'s weight in $i$'s neighbourhood is a
+Gaussian kernel over $i$'s retained neighbours only, so by the Markov
+properties of the graph nothing beyond them contributes:
+
+$$
+w_{j\mid i} = \frac{\exp\left(-e_{ij}^2 / 2b_i^2\right)}
+                   {\sum_{k \in N(i)} \exp\left(-e_{ik}^2 / 2b_i^2\right)},
+\qquad b_i = \gamma \, \frac{s_i}{k_i}.
+$$
+
+The bandwidth $b_i$ is a multiple $\gamma$ of the mean edge weight around $i$,
+so rescaling every edge weight leaves everything below unchanged.
+
+**Gravity asymmetry.**  Every edge is read from both ends.  The signed difference
+
+$$
+\Delta_{i \to j} = w_{i\mid j} - w_{j\mid i}
+$$
+
+is $i$'s pull on $j$ minus $j$'s pull on $i$.  Positive values make $i$ the
+genetic source and $j$ the sink; throughout, **higher means more of a source**.
+
+**Gravity and source-sink scores.**  The gravity of population $i$ is the total
+weight it holds in its neighbours' neighbourhoods, $g_i = \sum_{j \in N(i)} w_{i\mid j}$.
+Because each neighbourhood sums to one, $\sum_i g_i = K$, so the balance
+$g_i - 1$ sums to zero: every source is offset by sinks.  The source-sink score
+$S$ puts all populations on one scale, as the values whose differences best
+reproduce the asymmetries on every edge:
+
+$$
+\hat{S} = \arg\min_S \sum_{(i,j) \in E} \left[\Delta_{i \to j} - (S_i - S_j)\right]^2,
+\qquad \textstyle\sum_i S_i = 0 \text{ within each connected component.}
+$$
+
+**Degree and the bandwidth.**  As the kernel flattens, $w_{j\mid i} \to 1/k_i$
+and the asymmetry falls to a floor set by degree alone,
+$\Delta^0_{i \to j} = 1/k_j - 1/k_i$.  The share of the variance in $\Delta$
+explained by $\Delta^0$ (the *degree share*) reports how much of an analysis is
+topology rather than genetics.  Two bandwidths answer different questions:
+$\gamma = 1/2$ (the default) is *degree-neutral* and is used for inferring
+direction; $\gamma = 1$, the local mean, keeps the contribution of degree and
+describes each population's overall pull in the network.
+
+**Partitioned distance.**  The same weights split each edge into two directed
+shares, the partitioned conditional genetic distance (pGD):
+
+$$
+p_{ij} = e_{ij} \, \frac{w_{j\mid i}}{w_{j\mid i} + w_{i\mid j}}, \qquad p_{ij} + p_{ji} = e_{ij}.
+$$
+
+Being a distance, pGD is *shorter* in the direction of gene flow.  It turns the
+undirected graph into a directed one for downstream analyses such as isolation
+by graph distance.
+
+## The data
+
+`gravity` holds genotypes from one census of an individual-based simulation:
+25 populations of 100 diploids on a one-dimensional stepping stone, scored at
+20 biallelic loci.  Gene flow runs four times more strongly toward
+higher-numbered populations than back (`Pop01` is the upstream end), so the
+answer is known in advance.  See `?gravity` for how the census was chosen.
+
+```{r data}
+data(gravity)
+dim(gravity)
+
+gravity |>
+  select(Population, L01:L04) |>
+  head(4)
+```
+
+## From genotypes to a Population Graph
+
+`population_graph()` encodes the genotypes and builds the graph among the
+strata in the `Population` column (its default `stratum`).
+
+```{r graph}
+graph <- gravity |>
+  population_graph()
+
+graph
+```
+
+The hypothesized axis of flow is position along the stepping stone, which here
+is the population number:
+
+```{r deme}
+nodes <- igraph::V(graph)$name
+
+deme <- nodes |>
+  sub(pattern = "Pop", replacement = "") |>
+  as.integer() |>
+  setNames(nodes)
+```
+
+`plot()` draws the graph.  Without coordinates it uses a Kamada-Kawai layout.
+`population_graph()` stores each population's within-population genetic
+variability as the `size` vertex attribute, and nodes are sized by it.
+
+```{r plot-graph}
+graph |>
+  plot()
+```
+
+## Neighbourhood weights and edge asymmetries
+
+`neighbourhood_weights()` returns $W_{ij} = w_{j\mid i}$; each row sums to one
+over that population's neighbours.
+
+```{r weights}
+W <- graph |>
+  neighbourhood_weights()
+
+round(W[1:5, 1:5], 3)
+rowSums(W, na.rm = TRUE)[1:5]
+```
+
+`gravity_edges()` gives one row per edge with both weights, $\Delta$ and the
+degree-only floor $\Delta^0$.  Supplying the covariate `x` orients every edge
+from the lower to the higher value of `x`, so a positive `Delta` means the
+upstream population is the source.
+
+```{r edges}
+edges <- graph |>
+  gravity_edges(x = deme)
+
+edges |>
+  head()
+
+edges |>
+  summarize(edges = n(),
+            upstream_source = mean(Delta > 0))
+```
+
+## Source-sink scores and the bandwidth
+
+`source_sink_scores()` returns each population's gravity, balance and $S$, with
+the degree diagnostics attached.
+
+```{r scores}
+scores <- graph |>
+  source_sink_scores(x = deme)
+
+scores |>
+  select(Stratum, S, gravity, balance, degree) |>
+  head()
+
+attr(scores, "degree_share")
+```
+
+Plotted against position, $S$ falls steadily downstream: sources upstream,
+sinks downstream.
+
+```{r scores-plot, fig.height = 3.5}
+scores |>
+  mutate(deme = deme[Stratum]) |>
+  ggplot(aes(deme, S)) +
+  geom_hline(yintercept = 0, colour = "grey60") +
+  geom_point(aes(size = degree)) +
+  labs(x = "Position along the stepping stone (upstream to downstream)",
+       y = "Source-sink score S") +
+  theme_minimal()
+```
+
+The degree share says how much of $\Delta$ is set by the number of neighbours.
+At the degree-neutral bandwidth it is small; at the local mean, degree carries
+more of the signal.  A gravity field computed at both bandwidths reports the
+diagnostics side by side:
+
+```{r bandwidth}
+graph |>
+  gravity_field(gamma = c(0.5, 1)) |>
+  as.data.frame(what = "diagnostics") |>
+  select(gamma, degree_share, cor_S_degree, gradient_share)
+```
+
+Report the bandwidth and the degree share with any directional result.
+
+## Testing for a directional gradient
+
+Two complementary procedures test for direction.  Neither permutes parts of
+the graph freely: $\Delta$ and $S$ inherit smooth, node-level structure from
+drift on the graph, and nulls that ignore it are anti-conservative.
+
+### Source-sink gradient test
+
+The statistic is Spearman's $r(S, x)$.  The null is Moran spectral
+randomization of $S$ on the graph itself, which reproduces the smoothness $S$
+inherits from the topology.  A negative $r$ places the sources at low $x$.
+
+```{r ss-test}
+set.seed(1)
+
+graph |>
+  source_sink_test(x = deme)
+```
+
+### Directional isolation by graph distance
+
+The second procedure asks whether modelling direction improves isolation by
+graph distance.  It regresses all-pairs cGD on spatial separation ($R^2_{cGD}$),
+then regresses all-pairs directed pGD on separation with separate forward and
+reverse slopes ($R^2_{pGD}$, adjusted).  $\Delta R^2 = R^2_{pGD} - R^2_{cGD} > 0$
+means the directional description fits better; the forward-to-reverse slope
+ratio gives the direction and strength (below one: genetic distance
+accumulates more slowly downstream).  This is not a nested-model test, and
+$\Delta R^2 \le 0$ is an absence of evidence for asymmetry, not evidence of
+symmetry.
+
+`ibgd()` does both steps and prints each as a standard test.  The default,
+`mode = "cgd"`, is ordinary isolation by graph distance, with a Mantel
+permutation test of the correlation between cGD and separation;
+`mode = "pgd"` adds the directional model and reports $\Delta R^2$ with the
+forward and reverse slopes.  It gives no p-value for $\Delta R^2$, because the
+two fits are not nested.
+
+```{r ibgd}
+graph |>
+  ibgd(x = deme)
+
+graph |>
+  ibgd(x = deme, mode = "pgd")
+```
+
+Both procedures recover the imposed direction: a strong negative gradient in
+$S$ (sources upstream), and a directional isolation model that fits better than
+the symmetric one with far shallower downstream than upstream isolation.
+
+pGD is available directly for other downstream analyses.  From the genotypes,
+`genetic_distance()` returns all-pairs directed shortest-path pGD alongside the
+other distance metrics, where `P[i, j]` is the distance from $i$ to $j$; from an
+existing graph, `pgd()` gives the same matrix (`output = "matrix"`) or the
+directed graph of edge shares (`output = "graph"`).
+
+```{r pgd}
+P <- gravity |>
+  genetic_distance(mode = "pgd")
+
+round(P[1:4, 1:4], 3)
+```
+
+## Mapping the gravity field
+
+`gravity_field()` collects every population-level and edge-level quantity;
+`plot()` interpolates $S$ over the node positions (red = source, blue = sink)
+and draws an arrow on each edge from source to sink, with length proportional
+to $|\Delta|$.  Node placement is a drawing choice made in `plot()`; without
+coordinates, layouts are computed on the directed pGD graph so that gene flow
+shapes the picture.
+
+```{r field}
+field <- graph |>
+  gravity_field()
+
+field
+
+field |>
+  plot()
+```
+
+Fields with several panels are drawn on common scales.  Here the same graph at
+the local-mean and degree-neutral bandwidths:
+
+```{r field-gamma, fig.width = 9, fig.height = 5}
+graph |>
+  gravity_field(gamma = c(1, 0.5)) |>
+  plot(node_labels = "none")
+```
+
+All the quantities behind the map are available as tidy tables for your own
+figures:
+
+```{r field-tables}
+field |>
+  as.data.frame(what = "edges") |>
+  arrange(desc(abs(delta))) |>
+  head()
+```
+
+## Default behaviour on a real graph
+
+Nothing above is specific to simulated data.  For an existing Population Graph
+the defaults give a complete picture in one line, here for `lopho`, the
+Population Graph of the Sonoran Desert cactus *Lophocereus*.
+
+```{r lopho}
+data(lopho)
+
+lopho |>
+  gravity_field() |>
+  plot()
+```
+
+## Without pipes
+
+The pipelines above are the recommended style.  Every call also works with its
+options passed as arguments, without dplyr; these are the equivalents of the
+steps above, shown here but not run:
+
+```{r no-pipes}
+#| eval: false
+graph  <- popgraph(to_mv(gravity), groups = gravity$Population)
+deme   <- as.integer(sub("Pop", "", igraph::V(graph)$name))
+names(deme) <- igraph::V(graph)$name
+
+W      <- neighbourhood_weights(graph, gamma = 0.5)
+edges  <- gravity_edges(graph, gamma = 0.5, x = deme)
+scores <- source_sink_scores(graph, gamma = 0.5, x = deme)
+
+source_sink_test(graph, x = deme, gamma = 0.5, nperm = 999)
+ibgd(graph, x = deme, mode = "cgd", nperm = 999)
+ibgd(graph, x = deme, mode = "pgd", gamma = 0.5)
+
+P      <- genetic_distance(gravity, stratum = "Population", mode = "pgd", gamma = 0.5)
+field  <- gravity_field(graph, gamma = 0.5)
+plot(field, layout = "kk", surface = "interpolate")
+```

@@ -130,7 +130,9 @@ frequencies.data.frame <- function( x, loci, stratum, ... ) {
   }
   
   # Detect stratum from arguments or dplyr grouping
-  stratum <- .detect_stratum(x, if (missing(stratum)) NULL else stratum, default = NULL)
+  stratum <- .detect_stratum(x, if (missing(stratum)) NULL else stratum, default = NULL,
+                            explicit = !missing(stratum))
+  x <- .plain_df(x)
 
   # all loci to do (unstratified).
   if( is.null( stratum ) ){

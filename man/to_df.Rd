@@ -12,7 +12,10 @@ to_df(graph, mode = c("nodes", "edges")[1])
 \item{mode}{Either "nodes" or "edges" to be used.}
 }
 \value{
-An object of type data.frame
+A \code{data.frame}.  For \code{mode = "nodes"}, one row per node
+  with the node name as \code{Stratum} followed by the other vertex
+  attributes; for \code{mode = "edges"}, one row per edge with \code{from},
+  \code{to} and the edge attributes.
 }
 \description{
 Quick function to convert a population graph into a data.frame

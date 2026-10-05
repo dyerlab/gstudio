@@ -84,7 +84,7 @@
 #'
 #' @references
 #' Dyer RJ, Nason JD (2004) Population Graphs: the graph theoretic shape of
-#' genetic structure. \emph{Evolution} \strong{58}: 1605--1615.
+#' genetic structure. \emph{Molecular Ecology} \strong{13}: 1713--1727.
 #'
 #' Dyer RJ (2015) Population Graphs and Landscape Genetics.
 #' \emph{Annual Review of Ecology, Evolution, and Systematics}

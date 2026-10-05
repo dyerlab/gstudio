@@ -19,7 +19,7 @@ make_triangle <- function() {
   g
 }
 
-expected_cols <- c("from", "to", "delta", "statistic", "p_value")
+expected_cols <- c("from", "to", "delta", "statistic", "p.value")
 
 # ---------------------------------------------------------------------------
 # Input validation
@@ -67,7 +67,7 @@ test_that("location mode ignores alpha with a warning instead of failing", {
                                   mode = "location", nperm = 5, alpha = 0.01,
                                   pendants = "keep"),
     "'alpha' is ignored")
-  expect_true(all(res$p_value > 0 & res$p_value <= 1))
+  expect_true(all(res$p.value > 0 & res$p.value <= 1))
 })
 
 test_that("groups that do not match the graph nodes are rejected", {
@@ -84,8 +84,8 @@ test_that("existence mode survives rewired graphs with isolated nodes", {
   g <- make_triangle()
   set.seed(1)
   res <- asymmetry_significance(g, nperm = 20, rewire = "full")
-  expect_equal(nrow(res), 1L)
-  expect_true(res$p_value > 0 && res$p_value <= 1)
+  expect_s3_class(res, "htest")
+  expect_true(res$p.value > 0 && res$p.value <= 1)
 })
 
 # ---------------------------------------------------------------------------
@@ -99,18 +99,20 @@ test_that("mechanism mode returns the standard columns and valid p-values", {
   expect_s3_class(res, "data.frame")
   expect_named(res, expected_cols)
   expect_equal(nrow(res), igraph::ecount(g))
-  expect_true(all(res$p_value >= 0 & res$p_value <= 1))
+  expect_true(all(res$p.value >= 0 & res$p.value <= 1))
   expect_identical(attr(res, "mode"), "mechanism")
 })
 
-test_that("existence mode returns a single graph-level row", {
+test_that("existence mode returns a graph-level htest", {
   g   <- make_triangle()
   res <- asymmetry_significance(g, mode = "existence", nperm = 99)
 
-  expect_named(res, expected_cols)
-  expect_equal(nrow(res), 1L)
-  expect_true(is.na(res$from) && is.na(res$to))
-  expect_true(res$p_value >= 0 && res$p_value <= 1)
+  expect_s3_class(res, "htest")
+  expect_named(res$statistic, "mean |Delta|")
+  expect_identical(res$alternative, "greater")
+  expect_identical(res$data.name, "g")
+  expect_true(res$p.value >= 0 && res$p.value <= 1)
+  expect_output(print(res), "Graph-level asymmetry test")
 })
 
 test_that("permutation p-values are strictly positive (add-one correction)", {
@@ -119,10 +121,10 @@ test_that("permutation p-values are strictly positive (add-one correction)", {
   g  <- make_triangle()
   rb <- asymmetry_significance(g, mode = "mechanism", nperm = 99)
   rn <- asymmetry_significance(g, mode = "existence",   nperm = 99)
-  expect_true(all(rb$p_value > 0))
-  expect_true(rn$p_value > 0)
+  expect_true(all(rb$p.value > 0))
+  expect_true(rn$p.value > 0)
   # Smallest attainable value is 1 / (1 + nperm).
-  expect_true(all(rb$p_value >= 1 / (99 + 1) - 1e-12))
+  expect_true(all(rb$p.value >= 1 / (99 + 1) - 1e-12))
 })
 
 # ---------------------------------------------------------------------------
@@ -135,7 +137,7 @@ test_that("location mode returns valid per-edge p-values", {
                                 mode = "location", nperm = 49, pendants = "keep")
   expect_named(res, expected_cols)
   expect_equal(nrow(res), igraph::ecount(sg$graph))
-  expect_true(all(res$p_value >= 0 & res$p_value <= 1))
+  expect_true(all(res$p.value >= 0 & res$p.value <= 1))
   # statistic is Delta centred on each edge's null mean, not Delta itself
   expect_true(all(is.finite(res$statistic)))
   expect_false(isTRUE(all.equal(res$statistic, res$delta)))

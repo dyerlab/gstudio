@@ -19,6 +19,8 @@ population_graph <- function( x, stratum="Population", numLoci=NULL, ...) {
   if( !is(x,"data.frame")){
     stop("Must pass a data.frame object to this function.")
   }
+  stratum <- .detect_stratum(x, stratum, default = "Population", explicit = !missing(stratum))
+  x <- .plain_df(x)
   if( !(stratum %in% names(x))) {
     stop("You provided an invalid (or non-existent) column to be used as strata.")
   }

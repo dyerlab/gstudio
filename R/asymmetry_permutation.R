@@ -39,7 +39,7 @@
 #' @return A \code{data.frame} with columns \code{from}, \code{to},
 #'   \code{delta} (observed \eqn{\Delta_{ij}}), \code{statistic} (the centred
 #'   deviation \eqn{\Delta_{\mathrm{obs}} - \bar{\Delta}_{\mathrm{null}}}), and
-#'   \code{p_value}.
+#'   \code{p.value}.
 #'
 #' @seealso \code{\link{asymmetry_significance}}, \code{\link{graph_asymmetries}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -115,7 +115,7 @@ asymmetry_permutation <- function(graph, data, groups, nperm = 999, ...) {
     to        = el[, 2],
     delta     = delta_obs,
     statistic = stat_obs,
-    p_value   = p_value,
+    p.value   = p_value,
     stringsAsFactors = FALSE
   )
 }

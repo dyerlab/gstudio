@@ -62,7 +62,7 @@
 #'     \item{delta}{The observed asymmetry index \eqn{\Delta_{ij}}.}
 #'     \item{boot_mean}{Mean of \eqn{\Delta_{ij}} across the resamples in
 #'       which the edge was present.}
-#'     \item{ci_low, ci_high}{Percentile bootstrap bounds at level
+#'     \item{conf.low, conf.high}{Percentile bootstrap bounds at level
 #'       \code{conf}.}
 #'     \item{edge_support}{Proportion of successful resamples in which the
 #'       edge was present (the denominator of the interval).}
@@ -82,7 +82,8 @@
 #' groups <- arapat$Population
 #' graph  <- popgraph(mv, groups)
 #'
-#' ci <- asymmetry_ci(graph, data = mv, groups = groups, nboot = 99)
+#' # A small nboot keeps the example quick; use 999 or more in practice.
+#' ci <- asymmetry_ci(graph, data = mv, groups = groups, nboot = 9)
 #' head(ci)
 #' }
 #'
@@ -163,8 +164,8 @@ asymmetry_ci <- function(graph, data, groups, nboot = 999, conf = 0.95,
     to           = el[, 2],
     delta        = delta_obs,
     boot_mean    = ifelse(n_present > 0, rowMeans(mat, na.rm = TRUE), NA_real_),
-    ci_low       = apply(mat, 1, edge_q, p = a),
-    ci_high      = apply(mat, 1, edge_q, p = 1 - a),
+    conf.low     = apply(mat, 1, edge_q, p = a),
+    conf.high    = apply(mat, 1, edge_q, p = 1 - a),
     edge_support = n_present / n_ok,
     stringsAsFactors = FALSE
   )

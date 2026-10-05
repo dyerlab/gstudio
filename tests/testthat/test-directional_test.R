@@ -31,10 +31,12 @@ test_that("degree center exactly cancels equal-distance arc weights", {
 test_that("returns a valid, well-shaped result on unequal weights", {
   g   <- make_path4(c(2.1, 1.2, 2.8))
   res <- directional_test(g, orientation = c(A = 1, B = 2, C = 3, D = 4))
-  expect_named(res$test, c("n_edges", "n_forward", "estimate", "statistic",
-                           "p_value", "method", "alternative", "center"))
-  expect_equal(res$test$n_edges, 3L)
-  expect_true(res$test$p_value >= 0 && res$test$p_value <= 1)
+  expect_s3_class(res, "htest")
+  expect_named(res$statistic, "V")
+  expect_equal(unname(res$parameter), 3L)
+  expect_named(res$estimate, "median deviation")
+  expect_true(res$p.value >= 0 && res$p.value <= 1)
+  expect_output(print(res), "Wilcoxon signed-rank test of axis-oriented asymmetry")
   expect_true(all(c("from", "to", "w_forward", "center", "deviation") %in%
                     names(res$edges)))
 })
@@ -42,15 +44,17 @@ test_that("returns a valid, well-shaped result on unequal weights", {
 test_that("orientation ties drop the affected edges", {
   g   <- make_path4(c(2.1, 1.2, 2.8))
   res <- directional_test(g, orientation = c(A = 1, B = 1, C = 2, D = 3))
-  expect_lt(res$test$n_edges, 3L)        # A-B tie removed
+  expect_lt(unname(res$parameter), 3L)   # A-B tie removed
 })
 
 test_that("sign test path runs and respects alternative", {
   g  <- make_path4(c(2.1, 1.2, 2.8))
   rs <- directional_test(g, orientation = c(A = 1, B = 2, C = 3, D = 4),
                          test = "sign", alternative = "two.sided")
-  expect_identical(rs$test$method, "Sign test")
-  expect_true(rs$test$p_value >= 0 && rs$test$p_value <= 1)
+  expect_match(rs$method, "^Sign test")
+  expect_named(rs$statistic, "forward edges")
+  expect_identical(rs$alternative, "two.sided")
+  expect_true(rs$p.value >= 0 && rs$p.value <= 1)
 })
 
 test_that("input validation", {

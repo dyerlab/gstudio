@@ -1,5 +1,5 @@
 # Tests for the genetic-gravity functions: neighbourhood_weights(), gravity_edges(),
-# source_sink_scores(), msr_null(), source_sink_test(), pgd(), directional_ibgd(),
+# source_sink_scores(), msr_null(), source_sink_test(), pgd(), ibgd(),
 # gravity_field(), plot_gravity_field(), and the gamma / flat-kernel options of
 # graph_asymmetries().
 
@@ -38,7 +38,7 @@ test_that("S reproduces Delta exactly on a tree", {
   s <- source_sink_scores(g, gamma = 0.5)
   expect_equal(attr(s, "gradient_share"), 1, tolerance = 1e-10)
   ed <- gravity_edges(g, gamma = 0.5)
-  Sv <- setNames(s$S, s$node)
+  Sv <- setNames(s$S, s$Stratum)
   expect_equal(ed$Delta, unname(Sv[ed$from] - Sv[ed$to]), tolerance = 1e-10)
 })
 
@@ -89,41 +89,75 @@ test_that("source_sink_test is reproducible and mirror-symmetric", {
   x <- seq_len(14)
   set.seed(9); a <- source_sink_test(g, x, nperm = 99)
   set.seed(9); b <- source_sink_test(g, 15 - x, nperm = 99)
-  expect_equal(b$r, -a$r)
-  expect_equal(b$p, a$p)
-  expect_true(a$p > 0 && a$p <= 1)
+  expect_equal(b$statistic, -a$statistic)
+  expect_equal(b$p.value, a$p.value)
+  expect_true(a$p.value > 0 && a$p.value <= 1)
+  expect_s3_class(a, c("source_sink_test", "htest"))
+  expect_named(a$statistic, "r")
+  expect_equal(unname(a$parameter), c(14, 99))
+  expect_output(print(a), "Source-sink gradient test")
+  expect_output(print(a), "Sources at")
   set.seed(9); p1 <- source_sink_test(g, x, nperm = 49, null = "permute")
   expect_s3_class(p1, "source_sink_test")
+  expect_match(p1$method, "permutation of S")
   A <- matrix(0, 14, 14); for (i in 1:13) A[i, i + 1] <- A[i + 1, i] <- 1
   expect_s3_class(source_sink_test(g, x, nperm = 49, null = "adjacency", adjacency = A), "source_sink_test")
 })
 
-test_that("pgd partitions each edge and directional_ibgd returns the fit table", {
+test_that("pgd partitions each edge and ibgd returns htest results for both modes", {
   g <- make_chain()
   dg <- pgd(g)
   expect_true(igraph::is_directed(dg))
   el <- igraph::as_edgelist(g); w <- igraph::E(g)$weight
   P <- igraph::as_adjacency_matrix(dg, attr = "weight", sparse = FALSE)
   expect_equal(P[el] + P[el[, 2:1]], w, tolerance = 1e-12)
-  r <- directional_ibgd(g, x = seq_len(igraph::vcount(g)))
-  expect_named(r, c("r2_cgd", "r2_pgd_blind", "r2_pgd_dir", "delta_r2", "b_fwd", "b_rev", "slope_ratio", "preferred", "gamma"))
-  expect_equal(r$delta_r2, r$r2_pgd_dir - r$r2_cgd)
+  x <- seq_len(igraph::vcount(g))
+
+  set.seed(1)
+  rc <- ibgd(g, x = x)
+  expect_s3_class(rc, c("ibgd", "htest"))
+  expect_equal(rc$mode, "cgd")
+  expect_named(rc$statistic, "r"); expect_named(rc$estimate, c("R2", "slope"))
+  expect_equal(unname(rc$estimate["R2"]), unname(rc$statistic)^2)
+  expect_true(rc$p.value > 0 && rc$p.value <= 1)
+  expect_equal(unname(rc$parameter["nperm"]), 999)
+  expect_output(print(rc), "Mantel permutation test")
+
+  rp <- ibgd(g, x = x, mode = "pgd")
+  expect_named(rp$statistic, "delta R2")
+  expect_null(rp$p.value)
+  expect_equal(unname(rp$statistic), unname(rp$estimate["adj R2 pGD"] - rp$estimate["R2 cGD"]))
+  expect_equal(unname(rp$estimate["R2 cGD"]), unname(rc$estimate["R2"]))
+  expect_equal(unname(rp$estimate["slope ratio"]),
+               unname(rp$estimate["forward slope"] / rp$estimate["reverse slope"]))
+  expect_output(print(rp), "No p-value")
+
+  # a distance matrix gives the same answer as positions
+  D <- abs(outer(x, x, "-")); Fw <- outer(x, x, function(a, b) b > a)
+  expect_equal(ibgd(g, distance = D, forward = Fw, mode = "pgd")$statistic, rp$statistic)
+  expect_error(ibgd(g, distance = D, mode = "pgd"), "forward")
+  expect_error(ibgd(g), "Supply")
+  expect_error(ibgd(g, x = x, mode = "bogus"))
 })
 
 test_that("gravity_field arrows point from source to sink", {
   g <- make_chain()
   xy <- cbind(x = seq_len(10), y = sin(seq_len(10)))
-  f <- gravity_field(g, coords = xy)
-  e <- f$edges; n <- f$nodes
-  dx <- n$x[match(e$sink, n$node)] - n$x[match(e$source, n$node)]
-  expect_true(all(sign(e$ux) == sign(dx) | abs(dx) < 1e-12))
+  f <- gravity_field(g)
+  e <- f$edges
   expect_true(all((e$delta >= 0) == (e$source == e$from)))
+  # drawn arrows run from the source's coordinates toward the sink's
+  b <- ggplot2::ggplot_build(plot(f, layout = xy, surface = "none"))
+  arr <- b$data[[2]]
+  dx <- xy[match(e$sink, igraph::V(g)$name), 1] - xy[match(e$source, igraph::V(g)$name), 1]
+  dx <- dx[abs(e$delta) > 1e-6]
+  expect_true(all(sign(arr$xend - arr$x) == sign(dx) | abs(dx) < 1e-12))
 })
 
-test_that("plot_gravity_field builds with common scales", {
+test_that("multi-panel gravity fields plot with common scales", {
   g <- make_chain()
   xy <- cbind(x = seq_len(10), y = sin(seq_len(10)))
-  p <- plot_gravity_field(list(a = g, b = g), coords = xy, gamma = c(1, 0.5))
+  p <- plot(gravity_field(list(a = g, b = g), gamma = c(1, 0.5)), layout = xy)
   expect_s3_class(p, "ggplot")
   b <- ggplot2::ggplot_build(p)
   expect_equal(length(unique(b$layout$layout$PANEL)), 2)
@@ -138,43 +172,69 @@ test_that("asymmetric stepping-stone migration matrix", {
 test_that("gravity_field is an S3 object with print, plot and as.data.frame methods", {
   g <- make_chain()
   xy <- cbind(x = seq_len(10), y = sin(seq_len(10)))
-  f <- gravity_field(g, coords = xy, gamma = 0.5)
+  f <- gravity_field(g, gamma = 0.5)
   expect_s3_class(f, "gravity_field")
-  expect_equal(f$gamma, 0.5)
-  expect_equal(f$coords_source, "supplied")
-  expect_named(f$diagnostics, c("degree_share", "cor_S_degree", "cor_S_S0", "gradient_share"))
-  expect_equal(f$diagnostics[["degree_share"]], attr(source_sink_scores(g), "degree_share"))
+  expect_named(f, c("nodes", "edges", "diagnostics", "graphs"))
+  expect_equal(f$diagnostics$gamma, 0.5)
+  expect_equal(f$diagnostics$panel, "")
+  expect_named(f$diagnostics, c("panel", "gamma", "degree_share", "cor_S_degree", "cor_S_S0", "gradient_share"))
+  expect_equal(f$diagnostics$degree_share, attr(source_sink_scores(g), "degree_share"))
   expect_output(print(f), "Gravity field: 10 populations")
   expect_identical(as.data.frame(f), f$nodes)
   expect_identical(as.data.frame(f, what = "edges"), f$edges)
+  expect_identical(as.data.frame(f, what = "diagnostics"), f$diagnostics)
+  expect_false(any(c("x", "y") %in% names(f$nodes)))     # coordinates are a plot-time choice
+  expect_s3_class(plot(f, layout = xy), "ggplot")
   expect_s3_class(plot(f), "ggplot")
-  # precomputed fields keep their own bandwidth; graphs and fields can be mixed in one plot
-  f1 <- gravity_field(g, coords = xy, gamma = 1)
-  p <- plot_gravity_field(list(local = f1, neutral = g), coords = xy, gamma = 0.5)
-  labs <- levels(ggplot2::ggplot_build(p)$layout$layout$panel)
-  expect_true(any(grepl(sprintf("%.2f", f1$diagnostics[["degree_share"]]), labs)))
-  expect_message(gravity_field(g), "not geographic")
-  expect_equal(suppressMessages(gravity_field(g))$coords_source, "layout")
+
+  # one graph at several gamma -> one panel per gamma
+  f2 <- gravity_field(g, gamma = c(1, 0.5))
+  expect_equal(f2$diagnostics$panel, c("gamma = 1", "gamma = 0.5"))
+  expect_output(print(f2), "Gravity field \\[gamma = 1\\]")
+
+  # c() combines fields; each keeps its own bandwidth and argument names become panels
+  f1 <- gravity_field(g, gamma = 1)
+  fc <- c(local = f1, neutral = f)
+  expect_equal(fc$diagnostics$panel, c("local", "neutral"))
+  expect_equal(fc$diagnostics$gamma, c(1, 0.5))
+  expect_equal(unique(fc$nodes$panel), c("local", "neutral"))
+  labs <- levels(ggplot2::ggplot_build(plot(fc, layout = xy))$layout$layout$panel)
+  expect_true(any(grepl(sprintf("%.2f", f1$diagnostics$degree_share), labs)))
+  expect_error(c(f, f), "unique")
+  expect_error(c(f, 1), "gravity_field")
+
+  # display-only arguments: mistyped or computation arguments are reported
+  expect_warning(plot(f, layout = xy, gamma = 1), "gamma")
+  expect_error(plot(f, layout = xy, node_fill = "S"), "single colour")
 })
 
-test_that("manuscript example graphs load and reproduce their documented values", {
-  data(gravity_symmetric, package = "gstudio", envir = environment())
-  data(gravity_redistributed, package = "gstudio", envir = environment())
-  for (g in list(gravity_symmetric, gravity_redistributed)) {
-    expect_s3_class(g, "popgraph"); expect_equal(igraph::vcount(g), 25)
-    expect_equal(sort(igraph::V(g)$deme), 1:25)
-    expect_equal(suppressMessages(gravity_field(g))$coords_source, "layout")
-  }
-  set.seed(1); ts <- source_sink_test(gravity_symmetric, x = igraph::V(gravity_symmetric)$deme)
-  set.seed(1); tr <- source_sink_test(gravity_redistributed, x = igraph::V(gravity_redistributed)$deme)
-  expect_equal(round(ts$r, 3), -0.092); expect_gt(ts$p, 0.05)
-  expect_equal(round(tr$r, 3), -0.955); expect_lt(tr$p, 0.01)
-  expect_gt(directional_ibgd(gravity_redistributed, x = igraph::V(gravity_redistributed)$deme)$delta_r2, 0)
-  expect_lt(directional_ibgd(gravity_symmetric, x = igraph::V(gravity_symmetric)$deme)$delta_r2, 0)
+test_that("the gravity genotypes rebuild the documented example graph and values", {
+  data(gravity, package = "gstudio", envir = environment())
+  expect_equal(dim(gravity), c(2500L, 22L))
+  expect_equal(length(column_class(gravity, "locus")), 20L)
+  g <- popgraph(to_mv(gravity), gravity$Population)
+  expect_s3_class(g, "popgraph")
+  expect_equal(igraph::vcount(g), 25); expect_equal(igraph::ecount(g), 81)
+  deme <- as.integer(sub("Pop", "", igraph::V(g)$name))
+
+  set.seed(1); tr <- source_sink_test(g, x = deme)
+  expect_equal(round(unname(tr$statistic), 3), -0.955); expect_lt(tr$p.value, 0.01)
+  di <- ibgd(g, x = deme, mode = "pgd")
+  expect_equal(round(unname(di$statistic), 2), 0.16); expect_lt(di$estimate[["slope ratio"]], 1)
+  set.seed(1); ic <- ibgd(g, x = deme)
+  expect_equal(round(unname(ic$estimate["R2"]), 2), 0.67); expect_lt(ic$p.value, 0.01)
+  expect_equal(round(attr(source_sink_scores(g), "degree_share"), 2), 0.02)
 
   # Test layout override and node_size
-  f_kk <- gravity_field(gravity_symmetric, layout = "kk")
-  expect_equal(f_kk$coords_source, "layout")
-  p_kk <- plot_gravity_field(f_kk, node_size = "degree", node_labels = "degree")
+  p_kk <- plot(gravity_field(g), layout = "kk", node_size = "degree", node_labels = "degree")
   expect_s3_class(p_kk, "ggplot")
+
+  # Near-zero pGD arcs used to collapse node pairs under "kk", blanking the
+  # surface and leaving geom_contour() with zero contours.
+  f_r <- gravity_field(g)
+  xy <- .graph_layout(g, "kk", layout_graph = pgd(g, output = "graph"))
+  dm <- as.matrix(stats::dist(xy)); diag(dm) <- Inf
+  expect_gt(min(dm), 0.05 * diff(range(xy[, 1])))
+  expect_no_warning(ggplot2::ggplot_build(plot(f_r, layout = "kk")))
 })
+

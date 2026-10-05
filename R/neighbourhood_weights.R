@@ -1,4 +1,4 @@
-#' @rdname gravity
+#' @rdname genetic_gravity
 #' @export
 neighbourhood_weights <- function(graph, gamma = 0.5) {
   graph <- .gravity_check(graph)

@@ -24,9 +24,12 @@
 #'   \code{"full"}.
 #' @param ... Ignored; present for interface consistency.
 #'
-#' @return A one-row \code{data.frame} with columns \code{from} and \code{to}
-#'   equal to \code{NA}, \code{delta} and \code{statistic} equal to the observed
-#'   mean \eqn{|\Delta|}, and the \code{p_value}.  Rewired graphs for which the
+#' @return An object of class \code{"htest"}, which prints as a standard test
+#'   and works with \code{broom::tidy()}: \code{statistic} (observed
+#'   \code{mean |Delta|}), \code{parameter} (\code{edges} and the number of
+#'   valid rewired graphs, \code{nperm}), the one-sided \code{p.value},
+#'   \code{estimate} (the \code{null mean |Delta|}), \code{alternative},
+#'   \code{method} and \code{data.name}.  Rewired graphs for which the
 #'   asymmetry cannot be computed (e.g. those containing isolated nodes) are
 #'   excluded from the null distribution.
 #'
@@ -46,6 +49,7 @@ asymmetry_network <- function(graph, nperm = 999,
                               rewire = c("degree", "full"), ...) {
 
   rewire   <- match.arg(rewire)
+  dname    <- deparse1(substitute(graph))
   g_obs    <- graph_asymmetries(graph)
   obs_stat <- mean(abs(igraph::E(g_obs)$delta))
   w        <- igraph::E(graph)$weight
@@ -78,12 +82,14 @@ asymmetry_network <- function(graph, nperm = 999,
          if (rewire == "full") "; try rewire = \"degree\"" else "", ".")
   p_value <- (1 + sum(null >= obs_stat, na.rm = TRUE)) / (1 + B)
 
-  data.frame(
-    from      = NA_character_,
-    to        = NA_character_,
-    delta     = obs_stat,
-    statistic = obs_stat,
-    p_value   = p_value,
-    stringsAsFactors = FALSE
-  )
+  structure(list(
+    statistic   = c(`mean |Delta|` = obs_stat),
+    parameter   = c(edges = igraph::ecount(graph), nperm = B),
+    p.value     = p_value,
+    estimate    = c(`null mean |Delta|` = mean(null, na.rm = TRUE)),
+    alternative = "greater",
+    method      = sprintf("Graph-level asymmetry test (%s rewiring null)",
+                          if (rewire == "degree") "degree-preserving" else "full"),
+    data.name   = dname),
+    class = "htest")
 }

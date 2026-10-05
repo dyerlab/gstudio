@@ -15,16 +15,23 @@ Each chapter is self-contained and can be read independently, though they build 
 ## Quick Start
 
 ```{r}
+#| message: false
 library(gstudio)
+library(dplyr)
 data(arapat)
-str(arapat, max.level = 1)
+
+arapat |>
+  glimpse()
 ```
 
 The `arapat` dataset contains multilocus microsatellite genotypes from the cactus beetle *Araptus attenuatus* and will serve as the primary example dataset throughout this book.
 
 ```{r}
-head(arapat)
+arapat |>
+  head()
 ```
+
+Code in this book is written as pipelines, one function per line; every function also works with its options passed as arguments (see *Code Style in This Book* in the next chapter).
 
 ## Citation
 

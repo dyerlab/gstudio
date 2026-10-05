@@ -26,7 +26,7 @@ test_that("returns a data.frame with correct columns", {
   result <- asymmetric_weights(g)
 
   expect_s3_class(result, "data.frame")
-  expect_named(result, c("i", "j", "pij", "pji", "cGD", "dij", "dji", "Delta"))
+  expect_named(result, c("from", "to", "pij", "pji", "cGD", "dij", "dji", "Delta"))
 })
 
 test_that("one row per undirected edge", {
@@ -72,6 +72,6 @@ test_that("node names in output match graph vertex names", {
   result <- asymmetric_weights(g)
   node_names <- igraph::V(g)$name
 
-  expect_true(all(result$i %in% node_names))
-  expect_true(all(result$j %in% node_names))
+  expect_true(all(result$from %in% node_names))
+  expect_true(all(result$to %in% node_names))
 })

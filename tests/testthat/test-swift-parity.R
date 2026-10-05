@@ -71,7 +71,7 @@ test_that("asymmetry_bandwidth() is stable on cornus for seed 4041 (Swift parity
 
   expect_equal(nrow(res), igraph::ecount(g))
   expect_equal(
-    res$p_value,
+    res$p.value,
     c(0.582089552238806, 0.6318407960199005, 0.7661691542288557,
       0.6019900497512438, 0.7910447761194029, 0.24875621890547264,
       0.4925373134328358, 0.572139303482587, 0.208955223880597,
@@ -84,7 +84,7 @@ test_that("asymmetry_network() is stable on cornus for seed 5051 (Swift parity)"
   set.seed(5051)
   res <- asymmetry_network(g, nperm = 200, rewire = "degree")
 
-  expect_equal(nrow(res), 1L)
-  expect_equal(res$delta, 0.026752013114304994, tolerance = 1e-9)
-  expect_equal(res$p_value, 0.04975124378109453, tolerance = 1e-12)
+  expect_s3_class(res, "htest")
+  expect_equal(unname(res$statistic), 0.026752013114304994, tolerance = 1e-9)
+  expect_equal(res$p.value, 0.04975124378109453, tolerance = 1e-12)
 })

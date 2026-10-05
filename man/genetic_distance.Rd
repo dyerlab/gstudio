@@ -4,7 +4,7 @@
 \alias{genetic_distance}
 \title{Estimate genetic distances among individuals or strata}
 \usage{
-genetic_distance(x, stratum = "Population", mode)
+genetic_distance(x, stratum = "Population", mode, ...)
 }
 \arguments{
 \item{x}{A \code{data.frame} object with \code{\link{locus}} columns, or a single \code{locus} vector.}
@@ -19,14 +19,25 @@ Optional for individual-based distance metrics like AMOVA and Bray.}
   \item{dps}{Stratum-level shared allele distance (1 - Ps)}
   \item{cavalli}{Cavalli-Sforza & Edwards (1967) chord distance}
   \item{cgd}{Conditional Genetic Distance via Population Graphs (Dyer & Nason 2004)}
+  \item{pgd}{Partitioned (proportional) Conditional Genetic Distance: each
+    Population Graph edge's cGD split into two directed shares in proportion to
+    the genetic-gravity neighbourhood weights (see \code{\link{pgd}} and
+    \code{vignette("genetic_gravity")}), returned as all-pairs directed
+    shortest-path distances.  The matrix is \strong{asymmetric}: \code{[i, j]}
+    is the distance from \code{i} to \code{j}, shorter in the direction of
+    gene flow.  The bandwidth is set with \code{gamma} (default \code{0.5}).}
   \item{euclidean}{Euclidean allele frequency distance}
   \item{jaccard}{Jaccard set dissimilarity}
   \item{nei}{Nei's unbiased genetic distance (1978)}
   \item{ss}{Partitioned Sum of Squares distance from AMOVA}
 }}
+
+\item{...}{Options for the chosen metric.  Currently only \code{gamma}, the
+bandwidth multiplier for \code{mode = "pgd"}; other modes take none, and
+unused arguments are reported.}
 }
 \value{
-A pairwise distance matrix.
+A pairwise distance matrix (asymmetric for \code{mode = "pgd"}).
 }
 \description{
 This is the primary front-end function for estimating genetic distances among
@@ -42,6 +53,14 @@ genetic_distance(df, mode="amova")
 genetic_distance(df, mode="dps")
 genetic_distance(df, mode="cavalli")
 genetic_distance(df, mode="nei")
+\donttest{
+data(gravity)
+P <- genetic_distance(gravity, mode = "pgd")
+P[1:4, 1:4]   # rows: from, columns: to
+}
+}
+\seealso{
+\code{\link{pgd}} to compute pGD from an existing Population Graph.
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

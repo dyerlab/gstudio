@@ -19,7 +19,7 @@
 #' @param ... Ignored; present for interface consistency.
 #'
 #' @return A \code{data.frame} with columns \code{from}, \code{to},
-#'   \code{delta}, \code{statistic}, and \code{p_value}.
+#'   \code{delta}, \code{statistic}, and \code{p.value}.
 #'
 #' @seealso \code{\link{asymmetry_significance}}, \code{\link{graph_asymmetries}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -54,7 +54,7 @@ asymmetry_bandwidth <- function(graph, nperm = 999, ...) {
     to        = el[, 2],
     delta     = delta_obs,
     statistic = delta_obs,
-    p_value   = p_value,
+    p.value   = p_value,
     stringsAsFactors = FALSE
   )
 }

@@ -21,7 +21,8 @@ genotype_counts <- function( x, stratum=NULL ) {
   if( !is(x,"data.frame"))
     stop("This function works on data.frames")
   
-  stratum <- .detect_stratum(x, stratum, default = NULL)
+  stratum <- .detect_stratum(x, stratum, default = NULL, explicit = !missing(stratum))
+  x <- .plain_df(x)
 
   if( !is.null(stratum)) {
     if( !(stratum %in% names(x))) {

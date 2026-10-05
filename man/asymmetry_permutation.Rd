@@ -23,7 +23,7 @@ requires \code{alpha = 1}.}
 A \code{data.frame} with columns \code{from}, \code{to},
   \code{delta} (observed \eqn{\Delta_{ij}}), \code{statistic} (the centred
   deviation \eqn{\Delta_{\mathrm{obs}} - \bar{\Delta}_{\mathrm{null}}}), and
-  \code{p_value}.
+  \code{p.value}.
 }
 \description{
 Tests whether the magnitude of each edge's asymmetry index

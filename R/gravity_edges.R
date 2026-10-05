@@ -1,4 +1,4 @@
-#' @rdname gravity
+#' @rdname genetic_gravity
 #' @export
 gravity_edges <- function(graph, gamma = 0.5, x = NULL) {
   graph <- .gravity_check(graph)

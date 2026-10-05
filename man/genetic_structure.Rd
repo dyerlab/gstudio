@@ -41,8 +41,12 @@ strata (default=FALSE).}
 in the analysis. If this is not specified, then all loci are used.}
 }
 \value{
-An object of type \code{data.frame} containing estimates for each locus and a
- multilocus estimate. If \code{pairwise=TRUE}, then it returns a pairwise matrix.
+An object of type \code{data.frame} containing estimates for each locus and
+ (for Gst, Gst' and Dest) a \code{Multilocus} row, whose \code{Hs} and \code{Ht} are
+ sums across loci.  With \code{nperm > 0}, \code{p.value} holds permutation
+ p-values; for the \code{Multilocus} row, strata are permuted across individuals
+ (the same permutation for every locus) and the multilocus estimate recomputed.
+ If \code{pairwise=TRUE}, then it returns a pairwise matrix.
 }
 \description{
 This function is the primary front-end for estimating common genetic structure

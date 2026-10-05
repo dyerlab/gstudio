@@ -96,18 +96,19 @@
 #' @note Only \code{mode = "location"} uses \code{data} and \code{groups};
 #'   supplying them with another mode gives a warning.
 #'
-#' @return A \code{data.frame} with one row per retained edge (one row total for
-#'   \code{mode = "existence"}) and the columns:
+#' @return For \code{mode = "existence"}, an \code{"htest"} for the whole graph
+#'   (see \code{\link{asymmetry_network}}).  For \code{"location"} and
+#'   \code{"mechanism"}, a \code{data.frame} with one row per retained edge,
+#'   using \code{broom::tidy()} column names so it can be stacked with tidied
+#'   tests:
 #'   \describe{
-#'     \item{from, to}{Endpoint names of the edge (\code{NA} for the
-#'       graph-level \code{"existence"} summary).}
-#'     \item{delta}{The observed asymmetry index \eqn{\Delta_{ij}} (or observed
-#'       mean \eqn{|\Delta|} for \code{"existence"}).}
+#'     \item{from, to}{Endpoint names of the edge.}
+#'     \item{delta}{The observed asymmetry index \eqn{\Delta_{ij}}.}
 #'     \item{statistic}{The test statistic actually compared to the null
 #'       distribution.  For \code{"location"} this is the centred deviation
 #'       \eqn{\Delta_{\mathrm{obs}} - \bar{\Delta}_{\mathrm{null}}} from the
 #'       edge's null mean.}
-#'     \item{p_value}{Permutation \emph{p}-value, computed with the add-one
+#'     \item{p.value}{Permutation \emph{p}-value, computed with the add-one
 #'       correction \eqn{(1 + \#\{\mathrm{null} \ge \mathrm{obs}\}) / (1 + B)}
 #'       over \eqn{B} permutations, so it is strictly positive (Phipson & Smyth
 #'       2010).  \code{"existence"} is one-sided on mean \eqn{|\Delta|};
@@ -126,7 +127,7 @@
 #'
 #' @references
 #' Dyer RJ, Nason JD (2004) Population Graphs: the graph theoretic shape of
-#' genetic structure. \emph{Evolution} \strong{58}: 1605--1615.
+#' genetic structure. \emph{Molecular Ecology} \strong{13}: 1713--1727.
 #'
 #' Phipson B, Smyth GK (2010) Permutation p-values should never be zero:
 #' calculating exact p-values when permutations are randomly drawn.
@@ -142,18 +143,20 @@
 #' groups <- arapat$Population
 #' graph  <- popgraph(mv, groups)
 #'
-#' # Existence: is there any directional structure in the graph? (default)
-#' asymmetry_significance(graph, nperm = 199)
+#' # Small nperm / nboot keep the examples quick; use 999 or more in practice.
 #'
-#' # Location: which edge(s) carry it?
+#' # Existence: is there any directional structure in the graph? (default)
+#' asymmetry_significance(graph, nperm = 19)
+#'
+#' # Location: which edge(s) carry it?  (refits the graph on every permutation)
 #' asymmetry_significance(graph, data = mv, groups = groups,
-#'                        mode = "location", nperm = 99)
+#'                        mode = "location", nperm = 9, pendants = "keep")
 #'
 #' # Mechanism: does an edge's asymmetry reflect its populations' bandwidths?
-#' asymmetry_significance(graph, mode = "mechanism", nperm = 199)
+#' asymmetry_significance(graph, mode = "mechanism", nperm = 19, pendants = "keep")
 #'
 #' # Then report the magnitude of a retained edge with a confidence interval
-#' asymmetry_ci(graph, data = mv, groups = groups, nboot = 99)
+#' asymmetry_ci(graph, data = mv, groups = groups, nboot = 9)
 #' }
 #'
 #' @export
@@ -168,6 +171,7 @@ asymmetry_significance <- function(graph,
 
   mode     <- match.arg(mode)
   pendants <- match.arg(pendants)
+  dname    <- deparse1(substitute(graph))
 
   .validate_asymmetry_graph(graph)
   if (mode == "location") {
@@ -186,7 +190,9 @@ asymmetry_significance <- function(graph,
     mechanism = asymmetry_bandwidth(graph, nperm = nperm, ...)
   )
 
-  if (mode != "existence")
+  if (mode == "existence")
+    ret$data.name <- dname
+  else
     ret <- .handle_pendant_edges(ret, graph, pendants)
 
   attr(ret, "mode") <- mode

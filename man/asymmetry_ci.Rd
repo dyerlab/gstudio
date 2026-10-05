@@ -43,7 +43,7 @@ A \code{data.frame} with one row per retained edge and the columns:
     \item{delta}{The observed asymmetry index \eqn{\Delta_{ij}}.}
     \item{boot_mean}{Mean of \eqn{\Delta_{ij}} across the resamples in
       which the edge was present.}
-    \item{ci_low, ci_high}{Percentile bootstrap bounds at level
+    \item{conf.low, conf.high}{Percentile bootstrap bounds at level
       \code{conf}.}
     \item{edge_support}{Proportion of successful resamples in which the
       edge was present (the denominator of the interval).}
@@ -100,7 +100,8 @@ mv     <- to_mv(arapat)
 groups <- arapat$Population
 graph  <- popgraph(mv, groups)
 
-ci <- asymmetry_ci(graph, data = mv, groups = groups, nboot = 99)
+# A small nboot keeps the example quick; use 999 or more in practice.
+ci <- asymmetry_ci(graph, data = mv, groups = groups, nboot = 9)
 head(ci)
 }
 

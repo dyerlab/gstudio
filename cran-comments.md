@@ -1,21 +1,41 @@
 ## Resubmission
 
-This package was archived on CRAN on 2015-06-09. It has since been completely rewritten, incorporated additional functionality, and continues
-to be actively maintained. All previous check errors have been resolved. Major changes include integration of the `popgraph` package, comprehensive test coverage, a vignette, implementation of a simulation framework for individual-based forward time simulations, and conversion to selective namespace imports.
+This package was archived on CRAN on 2015-06-09 (last CRAN version 1.3). It has
+since been completely rewritten and is actively maintained; all check errors
+that led to archival have been resolved.
 
-This submission (v1.14) adds `asymmetric_weights()` for perplexity-based directional gene flow estimation and corrects missing `stats` namespace imports flagged by R CMD check.
+This submission (v1.15.0) consolidates the interface:
+
+* Analyses go through four gateway functions (`genetic_diversity()`,
+  `genetic_structure()`, `genetic_distance()`, `genetic_relatedness()`); the
+  former standalone estimators are internal.
+* Tests return standard `htest` objects, and result tables follow one column
+  convention (`Stratum`, `from`/`to`, `statistic`, `p.value`), so output works
+  with `broom::tidy()` and dplyr pipelines, including `group_by()`.
+* New genetic-gravity tools for inferring the direction of gene flow from a
+  Population Graph (`gravity_field()`, `source_sink_test()`, `ibgd()`,
+  `genetic_distance(mode = "pgd")`), with a new vignette and example data.
+* `plot()` methods for Population Graphs and gravity fields return ggplot
+  objects.
+
+The interface changes are listed in NEWS as [BREAKING] entries.
 
 ## Test environments
 
-* macOS Sequoia 15 (aarch64-apple-darwin20), R 4.6.0
-* Windows Server 2022 x64 (win-builder), R-release
-* Windows Server 2022 x64 (win-builder), R-devel
+* macOS (aarch64-apple-darwin20), R 4.6.0: `devtools::check(cran = TRUE)`
+* win-builder, R-release: TODO (`devtools::check_win_release()`)
+* win-builder, R-devel: TODO (`devtools::check_win_devel()`)
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 0 notes (local)
+
+Expected on CRAN incoming checks:
 
 * checking CRAN incoming feasibility ... NOTE
   New submission. Package was archived on CRAN.
 
-This is a resubmission of a fully rewritten package addressing all original issues that led to archival in 2015.
+## Reverse dependencies
+
+There are no reverse dependencies: the package is not currently on CRAN, and
+`tools::package_dependencies("gstudio", reverse = TRUE)` returns none.

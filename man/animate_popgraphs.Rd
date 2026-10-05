@@ -7,11 +7,13 @@
 animate_popgraphs(
   graphs,
   file = tempfile(fileext = ".gif"),
-  layout = "fr",
+  layout = NULL,
   delay = 1,
   width = 600,
   height = 600,
-  labels = TRUE,
+  node_size = c("constant", "degree", "size"),
+  node_labels = c("name", "degree", "size", "none"),
+  node_fill = NULL,
   loop = TRUE,
   frame_plot = NULL
 )
@@ -23,21 +25,15 @@ list is named, the names are used as frame titles.}
 \item{file}{The path of the GIF file to write.  Defaults to a temporary
 file, whose path is reported with a message and returned.}
 
-\item{layout}{How to place the nodes.  One of:
-\itemize{
-  \item A character shorthand for an \code{igraph} layout: "fr" (the
-    default, Fruchterman-Reingold), "kk" (Kamada-Kawai), "circle", or
-    "mds".
-  \item A layout function, such as \code{igraph::layout_with_graphopt},
-    that takes an \code{igraph} and returns a two-column coordinate matrix.
-  \item A two-column numeric matrix with node names as row names.
-  \item A \code{data.frame} with columns \code{name}, \code{x}, and
-    \code{y}, or the output of \code{strata_coordinates()} (columns
-    \code{Stratum}, \code{Longitude}, and \code{Latitude}).
-}
-Layout functions are applied to the union of all graphs.  Force-directed
-layouts are stochastic, so call \code{set.seed()} first for a
-reproducible arrangement.}
+\item{layout}{How to place the nodes, as in \code{\link{plot.popgraph}}:
+\code{NULL} (default) uses vertex attributes \code{x}/\code{y} or
+\code{Longitude}/\code{Latitude} when every node has them and otherwise a
+Kamada-Kawai layout; or a layout name (\code{"fr"}, \code{"kk"},
+\code{"circle"}, \code{"mds"}), a layout function, a two-column matrix with
+node names as row names, or a \code{data.frame} with columns
+\code{name}/\code{x}/\code{y} or the output of \code{strata_coordinates()}.
+Named and function layouts are computed once, on the unweighted union of all
+graphs, with a fixed seed, so the arrangement is reproducible.}
 
 \item{delay}{The time, in seconds, that each frame is shown (default 1).}
 
@@ -45,20 +41,25 @@ reproducible arrangement.}
 
 \item{height}{The height of the animation in pixels (default 600).}
 
-\item{labels}{A flag indicating whether node names are drawn (default TRUE).}
+\item{node_size, node_labels, node_fill}{Node styling for the default frames,
+as in \code{\link{plot.popgraph}} (defaults \code{"constant"},
+\code{"name"}, and \code{NULL}: fill by a \code{region} vertex attribute
+when present, otherwise white).  Degree is taken from each frame's own
+graph.}
 
 \item{loop}{Should the animation loop?  Either \code{TRUE} (the default)
 to loop forever, \code{FALSE} to play once, or a number of repetitions.}
 
 \item{frame_plot}{An optional function used to draw each frame, taking
-\code{(layout, title)} and returning a \code{ggplot}.  \code{layout} is a
-\code{ggraph} layout (from \code{ggraph::create_layout()}) holding every
-node at its fixed position, with node columns \code{name} and
-\code{present} (\code{FALSE} for nodes absent from that graph), so it can
-be drawn with \code{ggraph(layout) + geom_edge_link() + ...}.  The default
-(\code{NULL}) draws edges, nodes (absent nodes faded), and, if
-\code{labels = TRUE}, node names.  Keep the coordinate limits fixed across
-frames if you want nodes to stay still.}
+\code{(layout, title)} and returning a \code{ggplot}; requires
+\pkg{ggraph}.  \code{layout} is a \code{ggraph} layout (from
+\code{ggraph::create_layout()}) holding every node at its fixed position,
+with node columns \code{name} and \code{present} (\code{FALSE} for nodes
+absent from that graph), so it can be drawn with
+\code{ggraph(layout) + geom_edge_link() + ...}.  The default (\code{NULL})
+draws each frame with the same backend as \code{plot.popgraph()}, with
+absent nodes faded.  Keep the coordinate limits fixed across frames if you
+want nodes to stay still.}
 }
 \value{
 The path to the GIF file, invisibly.
@@ -74,13 +75,11 @@ Renders each graph in a list as a frame and stitches the frames together
 }
 \examples{
 \donttest{
-if (requireNamespace("gifski", quietly = TRUE) &&
-    requireNamespace("ggraph", quietly = TRUE)) {
+if (requireNamespace("gifski", quietly = TRUE)) {
   data(lopho)
   data(upiga)
   graphs <- list(Lophocereus = lopho, Upiga = upiga)
   out <- file.path(tempdir(), "baja.gif")
-  set.seed(42)
   animate_popgraphs(graphs, file = out, layout = "kk", delay = 2)
 
   # Style the frames yourself with ggraph

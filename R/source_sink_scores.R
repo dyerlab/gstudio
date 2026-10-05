@@ -1,4 +1,4 @@
-#' @rdname gravity
+#' @rdname genetic_gravity
 #' @export
 source_sink_scores <- function(graph, gamma = 0.5, x = NULL) {
   graph <- .gravity_check(graph)
@@ -22,7 +22,7 @@ source_sink_scores <- function(graph, gamma = 0.5, x = NULL) {
   fit <- as.numeric(B %*% S)
   ok <- k > 0
   sdz <- function(v) length(v) > 1 && stats::sd(v, na.rm = TRUE) > 0
-  out <- data.frame(node = nodes, S = S, gravity = grav, balance = bal, degree = as.numeric(k),
+  out <- data.frame(Stratum = nodes, S = S, gravity = grav, balance = bal, degree = as.numeric(k),
                     component = as.integer(comp), S0 = S0, n = NA_real_, stringsAsFactors = FALSE)
   if (!is.null(x)) {
     out$n <- as.numeric(colSums(B))

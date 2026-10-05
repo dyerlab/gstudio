@@ -16,7 +16,9 @@ hwe(x, mode = c("Chi")[1], supress_warnings = FALSE)
 (often helpful if you are simulating data sets for permutation)}
 }
 \value{
-A \code{data.frame} with columns for Locus, Chi (the stat), df, and Prob.
+A \code{data.frame} with one row per locus and columns \code{Locus},
+  \code{statistic} (the chi-square statistic), \code{df} and \code{p.value}
+  (numeric), named as \code{broom::tidy()} names test results.
 }
 \description{
 This function tests for Hardy-Weinberg Equilibrium using the either 

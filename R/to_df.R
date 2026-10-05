@@ -4,7 +4,10 @@
 #'   object for either the node or edge set with all attributes.
 #' @param graph An population graph
 #' @param mode Either "nodes" or "edges" to be used.
-#' @return An object of type data.frame
+#' @return A \code{data.frame}.  For \code{mode = "nodes"}, one row per node
+#'   with the node name as \code{Stratum} followed by the other vertex
+#'   attributes; for \code{mode = "edges"}, one row per edge with \code{from},
+#'   \code{to} and the edge attributes.
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @examples
@@ -26,12 +29,13 @@ to_df <- function( graph, mode=c("nodes","edges")[1]) {
     for( key in keys){
       ret[[key]] <- vertex_attr(graph,key)
     }
-    ret <- as.data.frame(ret)
+    ret <- as.data.frame(ret, stringsAsFactors = FALSE)
+    names(ret)[names(ret) == "name"] <- "Stratum"
   }
   else if( mode == "edges") {
     elist <- as_edgelist(graph,names=TRUE)
-    ret$From = elist[,1]
-    ret$To = elist[,2]
+    ret$from = elist[,1]
+    ret$to = elist[,2]
     for( attr in edge_attr_names(graph) ) {
       ret[[attr]] <- edge_attr(graph, attr)
     }  

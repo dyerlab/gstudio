@@ -21,7 +21,7 @@ distance bin (default 0 = no permutation test).}
 \value{
 A data frame with one row per lag and columns \code{From},
   \code{To}, \code{R} (autocorrelation coefficient), \code{N} (number of
-  pairs in the bin), and \code{P} (permutation p-value; \code{NA} when
+  pairs in the bin), and \code{p.value} (permutation p-value; \code{NA} when
   \code{perms = 0}).
 }
 \description{

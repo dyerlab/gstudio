@@ -204,14 +204,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./genetic-gravity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Genetic Gravity</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./visualization.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Visualization</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Visualization</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./simulation-parentage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Simulation &amp; Parentage</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Simulation &amp; Parentage</span></span></a>
   </div>
 </li>
     </ul>
@@ -236,6 +242,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#separated" id="toc-separated" class="nav-link" data-scroll-target="#separated"><span class="header-section-number">2.2.4</span> Separated</a></li>
   <li><a href="#zyme-allozyme" id="toc-zyme-allozyme" class="nav-link" data-scroll-target="#zyme-allozyme"><span class="header-section-number">2.2.5</span> Zyme (allozyme)</a></li>
   <li><a href="#column" id="toc-column" class="nav-link" data-scroll-target="#column"><span class="header-section-number">2.2.6</span> Column</a></li>
+  <li><a href="#locus-columns-in-a-data-frame" id="toc-locus-columns-in-a-data-frame" class="nav-link" data-scroll-target="#locus-columns-in-a-data-frame"><span class="header-section-number">2.2.7</span> Locus Columns in a Data Frame</a></li>
   </ul></li>
   <li><a href="#working-with-vectors-of-loci" id="toc-working-with-vectors-of-loci" class="nav-link" data-scroll-target="#working-with-vectors-of-loci"><span class="header-section-number">2.3</span> Working with Vectors of Loci</a>
   <ul class="collapse">
@@ -256,6 +263,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#is-a-test" id="toc-is-a-test" class="nav-link" data-scroll-target="#is-a-test"><span class="header-section-number">2.7.3</span> Is-a Test</a></li>
   </ul></li>
   <li><a href="#multivariate-conversion" id="toc-multivariate-conversion" class="nav-link" data-scroll-target="#multivariate-conversion"><span class="header-section-number">2.8</span> Multivariate Conversion</a></li>
+  <li><a href="#without-pipes" id="toc-without-pipes" class="nav-link" data-scroll-target="#without-pipes"><span class="header-section-number">2.9</span> Without Pipes</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyerlab/gstudio/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -283,25 +291,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>The <code>locus</code> is the fundamental data type in <code>gstudio</code>. It is an S3 class that stores a genotype as a colon-separated string of alleles. This chapter covers creating, manipulating, and converting locus objects.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="creating-locus-objects" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="creating-locus-objects"><span class="header-section-number">2.1</span> Creating Locus Objects</h2>
 <p>The <code>locus()</code> constructor takes a vector of alleles and collapses them into a single genotype:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>loc <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>loc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>loc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>loc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B"</code></pre>
 </div>
 </div>
 <p>Homozygotes and higher-ploidy genotypes work the same way:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:A"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B:C:D"</code></pre>
 </div>
@@ -329,7 +342,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="2.2.1" class="anchored" data-anchor-id="codominant-default"><span class="header-section-number">2.2.1</span> Codominant (default)</h3>
 <p>Alleles are sorted alphabetically and joined with <code>:</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"A"</span>), <span class="at">type =</span> <span class="st">"codom"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>(<span class="at">type =</span> <span class="st">"codom"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B"</code></pre>
 </div>
@@ -396,9 +410,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Two-column matrix format (used internally by <code>read_population()</code>):</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>alleles_mat <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"C"</span>))</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(alleles_mat, <span class="at">type =</span> <span class="st">"column"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>alleles_mat <span class="sc">|&gt;</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>(<span class="at">type =</span> <span class="st">"column"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B" "A:B" "C:C"</code></pre>
+</div>
+</div>
+</section>
+<section id="locus-columns-in-a-data-frame" class="level3" data-number="2.2.7">
+<h3 data-number="2.2.7" class="anchored" data-anchor-id="locus-columns-in-a-data-frame"><span class="header-section-number">2.2.7</span> Locus Columns in a Data Frame</h3>
+<p>Raw genotype data usually arrive as one column per allele. <code>mutate()</code> turns each pair of allele columns into a <code>locus</code> column, and locus columns keep their class through <code>filter()</code>, <code>select()</code> and <code>arrange()</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Population =</span> <span class="fu">c</span>(<span class="st">"North"</span>, <span class="st">"North"</span>, <span class="st">"South"</span>),</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">TPI_1 =</span> <span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"1"</span>, <span class="st">"2"</span>),</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">TPI_2 =</span> <span class="fu">c</span>(<span class="st">"2"</span>, <span class="st">"1"</span>, <span class="st">"2"</span>))</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>genos <span class="ot">&lt;-</span> raw <span class="sc">|&gt;</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TPI =</span> <span class="fu">locus</span>(<span class="fu">cbind</span>(TPI_1, TPI_2), <span class="at">type =</span> <span class="st">"column"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Population, TPI)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>genos</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Population TPI
+1      North 1:2
+2      North 1:1
+3      South 2:2</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>genos <span class="sc">|&gt;</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_class</span>(<span class="st">"locus"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "TPI"</code></pre>
 </div>
 </div>
 </section>
@@ -407,11 +449,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="2.3" class="anchored" data-anchor-id="working-with-vectors-of-loci"><span class="header-section-number">2.3</span> Working with Vectors of Loci</h2>
 <p>Genotype vectors are created using <code>c()</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>AA <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>AB <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>BB <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"B"</span>))</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>loci <span class="ot">&lt;-</span> <span class="fu">c</span>(AA, AB, AB, AA, BB)</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>loci</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>AA <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>AB <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>BB <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>loci <span class="ot">&lt;-</span> <span class="fu">c</span>(AA, AB, AB, AA, BB)</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>loci</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:A" "A:B" "A:B" "A:A" "B:B"</code></pre>
 </div>
@@ -419,11 +465,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="indexing" class="level3" data-number="2.3.1">
 <h3 data-number="2.3.1" class="anchored" data-anchor-id="indexing"><span class="header-section-number">2.3.1</span> Indexing</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>loci[<span class="dv">2</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>loci[<span class="dv">2</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>loci[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>loci[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:A" "A:B" "B:B"</code></pre>
 </div>
@@ -432,7 +478,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="replication" class="level3" data-number="2.3.2">
 <h3 data-number="2.3.2" class="anchored" data-anchor-id="replication"><span class="header-section-number">2.3.2</span> Replication</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(AB, <span class="at">times =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>AB <span class="sc">|&gt;</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="at">times =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B" "A:B" "A:B"</code></pre>
 </div>
@@ -443,11 +490,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="2.4" class="anchored" data-anchor-id="extracting-alleles"><span class="header-section-number">2.4</span> Extracting Alleles</h2>
 <p>The <code>alleles()</code> function returns the component alleles:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">alleles</span>(AB)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>AB <span class="sc">|&gt;</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alleles</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A" "B"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">alleles</span>(loci)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>loci <span class="sc">|&gt;</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alleles</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2]
 [1,] "A"  "A" 
@@ -461,17 +510,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="heterozygosity-testing" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="heterozygosity-testing"><span class="header-section-number">2.5</span> Heterozygosity Testing</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is_heterozygote</span>(AA)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is_heterozygote</span>(AB)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] TRUE</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is_heterozygote</span>(loci)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>loci <span class="sc">|&gt;</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">is_heterozygote</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] FALSE  TRUE  TRUE FALSE FALSE</code></pre>
+</div>
+</div>
+<p>Within a data frame, the same test summarizes observed heterozygosity by stratum:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">het =</span> <span class="fu">is_heterozygote</span>(LTRS)) <span class="sc">|&gt;</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Species) <span class="sc">|&gt;</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Ho_LTRS =</span> <span class="fu">mean</span>(het, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  Species   Ho_LTRS
+  &lt;fct&gt;       &lt;dbl&gt;
+1 Cape        0.107
+2 Mainland    0.472
+3 Peninsula   0.242</code></pre>
 </div>
 </div>
 </section>
@@ -481,11 +540,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="2.6.1" class="anchored" data-anchor-id="mating"><span class="header-section-number">2.6.1</span> Mating (<code>+</code>)</h3>
 <p>The <code>+</code> operator simulates mating by randomly sampling one allele from each parent:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>dad <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"B"</span>))</span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>offspring <span class="ot">&lt;-</span> mom <span class="sc">+</span> dad</span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>offspring</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>dad <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"B"</span>))</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>offspring <span class="ot">&lt;-</span> mom <span class="sc">+</span> dad</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>offspring</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B"</code></pre>
 </div>
@@ -495,10 +554,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="2.6.2" class="anchored" data-anchor-id="parental-subtraction--"><span class="header-section-number">2.6.2</span> Parental Subtraction (<code>-</code>)</h3>
 <p>The <code>-</code> operator removes the maternal contribution from an offspring genotype:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>off <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>paternal_gamete <span class="ot">&lt;-</span> off <span class="sc">-</span> mom</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>paternal_gamete</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>off <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>paternal_gamete <span class="ot">&lt;-</span> off <span class="sc">-</span> mom</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>paternal_gamete</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "B"</code></pre>
 </div>
@@ -511,7 +570,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="to-data-frame" class="level3" data-number="2.7.1">
 <h3 data-number="2.7.1" class="anchored" data-anchor-id="to-data-frame"><span class="header-section-number">2.7.1</span> To Data Frame</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(loci)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>loci <span class="sc">|&gt;</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  loci
 1  A:A
@@ -525,11 +585,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="from-other-types" class="level3" data-number="2.7.2">
 <h3 data-number="2.7.2" class="anchored" data-anchor-id="from-other-types"><span class="header-section-number">2.7.2</span> From Other Types</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.locus</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.locus</span>(<span class="fu">list</span>(<span class="st">"C"</span>, <span class="st">"D"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"C"</span>, <span class="st">"D"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.locus</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "C:D"</code></pre>
 </div>
@@ -538,11 +600,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="is-a-test" class="level3" data-number="2.7.3">
 <h3 data-number="2.7.3" class="anchored" data-anchor-id="is-a-test"><span class="header-section-number">2.7.3</span> Is-a Test</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>(AB)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>(AB)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>(<span class="st">"not a locus"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>(<span class="st">"not a locus"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] FALSE</code></pre>
 </div>
@@ -553,13 +615,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="2.8" class="anchored" data-anchor-id="multivariate-conversion"><span class="header-section-number">2.8</span> Multivariate Conversion</h2>
 <p>The <code>to_mv()</code> function converts locus data to a multivariate numeric format suitable for ordination and graph analysis:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
-<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> <span class="fu">to_mv</span>(arapat)</span>
-<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(mv)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">to_mv</span>()</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(mv)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 363  58</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>mv[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>mv[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     01 02  01 02  03 04
 [1,]  1  0 0.0  0 0.0  0
@@ -569,7 +632,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 [5,]  1  0 0.5  0 0.5  0</code></pre>
 </div>
 </div>
-<p>Each allele at each locus becomes a column, with values representing allele counts (0, 1, or 2 for diploids). This is the input format for <code>popgraph()</code>.</p>
+<p>Each allele at each locus becomes a column, with values representing allele counts (0, 1, or 2 for diploids). This is the input format for <code>popgraph()</code>; <code>population_graph()</code> does the conversion for you.</p>
+</section>
+<section id="without-pipes" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="without-pipes"><span class="header-section-number">2.9</span> Without Pipes</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>loc   <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>genos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Population =</span> raw<span class="sc">$</span>Population,</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">TPI =</span> <span class="fu">locus</span>(<span class="fu">cbind</span>(raw<span class="sc">$</span>TPI_1, raw<span class="sc">$</span>TPI_2), <span class="at">type =</span> <span class="st">"column"</span>))</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a><span class="fu">alleles</span>(loci)</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a><span class="fu">is_heterozygote</span>(loci)</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(loci)</span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a><span class="fu">as.locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> <span class="fu">to_mv</span>(arapat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
 <!-- -->
@@ -1040,200 +1116,269 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb68" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># The Locus Class</span></span>
-<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`locus`</span> is the fundamental data type in <span class="in">`gstudio`</span>. It is an S3 class that stores a genotype as a colon-separated string of alleles. This chapter covers creating, manipulating, and converting locus objects.</span>
-<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
-<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## Creating Locus Objects</span></span>
-<span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-13"><a href="#cb68-13" aria-hidden="true" tabindex="-1"></a>The <span class="in">`locus()`</span> constructor takes a vector of alleles and collapses them into a single genotype:</span>
-<span id="cb68-14"><a href="#cb68-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-17"><a href="#cb68-17" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-18"><a href="#cb68-18" aria-hidden="true" tabindex="-1"></a>loc <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
-<span id="cb68-19"><a href="#cb68-19" aria-hidden="true" tabindex="-1"></a>loc</span>
-<span id="cb68-20"><a href="#cb68-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-21"><a href="#cb68-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-22"><a href="#cb68-22" aria-hidden="true" tabindex="-1"></a>Homozygotes and higher-ploidy genotypes work the same way:</span>
-<span id="cb68-23"><a href="#cb68-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-26"><a href="#cb68-26" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-27"><a href="#cb68-27" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
-<span id="cb68-28"><a href="#cb68-28" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>))</span>
-<span id="cb68-29"><a href="#cb68-29" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-30"><a href="#cb68-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-31"><a href="#cb68-31" aria-hidden="true" tabindex="-1"></a><span class="fu">### Missing Data</span></span>
-<span id="cb68-32"><a href="#cb68-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-33"><a href="#cb68-33" aria-hidden="true" tabindex="-1"></a>Missing data is represented as an empty string internally:</span>
-<span id="cb68-34"><a href="#cb68-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-37"><a href="#cb68-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-38"><a href="#cb68-38" aria-hidden="true" tabindex="-1"></a>loc_missing <span class="ot">&lt;-</span> <span class="fu">locus</span>()</span>
-<span id="cb68-39"><a href="#cb68-39" aria-hidden="true" tabindex="-1"></a>loc_missing</span>
-<span id="cb68-40"><a href="#cb68-40" aria-hidden="true" tabindex="-1"></a><span class="fu">is.na</span>(loc_missing)</span>
-<span id="cb68-41"><a href="#cb68-41" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-42"><a href="#cb68-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-43"><a href="#cb68-43" aria-hidden="true" tabindex="-1"></a><span class="fu">## Marker Types</span></span>
-<span id="cb68-44"><a href="#cb68-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-45"><a href="#cb68-45" aria-hidden="true" tabindex="-1"></a>The <span class="in">`type`</span> parameter controls how raw data is interpreted:</span>
-<span id="cb68-46"><a href="#cb68-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-47"><a href="#cb68-47" aria-hidden="true" tabindex="-1"></a><span class="fu">### Codominant (default)</span></span>
-<span id="cb68-48"><a href="#cb68-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-49"><a href="#cb68-49" aria-hidden="true" tabindex="-1"></a>Alleles are sorted alphabetically and joined with <span class="in">`:`</span>:</span>
-<span id="cb68-50"><a href="#cb68-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-53"><a href="#cb68-53" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-54"><a href="#cb68-54" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"A"</span>), <span class="at">type =</span> <span class="st">"codom"</span>)</span>
-<span id="cb68-55"><a href="#cb68-55" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-56"><a href="#cb68-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-57"><a href="#cb68-57" aria-hidden="true" tabindex="-1"></a><span class="fu">### AFLP</span></span>
-<span id="cb68-58"><a href="#cb68-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-59"><a href="#cb68-59" aria-hidden="true" tabindex="-1"></a>Binary presence/absence data (0 or 1):</span>
-<span id="cb68-60"><a href="#cb68-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-63"><a href="#cb68-63" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-64"><a href="#cb68-64" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"1"</span>, <span class="at">type =</span> <span class="st">"aflp"</span>)</span>
-<span id="cb68-65"><a href="#cb68-65" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"0"</span>, <span class="at">type =</span> <span class="st">"aflp"</span>)</span>
-<span id="cb68-66"><a href="#cb68-66" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-67"><a href="#cb68-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-68"><a href="#cb68-68" aria-hidden="true" tabindex="-1"></a><span class="fu">### SNP</span></span>
-<span id="cb68-69"><a href="#cb68-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-70"><a href="#cb68-70" aria-hidden="true" tabindex="-1"></a>Encoded as 0, 1, or 2 (count of minor alleles):</span>
-<span id="cb68-71"><a href="#cb68-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-74"><a href="#cb68-74" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-75"><a href="#cb68-75" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"0"</span>, <span class="at">type =</span> <span class="st">"snp"</span>)</span>
-<span id="cb68-76"><a href="#cb68-76" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"1"</span>, <span class="at">type =</span> <span class="st">"snp"</span>)</span>
-<span id="cb68-77"><a href="#cb68-77" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"2"</span>, <span class="at">type =</span> <span class="st">"snp"</span>)</span>
-<span id="cb68-78"><a href="#cb68-78" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-79"><a href="#cb68-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-80"><a href="#cb68-80" aria-hidden="true" tabindex="-1"></a><span class="fu">### Separated</span></span>
-<span id="cb68-81"><a href="#cb68-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-82"><a href="#cb68-82" aria-hidden="true" tabindex="-1"></a>Pre-formatted colon-separated strings:</span>
-<span id="cb68-83"><a href="#cb68-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-86"><a href="#cb68-86" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-87"><a href="#cb68-87" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"A:B"</span>, <span class="at">type =</span> <span class="st">"separated"</span>)</span>
-<span id="cb68-88"><a href="#cb68-88" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-89"><a href="#cb68-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-90"><a href="#cb68-90" aria-hidden="true" tabindex="-1"></a><span class="fu">### Zyme (allozyme)</span></span>
-<span id="cb68-91"><a href="#cb68-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-92"><a href="#cb68-92" aria-hidden="true" tabindex="-1"></a>Alleles encoded as concatenated integers (e.g., "12" = alleles 1 and 2):</span>
-<span id="cb68-93"><a href="#cb68-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-96"><a href="#cb68-96" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-97"><a href="#cb68-97" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"12"</span>, <span class="at">type =</span> <span class="st">"zyme"</span>)</span>
-<span id="cb68-98"><a href="#cb68-98" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"23"</span>, <span class="at">type =</span> <span class="st">"zyme"</span>)</span>
-<span id="cb68-99"><a href="#cb68-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-100"><a href="#cb68-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-101"><a href="#cb68-101" aria-hidden="true" tabindex="-1"></a><span class="fu">### Column</span></span>
-<span id="cb68-102"><a href="#cb68-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-103"><a href="#cb68-103" aria-hidden="true" tabindex="-1"></a>Two-column matrix format (used internally by <span class="in">`read_population()`</span>):</span>
-<span id="cb68-104"><a href="#cb68-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-107"><a href="#cb68-107" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-108"><a href="#cb68-108" aria-hidden="true" tabindex="-1"></a>alleles_mat <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"C"</span>))</span>
-<span id="cb68-109"><a href="#cb68-109" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(alleles_mat, <span class="at">type =</span> <span class="st">"column"</span>)</span>
-<span id="cb68-110"><a href="#cb68-110" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-111"><a href="#cb68-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-112"><a href="#cb68-112" aria-hidden="true" tabindex="-1"></a><span class="fu">## Working with Vectors of Loci</span></span>
-<span id="cb68-113"><a href="#cb68-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-114"><a href="#cb68-114" aria-hidden="true" tabindex="-1"></a>Genotype vectors are created using <span class="in">`c()`</span>:</span>
-<span id="cb68-115"><a href="#cb68-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-118"><a href="#cb68-118" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-119"><a href="#cb68-119" aria-hidden="true" tabindex="-1"></a>AA <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
-<span id="cb68-120"><a href="#cb68-120" aria-hidden="true" tabindex="-1"></a>AB <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
-<span id="cb68-121"><a href="#cb68-121" aria-hidden="true" tabindex="-1"></a>BB <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"B"</span>))</span>
-<span id="cb68-122"><a href="#cb68-122" aria-hidden="true" tabindex="-1"></a>loci <span class="ot">&lt;-</span> <span class="fu">c</span>(AA, AB, AB, AA, BB)</span>
-<span id="cb68-123"><a href="#cb68-123" aria-hidden="true" tabindex="-1"></a>loci</span>
-<span id="cb68-124"><a href="#cb68-124" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-125"><a href="#cb68-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-126"><a href="#cb68-126" aria-hidden="true" tabindex="-1"></a><span class="fu">### Indexing</span></span>
-<span id="cb68-127"><a href="#cb68-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-130"><a href="#cb68-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-131"><a href="#cb68-131" aria-hidden="true" tabindex="-1"></a>loci[<span class="dv">2</span>]</span>
-<span id="cb68-132"><a href="#cb68-132" aria-hidden="true" tabindex="-1"></a>loci[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)]</span>
-<span id="cb68-133"><a href="#cb68-133" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-134"><a href="#cb68-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-135"><a href="#cb68-135" aria-hidden="true" tabindex="-1"></a><span class="fu">### Replication</span></span>
-<span id="cb68-136"><a href="#cb68-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-139"><a href="#cb68-139" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-140"><a href="#cb68-140" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(AB, <span class="at">times =</span> <span class="dv">3</span>)</span>
-<span id="cb68-141"><a href="#cb68-141" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-142"><a href="#cb68-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-143"><a href="#cb68-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## Extracting Alleles</span></span>
-<span id="cb68-144"><a href="#cb68-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-145"><a href="#cb68-145" aria-hidden="true" tabindex="-1"></a>The <span class="in">`alleles()`</span> function returns the component alleles:</span>
-<span id="cb68-146"><a href="#cb68-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-149"><a href="#cb68-149" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-150"><a href="#cb68-150" aria-hidden="true" tabindex="-1"></a><span class="fu">alleles</span>(AB)</span>
-<span id="cb68-151"><a href="#cb68-151" aria-hidden="true" tabindex="-1"></a><span class="fu">alleles</span>(loci)</span>
-<span id="cb68-152"><a href="#cb68-152" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-153"><a href="#cb68-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-154"><a href="#cb68-154" aria-hidden="true" tabindex="-1"></a><span class="fu">## Heterozygosity Testing</span></span>
-<span id="cb68-155"><a href="#cb68-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-158"><a href="#cb68-158" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-159"><a href="#cb68-159" aria-hidden="true" tabindex="-1"></a><span class="fu">is_heterozygote</span>(AA)</span>
-<span id="cb68-160"><a href="#cb68-160" aria-hidden="true" tabindex="-1"></a><span class="fu">is_heterozygote</span>(AB)</span>
-<span id="cb68-161"><a href="#cb68-161" aria-hidden="true" tabindex="-1"></a><span class="fu">is_heterozygote</span>(loci)</span>
-<span id="cb68-162"><a href="#cb68-162" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-163"><a href="#cb68-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-164"><a href="#cb68-164" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operator Overloads</span></span>
-<span id="cb68-165"><a href="#cb68-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-166"><a href="#cb68-166" aria-hidden="true" tabindex="-1"></a><span class="fu">### Mating (`+`)</span></span>
-<span id="cb68-167"><a href="#cb68-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-168"><a href="#cb68-168" aria-hidden="true" tabindex="-1"></a>The <span class="in">`+`</span> operator simulates mating by randomly sampling one allele from each parent:</span>
-<span id="cb68-169"><a href="#cb68-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-172"><a href="#cb68-172" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-173"><a href="#cb68-173" aria-hidden="true" tabindex="-1"></a>dad <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
-<span id="cb68-174"><a href="#cb68-174" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"B"</span>))</span>
-<span id="cb68-175"><a href="#cb68-175" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb68-176"><a href="#cb68-176" aria-hidden="true" tabindex="-1"></a>offspring <span class="ot">&lt;-</span> mom <span class="sc">+</span> dad</span>
-<span id="cb68-177"><a href="#cb68-177" aria-hidden="true" tabindex="-1"></a>offspring</span>
-<span id="cb68-178"><a href="#cb68-178" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-179"><a href="#cb68-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-180"><a href="#cb68-180" aria-hidden="true" tabindex="-1"></a><span class="fu">### Parental Subtraction (`-`)</span></span>
-<span id="cb68-181"><a href="#cb68-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-182"><a href="#cb68-182" aria-hidden="true" tabindex="-1"></a>The <span class="in">`-`</span> operator removes the maternal contribution from an offspring genotype:</span>
-<span id="cb68-183"><a href="#cb68-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-186"><a href="#cb68-186" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-187"><a href="#cb68-187" aria-hidden="true" tabindex="-1"></a>off <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
-<span id="cb68-188"><a href="#cb68-188" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
-<span id="cb68-189"><a href="#cb68-189" aria-hidden="true" tabindex="-1"></a>paternal_gamete <span class="ot">&lt;-</span> off <span class="sc">-</span> mom</span>
-<span id="cb68-190"><a href="#cb68-190" aria-hidden="true" tabindex="-1"></a>paternal_gamete</span>
-<span id="cb68-191"><a href="#cb68-191" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-192"><a href="#cb68-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-193"><a href="#cb68-193" aria-hidden="true" tabindex="-1"></a>This is useful in parentage analysis for identifying the paternal allelic contribution.</span>
-<span id="cb68-194"><a href="#cb68-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-195"><a href="#cb68-195" aria-hidden="true" tabindex="-1"></a><span class="fu">## Coercion</span></span>
-<span id="cb68-196"><a href="#cb68-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-197"><a href="#cb68-197" aria-hidden="true" tabindex="-1"></a><span class="fu">### To Data Frame</span></span>
-<span id="cb68-198"><a href="#cb68-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-201"><a href="#cb68-201" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-202"><a href="#cb68-202" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(loci)</span>
-<span id="cb68-203"><a href="#cb68-203" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-204"><a href="#cb68-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-205"><a href="#cb68-205" aria-hidden="true" tabindex="-1"></a><span class="fu">### From Other Types</span></span>
-<span id="cb68-206"><a href="#cb68-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-209"><a href="#cb68-209" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-210"><a href="#cb68-210" aria-hidden="true" tabindex="-1"></a><span class="fu">as.locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
-<span id="cb68-211"><a href="#cb68-211" aria-hidden="true" tabindex="-1"></a><span class="fu">as.locus</span>(<span class="fu">list</span>(<span class="st">"C"</span>, <span class="st">"D"</span>))</span>
-<span id="cb68-212"><a href="#cb68-212" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-213"><a href="#cb68-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-214"><a href="#cb68-214" aria-hidden="true" tabindex="-1"></a><span class="fu">### Is-a Test</span></span>
-<span id="cb68-215"><a href="#cb68-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-218"><a href="#cb68-218" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-219"><a href="#cb68-219" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>(AB)</span>
-<span id="cb68-220"><a href="#cb68-220" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>(<span class="st">"not a locus"</span>)</span>
-<span id="cb68-221"><a href="#cb68-221" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-222"><a href="#cb68-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-223"><a href="#cb68-223" aria-hidden="true" tabindex="-1"></a><span class="fu">## Multivariate Conversion</span></span>
-<span id="cb68-224"><a href="#cb68-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-225"><a href="#cb68-225" aria-hidden="true" tabindex="-1"></a>The <span class="in">`to_mv()`</span> function converts locus data to a multivariate numeric format suitable for ordination and graph analysis:</span>
-<span id="cb68-226"><a href="#cb68-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-229"><a href="#cb68-229" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb68-230"><a href="#cb68-230" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
-<span id="cb68-231"><a href="#cb68-231" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> <span class="fu">to_mv</span>(arapat)</span>
-<span id="cb68-232"><a href="#cb68-232" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(mv)</span>
-<span id="cb68-233"><a href="#cb68-233" aria-hidden="true" tabindex="-1"></a>mv[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]</span>
-<span id="cb68-234"><a href="#cb68-234" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb68-235"><a href="#cb68-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-236"><a href="#cb68-236" aria-hidden="true" tabindex="-1"></a>Each allele at each locus becomes a column, with values representing allele counts (0, 1, or 2 for diploids). This is the input format for <span class="in">`popgraph()`</span>.</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb71" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># The Locus Class</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`locus`</span> is the fundamental data type in <span class="in">`gstudio`</span>. It is an S3 class that stores a genotype as a colon-separated string of alleles. This chapter covers creating, manipulating, and converting locus objects.</span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
+<span id="cb71-10"><a href="#cb71-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb71-11"><a href="#cb71-11" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-12"><a href="#cb71-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-13"><a href="#cb71-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Creating Locus Objects</span></span>
+<span id="cb71-14"><a href="#cb71-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-15"><a href="#cb71-15" aria-hidden="true" tabindex="-1"></a>The <span class="in">`locus()`</span> constructor takes a vector of alleles and collapses them into a single genotype:</span>
+<span id="cb71-16"><a href="#cb71-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-19"><a href="#cb71-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-20"><a href="#cb71-20" aria-hidden="true" tabindex="-1"></a>loc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-21"><a href="#cb71-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
+<span id="cb71-22"><a href="#cb71-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-23"><a href="#cb71-23" aria-hidden="true" tabindex="-1"></a>loc</span>
+<span id="cb71-24"><a href="#cb71-24" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-25"><a href="#cb71-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-26"><a href="#cb71-26" aria-hidden="true" tabindex="-1"></a>Homozygotes and higher-ploidy genotypes work the same way:</span>
+<span id="cb71-27"><a href="#cb71-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-30"><a href="#cb71-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-31"><a href="#cb71-31" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-32"><a href="#cb71-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
+<span id="cb71-33"><a href="#cb71-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-34"><a href="#cb71-34" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-35"><a href="#cb71-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
+<span id="cb71-36"><a href="#cb71-36" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-37"><a href="#cb71-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-38"><a href="#cb71-38" aria-hidden="true" tabindex="-1"></a><span class="fu">### Missing Data</span></span>
+<span id="cb71-39"><a href="#cb71-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-40"><a href="#cb71-40" aria-hidden="true" tabindex="-1"></a>Missing data is represented as an empty string internally:</span>
+<span id="cb71-41"><a href="#cb71-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-44"><a href="#cb71-44" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-45"><a href="#cb71-45" aria-hidden="true" tabindex="-1"></a>loc_missing <span class="ot">&lt;-</span> <span class="fu">locus</span>()</span>
+<span id="cb71-46"><a href="#cb71-46" aria-hidden="true" tabindex="-1"></a>loc_missing</span>
+<span id="cb71-47"><a href="#cb71-47" aria-hidden="true" tabindex="-1"></a><span class="fu">is.na</span>(loc_missing)</span>
+<span id="cb71-48"><a href="#cb71-48" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-49"><a href="#cb71-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-50"><a href="#cb71-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## Marker Types</span></span>
+<span id="cb71-51"><a href="#cb71-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-52"><a href="#cb71-52" aria-hidden="true" tabindex="-1"></a>The <span class="in">`type`</span> parameter controls how raw data is interpreted:</span>
+<span id="cb71-53"><a href="#cb71-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-54"><a href="#cb71-54" aria-hidden="true" tabindex="-1"></a><span class="fu">### Codominant (default)</span></span>
+<span id="cb71-55"><a href="#cb71-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-56"><a href="#cb71-56" aria-hidden="true" tabindex="-1"></a>Alleles are sorted alphabetically and joined with <span class="in">`:`</span>:</span>
+<span id="cb71-57"><a href="#cb71-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-60"><a href="#cb71-60" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-61"><a href="#cb71-61" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-62"><a href="#cb71-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>(<span class="at">type =</span> <span class="st">"codom"</span>)</span>
+<span id="cb71-63"><a href="#cb71-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-64"><a href="#cb71-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-65"><a href="#cb71-65" aria-hidden="true" tabindex="-1"></a><span class="fu">### AFLP</span></span>
+<span id="cb71-66"><a href="#cb71-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-67"><a href="#cb71-67" aria-hidden="true" tabindex="-1"></a>Binary presence/absence data (0 or 1):</span>
+<span id="cb71-68"><a href="#cb71-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-71"><a href="#cb71-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-72"><a href="#cb71-72" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"1"</span>, <span class="at">type =</span> <span class="st">"aflp"</span>)</span>
+<span id="cb71-73"><a href="#cb71-73" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"0"</span>, <span class="at">type =</span> <span class="st">"aflp"</span>)</span>
+<span id="cb71-74"><a href="#cb71-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-75"><a href="#cb71-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-76"><a href="#cb71-76" aria-hidden="true" tabindex="-1"></a><span class="fu">### SNP</span></span>
+<span id="cb71-77"><a href="#cb71-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-78"><a href="#cb71-78" aria-hidden="true" tabindex="-1"></a>Encoded as 0, 1, or 2 (count of minor alleles):</span>
+<span id="cb71-79"><a href="#cb71-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-82"><a href="#cb71-82" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-83"><a href="#cb71-83" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"0"</span>, <span class="at">type =</span> <span class="st">"snp"</span>)</span>
+<span id="cb71-84"><a href="#cb71-84" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"1"</span>, <span class="at">type =</span> <span class="st">"snp"</span>)</span>
+<span id="cb71-85"><a href="#cb71-85" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"2"</span>, <span class="at">type =</span> <span class="st">"snp"</span>)</span>
+<span id="cb71-86"><a href="#cb71-86" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-87"><a href="#cb71-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-88"><a href="#cb71-88" aria-hidden="true" tabindex="-1"></a><span class="fu">### Separated</span></span>
+<span id="cb71-89"><a href="#cb71-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-90"><a href="#cb71-90" aria-hidden="true" tabindex="-1"></a>Pre-formatted colon-separated strings:</span>
+<span id="cb71-91"><a href="#cb71-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-94"><a href="#cb71-94" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-95"><a href="#cb71-95" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"A:B"</span>, <span class="at">type =</span> <span class="st">"separated"</span>)</span>
+<span id="cb71-96"><a href="#cb71-96" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-97"><a href="#cb71-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-98"><a href="#cb71-98" aria-hidden="true" tabindex="-1"></a><span class="fu">### Zyme (allozyme)</span></span>
+<span id="cb71-99"><a href="#cb71-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-100"><a href="#cb71-100" aria-hidden="true" tabindex="-1"></a>Alleles encoded as concatenated integers (e.g., "12" = alleles 1 and 2):</span>
+<span id="cb71-101"><a href="#cb71-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-104"><a href="#cb71-104" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-105"><a href="#cb71-105" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"12"</span>, <span class="at">type =</span> <span class="st">"zyme"</span>)</span>
+<span id="cb71-106"><a href="#cb71-106" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"23"</span>, <span class="at">type =</span> <span class="st">"zyme"</span>)</span>
+<span id="cb71-107"><a href="#cb71-107" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-108"><a href="#cb71-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-109"><a href="#cb71-109" aria-hidden="true" tabindex="-1"></a><span class="fu">### Column</span></span>
+<span id="cb71-110"><a href="#cb71-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-111"><a href="#cb71-111" aria-hidden="true" tabindex="-1"></a>Two-column matrix format (used internally by <span class="in">`read_population()`</span>):</span>
+<span id="cb71-112"><a href="#cb71-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-115"><a href="#cb71-115" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-116"><a href="#cb71-116" aria-hidden="true" tabindex="-1"></a>alleles_mat <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"C"</span>))</span>
+<span id="cb71-117"><a href="#cb71-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-118"><a href="#cb71-118" aria-hidden="true" tabindex="-1"></a>alleles_mat <span class="sc">|&gt;</span></span>
+<span id="cb71-119"><a href="#cb71-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>(<span class="at">type =</span> <span class="st">"column"</span>)</span>
+<span id="cb71-120"><a href="#cb71-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-121"><a href="#cb71-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-122"><a href="#cb71-122" aria-hidden="true" tabindex="-1"></a><span class="fu">### Locus Columns in a Data Frame</span></span>
+<span id="cb71-123"><a href="#cb71-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-124"><a href="#cb71-124" aria-hidden="true" tabindex="-1"></a>Raw genotype data usually arrive as one column per allele.  <span class="in">`mutate()`</span> turns</span>
+<span id="cb71-125"><a href="#cb71-125" aria-hidden="true" tabindex="-1"></a>each pair of allele columns into a <span class="in">`locus`</span> column, and locus columns keep their</span>
+<span id="cb71-126"><a href="#cb71-126" aria-hidden="true" tabindex="-1"></a>class through <span class="in">`filter()`</span>, <span class="in">`select()`</span> and <span class="in">`arrange()`</span>:</span>
+<span id="cb71-127"><a href="#cb71-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-130"><a href="#cb71-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-131"><a href="#cb71-131" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Population =</span> <span class="fu">c</span>(<span class="st">"North"</span>, <span class="st">"North"</span>, <span class="st">"South"</span>),</span>
+<span id="cb71-132"><a href="#cb71-132" aria-hidden="true" tabindex="-1"></a>                  <span class="at">TPI_1 =</span> <span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"1"</span>, <span class="st">"2"</span>),</span>
+<span id="cb71-133"><a href="#cb71-133" aria-hidden="true" tabindex="-1"></a>                  <span class="at">TPI_2 =</span> <span class="fu">c</span>(<span class="st">"2"</span>, <span class="st">"1"</span>, <span class="st">"2"</span>))</span>
+<span id="cb71-134"><a href="#cb71-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-135"><a href="#cb71-135" aria-hidden="true" tabindex="-1"></a>genos <span class="ot">&lt;-</span> raw <span class="sc">|&gt;</span></span>
+<span id="cb71-136"><a href="#cb71-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TPI =</span> <span class="fu">locus</span>(<span class="fu">cbind</span>(TPI_1, TPI_2), <span class="at">type =</span> <span class="st">"column"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb71-137"><a href="#cb71-137" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Population, TPI)</span>
+<span id="cb71-138"><a href="#cb71-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-139"><a href="#cb71-139" aria-hidden="true" tabindex="-1"></a>genos</span>
+<span id="cb71-140"><a href="#cb71-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-141"><a href="#cb71-141" aria-hidden="true" tabindex="-1"></a>genos <span class="sc">|&gt;</span></span>
+<span id="cb71-142"><a href="#cb71-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_class</span>(<span class="st">"locus"</span>)</span>
+<span id="cb71-143"><a href="#cb71-143" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-144"><a href="#cb71-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-145"><a href="#cb71-145" aria-hidden="true" tabindex="-1"></a><span class="fu">## Working with Vectors of Loci</span></span>
+<span id="cb71-146"><a href="#cb71-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-147"><a href="#cb71-147" aria-hidden="true" tabindex="-1"></a>Genotype vectors are created using <span class="in">`c()`</span>:</span>
+<span id="cb71-148"><a href="#cb71-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-151"><a href="#cb71-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-152"><a href="#cb71-152" aria-hidden="true" tabindex="-1"></a>AA <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-153"><a href="#cb71-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
+<span id="cb71-154"><a href="#cb71-154" aria-hidden="true" tabindex="-1"></a>AB <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-155"><a href="#cb71-155" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
+<span id="cb71-156"><a href="#cb71-156" aria-hidden="true" tabindex="-1"></a>BB <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-157"><a href="#cb71-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
+<span id="cb71-158"><a href="#cb71-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-159"><a href="#cb71-159" aria-hidden="true" tabindex="-1"></a>loci <span class="ot">&lt;-</span> <span class="fu">c</span>(AA, AB, AB, AA, BB)</span>
+<span id="cb71-160"><a href="#cb71-160" aria-hidden="true" tabindex="-1"></a>loci</span>
+<span id="cb71-161"><a href="#cb71-161" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-162"><a href="#cb71-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-163"><a href="#cb71-163" aria-hidden="true" tabindex="-1"></a><span class="fu">### Indexing</span></span>
+<span id="cb71-164"><a href="#cb71-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-167"><a href="#cb71-167" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-168"><a href="#cb71-168" aria-hidden="true" tabindex="-1"></a>loci[<span class="dv">2</span>]</span>
+<span id="cb71-169"><a href="#cb71-169" aria-hidden="true" tabindex="-1"></a>loci[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)]</span>
+<span id="cb71-170"><a href="#cb71-170" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-171"><a href="#cb71-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-172"><a href="#cb71-172" aria-hidden="true" tabindex="-1"></a><span class="fu">### Replication</span></span>
+<span id="cb71-173"><a href="#cb71-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-176"><a href="#cb71-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-177"><a href="#cb71-177" aria-hidden="true" tabindex="-1"></a>AB <span class="sc">|&gt;</span></span>
+<span id="cb71-178"><a href="#cb71-178" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="at">times =</span> <span class="dv">3</span>)</span>
+<span id="cb71-179"><a href="#cb71-179" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-180"><a href="#cb71-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-181"><a href="#cb71-181" aria-hidden="true" tabindex="-1"></a><span class="fu">## Extracting Alleles</span></span>
+<span id="cb71-182"><a href="#cb71-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-183"><a href="#cb71-183" aria-hidden="true" tabindex="-1"></a>The <span class="in">`alleles()`</span> function returns the component alleles:</span>
+<span id="cb71-184"><a href="#cb71-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-187"><a href="#cb71-187" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-188"><a href="#cb71-188" aria-hidden="true" tabindex="-1"></a>AB <span class="sc">|&gt;</span></span>
+<span id="cb71-189"><a href="#cb71-189" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alleles</span>()</span>
+<span id="cb71-190"><a href="#cb71-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-191"><a href="#cb71-191" aria-hidden="true" tabindex="-1"></a>loci <span class="sc">|&gt;</span></span>
+<span id="cb71-192"><a href="#cb71-192" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alleles</span>()</span>
+<span id="cb71-193"><a href="#cb71-193" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-194"><a href="#cb71-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-195"><a href="#cb71-195" aria-hidden="true" tabindex="-1"></a><span class="fu">## Heterozygosity Testing</span></span>
+<span id="cb71-196"><a href="#cb71-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-199"><a href="#cb71-199" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-200"><a href="#cb71-200" aria-hidden="true" tabindex="-1"></a>loci <span class="sc">|&gt;</span></span>
+<span id="cb71-201"><a href="#cb71-201" aria-hidden="true" tabindex="-1"></a>  <span class="fu">is_heterozygote</span>()</span>
+<span id="cb71-202"><a href="#cb71-202" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-203"><a href="#cb71-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-204"><a href="#cb71-204" aria-hidden="true" tabindex="-1"></a>Within a data frame, the same test summarizes observed heterozygosity by</span>
+<span id="cb71-205"><a href="#cb71-205" aria-hidden="true" tabindex="-1"></a>stratum:</span>
+<span id="cb71-206"><a href="#cb71-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-209"><a href="#cb71-209" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-210"><a href="#cb71-210" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb71-211"><a href="#cb71-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-212"><a href="#cb71-212" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb71-213"><a href="#cb71-213" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">het =</span> <span class="fu">is_heterozygote</span>(LTRS)) <span class="sc">|&gt;</span></span>
+<span id="cb71-214"><a href="#cb71-214" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Species) <span class="sc">|&gt;</span></span>
+<span id="cb71-215"><a href="#cb71-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Ho_LTRS =</span> <span class="fu">mean</span>(het, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb71-216"><a href="#cb71-216" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-217"><a href="#cb71-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-218"><a href="#cb71-218" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operator Overloads</span></span>
+<span id="cb71-219"><a href="#cb71-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-220"><a href="#cb71-220" aria-hidden="true" tabindex="-1"></a><span class="fu">### Mating (`+`)</span></span>
+<span id="cb71-221"><a href="#cb71-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-222"><a href="#cb71-222" aria-hidden="true" tabindex="-1"></a>The <span class="in">`+`</span> operator simulates mating by randomly sampling one allele from each parent:</span>
+<span id="cb71-223"><a href="#cb71-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-226"><a href="#cb71-226" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-227"><a href="#cb71-227" aria-hidden="true" tabindex="-1"></a>dad <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
+<span id="cb71-228"><a href="#cb71-228" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"B"</span>))</span>
+<span id="cb71-229"><a href="#cb71-229" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb71-230"><a href="#cb71-230" aria-hidden="true" tabindex="-1"></a>offspring <span class="ot">&lt;-</span> mom <span class="sc">+</span> dad</span>
+<span id="cb71-231"><a href="#cb71-231" aria-hidden="true" tabindex="-1"></a>offspring</span>
+<span id="cb71-232"><a href="#cb71-232" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-233"><a href="#cb71-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-234"><a href="#cb71-234" aria-hidden="true" tabindex="-1"></a><span class="fu">### Parental Subtraction (`-`)</span></span>
+<span id="cb71-235"><a href="#cb71-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-236"><a href="#cb71-236" aria-hidden="true" tabindex="-1"></a>The <span class="in">`-`</span> operator removes the maternal contribution from an offspring genotype:</span>
+<span id="cb71-237"><a href="#cb71-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-240"><a href="#cb71-240" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-241"><a href="#cb71-241" aria-hidden="true" tabindex="-1"></a>off <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
+<span id="cb71-242"><a href="#cb71-242" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
+<span id="cb71-243"><a href="#cb71-243" aria-hidden="true" tabindex="-1"></a>paternal_gamete <span class="ot">&lt;-</span> off <span class="sc">-</span> mom</span>
+<span id="cb71-244"><a href="#cb71-244" aria-hidden="true" tabindex="-1"></a>paternal_gamete</span>
+<span id="cb71-245"><a href="#cb71-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-246"><a href="#cb71-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-247"><a href="#cb71-247" aria-hidden="true" tabindex="-1"></a>This is useful in parentage analysis for identifying the paternal allelic contribution.</span>
+<span id="cb71-248"><a href="#cb71-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-249"><a href="#cb71-249" aria-hidden="true" tabindex="-1"></a><span class="fu">## Coercion</span></span>
+<span id="cb71-250"><a href="#cb71-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-251"><a href="#cb71-251" aria-hidden="true" tabindex="-1"></a><span class="fu">### To Data Frame</span></span>
+<span id="cb71-252"><a href="#cb71-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-255"><a href="#cb71-255" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-256"><a href="#cb71-256" aria-hidden="true" tabindex="-1"></a>loci <span class="sc">|&gt;</span></span>
+<span id="cb71-257"><a href="#cb71-257" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
+<span id="cb71-258"><a href="#cb71-258" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-259"><a href="#cb71-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-260"><a href="#cb71-260" aria-hidden="true" tabindex="-1"></a><span class="fu">### From Other Types</span></span>
+<span id="cb71-261"><a href="#cb71-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-264"><a href="#cb71-264" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-265"><a href="#cb71-265" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-266"><a href="#cb71-266" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.locus</span>()</span>
+<span id="cb71-267"><a href="#cb71-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-268"><a href="#cb71-268" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"C"</span>, <span class="st">"D"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-269"><a href="#cb71-269" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.locus</span>()</span>
+<span id="cb71-270"><a href="#cb71-270" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-271"><a href="#cb71-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-272"><a href="#cb71-272" aria-hidden="true" tabindex="-1"></a><span class="fu">### Is-a Test</span></span>
+<span id="cb71-273"><a href="#cb71-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-276"><a href="#cb71-276" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-277"><a href="#cb71-277" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>(AB)</span>
+<span id="cb71-278"><a href="#cb71-278" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>(<span class="st">"not a locus"</span>)</span>
+<span id="cb71-279"><a href="#cb71-279" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-280"><a href="#cb71-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-281"><a href="#cb71-281" aria-hidden="true" tabindex="-1"></a><span class="fu">## Multivariate Conversion</span></span>
+<span id="cb71-282"><a href="#cb71-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-283"><a href="#cb71-283" aria-hidden="true" tabindex="-1"></a>The <span class="in">`to_mv()`</span> function converts locus data to a multivariate numeric format suitable for ordination and graph analysis:</span>
+<span id="cb71-284"><a href="#cb71-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-287"><a href="#cb71-287" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-288"><a href="#cb71-288" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb71-289"><a href="#cb71-289" aria-hidden="true" tabindex="-1"></a>  <span class="fu">to_mv</span>()</span>
+<span id="cb71-290"><a href="#cb71-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-291"><a href="#cb71-291" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(mv)</span>
+<span id="cb71-292"><a href="#cb71-292" aria-hidden="true" tabindex="-1"></a>mv[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]</span>
+<span id="cb71-293"><a href="#cb71-293" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-294"><a href="#cb71-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-295"><a href="#cb71-295" aria-hidden="true" tabindex="-1"></a>Each allele at each locus becomes a column, with values representing allele counts (0, 1, or 2 for diploids). This is the input format for <span class="in">`popgraph()`</span>; <span class="in">`population_graph()`</span> does the conversion for you.</span>
+<span id="cb71-296"><a href="#cb71-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-297"><a href="#cb71-297" aria-hidden="true" tabindex="-1"></a><span class="fu">## Without Pipes</span></span>
+<span id="cb71-298"><a href="#cb71-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-301"><a href="#cb71-301" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb71-302"><a href="#cb71-302" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb71-303"><a href="#cb71-303" aria-hidden="true" tabindex="-1"></a>loc   <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
+<span id="cb71-304"><a href="#cb71-304" aria-hidden="true" tabindex="-1"></a>genos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Population =</span> raw<span class="sc">$</span>Population,</span>
+<span id="cb71-305"><a href="#cb71-305" aria-hidden="true" tabindex="-1"></a>                    <span class="at">TPI =</span> <span class="fu">locus</span>(<span class="fu">cbind</span>(raw<span class="sc">$</span>TPI_1, raw<span class="sc">$</span>TPI_2), <span class="at">type =</span> <span class="st">"column"</span>))</span>
+<span id="cb71-306"><a href="#cb71-306" aria-hidden="true" tabindex="-1"></a><span class="fu">alleles</span>(loci)</span>
+<span id="cb71-307"><a href="#cb71-307" aria-hidden="true" tabindex="-1"></a><span class="fu">is_heterozygote</span>(loci)</span>
+<span id="cb71-308"><a href="#cb71-308" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(loci)</span>
+<span id="cb71-309"><a href="#cb71-309" aria-hidden="true" tabindex="-1"></a><span class="fu">as.locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
+<span id="cb71-310"><a href="#cb71-310" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> <span class="fu">to_mv</span>(arapat)</span>
+<span id="cb71-311"><a href="#cb71-311" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

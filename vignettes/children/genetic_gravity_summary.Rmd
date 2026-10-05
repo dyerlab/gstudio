@@ -1,0 +1,33 @@
+<!-- Shared closing sections of the genetic gravity walkthrough (see
+     genetic_gravity_body.Rmd). -->
+
+## Summary
+
+| Step | Function |
+|---|---|
+| Population Graph from genotypes | `population_graph()` |
+| Neighbourhood weights $w_{j\mid i}$ | `neighbourhood_weights()` |
+| Edge asymmetry $\Delta$ and degree floor $\Delta^0$ | `gravity_edges()` |
+| Gravity, balance and source-sink score $S$; degree diagnostics | `source_sink_scores()` |
+| Partitioned distance pGD | `genetic_distance(mode = "pgd")`, `pgd()` |
+| Gradient test, $r(S, x)$ | `source_sink_test()` |
+| Isolation by graph distance (Mantel); directional isolation, $\Delta R^2$ | `ibgd(mode = "cgd")`, `ibgd(mode = "pgd")` |
+| Everything for mapping; the map | `gravity_field()`, `plot()` |
+
+Use $\gamma = 1/2$ for inferring direction and $\gamma = 1$ for describing
+connectivity, and report the degree share with every directional analysis.
+
+## References
+
+Dyer RJ, Nason JD (2004) Population Graphs: the graph theoretic shape of genetic
+structure. *Molecular Ecology* **13**: 1713--1727.
+
+Dyer RJ (in prep.) Genetic Gravity I: Extracting directional gene flow from
+Population Graphs.
+
+Hinton GE, Roweis ST (2003) Stochastic neighbor embedding. *Advances in Neural
+Information Processing Systems* **15**: 857--864.
+
+Wagner HH, Dray S (2015) Generating spatially constrained null models for
+irregularly spaced data using Moran spectral randomization methods. *Methods in
+Ecology and Evolution* **6**: 1169--1178.

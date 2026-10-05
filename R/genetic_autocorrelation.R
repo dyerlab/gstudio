@@ -14,7 +14,7 @@
 #'   distance bin (default 0 = no permutation test).
 #' @return A data frame with one row per lag and columns \code{From},
 #'   \code{To}, \code{R} (autocorrelation coefficient), \code{N} (number of
-#'   pairs in the bin), and \code{P} (permutation p-value; \code{NA} when
+#'   pairs in the bin), and \code{p.value} (permutation p-value; \code{NA} when
 #'   \code{perms = 0}).
 #' @references Smouse, P.E. & Peakall, R. (1999) Spatial autocorrelation
 #'   analysis of individual multiallele and multilocus genetic structure.
@@ -49,7 +49,7 @@ genetic_autocorrelation <- function(P, G, bins, perms = 0) {
     To   = bins[2:length(bins)],
     R    = NA_real_,
     N    = NA_real_,
-    P    = NA_real_
+    p.value = NA_real_
   )
 
   if (perms > 0)
@@ -79,7 +79,7 @@ genetic_autocorrelation <- function(P, G, bins, perms = 0) {
       }
       # Add-one permutation p-value: (1 + #{perm >= obs}) / (1 + B), strictly
       # positive (Phipson & Smyth 2010, Stat. Appl. Genet. Mol. Biol. 9:Article39).
-      ret$P[lag] <- (1 + sum(p >= r)) / (1 + perms)
+      ret$p.value[lag] <- (1 + sum(p >= r)) / (1 + perms)
       R <- rbind(R, data.frame(Bin = ret$To[lag], R = p))
     }
   }

@@ -16,3 +16,18 @@ test_that("testing",{
   expect_true( ssfreqs<0.01)
 })
 
+
+test_that("make_population selects frequency columns by name, not position", {
+  f <- data.frame(Allele = c("A", "B", "A", "B"),
+                  Locus = rep(c("L1", "L2"), each = 2),
+                  Frequency = c(0.5, 0.5, 0.2, 0.8))
+  set.seed(1)
+  pop <- make_population(f, N = 10)
+  expect_equal(names(pop), c("ID", "L1", "L2"))
+  expect_true(all(unlist(lapply(c("L1", "L2"), function(l) alleles(pop[[l]]))) %in% c("A", "B")))
+
+  fp <- expand.grid(Allele = c("01", "02"), Locus = c("Loc1", "Loc2"),
+                    Population = c("A", "B"), stringsAsFactors = FALSE)
+  fp$Frequency <- 0.5
+  expect_equal(nrow(make_populations(fp, N = 5)), 10L)
+})

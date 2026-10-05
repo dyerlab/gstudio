@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Rodney J. Dyer">
-<meta name="dcterms.date" content="2026-05-15">
+<meta name="dcterms.date" content="2026-10-05">
 
 <title>gstudio: Spatial Analysis of Genetic Marker Data</title>
 <style>
@@ -205,14 +205,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./genetic-gravity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Genetic Gravity</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./visualization.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Visualization</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Visualization</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./simulation-parentage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Simulation &amp; Parentage</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Simulation &amp; Parentage</span></span></a>
   </div>
 </li>
     </ul>
@@ -258,7 +264,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 15, 2026</p>
+      <p class="date">October 5, 2026</p>
     </div>
   </div>
   
@@ -286,37 +292,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="quick-start">Quick Start</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(arapat, <span class="at">max.level =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   363 obs. of  14 variables:
- $ Species   : Factor w/ 3 levels "Cape","Mainland",..: 3 3 3 3 3 3 3 3 3 3 ...
- $ Cluster   : Factor w/ 5 levels "CBP-C","NBP-C",..: 2 2 2 2 2 2 2 2 2 2 ...
- $ Population: Factor w/ 39 levels "101","102","12",..: 30 30 30 30 30 30 30 30 30 30 ...
- $ ID        : Factor w/ 363 levels "101_10A","101_1A",..: 296 297 298 299 300 301 302 303 304 305 ...
- $ Latitude  : num  29.3 29.3 29.3 29.3 29.3 ...
- $ Longitude : num  -114 -114 -114 -114 -114 ...
- $ LTRS      : 'locus' chr  "01:01" "01:01" "01:01" "01:01" ...
-  ..- attr(*, "locus_type")= chr [1:363] "codom" "codom" "codom" "codom" ...
- $ WNT       : 'locus' chr  "" "01:03" "01:03" "01:01" ...
-  ..- attr(*, "locus_type")= chr [1:363] "codom" "codom" "codom" "codom" ...
- $ EN        : 'locus' chr  "02:04" "01:01" "01:01" "01:02" ...
-  ..- attr(*, "locus_type")= chr [1:363] "codom" "codom" "codom" "codom" ...
- $ EF        : 'locus' chr  "01:02" "01:01" "01:01" "01:01" ...
-  ..- attr(*, "locus_type")= chr [1:363] "codom" "codom" "codom" "codom" ...
- $ ZMP       : 'locus' chr  "" "01:01" "01:01" "01:01" ...
-  ..- attr(*, "locus_type")= chr [1:363] "codom" "codom" "codom" "codom" ...
- $ AML       : 'locus' chr  "" "08:09" "08:09" "08:09" ...
-  ..- attr(*, "locus_type")= chr [1:363] "codom" "codom" "codom" "codom" ...
- $ ATPS      : 'locus' chr  "09:09" "09:09" "09:09" "09:09" ...
-  ..- attr(*, "locus_type")= chr [1:363] "codom" "codom" "codom" "codom" ...
- $ MP20      : 'locus' chr  "07:07" "07:07" "05:07" "07:07" ...
-  ..- attr(*, "locus_type")= chr [1:363] "codom" "codom" "codom" "codom" ...</code></pre>
+<pre><code>Rows: 363
+Columns: 14
+$ Species    &lt;fct&gt; Peninsula, Peninsula, Peninsula, Peninsula, Peninsula, Peni…
+$ Cluster    &lt;fct&gt; NBP-C, NBP-C, NBP-C, NBP-C, NBP-C, NBP-C, NBP-C, NBP-C, NBP…
+$ Population &lt;fct&gt; 88, 88, 88, 88, 88, 88, 88, 88, 88, 88, 9, 9, 9, 9, 9, 9, 9…
+$ ID         &lt;fct&gt; 88_11A, 88_12A, 88_13A, 88_14A, 88_15A, 88_16A, 88_17A, 88_…
+$ Latitude   &lt;dbl&gt; 29.32541, 29.32541, 29.32541, 29.32541, 29.32541, 29.32541,…
+$ Longitude  &lt;dbl&gt; -114.2935, -114.2935, -114.2935, -114.2935, -114.2935, -114…
+$ LTRS       &lt;locus&gt; 01:01, 01:01, 01:01, 01:01, 01:01, 01:01, 01:01, 01:01, 0…
+$ WNT        &lt;locus&gt; , 01:03, 01:03, 01:01, 01:03, 01:01, 01:01, 01:01, 01:03,…
+$ EN         &lt;locus&gt; 02:04, 01:01, 01:01, 01:02, 01:02, 01:02, 01:02, 01:02, 0…
+$ EF         &lt;locus&gt; 01:02, 01:01, 01:01, 01:01, 01:01, 01:01, 01:01, 01:01, 0…
+$ ZMP        &lt;locus&gt; , 01:01, 01:01, 01:01, 01:01, 01:01, 01:01, 01:01, 01:01,…
+$ AML        &lt;locus&gt; , 08:09, 08:09, 08:09, 08:09, 09:09, 07:09, 07:07, 09:10,…
+$ ATPS       &lt;locus&gt; 09:09, 09:09, 09:09, 09:09, 09:09, 09:09, 09:09, 09:09, 0…
+$ MP20       &lt;locus&gt; 07:07, 07:07, 05:07, 07:07, 05:05, 07:07, 05:07, 05:07, 0…</code></pre>
 </div>
 </div>
 <p>The <code>arapat</code> dataset contains multilocus microsatellite genotypes from the cactus beetle <em>Araptus attenuatus</em> and will serve as the primary example dataset throughout this book.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(arapat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    Species Cluster Population     ID Latitude Longitude  LTRS   WNT    EN
 1 Peninsula   NBP-C         88 88_11A 29.32541 -114.2935 01:01       02:04
@@ -334,6 +337,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6 01:01 01:01 09:09 09:09 07:07</code></pre>
 </div>
 </div>
+<p>Code in this book is written as pipelines, one function per line; every function also works with its options passed as arguments (see <em>Code Style in This Book</em> in the next chapter).</p>
 </section>
 <section id="citation" class="level2">
 <h2 class="anchored" data-anchor-id="citation">Citation</h2>
@@ -830,26 +834,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quick Start</span></span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(arapat, <span class="at">max.level =</span> <span class="dv">1</span>)</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>The <span class="in">`arapat`</span> dataset contains multilocus microsatellite genotypes from the cactus beetle *Araptus attenuatus* and will serve as the primary example dataset throughout this book.</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(arapat)</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Citation</span></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>If you use <span class="in">`gstudio`</span> in your research, please cite:</span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Dyer, R.J. 2009. GStudio: a suite of tools for the spatial analysis of genetic marker data. Molecular Ecology Resources 9(1): 110-113.</span></span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="fu">## Source Code</span></span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>The source code for <span class="in">`gstudio`</span> is available on GitHub at <span class="ot">&lt;https://github.com/dyerlab/gstudio&gt;</span>.</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>The <span class="in">`arapat`</span> dataset contains multilocus microsatellite genotypes from the cactus beetle *Araptus attenuatus* and will serve as the primary example dataset throughout this book.</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>Code in this book is written as pipelines, one function per line; every function also works with its options passed as arguments (see *Code Style in This Book* in the next chapter).</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="fu">## Citation</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>If you use <span class="in">`gstudio`</span> in your research, please cite:</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Dyer, R.J. 2009. GStudio: a suite of tools for the spatial analysis of genetic marker data. Molecular Ecology Resources 9(1): 110-113.</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## Source Code</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>The source code for <span class="in">`gstudio`</span> is available on GitHub at <span class="ot">&lt;https://github.com/dyerlab/gstudio&gt;</span>.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

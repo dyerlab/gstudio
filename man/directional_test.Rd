@@ -49,15 +49,19 @@ degree; \code{"half"} is therefore the recommended default and
 default uses every orientable edge.}
 }
 \value{
-A list with:
+An object of class \code{"htest"}, which prints as a standard test
+  and works with \code{broom::tidy()}: \code{statistic} (\code{V} for the
+  signed-rank test, or the number of \code{forward edges} for the sign test),
+  \code{parameter} (\code{edges} tested), \code{p.value}, \code{estimate}
+  (the \code{median deviation} of the forward weight from its center),
+  \code{null.value}, \code{alternative}, \code{method} and
+  \code{data.name}, plus
   \describe{
-    \item{\code{test}}{A one-row \code{data.frame}: \code{n_edges} tested,
-      \code{n_forward} (departures above center), \code{estimate} (median
-      signed departure), \code{statistic}, \code{p_value}, \code{method},
-      \code{alternative}, and \code{center}.}
     \item{\code{edges}}{A per-edge \code{data.frame} with the forward
       orientation (\code{from}, \code{to}), \code{w_forward}, \code{center},
       \code{deviation}, and endpoint degrees \code{k_from}, \code{k_to}.}
+    \item{\code{n_forward}}{Edges whose departure is above the center.}
+    \item{\code{center}}{The centering used.}
   }
 }
 \description{
@@ -107,7 +111,9 @@ g <- graph_from_adjacency_matrix(A, mode = "undirected",
                                  weighted = TRUE, diag = FALSE)
 class(g) <- c("popgraph", class(g))
 # Stepping-stone axis: A < B < C < D
-directional_test(g, orientation = c(A = 1, B = 2, C = 3, D = 4))$test
+res <- directional_test(g, orientation = c(A = 1, B = 2, C = 3, D = 4))
+res
+res$edges
 
 }
 \seealso{

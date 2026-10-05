@@ -45,12 +45,17 @@
 #'   observed range of \code{x}, more than \code{edge_margin} from either end.
 #' @param edge_margin Margin used by \code{interior} (default 2, in units of \code{x}).
 #' @param return_null If \code{TRUE}, the null correlations are returned.
-#' @return A list of class \code{"source_sink_test"} with \code{r} (Spearman
-#'   \eqn{r(S, x)}), \code{p}, \code{n} (nodes used), \code{nperm}, \code{null},
-#'   \code{gamma}, \code{degree_share}, \code{scores} (from
-#'   \code{\link{source_sink_scores}}) and optionally \code{r_null}.
+#' @return An object of class \code{c("source_sink_test", "htest")}, which
+#'   prints as a standard test and works with \code{broom::tidy()}:
+#'   \code{statistic} (\code{r}, Spearman \eqn{r(S, x)}), \code{parameter}
+#'   (\code{nodes} used and \code{nperm}), \code{p.value} (two-sided),
+#'   \code{estimate} (the \code{degree share}), \code{null.value},
+#'   \code{alternative}, \code{method}, \code{data.name}, plus \code{null}
+#'   (the null model used), \code{gamma}, \code{scores} (from
+#'   \code{\link{source_sink_scores}}) and, with \code{return_null = TRUE},
+#'   \code{r_null} (the null distribution of \eqn{r}).
 #' @seealso \code{\link{source_sink_scores}}, \code{\link{msr_null}},
-#'   \code{\link{directional_ibgd}}
+#'   \code{\link{ibgd}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' library(igraph)
@@ -65,6 +70,7 @@
 source_sink_test <- function(graph, x, gamma = 0.5, nperm = 999L, null = c("graph", "permute", "adjacency"),
                              adjacency = NULL, interior = FALSE, edge_margin = 2, return_null = FALSE) {
   null <- match.arg(null)
+  dname <- paste(deparse1(substitute(graph)), "and", deparse1(substitute(x)))
   graph <- .gravity_check(graph)
   nodes <- igraph::V(graph)$name
   xv <- .gravity_x(x, nodes)
@@ -88,18 +94,30 @@ source_sink_test <- function(graph, x, gamma = 0.5, nperm = 999L, null = c("grap
       msr_null(S, A, nperm) })
   r_null <- as.numeric(stats::cor(draws[keep, , drop = FALSE], xv[keep], method = "spearman"))
   p <- (1 + sum(abs(r_null) >= abs(r_obs) - 1e-12)) / (nperm + 1)
-  out <- list(r = r_obs, p = p, n = sum(keep), nperm = nperm, null = null, gamma = gamma,
-              degree_share = attr(sc, "degree_share"), scores = sc)
+  null_label <- c(graph = "Moran spectral randomization on the graph",
+                  permute = "permutation of S", adjacency = "Moran spectral randomization on the supplied adjacency")[[null]]
+  out <- list(statistic   = c(r = r_obs),
+              parameter   = c(nodes = sum(keep), nperm = as.integer(nperm)),
+              p.value     = p,
+              estimate    = c(`degree share` = attr(sc, "degree_share")),
+              null.value  = c(r = 0),
+              alternative = "two.sided",
+              method      = sprintf("Source-sink gradient test (Spearman r(S, x); %s)", null_label),
+              data.name   = dname,
+              null        = null,
+              gamma       = gamma,
+              scores      = sc)
   if (return_null) out$r_null <- r_null
-  class(out) <- "source_sink_test"
+  class(out) <- c("source_sink_test", "htest")
   out
 }
 
+#' @rdname source_sink_test
+#' @param ... Passed to \code{print.htest()}.
 #' @export
 print.source_sink_test <- function(x, ...) {
-  cat("Source-sink gradient test\n")
-  cat(sprintf("  r(S, x) = %.3f, p = %.3g (%s null, %d replicates, %d nodes)\n", x$r, x$p, x$null, x$nperm, x$n))
-  cat(sprintf("  bandwidth gamma = %g; degree share (R^2 of Delta on Delta0) = %.3f\n", x$gamma, x$degree_share))
-  cat(sprintf("  sources at %s values of x\n", if (x$r < 0) "low" else "high"))
+  NextMethod()
+  cat(sprintf("Bandwidth gamma = %g.  Sources at %s values of x.\n\n",
+              x$gamma, if (unname(x$statistic) < 0) "low" else "high"))
   invisible(x)
 }

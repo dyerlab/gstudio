@@ -18,9 +18,12 @@ asymmetry_network(graph, nperm = 999, rewire = c("degree", "full"), ...)
 \item{...}{Ignored; present for interface consistency.}
 }
 \value{
-A one-row \code{data.frame} with columns \code{from} and \code{to}
-  equal to \code{NA}, \code{delta} and \code{statistic} equal to the observed
-  mean \eqn{|\Delta|}, and the \code{p_value}.  Rewired graphs for which the
+An object of class \code{"htest"}, which prints as a standard test
+  and works with \code{broom::tidy()}: \code{statistic} (observed
+  \code{mean |Delta|}), \code{parameter} (\code{edges} and the number of
+  valid rewired graphs, \code{nperm}), the one-sided \code{p.value},
+  \code{estimate} (the \code{null mean |Delta|}), \code{alternative},
+  \code{method} and \code{data.name}.  Rewired graphs for which the
   asymmetry cannot be computed (e.g. those containing isolated nodes) are
   excluded from the null distribution.
 }

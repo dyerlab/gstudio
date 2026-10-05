@@ -70,7 +70,7 @@
 #' (\eqn{w_{to|from}}), \code{Delta} (\eqn{\Delta_{from \to to}}) and
 #' \code{Delta0}.
 #'
-#' \code{source_sink_scores()}: a \code{data.frame} with columns \code{node},
+#' \code{source_sink_scores()}: a \code{data.frame} with columns \code{Stratum},
 #' \code{S}, \code{gravity}, \code{balance} (\eqn{g_i - 1}), \code{degree},
 #' \code{component}, \code{S0}, and \code{n} (orientation imbalance: edges on
 #' which the node is upstream minus edges on which it is downstream; \code{NA}
@@ -82,10 +82,10 @@
 #'
 #' @references
 #' Dyer RJ, Nason JD (2004) Population Graphs: the graph theoretic shape of
-#' genetic structure. \emph{Evolution} \strong{58}: 1605--1615.
+#' genetic structure. \emph{Molecular Ecology} \strong{13}: 1713--1727.
 #'
 #' @seealso \code{\link{graph_asymmetries}}, \code{\link{source_sink_test}},
-#'   \code{\link{gravity_field}}, \code{\link{plot_gravity_field}}
+#'   \code{\link{gravity_field}}, \code{\link{plot.gravity_field}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #'
 #' @examples
@@ -103,5 +103,5 @@
 #' s <- source_sink_scores(g)
 #' s
 #' attr(s, "degree_share")
-#' @name gravity
+#' @name genetic_gravity
 NULL

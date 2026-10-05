@@ -1,0 +1,21 @@
+---
+title: "Genetic Gravity: Direction from a Population Graph"
+author: "Rodney J. Dyer"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Genetic Gravity: Direction from a Population Graph}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 5,
+                      fig.align = "center", out.width = "90%")
+```
+
+```{r body, child = "children/genetic_gravity_body.Rmd"}
+```
+
+```{r summary, child = "children/genetic_gravity_summary.Rmd"}
+```

@@ -20,8 +20,12 @@
 #'  strata (default=FALSE).
 #' @param locus An optional parameter specifying the locus or loci to be used
 #'  in the analysis. If this is not specified, then all loci are used.
-#' @return An object of type \code{data.frame} containing estimates for each locus and a
-#'  multilocus estimate. If \code{pairwise=TRUE}, then it returns a pairwise matrix.
+#' @return An object of type \code{data.frame} containing estimates for each locus and
+#'  (for Gst, Gst' and Dest) a \code{Multilocus} row, whose \code{Hs} and \code{Ht} are
+#'  sums across loci.  With \code{nperm > 0}, \code{p.value} holds permutation
+#'  p-values; for the \code{Multilocus} row, strata are permuted across individuals
+#'  (the same permutation for every locus) and the multilocus estimate recomputed.
+#'  If \code{pairwise=TRUE}, then it returns a pairwise matrix.
 #' @note The multilocus estimation of Gst parameters is estimated following the
 #'  suggestions of Culley et al. (2001) American Journal of Botany 89(3): 460-465.
 #' @export
@@ -42,7 +46,8 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
   if( !inherits(x,"data.frame") )
       stop("You need to pass a data frame to the function genetic_structure()...")
   
-  stratum <- .detect_stratum(x, stratum, default = "Population")
+  stratum <- .detect_stratum(x, stratum, default = "Population", explicit = !missing(stratum))
+  x <- .plain_df(x)
     
   if( !(stratum %in% names(x) ) ) 
     stop("You must specify which stratum to use for the estimation of genetic structure.")
@@ -94,6 +99,22 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
     
     else if( mode_clean == "fst" ) 
       ret <- Fst( x, stratum, nperm )
+
+    # The per-locus tests leave the Multilocus row untested; permute strata
+    # across individuals (shared by all loci) and recompute it.
+    ml <- which(ret$Locus == "Multilocus")
+    if( nperm > 0 && length(ml) == 1 ) {
+      obs  <- ret[ml, 2]
+      null <- vapply(seq_len(nperm), function(b) {
+        y <- x
+        y[[stratum]] <- sample(y[[stratum]])
+        r <- genetic_structure(y, stratum = stratum, mode = mode_clean, nperm = 0,
+                               size.correct = size.correct)
+        r[r$Locus == "Multilocus", 2]
+      }, numeric(1))
+      ret$P[ml] <- (1 + sum(null >= obs, na.rm = TRUE)) / (1 + sum(!is.na(null)))
+    }
+    names(ret)[names(ret) == "P"] <- "p.value"
   }
   
 

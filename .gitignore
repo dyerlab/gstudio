@@ -33,3 +33,10 @@ docs/.quarto/
 **/*.quarto_ipynb
 .claude
 .tana
+
+# Rendered vignette output (built into inst/doc by R CMD build, not committed)
+vignettes/*.html
+vignettes/*_files/
+
+# Stray graphics device output
+Rplots.pdf

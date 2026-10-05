@@ -2,6 +2,7 @@
 % Please edit documentation in R/source_sink_test.R
 \name{source_sink_test}
 \alias{source_sink_test}
+\alias{print.source_sink_test}
 \title{Source-sink gradient test}
 \usage{
 source_sink_test(
@@ -15,6 +16,8 @@ source_sink_test(
   edge_margin = 2,
   return_null = FALSE
 )
+
+\method{print}{source_sink_test}(x, ...)
 }
 \arguments{
 \item{graph}{An undirected \code{popgraph}/\code{igraph} with a numeric
@@ -38,12 +41,19 @@ observed range of \code{x}, more than \code{edge_margin} from either end.}
 \item{edge_margin}{Margin used by \code{interior} (default 2, in units of \code{x}).}
 
 \item{return_null}{If \code{TRUE}, the null correlations are returned.}
+
+\item{...}{Passed to \code{print.htest()}.}
 }
 \value{
-A list of class \code{"source_sink_test"} with \code{r} (Spearman
-  \eqn{r(S, x)}), \code{p}, \code{n} (nodes used), \code{nperm}, \code{null},
-  \code{gamma}, \code{degree_share}, \code{scores} (from
-  \code{\link{source_sink_scores}}) and optionally \code{r_null}.
+An object of class \code{c("source_sink_test", "htest")}, which
+  prints as a standard test and works with \code{broom::tidy()}:
+  \code{statistic} (\code{r}, Spearman \eqn{r(S, x)}), \code{parameter}
+  (\code{nodes} used and \code{nperm}), \code{p.value} (two-sided),
+  \code{estimate} (the \code{degree share}), \code{null.value},
+  \code{alternative}, \code{method}, \code{data.name}, plus \code{null}
+  (the null model used), \code{gamma}, \code{scores} (from
+  \code{\link{source_sink_scores}}) and, with \code{return_null = TRUE},
+  \code{r_null} (the null distribution of \eqn{r}).
 }
 \description{
 Tests whether populations' source-sink scores \eqn{S} change monotonically
@@ -88,7 +98,7 @@ source_sink_test(g, x = 1:K, nperm = 199)
 }
 \seealso{
 \code{\link{source_sink_scores}}, \code{\link{msr_null}},
-  \code{\link{directional_ibgd}}
+  \code{\link{ibgd}}
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

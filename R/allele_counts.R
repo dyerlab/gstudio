@@ -14,6 +14,10 @@
 #' head(cts) 
 #' 
 allele_counts <- function( x, locus, stratum="Population") {
+  if( is(x, "data.frame") ) {
+    stratum <- .detect_stratum(x, stratum, default = "Population", explicit = !missing(stratum))
+    x <- .plain_df(x)
+  }
   if( !is(x,"data.frame"))
     stop("You must pass a data.frame object to the allele_counts function")
   if( missing(locus) || !(locus %in% names(x)))

@@ -25,6 +25,7 @@ to_geojson <- function( graph, file ) {
   
   
   df <- to_df(graph,mode="nodes")
+  names(df)[names(df) == "Stratum"] <- "name"     # GeoJSON convention: a "name" property
   if( ! ( "Latitude" %in% names(df) && "Longitude" %in% names(df) ) ) {
     stop("You must have 'Latitude' and 'Longitude' in the graph for this to work...")
   }
@@ -83,8 +84,8 @@ to_geojson <- function( graph, file ) {
     e <- append( e, '    "coordinates": [')
     
     # coords
-    c1 <- df[ df$name == dfe[i,"From"],c("Longitude","Latitude")]
-    c2 <- df[ df$name == dfe[i,"To"],c("Longitude","Latitude")]
+    c1 <- df[ df$name == dfe[i,"from"],c("Longitude","Latitude")]
+    c2 <- df[ df$name == dfe[i,"to"],c("Longitude","Latitude")]
     c <- paste("      [",c1$Longitude,", ", c1$Latitude,"], [",c2$Longitude,", ",c2$Latitude,"]", sep="")
     e <- append(e,c)
     

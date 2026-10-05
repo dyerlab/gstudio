@@ -10,7 +10,8 @@ make_population(x, N = 20, F = 0)
 \item{x}{A \code{data.frame} as returned by the \code{frequencies()}
 function.  For a single locus, it has columns "Allele" and "Frequency"
 for multiple loci, it has a "Locus" column, and if it is to be 
-subdivided into strata, you have a "Strata" column.}
+subdivided into strata, you have a "Stratum" column (as returned by
+\code{frequencies(x, stratum = ...)}).}
 
 \item{N}{The number of individuals to create (default = 20).  This is a 
 'per-stratum' estimate so if you have K strata the result will be K*N 

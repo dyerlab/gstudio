@@ -21,8 +21,8 @@ asymmetric_weights(graph, perplexity = 4, tol = 1e-05, max_iter = 100)
 \value{
 A data.frame with one row per undirected edge and columns:
   \describe{
-    \item{i}{Name of the first node.}
-    \item{j}{Name of the second node.}
+    \item{from}{Name of the first node (\eqn{i}).}
+    \item{to}{Name of the second node (\eqn{j}).}
     \item{pij}{Conditional probability of j given i (\eqn{p_{j|i}}), normalised across i's neighbours.}
     \item{pji}{Conditional probability of i given j (\eqn{p_{i|j}}), normalised across j's neighbours.}
     \item{cGD}{Conditional genetic distance (edge weight) from the input graph.}

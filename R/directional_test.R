@@ -66,15 +66,19 @@
 #'   (an induced subgraph) to test, indexed over \code{igraph::E(graph)}; the
 #'   default uses every orientable edge.
 #'
-#' @return A list with:
+#' @return An object of class \code{"htest"}, which prints as a standard test
+#'   and works with \code{broom::tidy()}: \code{statistic} (\code{V} for the
+#'   signed-rank test, or the number of \code{forward edges} for the sign test),
+#'   \code{parameter} (\code{edges} tested), \code{p.value}, \code{estimate}
+#'   (the \code{median deviation} of the forward weight from its center),
+#'   \code{null.value}, \code{alternative}, \code{method} and
+#'   \code{data.name}, plus
 #'   \describe{
-#'     \item{\code{test}}{A one-row \code{data.frame}: \code{n_edges} tested,
-#'       \code{n_forward} (departures above center), \code{estimate} (median
-#'       signed departure), \code{statistic}, \code{p_value}, \code{method},
-#'       \code{alternative}, and \code{center}.}
 #'     \item{\code{edges}}{A per-edge \code{data.frame} with the forward
 #'       orientation (\code{from}, \code{to}), \code{w_forward}, \code{center},
 #'       \code{deviation}, and endpoint degrees \code{k_from}, \code{k_to}.}
+#'     \item{\code{n_forward}}{Edges whose departure is above the center.}
+#'     \item{\code{center}}{The centering used.}
 #'   }
 #'
 #' @seealso \code{\link{graph_asymmetries}} for the arc weights;
@@ -92,7 +96,9 @@
 #'                                  weighted = TRUE, diag = FALSE)
 #' class(g) <- c("popgraph", class(g))
 #' # Stepping-stone axis: A < B < C < D
-#' directional_test(g, orientation = c(A = 1, B = 2, C = 3, D = 4))$test
+#' res <- directional_test(g, orientation = c(A = 1, B = 2, C = 3, D = 4))
+#' res
+#' res$edges
 #'
 #' @importFrom igraph is_igraph is_directed E V degree as_edgelist
 #' @importFrom stats wilcox.test binom.test median
@@ -107,6 +113,7 @@ directional_test <- function(graph,
   center      <- match.arg(center)
   test        <- match.arg(test)
   alternative <- match.arg(alternative)
+  dname <- paste(deparse1(substitute(graph)), "oriented by", deparse1(substitute(orientation)))
 
   if (!igraph::is_igraph(graph))   stop("'graph' must be an igraph/popgraph object")
   if (igraph::is_directed(graph))  stop("'graph' must be undirected")
@@ -178,30 +185,32 @@ directional_test <- function(graph,
 
   # Degenerate case: no orientable edges, or all departures vanish.
   if (n == 0L || all(abs(dev) < 1e-12)) {
-    res <- list(statistic = NA_real_, p.value = 1,
-                method = if (test == "sign") "Sign test" else "Wilcoxon signed-rank")
+    stat <- if (test == "sign") c(`forward edges` = NA_real_) else c(V = NA_real_)
+    pval <- 1
   } else if (test == "sign") {
     n_eff <- sum(dev != 0)
     bt    <- stats::binom.test(n_fwd, n_eff, p = 0.5, alternative = alternative)
-    res   <- list(statistic = n_fwd, p.value = bt$p.value, method = "Sign test")
+    stat  <- c(`forward edges` = n_fwd)
+    pval  <- bt$p.value
   } else {
     wt_res <- suppressWarnings(
       stats::wilcox.test(dev, mu = 0, alternative = alternative))
-    res    <- list(statistic = unname(wt_res$statistic), p.value = wt_res$p.value,
-                   method = "Wilcoxon signed-rank")
+    stat  <- c(V = unname(wt_res$statistic))
+    pval  <- wt_res$p.value
   }
 
-  test_df <- data.frame(
-    n_edges     = n,
-    n_forward   = n_fwd,
-    estimate    = est,
-    statistic   = res$statistic,
-    p_value     = res$p.value,
-    method      = res$method,
+  structure(list(
+    statistic   = stat,
+    parameter   = c(edges = n),
+    p.value     = pval,
+    estimate    = c(`median deviation` = est),
+    null.value  = c(`median deviation` = 0),
     alternative = alternative,
-    center      = center,
-    stringsAsFactors = FALSE
-  )
-
-  list(test = test_df, edges = edges)
+    method      = sprintf("%s test of axis-oriented asymmetry (center = %s)",
+                          if (test == "sign") "Sign" else "Wilcoxon signed-rank", center),
+    data.name   = dname,
+    edges       = edges,
+    n_forward   = n_fwd,
+    center      = center),
+    class = "htest")
 }

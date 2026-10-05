@@ -12,7 +12,8 @@ centroid_variance(x, grouping)
 \item{grouping}{The Nx1 vector of grouping factors.}
 }
 \value{
-The sum of the within stratum variance for each group
+A \code{data.frame} with one row per group: \code{Stratum} and
+  \code{variance}, the sum of the within-stratum variances.
 }
 \description{
 This is a convience function for a reduce and distance operation based upon

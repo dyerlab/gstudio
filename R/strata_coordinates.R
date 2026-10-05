@@ -25,6 +25,8 @@ strata_coordinates <- function( x,
 
   if( !inherits(x,'data.frame') ) 
     stop("You need to pass a data frame to this function.")
+  stratum <- .detect_stratum(x, stratum, default = "Population", explicit = !missing(stratum))
+  x <- .plain_df(x)
   
   df <- data.frame( Stratum=x[[stratum]], Longitude=x[[longitude]], Latitude=x[[latitude]] , stringsAsFactors=FALSE)
   

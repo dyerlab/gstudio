@@ -3,7 +3,9 @@
 This chapter covers inter-individual and inter-population distance estimation, pairwise relatedness, and spatial autocorrelation analysis.
 
 ```{r}
+#| message: false
 library(gstudio)
+library(dplyr)
 data(arapat)
 ```
 
@@ -19,6 +21,7 @@ The `genetic_distance()` function computes distance matrices from genetic data. 
 | `"Bray"` | Individual | Proportion of shared alleles |
 | `"Euclidean"` | Population | Euclidean frequency distance |
 | `"cGD"` | Population | Conditional genetic distance |
+| `"pGD"` | Population | Partitioned (directed) conditional genetic distance; asymmetric |
 | `"Nei"` | Population | Nei's genetic distance (1978) |
 | `"Dps"` | Population | Shared allele distance (1 - Ps) |
 | `"Jaccard"` | Population | Jaccard set dissimilarity |
@@ -28,9 +31,11 @@ The `genetic_distance()` function computes distance matrices from genetic data. 
 AMOVA distance computes inter-individual genetic distances:
 
 ```{r}
-# Subset for a manageable example
-sub <- arapat[1:20, ]
-D_amova <- genetic_distance(sub, mode = "AMOVA")
+# The first 20 individuals, for a manageable example
+D_amova <- arapat |>
+  slice(1:20) |>
+  genetic_distance(mode = "AMOVA")
+
 dim(D_amova)
 D_amova[1:5, 1:5]
 ```
@@ -40,28 +45,29 @@ D_amova[1:5, 1:5]
 Population-level distances require a stratum column:
 
 ```{r}
-D_nei <- genetic_distance(arapat, stratum = "Species", mode = "Nei")
+D_nei <- arapat |>
+  genetic_distance(stratum = "Species", mode = "Nei")
 D_nei
 ```
 
 ```{r}
-D_cgd <- genetic_distance(arapat, stratum = "Species", mode = "cGD")
+D_cgd <- arapat |>
+  genetic_distance(stratum = "Species", mode = "cGD")
 D_cgd
 ```
 
+Partitioned conditional genetic distance (pGD) splits each Population Graph edge's cGD into two directed shares using the genetic-gravity neighbourhood weights, so the matrix is asymmetric: `[i, j]` is the distance from `i` to `j`, shorter in the direction of gene flow. The bandwidth multiplier is set with `gamma` (default 0.5); see `vignette("genetic_gravity")`.
+
 ```{r}
-D_euc <- genetic_distance(arapat, stratum = "Species",
-                           mode = "Euclidean")
-D_euc
+D_pgd <- arapat |>
+  genetic_distance(stratum = "Species", mode = "pGD")
+D_pgd
 ```
 
-### Standalone Distance Functions
-
-Each distance metric also has a standalone function:
-
 ```{r}
-D <- dist_nei(arapat, stratum = "Species")
-D
+D_euc <- arapat |>
+  genetic_distance(stratum = "Species", mode = "Euclidean")
+D_euc
 ```
 
 ## Genetic Relatedness
@@ -82,19 +88,24 @@ The Nason estimator divides by the polymorphic index `Pe()`, so monomorphic loci
 
 ```{r}
 # Use loci that are polymorphic in this subset
-poly_loci <- c("WNT", "EN", "EF", "ZMP", "AML", "MP20")
-sub <- arapat[1:10, c("Species", poly_loci)]
-R <- genetic_relatedness(sub, mode = "Nason")
+R <- arapat |>
+  slice(1:10) |>
+  select(Species, WNT, EN, EF, ZMP, AML, MP20) |>
+  genetic_relatedness(mode = "Nason")
+
 dim(R)
 round(R[1:5, 1:5], 4)
 ```
 
-### Standalone Relatedness Functions
+### Single-Locus Relatedness
 
-Per-locus relatedness can also be estimated directly. Choose a polymorphic locus:
+Relatedness at a single locus uses the same function, with `loci =`:
 
 ```{r}
-r_nason <- rel_nason(arapat$EN[1:10])
+r_nason <- arapat |>
+  slice(1:10) |>
+  genetic_relatedness(loci = "EN", mode = "Nason")
+
 round(r_nason[1:5, 1:5], 4)
 ```
 
@@ -105,12 +116,12 @@ The `genetic_autocorrelation()` function performs the spatial autocorrelation an
 ```{r}
 #| eval: false
 # Physical distance matrix
-P <- strata_distance(arapat,
-                     longitude = "Longitude",
-                     latitude = "Latitude")
+P <- arapat |>
+  strata_distance(longitude = "Longitude", latitude = "Latitude")
 
 # Genetic distance matrix
-G <- genetic_distance(arapat, mode = "AMOVA")
+G <- arapat |>
+  genetic_distance(mode = "AMOVA")
 
 # Define distance bins
 bins <- seq(0, max(P), length.out = 6)
@@ -127,12 +138,25 @@ The output includes the spatial autocorrelation coefficient (R) for each distanc
 The `strata_coordinates()` function extracts per-stratum centroid coordinates, and `strata_distance()` computes physical (geographic) distances between them:
 
 ```{r}
-coords <- strata_coordinates(arapat, stratum = "Species",
-                              longitude = "Longitude",
-                              latitude = "Latitude")
+coords <- arapat |>
+  strata_coordinates(stratum = "Species", longitude = "Longitude", latitude = "Latitude")
 coords
 ```
 
 ```{r}
+coords |>
+  strata_distance()
+```
+
+## Without Pipes
+
+```{r}
+#| eval: false
+D_amova <- genetic_distance(arapat[1:20, ], mode = "AMOVA")
+D_nei   <- genetic_distance(arapat, stratum = "Species", mode = "Nei")
+D_pgd   <- genetic_distance(arapat, stratum = "Species", mode = "pGD", gamma = 0.5)
+R       <- genetic_relatedness(arapat[1:10, c("Species", "WNT", "EN", "EF", "ZMP", "AML", "MP20")],
+                               mode = "Nason")
+coords  <- strata_coordinates(arapat, stratum = "Species")
 strata_distance(coords)
 ```

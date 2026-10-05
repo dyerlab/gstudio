@@ -7,8 +7,8 @@
 #'
 #' @param N The total sample size (number of strata × individuals per stratum).
 #' @param phi An estimate of the expected level of differentiation.
-#' @return A data frame with columns \code{Strata}, \code{Var.Phi},
-#'   \code{Var.Phi.Low}, and \code{Var.Phi.High}.
+#' @return A data frame with columns \code{Stratum}, \code{var_phi}, and its
+#'   interval bounds \code{conf.low} and \code{conf.high}.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
@@ -16,8 +16,8 @@
 #' head(df)
 #' \donttest{
 #' library(ggplot2)
-#' ggplot(df, aes(x = Strata, y = Var.Phi)) +
-#'   geom_ribbon(aes(ymin = Var.Phi.Low, ymax = Var.Phi.High), alpha = 0.3) +
+#' ggplot(df, aes(x = Stratum, y = var_phi)) +
+#'   geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.3) +
 #'   geom_line() +
 #'   labs(x = "Number of Strata",
 #'        y = "Variance in Interclass Correlation Parameter")
@@ -39,9 +39,9 @@ optimal_sampling <- function(N, phi) {
   var.high <- 2 * ((1 + (K - 1) * phi * 1.1)^2 * (1 - phi * 1.1)^2) / (K * (K - 1) * (J - 1))
 
   data.frame(
-    Strata       = J,
-    Var.Phi      = var.phi,
-    Var.Phi.Low  = var.low,
-    Var.Phi.High = var.high
+    Stratum   = J,
+    var_phi   = var.phi,
+    conf.low  = var.low,
+    conf.high = var.high
   )
 }

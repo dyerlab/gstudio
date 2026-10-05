@@ -7,7 +7,9 @@
 #'  'Chi': Chi-square approximation & 'Permute': A permutation approach
 #' @param supress_warnings A flag that prevents sample size warnings from being displayed
 #'  (often helpful if you are simulating data sets for permutation)
-#' @return A \code{data.frame} with columns for Locus, Chi (the stat), df, and Prob.
+#' @return A \code{data.frame} with one row per locus and columns \code{Locus},
+#'   \code{statistic} (the chi-square statistic), \code{df} and \code{p.value}
+#'   (numeric), named as \code{broom::tidy()} names test results.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples 
@@ -28,7 +30,7 @@ hwe <- function( x, mode=c("Chi")[1], supress_warnings=FALSE ){
   if( length(loci) < 1 )
     stop("You need to pass a data.frame to this function with a locus object in it...Hello?")
   
-  ret <- data.frame( Locus=loci, Chi=NA, df=NA, Prob=NA )
+  ret <- data.frame( Locus=loci, statistic=NA_real_, df=NA_real_, p.value=NA_real_ )
   
   
   for( locus in loci ){
@@ -52,13 +54,12 @@ hwe <- function( x, mode=c("Chi")[1], supress_warnings=FALSE ){
       p <- 1.0 - pchisq(chi.obs,df=df)
     }
     
-    ret$Chi[ ret$Locus==locus] <- chi.obs
+    ret$statistic[ ret$Locus==locus] <- chi.obs
     ret$df[ ret$Locus==locus] <- df
-    ret$Prob[ ret$Locus==locus] <- p
+    ret$p.value[ ret$Locus==locus] <- p
     
   }
 
-  ret$Prob <- format( ret$Prob, scientific=TRUE)
   return(ret)
   
   

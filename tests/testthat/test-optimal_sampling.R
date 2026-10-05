@@ -4,9 +4,9 @@ test_that("optimal_sampling input validation and calculation", {
 
   df <- optimal_sampling(100, 0.25)
   expect_s3_class(df, "data.frame")
-  expect_true(all(c("Strata", "Var.Phi", "Var.Phi.Low", "Var.Phi.High") %in% names(df)))
+  expect_named(df, c("Stratum", "var_phi", "conf.low", "conf.high"))
   expect_true(nrow(df) > 0)
-  expect_true(all(df$Var.Phi > 0))
-  expect_true(all(df$Var.Phi.Low > 0))
-  expect_true(all(df$Var.Phi.High > 0))
+  expect_true(all(df$var_phi > 0))
+  expect_true(all(df$conf.low > 0))
+  expect_true(all(df$conf.high > 0))
 })

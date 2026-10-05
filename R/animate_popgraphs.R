@@ -12,49 +12,46 @@
 #'  list is named, the names are used as frame titles.
 #' @param file The path of the GIF file to write.  Defaults to a temporary
 #'  file, whose path is reported with a message and returned.
-#' @param layout How to place the nodes.  One of:
-#'  \itemize{
-#'    \item A character shorthand for an \code{igraph} layout: "fr" (the
-#'      default, Fruchterman-Reingold), "kk" (Kamada-Kawai), "circle", or
-#'      "mds".
-#'    \item A layout function, such as \code{igraph::layout_with_graphopt},
-#'      that takes an \code{igraph} and returns a two-column coordinate matrix.
-#'    \item A two-column numeric matrix with node names as row names.
-#'    \item A \code{data.frame} with columns \code{name}, \code{x}, and
-#'      \code{y}, or the output of \code{strata_coordinates()} (columns
-#'      \code{Stratum}, \code{Longitude}, and \code{Latitude}).
-#'  }
-#'  Layout functions are applied to the union of all graphs.  Force-directed
-#'  layouts are stochastic, so call \code{set.seed()} first for a
-#'  reproducible arrangement.
+#' @param layout How to place the nodes, as in \code{\link{plot.popgraph}}:
+#'  \code{NULL} (default) uses vertex attributes \code{x}/\code{y} or
+#'  \code{Longitude}/\code{Latitude} when every node has them and otherwise a
+#'  Kamada-Kawai layout; or a layout name (\code{"fr"}, \code{"kk"},
+#'  \code{"circle"}, \code{"mds"}), a layout function, a two-column matrix with
+#'  node names as row names, or a \code{data.frame} with columns
+#'  \code{name}/\code{x}/\code{y} or the output of \code{strata_coordinates()}.
+#'  Named and function layouts are computed once, on the unweighted union of all
+#'  graphs, with a fixed seed, so the arrangement is reproducible.
 #' @param delay The time, in seconds, that each frame is shown (default 1).
 #' @param width The width of the animation in pixels (default 600).
 #' @param height The height of the animation in pixels (default 600).
-#' @param labels A flag indicating whether node names are drawn (default TRUE).
+#' @param node_size,node_labels,node_fill Node styling for the default frames,
+#'  as in \code{\link{plot.popgraph}} (defaults \code{"constant"},
+#'  \code{"name"}, and \code{NULL}: fill by a \code{region} vertex attribute
+#'  when present, otherwise white).  Degree is taken from each frame's own
+#'  graph.
 #' @param loop Should the animation loop?  Either \code{TRUE} (the default)
 #'  to loop forever, \code{FALSE} to play once, or a number of repetitions.
 #' @param frame_plot An optional function used to draw each frame, taking
-#'  \code{(layout, title)} and returning a \code{ggplot}.  \code{layout} is a
-#'  \code{ggraph} layout (from \code{ggraph::create_layout()}) holding every
-#'  node at its fixed position, with node columns \code{name} and
-#'  \code{present} (\code{FALSE} for nodes absent from that graph), so it can
-#'  be drawn with \code{ggraph(layout) + geom_edge_link() + ...}.  The default
-#'  (\code{NULL}) draws edges, nodes (absent nodes faded), and, if
-#'  \code{labels = TRUE}, node names.  Keep the coordinate limits fixed across
-#'  frames if you want nodes to stay still.
+#'  \code{(layout, title)} and returning a \code{ggplot}; requires
+#'  \pkg{ggraph}.  \code{layout} is a \code{ggraph} layout (from
+#'  \code{ggraph::create_layout()}) holding every node at its fixed position,
+#'  with node columns \code{name} and \code{present} (\code{FALSE} for nodes
+#'  absent from that graph), so it can be drawn with
+#'  \code{ggraph(layout) + geom_edge_link() + ...}.  The default (\code{NULL})
+#'  draws each frame with the same backend as \code{plot.popgraph()}, with
+#'  absent nodes faded.  Keep the coordinate limits fixed across frames if you
+#'  want nodes to stay still.
 #' @return The path to the GIF file, invisibly.
 #' @importFrom ggplot2 .data
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' \donttest{
-#' if (requireNamespace("gifski", quietly = TRUE) &&
-#'     requireNamespace("ggraph", quietly = TRUE)) {
+#' if (requireNamespace("gifski", quietly = TRUE)) {
 #'   data(lopho)
 #'   data(upiga)
 #'   graphs <- list(Lophocereus = lopho, Upiga = upiga)
 #'   out <- file.path(tempdir(), "baja.gif")
-#'   set.seed(42)
 #'   animate_popgraphs(graphs, file = out, layout = "kk", delay = 2)
 #'
 #'   # Style the frames yourself with ggraph
@@ -72,20 +69,24 @@
 #' }
 animate_popgraphs <- function(graphs,
                               file = tempfile(fileext = ".gif"),
-                              layout = "fr",
+                              layout = NULL,
                               delay = 1,
                               width = 600,
                               height = 600,
-                              labels = TRUE,
+                              node_size = c("constant", "degree", "size"),
+                              node_labels = c("name", "degree", "size", "none"),
+                              node_fill = NULL,
                               loop = TRUE,
                               frame_plot = NULL) {
 
   if (!requireNamespace("gifski", quietly = TRUE))
     stop("The 'gifski' package is required. Install it with install.packages('gifski').")
-  if (!requireNamespace("ggraph", quietly = TRUE))
-    stop("The 'ggraph' package is required. Install it with install.packages('ggraph').")
   if (!is.null(frame_plot) && !is.function(frame_plot))
     stop("'frame_plot' must be NULL or a function(layout, title) returning a ggplot.")
+  if (!is.null(frame_plot) && !requireNamespace("ggraph", quietly = TRUE))
+    stop("A custom 'frame_plot' needs the 'ggraph' package. Install it with install.packages('ggraph').")
+  if (!is.numeric(node_size)) node_size <- match.arg(node_size)
+  node_labels <- match.arg(node_labels)
 
   if (inherits(graphs, "igraph"))
     stop("Pass a list of graphs, e.g. list(graph1, graph2), not a single graph.")
@@ -110,12 +111,11 @@ animate_popgraphs <- function(graphs,
   # Fixed node coordinates across all frames
   all_nodes <- unique(unlist(lapply(graphs, function(g) V(g)$name)))
   coords <- .animation_layout(graphs, all_nodes, layout)
-  xlim <- range(coords$x)
-  ylim <- range(coords$y)
+  xlim <- range(coords[, 1])
+  ylim <- range(coords[, 2])
   pad_x <- max(diff(xlim) * 0.08, 1e-8)
   pad_y <- max(diff(ylim) * 0.08, 1e-8)
-  xlim <- xlim + c(-pad_x, pad_x)
-  ylim <- ylim + c(-pad_y, pad_y)
+  limits <- list(x = xlim + c(-pad_x, pad_x), y = ylim + c(-pad_y, pad_y))
 
   frame_dir <- tempfile("popgraph_frames_")
   dir.create(frame_dir)
@@ -124,11 +124,10 @@ animate_popgraphs <- function(graphs,
   frames <- file.path(frame_dir, sprintf("frame_%04d.png", seq_along(graphs)))
 
   for (i in seq_along(graphs)) {
-    lay <- .animation_frame_layout(graphs[[i]], coords)
     p <- if (is.null(frame_plot))
-      .animation_frame(lay, titles[i], labels, xlim, ylim)
+      .animation_frame(graphs[[i]], coords, titles[i], node_size, node_labels, node_fill, limits)
     else
-      frame_plot(lay, titles[i])
+      frame_plot(.animation_frame_layout(graphs[[i]], coords), titles[i])
     if (!inherits(p, "ggplot"))
       stop("'frame_plot' must return a ggplot object.")
     grDevices::png(frames[i], width = width, height = height, res = 96)
@@ -151,77 +150,44 @@ animate_popgraphs <- function(graphs,
 
 #' Resolve a layout specification into fixed node coordinates
 #'
-#' Converts the \code{layout} argument of \code{animate_popgraphs()} into a
-#'  single set of coordinates shared by every frame.  Layout names and
-#'  functions are applied to the unweighted union of all edges so that no
-#'  single graph's weights drive the placement.
+#' Resolves the \code{layout} argument of \code{animate_popgraphs()} with the
+#'  shared plotting resolver into one set of coordinates for every frame.
+#'  Layout names and functions are applied to the unweighted union of all
+#'  edges so that no single graph's weights drive the placement.
 #' @param graphs A list of \code{igraph} objects with named nodes.
 #' @param all_nodes Character vector of every node name across \code{graphs}.
-#' @param layout A layout name ("fr", "kk", "circle", "mds"), a layout
-#'  function, a two-column matrix with node names as row names, or a
-#'  \code{data.frame} with columns (name, x, y) or (Stratum, Longitude, Latitude).
-#' @return A \code{data.frame} with columns \code{name}, \code{x}, and \code{y},
-#'  one row per node in \code{all_nodes}.
+#' @param layout See \code{animate_popgraphs()}.
+#' @return A two-column coordinate matrix with one row per node in
+#'  \code{all_nodes} (row names are node names).
 #' @keywords internal
 #' @noRd
 .animation_layout <- function(graphs, all_nodes, layout) {
+  el <- do.call(rbind, lapply(graphs, as_edgelist, names = TRUE))
+  union_graph <- igraph::graph_from_data_frame(
+    data.frame(from = el[, 1], to = el[, 2], stringsAsFactors = FALSE),
+    directed = FALSE, vertices = data.frame(name = all_nodes, stringsAsFactors = FALSE))
+  union_graph <- igraph::simplify(union_graph)
 
-  if (is.character(layout)) {
-    if (length(layout) != 1)
-      stop("'layout' must be a single layout name.")
-    layout <- switch(layout,
-                     fr = igraph::layout_with_fr,
-                     kk = igraph::layout_with_kk,
-                     circle = igraph::layout_in_circle,
-                     mds = igraph::layout_with_mds,
-                     stop("Unknown layout '", layout, "'. Use one of 'fr', 'kk', 'circle', 'mds', ",
-                          "a layout function, or a matrix/data.frame of coordinates."))
-  }
-
-  if (is.function(layout)) {
-    # Unweighted union of all edges so no single graph's weights drive the layout
-    el <- do.call(rbind, lapply(graphs, as_edgelist, names = TRUE))
-    union_graph <- igraph::graph_from_data_frame(as.data.frame(el, stringsAsFactors = FALSE),
-                                                 directed = FALSE,
-                                                 vertices = data.frame(name = all_nodes))
-    union_graph <- igraph::simplify(union_graph)
-    xy <- layout(union_graph)
-    return(data.frame(name = V(union_graph)$name,
-                      x = xy[, 1],
-                      y = xy[, 2],
-                      stringsAsFactors = FALSE))
-  }
-
-  if (is.matrix(layout)) {
-    if (ncol(layout) != 2 || is.null(rownames(layout)))
-      stop("A layout matrix must have two columns and node names as row names.")
-    coords <- data.frame(name = rownames(layout),
-                         x = as.numeric(layout[, 1]),
-                         y = as.numeric(layout[, 2]),
-                         stringsAsFactors = FALSE)
-  } else if (is.data.frame(layout)) {
-    if (all(c("name", "x", "y") %in% names(layout))) {
-      coords <- data.frame(name = as.character(layout$name),
-                           x = layout$x,
-                           y = layout$y,
-                           stringsAsFactors = FALSE)
-    } else if (all(c("Stratum", "Longitude", "Latitude") %in% names(layout))) {
-      coords <- data.frame(name = as.character(layout$Stratum),
-                           x = layout$Longitude,
-                           y = layout$Latitude,
-                           stringsAsFactors = FALSE)
-    } else {
-      stop("A layout data.frame needs columns (name, x, y) or (Stratum, Longitude, Latitude).")
+  if (is.null(layout)) {
+    # Vertex coordinates count only if every node carries them in some graph.
+    attr_xy <- function(a, b) do.call(rbind, lapply(graphs, function(g) {
+      if (!all(c(a, b) %in% igraph::vertex_attr_names(g))) return(NULL)
+      data.frame(name = V(g)$name, x = igraph::vertex_attr(g, a),
+                 y = igraph::vertex_attr(g, b), stringsAsFactors = FALSE)
+    }))
+    for (ab in list(c("x", "y"), c("Longitude", "Latitude"))) {
+      d <- attr_xy(ab[1], ab[2])
+      if (!is.null(d) && all(all_nodes %in% d$name)) {
+        d <- d[!duplicated(d$name), ]
+        m <- .coords_from_table(d, all_nodes)
+        m <- matrix(as.numeric(m), ncol = 2, dimnames = list(all_nodes, c("x", "y")))
+        attr(m, "source") <- if (ab[1] == "Longitude") "geographic" else "attributes"
+        return(m)
+      }
     }
-  } else {
-    stop("'layout' must be a layout name, a layout function, or a matrix/data.frame of coordinates.")
+    layout <- "kk"
   }
-
-  missing_nodes <- setdiff(all_nodes, coords$name)
-  if (length(missing_nodes))
-    stop("The supplied layout has no coordinates for: ", paste(missing_nodes, collapse = ", "))
-
-  coords[match(all_nodes, coords$name), ]
+  .graph_layout(union_graph, layout, nodes = all_nodes)
 }
 
 
@@ -231,7 +197,7 @@ animate_popgraphs <- function(graphs,
 #'  holds the full node set, marks them with \code{present = FALSE}, and places
 #'  all nodes at the shared coordinates.
 #' @param graph An \code{igraph} object with named nodes.
-#' @param coords The \code{data.frame} (name, x, y) from \code{.animation_layout()}.
+#' @param coords The coordinate matrix (row names are nodes) from \code{.animation_layout()}.
 #' @return A \code{layout_ggraph} object.
 #' @keywords internal
 #' @noRd
@@ -240,43 +206,45 @@ animate_popgraphs <- function(graphs,
   g <- igraph::graph_from_data_frame(
     data.frame(from = el[, 1], to = el[, 2], stringsAsFactors = FALSE),
     directed = FALSE,
-    vertices = data.frame(name = coords$name,
-                          present = coords$name %in% V(graph)$name,
+    vertices = data.frame(name = rownames(coords),
+                          present = rownames(coords) %in% V(graph)$name,
                           stringsAsFactors = FALSE))
   ggraph::create_layout(g, layout = "manual",
-                        x = coords$x[match(V(g)$name, coords$name)],
-                        y = coords$y[match(V(g)$name, coords$name)])
+                        x = coords[V(g)$name, 1],
+                        y = coords[V(g)$name, 2])
 }
 
 
 #' Build the default plot for a single animation frame
 #'
-#' Draws one frame with ggraph on the shared coordinates.  Nodes absent from
-#'  the frame's graph are drawn faded so the node set is visually stable.
-#' @param layout The \code{layout_ggraph} from \code{.animation_frame_layout()}.
+#' Draws one frame with the shared \code{plot.popgraph()} backend on the fixed
+#'  coordinates.  Nodes absent from the frame's graph are drawn faded so the
+#'  node set is visually stable.
+#' @param graph The frame's \code{igraph}.
+#' @param coords The coordinate matrix from \code{.animation_layout()}.
 #' @param title The frame title.
-#' @param labels A flag indicating whether node names are drawn.
-#' @param xlim,ylim Fixed plot limits shared by all frames.
+#' @param node_size,node_labels,node_fill Node styling, as in \code{plot.popgraph()}.
+#' @param limits Fixed plot limits shared by all frames, \code{list(x, y)}.
 #' @return A \code{ggplot} object.
 #' @keywords internal
 #' @noRd
-.animation_frame <- function(layout, title, labels, xlim, ylim) {
+.animation_frame <- function(graph, coords, title, node_size, node_labels, node_fill, limits) {
+  nd <- .graph_nodes(graph, coords[, 1:2, drop = FALSE])
+  present <- nd$node %in% V(graph)$name
+  nd$alpha <- ifelse(present, 1, 0.2)
+  node_fill <- .resolve_node_fill(graph, node_fill)
+  nd <- .graph_node_fill(nd, graph, node_fill)
+  ed <- .edge_segments(as_edgelist(graph, names = TRUE), coords,
+                       directed = igraph::is_directed(graph))
+  ed$panel <- rep("", nrow(ed))
+  ed$weight <- rep(1, nrow(ed))
 
-  p <- ggraph::ggraph(layout) +
-    ggraph::geom_edge_link(colour = "grey50") +
-    ggraph::geom_node_point(ggplot2::aes(alpha = ifelse(.data$present, 1, 0.2)),
-                            size = 4, colour = "#2c7fb8") +
-    ggplot2::scale_alpha_identity() +
-    ggplot2::coord_fixed(xlim = xlim, ylim = ylim, expand = FALSE) +
+  .graph_canvas(nd, ed, node_size = node_size, node_labels = node_labels,
+                node_fill = node_fill, arrows = igraph::is_directed(graph),
+                geographic = identical(attr(coords, "source"), "geographic"),
+                limits = limits) +
     ggplot2::labs(title = title) +
-    ggplot2::theme_void() +
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, size = 16),
-                   plot.background = ggplot2::element_rect(fill = "white", colour = NA))
-
-  if (labels)
-    p <- p + ggraph::geom_node_text(ggplot2::aes(label = .data$name,
-                                                 alpha = ifelse(.data$present, 1, 0.2)),
-                                    vjust = -1.1, size = 3.5)
-
-  p
+                   plot.background = ggplot2::element_rect(fill = "white", colour = NA),
+                   legend.position = "none")
 }

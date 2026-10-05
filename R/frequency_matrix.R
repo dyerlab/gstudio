@@ -14,6 +14,10 @@
 #' head(fm)
 
 frequency_matrix <- function( x, stratum="Population", loci=NULL ) {
+  if( is(x, "data.frame") ) {
+    stratum <- .detect_stratum(x, stratum, default = "Population", explicit = !missing(stratum))
+    x <- .plain_df(x)
+  }
   
   if( !(stratum %in% names(x)))
     stop("You must pass the name of the column you have your stratum names located")

@@ -16,8 +16,10 @@ test_that("hwe chi-square test on equilibrium data", {
   expect_s3_class(res, "data.frame")
   expect_equal(res$Locus, "TPI")
   expect_equal(res$df, 1)
-  expect_true(res$Chi < 0.01)
-  expect_true(as.numeric(res$Prob) > 0.95)
+  expect_named(res, c("Locus", "statistic", "df", "p.value"))
+  expect_true(res$statistic < 0.01)
+  expect_type(res$p.value, "double")
+  expect_true(res$p.value > 0.95)
 })
 
 test_that("hwe works on locus vector input", {

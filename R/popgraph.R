@@ -81,7 +81,7 @@ popgraph <- function( x, groups, alpha=0.05, tol=1.0e-4 ) {
   LDValues <- scale( mv, center=means, scale=FALSE ) %*% scaling
   
   allLD <- centroid_distance( LDValues, groups )
-  allSD <- centroid_variance( LDValues, groups )
+  allSD <- centroid_variance( LDValues, groups )$variance
   D <- matrix(0.0,nrow=K,ncol=K)
   
   for(i in seq(1,K)) 

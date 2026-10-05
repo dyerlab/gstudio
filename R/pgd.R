@@ -15,7 +15,7 @@
 #'   \code{"matrix"} (all-pairs directed shortest-path pGD; \code{[i, j]} is the
 #'   distance from \eqn{i} to \eqn{j}).
 #' @return A directed \code{igraph} or a numeric matrix.
-#' @seealso \code{\link{directional_ibgd}}
+#' @seealso \code{\link{ibgd}}, \code{\link{genetic_distance}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' library(igraph)

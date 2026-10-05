@@ -19,7 +19,8 @@
 #'  partition(df, stratum="Population")
 partition <- function( x, stratum="Population" ){
 
-  stratum <- .detect_stratum(x, stratum, default = "Population")
+  stratum <- .detect_stratum(x, stratum, default = "Population", explicit = !missing(stratum))
+  x <- .plain_df(x)
 
   if( !(stratum %in% names(x) ) )
     stop(paste("Cannot find '",stratum,"' in the column names of your Population."))
