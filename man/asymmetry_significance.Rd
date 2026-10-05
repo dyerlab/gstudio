@@ -49,7 +49,11 @@ leaf; to remove leaf influence entirely, prune the degree-one nodes from
 \item{...}{Additional arguments passed to the dispatched base function
 (e.g. \code{rewire} for \code{"existence"}, or \code{tol} for the
 internal \code{popgraph} calls of \code{"location"}, which always use
-\code{alpha = 1}).}
+\code{alpha = 1}).  \code{return_null = TRUE} keeps the null distribution
+for every mode: as \code{$null_distribution} on the \code{"existence"}
+test, and as attribute \code{"null_distribution"} (edges by permutations,
+rows matching the returned edges) on the \code{"location"} and
+\code{"mechanism"} tables.}
 }
 \value{
 For \code{mode = "existence"}, an \code{"htest"} for the whole graph

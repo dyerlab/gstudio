@@ -194,3 +194,29 @@ test_that("a graph with no pendants does not warn", {
     asymmetry_significance(g, mode = "mechanism", nperm = 49),
     regexp = NA)
 })
+
+test_that("return_null keeps the null distribution for every mode", {
+  data(lopho)
+  set.seed(3)
+  ex <- asymmetry_significance(lopho, mode = "existence", nperm = 9, return_null = TRUE)
+  expect_length(ex$null_distribution, unname(ex$parameter["nperm"]))
+  expect_null(asymmetry_network(lopho, nperm = 3)$null_distribution)
+
+  me <- suppressWarnings(asymmetry_significance(lopho, mode = "mechanism", nperm = 9, return_null = TRUE))
+  nd <- attr(me, "null_distribution")
+  expect_equal(dim(nd), c(nrow(me), 9))
+
+  dr <- asymmetry_significance(lopho, mode = "mechanism", nperm = 9, return_null = TRUE, pendants = "drop")
+  expect_equal(nrow(attr(dr, "null_distribution")), nrow(dr))
+
+  data(arapat)
+  mv <- to_mv(arapat)
+  g  <- popgraph(mv, groups = arapat$Population)
+  lo <- asymmetry_permutation(g, mv, arapat$Population, nperm = 3, return_null = TRUE)
+  expect_equal(nrow(attr(lo, "null_distribution")), nrow(lo))
+  expect_lte(ncol(attr(lo, "null_distribution")), 3)
+  # the p-values can be recomputed from the returned null
+  nd <- attr(lo, "null_distribution")
+  ctr <- rowMeans(nd)
+  expect_equal(lo$p.value, (1 + rowSums(abs(nd - ctr) >= abs(lo$delta - ctr))) / (1 + ncol(nd)))
+})

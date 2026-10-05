@@ -32,6 +32,8 @@
 #' @param data The multivariate genotype matrix passed to \code{\link{popgraph}}.
 #' @param groups A factor of stratum membership, one entry per row of \code{data}.
 #' @param nperm Number of label permutations (default 999).
+#' @param return_null If \code{TRUE}, the per-edge null distributions are
+#'   attached as attribute \code{"null_distribution"} (default \code{FALSE}).
 #' @param ... Additional arguments passed to \code{\link{popgraph}} (e.g.
 #'   \code{tol}).  \code{alpha} is ignored with a warning, since the test
 #'   requires \code{alpha = 1}.
@@ -39,7 +41,9 @@
 #' @return A \code{data.frame} with columns \code{from}, \code{to},
 #'   \code{delta} (observed \eqn{\Delta_{ij}}), \code{statistic} (the centred
 #'   deviation \eqn{\Delta_{\mathrm{obs}} - \bar{\Delta}_{\mathrm{null}}}), and
-#'   \code{p.value}.
+#'   \code{p.value}.  With \code{return_null = TRUE}, attribute
+#'   \code{"null_distribution"} is a matrix of the permuted \eqn{\Delta}, one
+#'   row per edge (in the same order) and one column per successful permutation.
 #'
 #' @seealso \code{\link{asymmetry_significance}}, \code{\link{graph_asymmetries}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -54,7 +58,7 @@
 #'   res <- asymmetry_permutation(g, mv, arapat$Population, nperm = 19)
 #'   head(res)
 #' }
-asymmetry_permutation <- function(graph, data, groups, nperm = 999, ...) {
+asymmetry_permutation <- function(graph, data, groups, nperm = 999, return_null = FALSE, ...) {
 
   .validate_asymmetry_groups(graph, groups)
   groups    <- factor(as.character(groups))
@@ -110,7 +114,7 @@ asymmetry_permutation <- function(graph, data, groups, nperm = 999, ...) {
   B       <- rowSums(!is.na(null))
   p_value <- (1 + n_ge) / (1 + B)
 
-  data.frame(
+  ret <- data.frame(
     from      = el[, 1],
     to        = el[, 2],
     delta     = delta_obs,
@@ -118,4 +122,7 @@ asymmetry_permutation <- function(graph, data, groups, nperm = 999, ...) {
     p.value   = p_value,
     stringsAsFactors = FALSE
   )
+  if (return_null)
+    attr(ret, "null_distribution") <- null[, colSums(!is.na(null)) > 0, drop = FALSE]
+  ret
 }

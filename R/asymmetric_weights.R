@@ -35,6 +35,15 @@ asymmetric_weights <- function(graph, perplexity = 4, tol = 1e-5, max_iter = 100
 
   nodes <- igraph::V(graph)$name
 
+  # Normalised Gaussian kernel.  The smallest exponent is subtracted so the
+  # terms cannot all underflow to zero (0/0) when sigma is small relative to
+  # the distances, e.g. a node with many near-equal neighbour distances.
+  kernel <- function(distances, sigma) {
+    z <- distances^2 / (2 * sigma^2)
+    p <- exp(-(z - min(z)))
+    p / sum(p)
+  }
+
   find_sigma <- function(distances, target_perplexity) {
     k <- length(distances)
     if (k <= 1) return(1e-3)
@@ -46,9 +55,7 @@ asymmetric_weights <- function(graph, perplexity = 4, tol = 1e-5, max_iter = 100
     sigma_max <- max(10, max_d * 10)
     for (iter in 1:max_iter) {
       sigma <- (sigma_min + sigma_max) / 2
-      p <- exp(-distances^2 / (2 * sigma^2))
-      p <- p / sum(p)
-      perp <- 2^shannon_entropy(p)
+      perp <- 2^shannon_entropy(kernel(distances, sigma))
       if (abs(perp - eff_target) < tol) break
       if (perp > eff_target) sigma_max <- sigma else sigma_min <- sigma
     }
@@ -71,9 +78,7 @@ asymmetric_weights <- function(graph, perplexity = 4, tol = 1e-5, max_iter = 100
     if (length(dists) == 1L) {
       p <- 1
     } else {
-      sigma_i <- find_sigma(dists, perplexity)
-      p <- exp(-dists^2 / (2 * sigma_i^2))
-      p <- p / sum(p)
+      p <- kernel(dists, find_sigma(dists, perplexity))
     }
     prob[ni, neighbors_i] <- p
   }

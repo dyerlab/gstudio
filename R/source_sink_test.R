@@ -22,9 +22,12 @@
 #' the true landscape adjacency).  The two-sided p-value is
 #' \eqn{(1 + \#\{|r_{null}| \ge |r_{obs}|\}) / (1 + B)}.
 #'
-#' \strong{Ties.} \eqn{S} is rounded to 12 significant digits before ranking, so
-#' floating-point near-ties between structurally equivalent populations do not
-#' change the ranks.
+#' \strong{Ties.} Values of \eqn{S} within \eqn{10^{-10} \max|S|} of each other
+#' are treated as tied before ranking (sorted values closer than that to their
+#' neighbour share one value), so floating-point near-ties between structurally
+#' equivalent populations (for example two leaves on the same hub) cannot change
+#' the ranks.  Rounding to a fixed number of digits is not enough: two values a
+#' few ulps apart can straddle a rounding boundary.
 #'
 #' \strong{Bandwidth.} The default \code{gamma = 0.5} (degree-neutral) is
 #' recommended for this test; see \code{\link{source_sink_scores}}.  Report the
@@ -41,9 +44,11 @@
 #' @param adjacency For \code{null = "adjacency"}: an \eqn{n \times n} weight matrix
 #'   in vertex order (or with node dimnames).
 #' @param interior If \code{TRUE}, the statistic and the null replicates are
-#'   restricted to interior nodes: degree greater than one and, for the
-#'   observed range of \code{x}, more than \code{edge_margin} from either end.
-#' @param edge_margin Margin used by \code{interior} (default 2, in units of \code{x}).
+#'   restricted to interior nodes: degree greater than one and at least
+#'   \code{edge_margin} from either end of the observed range of \code{x}.
+#' @param edge_margin How much of each end of \code{x} \code{interior} trims,
+#'   in units of \code{x} (default 2).  On a stepping stone with \code{x = 1:25}
+#'   the default keeps populations 3 to 23, i.e. drops the two at each end.
 #' @param return_null If \code{TRUE}, the null correlations are returned.
 #' @return An object of class \code{c("source_sink_test", "htest")}, which
 #'   prints as a standard test and works with \code{broom::tidy()}:
@@ -75,9 +80,9 @@ source_sink_test <- function(graph, x, gamma = 0.5, nperm = 999L, null = c("grap
   nodes <- igraph::V(graph)$name
   xv <- .gravity_x(x, nodes)
   sc <- source_sink_scores(graph, gamma)
-  S <- signif(sc$S, 12)
+  S <- .merge_ties(sc$S)
   keep <- rep(TRUE, length(S))
-  if (interior) keep <- sc$degree > 1 & xv > min(xv) + edge_margin & xv < max(xv) - edge_margin
+  if (interior) keep <- sc$degree > 1 & xv >= min(xv) + edge_margin & xv <= max(xv) - edge_margin
   if (sum(keep) < 4) stop("fewer than 4 nodes available for the test")
   r_obs <- stats::cor(S[keep], xv[keep], method = "spearman")
   draws <- switch(null,
@@ -110,6 +115,18 @@ source_sink_test <- function(graph, x, gamma = 0.5, nperm = 999L, null = c("grap
   if (return_null) out$r_null <- r_null
   class(out) <- c("source_sink_test", "htest")
   out
+}
+
+# Internal: merge floating-point near-ties.  Sorted values closer than
+# tol * max|z| to their predecessor take the first value of their run.
+.merge_ties <- function(z, tol = 1e-10) {
+  ok <- which(is.finite(z))
+  if (length(ok) < 2) return(z)
+  o   <- ok[order(z[ok])]
+  zs  <- z[o]
+  run <- cumsum(c(TRUE, diff(zs) > tol * max(abs(zs))))
+  z[o] <- zs[match(run, run)]
+  z
 }
 
 #' @rdname source_sink_test

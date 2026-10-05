@@ -4,7 +4,13 @@
 \alias{asymmetry_network}
 \title{Network (rewiring) null for graph asymmetry}
 \usage{
-asymmetry_network(graph, nperm = 999, rewire = c("degree", "full"), ...)
+asymmetry_network(
+  graph,
+  nperm = 999,
+  rewire = c("degree", "full"),
+  return_null = FALSE,
+  ...
+)
 }
 \arguments{
 \item{graph}{An undirected weighted \code{popgraph}/\code{igraph} object.}
@@ -15,6 +21,10 @@ asymmetry_network(graph, nperm = 999, rewire = c("degree", "full"), ...)
 \code{"degree"} (default, preserves the degree distribution) or
 \code{"full"}.}
 
+\item{return_null}{If \code{TRUE}, the null distribution is returned as
+\code{null_distribution}: the mean \eqn{|\Delta|} of each valid rewired
+graph (default \code{FALSE}).}
+
 \item{...}{Ignored; present for interface consistency.}
 }
 \value{
@@ -23,7 +33,8 @@ An object of class \code{"htest"}, which prints as a standard test
   \code{mean |Delta|}), \code{parameter} (\code{edges} and the number of
   valid rewired graphs, \code{nperm}), the one-sided \code{p.value},
   \code{estimate} (the \code{null mean |Delta|}), \code{alternative},
-  \code{method} and \code{data.name}.  Rewired graphs for which the
+  \code{method} and \code{data.name}, plus \code{null_distribution} with
+  \code{return_null = TRUE}.  Rewired graphs for which the
   asymmetry cannot be computed (e.g. those containing isolated nodes) are
   excluded from the null distribution.
 }

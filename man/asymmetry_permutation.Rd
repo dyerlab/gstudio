@@ -4,7 +4,14 @@
 \alias{asymmetry_permutation}
 \title{Fixed-topology permutation test for edge asymmetry}
 \usage{
-asymmetry_permutation(graph, data, groups, nperm = 999, ...)
+asymmetry_permutation(
+  graph,
+  data,
+  groups,
+  nperm = 999,
+  return_null = FALSE,
+  ...
+)
 }
 \arguments{
 \item{graph}{An undirected weighted \code{popgraph}/\code{igraph} object.}
@@ -15,6 +22,9 @@ asymmetry_permutation(graph, data, groups, nperm = 999, ...)
 
 \item{nperm}{Number of label permutations (default 999).}
 
+\item{return_null}{If \code{TRUE}, the per-edge null distributions are
+attached as attribute \code{"null_distribution"} (default \code{FALSE}).}
+
 \item{...}{Additional arguments passed to \code{\link{popgraph}} (e.g.
 \code{tol}).  \code{alpha} is ignored with a warning, since the test
 requires \code{alpha = 1}.}
@@ -23,7 +33,9 @@ requires \code{alpha = 1}.}
 A \code{data.frame} with columns \code{from}, \code{to},
   \code{delta} (observed \eqn{\Delta_{ij}}), \code{statistic} (the centred
   deviation \eqn{\Delta_{\mathrm{obs}} - \bar{\Delta}_{\mathrm{null}}}), and
-  \code{p.value}.
+  \code{p.value}.  With \code{return_null = TRUE}, attribute
+  \code{"null_distribution"} is a matrix of the permuted \eqn{\Delta}, one
+  row per edge (in the same order) and one column per successful permutation.
 }
 \description{
 Tests whether the magnitude of each edge's asymmetry index

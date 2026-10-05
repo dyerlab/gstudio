@@ -22,6 +22,9 @@
 #' @param rewire The randomisation mode passed to \code{\link{randomize_graph}}:
 #'   \code{"degree"} (default, preserves the degree distribution) or
 #'   \code{"full"}.
+#' @param return_null If \code{TRUE}, the null distribution is returned as
+#'   \code{null_distribution}: the mean \eqn{|\Delta|} of each valid rewired
+#'   graph (default \code{FALSE}).
 #' @param ... Ignored; present for interface consistency.
 #'
 #' @return An object of class \code{"htest"}, which prints as a standard test
@@ -29,7 +32,8 @@
 #'   \code{mean |Delta|}), \code{parameter} (\code{edges} and the number of
 #'   valid rewired graphs, \code{nperm}), the one-sided \code{p.value},
 #'   \code{estimate} (the \code{null mean |Delta|}), \code{alternative},
-#'   \code{method} and \code{data.name}.  Rewired graphs for which the
+#'   \code{method} and \code{data.name}, plus \code{null_distribution} with
+#'   \code{return_null = TRUE}.  Rewired graphs for which the
 #'   asymmetry cannot be computed (e.g. those containing isolated nodes) are
 #'   excluded from the null distribution.
 #'
@@ -46,7 +50,7 @@
 #'   res
 #' }
 asymmetry_network <- function(graph, nperm = 999,
-                              rewire = c("degree", "full"), ...) {
+                              rewire = c("degree", "full"), return_null = FALSE, ...) {
 
   rewire   <- match.arg(rewire)
   dname    <- deparse1(substitute(graph))
@@ -82,7 +86,7 @@ asymmetry_network <- function(graph, nperm = 999,
          if (rewire == "full") "; try rewire = \"degree\"" else "", ".")
   p_value <- (1 + sum(null >= obs_stat, na.rm = TRUE)) / (1 + B)
 
-  structure(list(
+  out <- structure(list(
     statistic   = c(`mean |Delta|` = obs_stat),
     parameter   = c(edges = igraph::ecount(graph), nperm = B),
     p.value     = p_value,
@@ -92,4 +96,6 @@ asymmetry_network <- function(graph, nperm = 999,
                           if (rewire == "degree") "degree-preserving" else "full"),
     data.name   = dname),
     class = "htest")
+  if (return_null) out$null_distribution <- null[!is.na(null)]
+  out
 }

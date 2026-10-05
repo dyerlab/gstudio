@@ -238,3 +238,23 @@ test_that("the gravity genotypes rebuild the documented example graph and values
   expect_no_warning(ggplot2::ggplot_build(plot(f_r, layout = "kk")))
 })
 
+
+test_that("source_sink_test treats near-ties as ties and trims edge_margin from each end", {
+  # S values a few ulps apart that straddle a 12-digit rounding boundary
+  z <- c(0.1234567890125 - 2e-16, 0.1234567890125 + 2e-16, 0.5, -0.3)
+  expect_false(signif(z[1], 12) == signif(z[2], 12))
+  m <- gstudio:::.merge_ties(z)
+  expect_identical(m[1], m[2])
+  expect_equal(m[3:4], z[3:4])
+  expect_equal(gstudio:::.merge_ties(c(1, NA, 1 + 1e-15)), c(1, NA, 1))
+
+  K <- 12
+  A <- matrix(0, K, K, dimnames = list(paste0("P", 1:K), paste0("P", 1:K)))
+  for (i in 1:(K - 1)) A[i, i + 1] <- A[i + 1, i] <- i / 4 + 0.5
+  g <- igraph::graph_from_adjacency_matrix(A, mode = "undirected", weighted = TRUE)
+  set.seed(1)
+  t2 <- source_sink_test(g, x = 1:K, nperm = 19, interior = TRUE)
+  expect_equal(unname(t2$parameter["nodes"]), K - 4)      # keeps 3..10
+  t1 <- source_sink_test(g, x = 1:K, nperm = 19, interior = TRUE, edge_margin = 1)
+  expect_equal(unname(t1$parameter["nodes"]), K - 2)      # keeps 2..11
+})

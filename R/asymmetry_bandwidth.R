@@ -16,6 +16,10 @@
 #'
 #' @param graph An undirected weighted \code{popgraph}/\code{igraph} object.
 #' @param nperm Number of bandwidth permutations (default 999).
+#' @param return_null If \code{TRUE}, the per-edge null distributions are
+#'   attached as attribute \code{"null_distribution"}: a matrix of \eqn{\Delta}
+#'   under permuted bandwidths, one row per edge and one column per permutation
+#'   (default \code{FALSE}).
 #' @param ... Ignored; present for interface consistency.
 #'
 #' @return A \code{data.frame} with columns \code{from}, \code{to},
@@ -32,7 +36,7 @@
 #'   res <- asymmetry_bandwidth(lopho, nperm = 19)
 #'   head(res)
 #' }
-asymmetry_bandwidth <- function(graph, nperm = 999, ...) {
+asymmetry_bandwidth <- function(graph, nperm = 999, return_null = FALSE, ...) {
 
   g_obs     <- graph_asymmetries(graph)
   delta_obs <- igraph::E(g_obs)$delta
@@ -49,7 +53,7 @@ asymmetry_bandwidth <- function(graph, nperm = 999, ...) {
   B       <- rowSums(!is.na(null))
   p_value <- (1 + n_ge) / (1 + B)
 
-  data.frame(
+  ret <- data.frame(
     from      = el[, 1],
     to        = el[, 2],
     delta     = delta_obs,
@@ -57,6 +61,8 @@ asymmetry_bandwidth <- function(graph, nperm = 999, ...) {
     p.value   = p_value,
     stringsAsFactors = FALSE
   )
+  if (return_null) attr(ret, "null_distribution") <- null
+  ret
 }
 
 

@@ -75,3 +75,16 @@ test_that("node names in output match graph vertex names", {
   expect_true(all(result$from %in% node_names))
   expect_true(all(result$to %in% node_names))
 })
+
+test_that("near-equal neighbour distances do not underflow the kernel", {
+  # A hub with 5 (near-)tied neighbours never reaches perplexity 4, so the
+  # sigma search runs to its floor; the kernel used to underflow to 0/0 there.
+  g <- igraph::make_star(6, mode = "undirected")
+  igraph::V(g)$name <- paste0("P", 1:6)
+  for (w in list(rep(5, 5), 5 + (0:4) * 1e-6)) {
+    igraph::E(g)$weight <- w
+    result <- asymmetric_weights(g)
+    expect_false(anyNA(result))
+    expect_equal(result$dij + result$dji, result$cGD, tolerance = 1e-10)
+  }
+})

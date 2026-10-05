@@ -25,8 +25,10 @@
       "with pendants = 'drop' to exclude them."),
       n_pend, nrow(ret)))
   } else {                                        # pendants == "drop"
+    nd  <- attr(ret, "null_distribution")
     ret <- ret[!is_pend, , drop = FALSE]
     rownames(ret) <- NULL
+    if (!is.null(nd)) attr(ret, "null_distribution") <- nd[!is_pend, , drop = FALSE]
     attr(ret, "pendants_dropped") <- n_pend
   }
   ret

@@ -35,10 +35,12 @@ source_sink_test(
 in vertex order (or with node dimnames).}
 
 \item{interior}{If \code{TRUE}, the statistic and the null replicates are
-restricted to interior nodes: degree greater than one and, for the
-observed range of \code{x}, more than \code{edge_margin} from either end.}
+restricted to interior nodes: degree greater than one and at least
+\code{edge_margin} from either end of the observed range of \code{x}.}
 
-\item{edge_margin}{Margin used by \code{interior} (default 2, in units of \code{x}).}
+\item{edge_margin}{How much of each end of \code{x} \code{interior} trims,
+in units of \code{x} (default 2).  On a stepping stone with \code{x = 1:25}
+the default keeps populations 3 to 23, i.e. drops the two at each end.}
 
 \item{return_null}{If \code{TRUE}, the null correlations are returned.}
 
@@ -76,9 +78,12 @@ topology and held its false-positive rate at or below nominal in simulations.
 the true landscape adjacency).  The two-sided p-value is
 \eqn{(1 + \#\{|r_{null}| \ge |r_{obs}|\}) / (1 + B)}.
 
-\strong{Ties.} \eqn{S} is rounded to 12 significant digits before ranking, so
-floating-point near-ties between structurally equivalent populations do not
-change the ranks.
+\strong{Ties.} Values of \eqn{S} within \eqn{10^{-10} \max|S|} of each other
+are treated as tied before ranking (sorted values closer than that to their
+neighbour share one value), so floating-point near-ties between structurally
+equivalent populations (for example two leaves on the same hub) cannot change
+the ranks.  Rounding to a fixed number of digits is not enough: two values a
+few ulps apart can straddle a rounding boundary.
 
 \strong{Bandwidth.} The default \code{gamma = 0.5} (degree-neutral) is
 recommended for this test; see \code{\link{source_sink_scores}}.  Report the

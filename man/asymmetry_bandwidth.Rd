@@ -4,12 +4,17 @@
 \alias{asymmetry_bandwidth}
 \title{Bandwidth-alignment permutation test for edge asymmetry}
 \usage{
-asymmetry_bandwidth(graph, nperm = 999, ...)
+asymmetry_bandwidth(graph, nperm = 999, return_null = FALSE, ...)
 }
 \arguments{
 \item{graph}{An undirected weighted \code{popgraph}/\code{igraph} object.}
 
 \item{nperm}{Number of bandwidth permutations (default 999).}
+
+\item{return_null}{If \code{TRUE}, the per-edge null distributions are
+attached as attribute \code{"null_distribution"}: a matrix of \eqn{\Delta}
+under permuted bandwidths, one row per edge and one column per permutation
+(default \code{FALSE}).}
 
 \item{...}{Ignored; present for interface consistency.}
 }
