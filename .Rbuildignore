@@ -20,3 +20,4 @@ _quarto.yml
 ^CRAN-SUBMISSION$
 ^\.tana$
 ^gravity_significance_tests\.md$
+^vignettes/.*_files$

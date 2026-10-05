@@ -25,7 +25,10 @@ creating the new data set.}
 
 \item{nperm}{The number of perms to use (default 99).}
 
-\item{FUN}{the function to pass the permuted data to.}
+\item{FUN}{The function to pass the permuted data to.  It is called on a
+\code{locus} vector (and the permuted strata, if given) and must return a
+single number; wrap \code{\link{genetic_diversity}} as in the example to
+permute a diversity statistic.}
 
 \item{replace}{A flag indicating if randomization should be with replacement (default FALSE)}
 
@@ -41,7 +44,8 @@ This function takes some data and does permutations on it and passes
 }
 \examples{
 loc <- c(locus(1:2), locus(c(1,1)), locus(c(2,2)))
-permute_ci(loc, FUN = He, nperm = 19)
+he <- function(x) genetic_diversity(x, mode = "He")$He
+permute_ci(loc, FUN = he, nperm = 19)
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
