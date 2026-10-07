@@ -74,7 +74,13 @@ the two are then compared at two levels:
     \eqn{S} is not on a common scale across graphs with different sizes and
     edge weights.  Each population is also classed as a concordant
     \code{"source"} (\eqn{S_1, S_2 > 0}), concordant \code{"sink"}
-    (\eqn{S_1, S_2 < 0}), or \code{"discordant"}.}
+    (\eqn{S_1, S_2 < 0}), \code{"discordant"} (a source in one graph and
+    a sink in the other), or \code{"neutral"} (\eqn{S = 0} in either graph,
+    so it has no direction to agree or disagree with).  S is 0 for a
+    population that is isolated, or in a two-node component, in that graph:
+    a node with a single neighbour gives it all its weight, so both ends of
+    a lone edge weigh each other equally and \eqn{\Delta = 0}.  All
+    populations, neutral ones included, enter the correlation.}
   \item{\strong{Edge direction.}}{Over the edges present in both graphs (the
     \code{\link{congruence_topology}}), the proportion whose asymmetry
     \eqn{\Delta} has the same sign in both, i.e. along which gene flow runs

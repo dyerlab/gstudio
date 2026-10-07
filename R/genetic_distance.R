@@ -4,11 +4,18 @@
 #'  either individuals or strata.
 #' @param x A \code{data.frame} object with \code{\link{locus}} columns, or a single \code{locus} vector.
 #' @param stratum The strata by which genetic distances are estimated (default="Population").
-#'    Optional for individual-based distance metrics like AMOVA and Bray.
+#'    Optional for individual-based distance metrics like AMOVA, Bray and Bruvo.
 #' @param mode The genetic distance metric to use:
 #'    \describe{
 #'      \item{amova}{Inter-individual squared Euclidean distance (Peakall et al. 1995, Smouse & Peakall 1999)}
 #'      \item{bray}{Inter-individual Bray-Curtis / shared allele distance (Bowcock et al. 1994)}
+#'      \item{bruvo}{Inter-individual stepwise-mutation distance for microsatellites
+#'        (Bruvo et al. 2004), for any ploidy.  Alleles must be numeric sizes; they
+#'        are divided by \code{repeat_length} (default \code{1}; a single number or
+#'        a vector named by locus) to give repeat counts.  Alleles \eqn{x} repeats
+#'        apart are \eqn{1 - 2^{-x}} apart; a locus scores the best pairing of the
+#'        two genotypes' alleles, and loci are averaged over those typed in both
+#'        individuals (with the same ploidy).  Ranges from 0 to 1.}
 #'      \item{dps}{Stratum-level shared allele distance (1 - Ps)}
 #'      \item{cavalli}{Cavalli-Sforza & Edwards (1967) chord distance}
 #'      \item{cgd}{Conditional Genetic Distance via Population Graphs (Dyer & Nason 2004)}
@@ -24,9 +31,10 @@
 #'      \item{nei}{Nei's unbiased genetic distance (1978)}
 #'      \item{ss}{Partitioned Sum of Squares distance from AMOVA}
 #'    }
-#' @param ... Options for the chosen metric.  Currently only \code{gamma}, the
-#'    bandwidth multiplier for \code{mode = "pgd"}; other modes take none, and
-#'    unused arguments are reported.
+#' @param ... Options for the chosen metric: \code{gamma}, the bandwidth
+#'    multiplier for \code{mode = "pgd"}, and \code{repeat_length} for
+#'    \code{mode = "bruvo"}; other modes take none, and unused arguments are
+#'    reported.
 #' @return A pairwise distance matrix (asymmetric for \code{mode = "pgd"}).
 #' @seealso \code{\link{pgd}} to compute pGD from an existing Population Graph.
 #' @export
@@ -41,6 +49,9 @@
 #' genetic_distance(df, mode="dps")
 #' genetic_distance(df, mode="cavalli")
 #' genetic_distance(df, mode="nei")
+#' data(cornus_florida)
+#' D <- genetic_distance(cornus_florida[1:5, ], mode = "bruvo", repeat_length = 2)
+#' round(D, 3)
 #' \donttest{
 #' data(gravity)
 #' P <- genetic_distance(gravity, mode = "pgd")
@@ -65,7 +76,7 @@ genetic_distance <- function( x, stratum="Population", mode, ... ){
   x <- .plain_df(x)
 
   ret <- NULL
-  if( mode != "pgd" )
+  if( !(mode %in% c("pgd", "bruvo")) )
     chkDots(...)
 
   if( mode == "amova" )
@@ -75,6 +86,9 @@ genetic_distance <- function( x, stratum="Population", mode, ... ){
     x[[stratum]] <- 1:length(x[,1])
     ret <- dist_bray(x=x,stratum=stratum)
   }
+  
+  else if( mode == "bruvo")
+    ret <- dist_bruvo(x, ...)
   
   else if( mode == "euclidean") 
     ret <- dist_euclidean(x,stratum=stratum)

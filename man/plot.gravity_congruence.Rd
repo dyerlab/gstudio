@@ -47,7 +47,7 @@ label layer (e.g. \code{ggrepel::geom_text_repel()}) for crowded graphs.}
 
 \item{node_fill}{\code{NULL} (default) colours nodes by \code{concordance}:
 shared source and shared sink in the \code{palette} colours, discordant in
-grey.  Otherwise a colour, or the name
+grey, neutral (\eqn{S = 0} in either graph) in white.  Otherwise a colour, or the name
 of any column of \code{x$nodes} (e.g. \code{"S.1"} or \code{"Region"}).}
 
 \item{edges}{Draw the edges (default \code{TRUE}).}
@@ -99,7 +99,8 @@ A \code{ggplot} object.
 Maps where two graphs agree about genetic gravity.  The surface is the
 \emph{shared} source-sink score: at each population the mean of the two
 standardized scores (\eqn{S / sd(S)}) when both graphs agree that it is a
-source (red) or a sink (blue), and 0 (white) when they disagree.  The shared
+source (red) or a sink (blue), and 0 (white) when they disagree or either
+score is 0.  The shared
 edges are drawn; an arrow on each edge whose gene-flow direction agrees
 points from source to sink, with length proportional to the geometric mean
 of the two \eqn{|\Delta|}, and edges whose directions disagree are overlaid

@@ -41,7 +41,8 @@ test_that("gravity_congruence compares S and edge direction on the shared topolo
   expect_equal(gc$tests$parameter, c(10, nrow(gc$edges)))
 
   # concordance classes
-  cl <- with(gc$nodes, ifelse(S.1 > 0 & S.2 > 0, "source", ifelse(S.1 < 0 & S.2 < 0, "sink", "discordant")))
+  cl <- with(gc$nodes, ifelse(S.1 == 0 | S.2 == 0, "neutral",
+                              ifelse(S.1 > 0 & S.2 > 0, "source", ifelse(S.1 < 0 & S.2 < 0, "sink", "discordant"))))
   expect_equal(gc$nodes$concordance, cl)
 
   # a graph compared with itself is perfectly congruent
@@ -50,6 +51,27 @@ test_that("gravity_congruence compares S and edge direction on the shared topolo
   expect_equal(self$tests$statistic, c(1, 1))
   expect_true(all(self$tests$p.value < 0.05))
   expect_true(all(self$nodes$concordance != "discordant"))
+})
+
+test_that("gravity_congruence classes populations with S = 0 in either graph as neutral", {
+  gp <- chain_pair()
+  # P10 isolated in g2 (S = 0 there); g2 stays connected otherwise
+  g2 <- igraph::delete_edges(gp$g2, igraph::incident(gp$g2, "P10"))
+  set.seed(1)
+  gc <- gravity_congruence(gp$g1, g2, nperm = 19)
+  n <- gc$nodes[gc$nodes$Stratum == "P10", ]
+  expect_equal(n$S.2, 0)
+  expect_true(n$S.1 != 0)
+  expect_equal(n$concordance, "neutral")
+  expect_equal(sum(gc$nodes$concordance == "neutral"), 1)
+  expect_equal(gc$tests$parameter[1], 10)          # still in the correlation
+  expect_output(print(gc), "neutral: +P10")
+  b <- ggplot2::ggplot_build(plot(gc, layout = xy10))
+  expect_true("neutral" %in% levels(b$plot$layers[[length(b$plot$layers)]]$data$fill) ||
+              any(vapply(b$data, function(d) "white" %in% d$colour, logical(1))))
+  # no neutral nodes, no neutral line
+  expect_false(grepl("neutral", paste(capture.output(print(gravity_congruence(gp$g1, gp$g2, nperm = 9))),
+                                      collapse = "\n")))
 })
 
 test_that("gravity_congruence requires the same populations", {

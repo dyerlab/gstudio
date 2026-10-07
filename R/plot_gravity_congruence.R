@@ -4,7 +4,8 @@
 #' Maps where two graphs agree about genetic gravity.  The surface is the
 #' \emph{shared} source-sink score: at each population the mean of the two
 #' standardized scores (\eqn{S / sd(S)}) when both graphs agree that it is a
-#' source (red) or a sink (blue), and 0 (white) when they disagree.  The shared
+#' source (red) or a sink (blue), and 0 (white) when they disagree or either
+#' score is 0.  The shared
 #' edges are drawn; an arrow on each edge whose gene-flow direction agrees
 #' points from source to sink, with length proportional to the geometric mean
 #' of the two \eqn{|\Delta|}, and edges whose directions disagree are overlaid
@@ -26,7 +27,7 @@
 #'   \code{size}), and degree on the congruence topology otherwise.
 #' @param node_fill \code{NULL} (default) colours nodes by \code{concordance}:
 #'   shared source and shared sink in the \code{palette} colours, discordant in
-#'   grey.  Otherwise a colour, or the name
+#'   grey, neutral (\eqn{S = 0} in either graph) in white.  Otherwise a colour, or the name
 #'   of any column of \code{x$nodes} (e.g. \code{"S.1"} or \code{"Region"}).
 #' @param edge_width \code{"constant"} (default) or \code{"weight"}, which uses
 #'   the mean of the two graphs' weights.
@@ -91,13 +92,13 @@ plot.gravity_congruence <- function(x, y, ...,
   if (fill_attr) nd <- .graph_node_fill(nd, cong, node_fill)
   node_colours <- NULL
   if (identical(node_fill, "concordance")) {
-    nd$fill <- factor(nd$fill, c("source", "sink", "discordant"))
-    node_colours <- c(source = palette[2], sink = palette[1], discordant = "grey70")
+    nd$fill <- factor(nd$fill, c("source", "sink", "discordant", "neutral"))
+    node_colours <- c(source = palette[2], sink = palette[1], discordant = "grey70", neutral = "white")
   }
-  # Shared score: mean standardized S where the graphs agree, 0 where not.
+  # Shared score: mean standardized S where the graphs agree, 0 elsewhere.
   z <- function(s) { v <- stats::sd(s); if (is.finite(v) && v > 0) s / v else s }
   z1 <- z(x$nodes$S.1); z2 <- z(x$nodes$S.2)
-  nd$shared <- ifelse(x$nodes$concordance == "discordant", 0, (z1 + z2) / 2)
+  nd$shared <- ifelse(x$nodes$concordance %in% c("source", "sink"), (z1 + z2) / 2, 0)
 
   e <- x$edges
   seg <- .edge_segments(cbind(e$from, e$to), xy)

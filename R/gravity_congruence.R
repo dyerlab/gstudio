@@ -11,7 +11,13 @@
 #'     \eqn{S} is not on a common scale across graphs with different sizes and
 #'     edge weights.  Each population is also classed as a concordant
 #'     \code{"source"} (\eqn{S_1, S_2 > 0}), concordant \code{"sink"}
-#'     (\eqn{S_1, S_2 < 0}), or \code{"discordant"}.}
+#'     (\eqn{S_1, S_2 < 0}), \code{"discordant"} (a source in one graph and
+#'     a sink in the other), or \code{"neutral"} (\eqn{S = 0} in either graph,
+#'     so it has no direction to agree or disagree with).  S is 0 for a
+#'     population that is isolated, or in a two-node component, in that graph:
+#'     a node with a single neighbour gives it all its weight, so both ends of
+#'     a lone edge weigh each other equally and \eqn{\Delta = 0}.  All
+#'     populations, neutral ones included, enter the correlation.}
 #'   \item{\strong{Edge direction.}}{Over the edges present in both graphs (the
 #'     \code{\link{congruence_topology}}), the proportion whose asymmetry
 #'     \eqn{\Delta} has the same sign in both, i.e. along which gene flow runs
@@ -146,8 +152,9 @@ gravity_congruence <- function(x, y, gamma = 0.5, nperm = 999L) {
     alternative = "greater",
     stringsAsFactors = FALSE)
 
-  concordance <- ifelse(s1$S > 0 & s2$S > 0, "source",
-                        ifelse(s1$S < 0 & s2$S < 0, "sink", "discordant"))
+  concordance <- ifelse(abs(s1$S) < tiny | abs(s2$S) < tiny, "neutral",
+                        ifelse(s1$S > 0 & s2$S > 0, "source",
+                               ifelse(s1$S < 0 & s2$S < 0, "sink", "discordant")))
   nd <- data.frame(Stratum = nodes, S.1 = s1$S, S.2 = s2$S,
                    gravity.1 = s1$gravity, gravity.2 = s2$gravity,
                    degree.1 = s1$degree, degree.2 = s2$degree,
@@ -217,6 +224,8 @@ print.gravity_congruence <- function(x, n = 5, ...) {
   cat(sprintf("  shared sources: %s\n", lst("source")))
   cat(sprintf("  shared sinks:   %s\n", lst("sink")))
   cat(sprintf("  discordant:     %s\n", lst("discordant")))
+  if (any(x$nodes$concordance == "neutral"))
+    cat(sprintf("  neutral:        %s\n", lst("neutral")))
   invisible(x)
 }
 
