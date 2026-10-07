@@ -15,7 +15,8 @@ animate_popgraphs(
   node_labels = c("name", "degree", "size", "none"),
   node_fill = NULL,
   loop = TRUE,
-  frame_plot = NULL
+  frame_plot = NULL,
+  base = NULL
 )
 }
 \arguments{
@@ -60,6 +61,11 @@ absent from that graph), so it can be drawn with
 draws each frame with the same backend as \code{plot.popgraph()}, with
 absent nodes faded.  Keep the coordinate limits fixed across frames if you
 want nodes to stay still.}
+
+\item{base}{An optional \code{ggplot} drawn under every default frame (e.g.
+a map), as in \code{\link{plot.popgraph}}.  Ignored with \code{frame_plot}.
+If it sets its own coordinate system, the frames use that instead of the
+fixed limits, so keep its extent fixed.}
 }
 \value{
 The path to the GIF file, invisibly.

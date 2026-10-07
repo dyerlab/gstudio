@@ -46,7 +46,12 @@
 #'   \code{"pgd"}.
 #' @param nperm Number of Mantel permutations for \code{"cgd"} (default 999).
 #' @param distance Optional \eqn{n \times n} spatial (or resistance) distance
-#'   matrix, used instead of \eqn{|x_j - x_i|}.
+#'   matrix, used instead of \eqn{|x_j - x_i|}.  When both \code{x} and
+#'   \code{distance} are \code{NULL} and the graph has \code{Longitude} and
+#'   \code{Latitude} vertex attributes (e.g. from
+#'   \code{population_graph(decorate = TRUE)}), the great-circle distance in km
+#'   between nodes is used (see \code{\link{strata_distance}}); \code{"pgd"}
+#'   then still needs \code{forward}.
 #' @param forward Optional logical \eqn{n \times n} matrix, \code{TRUE} where the
 #'   ordered pair \eqn{(i, j)} runs in the hypothesized forward direction;
 #'   required with \code{distance} for \code{"pgd"}.
@@ -77,14 +82,34 @@
 #' set.seed(1)
 #' ibgd(graph, x = deme)                 # isolation by graph distance (cGD)
 #' ibgd(graph, x = deme, mode = "pgd")   # does a directional model fit better?
+#'
+#' # Distances from node coordinates
+#' data(arapat)
+#' g <- population_graph(arapat, decorate = TRUE)
+#' ibgd(g, nperm = 99)
 #' @export
 ibgd <- function(graph, x = NULL, mode = c("cgd", "pgd"), gamma = 0.5,
                  nperm = 999L, distance = NULL, forward = NULL) {
   mode  <- match.arg(mode)
-  dname <- paste(deparse1(substitute(graph)), "and",
+  gname <- deparse1(substitute(graph))
+  dname <- paste(gname, "and",
                  if (!is.null(distance)) deparse1(substitute(distance)) else deparse1(substitute(x)))
   graph <- .gravity_check(graph)
   nodes <- igraph::V(graph)$name
+
+  # Neither positions nor distances given: fall back on node coordinates,
+  # e.g. from population_graph(decorate = TRUE).
+  if (is.null(distance) && is.null(x) &&
+      all(c("Longitude", "Latitude") %in% igraph::vertex_attr_names(graph))) {
+    xy <- data.frame(Stratum = nodes, Longitude = igraph::V(graph)$Longitude,
+                     Latitude = igraph::V(graph)$Latitude, stringsAsFactors = FALSE)
+    if (anyNA(xy[-1]))
+      stop("Some nodes lack 'Longitude'/'Latitude'; supply 'x' or 'distance'.")
+    if (mode == "pgd" && is.null(forward))
+      stop("'forward' is required for mode = \"pgd\" when distances come from node coordinates")
+    distance <- strata_distance(xy, mode = "Circle")
+    dname <- paste(gname, "and great-circle distance (km)")
+  }
 
   if (!is.null(distance)) {
     X <- as.matrix(distance)
@@ -95,7 +120,7 @@ ibgd <- function(graph, x = NULL, mode = c("cgd", "pgd"), gamma = 0.5,
       if (!is.null(rownames(Fw))) Fw <- Fw[nodes, nodes]
     }
   } else {
-    if (is.null(x)) stop("Supply 'x' (positions) or 'distance'.")
+    if (is.null(x)) stop("Supply 'x' (positions) or 'distance', or give the graph 'Longitude' and 'Latitude' vertex attributes.")
     xv <- .gravity_x(x, nodes)
     X  <- abs(outer(xv, xv, "-"))
     Fw <- outer(xv, xv, function(a, b) b > a)

@@ -34,7 +34,12 @@ or in vertex order).  Separation is \eqn{|x_j - x_i|}, and for
 \item{nperm}{Number of Mantel permutations for \code{"cgd"} (default 999).}
 
 \item{distance}{Optional \eqn{n \times n} spatial (or resistance) distance
-matrix, used instead of \eqn{|x_j - x_i|}.}
+matrix, used instead of \eqn{|x_j - x_i|}.  When both \code{x} and
+\code{distance} are \code{NULL} and the graph has \code{Longitude} and
+\code{Latitude} vertex attributes (e.g. from
+\code{population_graph(decorate = TRUE)}), the great-circle distance in km
+between nodes is used (see \code{\link{strata_distance}}); \code{"pgd"}
+then still needs \code{forward}.}
 
 \item{forward}{Optional logical \eqn{n \times n} matrix, \code{TRUE} where the
 ordered pair \eqn{(i, j)} runs in the hypothesized forward direction;
@@ -103,6 +108,11 @@ deme  <- as.integer(sub("Pop", "", igraph::V(graph)$name))
 set.seed(1)
 ibgd(graph, x = deme)                 # isolation by graph distance (cGD)
 ibgd(graph, x = deme, mode = "pgd")   # does a directional model fit better?
+
+# Distances from node coordinates
+data(arapat)
+g <- population_graph(arapat, decorate = TRUE)
+ibgd(g, nperm = 99)
 }
 \seealso{
 \code{\link{pgd}}, \code{\link{source_sink_test}},

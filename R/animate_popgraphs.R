@@ -41,6 +41,10 @@
 #'  draws each frame with the same backend as \code{plot.popgraph()}, with
 #'  absent nodes faded.  Keep the coordinate limits fixed across frames if you
 #'  want nodes to stay still.
+#' @param base An optional \code{ggplot} drawn under every default frame (e.g.
+#'  a map), as in \code{\link{plot.popgraph}}.  Ignored with \code{frame_plot}.
+#'  If it sets its own coordinate system, the frames use that instead of the
+#'  fixed limits, so keep its extent fixed.
 #' @return The path to the GIF file, invisibly.
 #' @importFrom ggplot2 .data
 #' @export
@@ -77,7 +81,9 @@ animate_popgraphs <- function(graphs,
                               node_labels = c("name", "degree", "size", "none"),
                               node_fill = NULL,
                               loop = TRUE,
-                              frame_plot = NULL) {
+                              frame_plot = NULL,
+                              base = NULL) {
+  .check_base(base)
 
   if (!requireNamespace("gifski", quietly = TRUE))
     stop("The 'gifski' package is required. Install it with install.packages('gifski').")
@@ -125,7 +131,7 @@ animate_popgraphs <- function(graphs,
 
   for (i in seq_along(graphs)) {
     p <- if (is.null(frame_plot))
-      .animation_frame(graphs[[i]], coords, titles[i], node_size, node_labels, node_fill, limits)
+      .animation_frame(graphs[[i]], coords, titles[i], node_size, node_labels, node_fill, limits, base)
     else
       frame_plot(.animation_frame_layout(graphs[[i]], coords), titles[i])
     if (!inherits(p, "ggplot"))
@@ -225,10 +231,12 @@ animate_popgraphs <- function(graphs,
 #' @param title The frame title.
 #' @param node_size,node_labels,node_fill Node styling, as in \code{plot.popgraph()}.
 #' @param limits Fixed plot limits shared by all frames, \code{list(x, y)}.
+#' @param base Optional base \code{ggplot}, as in \code{plot.popgraph()}.
 #' @return A \code{ggplot} object.
 #' @keywords internal
 #' @noRd
-.animation_frame <- function(graph, coords, title, node_size, node_labels, node_fill, limits) {
+.animation_frame <- function(graph, coords, title, node_size, node_labels, node_fill, limits,
+                             base = NULL) {
   nd <- .graph_nodes(graph, coords[, 1:2, drop = FALSE])
   present <- nd$node %in% V(graph)$name
   nd$alpha <- ifelse(present, 1, 0.2)
@@ -242,7 +250,7 @@ animate_popgraphs <- function(graphs,
   .graph_canvas(nd, ed, node_size = node_size, node_labels = node_labels,
                 node_fill = node_fill, arrows = igraph::is_directed(graph),
                 geographic = identical(attr(coords, "source"), "geographic"),
-                limits = limits) +
+                limits = limits, base = base) +
     ggplot2::labs(title = title) +
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, size = 16),
                    plot.background = ggplot2::element_rect(fill = "white", colour = NA),

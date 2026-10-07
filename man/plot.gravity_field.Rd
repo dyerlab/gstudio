@@ -11,10 +11,12 @@
   layout = NULL,
   node_size = c("size", "degree", "constant"),
   node_labels = c("name", "degree", "size", "none"),
-  node_fill = "white",
+  node_fill = NULL,
   edges = TRUE,
   edge_width = c("constant", "weight"),
+  base = NULL,
   surface = c("interpolate", "voronoi", "none"),
+  alpha = 1,
   arrows = TRUE,
   palette = c("#2166ac", "#b2182b"),
   subtitle_stats = TRUE,
@@ -49,18 +51,39 @@ Nason 2004); it is not the number of individuals sampled.}
 or \code{"none"}.  Labels are drawn just above each node; add your own
 label layer (e.g. \code{ggrepel::geom_text_repel()}) for crowded graphs.}
 
-\item{node_fill}{A colour for every node (default \code{"white"}).  Unlike
-\code{plot.popgraph()}, a vertex attribute cannot be mapped here, because
-the fill scale shows \eqn{S}.}
+\item{node_fill}{As for \code{\link{plot.popgraph}}: \code{NULL} (default)
+uses a \code{region} vertex attribute when present and white otherwise,
+or give a colour, or the name of any vertex attribute of the field's graphs
+(including those carried over by \code{\link{gravity_field}}, and
+\code{S} or \code{gravity}).  Node colours use the colour scale and the
+surface uses the fill scale, so both get a legend.  In a multi-panel field,
+panels whose graph lacks the attribute show it as missing.}
 
 \item{edges}{Draw the edges (default \code{TRUE}).}
 
 \item{edge_width}{\code{"constant"} (default) or \code{"weight"} to scale
 edge width by the \code{weight} attribute.}
 
+\item{base}{An optional \code{ggplot} to draw the graph on, so that layers
+can go \emph{underneath} it, e.g. \code{ggplot() + geom_sf(data = map)} or
+\code{ggplot() + geom_raster(aes(x, y, fill = elevation), data = dem)}.
+The graph's layers are added on top and do not inherit the base plot's
+mappings.  If the base sets a coordinate system (e.g. \code{coord_sf()},
+which \code{geom_sf()} adds) it is kept, so the base layers must use the
+same coordinates as the layout (longitude/latitude for a geographic
+layout).  Node colours use the colour scale (and a gravity surface the fill
+scale), so a base layer mapped to the same scale will be replaced; set
+such layers' colours directly instead.  The base plot keeps its own
+theme and axis labels.}
+
 \item{surface}{\code{"interpolate"} (smooth Gaussian kernel interpolation of
 \eqn{S} with contour lines), \code{"voronoi"} (each grid cell takes its
 nearest node's \eqn{S}), or \code{"none"}.}
+
+\item{alpha}{Opacity of the source-sink surface, from \code{0} (invisible)
+to \code{1} (opaque, the default).  Lower it to let a \code{base} map show
+through, e.g. \code{alpha = 0.5}; contour lines, edges, arrows and nodes
+stay opaque.}
 
 \item{arrows}{Draw source-to-sink arrows (default \code{TRUE}).}
 

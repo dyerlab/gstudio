@@ -43,11 +43,26 @@
 #' @param node_fill \code{NULL} (default) fills nodes by a vertex attribute
 #'   named \code{region} (any capitalisation, e.g. \code{Region} from
 #'   \code{\link{decorate_graph}}) when the graph has one, and white otherwise.
-#'   Otherwise a colour for every node, or the name of a vertex attribute to map
-#'   to fill.
+#'   Otherwise a colour for every node, or the name of a vertex attribute
+#'   (categorical or continuous) to map.  Mapped attributes use the
+#'   \strong{colour} scale (default viridis), so restyle them with
+#'   \code{scale_colour_*()}, e.g. \code{+ scale_colour_brewer(palette =
+#'   "Set2")}; the fill scale is left free (a gravity field uses it for
+#'   \eqn{S}).
 #' @param edges Draw the edges (default \code{TRUE}).
 #' @param edge_width \code{"constant"} (default) or \code{"weight"} to scale
 #'   edge width by the \code{weight} attribute.
+#' @param base An optional \code{ggplot} to draw the graph on, so that layers
+#'   can go \emph{underneath} it, e.g. \code{ggplot() + geom_sf(data = map)} or
+#'   \code{ggplot() + geom_raster(aes(x, y, fill = elevation), data = dem)}.
+#'   The graph's layers are added on top and do not inherit the base plot's
+#'   mappings.  If the base sets a coordinate system (e.g. \code{coord_sf()},
+#'   which \code{geom_sf()} adds) it is kept, so the base layers must use the
+#'   same coordinates as the layout (longitude/latitude for a geographic
+#'   layout).  Node colours use the colour scale (and a gravity surface the fill
+#'   scale), so a base layer mapped to the same scale will be replaced; set
+#'   such layers' colours directly instead.  The base plot keeps its own
+#'   theme and axis labels.
 #' @return A \code{ggplot} object.
 #' @seealso \code{\link{plot.gravity_field}}, \code{\link{animate_popgraphs}},
 #'   \code{\link{decorate_graph}}, \code{\link{asymmetric_popgraph}}
@@ -60,6 +75,12 @@
 #' lopho_dec <- decorate_graph(lopho, baja, stratum = "Population")
 #' plot(lopho_dec, edge_width = "weight")          # filled by Region, sized by size
 #' plot(asymmetric_popgraph(lopho_dec), node_labels = "none")
+#'
+#' # Layers underneath the graph: pass them in as 'base'
+#' library(ggplot2)
+#' coast <- data.frame(x = c(-115, -109, -109, -115), y = c(23, 23, 31, 31))
+#' under <- ggplot() + geom_polygon(aes(x, y), data = coast, fill = "grey92")
+#' plot(lopho_dec, base = under)
 #' }
 #' @export
 plot.popgraph <- function(x, y, ...,
@@ -68,8 +89,10 @@ plot.popgraph <- function(x, y, ...,
                           node_labels = c("name", "degree", "size", "none"),
                           node_fill = NULL,
                           edges = TRUE,
-                          edge_width = c("constant", "weight")) {
+                          edge_width = c("constant", "weight"),
+                          base = NULL) {
   chkDots(...)
+  .check_base(base)
   if (!is.numeric(node_size)) node_size <- match.arg(node_size)
   node_labels <- match.arg(node_labels)
   edge_width  <- match.arg(edge_width)
@@ -93,7 +116,8 @@ plot.popgraph <- function(x, y, ...,
 
   .graph_canvas(nd, ed, node_size = node_size, node_labels = node_labels,
                 node_fill = node_fill, edges = edges, edge_width = edge_width,
-                arrows = directed, geographic = identical(attr(xy, "source"), "geographic"))
+                arrows = directed, geographic = identical(attr(xy, "source"), "geographic"),
+                base = base)
 }
 
 
@@ -325,18 +349,23 @@ plot.popgraph <- function(x, y, ...,
 # Build the plot.  Layer order: underlay (e.g. a gravity surface), edges,
 # overlay (e.g. gravity arrows), nodes, labels.  nd$panel / ed$panel are
 # factors; the plot is faceted when any panel has a non-empty name.
+# 'node_colours' optionally gives named colours for a categorical node_fill.
+# 'base' is a ggplot to draw on (checked by .check_base()); the graph's layers
+# do not inherit its mappings, and its coordinate system (if any), theme and
+# axis labels are kept.
 #' @keywords internal
 #' @noRd
 .graph_canvas <- function(nd, ed, node_size = "degree", node_labels = "name",
                           node_fill = "white", edges = TRUE,
                           edge_width = "constant", arrows = FALSE,
                           geographic = FALSE, underlay = list(),
-                          overlay = list(), limits = NULL) {
+                          overlay = list(), limits = NULL, node_colours = NULL,
+                          base = NULL) {
   if (!is.factor(nd$panel)) nd$panel <- factor(nd$panel, unique(nd$panel))
   if (nrow(ed)) ed$panel <- factor(ed$panel, levels(nd$panel))
   if (is.null(nd$alpha)) nd$alpha <- 1
 
-  p <- ggplot2::ggplot()
+  p <- if (is.null(base)) ggplot2::ggplot() else base
   for (l in underlay) p <- p + l
 
   if (edges && nrow(ed)) {
@@ -344,36 +373,46 @@ plot.popgraph <- function(x, y, ...,
     if (identical(edge_width, "weight")) {
       p <- p + ggplot2::geom_segment(data = ed, ggplot2::aes(.data$x, .data$y, xend = .data$xend,
                                                              yend = .data$yend, linewidth = .data$weight),
-                                     colour = "grey40", alpha = 0.7, arrow = arr) +
+                                     colour = "grey40", alpha = 0.7, arrow = arr, inherit.aes = FALSE) +
         ggplot2::scale_linewidth_continuous(range = c(0.2, 1.6), name = "Edge weight")
     } else {
       p <- p + ggplot2::geom_segment(data = ed, ggplot2::aes(.data$x, .data$y, xend = .data$xend,
                                                              yend = .data$yend),
-                                     colour = "grey40", linewidth = 0.5, alpha = 0.7, arrow = arr)
+                                     colour = "grey40", linewidth = 0.5, alpha = 0.7, arrow = arr,
+                                     inherit.aes = FALSE)
     }
   }
 
   for (l in overlay) p <- p + l
 
   ns <- .graph_node_size(nd, node_size); nd <- ns$nd
+  # Nodes are a solid dot coloured by node_fill under a black ring.  The
+  # colour comes from the colour scale, not fill, so the fill scale stays free
+  # for underlays such as the gravity surface.
   map_fill <- !is.null(nd$fill)
-  aes_pt <- if (ns$scale && map_fill)
-    ggplot2::aes(.data$x, .data$y, size = .data$plot_size, fill = .data$fill, alpha = .data$alpha)
-  else if (ns$scale)
-    ggplot2::aes(.data$x, .data$y, size = .data$plot_size, alpha = .data$alpha)
-  else if (map_fill)
-    ggplot2::aes(.data$x, .data$y, fill = .data$fill, alpha = .data$alpha)
-  else
-    ggplot2::aes(.data$x, .data$y, alpha = .data$alpha)
-  pt_args <- list(data = nd, mapping = aes_pt, shape = 21, colour = "black", stroke = 0.8)
-  if (!map_fill) pt_args$fill <- node_fill
-  if (!ns$scale) pt_args$size <- nd$plot_size[1]
-  p <- p + do.call(ggplot2::geom_point, pt_args) + ggplot2::scale_alpha_identity()
+  m <- list(x = quote(.data$x), y = quote(.data$y), alpha = quote(.data$alpha))
+  if (ns$scale) m$size <- quote(.data$plot_size)
+  aes_ring <- do.call(ggplot2::aes, m)
+  if (map_fill) m$colour <- quote(.data$fill)
+  aes_dot  <- do.call(ggplot2::aes, m)
+  # The size legend shows the ring only; the colour legend shows the dot.
+  dot  <- list(data = nd, mapping = aes_dot, shape = 16, show.legend = c(size = FALSE),
+               inherit.aes = FALSE)
+  ring <- list(data = nd, mapping = aes_ring, shape = 21, fill = NA,
+               colour = "black", stroke = 0.8, inherit.aes = FALSE)
+  if (!map_fill) dot$colour <- node_fill
+  if (!ns$scale) dot$size <- ring$size <- nd$plot_size[1]
+  p <- p + do.call(ggplot2::geom_point, dot) + do.call(ggplot2::geom_point, ring) +
+    ggplot2::scale_alpha_identity()
   if (ns$scale)
     p <- p + ggplot2::scale_size_continuous(range = c(2.8, 6.5), name = ns$title)
   if (map_fill)
-    p <- p + if (is.numeric(nd$fill)) ggplot2::scale_fill_viridis_c(name = node_fill)
-             else ggplot2::scale_fill_viridis_d(name = node_fill)
+    p <- p + if (is.numeric(nd$fill)) ggplot2::scale_colour_viridis_c(name = node_fill)
+             else if (!is.null(node_colours))
+               ggplot2::scale_colour_manual(name = node_fill, values = node_colours,
+                                            guide = ggplot2::guide_legend(override.aes = list(size = 4)))
+             else ggplot2::scale_colour_viridis_d(name = node_fill,
+                                                  guide = ggplot2::guide_legend(override.aes = list(size = 4)))
 
   if (node_labels != "none") {
     nd$node_label <- switch(node_labels,
@@ -384,17 +423,30 @@ plot.popgraph <- function(x, y, ...,
     # (e.g. macOS Quartz) is still opening fails with a grid "depth" error.
     p <- p + ggplot2::geom_text(data = nd, ggplot2::aes(.data$x, .data$y, label = .data$node_label,
                                                         alpha = .data$alpha),
-                                size = 2.6, fontface = "bold", colour = "grey15", vjust = -1.6)
+                                size = 2.6, fontface = "bold", colour = "grey15", vjust = -1.6,
+                                inherit.aes = FALSE)
   }
 
   if (any(nzchar(levels(nd$panel))))
     p <- p + ggplot2::facet_wrap(~panel)
-  p <- p + if (geographic)
+  # Keep a coordinate system the base plot sets (e.g. coord_sf() for geom_sf()).
+  if (is.null(base) || isTRUE(base$coordinates$default))
+    p <- p + if (geographic)
     ggplot2::coord_quickmap(xlim = limits$x, ylim = limits$y, expand = is.null(limits))
   else
     ggplot2::coord_equal(xlim = limits$x, ylim = limits$y, expand = is.null(limits))
+  # A base plot keeps its own theme and axis labels.
+  if (!is.null(base)) return(p)
   p + ggplot2::labs(x = NULL, y = NULL) + ggplot2::theme_minimal(base_size = 10) +
     ggplot2::theme(panel.grid = ggplot2::element_blank(),
                    axis.text = ggplot2::element_blank(),
                    axis.ticks = ggplot2::element_blank())
+}
+
+#' @keywords internal
+#' @noRd
+.check_base <- function(base) {
+  if (!is.null(base) && !ggplot2::is_ggplot(base))
+    stop("'base' must be NULL or a ggplot, e.g. ggplot() + geom_sf(data = map).")
+  base
 }

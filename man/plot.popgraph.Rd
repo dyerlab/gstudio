@@ -13,7 +13,8 @@
   node_labels = c("name", "degree", "size", "none"),
   node_fill = NULL,
   edges = TRUE,
-  edge_width = c("constant", "weight")
+  edge_width = c("constant", "weight"),
+  base = NULL
 )
 }
 \arguments{
@@ -50,13 +51,29 @@ label layer (e.g. \code{ggrepel::geom_text_repel()}) for crowded graphs.}
 \item{node_fill}{\code{NULL} (default) fills nodes by a vertex attribute
 named \code{region} (any capitalisation, e.g. \code{Region} from
 \code{\link{decorate_graph}}) when the graph has one, and white otherwise.
-Otherwise a colour for every node, or the name of a vertex attribute to map
-to fill.}
+Otherwise a colour for every node, or the name of a vertex attribute
+(categorical or continuous) to map.  Mapped attributes use the
+\strong{colour} scale (default viridis), so restyle them with
+\code{scale_colour_*()}, e.g. \code{+ scale_colour_brewer(palette =
+"Set2")}; the fill scale is left free (a gravity field uses it for
+\eqn{S}).}
 
 \item{edges}{Draw the edges (default \code{TRUE}).}
 
 \item{edge_width}{\code{"constant"} (default) or \code{"weight"} to scale
 edge width by the \code{weight} attribute.}
+
+\item{base}{An optional \code{ggplot} to draw the graph on, so that layers
+can go \emph{underneath} it, e.g. \code{ggplot() + geom_sf(data = map)} or
+\code{ggplot() + geom_raster(aes(x, y, fill = elevation), data = dem)}.
+The graph's layers are added on top and do not inherit the base plot's
+mappings.  If the base sets a coordinate system (e.g. \code{coord_sf()},
+which \code{geom_sf()} adds) it is kept, so the base layers must use the
+same coordinates as the layout (longitude/latitude for a geographic
+layout).  Node colours use the colour scale (and a gravity surface the fill
+scale), so a base layer mapped to the same scale will be replaced; set
+such layers' colours directly instead.  The base plot keeps its own
+theme and axis labels.}
 }
 \value{
 A \code{ggplot} object.
@@ -85,6 +102,12 @@ data(baja)
 lopho_dec <- decorate_graph(lopho, baja, stratum = "Population")
 plot(lopho_dec, edge_width = "weight")          # filled by Region, sized by size
 plot(asymmetric_popgraph(lopho_dec), node_labels = "none")
+
+# Layers underneath the graph: pass them in as 'base'
+library(ggplot2)
+coast <- data.frame(x = c(-115, -109, -109, -115), y = c(23, 23, 31, 31))
+under <- ggplot() + geom_polygon(aes(x, y), data = coast, fill = "grey92")
+plot(lopho_dec, base = under)
 }
 }
 \seealso{

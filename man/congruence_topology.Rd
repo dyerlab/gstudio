@@ -16,7 +16,13 @@ if the node sets are not equal (default = TRUE )}
 }
 \value{
 An object of type \code{popgraph} where the node and edge 
- sets are the intersection of the two.
+ sets are the intersection of the two.  Vertex attributes of the parent
+ graphs (e.g. \code{Longitude}/\code{Latitude} from
+ \code{population_graph(decorate = TRUE)} or \code{\link{decorate_graph}})
+ are carried over: an attribute found in only one graph is copied, one found
+ in both with the same values on the shared nodes is copied once, and one
+ whose values differ (such as \code{size}, each graph's own within-population
+ variability) is kept from both as \code{<name>.1} and \code{<name>.2}.
 }
 \description{
 Takes two graphs and returns topology that is 

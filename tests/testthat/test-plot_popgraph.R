@@ -23,10 +23,10 @@ test_that("plot.popgraph returns a ggplot placed at the requested layout", {
 })
 
 test_that("plot.popgraph options are shared with plot.gravity_field", {
-  shared <- c("layout", "node_size", "node_labels", "node_fill", "edges", "edge_width")
+  shared <- c("layout", "node_size", "node_labels", "node_fill", "edges", "edge_width", "base")
   expect_true(all(shared %in% names(formals(plot.popgraph))))
   expect_true(all(shared %in% names(formals(plot.gravity_field))))
-  for (a in setdiff(shared, "node_fill"))
+  for (a in shared)
     expect_identical(formals(plot.popgraph)[[a]], formals(plot.gravity_field)[[a]])
 })
 
@@ -48,14 +48,14 @@ test_that("nodes are sized by population size by default, falling back to degree
 })
 
 test_that("nodes are filled by a region attribute by default", {
-  fill_name <- function(p) { sc <- p$scales$get_scales("fill"); if (is.null(sc)) NULL else sc$name }
+  fill_name <- function(p) { sc <- p$scales$get_scales("colour"); if (is.null(sc)) NULL else sc$name }
   g <- square_graph()
   expect_null(fill_name(plot(g, layout = xy)))                     # no region: plain white
   expect_equal(.resolve_node_fill(g, NULL), "white")
   igraph::V(g)$region <- c("N", "N", "S", "S")                       # any capitalisation
   p <- plot(g, layout = xy)
   expect_equal(fill_name(p), "region")
-  expect_equal(length(unique(ggplot2::ggplot_build(p)$data[[2]]$fill)), 2L)
+  expect_equal(length(unique(ggplot2::ggplot_build(p)$data[[2]]$colour)), 2L)
   expect_null(fill_name(plot(g, layout = xy, node_fill = "grey80")))   # explicit colour wins
   g2 <- square_graph()
   igraph::V(g2)$Region <- c(1, 2, 3, 4)                              # numeric region -> continuous fill
@@ -109,4 +109,34 @@ test_that("layout resolution: attributes, names, functions, tables and errors", 
   expect_equal(unname(.graph_layout(g2, unname(xy))[, 2]), unname(xy[, 2]))   # vertex order
   expect_error(.graph_layout(g2, "bogus"), "Unknown layout")
   expect_error(.graph_layout(g2, xy[1:2, ]), "no coordinates for: C, D")
+})
+
+test_that("plot methods draw on a base ggplot, under the graph", {
+  g <- square_graph()
+  under <- ggplot2::ggplot(data.frame(px = c(0, 1), py = c(0, 1), z = c(1, 2)),
+                           ggplot2::aes(px, py, colour = z)) +      # global mapping must not leak
+    ggplot2::geom_point(colour = "red")
+  p <- plot(g, layout = xy, base = under)
+  b <- ggplot2::ggplot_build(p)
+  expect_s3_class(b, "ggplot_built")
+  expect_true(inherits(p$layers[[1]]$geom, "GeomPoint"))            # base layer first (underneath)
+  expect_equal(length(p$layers), length(plot(g, layout = xy)$layers) + 1L)
+  expect_true(all(vapply(p$layers[-1], function(l) isFALSE(l$inherit.aes), logical(1))))
+  expect_equal(p$coordinates$ratio, 1)                              # no base coord: ours is used
+
+  # a base coordinate system, theme and axis labels are kept
+  pf <- plot(g, layout = xy, base = ggplot2::ggplot() + ggplot2::coord_cartesian(xlim = c(-5, 5)) +
+               ggplot2::xlab("Longitude") + ggplot2::theme_bw())
+  expect_null(pf$coordinates$ratio)
+  expect_equal(pf$coordinates$limits$x, c(-5, 5))
+  expect_equal(pf$labels$x, "Longitude")
+  expect_equal(pf$theme, (ggplot2::ggplot() + ggplot2::theme_bw())$theme)
+
+  # gravity fields and congruences take the same argument
+  f <- gravity_field(g)
+  pg <- plot(f, layout = xy, base = under)
+  expect_true(inherits(pg$layers[[1]]$geom, "GeomPoint"))
+  expect_s3_class(ggplot2::ggplot_build(pg), "ggplot_built")
+  expect_error(plot(g, base = "map"), "ggplot")
+  expect_error(plot(f, base = 1), "ggplot")
 })

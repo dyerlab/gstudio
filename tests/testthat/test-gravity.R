@@ -205,7 +205,7 @@ test_that("gravity_field is an S3 object with print, plot and as.data.frame meth
 
   # display-only arguments: mistyped or computation arguments are reported
   expect_warning(plot(f, layout = xy, gamma = 1), "gamma")
-  expect_error(plot(f, layout = xy, node_fill = "S"), "single colour")
+  expect_error(plot(f, layout = xy, node_fill = "notacolour"), "single colour")
 })
 
 test_that("the gravity genotypes rebuild the documented example graph and values", {
@@ -299,4 +299,74 @@ test_that("gravity_field carries graph decorations into nodes, edges and graphs"
   p <- plot(f, layout = "fr")
   expect_s3_class(p, "ggplot")
   expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("ibgd uses great-circle distances from node coordinates only when x and distance are NULL", {
+  data(arapat)
+  g  <- suppressWarnings(population_graph(arapat, decorate = TRUE))
+  g0 <- suppressWarnings(population_graph(arapat))
+  D  <- strata_distance(strata_coordinates(arapat), mode = "Circle")
+
+  set.seed(3); auto <- ibgd(g, nperm = 49)
+  set.seed(3); man  <- ibgd(g, distance = D, nperm = 49)
+  expect_equal(auto$statistic, man$statistic)
+  expect_equal(auto$p.value, man$p.value)
+  expect_equal(auto$data.name, "g and great-circle distance (km)")
+
+  # explicit x or distance wins over coordinates
+  xv <- igraph::V(g)$Latitude
+  set.seed(3); by_x <- ibgd(g, x = xv, nperm = 49)
+  set.seed(3); by_x0 <- ibgd(g0, x = xv, nperm = 49)
+  expect_equal(by_x$statistic, by_x0$statistic)
+
+  # no coordinates, no inputs: still an error
+  expect_error(ibgd(g0), "Longitude")
+  # pgd needs a direction
+  expect_error(ibgd(g, mode = "pgd"), "forward")
+  # missing coordinates
+  igraph::V(g)$Latitude[1] <- NA
+  expect_error(ibgd(g), "lack")
+})
+
+test_that("plot.gravity_field maps node_fill to a vertex attribute alongside the S surface", {
+  g <- make_chain()
+  igraph::V(g)$Region <- rep(c("north", "south"), length.out = igraph::vcount(g))
+  igraph::V(g)$Elevation <- seq_len(igraph::vcount(g)) * 10
+  xy <- cbind(x = seq_len(igraph::vcount(g)), y = 0)
+  f <- gravity_field(g)
+  scale_name <- function(p, a) { sc <- p$scales$get_scales(a); if (is.null(sc)) NULL else sc$name }
+
+  p <- plot(f, layout = xy)                               # region attribute used by default
+  expect_equal(scale_name(p, "colour"), "Region")
+  expect_match(scale_name(p, "fill"), "Source")          # the surface keeps the fill scale
+  b <- ggplot2::ggplot_build(p)
+  dots <- b$data[[which(vapply(b$plot$layers, function(l) inherits(l$geom, "GeomPoint"), logical(1)))[1]]]
+  expect_equal(length(unique(dots$colour)), 2L)
+
+  p2 <- plot(f, layout = xy, node_fill = "Elevation")     # continuous
+  expect_equal(scale_name(p2, "colour"), "Elevation")
+  expect_s3_class(ggplot2::ggplot_build(p2), "ggplot_built")
+  expect_equal(scale_name(plot(f, layout = xy, node_fill = "S"), "colour"), "S")
+  expect_null(scale_name(plot(f, layout = xy, node_fill = "grey70"), "colour"))
+
+  # a panel whose graph lacks the attribute still plots
+  fc <- c(a = f, b = gravity_field(make_chain(seed = 2)))
+  expect_s3_class(ggplot2::ggplot_build(plot(fc, layout = xy, node_fill = "Elevation")), "ggplot_built")
+})
+
+test_that("plot.gravity_field alpha sets the surface opacity only", {
+  g <- make_chain()
+  xy <- cbind(x = seq_len(igraph::vcount(g)), y = sin(seq_len(igraph::vcount(g))))
+  f <- gravity_field(g)
+  surf_alpha <- function(p) {
+    l <- p$layers[[which(vapply(p$layers, function(l) inherits(l$geom, "GeomRaster"), logical(1)))]]
+    l$aes_params$alpha
+  }
+  expect_equal(surf_alpha(plot(f, layout = xy)), 1)
+  p <- plot(f, layout = xy, alpha = 0.4)
+  expect_equal(surf_alpha(p), 0.4)
+  b <- ggplot2::ggplot_build(p)
+  expect_true(all(b$data[[1]]$alpha == 0.4))
+  expect_error(plot(f, layout = xy, alpha = 2), "between 0 and 1")
+  expect_error(plot(f, layout = xy, alpha = "a"), "between 0 and 1")
 })
