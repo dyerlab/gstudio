@@ -8,7 +8,8 @@
 #' edges are drawn; an arrow on each edge whose gene-flow direction agrees
 #' points from source to sink, with length proportional to the geometric mean
 #' of the two \eqn{|\Delta|}, and edges whose directions disagree are overlaid
-#' with a dashed line.  Nodes are coloured by their \code{concordance} class.
+#' with a dashed line (both explained in a "Shared edges" legend).  Shared edges
+#' with \eqn{\Delta = 0} in either graph have no direction and are left plain.  Nodes are coloured by their \code{concordance} class.
 #'
 #' Uses the same plotting backend as \code{\link{plot.popgraph}}, so
 #' \code{layout}, \code{node_size}, \code{node_labels}, \code{node_fill},
@@ -105,6 +106,7 @@ plot.gravity_congruence <- function(x, y, ...,
 
   underlay <- .gravity_surface(nd, "shared", "", surface, mask_dist, grid_n, alpha)
   overlay <- list()
+  edge_keys <- c("Concordant (source \u2192 sink)", "Discordant")
   if (arrows && nrow(e)) {
     edge_len <- .median_edge_length(seg)
     mag <- sqrt(abs(e$delta.1 * e$delta.2))
@@ -112,12 +114,16 @@ plot.gravity_congruence <- function(x, y, ...,
     a <- e[ok, ]
     a$source <- ifelse(a$delta.1 >= 0, a$from, a$to)
     a$sink   <- ifelse(a$delta.1 >= 0, a$to, a$from)
-    overlay <- .gravity_arrows(.edge_midpoints(a, xy), mag[ok], max(mag[ok], 0), edge_len, arrow_scale)
+    overlay <- .gravity_arrows(.edge_midpoints(a, xy), mag[ok], max(mag[ok], 0), edge_len, arrow_scale,
+                               legend = edge_keys[1])
     dis <- seg[!is.na(e$concordant) & !e$concordant, ]
-    if (nrow(dis))
+    if (nrow(dis)) {
+      dis$legend_key <- edge_keys[2]
       overlay <- c(overlay, list(ggplot2::geom_segment(
-        data = dis, ggplot2::aes(.data$x, .data$y, xend = .data$xend, yend = .data$yend),
-        colour = "black", linewidth = 0.6, linetype = "22", inherit.aes = FALSE)))
+        data = dis, ggplot2::aes(.data$x, .data$y, xend = .data$xend, yend = .data$yend,
+                                 linetype = .data$legend_key),
+        colour = "black", linewidth = 0.6, inherit.aes = FALSE)))
+    }
   }
 
   lim <- max(abs(nd$shared), na.rm = TRUE); if (!is.finite(lim) || lim == 0) lim <- 1
@@ -131,6 +137,8 @@ plot.gravity_congruence <- function(x, y, ...,
                                     limits = c(-lim, lim),
                                     name = "Shared source–sink score\n(red = both source,\nblue = both sink)",
                                     na.value = NA) +
+    ggplot2::scale_linetype_manual(name = "Shared edges", values = stats::setNames(c("solid", "22"), edge_keys),
+                                   guide = ggplot2::guide_legend(override.aes = list(linewidth = 0.6))) +
     ggplot2::labs(subtitle = sprintf("S: rho = %.2f (p = %s);  edge direction: %.2f concordant (p = %s)",
                                      t$statistic[1], format.pval(t$p.value[1], digits = 2),
                                      t$statistic[2], format.pval(t$p.value[2], digits = 2)))

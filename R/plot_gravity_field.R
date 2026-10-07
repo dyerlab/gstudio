@@ -208,12 +208,19 @@ plot.gravity_field <- function(x, y, ...,
 # 'a' needs x_mid, y_mid, ux, uy.
 #' @keywords internal
 #' @noRd
-.gravity_arrows <- function(a, mag, mag_max, edge_len, arrow_scale = 1, colour = "black") {
+.gravity_arrows <- function(a, mag, mag_max, edge_len, arrow_scale = 1, colour = "black",
+                            legend = NULL) {
   if (!nrow(a) || !is.finite(mag_max) || mag_max <= 0) return(list())
   L <- arrow_scale * mag / mag_max * edge_len
   a$x0 <- a$x_mid - a$ux * L / 2; a$y0 <- a$y_mid - a$uy * L / 2
   a$x1 <- a$x_mid + a$ux * L / 2; a$y1 <- a$y_mid + a$uy * L / 2
-  list(ggplot2::geom_segment(data = a, ggplot2::aes(.data$x0, .data$y0, xend = .data$x1, yend = .data$y1),
+  # With 'legend', the arrows get a linetype legend entry with that label.
+  m <- ggplot2::aes(.data$x0, .data$y0, xend = .data$x1, yend = .data$y1)
+  if (!is.null(legend)) {
+    a$legend_key <- legend
+    m <- ggplot2::aes(.data$x0, .data$y0, xend = .data$x1, yend = .data$y1, linetype = .data$legend_key)
+  }
+  list(ggplot2::geom_segment(data = a, m,
                              arrow = ggplot2::arrow(length = ggplot2::unit(0.16, "cm"), type = "closed"),
                              colour = colour, linewidth = 0.65, inherit.aes = FALSE))
 }

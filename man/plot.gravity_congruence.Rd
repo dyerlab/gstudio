@@ -103,7 +103,8 @@ source (red) or a sink (blue), and 0 (white) when they disagree.  The shared
 edges are drawn; an arrow on each edge whose gene-flow direction agrees
 points from source to sink, with length proportional to the geometric mean
 of the two \eqn{|\Delta|}, and edges whose directions disagree are overlaid
-with a dashed line.  Nodes are coloured by their \code{concordance} class.
+with a dashed line (both explained in a "Shared edges" legend).  Shared edges
+with \eqn{\Delta = 0} in either graph have no direction and are left plain.  Nodes are coloured by their \code{concordance} class.
 
 Uses the same plotting backend as \code{\link{plot.popgraph}}, so
 \code{layout}, \code{node_size}, \code{node_labels}, \code{node_fill},

@@ -111,3 +111,18 @@ test_that("plot.gravity_congruence takes a surface alpha", {
   b <- ggplot2::ggplot_build(plot(gc, layout = xy10, alpha = 0.3))
   expect_true(all(b$data[[1]]$alpha == 0.3))
 })
+
+test_that("plot.gravity_congruence has a legend for concordant and discordant edges", {
+  gp <- chain_pair()
+  gc <- gravity_congruence(gp$g1, gp$g2, nperm = 19)
+  expect_true(any(gc$edges$concordant) && any(!gc$edges$concordant))
+  p <- plot(gc, layout = xy10)
+  sc <- p$scales$get_scales("linetype")
+  expect_equal(sc$name, "Shared edges")
+  b <- ggplot2::ggplot_build(p)
+  lt <- unlist(lapply(b$data, function(d) d$linetype))
+  expect_true(all(c("solid", "22") %in% lt))
+  # no overlays, no legend entries
+  b2 <- ggplot2::ggplot_build(plot(gc, layout = xy10, arrows = FALSE))
+  expect_false(any(unlist(lapply(b2$data, function(d) "22" %in% d$linetype))))
+})
