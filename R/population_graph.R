@@ -7,6 +7,14 @@
 #' @param stratum The stratum column to use as the Node designation (default="Population").
 #' @param numLoci If not \code{NULL} then how many randomly selected loci (fewer than the total)
 #'   to use in the estimation.
+#' @param decorate If \code{TRUE}, every numeric column of \code{x} (other
+#'   than \code{stratum} and the loci) is averaged within each stratum and added
+#'   as a vertex attribute.  With \code{Latitude} and \code{Longitude} columns
+#'   this places each node at the barycenter of its sampled individuals, ready
+#'   for \code{plot(graph)} and \code{\link{to_sf}}.  Columns named \code{name}
+#'   or \code{size} are skipped, as those attributes are set by
+#'   \code{\link{popgraph}}.  Default \code{FALSE}; for other summaries or
+#'   categorical data use \code{\link{decorate_graph}}.
 #' @param ... Other parameters passed to the \code{popgraph()} function.
 #' @return A \code{popgraph} object (an \code{igraph} graph).
 #' @export
@@ -14,8 +22,12 @@
 #' data(arapat)
 #' g <- population_graph(arapat, stratum = "Population")
 #' g
+#'
+#' # Node coordinates (and any other numeric columns) as vertex attributes
+#' g <- population_graph(arapat, decorate = TRUE)
+#' igraph::vertex_attr_names(g)
 
-population_graph <- function( x, stratum="Population", numLoci=NULL, ...) {
+population_graph <- function( x, stratum="Population", numLoci=NULL, decorate=FALSE, ...) {
   if( !is(x,"data.frame")){
     stop("Must pass a data.frame object to this function.")
   }
@@ -34,6 +46,18 @@ population_graph <- function( x, stratum="Population", numLoci=NULL, ...) {
   }
 
   groups <- as.factor( x[[stratum]] )
-  
-  return( popgraph(data,groups,...))
+  graph <- popgraph(data,groups,...)
+
+  if( isTRUE(decorate) ) {
+    nodes <- igraph::V(graph)$name
+    num <- setdiff( names(x)[vapply(x, is.numeric, logical(1))],
+                    c(stratum, column_class(x, "locus"), "name", "size") )
+    for( col in num ) {
+      m <- tapply( x[[col]], groups, mean, na.rm = TRUE )[nodes]
+      m[is.nan(m)] <- NA
+      graph <- igraph::set_vertex_attr( graph, col, value = as.numeric(m) )
+    }
+  }
+
+  return( graph )
 }

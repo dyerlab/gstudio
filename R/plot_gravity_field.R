@@ -102,13 +102,15 @@ plot.gravity_field <- function(x, y, ...,
     p  <- parts[[i]]
     xy <- if (same_nodes) shared[p$nodes$Stratum, , drop = FALSE] else coords_for(p)
     geo[[i]] <- identical(attr(if (same_nodes) shared else xy, "source"), "geographic")
-    n <- p$nodes
+    # Only the computed columns: decorations (e.g. a 'fill' or 'alpha' vertex
+    # attribute) must not reach the plotting canvas.
+    n <- p$nodes[c("panel", "Stratum", "degree", "size", "S", "gravity")]
     n$node <- n$Stratum                      # the plotting canvas keys nodes by 'node'
     n$x <- xy[n$node, 1]; n$y <- xy[n$node, 2]; n$panel <- lab[i]
     # gravity_field() fills 'size' with degree when the graph has no size
     # attribute; mark it missing so node_size = "size" reports the fallback.
     if (!"size" %in% igraph::vertex_attr_names(p$graph)) n$size <- NA_real_
-    e <- p$edges
+    e <- p$edges[c("panel", "from", "to", "weight", "delta", "source", "sink")]
     sx <- xy[e$source, 1]; sy <- xy[e$source, 2]; tx <- xy[e$sink, 1]; ty <- xy[e$sink, 2]
     len <- sqrt((tx - sx)^2 + (ty - sy)^2); len[len == 0] <- 1
     e$x_mid <- (sx + tx) / 2; e$y_mid <- (sy + ty) / 2

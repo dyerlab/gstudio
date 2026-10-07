@@ -258,3 +258,45 @@ test_that("source_sink_test treats near-ties as ties and trims edge_margin from 
   t1 <- source_sink_test(g, x = 1:K, nperm = 19, interior = TRUE, edge_margin = 1)
   expect_equal(unname(t1$parameter["nodes"]), K - 2)      # keeps 2..11
 })
+
+test_that("gravity_field stores S and gravity as vertex attributes on its graphs", {
+  g <- make_chain()
+  f <- gravity_field(g, gamma = c(1, 0.5))
+  for (p in names(f$graphs)) {
+    gp <- f$graphs[[p]]
+    nd <- f$nodes[f$nodes$panel == p, ]
+    expect_equal(igraph::V(gp)$S, nd$S[match(igraph::V(gp)$name, nd$Stratum)])
+    expect_equal(igraph::V(gp)$gravity, nd$gravity[match(igraph::V(gp)$name, nd$Stratum)])
+  }
+})
+
+test_that("gravity_field carries graph decorations into nodes, edges and graphs", {
+  g <- make_chain()
+  igraph::V(g)$Region <- rep(c("north", "south"), length.out = igraph::vcount(g))
+  igraph::V(g)$alpha <- 0.1
+  igraph::E(g)$kind <- paste0("e", seq_len(igraph::ecount(g)))
+  f <- gravity_field(g)
+  expect_equal(f$nodes$Region, igraph::V(g)$Region)
+  expect_equal(f$edges$kind, igraph::E(g)$kind)
+  expect_equal(names(f$nodes)[1:6], c("panel", "Stratum", "degree", "size", "S", "gravity"))
+  gf <- f$graphs[[1]]
+  expect_equal(igraph::V(gf)$Region, igraph::V(g)$Region)
+  expect_equal(igraph::E(gf)$kind, igraph::E(g)$kind)
+  expect_equal(igraph::E(gf)$delta, f$edges$delta)
+  expect_equal(unname(igraph::ends(gf, igraph::E(gf))), unname(as.matrix(f$edges[c("from", "to")])))
+
+  # computed columns win over clashing attributes
+  igraph::V(g)$S <- 99
+  expect_false(any(gravity_field(g)$nodes$S == 99))
+
+  # panels with different decorations are filled with NA
+  h <- make_chain(seed = 2)
+  f2 <- c(a = f, b = gravity_field(h))
+  expect_true(all(is.na(f2$nodes$Region[f2$nodes$panel == "b"])))
+  expect_equal(f2$nodes$Region[f2$nodes$panel == "a"], igraph::V(g)$Region)
+
+  # decorations do not leak into the plot (e.g. a vertex 'alpha')
+  p <- plot(f, layout = "fr")
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})

@@ -47,17 +47,24 @@ An object of class \code{"gravity_field"}: a list with
   \describe{
     \item{\code{nodes}}{\code{data.frame}: \code{panel}, \code{Stratum},
       \code{degree}, \code{size} (vertex \code{size} attribute if present,
-      else \code{degree}), \code{S} (source-sink score), \code{gravity}.}
+      else \code{degree}), \code{S} (source-sink score), \code{gravity},
+      followed by any other vertex attributes of the graph.}
     \item{\code{edges}}{\code{data.frame}: \code{panel}, \code{from}, \code{to},
       \code{weight}, \code{delta} (\eqn{\Delta_{from \to to}}), \code{source},
-      \code{sink}.}
+      \code{sink}, followed by any other edge attributes of the graph.}
     \item{\code{diagnostics}}{\code{data.frame}, one row per panel:
       \code{panel}, \code{gamma}, \code{degree_share} (\eqn{R^2} of \eqn{\Delta}
       on \eqn{\Delta^0}), \code{cor_S_degree}, \code{cor_S_S0},
       \code{gradient_share} (see \code{\link{source_sink_scores}}).}
-    \item{\code{graphs}}{The input graphs, named by panel, used for layouts.}
+    \item{\code{graphs}}{The input graphs, named by panel, used for layouts,
+      with all their attributes plus \code{S} and \code{gravity} as vertex
+      attributes and \code{delta} as an edge attribute (oriented as
+      \code{igraph::ends()}).}
   }
-  \code{panel} is \code{""} for a single unnamed graph.  Methods:
+  \code{panel} is \code{""} for a single unnamed graph.  Vertex and edge
+  attributes that clash with a computed column are replaced by it, and only
+  attributes holding one plain value per vertex or edge become columns.  In
+  a multi-panel field, a column a panel's graph lacks is \code{NA}.  Methods:
   \code{print()} summarizes each panel (bandwidth, size, degree diagnostics and
   the strongest sources and sinks); \code{plot()} draws it (see
   \code{\link{plot.gravity_field}}); \code{as.data.frame()} returns the node,

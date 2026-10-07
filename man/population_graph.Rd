@@ -4,7 +4,13 @@
 \alias{population_graph}
 \title{Convience function to create population graph object from genotypes.}
 \usage{
-population_graph(x, stratum = "Population", numLoci = NULL, ...)
+population_graph(
+  x,
+  stratum = "Population",
+  numLoci = NULL,
+  decorate = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{data.frame} with \code{locus} objects}
@@ -13,6 +19,15 @@ population_graph(x, stratum = "Population", numLoci = NULL, ...)
 
 \item{numLoci}{If not \code{NULL} then how many randomly selected loci (fewer than the total)
 to use in the estimation.}
+
+\item{decorate}{If \code{TRUE}, every numeric column of \code{x} (other
+than \code{stratum} and the loci) is averaged within each stratum and added
+as a vertex attribute.  With \code{Latitude} and \code{Longitude} columns
+this places each node at the barycenter of its sampled individuals, ready
+for \code{plot(graph)} and \code{\link{to_sf}}.  Columns named \code{name}
+or \code{size} are skipped, as those attributes are set by
+\code{\link{popgraph}}.  Default \code{FALSE}; for other summaries or
+categorical data use \code{\link{decorate_graph}}.}
 
 \item{...}{Other parameters passed to the \code{popgraph()} function.}
 }
@@ -28,4 +43,8 @@ This function is a convience function that wraps together the subset_loci() (pot
 data(arapat)
 g <- population_graph(arapat, stratum = "Population")
 g
+
+# Node coordinates (and any other numeric columns) as vertex attributes
+g <- population_graph(arapat, decorate = TRUE)
+igraph::vertex_attr_names(g)
 }

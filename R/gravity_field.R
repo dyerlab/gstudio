@@ -21,17 +21,24 @@
 #'   \describe{
 #'     \item{\code{nodes}}{\code{data.frame}: \code{panel}, \code{Stratum},
 #'       \code{degree}, \code{size} (vertex \code{size} attribute if present,
-#'       else \code{degree}), \code{S} (source-sink score), \code{gravity}.}
+#'       else \code{degree}), \code{S} (source-sink score), \code{gravity},
+#'       followed by any other vertex attributes of the graph.}
 #'     \item{\code{edges}}{\code{data.frame}: \code{panel}, \code{from}, \code{to},
 #'       \code{weight}, \code{delta} (\eqn{\Delta_{from \to to}}), \code{source},
-#'       \code{sink}.}
+#'       \code{sink}, followed by any other edge attributes of the graph.}
 #'     \item{\code{diagnostics}}{\code{data.frame}, one row per panel:
 #'       \code{panel}, \code{gamma}, \code{degree_share} (\eqn{R^2} of \eqn{\Delta}
 #'       on \eqn{\Delta^0}), \code{cor_S_degree}, \code{cor_S_S0},
 #'       \code{gradient_share} (see \code{\link{source_sink_scores}}).}
-#'     \item{\code{graphs}}{The input graphs, named by panel, used for layouts.}
+#'     \item{\code{graphs}}{The input graphs, named by panel, used for layouts,
+#'       with all their attributes plus \code{S} and \code{gravity} as vertex
+#'       attributes and \code{delta} as an edge attribute (oriented as
+#'       \code{igraph::ends()}).}
 #'   }
-#'   \code{panel} is \code{""} for a single unnamed graph.  Methods:
+#'   \code{panel} is \code{""} for a single unnamed graph.  Vertex and edge
+#'   attributes that clash with a computed column are replaced by it, and only
+#'   attributes holding one plain value per vertex or edge become columns.  In
+#'   a multi-panel field, a column a panel's graph lacks is \code{NA}.  Methods:
 #'   \code{print()} summarizes each panel (bandwidth, size, degree diagnostics and
 #'   the strongest sources and sinks); \code{plot()} draws it (see
 #'   \code{\link{plot.gravity_field}}); \code{as.data.frame()} returns the node,
@@ -78,16 +85,24 @@ gravity_field <- function(graph, gamma = 0.5) {
     ed <- gravity_edges(g, gm)
     nodes <- igraph::V(g)$name
     sz <- if ("size" %in% igraph::vertex_attr_names(g)) igraph::V(g)$size else sc$degree
+    nd <- data.frame(panel = p, Stratum = nodes, degree = sc$degree, size = sz,
+                     S = sc$S, gravity = sc$gravity,
+                     row.names = NULL, stringsAsFactors = FALSE)
+    # gravity_edges() lists edges in E(g) order with from/to as igraph's ends.
+    es <- data.frame(panel = p, from = ed$from, to = ed$to, weight = ed$weight,
+                     delta = ed$Delta,
+                     source = ifelse(ed$Delta >= 0, ed$from, ed$to),
+                     sink   = ifelse(ed$Delta >= 0, ed$to, ed$from),
+                     row.names = NULL, stringsAsFactors = FALSE)
+    nd <- cbind(nd, .extra_attrs(igraph::vertex_attr(g), nrow(nd), c(names(nd), "name")))
+    es <- cbind(es, .extra_attrs(igraph::edge_attr(g), nrow(es), names(es)))
+    igraph::V(g)$S <- sc$S
+    igraph::V(g)$gravity <- sc$gravity
+    igraph::E(g)$delta <- ed$Delta
     list(
       graph = g,
-      nodes = data.frame(panel = p, Stratum = nodes, degree = sc$degree, size = sz,
-                         S = sc$S, gravity = sc$gravity,
-                         row.names = NULL, stringsAsFactors = FALSE),
-      edges = data.frame(panel = p, from = ed$from, to = ed$to, weight = ed$weight,
-                         delta = ed$Delta,
-                         source = ifelse(ed$Delta >= 0, ed$from, ed$to),
-                         sink   = ifelse(ed$Delta >= 0, ed$to, ed$from),
-                         row.names = NULL, stringsAsFactors = FALSE),
+      nodes = nd,
+      edges = es,
       diagnostics = data.frame(panel = p, gamma = gm,
                                degree_share   = attr(sc, "degree_share"),
                                cor_S_degree   = attr(sc, "cor_S_degree"),
@@ -99,11 +114,26 @@ gravity_field <- function(graph, gamma = 0.5) {
   .new_gravity_field(parts)
 }
 
+# Vertex or edge attributes (other than those in 'drop') as extra columns,
+# keeping only plain vectors with one value per vertex or edge.
+#' @keywords internal
+#' @noRd
+.extra_attrs <- function(attrs, n, drop) {
+  attrs <- attrs[!names(attrs) %in% drop]
+  attrs <- attrs[vapply(attrs, function(a) is.atomic(a) && length(a) == n, logical(1))]
+  out <- data.frame(row.names = seq_len(n))
+  for (a in names(attrs)) out[[a]] <- attrs[[a]]
+  out
+}
+
 #' @keywords internal
 #' @noRd
 .new_gravity_field <- function(parts) {
   stack <- function(what) {
-    d <- do.call(rbind, lapply(parts, `[[`, what))
+    # Panels may carry different decorations; fill the missing ones with NA.
+    ds <- lapply(parts, `[[`, what)
+    cols <- unique(unlist(lapply(ds, names)))
+    d <- do.call(rbind, lapply(ds, function(x) { x[setdiff(cols, names(x))] <- NA; x[cols] }))
     rownames(d) <- NULL
     d
   }
