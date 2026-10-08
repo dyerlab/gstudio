@@ -370,3 +370,21 @@ test_that("plot.gravity_field alpha sets the surface opacity only", {
   expect_error(plot(f, layout = xy, alpha = 2), "between 0 and 1")
   expect_error(plot(f, layout = xy, alpha = "a"), "between 0 and 1")
 })
+
+test_that("the S surface interpolates each component separately", {
+  # A chain with a two-node component (S = 0 for both) set right beside it.
+  g <- igraph::disjoint_union(make_chain(), make_chain(2, extra = list(), prefix = "Q"))
+  xy <- rbind(cbind(x = 1:10, y = 0), cbind(x = c(4.5, 5.5), y = 0.6))
+  rownames(xy) <- igraph::V(g)$name
+  f <- gravity_field(g)
+  q <- igraph::V(g)$name %in% c("Q1", "Q2")
+  expect_true(any(abs(f$nodes$S[!q]) > 0.01))
+  surf <- function(p) p$layers[[which(vapply(p$layers, function(l) inherits(l$geom, "GeomRaster"), logical(1)))]]$data
+  for (s in c("interpolate", "voronoi")) {
+    d <- surf(plot(f, layout = xy, surface = s))
+    d <- d[!is.na(d$value), ]
+    near <- apply(sqrt(outer(d$x, xy[, 1], "-")^2 + outer(d$y, xy[, 2], "-")^2), 1, which.min)
+    expect_true(any(q[near]))
+    expect_equal(d$value[q[near]], rep(0, sum(q[near])), tolerance = 1e-12)
+  }
+})

@@ -122,6 +122,8 @@ plot.gravity_field <- function(x, y, ...,
     n <- p$nodes[c("panel", "Stratum", "degree", "size", "S", "gravity")]
     n$node <- n$Stratum                      # the plotting canvas keys nodes by 'node'
     n$x <- xy[n$node, 1]; n$y <- xy[n$node, 2]; n$panel <- lab[i]
+    # S is centred within each component, so the surface interpolates them apart.
+    n$component <- igraph::components(p$graph)$membership[match(n$node, igraph::V(p$graph)$name)]
     # gravity_field() fills 'size' with degree when the graph has no size
     # attribute; mark it missing so node_size = "size" reports the fallback.
     if (!"size" %in% igraph::vertex_attr_names(p$graph)) n$size <- NA_real_
@@ -161,7 +163,9 @@ plot.gravity_field <- function(x, y, ...,
 
 
 # Interpolated (or Voronoi) surface of nd[[value]] over the node positions,
-# one per panel, as underlay layers on the fill aesthetic.
+# one per panel, as underlay layers on the fill aesthetic.  With a
+# 'component' column, each grid cell belongs to its nearest node's component
+# and is interpolated from that component's nodes only.
 #' @keywords internal
 #' @noRd
 .gravity_surface <- function(nd, value, lab, surface, mask_dist = NULL, grid_n = 140, alpha = 1) {
@@ -183,11 +187,13 @@ plot.gravity_field <- function(x, y, ...,
   surf <- do.call(rbind, lapply(lab, function(l) {
     n <- nd[nd$panel == l, ]
     d <- sqrt(outer(gr$x, n$x, "-")^2 + outer(gr$y, n$y, "-")^2)
+    near <- apply(d, 1, which.min)
     v <- if (surface == "voronoi") {
-      n[[value]][apply(d, 1, which.min)]
+      n[[value]][near]
     } else {
       h <- pmax(nn * 1.2, 1e-6)
       w <- exp(-0.5 * (d / h)^2)
+      if (!is.null(n$component)) w <- w * outer(n$component[near], n$component, "==")
       as.numeric((w %*% n[[value]]) / pmax(rowSums(w), 1e-9))
     }
     v[apply(d, 1, min) > mask_dist] <- NA
