@@ -5,7 +5,23 @@
 \alias{lopho}
 \title{Lophocereus population graph}
 \description{
-This is the population graph for the Lophocereus data
- that is discussed in Dyer & Nason (2004).
+The Population Graph of the senita cactus, \emph{Lophocereus schottii}, from
+ Dyer & Nason (2004): 21 populations (12 peninsular Baja California, 9
+ continental Sonora and southern Arizona) estimated from the allozyme data
+ of Nason et al. (2002).  The 50 edges are those marked significant in
+ Table 1 of Dyer & Nason (2004), weighted by the multivariate statistical
+ distances \eqn{d_{ij}} in the same table.  Vertex attributes are
+ \code{size} and \code{region} (\code{"Baja"}, \code{"Sonora"}); sampling
+ coordinates are in \code{\link{baja}}.  Rebuilt from the published table
+ by \code{data-raw/lopho.R} in the package sources.
+}
+\references{
+Dyer, R. J., & Nason, J. D. (2004). Population graphs: the
+ graph theoretic shape of genetic structure. \emph{Molecular Ecology}, 13,
+ 1713--1727.
+
+ Nason, J. D., Hamrick, J. L., & Fleming, T. H. (2002). Gene migration,
+ range expansion, and phylogeography of the columnar cactus genus
+ \emph{Lophocereus}. \emph{Evolution}, 56, 2214--2226.
 }
 \keyword{data}

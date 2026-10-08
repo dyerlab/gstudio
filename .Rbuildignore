@@ -21,3 +21,4 @@ _quarto.yml
 ^\.tana$
 ^gravity_significance_tests\.md$
 ^vignettes/.*_files$
+^data-raw$
