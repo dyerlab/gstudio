@@ -33,6 +33,10 @@
 #'   the mean of the two graphs' weights.
 #' @param arrows Draw arrows on concordant edges and dashes on discordant ones
 #'   (default \code{TRUE}).
+#' @param mask_dist Surface cells farther than this from every node are left
+#'   blank; default 1.2 times the median nearest-neighbour distance between
+#'   nodes (floored at a quarter of the nodes' mean spacing, so near-coincident
+#'   nodes do not blank the surface).
 #' @return A \code{ggplot} object.
 #' @seealso \code{\link{gravity_congruence}}, \code{\link{plot.gravity_field}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}

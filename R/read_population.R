@@ -2,7 +2,9 @@
 #' 
 #' The function reads in a text file and does the proper translations for 
 #'  genotypes and spatial coordinates.  
-#' @param path The path to the text file
+#' @param path The path to the text file, or a URL (\code{http://},
+#'  \code{https://}, \code{ftp://}, or \code{file://}) pointing to one.  Remote files are
+#'  downloaded to a temporary file before being read.
 #' @param type An indication of what kind of loci that the data represent. The 
 #'  following kinds are recoginzed (n.b., if you have several types load them
 #'  separately and \code{merge} them).
@@ -34,11 +36,28 @@
 #' \dontrun{
 #'   path <- system.file("extdata", "data_2_column.csv", package = "gstudio")
 #'   pop <- read_population(path, type = "column", locus.columns = 4:7)
+#'
+#'   # Files may also be read directly from a URL
+#'   url <- "https://example.com/data_2_column.csv"
+#'   pop <- read_population(url, type = "column", locus.columns = 4:7)
 #' }
 read_population <- function( path, type, locus.columns, phased=FALSE, sep=",", header=TRUE, delim=":",...) {
   type <- tolower(type)
   
-  if (!("textConnection" %in% class(file)))
+  # download remote files to a temporary local copy
+  if( is.character(path) && length(path) == 1 && grepl("^(https?|ftp|file)://", path, ignore.case = TRUE) ) {
+    remote_name <- basename( sub("[?#].*$", "", path) )
+    ext <- regmatches( remote_name, regexpr("\\.[[:alnum:]]+$", remote_name) )
+    local_path <- tempfile( fileext = if( length(ext) ) ext else "" )
+    on.exit( unlink(local_path), add = TRUE )
+    status <- tryCatch( utils::download.file(path, local_path, mode = "wb", quiet = TRUE),
+                        error = function(e) stop(paste("Could not download the file at", path, ":", conditionMessage(e)), call. = FALSE) )
+    if( status != 0 )
+      stop(paste("Could not download the file at", path))
+    path <- local_path
+  }
+  
+  if (!inherits(path, "connection"))
       {
         if( !file.exists(path) ){
         ans <- paste("You did not pass a valid path to this function.  What you passed", 

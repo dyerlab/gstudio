@@ -23,7 +23,11 @@
   mask_dist = NULL,
   arrow_scale = 1,
   min_delta = 0,
-  grid_n = 140
+  grid_n = 140,
+  mask = c("hull", "nodes"),
+  clip_to_base = FALSE,
+  show_graph = TRUE,
+  graph_alpha = 1
 )
 }
 \arguments{
@@ -94,10 +98,11 @@ blue/red pair).}
 \eqn{\Delta^0}) and cor(\eqn{S}, degree) to each facet label (default
 \code{TRUE}).}
 
-\item{mask_dist}{Surface cells farther than this from every node are left
-blank; default 1.2 times the median nearest-neighbour distance between
-nodes (floored at a quarter of the nodes' mean spacing, so near-coincident
-nodes do not blank the surface).}
+\item{mask_dist}{Buffer around the hull (\code{mask = "hull"}) or the nodes
+(\code{mask = "nodes"}) beyond which surface cells are left blank; default
+1.2 times the median nearest-neighbour distance between nodes (floored at
+a quarter of the nodes' mean spacing, so near-coincident nodes do not
+blank the surface).}
 
 \item{arrow_scale}{Arrow length multiplier (default 1).  The longest arrow
 over all facets is \code{arrow_scale} times the median edge length.}
@@ -106,6 +111,27 @@ over all facets is \code{arrow_scale} times the median edge length.}
 all \eqn{|\Delta|} (default 0, show all).}
 
 \item{grid_n}{Surface grid resolution per axis (default 140).}
+
+\item{mask}{Where the surface is drawn.  \code{"hull"} (default) keeps
+cells inside the convex hull of each connected component's nodes, or
+within \code{mask_dist} of it; \code{"nodes"} keeps only cells within
+\code{mask_dist} of a node (a disc around each node, the behaviour before
+this option).}
+
+\item{clip_to_base}{With a \code{base} map, also blank the surface outside
+the base plot's polygons (its \code{geom_polygon()} and \code{geom_sf()}
+layers), so that, for example, a surface over land does not spill into the
+sea (default \code{FALSE}).  Needs a geographic layout (node
+coordinates in the base map's longitude and latitude).}
+
+\item{show_graph}{Draw the graph (edges, arrows, nodes and labels) on top of
+the surface (default \code{TRUE}); \code{FALSE} draws the surface alone.}
+
+\item{graph_alpha}{Opacity of the graph drawn over the surface (nodes,
+labels, edges and arrows), from \code{0} to \code{1} (default, fully
+drawn): an intermediate value, e.g. \code{0.35}, keeps the graph visible
+but lets the surface dominate.  \code{0} is the same as
+\code{show_graph = FALSE}.}
 }
 \value{
 A \code{ggplot} object.
@@ -135,6 +161,7 @@ g <- graph_from_adjacency_matrix(A, mode = "undirected", weighted = TRUE)
 xy <- cbind(x = 1:K, y = 2 * sin(1:K * pi / 6))
 f <- gravity_field(list(`local mean` = g, `degree-neutral` = g), gamma = c(1, 0.5))
 plot(f, layout = xy)
+plot(f, layout = xy, show_graph = FALSE)       # the surface alone
 }
 \seealso{
 \code{\link{gravity_field}}, \code{\link{plot.popgraph}},

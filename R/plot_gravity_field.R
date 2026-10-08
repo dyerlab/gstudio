@@ -41,10 +41,28 @@
 #' @param subtitle_stats Add the degree share (\eqn{R^2} of \eqn{\Delta} on
 #'   \eqn{\Delta^0}) and cor(\eqn{S}, degree) to each facet label (default
 #'   \code{TRUE}).
-#' @param mask_dist Surface cells farther than this from every node are left
-#'   blank; default 1.2 times the median nearest-neighbour distance between
-#'   nodes (floored at a quarter of the nodes' mean spacing, so near-coincident
-#'   nodes do not blank the surface).
+#' @param mask Where the surface is drawn.  \code{"hull"} (default) keeps
+#'   cells inside the convex hull of each connected component's nodes, or
+#'   within \code{mask_dist} of it; \code{"nodes"} keeps only cells within
+#'   \code{mask_dist} of a node (a disc around each node, the behaviour before
+#'   this option).
+#' @param mask_dist Buffer around the hull (\code{mask = "hull"}) or the nodes
+#'   (\code{mask = "nodes"}) beyond which surface cells are left blank; default
+#'   1.2 times the median nearest-neighbour distance between nodes (floored at
+#'   a quarter of the nodes' mean spacing, so near-coincident nodes do not
+#'   blank the surface).
+#' @param clip_to_base With a \code{base} map, also blank the surface outside
+#'   the base plot's polygons (its \code{geom_polygon()} and \code{geom_sf()}
+#'   layers), so that, for example, a surface over land does not spill into the
+#'   sea (default \code{FALSE}).  Needs a geographic layout (node
+#'   coordinates in the base map's longitude and latitude).
+#' @param show_graph Draw the graph (edges, arrows, nodes and labels) on top of
+#'   the surface (default \code{TRUE}); \code{FALSE} draws the surface alone.
+#' @param graph_alpha Opacity of the graph drawn over the surface (nodes,
+#'   labels, edges and arrows), from \code{0} to \code{1} (default, fully
+#'   drawn): an intermediate value, e.g. \code{0.35}, keeps the graph visible
+#'   but lets the surface dominate.  \code{0} is the same as
+#'   \code{show_graph = FALSE}.
 #' @param arrow_scale Arrow length multiplier (default 1).  The longest arrow
 #'   over all facets is \code{arrow_scale} times the median edge length.
 #' @param min_delta Hide arrows whose \eqn{|\Delta|} is below this quantile of
@@ -65,6 +83,7 @@
 #' xy <- cbind(x = 1:K, y = 2 * sin(1:K * pi / 6))
 #' f <- gravity_field(list(`local mean` = g, `degree-neutral` = g), gamma = c(1, 0.5))
 #' plot(f, layout = xy)
+#' plot(f, layout = xy, show_graph = FALSE)       # the surface alone
 #' @export
 plot.gravity_field <- function(x, y, ...,
                                layout = NULL,
@@ -82,9 +101,22 @@ plot.gravity_field <- function(x, y, ...,
                                mask_dist = NULL,
                                arrow_scale = 1,
                                min_delta = 0,
-                               grid_n = 140) {
+                               grid_n = 140,
+                               mask = c("hull", "nodes"),
+                               clip_to_base = FALSE,
+                               show_graph = TRUE,
+                               graph_alpha = 1) {
   chkDots(...)
   .check_base(base)
+  mask <- match.arg(mask)
+  if (!is.logical(clip_to_base) || length(clip_to_base) != 1 || is.na(clip_to_base))
+    stop("'clip_to_base' must be TRUE or FALSE.")
+  if (!is.logical(show_graph) || length(show_graph) != 1 || is.na(show_graph))
+    stop("'show_graph' must be TRUE or FALSE.")
+  if (!is.numeric(graph_alpha) || length(graph_alpha) != 1 || is.na(graph_alpha) ||
+      graph_alpha < 0 || graph_alpha > 1)
+    stop("'graph_alpha' must be a single number between 0 and 1.")
+  if (graph_alpha == 0) show_graph <- FALSE
   if (!is.numeric(alpha) || length(alpha) != 1 || is.na(alpha) || alpha < 0 || alpha > 1)
     stop("'alpha' must be a single number between 0 and 1.")
   if (!is.numeric(node_size)) node_size <- match.arg(node_size)
@@ -121,6 +153,7 @@ plot.gravity_field <- function(x, y, ...,
     # attribute) must not reach the plotting canvas.
     n <- p$nodes[c("panel", "Stratum", "degree", "size", "S", "gravity")]
     n$node <- n$Stratum                      # the plotting canvas keys nodes by 'node'
+    n$alpha <- graph_alpha
     n$x <- xy[n$node, 1]; n$y <- xy[n$node, 2]; n$panel <- lab[i]
     # S is centred within each component, so the surface interpolates them apart.
     n$component <- igraph::components(p$graph)$membership[match(n$node, igraph::V(p$graph)$name)]
@@ -142,19 +175,25 @@ plot.gravity_field <- function(x, y, ...,
   nd$panel <- factor(nd$panel, lab); ed$panel <- factor(ed$panel, lab); seg$panel <- factor(seg$panel, lab)
 
   lim <- max(abs(nd$S), na.rm = TRUE); if (!is.finite(lim) || lim == 0) lim <- 1
-  underlay <- .gravity_surface(nd, "S", lab, surface, mask_dist, grid_n, alpha)
+  clip <- NULL
+  if (clip_to_base) {
+    if (is.null(base)) warning("'clip_to_base' needs a 'base' plot; the surface is not clipped.")
+    else if (!all(unlist(geo))) warning("'clip_to_base' needs a geographic layout; the surface is not clipped.")
+    else clip <- .base_polygons(base)
+  }
+  underlay <- .gravity_surface(nd, "S", lab, surface, mask_dist, grid_n, alpha, mask = mask, clip = clip)
   overlay <- list()
-  if (arrows) {
+  if (arrows && show_graph) {
     a <- ed[abs(ed$delta) > 1e-6, ]
     if (min_delta > 0 && nrow(a)) a <- a[abs(a$delta) >= stats::quantile(abs(ed$delta), min_delta), ]
     overlay <- .gravity_arrows(a, abs(a$delta), max(abs(ed$delta), na.rm = TRUE),
-                               .median_edge_length(seg), arrow_scale)
+                               .median_edge_length(seg), arrow_scale, alpha = graph_alpha)
   }
 
   p <- .graph_canvas(nd, seg, node_size = node_size, node_labels = node_labels,
-                     node_fill = node_fill, edges = edges, edge_width = edge_width,
+                     node_fill = node_fill, edges = edges && show_graph, edge_width = edge_width,
                      geographic = all(unlist(geo)), underlay = underlay, overlay = overlay,
-                     base = base)
+                     base = base, show_nodes = show_graph, edge_alpha = 0.7 * graph_alpha)
   p + ggplot2::scale_fill_gradient2(low = palette[1], mid = "#f7f7f7", high = palette[2], midpoint = 0,
                                     limits = c(-lim, lim),
                                     name = "Source\u2013sink score S\n(red = source, blue = sink)",
@@ -165,10 +204,14 @@ plot.gravity_field <- function(x, y, ...,
 # Interpolated (or Voronoi) surface of nd[[value]] over the node positions,
 # one per panel, as underlay layers on the fill aesthetic.  With a
 # 'component' column, each grid cell belongs to its nearest node's component
-# and is interpolated from that component's nodes only.
+# and is interpolated from that component's nodes only.  mask = "nodes" keeps
+# cells within mask_dist of a node; "hull" keeps cells within mask_dist of the
+# convex hull of a component (all nodes when there is no 'component' column).
+# 'clip' (from .base_polygons()) further keeps only cells inside its rings.
 #' @keywords internal
 #' @noRd
-.gravity_surface <- function(nd, value, lab, surface, mask_dist = NULL, grid_n = 140, alpha = 1) {
+.gravity_surface <- function(nd, value, lab, surface, mask_dist = NULL, grid_n = 140, alpha = 1,
+                             mask = "nodes", clip = NULL) {
   if (surface == "none") return(list())
   xy1 <- nd[nd$panel == lab[1], c("x", "y")]
   dmat <- as.matrix(stats::dist(xy1)); diag(dmat) <- Inf
@@ -184,19 +227,29 @@ plot.gravity_field <- function(x, y, ...,
   gx <- seq(rx[1] - pad, rx[2] + pad, length.out = grid_n)
   gy <- seq(ry[1] - pad, ry[2] + pad, length.out = grid_n)
   gr <- expand.grid(x = gx, y = gy)
+  inside_clip <- if (is.null(clip)) TRUE else .in_rings(gr$x, gr$y, clip)
   surf <- do.call(rbind, lapply(lab, function(l) {
     n <- nd[nd$panel == l, ]
     d <- sqrt(outer(gr$x, n$x, "-")^2 + outer(gr$y, n$y, "-")^2)
     near <- apply(d, 1, which.min)
+    dmin <- d[cbind(seq_len(nrow(d)), near)]
     v <- if (surface == "voronoi") {
       n[[value]][near]
     } else {
       h <- pmax(nn * 1.2, 1e-6)
-      w <- exp(-0.5 * (d / h)^2)
+      # Weights relative to the nearest node, so cells far from every node
+      # (inside a large hull) do not underflow to zero.
+      w <- exp(-0.5 * (d^2 - dmin^2) / h^2)
       if (!is.null(n$component)) w <- w * outer(n$component[near], n$component, "==")
       as.numeric((w %*% n[[value]]) / pmax(rowSums(w), 1e-9))
     }
-    v[apply(d, 1, min) > mask_dist] <- NA
+    far <- if (mask == "hull") {
+      comp <- if (is.null(n$component)) rep(1L, nrow(n)) else n$component
+      dh <- do.call(pmin, lapply(split(seq_len(nrow(n)), comp), function(k)
+        .hull_distance(gr$x, gr$y, n$x[k], n$y[k])))
+      dh > mask_dist
+    } else dmin > mask_dist
+    v[far | !inside_clip] <- NA
     data.frame(gr, value = v, panel = l)
   }))
   surf$panel <- factor(surf$panel, lab)
@@ -215,7 +268,7 @@ plot.gravity_field <- function(x, y, ...,
 #' @keywords internal
 #' @noRd
 .gravity_arrows <- function(a, mag, mag_max, edge_len, arrow_scale = 1, colour = "black",
-                            legend = NULL) {
+                            legend = NULL, alpha = 1) {
   if (!nrow(a) || !is.finite(mag_max) || mag_max <= 0) return(list())
   L <- arrow_scale * mag / mag_max * edge_len
   a$x0 <- a$x_mid - a$ux * L / 2; a$y0 <- a$y_mid - a$uy * L / 2
@@ -228,7 +281,7 @@ plot.gravity_field <- function(x, y, ...,
   }
   list(ggplot2::geom_segment(data = a, m,
                              arrow = ggplot2::arrow(length = ggplot2::unit(0.16, "cm"), type = "closed"),
-                             colour = colour, linewidth = 0.65, inherit.aes = FALSE))
+                             colour = colour, linewidth = 0.65, alpha = alpha, inherit.aes = FALSE))
 }
 
 # Midpoint and unit direction of each source -> sink edge, for .gravity_arrows().
@@ -247,4 +300,86 @@ plot.gravity_field <- function(x, y, ...,
 .median_edge_length <- function(seg) {
   if (!nrow(seg)) return(1)
   stats::median(sqrt((seg$xend - seg$x)^2 + (seg$yend - seg$y)^2))
+}
+
+# Distance from each point (px, py) to the convex hull of the nodes (hx, hy):
+# 0 inside, else the distance to the hull's boundary (a point or a segment for
+# one or two distinct nodes).
+#' @keywords internal
+#' @noRd
+.hull_distance <- function(px, py, hx, hy) {
+  u <- unique(data.frame(x = hx, y = hy))
+  if (nrow(u) == 1) return(sqrt((px - u$x)^2 + (py - u$y)^2))
+  h <- if (nrow(u) == 2) seq_len(2) else grDevices::chull(u$x, u$y)
+  vx <- u$x[h]; vy <- u$y[h]; m <- length(vx)
+  seg <- if (m == 2) list(c(1, 2)) else lapply(seq_len(m), function(i) c(i, i %% m + 1))
+  d <- Inf
+  for (s in seg) {
+    ax <- vx[s[1]]; ay <- vy[s[1]]; bx <- vx[s[2]]; by <- vy[s[2]]
+    L2 <- (bx - ax)^2 + (by - ay)^2
+    t <- if (L2 > 0) pmin(1, pmax(0, ((px - ax) * (bx - ax) + (py - ay) * (by - ay)) / L2)) else 0
+    d <- pmin(d, sqrt((px - ax - t * (bx - ax))^2 + (py - ay - t * (by - ay))^2))
+  }
+  if (m >= 3) d[.in_rings(px, py, list(list(data.frame(x = vx, y = vy))))] <- 0
+  d
+}
+
+# Polygons of a base plot, for clipping: a list of features, each a list of
+# rings (data.frames x, y) combined by the even-odd rule, so holes are holes.
+# geom_polygon() layers give one feature per group (rings by subgroup);
+# geom_sf() layers give one feature per (multi)polygon, in longitude and
+# latitude.  Other layers are ignored.
+#' @keywords internal
+#' @noRd
+.base_polygons <- function(base) {
+  built <- ggplot2::ggplot_build(base)
+  out <- list()
+  for (i in seq_along(base$layers)) {
+    geom <- base$layers[[i]]$geom
+    if (inherits(geom, "GeomSf")) {
+      g <- built$data[[i]]$geometry
+      if (is.null(g)) next
+      if (!is.na(sf::st_crs(g)) && !isTRUE(sf::st_is_longlat(g))) g <- sf::st_transform(g, 4326)
+      g <- g[sf::st_dimension(g) == 2]
+      for (k in seq_along(g)) {
+        cc <- sf::st_coordinates(g[k])
+        L <- intersect(c("L3", "L2", "L1"), colnames(cc))
+        feat <- if (length(L)) split(as.data.frame(cc[, c("X", "Y")]), interaction(as.data.frame(cc[, L, drop = FALSE]), drop = TRUE))
+                else list(as.data.frame(cc[, c("X", "Y")]))
+        out[[length(out) + 1]] <- lapply(feat, stats::setNames, c("x", "y"))
+      }
+    } else if (inherits(geom, "GeomPolygon")) {
+      d <- built$data[[i]]
+      if (!all(c("x", "y") %in% names(d))) next
+      grp <- if (is.null(d$group)) rep(1L, nrow(d)) else d$group
+      sub <- if (is.null(d$subgroup)) rep(1L, nrow(d)) else d$subgroup
+      for (gi in split(seq_len(nrow(d)), grp))
+        out[[length(out) + 1]] <- lapply(split(gi, sub[gi]), function(k) data.frame(x = d$x[k], y = d$y[k]))
+    }
+  }
+  if (!length(out)) warning("'clip_to_base': the base plot has no polygon layers; the surface is not clipped.")
+  if (length(out)) out else NULL
+}
+
+# Points inside any feature (even-odd over a feature's rings), by ray casting.
+#' @keywords internal
+#' @noRd
+.in_rings <- function(px, py, features) {
+  rx <- range(px); ry <- range(py)
+  inside <- logical(length(px))
+  for (f in features) {
+    fin <- logical(length(px))
+    for (r in f) {
+      r <- r[stats::complete.cases(r), , drop = FALSE]
+      if (nrow(r) < 3 || max(r$x) < rx[1] || min(r$x) > rx[2] || max(r$y) < ry[1] || min(r$y) > ry[2]) next
+      vx <- r$x; vy <- r$y; j <- length(vx)
+      for (k in seq_along(vx)) {
+        cr <- ((vy[k] > py) != (vy[j] > py)) &
+          (px < (vx[j] - vx[k]) * (py - vy[k]) / (vy[j] - vy[k]) + vx[k])
+        fin <- xor(fin, cr %in% TRUE); j <- k
+      }
+    }
+    inside <- inside | fin
+  }
+  inside
 }

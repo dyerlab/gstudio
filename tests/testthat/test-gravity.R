@@ -388,3 +388,78 @@ test_that("the S surface interpolates each component separately", {
     expect_equal(d$value[q[near]], rep(0, sum(q[near])), tolerance = 1e-12)
   }
 })
+
+test_that("plot.gravity_field masks the surface to the component hull or to the nodes", {
+  # Twelve nodes on a circle: the centre is far from every node but inside the hull.
+  g <- make_chain(12, extra = list(c(1, 12)))
+  th <- seq(0, 2 * pi, length.out = 13)[-13]
+  xy <- cbind(x = 10 * cos(th), y = 10 * sin(th)); rownames(xy) <- igraph::V(g)$name
+  f <- gravity_field(g)
+  surf <- function(p) p$layers[[which(vapply(p$layers, function(l) inherits(l$geom, "GeomRaster"), logical(1)))]]$data
+  centre <- function(d) d$value[which.min(d$x^2 + d$y^2)]
+  d_hull <- surf(plot(f, layout = xy))                       # mask = "hull" is the default
+  d_node <- surf(plot(f, layout = xy, mask = "nodes"))
+  expect_false(is.na(centre(d_hull)))
+  expect_true(is.na(centre(d_node)))
+  expect_gt(sum(!is.na(d_hull$value)), sum(!is.na(d_node$value)))
+  # far from every node the kernel does not underflow: values stay within the range of S
+  expect_true(all(abs(d_hull$value[!is.na(d_hull$value)]) <= max(abs(f$nodes$S)) + 1e-9))
+  expect_error(plot(f, layout = xy, mask = "circle"), "should be one of")
+})
+
+test_that("plot.gravity_field clips the surface to a base map's polygons", {
+  g <- make_chain()
+  xy <- cbind(Longitude = seq(-112, -111.1, by = 0.1), Latitude = seq(25, 25.9, by = 0.1))
+  rownames(xy) <- igraph::V(g)$name
+  igraph::V(g)$Longitude <- xy[, 1]; igraph::V(g)$Latitude <- xy[, 2]
+  f <- gravity_field(g)
+  # "land" is everything west of -111.5, drawn as one polygon
+  land <- data.frame(long = c(-113, -111.5, -111.5, -113), lat = c(24, 24, 27, 27), group = 1)
+  base <- ggplot2::ggplot() + ggplot2::geom_polygon(ggplot2::aes(long, lat, group = group), data = land)
+  surf <- function(p) p$layers[[which(vapply(p$layers, function(l) inherits(l$geom, "GeomRaster"), logical(1)))]]$data
+  d0 <- surf(plot(f, base = base))
+  d1 <- surf(plot(f, base = base, clip_to_base = TRUE))
+  expect_true(any(!is.na(d0$value) & d0$x > -111.5))
+  expect_false(any(!is.na(d1$value) & d1$x > -111.5))
+  expect_true(any(!is.na(d1$value)))
+  # the same with an sf base layer
+  sq <- sf::st_sf(geometry = sf::st_sfc(sf::st_polygon(list(cbind(c(-113, -111.5, -111.5, -113, -113),
+                                                                   c(24, 24, 27, 27, 24)))), crs = 4326))
+  d2 <- surf(plot(f, base = ggplot2::ggplot() + ggplot2::geom_sf(data = sq), clip_to_base = TRUE))
+  expect_false(any(!is.na(d2$value) & d2$x > -111.5))
+  expect_true(any(!is.na(d2$value)))
+  expect_warning(plot(f, clip_to_base = TRUE), "needs a 'base'")
+  expect_error(plot(f, base = base, clip_to_base = NA), "TRUE or FALSE")
+})
+
+test_that("plot.gravity_field show_graph = FALSE draws the surface alone", {
+  g <- make_chain()
+  xy <- cbind(x = seq_len(igraph::vcount(g)), y = sin(seq_len(igraph::vcount(g))))
+  f <- gravity_field(g)
+  geoms <- function(p) vapply(p$layers, function(l) class(l$geom)[1], character(1))
+  expect_true(all(c("GeomSegment", "GeomPoint", "GeomText") %in% geoms(plot(f, layout = xy))))
+  p <- plot(f, layout = xy, show_graph = FALSE)
+  expect_setequal(geoms(p), c("GeomRaster", "GeomContour"))
+  expect_s3_class(ggplot2::ggplot_build(p), "ggplot_built")
+  expect_error(plot(f, layout = xy, show_graph = "no"), "TRUE or FALSE")
+})
+
+test_that("plot.gravity_field graph_alpha fades the graph, not the surface", {
+  g <- make_chain()
+  xy <- cbind(x = seq_len(igraph::vcount(g)), y = sin(seq_len(igraph::vcount(g))))
+  f <- gravity_field(g)
+  b <- ggplot2::ggplot_build(plot(f, layout = xy, graph_alpha = 0.3))
+  geoms <- vapply(b$plot$layers, function(l) class(l$geom)[1], character(1))
+  a <- function(k) unique(b$data[[k]]$alpha)
+  expect_equal(a(which(geoms == "GeomRaster")), 1)
+  for (k in which(geoms == "GeomPoint")) expect_equal(a(k), 0.3)
+  expect_equal(a(which(geoms == "GeomText")), 0.3)
+  seg <- which(geoms == "GeomSegment")
+  expect_setequal(unlist(lapply(seg, a)), c(0.7 * 0.3, 0.3))   # edges, arrows
+  # default unchanged; 0 hides the graph
+  b1 <- ggplot2::ggplot_build(plot(f, layout = xy))
+  expect_equal(unique(b1$data[[which(vapply(b1$plot$layers, function(l) class(l$geom)[1], "") == "GeomText")]]$alpha), 1)
+  expect_setequal(vapply(plot(f, layout = xy, graph_alpha = 0)$layers, function(l) class(l$geom)[1], ""),
+                  c("GeomRaster", "GeomContour"))
+  expect_error(plot(f, layout = xy, graph_alpha = 2), "between 0 and 1")
+})

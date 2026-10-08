@@ -94,3 +94,15 @@ test_that("from012 stub returns NULL", {
 
 
 
+
+test_that("reading from a URL", {
+  path <- system.file("extdata","data_2_column.csv",package="gstudio")
+  url <- paste0("file://", normalizePath(path))
+  data <- read_population(url, type="column", locus.columns=4:7)
+  expect_s3_class(data, "data.frame")
+  expect_equal(length(column_class(data,"locus")), 2)
+  expect_equal(data, read_population(path, type="column", locus.columns=4:7))
+
+  expect_error(read_population("file:///no/such/file.csv", type="column", locus.columns=4:7),
+               "Could not download")
+})

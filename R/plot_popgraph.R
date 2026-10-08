@@ -350,6 +350,8 @@ plot.popgraph <- function(x, y, ...,
 # overlay (e.g. gravity arrows), nodes, labels.  nd$panel / ed$panel are
 # factors; the plot is faceted when any panel has a non-empty name.
 # 'node_colours' optionally gives named colours for a categorical node_fill.
+# 'show_nodes = FALSE' leaves out the nodes and labels (e.g. a surface alone);
+# 'edge_alpha' is the edges' opacity (nodes take theirs from nd$alpha).
 # 'base' is a ggplot to draw on (checked by .check_base()); the graph's layers
 # do not inherit its mappings, and its coordinate system (if any), theme and
 # axis labels are kept.
@@ -360,7 +362,7 @@ plot.popgraph <- function(x, y, ...,
                           edge_width = "constant", arrows = FALSE,
                           geographic = FALSE, underlay = list(),
                           overlay = list(), limits = NULL, node_colours = NULL,
-                          base = NULL) {
+                          base = NULL, show_nodes = TRUE, edge_alpha = 0.7) {
   if (!is.factor(nd$panel)) nd$panel <- factor(nd$panel, unique(nd$panel))
   if (nrow(ed)) ed$panel <- factor(ed$panel, levels(nd$panel))
   if (is.null(nd$alpha)) nd$alpha <- 1
@@ -373,58 +375,60 @@ plot.popgraph <- function(x, y, ...,
     if (identical(edge_width, "weight")) {
       p <- p + ggplot2::geom_segment(data = ed, ggplot2::aes(.data$x, .data$y, xend = .data$xend,
                                                              yend = .data$yend, linewidth = .data$weight),
-                                     colour = "grey40", alpha = 0.7, arrow = arr, inherit.aes = FALSE) +
+                                     colour = "grey40", alpha = edge_alpha, arrow = arr, inherit.aes = FALSE) +
         ggplot2::scale_linewidth_continuous(range = c(0.2, 1.6), name = "Edge weight")
     } else {
       p <- p + ggplot2::geom_segment(data = ed, ggplot2::aes(.data$x, .data$y, xend = .data$xend,
                                                              yend = .data$yend),
-                                     colour = "grey40", linewidth = 0.5, alpha = 0.7, arrow = arr,
+                                     colour = "grey40", linewidth = 0.5, alpha = edge_alpha, arrow = arr,
                                      inherit.aes = FALSE)
     }
   }
 
   for (l in overlay) p <- p + l
 
-  ns <- .graph_node_size(nd, node_size); nd <- ns$nd
-  # Nodes are a solid dot coloured by node_fill under a black ring.  The
-  # colour comes from the colour scale, not fill, so the fill scale stays free
-  # for underlays such as the gravity surface.
-  map_fill <- !is.null(nd$fill)
-  m <- list(x = quote(.data$x), y = quote(.data$y), alpha = quote(.data$alpha))
-  if (ns$scale) m$size <- quote(.data$plot_size)
-  aes_ring <- do.call(ggplot2::aes, m)
-  if (map_fill) m$colour <- quote(.data$fill)
-  aes_dot  <- do.call(ggplot2::aes, m)
-  # The size legend shows the ring only; the colour legend shows the dot.
-  dot  <- list(data = nd, mapping = aes_dot, shape = 16, show.legend = c(size = FALSE),
-               inherit.aes = FALSE)
-  ring <- list(data = nd, mapping = aes_ring, shape = 21, fill = NA,
-               colour = "black", stroke = 0.8, inherit.aes = FALSE)
-  if (!map_fill) dot$colour <- node_fill
-  if (!ns$scale) dot$size <- ring$size <- nd$plot_size[1]
-  p <- p + do.call(ggplot2::geom_point, dot) + do.call(ggplot2::geom_point, ring) +
-    ggplot2::scale_alpha_identity()
-  if (ns$scale)
-    p <- p + ggplot2::scale_size_continuous(range = c(2.8, 6.5), name = ns$title)
-  if (map_fill)
-    p <- p + if (is.numeric(nd$fill)) ggplot2::scale_colour_viridis_c(name = node_fill)
-             else if (!is.null(node_colours))
-               ggplot2::scale_colour_manual(name = node_fill, values = node_colours,
-                                            guide = ggplot2::guide_legend(override.aes = list(size = 4)))
-             else ggplot2::scale_colour_viridis_d(name = node_fill,
-                                                  guide = ggplot2::guide_legend(override.aes = list(size = 4)))
+  if (show_nodes) {
+    ns <- .graph_node_size(nd, node_size); nd <- ns$nd
+    # Nodes are a solid dot coloured by node_fill under a black ring.  The
+    # colour comes from the colour scale, not fill, so the fill scale stays free
+    # for underlays such as the gravity surface.
+    map_fill <- !is.null(nd$fill)
+    m <- list(x = quote(.data$x), y = quote(.data$y), alpha = quote(.data$alpha))
+    if (ns$scale) m$size <- quote(.data$plot_size)
+    aes_ring <- do.call(ggplot2::aes, m)
+    if (map_fill) m$colour <- quote(.data$fill)
+    aes_dot  <- do.call(ggplot2::aes, m)
+    # The size legend shows the ring only; the colour legend shows the dot.
+    dot  <- list(data = nd, mapping = aes_dot, shape = 16, show.legend = c(size = FALSE),
+                 inherit.aes = FALSE)
+    ring <- list(data = nd, mapping = aes_ring, shape = 21, fill = NA,
+                 colour = "black", stroke = 0.8, inherit.aes = FALSE)
+    if (!map_fill) dot$colour <- node_fill
+    if (!ns$scale) dot$size <- ring$size <- nd$plot_size[1]
+    p <- p + do.call(ggplot2::geom_point, dot) + do.call(ggplot2::geom_point, ring) +
+      ggplot2::scale_alpha_identity()
+    if (ns$scale)
+      p <- p + ggplot2::scale_size_continuous(range = c(2.8, 6.5), name = ns$title)
+    if (map_fill)
+      p <- p + if (is.numeric(nd$fill)) ggplot2::scale_colour_viridis_c(name = node_fill)
+               else if (!is.null(node_colours))
+                 ggplot2::scale_colour_manual(name = node_fill, values = node_colours,
+                                              guide = ggplot2::guide_legend(override.aes = list(size = 4)))
+               else ggplot2::scale_colour_viridis_d(name = node_fill,
+                                                    guide = ggplot2::guide_legend(override.aes = list(size = 4)))
 
-  if (node_labels != "none") {
-    nd$node_label <- switch(node_labels,
-                            degree = format(nd$degree, trim = TRUE),
-                            size   = format(round(nd$size, 1), trim = TRUE),
-                            nd$node)
-    # Plain text, not ggrepel: repel layout run while an on-screen device
-    # (e.g. macOS Quartz) is still opening fails with a grid "depth" error.
-    p <- p + ggplot2::geom_text(data = nd, ggplot2::aes(.data$x, .data$y, label = .data$node_label,
-                                                        alpha = .data$alpha),
-                                size = 2.6, fontface = "bold", colour = "grey15", vjust = -1.6,
-                                inherit.aes = FALSE)
+    if (node_labels != "none") {
+      nd$node_label <- switch(node_labels,
+                              degree = format(nd$degree, trim = TRUE),
+                              size   = format(round(nd$size, 1), trim = TRUE),
+                              nd$node)
+      # Plain text, not ggrepel: repel layout run while an on-screen device
+      # (e.g. macOS Quartz) is still opening fails with a grid "depth" error.
+      p <- p + ggplot2::geom_text(data = nd, ggplot2::aes(.data$x, .data$y, label = .data$node_label,
+                                                          alpha = .data$alpha),
+                                  size = 2.6, fontface = "bold", colour = "grey15", vjust = -1.6,
+                                  inherit.aes = FALSE)
+    }
   }
 
   if (any(nzchar(levels(nd$panel))))
