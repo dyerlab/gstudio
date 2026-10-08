@@ -439,7 +439,7 @@ test_that("plot.gravity_field show_graph = FALSE draws the surface alone", {
   geoms <- function(p) vapply(p$layers, function(l) class(l$geom)[1], character(1))
   expect_true(all(c("GeomSegment", "GeomPoint", "GeomText") %in% geoms(plot(f, layout = xy))))
   p <- plot(f, layout = xy, show_graph = FALSE)
-  expect_setequal(geoms(p), c("GeomRaster", "GeomContour"))
+  expect_setequal(geoms(p), c("GeomRaster", "GeomContour", "GeomBlank"))
   expect_s3_class(ggplot2::ggplot_build(p), "ggplot_built")
   expect_error(plot(f, layout = xy, show_graph = "no"), "TRUE or FALSE")
 })
@@ -460,6 +460,43 @@ test_that("plot.gravity_field graph_alpha fades the graph, not the surface", {
   b1 <- ggplot2::ggplot_build(plot(f, layout = xy))
   expect_equal(unique(b1$data[[which(vapply(b1$plot$layers, function(l) class(l$geom)[1], "") == "GeomText")]]$alpha), 1)
   expect_setequal(vapply(plot(f, layout = xy, graph_alpha = 0)$layers, function(l) class(l$geom)[1], ""),
-                  c("GeomRaster", "GeomContour"))
+                  c("GeomRaster", "GeomContour", "GeomBlank"))
   expect_error(plot(f, layout = xy, graph_alpha = 2), "between 0 and 1")
+})
+
+test_that("plot.gravity_field graph_alpha sets the graph's parts separately", {
+  g <- make_chain()
+  xy <- cbind(x = seq_len(igraph::vcount(g)), y = sin(seq_len(igraph::vcount(g))))
+  f <- gravity_field(g)
+  geoms <- function(p) vapply(p$layers, function(l) class(l$geom)[1], character(1))
+  p <- plot(f, layout = xy, graph_alpha = c(nodes = 0.4, labels = 0.9, edges = 0.5))
+  b <- ggplot2::ggplot_build(p)
+  a <- function(k) unique(b$data[[k]]$alpha)
+  for (k in which(geoms(p) == "GeomPoint")) expect_equal(a(k), 0.4)
+  expect_equal(a(which(geoms(p) == "GeomText")), 0.9)
+  expect_setequal(unlist(lapply(which(geoms(p) == "GeomSegment"), a)), c(0.7 * 0.5, 1))  # arrows default 1
+  # a part at 0 is left out; the rest stay
+  g0 <- geoms(plot(f, layout = xy, graph_alpha = c(arrows = 0, nodes = 0)))
+  expect_equal(sum(g0 == "GeomSegment"), 1)
+  expect_false("GeomPoint" %in% g0)
+  expect_true("GeomText" %in% g0)
+  expect_s3_class(ggplot2::ggplot_build(plot(f, layout = xy, graph_alpha = c(nodes = 0))), "ggplot_built")
+  expect_error(plot(f, layout = xy, graph_alpha = c(node = 0.5)), "not node")
+  expect_error(plot(f, layout = xy, graph_alpha = c(0.2, 0.3)), "named by part")
+})
+
+test_that("plot_nodes() returns the plotted node positions, shown or not", {
+  g <- make_chain()
+  xy <- cbind(x = seq_len(igraph::vcount(g)), y = sin(seq_len(igraph::vcount(g))))
+  f <- gravity_field(g)
+  for (p in list(plot(f, layout = xy), plot(f, layout = xy, show_graph = FALSE),
+                 plot(f, layout = xy) + ggplot2::labs(title = "x"))) {
+    nd <- plot_nodes(p)
+    expect_equal(names(nd)[1:4], c("panel", "node", "x", "y"))
+    expect_equal(nd$x, unname(xy[, 1])); expect_equal(nd$y, unname(xy[, 2]))
+    expect_true("S" %in% names(nd))
+  }
+  expect_equal(nrow(plot_nodes(plot(as.popgraph(g)))), igraph::vcount(g))
+  expect_error(plot_nodes(ggplot2::ggplot()), "no node layer")
+  expect_error(plot_nodes(1), "must be a ggplot")
 })

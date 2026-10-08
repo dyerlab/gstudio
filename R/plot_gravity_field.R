@@ -58,11 +58,17 @@
 #'   coordinates in the base map's longitude and latitude).
 #' @param show_graph Draw the graph (edges, arrows, nodes and labels) on top of
 #'   the surface (default \code{TRUE}); \code{FALSE} draws the surface alone.
-#' @param graph_alpha Opacity of the graph drawn over the surface (nodes,
-#'   labels, edges and arrows), from \code{0} to \code{1} (default, fully
-#'   drawn): an intermediate value, e.g. \code{0.35}, keeps the graph visible
-#'   but lets the surface dominate.  \code{0} is the same as
-#'   \code{show_graph = FALSE}.
+#' @param graph_alpha Opacity of the graph drawn over the surface, from
+#'   \code{0} (hidden) to \code{1} (default, fully drawn).  A single number
+#'   applies to the whole graph: an intermediate value, e.g. \code{0.35}, keeps
+#'   the graph visible but lets the surface dominate.  A named vector sets the
+#'   parts separately, with any part not named left at \code{1}: \code{nodes},
+#'   \code{edges}, \code{arrows} and \code{labels}, e.g.
+#'   \code{c(nodes = 0.4, edges = 0.2, arrows = 0)}.  Edges are drawn at 0.7
+#'   times their value.  All zero is the same as \code{show_graph = FALSE}.
+#'   To draw your own labels (e.g. \code{ggrepel::geom_text_repel()}) set
+#'   \code{node_labels = "none"} and take the node positions from
+#'   \code{\link{plot_nodes}}.
 #' @param arrow_scale Arrow length multiplier (default 1).  The longest arrow
 #'   over all facets is \code{arrow_scale} times the median edge length.
 #' @param min_delta Hide arrows whose \eqn{|\Delta|} is below this quantile of
@@ -84,6 +90,7 @@
 #' f <- gravity_field(list(`local mean` = g, `degree-neutral` = g), gamma = c(1, 0.5))
 #' plot(f, layout = xy)
 #' plot(f, layout = xy, show_graph = FALSE)       # the surface alone
+#' plot(f, layout = xy, graph_alpha = c(nodes = 0.5, edges = 0.2, arrows = 0))
 #' @export
 plot.gravity_field <- function(x, y, ...,
                                layout = NULL,
@@ -113,10 +120,8 @@ plot.gravity_field <- function(x, y, ...,
     stop("'clip_to_base' must be TRUE or FALSE.")
   if (!is.logical(show_graph) || length(show_graph) != 1 || is.na(show_graph))
     stop("'show_graph' must be TRUE or FALSE.")
-  if (!is.numeric(graph_alpha) || length(graph_alpha) != 1 || is.na(graph_alpha) ||
-      graph_alpha < 0 || graph_alpha > 1)
-    stop("'graph_alpha' must be a single number between 0 and 1.")
-  if (graph_alpha == 0) show_graph <- FALSE
+  ga <- .graph_alpha(graph_alpha)
+  if (!show_graph) ga[] <- 0
   if (!is.numeric(alpha) || length(alpha) != 1 || is.na(alpha) || alpha < 0 || alpha > 1)
     stop("'alpha' must be a single number between 0 and 1.")
   if (!is.numeric(node_size)) node_size <- match.arg(node_size)
@@ -153,7 +158,7 @@ plot.gravity_field <- function(x, y, ...,
     # attribute) must not reach the plotting canvas.
     n <- p$nodes[c("panel", "Stratum", "degree", "size", "S", "gravity")]
     n$node <- n$Stratum                      # the plotting canvas keys nodes by 'node'
-    n$alpha <- graph_alpha
+    n$alpha <- ga[["nodes"]]; n$label_alpha <- ga[["labels"]]
     n$x <- xy[n$node, 1]; n$y <- xy[n$node, 2]; n$panel <- lab[i]
     # S is centred within each component, so the surface interpolates them apart.
     n$component <- igraph::components(p$graph)$membership[match(n$node, igraph::V(p$graph)$name)]
@@ -183,21 +188,43 @@ plot.gravity_field <- function(x, y, ...,
   }
   underlay <- .gravity_surface(nd, "S", lab, surface, mask_dist, grid_n, alpha, mask = mask, clip = clip)
   overlay <- list()
-  if (arrows && show_graph) {
+  if (arrows && ga[["arrows"]] > 0) {
     a <- ed[abs(ed$delta) > 1e-6, ]
     if (min_delta > 0 && nrow(a)) a <- a[abs(a$delta) >= stats::quantile(abs(ed$delta), min_delta), ]
     overlay <- .gravity_arrows(a, abs(a$delta), max(abs(ed$delta), na.rm = TRUE),
-                               .median_edge_length(seg), arrow_scale, alpha = graph_alpha)
+                               .median_edge_length(seg), arrow_scale, alpha = ga[["arrows"]])
   }
 
   p <- .graph_canvas(nd, seg, node_size = node_size, node_labels = node_labels,
-                     node_fill = node_fill, edges = edges && show_graph, edge_width = edge_width,
+                     node_fill = node_fill, edges = edges && ga[["edges"]] > 0, edge_width = edge_width,
                      geographic = all(unlist(geo)), underlay = underlay, overlay = overlay,
-                     base = base, show_nodes = show_graph, edge_alpha = 0.7 * graph_alpha)
+                     base = base, show_nodes = ga[["nodes"]] > 0, edge_alpha = 0.7 * ga[["edges"]],
+                     show_labels = ga[["labels"]] > 0)
   p + ggplot2::scale_fill_gradient2(low = palette[1], mid = "#f7f7f7", high = palette[2], midpoint = 0,
                                     limits = c(-lim, lim),
                                     name = "Source\u2013sink score S\n(red = source, blue = sink)",
                                     na.value = NA)
+}
+
+
+# graph_alpha as a named vector over the graph's parts: one number for all of
+# them, or a named subset with the rest at 1.
+.graph_alpha <- function(a) {
+  parts <- c("nodes", "edges", "arrows", "labels")
+  if (!is.numeric(a) || !length(a) || anyNA(a) || any(a < 0 | a > 1))
+    stop("'graph_alpha' must be numbers between 0 and 1.")
+  if (is.null(names(a))) {
+    if (length(a) != 1) stop("'graph_alpha' must be one number, or named by part (",
+                             paste(parts, collapse = ", "), ").")
+    return(stats::setNames(rep(a, length(parts)), parts))
+  }
+  bad <- setdiff(names(a), parts)
+  if (length(bad) || anyDuplicated(names(a)))
+    stop("'graph_alpha' names must be distinct parts among ", paste(parts, collapse = ", "),
+         if (length(bad)) paste0("; not ", paste(bad, collapse = ", ")), ".")
+  out <- stats::setNames(rep(1, length(parts)), parts)
+  out[names(a)] <- a
+  out
 }
 
 

@@ -362,10 +362,12 @@ plot.popgraph <- function(x, y, ...,
                           edge_width = "constant", arrows = FALSE,
                           geographic = FALSE, underlay = list(),
                           overlay = list(), limits = NULL, node_colours = NULL,
-                          base = NULL, show_nodes = TRUE, edge_alpha = 0.7) {
+                          base = NULL, show_nodes = TRUE, edge_alpha = 0.7,
+                          show_labels = TRUE) {
   if (!is.factor(nd$panel)) nd$panel <- factor(nd$panel, unique(nd$panel))
   if (nrow(ed)) ed$panel <- factor(ed$panel, levels(nd$panel))
   if (is.null(nd$alpha)) nd$alpha <- 1
+  if (is.null(nd$label_alpha)) nd$label_alpha <- nd$alpha
 
   p <- if (is.null(base)) ggplot2::ggplot() else base
   for (l in underlay) p <- p + l
@@ -416,20 +418,24 @@ plot.popgraph <- function(x, y, ...,
                                               guide = ggplot2::guide_legend(override.aes = list(size = 4)))
                else ggplot2::scale_colour_viridis_d(name = node_fill,
                                                     guide = ggplot2::guide_legend(override.aes = list(size = 4)))
-
-    if (node_labels != "none") {
-      nd$node_label <- switch(node_labels,
-                              degree = format(nd$degree, trim = TRUE),
-                              size   = format(round(nd$size, 1), trim = TRUE),
-                              nd$node)
-      # Plain text, not ggrepel: repel layout run while an on-screen device
-      # (e.g. macOS Quartz) is still opening fails with a grid "depth" error.
-      p <- p + ggplot2::geom_text(data = nd, ggplot2::aes(.data$x, .data$y, label = .data$node_label,
-                                                          alpha = .data$alpha),
-                                  size = 2.6, fontface = "bold", colour = "grey15", vjust = -1.6,
-                                  inherit.aes = FALSE)
-    }
   }
+
+  if (show_labels && node_labels != "none") {
+    nd$node_label <- switch(node_labels,
+                            degree = format(nd$degree, trim = TRUE),
+                            size   = format(round(nd$size, 1), trim = TRUE),
+                            nd$node)
+    # Plain text, not ggrepel: repel layout run while an on-screen device
+    # (e.g. macOS Quartz) is still opening fails with a grid "depth" error.
+    p <- p + ggplot2::geom_text(data = nd, ggplot2::aes(.data$x, .data$y, label = .data$node_label,
+                                                        alpha = .data$label_alpha),
+                                size = 2.6, fontface = "bold", colour = "grey15", vjust = -1.6,
+                                inherit.aes = FALSE)
+    if (!show_nodes) p <- p + ggplot2::scale_alpha_identity()
+  }
+  # The nodes as an invisible layer, drawn or not: the frame is the same
+  # whichever parts of the graph are shown, and plot_nodes() reads it.
+  p <- p + ggplot2::geom_blank(data = nd, ggplot2::aes(.data$x, .data$y), inherit.aes = FALSE)
 
   if (any(nzchar(levels(nd$panel))))
     p <- p + ggplot2::facet_wrap(~panel)
@@ -453,4 +459,41 @@ plot.popgraph <- function(x, y, ...,
   if (!is.null(base) && !ggplot2::is_ggplot(base))
     stop("'base' must be NULL or a ggplot, e.g. ggplot() + geom_sf(data = map).")
   base
+}
+
+#' Node positions of a graph plot
+#'
+#' @description
+#' The nodes of a plot made by \code{\link{plot.popgraph}} or
+#' \code{\link{plot.gravity_field}}, as drawn: one row per node (and panel),
+#' with its plotting coordinates \code{x} and \code{y}.  Use it to add your own
+#' layers on the same layout, e.g. repelled labels with
+#' \code{ggrepel::geom_text_repel()} and \code{node_labels = "none"}.  The
+#' positions are there whichever parts of the graph are shown (including
+#' \code{show_graph = FALSE}).
+#'
+#' @param p A \code{ggplot} from \code{plot()} on a \code{popgraph} or
+#'   \code{gravity_field}, with or without layers added since.
+#' @return A \code{data.frame} with columns \code{panel}, \code{node},
+#'   \code{x} and \code{y}, and the node data the plot carries (for a gravity
+#'   field, \code{S}, \code{gravity}, \code{degree}, \code{size},
+#'   \code{component}, and \code{fill} when nodes are coloured by an attribute).
+#' @seealso \code{\link{plot.popgraph}}, \code{\link{plot.gravity_field}}
+#' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
+#' @examples
+#' library(igraph)
+#' g <- make_ring(6)
+#' V(g)$name <- LETTERS[1:6]
+#' p <- plot(as.popgraph(g), node_labels = "none")
+#' head(plot_nodes(p))
+#' @export
+plot_nodes <- function(p) {
+  if (!ggplot2::is_ggplot(p)) stop("'p' must be a ggplot from plot() on a popgraph or gravity_field.")
+  hit <- Filter(function(l) inherits(l$geom, "GeomBlank") && is.data.frame(l$data) &&
+                  all(c("node", "x", "y") %in% names(l$data)), p$layers)
+  if (!length(hit)) stop("'p' has no node layer; was it made by plot() on a popgraph or gravity_field?")
+  nd <- hit[[1]]$data
+  drop <- c("alpha", "label_alpha", "plot_size", "node_label", "Stratum")
+  nd <- nd[setdiff(names(nd), drop)]
+  nd[c("panel", "node", "x", "y", setdiff(names(nd), c("panel", "node", "x", "y")))]
 }

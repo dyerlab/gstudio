@@ -127,11 +127,17 @@ coordinates in the base map's longitude and latitude).}
 \item{show_graph}{Draw the graph (edges, arrows, nodes and labels) on top of
 the surface (default \code{TRUE}); \code{FALSE} draws the surface alone.}
 
-\item{graph_alpha}{Opacity of the graph drawn over the surface (nodes,
-labels, edges and arrows), from \code{0} to \code{1} (default, fully
-drawn): an intermediate value, e.g. \code{0.35}, keeps the graph visible
-but lets the surface dominate.  \code{0} is the same as
-\code{show_graph = FALSE}.}
+\item{graph_alpha}{Opacity of the graph drawn over the surface, from
+\code{0} (hidden) to \code{1} (default, fully drawn).  A single number
+applies to the whole graph: an intermediate value, e.g. \code{0.35}, keeps
+the graph visible but lets the surface dominate.  A named vector sets the
+parts separately, with any part not named left at \code{1}: \code{nodes},
+\code{edges}, \code{arrows} and \code{labels}, e.g.
+\code{c(nodes = 0.4, edges = 0.2, arrows = 0)}.  Edges are drawn at 0.7
+times their value.  All zero is the same as \code{show_graph = FALSE}.
+To draw your own labels (e.g. \code{ggrepel::geom_text_repel()}) set
+\code{node_labels = "none"} and take the node positions from
+\code{\link{plot_nodes}}.}
 }
 \value{
 A \code{ggplot} object.
@@ -162,6 +168,7 @@ xy <- cbind(x = 1:K, y = 2 * sin(1:K * pi / 6))
 f <- gravity_field(list(`local mean` = g, `degree-neutral` = g), gamma = c(1, 0.5))
 plot(f, layout = xy)
 plot(f, layout = xy, show_graph = FALSE)       # the surface alone
+plot(f, layout = xy, graph_alpha = c(nodes = 0.5, edges = 0.2, arrows = 0))
 }
 \seealso{
 \code{\link{gravity_field}}, \code{\link{plot.popgraph}},
