@@ -140,7 +140,7 @@ plot.gravity_congruence <- function(x, y, ...,
   t <- x$tests
   p + ggplot2::scale_fill_gradient2(low = palette[1], mid = "#f7f7f7", high = palette[2], midpoint = 0,
                                     limits = c(-lim, lim),
-                                    name = "Shared source–sink score\n(red = both source,\nblue = both sink)",
+                                    name = "Shared source\u2013sink score\n(red = both source,\nblue = both sink)",
                                     na.value = NA) +
     ggplot2::scale_linetype_manual(name = "Shared edges", values = stats::setNames(c("solid", "22"), edge_keys),
                                    guide = ggplot2::guide_legend(override.aes = list(linewidth = 0.6))) +
