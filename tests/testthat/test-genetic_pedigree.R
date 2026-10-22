@@ -97,7 +97,7 @@ test_that("kinship and relatedness matrices match expectations", {
   # Alternative paternity: Sire fathers Child with his daughter
   ped$AltFather <- c(NA, NA, NA, NA, "Sire")
   r_alt <- genetic_pedigree( ped, mode = "relatedness", father = "AltFather" )
-  expect_equal( r_alt["Son", "Child"], 0.5 + 0.25 )
+  expect_equal( r_alt["Son", "Child"], 0.5 )
   expect_equal( r_alt["Sire", "Child"], 0.5 + 0.25 )
 })
 
