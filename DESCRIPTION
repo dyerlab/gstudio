@@ -22,8 +22,8 @@ Description: Provides classes and functions for the spatial analysis of
     kernels and perplexity-tuned Markov flow partitioning. Integration with spatial 
     and geographic data is provided via compatibility with 'sf', 'ggplot2', 
     and interactive leaflet maps.
-Version: 1.15.0
-Date: 2026-10-12
+Version: 1.15.1
+Date: 2026-10-22
 LazyLoad: true
 Encoding: UTF-8
 Depends:
@@ -38,6 +38,7 @@ Imports:
     sf
 Suggests:
     broom,
+    kinship2,
     testthat,
     knitr,
     rmarkdown,
@@ -46,4 +47,4 @@ Suggests:
     leaflet,
     leaflet.minicharts
 VignetteBuilder: knitr
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.1.1

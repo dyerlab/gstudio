@@ -1,3 +1,9 @@
+gstudio 1.15.1 - 20261022
+------------------
+* [ADD] (1.15.0) genetic_pedigree(x, mode = c("inbreeding", "table", "plot", "kinship")): inbreeding coefficients from a known pedigree (a data.frame with ID, Sex, Father, Mother and optional Name and AltFather columns). F is the kinship of each individual's parents, via kinship2 (now in Suggests). mode = "inbreeding" returns F named by ID, "table" a data.frame of ID, Name, F and F_alt (F under the AltFather paternity), "plot" draws the pedigree with F (kinship2 base graphics) and "kinship" returns the kinship2 pedigree object; father = "AltFather" analyses the alternative paternity. The pedigree is checked first (unique IDs, known parents of the right sex, both parents or neither).
+* [ADD] (1.15.0) Example data 'targaryen': the pedigree of House Targaryen from George R.R. Martin's fiction (101 individuals, 16 generations), with rumoured fathers in AltFather. Built by data-raw/targaryen.R.
+
+
 gstudio 1.15.0 - 20261012
 -----------------
 * [BREAKING] (1.15.0) This release marks the interface changes below; they break code written for 1.14 (installed from GitHub) and have no deprecation period.

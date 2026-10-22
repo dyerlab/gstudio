@@ -1,0 +1,102 @@
+ID,Name,Sex,Father,Mother,AltFather,Notes
+Aerion,Aerion Targaryen,M,,,,Founder; Lord of Dragonstone before the Conquest
+Valaena,Valaena Velaryon,F,,,,Founder
+Aegon_I,Aegon I Targaryen,M,Aerion,Valaena,,The Conqueror
+Visenya,Visenya Targaryen,F,Aerion,Valaena,,Sister-wife of Aegon I
+Rhaenys_Q,Rhaenys Targaryen,F,Aerion,Valaena,,Sister-wife of Aegon I
+Aenys_I,Aenys I Targaryen,M,Aegon_I,Rhaenys_Q,,
+Maegor_I,Maegor I Targaryen,M,Aegon_I,Visenya,,The Cruel; no surviving children
+Alyssa_V,Alyssa Velaryon,F,,,,Founder
+Rhaena_A,Rhaena Targaryen,F,Aenys_I,Alyssa_V,,Daughter of Aenys I
+Aegon_U,Aegon Targaryen,M,Aenys_I,Alyssa_V,,The Uncrowned
+Viserys_A,Viserys Targaryen,M,Aenys_I,Alyssa_V,,Son of Aenys I
+Jaehaerys_I,Jaehaerys I Targaryen,M,Aenys_I,Alyssa_V,,The Conciliator
+Alysanne,Alysanne Targaryen,F,Aenys_I,Alyssa_V,,Sister-wife of Jaehaerys I
+Vaella,Vaella Targaryen,F,Aenys_I,Alyssa_V,,
+Aerea,Aerea Targaryen,F,Aegon_U,Rhaena_A,,Twin
+Rhaella_A,Rhaella Targaryen,F,Aegon_U,Rhaena_A,,Twin
+Aegon_J,Aegon Targaryen,M,Jaehaerys_I,Alysanne,,Died in infancy
+Daenerys_J,Daenerys Targaryen,F,Jaehaerys_I,Alysanne,,Daughter of Jaehaerys I
+Aemon_J,Aemon Targaryen,M,Jaehaerys_I,Alysanne,,Prince of Dragonstone
+Baelon,Baelon Targaryen,M,Jaehaerys_I,Alysanne,,The Brave
+Alyssa_T,Alyssa Targaryen,F,Jaehaerys_I,Alysanne,,Sister-wife of Baelon
+Maegelle,Maegelle Targaryen,F,Jaehaerys_I,Alysanne,,
+Vaegon,Vaegon Targaryen,M,Jaehaerys_I,Alysanne,,
+Daella_J,Daella Targaryen,F,Jaehaerys_I,Alysanne,,Daughter of Jaehaerys I
+Saera,Saera Targaryen,F,Jaehaerys_I,Alysanne,,
+Viserra,Viserra Targaryen,F,Jaehaerys_I,Alysanne,,
+Gaemon_J,Gaemon Targaryen,M,Jaehaerys_I,Alysanne,,
+Valerion,Valerion Targaryen,M,Jaehaerys_I,Alysanne,,
+Gael,Gael Targaryen,F,Jaehaerys_I,Alysanne,,
+Jocelyn,Jocelyn Baratheon,F,,,,Founder
+Rhaenys_W,Rhaenys Targaryen,F,Aemon_J,Jocelyn,,The Queen Who Never Was
+Rodrik_Arryn,Rodrik Arryn,M,,,,Founder
+Aemma,Aemma Arryn,F,Rodrik_Arryn,Daella_J,,First wife of Viserys I
+Viserys_I,Viserys I Targaryen,M,Baelon,Alyssa_T,,
+Daemon,Daemon Targaryen,M,Baelon,Alyssa_T,,The Rogue Prince
+Corlys,Corlys Velaryon,M,,,,Founder; the Sea Snake
+Laena,Laena Velaryon,F,Corlys,Rhaenys_W,,Second wife of Daemon
+Laenor,Laenor Velaryon,M,Corlys,Rhaenys_W,,First husband of Rhaenyra
+Alicent,Alicent Hightower,F,,,,Founder; second wife of Viserys I
+Harwin_Strong,Harwin Strong,M,,,,Founder; rumored father of Rhaenyra's Velaryon sons
+Rhaenyra,Rhaenyra Targaryen,F,Viserys_I,Aemma,,
+Aegon_II,Aegon II Targaryen,M,Viserys_I,Alicent,,
+Helaena,Helaena Targaryen,F,Viserys_I,Alicent,,Sister-wife of Aegon II
+Aemond,Aemond Targaryen,M,Viserys_I,Alicent,,
+Daeron_V,Daeron Targaryen,M,Viserys_I,Alicent,,The Daring
+Baela,Baela Targaryen,F,Daemon,Laena,,Twin
+Rhaena_D,Rhaena Targaryen,F,Daemon,Laena,,Twin
+Jacaerys,Jacaerys Velaryon,M,Laenor,Rhaenyra,Harwin_Strong,
+Lucerys,Lucerys Velaryon,M,Laenor,Rhaenyra,Harwin_Strong,
+Joffrey,Joffrey Velaryon,M,Laenor,Rhaenyra,Harwin_Strong,
+Aegon_III,Aegon III Targaryen,M,Daemon,Rhaenyra,,The Dragonbane
+Viserys_II,Viserys II Targaryen,M,Daemon,Rhaenyra,,
+Jaehaerys_H,Jaehaerys Targaryen,M,Aegon_II,Helaena,,Twin
+Jaehaera,Jaehaera Targaryen,F,Aegon_II,Helaena,,Twin; first wife of Aegon III
+Maelor,Maelor Targaryen,M,Aegon_II,Helaena,,
+Daenaera,Daenaera Velaryon,F,,,,Founder; second wife of Aegon III
+Daenerys_A,Daenerys Targaryen,F,Aegon_III,Daenaera,,Daughter of Aegon III
+Daeron_I,Daeron I Targaryen,M,Aegon_III,Daenaera,,The Young Dragon
+Baelor_I,Baelor I Targaryen,M,Aegon_III,Daenaera,,The Blessed
+Daena,Daena Targaryen,F,Aegon_III,Daenaera,,The Defiant
+Rhaena_E,Rhaena Targaryen,F,Aegon_III,Daenaera,,Daughter of Aegon III
+Elaena,Elaena Targaryen,F,Aegon_III,Daenaera,,
+Larra,Larra Rogare,F,,,,Founder
+Aegon_IV,Aegon IV Targaryen,M,Viserys_II,Larra,,The Unworthy
+Aemon_K,Aemon Targaryen,M,Viserys_II,Larra,,The Dragonknight
+Naerys,Naerys Targaryen,F,Viserys_II,Larra,,Sister-wife of Aegon IV
+Daeron_II,Daeron II Targaryen,M,Aegon_IV,Naerys,Aemon_K,Aegon IV doubted his paternity
+Myriah,Myriah Martell,F,,,,Founder
+Baelor_B,Baelor Targaryen,M,Daeron_II,Myriah,,Breakspear
+Aerys_I,Aerys I Targaryen,M,Daeron_II,Myriah,,
+Rhaegel,Rhaegel Targaryen,M,Daeron_II,Myriah,,
+Maekar_I,Maekar I Targaryen,M,Daeron_II,Myriah,,
+Dyanna,Dyanna Dayne,F,,,,Founder
+Daeron_M,Daeron Targaryen,M,Maekar_I,Dyanna,,The Drunken
+Aerion_B,Aerion Targaryen,M,Maekar_I,Dyanna,,Brightflame
+Aemon_M,Aemon Targaryen,M,Maekar_I,Dyanna,,Maester of the Night's Watch
+Daella_M,Daella Targaryen,F,Maekar_I,Dyanna,,Daughter of Maekar I
+Rhae,Rhae Targaryen,F,Maekar_I,Dyanna,,
+Aegon_V,Aegon V Targaryen,M,Maekar_I,Dyanna,,The Unlikely (Egg)
+Betha,Betha Blackwood,F,,,,Founder
+Duncan,Duncan Targaryen,M,Aegon_V,Betha,,The Small
+Jaehaerys_II,Jaehaerys II Targaryen,M,Aegon_V,Betha,,
+Shaera,Shaera Targaryen,F,Aegon_V,Betha,,Sister-wife of Jaehaerys II
+Daeron_A,Daeron Targaryen,M,Aegon_V,Betha,,
+Rhaelle,Rhaelle Targaryen,F,Aegon_V,Betha,,
+Ormund,Ormund Baratheon,M,,,,Founder
+Steffon,Steffon Baratheon,M,Ormund,Rhaelle,,
+Cassana,Cassana Estermont,F,,,,Founder
+Robert,Robert Baratheon,M,Steffon,Cassana,,
+Stannis,Stannis Baratheon,M,Steffon,Cassana,,
+Renly,Renly Baratheon,M,Steffon,Cassana,,
+Aerys_II,Aerys II Targaryen,M,Jaehaerys_II,Shaera,,The Mad King
+Rhaella,Rhaella Targaryen,F,Jaehaerys_II,Shaera,,Sister-wife of Aerys II
+Rhaegar,Rhaegar Targaryen,M,Aerys_II,Rhaella,,
+Viserys_R,Viserys Targaryen,M,Aerys_II,Rhaella,,The Beggar King
+Daenerys_S,Daenerys Targaryen,F,Aerys_II,Rhaella,,Stormborn
+Elia,Elia Martell,F,,,,Founder
+Rhaenys_R,Rhaenys Targaryen,F,Rhaegar,Elia,,
+Aegon_R,Aegon Targaryen,M,Rhaegar,Elia,,
+Lyanna,Lyanna Stark,F,,,,Founder
+Jon_Snow,Jon Snow,M,Rhaegar,Lyanna,,Parentage confirmed in the TV series; implied in the books

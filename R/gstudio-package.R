@@ -205,3 +205,57 @@ NULL
 
 
 
+
+#' Pedigree of House Targaryen
+#'
+#' The pedigree of House Targaryen from George R.R. Martin's fiction, from the
+#'  parents of Aegon the Conqueror to Daenerys Targaryen, Jon Snow and the
+#'  Baratheon brothers: 101 individuals across 16 generations, 17 of them
+#'  founders.  Generations of sibling, half-sibling and uncle-niece marriages
+#'  make it a worked example of inbreeding from a pedigree; see
+#'  \code{\link{genetic_pedigree}}.
+#'
+#' Parentage follows the books (the official, legitimate parentage), not the
+#'  television adaptations, except that Jon Snow is entered as the son of
+#'  Rhaegar Targaryen and Lyanna Stark, which the books imply and the
+#'  television series confirms.  Spouses who married into the family are
+#'  entered as unrelated founders, although some had Targaryen ancestors, so
+#'  F is underestimated for their descendants.  Some children who died
+#'  young, and most members of cadet branches, are omitted.
+#'
+#' @format A \code{data.frame} with 101 rows and 7 columns:
+#'  \describe{
+#'    \item{ID}{Unique key (e.g. \code{"Aegon_I"}, \code{"Daenerys_S"}).
+#'      Names repeat across generations, so a suffix distinguishes them.}
+#'    \item{Name}{Display name.}
+#'    \item{Sex}{\code{"M"} or \code{"F"}.}
+#'    \item{Father, Mother}{\code{ID} of each parent; \code{NA} for founders.}
+#'    \item{AltFather}{\code{ID} of a rumoured father where the books raise
+#'      doubt: Harwin Strong for the three sons of Rhaenyra Targaryen and
+#'      Laenor Velaryon, and Aemon the Dragonknight for Daeron II.
+#'      \code{NA} otherwise.}
+#'    \item{Notes}{Epithets and short notes.}
+#'  }
+#' @source Compiled by R.J. Dyer from the books of George R.R. Martin:
+#'  \emph{A Song of Ice and Fire} (Bantam, 1996--2011), \emph{The World of Ice
+#'  & Fire} (with E.M. Garcia Jr. and L. Antonsson; Bantam, 2014) and
+#'  \emph{Fire & Blood} (Bantam, 2018).  Parent links were cross-checked
+#'  against the father (P22) and mother (P25) statements in Wikidata
+#'  (\url{https://www.wikidata.org}, CC0).  Built by
+#'  \code{data-raw/targaryen.R} in the package sources.
+#'
+#'  This is an unofficial compilation for teaching. It is not affiliated with
+#'  or endorsed by George R.R. Martin, his publishers, or HBO.  The characters
+#'  and their histories remain the property of their author; only the
+#'  arrangement of the table is covered by the package licence.
+#' @seealso \code{\link{genetic_pedigree}}
+#' @examples
+#' data( targaryen )
+#' head( targaryen )
+#' if( requireNamespace("kinship2", quietly = TRUE) ) {
+#'   head( genetic_pedigree( targaryen, mode = "table" ) )
+#' }
+#' @name targaryen
+#' @docType data
+#' @keywords data
+NULL
