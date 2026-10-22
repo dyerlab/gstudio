@@ -1,8 +1,9 @@
 #' Inbreeding and kinship from a pedigree
 #'
 #' This is the front-end function for analyses of a known pedigree.  It
-#'  estimates inbreeding coefficients (F) from the pedigree, compares them
-#'  under an alternative paternity, and draws the pedigree.
+#'  estimates inbreeding coefficients (F), kinship and relatedness from the
+#'  pedigree, compares them under an alternative paternity, and draws the
+#'  pedigree.
 #'
 #' The pedigree is a \code{data.frame} with one row per individual and the
 #'  columns
@@ -27,6 +28,10 @@
 #'  over the loops through each common ancestor A,
 #'  \eqn{F = \sum (1/2)^i (1 + F_A)}, where \eqn{i} is the number of
 #'  individuals in the loop.  Kinship is estimated by \code{kinship2::kinship()}.
+#'  Relatedness is twice the kinship, \eqn{r_{XY} = 2\theta_{XY}}; it equals
+#'  the textbook values (1/2 for full sibs, 1/4 for half sibs, ...) only when
+#'  the individuals' ancestors are not inbred, and an individual's
+#'  relatedness to itself is \eqn{1 + F}.
 #'
 #' @param x A pedigree \code{data.frame} (see Details), e.g.
 #'    \code{\link{targaryen}}.
@@ -46,14 +51,21 @@
 #'        An individual with several mates may be drawn twice, joined by a
 #'        dashed line, and individuals with neither parents nor offspring in
 #'        the pedigree are not drawn.}
-#'      \item{kinship}{The pedigree as a \code{kinship2} \code{pedigree}
-#'        object, for further analysis with that package (e.g.
-#'        \code{kinship2::kinship()} for the full kinship matrix).}
+#'      \item{kinship}{The kinship (coancestry) matrix, \eqn{\theta}, with
+#'        rows and columns named by \code{ID}.}
+#'      \item{relatedness}{The relatedness matrix, \eqn{r = 2\theta}, with
+#'        rows and columns named by \code{ID}.}
+#'      \item{pedigree}{The pedigree as a \code{kinship2} \code{pedigree}
+#'        object, for further analysis with that package.}
 #'    }
 #' @param father The column holding fathers: \code{"Father"} (default) or
 #'    \code{"AltFather"} to analyse the alternative paternity.  Individuals
 #'    with no alternative father keep their \code{Father}.  Mode \code{table}
 #'    always reports both and ignores this.
+#' @param focal (optional) A vector of \code{ID}s.  The pedigree is cut down
+#'    to these individuals and all of their ancestors (under both paternities)
+#'    before the analysis, e.g. to draw one branch of a large pedigree.  F,
+#'    kinship and relatedness depend only on ancestors, so they are unchanged.
 #' @param inbred_only For mode \code{table}, keep only the individuals with
 #'    F > 0 under either paternity (default \code{TRUE}).
 #' @param threshold For mode \code{plot}, the F at or above which a symbol is
@@ -87,10 +99,22 @@
 #'   data( targaryen )
 #'   head( genetic_pedigree( targaryen, mode = "table" ) )
 #'   genetic_pedigree( targaryen, mode = "plot", labels = "ID" )
+#'
+#'   # Relatedness of Rhaenyra's eldest son to his family under each paternity
+#'   family <- c( "Jacaerys", "Laenor", "Rhaenyra", "Aegon_III" )
+#'   genetic_pedigree( targaryen, mode = "relatedness" )[ family, family ]
+#'   genetic_pedigree( targaryen, mode = "relatedness",
+#'                     father = "AltFather" )[ family, family ]
+#'
+#'   # Just the ancestors of Rhaenyra's sons
+#'   genetic_pedigree( targaryen, mode = "plot", labels = "ID",
+#'                     focal = c( "Jacaerys", "Aegon_III" ) )
 #' }
 genetic_pedigree <- function( x,
-                              mode = c("inbreeding", "table", "plot", "kinship")[1],
+                              mode = c("inbreeding", "table", "plot", "kinship",
+                                       "relatedness", "pedigree")[1],
                               father = "Father",
+                              focal = NULL,
                               inbred_only = TRUE,
                               threshold = 0.25,
                               labels = NULL,
@@ -103,6 +127,8 @@ genetic_pedigree <- function( x,
     stop("genetic_pedigree() takes a single mode.", call. = FALSE)
 
   x <- .validate_pedigree( x )
+  if( !is.null(focal) )
+    x <- .pedigree_focal( x, focal )
   mode_clean <- tolower(mode)
 
   if( mode_clean == "inbreeding" ) {
@@ -129,6 +155,12 @@ genetic_pedigree <- function( x,
     return( .pedigree_plot( x, father, threshold, labels, cex, ... ) )
   }
   else if( mode_clean == "kinship" ) {
+    return( .pedigree_kinship_matrix( x, father ) )
+  }
+  else if( mode_clean == "relatedness" ) {
+    return( 2 * .pedigree_kinship_matrix( x, father ) )
+  }
+  else if( mode_clean == "pedigree" ) {
     return( .pedigree_kinship2( x, father ) )
   }
   else
@@ -196,6 +228,28 @@ genetic_pedigree <- function( x,
 }
 
 
+# The focal individuals and all of their ancestors (through Father, Mother
+# and AltFather), in the original row order.
+.pedigree_focal <- function( x, focal ) {
+  focal <- as.character( focal )
+  unknown <- setdiff( focal, x$ID )
+  if( length(unknown) )
+    stop("focal not found in the ID column: ", paste( unknown, collapse = ", " ), call. = FALSE)
+
+  parent_cols <- intersect( c("Father", "Mother", "AltFather"), names(x) )
+  keep <- focal
+  repeat {
+    rows <- x$ID %in% keep
+    parents <- unique( stats::na.omit( unlist( x[ rows, parent_cols ] ) ) )
+    new <- setdiff( parents, keep )
+    if( !length(new) )
+      break
+    keep <- c( keep, new )
+  }
+  x[ x$ID %in% keep, , drop = FALSE ]
+}
+
+
 # The father of each individual under the chosen paternity.  For
 # "AltFather", individuals without an alternative keep their Father.
 .pedigree_fathers <- function( x, father = "Father" ) {
@@ -216,10 +270,17 @@ genetic_pedigree <- function( x,
 }
 
 
+# The kinship matrix, rows and columns in the order of x$ID.
+.pedigree_kinship_matrix <- function( x, father = "Father" ) {
+  k <- kinship2::kinship( .pedigree_kinship2( x, father ) )
+  as.matrix( k[ x$ID, x$ID ] )
+}
+
+
 # F for each individual: the kinship coefficient of its parents.
 .pedigree_inbreeding <- function( x, father = "Father" ) {
   dads <- .pedigree_fathers( x, father )
-  k <- kinship2::kinship( .pedigree_kinship2( x, father ) )
+  k <- .pedigree_kinship_matrix( x, father )
   ret <- vapply( seq_len( nrow(x) ), function(i) {
     if( is.na( dads[i] ) ) 0 else k[ dads[i], x$Mother[i] ]
   }, numeric(1) )

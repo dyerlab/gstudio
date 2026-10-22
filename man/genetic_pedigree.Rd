@@ -6,8 +6,9 @@
 \usage{
 genetic_pedigree(
   x,
-  mode = c("inbreeding", "table", "plot", "kinship")[1],
+  mode = c("inbreeding", "table", "plot", "kinship", "relatedness", "pedigree")[1],
   father = "Father",
+  focal = NULL,
   inbred_only = TRUE,
   threshold = 0.25,
   labels = NULL,
@@ -35,15 +36,23 @@ genetic_pedigree(
     An individual with several mates may be drawn twice, joined by a
     dashed line, and individuals with neither parents nor offspring in
     the pedigree are not drawn.}
-  \item{kinship}{The pedigree as a \code{kinship2} \code{pedigree}
-    object, for further analysis with that package (e.g.
-    \code{kinship2::kinship()} for the full kinship matrix).}
+  \item{kinship}{The kinship (coancestry) matrix, \eqn{\theta}, with
+    rows and columns named by \code{ID}.}
+  \item{relatedness}{The relatedness matrix, \eqn{r = 2\theta}, with
+    rows and columns named by \code{ID}.}
+  \item{pedigree}{The pedigree as a \code{kinship2} \code{pedigree}
+    object, for further analysis with that package.}
 }}
 
 \item{father}{The column holding fathers: \code{"Father"} (default) or
 \code{"AltFather"} to analyse the alternative paternity.  Individuals
 with no alternative father keep their \code{Father}.  Mode \code{table}
 always reports both and ignores this.}
+
+\item{focal}{(optional) A vector of \code{ID}s.  The pedigree is cut down
+to these individuals and all of their ancestors (under both paternities)
+before the analysis, e.g. to draw one branch of a large pedigree.  F,
+kinship and relatedness depend only on ancestors, so they are unchanged.}
 
 \item{inbred_only}{For mode \code{table}, keep only the individuals with
 F > 0 under either paternity (default \code{TRUE}).}
@@ -65,8 +74,9 @@ Depends on \code{mode}; see above.
 }
 \description{
 This is the front-end function for analyses of a known pedigree.  It
- estimates inbreeding coefficients (F) from the pedigree, compares them
- under an alternative paternity, and draws the pedigree.
+ estimates inbreeding coefficients (F), kinship and relatedness from the
+ pedigree, compares them under an alternative paternity, and draws the
+ pedigree.
 }
 \details{
 The pedigree is a \code{data.frame} with one row per individual and the
@@ -92,6 +102,10 @@ The inbreeding coefficient of an individual is the kinship (coancestry)
  over the loops through each common ancestor A,
  \eqn{F = \sum (1/2)^i (1 + F_A)}, where \eqn{i} is the number of
  individuals in the loop.  Kinship is estimated by \code{kinship2::kinship()}.
+ Relatedness is twice the kinship, \eqn{r_{XY} = 2\theta_{XY}}; it equals
+ the textbook values (1/2 for full sibs, 1/4 for half sibs, ...) only when
+ the individuals' ancestors are not inbred, and an individual's
+ relatedness to itself is \eqn{1 + F}.
 }
 \note{
 Requires the \code{kinship2} package.
@@ -108,6 +122,16 @@ if( requireNamespace("kinship2", quietly = TRUE) ) {
   data( targaryen )
   head( genetic_pedigree( targaryen, mode = "table" ) )
   genetic_pedigree( targaryen, mode = "plot", labels = "ID" )
+
+  # Relatedness of Rhaenyra's eldest son to his family under each paternity
+  family <- c( "Jacaerys", "Laenor", "Rhaenyra", "Aegon_III" )
+  genetic_pedigree( targaryen, mode = "relatedness" )[ family, family ]
+  genetic_pedigree( targaryen, mode = "relatedness",
+                    father = "AltFather" )[ family, family ]
+
+  # Just the ancestors of Rhaenyra's sons
+  genetic_pedigree( targaryen, mode = "plot", labels = "ID",
+                    focal = c( "Jacaerys", "Aegon_III" ) )
 }
 }
 \references{

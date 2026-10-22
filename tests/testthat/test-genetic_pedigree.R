@@ -73,8 +73,53 @@ test_that("targaryen pedigree gives the expected coefficients", {
   expect_equal( tab$F[ tab$ID == "Daeron_II" ], tab$F_alt[ tab$ID == "Daeron_II" ] )
 })
 
-test_that("kinship and plot modes return kinship2 pedigrees", {
-  p <- genetic_pedigree( sib_mating(), mode = "kinship" )
+test_that("kinship and relatedness matrices match expectations", {
+  ped <- sib_mating()
+  k <- genetic_pedigree( ped, mode = "kinship" )
+  expect_true( is.matrix(k) )
+  expect_equal( rownames(k), ped$ID )
+  expect_equal( colnames(k), ped$ID )
+  # Full sibs share theta = 1/4, which is F of their child
+  expect_equal( k["Son", "Daughter"], 0.25 )
+  expect_equal( k["Son", "Daughter"], genetic_pedigree( ped )[["Child"]] )
+  expect_equal( k["Sire", "Dam"], 0 )
+
+  r <- genetic_pedigree( ped, mode = "relatedness" )
+  expect_equal( r, 2 * k )
+  expect_equal( r["Sire", "Son"], 0.5 )
+  # The diagonal is 1 + F
+  expect_equal( unname( diag(r) ), 1 + unname( genetic_pedigree( ped ) ) )
+
+  # Rows follow the input order, not kinship2's
+  shuffled <- ped[ c(5, 3, 1, 4, 2), ]
+  expect_equal( rownames( genetic_pedigree( shuffled, mode = "kinship" ) ), shuffled$ID )
+
+  # Alternative paternity: Sire fathers Child with his daughter
+  ped$AltFather <- c(NA, NA, NA, NA, "Sire")
+  r_alt <- genetic_pedigree( ped, mode = "relatedness", father = "AltFather" )
+  expect_equal( r_alt["Son", "Child"], 0.5 + 0.25 )
+  expect_equal( r_alt["Sire", "Child"], 0.5 + 0.25 )
+})
+
+test_that("focal keeps the focal individuals and their ancestors", {
+  data( targaryen, envir = environment() )
+  boys <- c( "Jacaerys", "Aegon_III" )
+  sub <- genetic_pedigree( targaryen, mode = "pedigree", focal = boys )
+  expect_true( all( c( boys, "Rhaenyra", "Laenor", "Harwin_Strong",
+                       "Daemon", "Aerion", "Valaena" ) %in% sub$id ) )
+  expect_false( any( c( "Aegon_II", "Daenerys_S", "Lucerys" ) %in% sub$id ) )
+
+  # Coefficients depend only on ancestors, so they are unchanged
+  full <- genetic_pedigree( targaryen, mode = "relatedness" )
+  part <- genetic_pedigree( targaryen, mode = "relatedness", focal = boys )
+  expect_equal( part[ boys, boys ], full[ boys, boys ] )
+  expect_equal( genetic_pedigree( targaryen, father = "AltFather", focal = boys )[["Jacaerys"]], 0 )
+
+  expect_error( genetic_pedigree( targaryen, focal = "Nobody" ), "focal not found" )
+})
+
+test_that("pedigree and plot modes return kinship2 pedigrees", {
+  p <- genetic_pedigree( sib_mating(), mode = "pedigree" )
   expect_s3_class( p, "pedigree" )
 
   f <- tempfile( fileext = ".pdf" )

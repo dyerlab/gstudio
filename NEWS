@@ -1,5 +1,8 @@
-gstudio 1.15.1 - 20261022
+gstudio 1.15.2 - 20261022
 ------------------
+* [BREAKING] (1.15.2) genetic_pedigree(mode = "kinship") now returns the kinship (coancestry) matrix, named by ID; the kinship2 pedigree object it used to return is now mode = "pedigree".
+* [ADD] (1.15.2) genetic_pedigree(mode = "relatedness"): the pedigree relatedness matrix, r = 2 * kinship, named by ID (diagonal 1 + F); honours father = "AltFather".
+* [ADD] (1.15.2) genetic_pedigree(focal = ): cuts the pedigree down to the named individuals and all of their ancestors (under both paternities) before any mode, e.g. to plot one branch of a large pedigree. Coefficients are unchanged, as they depend only on ancestors.
 * [ADD] (1.15.0) genetic_pedigree(x, mode = c("inbreeding", "table", "plot", "kinship")): inbreeding coefficients from a known pedigree (a data.frame with ID, Sex, Father, Mother and optional Name and AltFather columns). F is the kinship of each individual's parents, via kinship2 (now in Suggests). mode = "inbreeding" returns F named by ID, "table" a data.frame of ID, Name, F and F_alt (F under the AltFather paternity), "plot" draws the pedigree with F (kinship2 base graphics) and "kinship" returns the kinship2 pedigree object; father = "AltFather" analyses the alternative paternity. The pedigree is checked first (unique IDs, known parents of the right sex, both parents or neither).
 * [ADD] (1.15.0) Example data 'targaryen': the pedigree of House Targaryen from George R.R. Martin's fiction (101 individuals, 16 generations), with rumoured fathers in AltFather. Built by data-raw/targaryen.R.
 
