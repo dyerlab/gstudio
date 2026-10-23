@@ -20,7 +20,9 @@ write_population(
 \item{mode}{Which format to use for writing data to file.  At present there
  are 
 \describe{
- \item{text}{Outputs all data columns with loci treated as colon separated.  This is the default.}
+ \item{text}{Outputs all data columns as a CSV file with a header row, loci
+  treated as colon separated.  Read it back with
+  \code{read_population(file, type = "separated", locus.columns = ...)}.  This is the default.}
  
  \item{genepop}{Saves genetic data into GENEPOP format. You must specify a stratum.}
  \item{structure}{Saves genetic data into the two-lined per individual STRUCTURE format.  You must specify a stratum.}

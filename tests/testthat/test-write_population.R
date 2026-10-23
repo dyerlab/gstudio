@@ -22,6 +22,12 @@ test_that("write_population writes valid files across modes", {
   write_population(df, file = tmp_text, mode = "text")
   expect_true(file.exists(tmp_text))
   expect_true(file.info(tmp_text)$size > 0)
+  expect_length(readLines(tmp_text), nrow(df) + 1)  # header + every row
+  expect_false(any(grepl("\"", readLines(tmp_text))))  # no needless quoting
+  back <- read_population(tmp_text, type = "separated", locus.columns = 2:3)
+  expect_equal(back$Population, df$Population)
+  expect_equal(as.character(back$TPI), as.character(df$TPI))
+  expect_equal(as.character(back$PGM), as.character(df$PGM))
 
   # genepop mode
   tmp_gp <- tempfile(fileext = ".gen")

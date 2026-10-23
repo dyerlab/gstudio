@@ -7,7 +7,9 @@
 #' @param mode Which format to use for writing data to file.  At present there
 #'  are 
 #' \describe{
-#'  \item{text}{Outputs all data columns with loci treated as colon separated.  This is the default.}
+#'  \item{text}{Outputs all data columns as a CSV file with a header row, loci
+#'   treated as colon separated.  Read it back with
+#'   \code{read_population(file, type = "separated", locus.columns = ...)}.  This is the default.}
 #'  
 #'  \item{genepop}{Saves genetic data into GENEPOP format. You must specify a stratum.}
 #'  \item{structure}{Saves genetic data into the two-lined per individual STRUCTURE format.  You must specify a stratum.}
@@ -42,12 +44,16 @@ write_population <- function( df, file, mode=c("text","genepop", "structure","df
   else if( mode == "dfdist" )
     file_contents <- to_dfdist(df,stratum=stratum, ...)
   else {
-    file_contents <- character(nrow(df))
-    for( i in 1:nrow(df))
-      file_contents <- paste( as.character(df[i,]),collapse=",")
+    # loci become "A:B" strings and factors their labels rather than level codes
+    df[] <- lapply(df, as.character)
+    # quote only the columns whose values would otherwise break the CSV
+    needs_quote <- which(vapply(df, function(x) any(grepl("[,\"\n]", x)), logical(1)))
+    write.csv(df, file = file, row.names = FALSE, na = "",
+              quote = if (length(needs_quote)) needs_quote else FALSE)
+    return(invisible(0))
   }
-  
-  
+
+
   write(file_contents,file=file)
   invisible(0)
 }
