@@ -4,7 +4,7 @@
 \alias{transition_probability}
 \title{Returns transition probability for offspring given one or more parents.}
 \usage{
-transition_probability(off, mom, dad, multilocus = TRUE)
+transition_probability(off, mom, dad, freqs, multilocus = TRUE)
 }
 \arguments{
 \item{off}{A locus from the offspring}
@@ -12,6 +12,11 @@ transition_probability(off, mom, dad, multilocus = TRUE)
 \item{mom}{A locus from one parent}
 
 \item{dad}{A locus from another parent}
+
+\item{freqs}{An optional allele frequency table, as returned by
+\code{frequencies()} (columns Allele and Frequency, plus Locus for
+multilocus data), used only when \code{dad} is missing.  For a single
+locus it must hold one locus.}
 
 \item{multilocus}{A flag indicating that a single multilocus estimate
 of the transition probability should be passed (the default action).  
@@ -25,6 +30,24 @@ The numeric probability of the offspring given the parents
 This is a quick function used in paternity testing that provides the
  probability of transition for a locus of any ploidy level.
 }
+\details{
+With both parents, the value is the Mendelian probability of the offspring
+ genotype from that cross.  With one parent and \code{freqs}, it is the
+ probability of the offspring given that parent and a random mate drawn
+ from the population, the sum over the parent's alleles shared with the
+ offspring of (probability the parent transmits it) times (frequency of
+ the offspring's other allele).  The ratio of the two is the paternity
+ index, \eqn{PI = T(O|M,F) / T(O|M)}, for that putative father.  An
+ offspring allele missing from \code{freqs} has frequency zero.
+
+With one parent and no \code{freqs}, the value is a compatibility score:
+ the probability of the offspring were the parent crossed with a mate of
+ the offspring's own genotype (the parent's chance of transmitting a shared
+ allele, halved for a heterozygous offspring).  It is zero when the parent
+ is excluded and can rank candidate parents (as \code{parent_finder()}
+ does), but it is not a likelihood and should not be used as the
+ denominator of a paternity index.
+}
 \examples{
 off <- locus( 1:2 )
 mom <- locus( c(1,1) )
@@ -34,6 +57,10 @@ dad3 <- locus( c(1,1) )
 transition_probability( off, mom, dad1 )
 transition_probability( off, mom, dad2 )
 transition_probability( off, mom, dad3 )
+
+# one parent and a random mate with these allele frequencies
+freqs <- data.frame( Allele = c("1","2"), Frequency = c(0.8, 0.2) )
+transition_probability( off, mom, freqs = freqs )
 }
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>

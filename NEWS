@@ -1,3 +1,8 @@
+gstudio 1.15.3 - 20261027
+------------------
+* [ADD] (1.15.3) transition_probability(freqs = ): with one parent and an allele frequency table (from frequencies()), returns the probability of the offspring given that parent and a random mate, so a two-parent value divided by it is the paternity index. Without freqs the one-parent value is unchanged, and its documentation now says what it is: a compatibility score (the probability under a mate with the offspring's own genotype), not a likelihood.
+
+
 gstudio 1.15.2 - 20261022
 ------------------
 * [BREAKING] (1.15.2) genetic_pedigree(mode = "kinship") now returns the kinship (coancestry) matrix, named by ID; the kinship2 pedigree object it used to return is now mode = "pedigree".
