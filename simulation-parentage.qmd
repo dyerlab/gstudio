@@ -269,6 +269,30 @@ offs |>
   paternity(slice(adults, 1), adults, strict = TRUE)
 ```
 
+### Transition Probabilities and the Paternity Index
+
+`transition_probability()` gives the Mendelian probability of an offspring genotype from a pair of parents, as a product across loci (`multilocus = FALSE` returns the per-locus values):
+
+```{r}
+mom <- slice(adults, 1)
+dad <- slice(adults, 2)
+
+transition_probability(slice(offs, 1), mom, dad)
+transition_probability(slice(offs, 1), mom, dad, multilocus = FALSE)
+```
+
+To judge a putative father, compare that value with the probability of the offspring given the mother and a *random* male. Pass only the mother and an allele frequency table from `frequencies()`; at each locus this is the chance the mother transmits an allele the offspring carries times the frequency of the offspring's other allele. The ratio is the paternity index, how many times more likely the male is to be the father than a random male:
+
+```{r}
+freqs <- adults |>
+  frequencies()
+
+T_random <- transition_probability(slice(offs, 1), mom, freqs = freqs)
+transition_probability(slice(offs, 1), mom, dad) / T_random
+```
+
+Without `freqs`, the one-parent value is only a compatibility score (zero when the parent is excluded), not a likelihood, so do not use it as the denominator of a paternity index.
+
 ### Single-Parent Exclusion
 
 The `parent_finder()` function identifies compatible parents for each offspring using exclusion. It requires a data.frame with `ID` and `OffID` columns, where adults have `OffID = 0`:
@@ -289,6 +313,8 @@ combined |>
   parent_finder() |>
   head()
 ```
+
+Its `T` column is the one-parent compatibility score from `transition_probability()` (without `freqs`): it ranks the compatible parents of each offspring, but it is not a likelihood.
 
 ### Identifying Bad Parents
 

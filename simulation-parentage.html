@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.11.9">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -74,14 +74,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./visualization.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-5c1318cf63eba56dbef7ba16bc7d56f5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1609953a09f98be9d0fed27954444b17.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-6302357f959a8f7748413a5996c6581e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -113,17 +114,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar floating quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
+  <nav class="quarto-secondary-nav" aria-label="Toolbar">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./simulation-parentage.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Simulation &amp; Parentage</span></a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./simulation-parentage.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Simulation &amp; Parentage</span></a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -134,7 +135,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto" aria-label="Site">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">gstudio: Spatial Analysis of Genetic Marker Data</a> 
@@ -228,7 +229,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
@@ -260,8 +261,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#mating-and-offspring" id="toc-mating-and-offspring" class="nav-link" data-scroll-target="#mating-and-offspring"><span class="header-section-number">11.6.1</span> Mating and Offspring</a></li>
   <li><a href="#maternal-subtraction" id="toc-maternal-subtraction" class="nav-link" data-scroll-target="#maternal-subtraction"><span class="header-section-number">11.6.2</span> Maternal Subtraction</a></li>
   <li><a href="#fractional-paternity" id="toc-fractional-paternity" class="nav-link" data-scroll-target="#fractional-paternity"><span class="header-section-number">11.6.3</span> Fractional Paternity</a></li>
-  <li><a href="#single-parent-exclusion" id="toc-single-parent-exclusion" class="nav-link" data-scroll-target="#single-parent-exclusion"><span class="header-section-number">11.6.4</span> Single-Parent Exclusion</a></li>
-  <li><a href="#identifying-bad-parents" id="toc-identifying-bad-parents" class="nav-link" data-scroll-target="#identifying-bad-parents"><span class="header-section-number">11.6.5</span> Identifying Bad Parents</a></li>
+  <li><a href="#transition-probabilities-and-the-paternity-index" id="toc-transition-probabilities-and-the-paternity-index" class="nav-link" data-scroll-target="#transition-probabilities-and-the-paternity-index"><span class="header-section-number">11.6.4</span> Transition Probabilities and the Paternity Index</a></li>
+  <li><a href="#single-parent-exclusion" id="toc-single-parent-exclusion" class="nav-link" data-scroll-target="#single-parent-exclusion"><span class="header-section-number">11.6.5</span> Single-Parent Exclusion</a></li>
+  <li><a href="#identifying-bad-parents" id="toc-identifying-bad-parents" class="nav-link" data-scroll-target="#identifying-bad-parents"><span class="header-section-number">11.6.6</span> Identifying Bad Parents</a></li>
   </ul></li>
   <li><a href="#bundled-parentage-datasets" id="toc-bundled-parentage-datasets" class="nav-link" data-scroll-target="#bundled-parentage-datasets"><span class="header-section-number">11.7</span> Bundled Parentage Datasets</a></li>
   <li><a href="#without-pipes" id="toc-without-pipes" class="nav-link" data-scroll-target="#without-pipes"><span class="header-section-number">11.8</span> Without Pipes</a></li>
@@ -269,7 +271,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="toc-actions"><ul><li><a href="https://github.com/dyerlab/gstudio/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content" tabindex="-1">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -322,12 +324,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Population ID  Loc1  Loc2  Loc3
-1          A  1 02:02 01:01 01:01
-2          A  2 02:02 01:02 01:01
-3          A  3 02:02 02:02 02:02
-4          A  4 02:02 02:02 02:02
-5          A  5 01:01 02:02 01:02
-6          A  6 01:02 01:02 02:02</code></pre>
+1          A  1 02:02 01:01 01:02
+2          A  2 01:02 02:02 02:02
+3          A  3 01:02 01:02 02:02
+4          A  4 01:02 02:02 02:02
+5          A  5 02:02 02:02 01:02
+6          A  6 01:01 02:02 02:02</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Population)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -449,11 +451,11 @@ Pop3 0.0500000 0.0500000 0.9000000</code></pre>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  ID Population  Loc1  Loc2  Loc3
-1  1          A 02:02 02:02 01:02
-2  2          A 02:02 01:02 02:02
-3  3          A 02:02 01:02 02:02
+1  1          A 01:02 01:01 01:02
+2  2          A 02:02 02:02 02:02
+3  3          A 02:02 02:02 02:02
 4  4          A 02:02 02:02 01:02
-5  5          A 02:02 01:02 02:02
+5  5          A 01:02 02:02 02:02
 6  6          A 02:02 01:02 02:02</code></pre>
 </div>
 </div>
@@ -522,10 +524,10 @@ Pop3 0.0500000 0.0500000 0.9000000</code></pre>
 <span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Locus        Gst        Hs        Ht p.value
-1       Loc1 0.10172629 0.4184512 0.4658393      NA
-2       Loc2 0.01295521 0.4401347 0.4459116      NA
-3       Loc3 0.02723203 0.4628956 0.4758541      NA
-4 Multilocus 0.04765294 1.3214815 1.3876049      NA</code></pre>
+1       Loc1 0.03860354 0.4822222 0.5015852      NA
+2       Loc2 0.02426476 0.4580471 0.4694379      NA
+3       Loc3 0.11745245 0.3934007 0.4457558      NA
+4 Multilocus 0.05866043 1.3336700 1.4167789      NA</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -539,12 +541,12 @@ Pop3 0.0500000 0.0500000 0.9000000</code></pre>
 <pre><code># A tibble: 6 × 3
   Generation Stratum mean_He
   &lt;chr&gt;      &lt;chr&gt;     &lt;dbl&gt;
-1 Final      A         0.432
-2 Final      B         0.425
-3 Final      C         0.452
-4 Start      A         0.386
-5 Start      B         0.467
-6 Start      C         0.415</code></pre>
+1 Final      A         0.485
+2 Final      B         0.470
+3 Final      C         0.365
+4 Start      A         0.416
+5 Start      B         0.460
+6 Start      C         0.391</code></pre>
 </div>
 </div>
 </section>
@@ -634,24 +636,54 @@ Pop3 0.0500000 0.0500000 0.9000000</code></pre>
 </div>
 </div>
 </section>
-<section id="single-parent-exclusion" class="level3" data-number="11.6.4">
-<h3 data-number="11.6.4" class="anchored" data-anchor-id="single-parent-exclusion"><span class="header-section-number">11.6.4</span> Single-Parent Exclusion</h3>
+<section id="transition-probabilities-and-the-paternity-index" class="level3" data-number="11.6.4">
+<h3 data-number="11.6.4" class="anchored" data-anchor-id="transition-probabilities-and-the-paternity-index"><span class="header-section-number">11.6.4</span> Transition Probabilities and the Paternity Index</h3>
+<p><code>transition_probability()</code> gives the Mendelian probability of an offspring genotype from a pair of parents, as a product across loci (<code>multilocus = FALSE</code> returns the per-locus values):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">slice</span>(adults, <span class="dv">1</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>dad <span class="ot">&lt;-</span> <span class="fu">slice</span>(adults, <span class="dv">2</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">transition_probability</span>(<span class="fu">slice</span>(offs, <span class="dv">1</span>), mom, dad)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0625</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">transition_probability</span>(<span class="fu">slice</span>(offs, <span class="dv">1</span>), mom, dad, <span class="at">multilocus =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Loc1 Loc2 Loc3 Loc4 
+ 0.5  0.5  0.5  0.5 </code></pre>
+</div>
+</div>
+<p>To judge a putative father, compare that value with the probability of the offspring given the mother and a <em>random</em> male. Pass only the mother and an allele frequency table from <code>frequencies()</code>; at each locus this is the chance the mother transmits an allele the offspring carries times the frequency of the offspring’s other allele. The ratio is the paternity index, how many times more likely the male is to be the father than a random male:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> adults <span class="sc">|&gt;</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">frequencies</span>()</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>T_random <span class="ot">&lt;-</span> <span class="fu">transition_probability</span>(<span class="fu">slice</span>(offs, <span class="dv">1</span>), mom, <span class="at">freqs =</span> freqs)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">transition_probability</span>(<span class="fu">slice</span>(offs, <span class="dv">1</span>), mom, dad) <span class="sc">/</span> T_random</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 22.7047</code></pre>
+</div>
+</div>
+<p>Without <code>freqs</code>, the one-parent value is only a compatibility score (zero when the parent is excluded), not a likelihood, so do not use it as the denominator of a paternity index.</p>
+</section>
+<section id="single-parent-exclusion" class="level3" data-number="11.6.5">
+<h3 data-number="11.6.5" class="anchored" data-anchor-id="single-parent-exclusion"><span class="header-section-number">11.6.5</span> Single-Parent Exclusion</h3>
 <p>The <code>parent_finder()</code> function identifies compatible parents for each offspring using exclusion. It requires a data.frame with <code>ID</code> and <code>OffID</code> columns, where adults have <code>OffID = 0</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare a combined data.frame: adults (OffID = 0) then offspring</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>locus_cols <span class="ot">&lt;-</span> adults <span class="sc">|&gt;</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_class</span>(<span class="st">"locus"</span>)</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>combined <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(adults <span class="sc">|&gt;</span></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">select</span>(ID, <span class="fu">all_of</span>(locus_cols)) <span class="sc">|&gt;</span></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">mutate</span>(<span class="at">OffID =</span> <span class="dv">0</span>),</span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>                      offs <span class="sc">|&gt;</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">select</span>(ID, <span class="fu">all_of</span>(locus_cols)) <span class="sc">|&gt;</span></span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">mutate</span>(<span class="at">OffID =</span> <span class="fu">row_number</span>()))</span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>combined <span class="sc">|&gt;</span></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">parent_finder</span>() <span class="sc">|&gt;</span></span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare a combined data.frame: adults (OffID = 0) then offspring</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>locus_cols <span class="ot">&lt;-</span> adults <span class="sc">|&gt;</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_class</span>(<span class="st">"locus"</span>)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>combined <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(adults <span class="sc">|&gt;</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">select</span>(ID, <span class="fu">all_of</span>(locus_cols)) <span class="sc">|&gt;</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">mutate</span>(<span class="at">OffID =</span> <span class="dv">0</span>),</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>                      offs <span class="sc">|&gt;</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">select</span>(ID, <span class="fu">all_of</span>(locus_cols)) <span class="sc">|&gt;</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">mutate</span>(<span class="at">OffID =</span> <span class="fu">row_number</span>()))</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>combined <span class="sc">|&gt;</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">parent_finder</span>() <span class="sc">|&gt;</span></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  ID OffID ParentID        T
 5  1     1       12 0.062500
@@ -662,13 +694,14 @@ Pop3 0.0500000 0.0500000 0.9000000</code></pre>
 6  1     1       13 0.015625</code></pre>
 </div>
 </div>
+<p>Its <code>T</code> column is the one-parent compatibility score from <code>transition_probability()</code> (without <code>freqs</code>): it ranks the compatible parents of each offspring, but it is not a likelihood.</p>
 </section>
-<section id="identifying-bad-parents" class="level3" data-number="11.6.5">
-<h3 data-number="11.6.5" class="anchored" data-anchor-id="identifying-bad-parents"><span class="header-section-number">11.6.5</span> Identifying Bad Parents</h3>
+<section id="identifying-bad-parents" class="level3" data-number="11.6.6">
+<h3 data-number="11.6.6" class="anchored" data-anchor-id="identifying-bad-parents"><span class="header-section-number">11.6.6</span> Identifying Bad Parents</h3>
 <p>The <code>bad_parents()</code> function flags parent-offspring pairs that are genetically incompatible:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>offs <span class="sc">|&gt;</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bad_parents</span>(adults)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>offs <span class="sc">|&gt;</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bad_parents</span>(adults)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -676,10 +709,10 @@ Pop3 0.0500000 0.0500000 0.9000000</code></pre>
 <h2 data-number="11.7" class="anchored" data-anchor-id="bundled-parentage-datasets"><span class="header-section-number">11.7</span> Bundled Parentage Datasets</h2>
 <p>The <code>cornus</code> and <code>cornus_florida</code> datasets contain <em>Cornus florida</em> genotype data for parentage analysis:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(cornus)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>cornus <span class="sc">|&gt;</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(cornus)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>cornus <span class="sc">|&gt;</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Population SampleID X.Coordinate Y.Coordinate   Cf.G8  Cf.H18   Cf.N5  Cf.N10
 1          2      203         3040         6146 157:165 117:119 170:170 189:191
@@ -698,10 +731,10 @@ Pop3 0.0500000 0.0500000 0.9000000</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(cornus_florida)</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>cornus_florida <span class="sc">|&gt;</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(cornus_florida)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>cornus_florida <span class="sc">|&gt;</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   ID OffID    X    Y      G8     H18      N5     N10      O5
 1 226     0 1392 3534 162:180 114:114 124:126 192:192 185:195
@@ -716,15 +749,15 @@ Pop3 0.0500000 0.0500000 0.9000000</code></pre>
 <section id="without-pipes" class="level2" data-number="11.8">
 <h2 data-number="11.8" class="anchored" data-anchor-id="without-pipes"><span class="header-section-number">11.8</span> Without Pipes</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>pop    <span class="ot">&lt;-</span> <span class="fu">make_populations</span>(freqs, <span class="at">N =</span> <span class="dv">50</span>)</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>m      <span class="ot">&lt;-</span> <span class="fu">migration_matrix</span>(<span class="fu">unique</span>(pop<span class="sc">$</span>Population), <span class="at">model =</span> <span class="st">"island"</span>, <span class="at">m =</span> <span class="fl">0.02</span>)</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>evt    <span class="ot">&lt;-</span> <span class="fu">migration_event</span>(m, <span class="at">start =</span> <span class="dv">1</span>)</span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>final  <span class="ot">&lt;-</span> <span class="fu">simulate_pop</span>(pop, <span class="at">ngen =</span> <span class="dv">50</span>, <span class="at">migration =</span> evt, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>(final, <span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>)</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>adults <span class="ot">&lt;-</span> <span class="fu">make_population</span>(f, <span class="at">N =</span> <span class="dv">20</span>)</span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>offs   <span class="ot">&lt;-</span> <span class="fu">mate</span>(adults[<span class="dv">1</span>, ], adults[<span class="dv">2</span>, ], <span class="at">N =</span> <span class="dv">5</span>)</span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>pat    <span class="ot">&lt;-</span> <span class="fu">paternity</span>(offs, adults[<span class="dv">1</span>, ], adults)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>pop    <span class="ot">&lt;-</span> <span class="fu">make_populations</span>(freqs, <span class="at">N =</span> <span class="dv">50</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>m      <span class="ot">&lt;-</span> <span class="fu">migration_matrix</span>(<span class="fu">unique</span>(pop<span class="sc">$</span>Population), <span class="at">model =</span> <span class="st">"island"</span>, <span class="at">m =</span> <span class="fl">0.02</span>)</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>evt    <span class="ot">&lt;-</span> <span class="fu">migration_event</span>(m, <span class="at">start =</span> <span class="dv">1</span>)</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>final  <span class="ot">&lt;-</span> <span class="fu">simulate_pop</span>(pop, <span class="at">ngen =</span> <span class="dv">50</span>, <span class="at">migration =</span> evt, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>(final, <span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>)</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>adults <span class="ot">&lt;-</span> <span class="fu">make_population</span>(f, <span class="at">N =</span> <span class="dv">20</span>)</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>offs   <span class="ot">&lt;-</span> <span class="fu">mate</span>(adults[<span class="dv">1</span>, ], adults[<span class="dv">2</span>, ], <span class="at">N =</span> <span class="dv">5</span>)</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>pat    <span class="ot">&lt;-</span> <span class="fu">paternity</span>(offs, adults[<span class="dv">1</span>, ], adults)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
@@ -862,7 +895,8 @@ Pop3 0.0500000 0.0500000 0.9000000</code></pre>
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -871,8 +905,69 @@ Pop3 0.0500000 0.0500000 0.9000000</code></pre>
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+          if (!link.classList.contains('no-external-icon')) {
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -886,6 +981,7 @@ Pop3 0.0500000 0.0500000 0.9000000</code></pre>
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -1048,44 +1144,54 @@ Pop3 0.0500000 0.0500000 0.9000000</code></pre>
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1184,7 +1290,10 @@ Pop3 0.0500000 0.0500000 0.9000000</code></pre>
     }
   });
   </script>
-<nav class="page-navigation">
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script>
+<nav class="page-navigation" aria-label="Page">
   <div class="nav-page nav-page-previous">
       <a href="./visualization.html" class="pagination-link" aria-label="Visualization">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Visualization</span></span>
@@ -1193,340 +1302,366 @@ Pop3 0.0500000 0.0500000 0.9000000</code></pre>
   <div class="nav-page nav-page-next">
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Simulation &amp; Parentage</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>This chapter covers the forward-time population simulation framework and parentage analysis tools in <span class="in">`gstudio`</span>.</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Building Populations from Frequencies</span></span>
-<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Allele Frequency Specification</span></span>
-<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>The simulation tools start with specifying allele frequencies per population and locus. The <span class="in">`make_populations()`</span> function requires a data.frame with <span class="in">`Population`</span>, <span class="in">`Locus`</span>, <span class="in">`Allele`</span>, and <span class="in">`Frequency`</span> columns:</span>
-<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">Allele =</span> <span class="fu">c</span>(<span class="st">"01"</span>, <span class="st">"02"</span>),</span>
-<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a>                     <span class="at">Locus =</span> <span class="fu">c</span>(<span class="st">"Loc1"</span>, <span class="st">"Loc2"</span>, <span class="st">"Loc3"</span>),</span>
-<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a>                     <span class="at">Population =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>),</span>
-<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a>                     <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Frequency =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.8</span>, <span class="fl">0.3</span>, <span class="fl">0.7</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>,    <span class="co"># A</span></span>
-<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a>                       <span class="fl">0.7</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span>,    <span class="co"># B</span></span>
-<span id="cb44-28"><a href="#cb44-28" aria-hidden="true" tabindex="-1"></a>                       <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.3</span>, <span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.8</span>),   <span class="co"># C</span></span>
-<span id="cb44-29"><a href="#cb44-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">Population =</span> <span class="fu">factor</span>(Population, <span class="at">ordered =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb44-30"><a href="#cb44-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Population, Locus, Allele, Frequency)</span>
-<span id="cb44-31"><a href="#cb44-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-32"><a href="#cb44-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-33"><a href="#cb44-33" aria-hidden="true" tabindex="-1"></a><span class="fu">### Creating Populations</span></span>
-<span id="cb44-34"><a href="#cb44-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-37"><a href="#cb44-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-38"><a href="#cb44-38" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> freqs <span class="sc">|&gt;</span></span>
-<span id="cb44-39"><a href="#cb44-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_populations</span>(<span class="at">N =</span> <span class="dv">30</span>)</span>
-<span id="cb44-40"><a href="#cb44-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-41"><a href="#cb44-41" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
-<span id="cb44-42"><a href="#cb44-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb44-43"><a href="#cb44-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-44"><a href="#cb44-44" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
-<span id="cb44-45"><a href="#cb44-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Population)</span>
-<span id="cb44-46"><a href="#cb44-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-47"><a href="#cb44-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-48"><a href="#cb44-48" aria-hidden="true" tabindex="-1"></a>You can specify an inbreeding level with <span class="in">`F`</span>:</span>
-<span id="cb44-49"><a href="#cb44-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-52"><a href="#cb44-52" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-53"><a href="#cb44-53" aria-hidden="true" tabindex="-1"></a>pop_inbred <span class="ot">&lt;-</span> freqs <span class="sc">|&gt;</span></span>
-<span id="cb44-54"><a href="#cb44-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_populations</span>(<span class="at">N =</span> <span class="dv">30</span>, <span class="at">F =</span> <span class="fl">0.3</span>)</span>
-<span id="cb44-55"><a href="#cb44-55" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-56"><a href="#cb44-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-57"><a href="#cb44-57" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Models</span></span>
-<span id="cb44-58"><a href="#cb44-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-59"><a href="#cb44-59" aria-hidden="true" tabindex="-1"></a>The <span class="in">`migration_matrix()`</span> function creates a K x K migration matrix where rows sum to 1. Element <span class="in">`[i,j]`</span> is the proportion of population *i* that originates from population *j*.</span>
-<span id="cb44-60"><a href="#cb44-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-61"><a href="#cb44-61" aria-hidden="true" tabindex="-1"></a><span class="fu">### Island Model</span></span>
-<span id="cb44-62"><a href="#cb44-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-63"><a href="#cb44-63" aria-hidden="true" tabindex="-1"></a>Equal migration among all populations:</span>
-<span id="cb44-64"><a href="#cb44-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-67"><a href="#cb44-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-68"><a href="#cb44-68" aria-hidden="true" tabindex="-1"></a><span class="fu">migration_matrix</span>(<span class="dv">3</span>, <span class="at">model =</span> <span class="st">"island"</span>, <span class="at">m =</span> <span class="fl">0.05</span>)</span>
-<span id="cb44-69"><a href="#cb44-69" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-70"><a href="#cb44-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-71"><a href="#cb44-71" aria-hidden="true" tabindex="-1"></a>A count names the populations <span class="in">`Pop1`</span>, <span class="in">`Pop2`</span>, ….  For simulations, pass the population names instead (as below), so the matrix matches the <span class="in">`Population`</span> column that <span class="in">`simulate_pop()`</span> migrates between.</span>
-<span id="cb44-72"><a href="#cb44-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-73"><a href="#cb44-73" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1D Stepping Stone</span></span>
-<span id="cb44-74"><a href="#cb44-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-75"><a href="#cb44-75" aria-hidden="true" tabindex="-1"></a>Migration only between adjacent populations:</span>
-<span id="cb44-76"><a href="#cb44-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-79"><a href="#cb44-79" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-80"><a href="#cb44-80" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb44-81"><a href="#cb44-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"stepping_stone_1d"</span>, <span class="at">m =</span> <span class="fl">0.1</span>)</span>
-<span id="cb44-82"><a href="#cb44-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-83"><a href="#cb44-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-84"><a href="#cb44-84" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2D Stepping Stone</span></span>
-<span id="cb44-85"><a href="#cb44-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-86"><a href="#cb44-86" aria-hidden="true" tabindex="-1"></a>Grid-based adjacency:</span>
-<span id="cb44-87"><a href="#cb44-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-90"><a href="#cb44-90" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-91"><a href="#cb44-91" aria-hidden="true" tabindex="-1"></a><span class="fu">migration_matrix</span>(<span class="dv">4</span>, <span class="at">model =</span> <span class="st">"stepping_stone_2d"</span>,</span>
-<span id="cb44-92"><a href="#cb44-92" aria-hidden="true" tabindex="-1"></a>                 <span class="at">m =</span> <span class="fl">0.1</span>, <span class="at">nr =</span> <span class="dv">2</span>, <span class="at">nc =</span> <span class="dv">2</span>)</span>
-<span id="cb44-93"><a href="#cb44-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-94"><a href="#cb44-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-95"><a href="#cb44-95" aria-hidden="true" tabindex="-1"></a><span class="fu">### Distance-Based</span></span>
-<span id="cb44-96"><a href="#cb44-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-97"><a href="#cb44-97" aria-hidden="true" tabindex="-1"></a>Migration rate decays with distance:</span>
-<span id="cb44-98"><a href="#cb44-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-101"><a href="#cb44-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-102"><a href="#cb44-102" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>), <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb44-103"><a href="#cb44-103" aria-hidden="true" tabindex="-1"></a><span class="fu">migration_matrix</span>(<span class="dv">3</span>, <span class="at">model =</span> <span class="st">"distance"</span>, <span class="at">m =</span> <span class="fl">0.1</span>, <span class="at">coords =</span> coords)</span>
-<span id="cb44-104"><a href="#cb44-104" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-105"><a href="#cb44-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-106"><a href="#cb44-106" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Events</span></span>
-<span id="cb44-107"><a href="#cb44-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-108"><a href="#cb44-108" aria-hidden="true" tabindex="-1"></a>A <span class="in">`migration_event`</span> pairs a migration matrix with a generation interval, allowing temporal regime changes:</span>
-<span id="cb44-109"><a href="#cb44-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-112"><a href="#cb44-112" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-113"><a href="#cb44-113" aria-hidden="true" tabindex="-1"></a><span class="co"># Low migration for generations 1-50</span></span>
-<span id="cb44-114"><a href="#cb44-114" aria-hidden="true" tabindex="-1"></a>evt1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb44-115"><a href="#cb44-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"island"</span>, <span class="at">m =</span> <span class="fl">0.05</span>) <span class="sc">|&gt;</span></span>
-<span id="cb44-116"><a href="#cb44-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_event</span>(<span class="at">start =</span> <span class="dv">1</span>, <span class="at">end =</span> <span class="dv">50</span>)</span>
-<span id="cb44-117"><a href="#cb44-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-118"><a href="#cb44-118" aria-hidden="true" tabindex="-1"></a><span class="co"># High migration from generation 51 onward</span></span>
-<span id="cb44-119"><a href="#cb44-119" aria-hidden="true" tabindex="-1"></a>evt2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb44-120"><a href="#cb44-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"island"</span>, <span class="at">m =</span> <span class="fl">0.20</span>) <span class="sc">|&gt;</span></span>
-<span id="cb44-121"><a href="#cb44-121" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_event</span>(<span class="at">start =</span> <span class="dv">51</span>)</span>
-<span id="cb44-122"><a href="#cb44-122" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-123"><a href="#cb44-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-124"><a href="#cb44-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mutation Models</span></span>
-<span id="cb44-125"><a href="#cb44-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-126"><a href="#cb44-126" aria-hidden="true" tabindex="-1"></a>The <span class="in">`mutation_model()`</span> function defines how alleles mutate during simulation:</span>
-<span id="cb44-127"><a href="#cb44-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-130"><a href="#cb44-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-131"><a href="#cb44-131" aria-hidden="true" tabindex="-1"></a><span class="co"># Infinite Alleles Model</span></span>
-<span id="cb44-132"><a href="#cb44-132" aria-hidden="true" tabindex="-1"></a>mm_iam <span class="ot">&lt;-</span> <span class="fu">mutation_model</span>(<span class="at">rate =</span> <span class="fl">0.001</span>, <span class="at">model =</span> <span class="st">"iam"</span>)</span>
-<span id="cb44-133"><a href="#cb44-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-134"><a href="#cb44-134" aria-hidden="true" tabindex="-1"></a><span class="co"># K-Allele Model (10 possible states)</span></span>
-<span id="cb44-135"><a href="#cb44-135" aria-hidden="true" tabindex="-1"></a>mm_kam <span class="ot">&lt;-</span> <span class="fu">mutation_model</span>(<span class="at">rate =</span> <span class="fl">0.001</span>, <span class="at">model =</span> <span class="st">"kam"</span>, <span class="at">k =</span> <span class="dv">10</span>)</span>
-<span id="cb44-136"><a href="#cb44-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-137"><a href="#cb44-137" aria-hidden="true" tabindex="-1"></a><span class="co"># Stepwise Mutation Model</span></span>
-<span id="cb44-138"><a href="#cb44-138" aria-hidden="true" tabindex="-1"></a>mm_smm <span class="ot">&lt;-</span> <span class="fu">mutation_model</span>(<span class="at">rate =</span> <span class="fl">0.001</span>, <span class="at">model =</span> <span class="st">"smm"</span>)</span>
-<span id="cb44-139"><a href="#cb44-139" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-140"><a href="#cb44-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-141"><a href="#cb44-141" aria-hidden="true" tabindex="-1"></a><span class="fu">## Forward-Time Simulation</span></span>
-<span id="cb44-142"><a href="#cb44-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-143"><a href="#cb44-143" aria-hidden="true" tabindex="-1"></a>The <span class="in">`simulate_pop()`</span> function runs a multi-generation forward-time simulation. Each generation cycle: census, migrate, mate, mutate.</span>
-<span id="cb44-144"><a href="#cb44-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-145"><a href="#cb44-145" aria-hidden="true" tabindex="-1"></a><span class="fu">### Basic Simulation</span></span>
-<span id="cb44-146"><a href="#cb44-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-149"><a href="#cb44-149" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-150"><a href="#cb44-150" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
-<span id="cb44-151"><a href="#cb44-151" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">20</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb44-152"><a href="#cb44-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-153"><a href="#cb44-153" aria-hidden="true" tabindex="-1"></a>result <span class="sc">|&gt;</span></span>
-<span id="cb44-154"><a href="#cb44-154" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb44-155"><a href="#cb44-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-156"><a href="#cb44-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-157"><a href="#cb44-157" aria-hidden="true" tabindex="-1"></a><span class="fu">### With Migration</span></span>
-<span id="cb44-158"><a href="#cb44-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-161"><a href="#cb44-161" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-162"><a href="#cb44-162" aria-hidden="true" tabindex="-1"></a>evt <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
-<span id="cb44-163"><a href="#cb44-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Population) <span class="sc">|&gt;</span></span>
-<span id="cb44-164"><a href="#cb44-164" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span></span>
-<span id="cb44-165"><a href="#cb44-165" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"island"</span>, <span class="at">m =</span> <span class="fl">0.05</span>) <span class="sc">|&gt;</span></span>
-<span id="cb44-166"><a href="#cb44-166" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_event</span>(<span class="at">start =</span> <span class="dv">1</span>)</span>
-<span id="cb44-167"><a href="#cb44-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-168"><a href="#cb44-168" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
-<span id="cb44-169"><a href="#cb44-169" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">20</span>, <span class="at">migration =</span> evt, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb44-170"><a href="#cb44-170" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-171"><a href="#cb44-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-172"><a href="#cb44-172" aria-hidden="true" tabindex="-1"></a><span class="fu">### With Mutation</span></span>
-<span id="cb44-173"><a href="#cb44-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-176"><a href="#cb44-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-177"><a href="#cb44-177" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> <span class="fu">mutation_model</span>(<span class="at">rate =</span> <span class="fl">0.01</span>, <span class="at">model =</span> <span class="st">"iam"</span>)</span>
-<span id="cb44-178"><a href="#cb44-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-179"><a href="#cb44-179" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
-<span id="cb44-180"><a href="#cb44-180" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">20</span>, <span class="at">mutation =</span> mm, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb44-181"><a href="#cb44-181" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-182"><a href="#cb44-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-183"><a href="#cb44-183" aria-hidden="true" tabindex="-1"></a><span class="fu">### With Mixed Mating (Selfing)</span></span>
-<span id="cb44-184"><a href="#cb44-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-187"><a href="#cb44-187" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-188"><a href="#cb44-188" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
-<span id="cb44-189"><a href="#cb44-189" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">20</span>, <span class="at">selfing_rate =</span> <span class="fl">0.3</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb44-190"><a href="#cb44-190" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-191"><a href="#cb44-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-192"><a href="#cb44-192" aria-hidden="true" tabindex="-1"></a><span class="fu">### Census Snapshots</span></span>
-<span id="cb44-193"><a href="#cb44-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-194"><a href="#cb44-194" aria-hidden="true" tabindex="-1"></a>Save population snapshots at regular intervals:</span>
-<span id="cb44-195"><a href="#cb44-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-198"><a href="#cb44-198" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-199"><a href="#cb44-199" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb44-200"><a href="#cb44-200" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
-<span id="cb44-201"><a href="#cb44-201" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">100</span>, <span class="at">census_interval =</span> <span class="dv">25</span>, <span class="at">census_dir =</span> <span class="fu">tempdir</span>(), <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb44-202"><a href="#cb44-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-203"><a href="#cb44-203" aria-hidden="true" tabindex="-1"></a><span class="co"># Snapshots saved as gen_0025.rds, gen_0050.rds, etc.</span></span>
-<span id="cb44-204"><a href="#cb44-204" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-205"><a href="#cb44-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-206"><a href="#cb44-206" aria-hidden="true" tabindex="-1"></a><span class="fu">### Complete Worked Example</span></span>
-<span id="cb44-207"><a href="#cb44-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-208"><a href="#cb44-208" aria-hidden="true" tabindex="-1"></a>Simulate drift and migration in a 3-population system, then analyze the outcome:</span>
-<span id="cb44-209"><a href="#cb44-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-212"><a href="#cb44-212" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-213"><a href="#cb44-213" aria-hidden="true" tabindex="-1"></a><span class="co"># Create starting populations</span></span>
-<span id="cb44-214"><a href="#cb44-214" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> freqs <span class="sc">|&gt;</span></span>
-<span id="cb44-215"><a href="#cb44-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_populations</span>(<span class="at">N =</span> <span class="dv">50</span>)</span>
-<span id="cb44-216"><a href="#cb44-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-217"><a href="#cb44-217" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up island model migration among the simulated populations</span></span>
-<span id="cb44-218"><a href="#cb44-218" aria-hidden="true" tabindex="-1"></a>evt <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
-<span id="cb44-219"><a href="#cb44-219" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Population) <span class="sc">|&gt;</span></span>
-<span id="cb44-220"><a href="#cb44-220" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span></span>
-<span id="cb44-221"><a href="#cb44-221" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"island"</span>, <span class="at">m =</span> <span class="fl">0.02</span>) <span class="sc">|&gt;</span></span>
-<span id="cb44-222"><a href="#cb44-222" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_event</span>(<span class="at">start =</span> <span class="dv">1</span>)</span>
-<span id="cb44-223"><a href="#cb44-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-224"><a href="#cb44-224" aria-hidden="true" tabindex="-1"></a><span class="co"># Run simulation</span></span>
-<span id="cb44-225"><a href="#cb44-225" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb44-226"><a href="#cb44-226" aria-hidden="true" tabindex="-1"></a>final <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
-<span id="cb44-227"><a href="#cb44-227" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">50</span>, <span class="at">migration =</span> evt, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb44-228"><a href="#cb44-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-229"><a href="#cb44-229" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyze structure in the final generation</span></span>
-<span id="cb44-230"><a href="#cb44-230" aria-hidden="true" tabindex="-1"></a>final <span class="sc">|&gt;</span></span>
-<span id="cb44-231"><a href="#cb44-231" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>)</span>
-<span id="cb44-232"><a href="#cb44-232" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-233"><a href="#cb44-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-236"><a href="#cb44-236" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-237"><a href="#cb44-237" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare diversity before and after</span></span>
-<span id="cb44-238"><a href="#cb44-238" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">Start =</span> pop, <span class="at">Final =</span> final) <span class="sc">|&gt;</span></span>
-<span id="cb44-239"><a href="#cb44-239" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(genetic_diversity, <span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">mode =</span> <span class="st">"He"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb44-240"><a href="#cb44-240" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="at">.id =</span> <span class="st">"Generation"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb44-241"><a href="#cb44-241" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Generation, Stratum) <span class="sc">|&gt;</span></span>
-<span id="cb44-242"><a href="#cb44-242" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_He =</span> <span class="fu">mean</span>(He), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb44-243"><a href="#cb44-243" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-244"><a href="#cb44-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-245"><a href="#cb44-245" aria-hidden="true" tabindex="-1"></a><span class="fu">## Parentage Analysis</span></span>
-<span id="cb44-246"><a href="#cb44-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-247"><a href="#cb44-247" aria-hidden="true" tabindex="-1"></a><span class="fu">### Mating and Offspring</span></span>
-<span id="cb44-248"><a href="#cb44-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-249"><a href="#cb44-249" aria-hidden="true" tabindex="-1"></a>The <span class="in">`mate()`</span> function creates offspring from two parents:</span>
-<span id="cb44-250"><a href="#cb44-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-253"><a href="#cb44-253" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-254"><a href="#cb44-254" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb44-255"><a href="#cb44-255" aria-hidden="true" tabindex="-1"></a>  <span class="at">Locus =</span> <span class="fu">rep</span>(<span class="fu">paste0</span>(<span class="st">"Loc"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>), <span class="at">each =</span> <span class="dv">3</span>),</span>
-<span id="cb44-256"><a href="#cb44-256" aria-hidden="true" tabindex="-1"></a>  <span class="at">Allele =</span> <span class="fu">rep</span>(LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="at">times =</span> <span class="dv">4</span>),</span>
-<span id="cb44-257"><a href="#cb44-257" aria-hidden="true" tabindex="-1"></a>  <span class="at">Frequency =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>), <span class="at">times =</span> <span class="dv">4</span>)</span>
-<span id="cb44-258"><a href="#cb44-258" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb44-259"><a href="#cb44-259" aria-hidden="true" tabindex="-1"></a>adults <span class="ot">&lt;-</span> f <span class="sc">|&gt;</span></span>
-<span id="cb44-260"><a href="#cb44-260" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_population</span>(<span class="at">N =</span> <span class="dv">20</span>)</span>
-<span id="cb44-261"><a href="#cb44-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-262"><a href="#cb44-262" aria-hidden="true" tabindex="-1"></a>offs <span class="ot">&lt;-</span> adults <span class="sc">|&gt;</span></span>
-<span id="cb44-263"><a href="#cb44-263" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb44-264"><a href="#cb44-264" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mate</span>(<span class="fu">slice</span>(adults, <span class="dv">2</span>), <span class="at">N =</span> <span class="dv">5</span>)</span>
-<span id="cb44-265"><a href="#cb44-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-266"><a href="#cb44-266" aria-hidden="true" tabindex="-1"></a>offs</span>
-<span id="cb44-267"><a href="#cb44-267" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-268"><a href="#cb44-268" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-269"><a href="#cb44-269" aria-hidden="true" tabindex="-1"></a><span class="fu">### Maternal Subtraction</span></span>
-<span id="cb44-270"><a href="#cb44-270" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-271"><a href="#cb44-271" aria-hidden="true" tabindex="-1"></a>The <span class="in">`minus_mom()`</span> function removes the maternal contribution from offspring genotypes. It takes a single data.frame where mothers have <span class="in">`OffID = 0`</span> and offspring have <span class="in">`OffID != 0`</span>:</span>
-<span id="cb44-272"><a href="#cb44-272" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-275"><a href="#cb44-275" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-276"><a href="#cb44-276" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine mother (OffID = 0) and offspring into one data.frame</span></span>
-<span id="cb44-277"><a href="#cb44-277" aria-hidden="true" tabindex="-1"></a>family <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(adults <span class="sc">|&gt;</span></span>
-<span id="cb44-278"><a href="#cb44-278" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb44-279"><a href="#cb44-279" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">mutate</span>(<span class="at">OffID =</span> <span class="dv">0</span>),</span>
-<span id="cb44-280"><a href="#cb44-280" aria-hidden="true" tabindex="-1"></a>                    offs <span class="sc">|&gt;</span></span>
-<span id="cb44-281"><a href="#cb44-281" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">mutate</span>(<span class="at">OffID =</span> <span class="fu">row_number</span>()))</span>
-<span id="cb44-282"><a href="#cb44-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-283"><a href="#cb44-283" aria-hidden="true" tabindex="-1"></a>family <span class="sc">|&gt;</span></span>
-<span id="cb44-284"><a href="#cb44-284" aria-hidden="true" tabindex="-1"></a>  <span class="fu">minus_mom</span>()</span>
-<span id="cb44-285"><a href="#cb44-285" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-286"><a href="#cb44-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-287"><a href="#cb44-287" aria-hidden="true" tabindex="-1"></a><span class="fu">### Fractional Paternity</span></span>
-<span id="cb44-288"><a href="#cb44-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-289"><a href="#cb44-289" aria-hidden="true" tabindex="-1"></a>The <span class="in">`paternity()`</span> function estimates the probability of each potential father siring each offspring:</span>
-<span id="cb44-290"><a href="#cb44-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-293"><a href="#cb44-293" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-294"><a href="#cb44-294" aria-hidden="true" tabindex="-1"></a>offs <span class="ot">&lt;-</span> offs <span class="sc">|&gt;</span></span>
-<span id="cb44-295"><a href="#cb44-295" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">OffID =</span> <span class="fu">row_number</span>(),</span>
-<span id="cb44-296"><a href="#cb44-296" aria-hidden="true" tabindex="-1"></a>         <span class="at">MomID =</span> adults<span class="sc">$</span>ID[<span class="dv">1</span>])</span>
-<span id="cb44-297"><a href="#cb44-297" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-298"><a href="#cb44-298" aria-hidden="true" tabindex="-1"></a>pat <span class="ot">&lt;-</span> offs <span class="sc">|&gt;</span></span>
-<span id="cb44-299"><a href="#cb44-299" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paternity</span>(<span class="fu">slice</span>(adults, <span class="dv">1</span>), adults)</span>
-<span id="cb44-300"><a href="#cb44-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-301"><a href="#cb44-301" aria-hidden="true" tabindex="-1"></a>pat <span class="sc">|&gt;</span></span>
-<span id="cb44-302"><a href="#cb44-302" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb44-303"><a href="#cb44-303" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-304"><a href="#cb44-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-305"><a href="#cb44-305" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Fij`</span> column gives the fractional paternity probability. Use <span class="in">`strict = TRUE`</span> to retain only unambiguous assignments:</span>
-<span id="cb44-306"><a href="#cb44-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-309"><a href="#cb44-309" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-310"><a href="#cb44-310" aria-hidden="true" tabindex="-1"></a>offs <span class="sc">|&gt;</span></span>
-<span id="cb44-311"><a href="#cb44-311" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paternity</span>(<span class="fu">slice</span>(adults, <span class="dv">1</span>), adults, <span class="at">strict =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb44-312"><a href="#cb44-312" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-313"><a href="#cb44-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-314"><a href="#cb44-314" aria-hidden="true" tabindex="-1"></a><span class="fu">### Single-Parent Exclusion</span></span>
-<span id="cb44-315"><a href="#cb44-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-316"><a href="#cb44-316" aria-hidden="true" tabindex="-1"></a>The <span class="in">`parent_finder()`</span> function identifies compatible parents for each offspring using exclusion. It requires a data.frame with <span class="in">`ID`</span> and <span class="in">`OffID`</span> columns, where adults have <span class="in">`OffID = 0`</span>:</span>
-<span id="cb44-317"><a href="#cb44-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-320"><a href="#cb44-320" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-321"><a href="#cb44-321" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare a combined data.frame: adults (OffID = 0) then offspring</span></span>
-<span id="cb44-322"><a href="#cb44-322" aria-hidden="true" tabindex="-1"></a>locus_cols <span class="ot">&lt;-</span> adults <span class="sc">|&gt;</span></span>
-<span id="cb44-323"><a href="#cb44-323" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_class</span>(<span class="st">"locus"</span>)</span>
-<span id="cb44-324"><a href="#cb44-324" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-325"><a href="#cb44-325" aria-hidden="true" tabindex="-1"></a>combined <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(adults <span class="sc">|&gt;</span></span>
-<span id="cb44-326"><a href="#cb44-326" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">select</span>(ID, <span class="fu">all_of</span>(locus_cols)) <span class="sc">|&gt;</span></span>
-<span id="cb44-327"><a href="#cb44-327" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">mutate</span>(<span class="at">OffID =</span> <span class="dv">0</span>),</span>
-<span id="cb44-328"><a href="#cb44-328" aria-hidden="true" tabindex="-1"></a>                      offs <span class="sc">|&gt;</span></span>
-<span id="cb44-329"><a href="#cb44-329" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">select</span>(ID, <span class="fu">all_of</span>(locus_cols)) <span class="sc">|&gt;</span></span>
-<span id="cb44-330"><a href="#cb44-330" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">mutate</span>(<span class="at">OffID =</span> <span class="fu">row_number</span>()))</span>
-<span id="cb44-331"><a href="#cb44-331" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-332"><a href="#cb44-332" aria-hidden="true" tabindex="-1"></a>combined <span class="sc">|&gt;</span></span>
-<span id="cb44-333"><a href="#cb44-333" aria-hidden="true" tabindex="-1"></a>  <span class="fu">parent_finder</span>() <span class="sc">|&gt;</span></span>
-<span id="cb44-334"><a href="#cb44-334" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb44-335"><a href="#cb44-335" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-336"><a href="#cb44-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-337"><a href="#cb44-337" aria-hidden="true" tabindex="-1"></a><span class="fu">### Identifying Bad Parents</span></span>
-<span id="cb44-338"><a href="#cb44-338" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-339"><a href="#cb44-339" aria-hidden="true" tabindex="-1"></a>The <span class="in">`bad_parents()`</span> function flags parent-offspring pairs that are genetically incompatible:</span>
-<span id="cb44-340"><a href="#cb44-340" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-343"><a href="#cb44-343" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-344"><a href="#cb44-344" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb44-345"><a href="#cb44-345" aria-hidden="true" tabindex="-1"></a>offs <span class="sc">|&gt;</span></span>
-<span id="cb44-346"><a href="#cb44-346" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bad_parents</span>(adults)</span>
-<span id="cb44-347"><a href="#cb44-347" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-348"><a href="#cb44-348" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-349"><a href="#cb44-349" aria-hidden="true" tabindex="-1"></a><span class="fu">## Bundled Parentage Datasets</span></span>
-<span id="cb44-350"><a href="#cb44-350" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-351"><a href="#cb44-351" aria-hidden="true" tabindex="-1"></a>The <span class="in">`cornus`</span> and <span class="in">`cornus_florida`</span> datasets contain *Cornus florida* genotype data for parentage analysis:</span>
-<span id="cb44-352"><a href="#cb44-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-355"><a href="#cb44-355" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-356"><a href="#cb44-356" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(cornus)</span>
-<span id="cb44-357"><a href="#cb44-357" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-358"><a href="#cb44-358" aria-hidden="true" tabindex="-1"></a>cornus <span class="sc">|&gt;</span></span>
-<span id="cb44-359"><a href="#cb44-359" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb44-360"><a href="#cb44-360" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-361"><a href="#cb44-361" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-364"><a href="#cb44-364" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-365"><a href="#cb44-365" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(cornus_florida)</span>
-<span id="cb44-366"><a href="#cb44-366" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-367"><a href="#cb44-367" aria-hidden="true" tabindex="-1"></a>cornus_florida <span class="sc">|&gt;</span></span>
-<span id="cb44-368"><a href="#cb44-368" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb44-369"><a href="#cb44-369" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb44-370"><a href="#cb44-370" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-371"><a href="#cb44-371" aria-hidden="true" tabindex="-1"></a><span class="fu">## Without Pipes</span></span>
-<span id="cb44-372"><a href="#cb44-372" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-375"><a href="#cb44-375" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb44-376"><a href="#cb44-376" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb44-377"><a href="#cb44-377" aria-hidden="true" tabindex="-1"></a>pop    <span class="ot">&lt;-</span> <span class="fu">make_populations</span>(freqs, <span class="at">N =</span> <span class="dv">50</span>)</span>
-<span id="cb44-378"><a href="#cb44-378" aria-hidden="true" tabindex="-1"></a>m      <span class="ot">&lt;-</span> <span class="fu">migration_matrix</span>(<span class="fu">unique</span>(pop<span class="sc">$</span>Population), <span class="at">model =</span> <span class="st">"island"</span>, <span class="at">m =</span> <span class="fl">0.02</span>)</span>
-<span id="cb44-379"><a href="#cb44-379" aria-hidden="true" tabindex="-1"></a>evt    <span class="ot">&lt;-</span> <span class="fu">migration_event</span>(m, <span class="at">start =</span> <span class="dv">1</span>)</span>
-<span id="cb44-380"><a href="#cb44-380" aria-hidden="true" tabindex="-1"></a>final  <span class="ot">&lt;-</span> <span class="fu">simulate_pop</span>(pop, <span class="at">ngen =</span> <span class="dv">50</span>, <span class="at">migration =</span> evt, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb44-381"><a href="#cb44-381" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>(final, <span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>)</span>
-<span id="cb44-382"><a href="#cb44-382" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-383"><a href="#cb44-383" aria-hidden="true" tabindex="-1"></a>adults <span class="ot">&lt;-</span> <span class="fu">make_population</span>(f, <span class="at">N =</span> <span class="dv">20</span>)</span>
-<span id="cb44-384"><a href="#cb44-384" aria-hidden="true" tabindex="-1"></a>offs   <span class="ot">&lt;-</span> <span class="fu">mate</span>(adults[<span class="dv">1</span>, ], adults[<span class="dv">2</span>, ], <span class="at">N =</span> <span class="dv">5</span>)</span>
-<span id="cb44-385"><a href="#cb44-385" aria-hidden="true" tabindex="-1"></a>pat    <span class="ot">&lt;-</span> <span class="fu">paternity</span>(offs, adults[<span class="dv">1</span>, ], adults)</span>
-<span id="cb44-386"><a href="#cb44-386" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb50" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Simulation &amp; Parentage</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>This chapter covers the forward-time population simulation framework and parentage analysis tools in <span class="in">`gstudio`</span>.</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Building Populations from Frequencies</span></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Allele Frequency Specification</span></span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>The simulation tools start with specifying allele frequencies per population and locus. The <span class="in">`make_populations()`</span> function requires a data.frame with <span class="in">`Population`</span>, <span class="in">`Locus`</span>, <span class="in">`Allele`</span>, and <span class="in">`Frequency`</span> columns:</span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">Allele =</span> <span class="fu">c</span>(<span class="st">"01"</span>, <span class="st">"02"</span>),</span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a>                     <span class="at">Locus =</span> <span class="fu">c</span>(<span class="st">"Loc1"</span>, <span class="st">"Loc2"</span>, <span class="st">"Loc3"</span>),</span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a>                     <span class="at">Population =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>),</span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a>                     <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Frequency =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.8</span>, <span class="fl">0.3</span>, <span class="fl">0.7</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>,    <span class="co"># A</span></span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a>                       <span class="fl">0.7</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span>,    <span class="co"># B</span></span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>                       <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.3</span>, <span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.8</span>),   <span class="co"># C</span></span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">Population =</span> <span class="fu">factor</span>(Population, <span class="at">ordered =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Population, Locus, Allele, Frequency)</span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a><span class="fu">### Creating Populations</span></span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> freqs <span class="sc">|&gt;</span></span>
+<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_populations</span>(<span class="at">N =</span> <span class="dv">30</span>)</span>
+<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
+<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-44"><a href="#cb50-44" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
+<span id="cb50-45"><a href="#cb50-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Population)</span>
+<span id="cb50-46"><a href="#cb50-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-47"><a href="#cb50-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-48"><a href="#cb50-48" aria-hidden="true" tabindex="-1"></a>You can specify an inbreeding level with <span class="in">`F`</span>:</span>
+<span id="cb50-49"><a href="#cb50-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-52"><a href="#cb50-52" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-53"><a href="#cb50-53" aria-hidden="true" tabindex="-1"></a>pop_inbred <span class="ot">&lt;-</span> freqs <span class="sc">|&gt;</span></span>
+<span id="cb50-54"><a href="#cb50-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_populations</span>(<span class="at">N =</span> <span class="dv">30</span>, <span class="at">F =</span> <span class="fl">0.3</span>)</span>
+<span id="cb50-55"><a href="#cb50-55" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-56"><a href="#cb50-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-57"><a href="#cb50-57" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Models</span></span>
+<span id="cb50-58"><a href="#cb50-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-59"><a href="#cb50-59" aria-hidden="true" tabindex="-1"></a>The <span class="in">`migration_matrix()`</span> function creates a K x K migration matrix where rows sum to 1. Element <span class="in">`[i,j]`</span> is the proportion of population *i* that originates from population *j*.</span>
+<span id="cb50-60"><a href="#cb50-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-61"><a href="#cb50-61" aria-hidden="true" tabindex="-1"></a><span class="fu">### Island Model</span></span>
+<span id="cb50-62"><a href="#cb50-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-63"><a href="#cb50-63" aria-hidden="true" tabindex="-1"></a>Equal migration among all populations:</span>
+<span id="cb50-64"><a href="#cb50-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-67"><a href="#cb50-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-68"><a href="#cb50-68" aria-hidden="true" tabindex="-1"></a><span class="fu">migration_matrix</span>(<span class="dv">3</span>, <span class="at">model =</span> <span class="st">"island"</span>, <span class="at">m =</span> <span class="fl">0.05</span>)</span>
+<span id="cb50-69"><a href="#cb50-69" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-70"><a href="#cb50-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-71"><a href="#cb50-71" aria-hidden="true" tabindex="-1"></a>A count names the populations <span class="in">`Pop1`</span>, <span class="in">`Pop2`</span>, ….  For simulations, pass the population names instead (as below), so the matrix matches the <span class="in">`Population`</span> column that <span class="in">`simulate_pop()`</span> migrates between.</span>
+<span id="cb50-72"><a href="#cb50-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-73"><a href="#cb50-73" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1D Stepping Stone</span></span>
+<span id="cb50-74"><a href="#cb50-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-75"><a href="#cb50-75" aria-hidden="true" tabindex="-1"></a>Migration only between adjacent populations:</span>
+<span id="cb50-76"><a href="#cb50-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-79"><a href="#cb50-79" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-80"><a href="#cb50-80" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-81"><a href="#cb50-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"stepping_stone_1d"</span>, <span class="at">m =</span> <span class="fl">0.1</span>)</span>
+<span id="cb50-82"><a href="#cb50-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-83"><a href="#cb50-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-84"><a href="#cb50-84" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2D Stepping Stone</span></span>
+<span id="cb50-85"><a href="#cb50-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-86"><a href="#cb50-86" aria-hidden="true" tabindex="-1"></a>Grid-based adjacency:</span>
+<span id="cb50-87"><a href="#cb50-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-90"><a href="#cb50-90" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-91"><a href="#cb50-91" aria-hidden="true" tabindex="-1"></a><span class="fu">migration_matrix</span>(<span class="dv">4</span>, <span class="at">model =</span> <span class="st">"stepping_stone_2d"</span>,</span>
+<span id="cb50-92"><a href="#cb50-92" aria-hidden="true" tabindex="-1"></a>                 <span class="at">m =</span> <span class="fl">0.1</span>, <span class="at">nr =</span> <span class="dv">2</span>, <span class="at">nc =</span> <span class="dv">2</span>)</span>
+<span id="cb50-93"><a href="#cb50-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-94"><a href="#cb50-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-95"><a href="#cb50-95" aria-hidden="true" tabindex="-1"></a><span class="fu">### Distance-Based</span></span>
+<span id="cb50-96"><a href="#cb50-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-97"><a href="#cb50-97" aria-hidden="true" tabindex="-1"></a>Migration rate decays with distance:</span>
+<span id="cb50-98"><a href="#cb50-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-101"><a href="#cb50-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-102"><a href="#cb50-102" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>), <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb50-103"><a href="#cb50-103" aria-hidden="true" tabindex="-1"></a><span class="fu">migration_matrix</span>(<span class="dv">3</span>, <span class="at">model =</span> <span class="st">"distance"</span>, <span class="at">m =</span> <span class="fl">0.1</span>, <span class="at">coords =</span> coords)</span>
+<span id="cb50-104"><a href="#cb50-104" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-105"><a href="#cb50-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-106"><a href="#cb50-106" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Events</span></span>
+<span id="cb50-107"><a href="#cb50-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-108"><a href="#cb50-108" aria-hidden="true" tabindex="-1"></a>A <span class="in">`migration_event`</span> pairs a migration matrix with a generation interval, allowing temporal regime changes:</span>
+<span id="cb50-109"><a href="#cb50-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-112"><a href="#cb50-112" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-113"><a href="#cb50-113" aria-hidden="true" tabindex="-1"></a><span class="co"># Low migration for generations 1-50</span></span>
+<span id="cb50-114"><a href="#cb50-114" aria-hidden="true" tabindex="-1"></a>evt1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-115"><a href="#cb50-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"island"</span>, <span class="at">m =</span> <span class="fl">0.05</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-116"><a href="#cb50-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_event</span>(<span class="at">start =</span> <span class="dv">1</span>, <span class="at">end =</span> <span class="dv">50</span>)</span>
+<span id="cb50-117"><a href="#cb50-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-118"><a href="#cb50-118" aria-hidden="true" tabindex="-1"></a><span class="co"># High migration from generation 51 onward</span></span>
+<span id="cb50-119"><a href="#cb50-119" aria-hidden="true" tabindex="-1"></a>evt2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-120"><a href="#cb50-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"island"</span>, <span class="at">m =</span> <span class="fl">0.20</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-121"><a href="#cb50-121" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_event</span>(<span class="at">start =</span> <span class="dv">51</span>)</span>
+<span id="cb50-122"><a href="#cb50-122" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-123"><a href="#cb50-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-124"><a href="#cb50-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mutation Models</span></span>
+<span id="cb50-125"><a href="#cb50-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-126"><a href="#cb50-126" aria-hidden="true" tabindex="-1"></a>The <span class="in">`mutation_model()`</span> function defines how alleles mutate during simulation:</span>
+<span id="cb50-127"><a href="#cb50-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-130"><a href="#cb50-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-131"><a href="#cb50-131" aria-hidden="true" tabindex="-1"></a><span class="co"># Infinite Alleles Model</span></span>
+<span id="cb50-132"><a href="#cb50-132" aria-hidden="true" tabindex="-1"></a>mm_iam <span class="ot">&lt;-</span> <span class="fu">mutation_model</span>(<span class="at">rate =</span> <span class="fl">0.001</span>, <span class="at">model =</span> <span class="st">"iam"</span>)</span>
+<span id="cb50-133"><a href="#cb50-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-134"><a href="#cb50-134" aria-hidden="true" tabindex="-1"></a><span class="co"># K-Allele Model (10 possible states)</span></span>
+<span id="cb50-135"><a href="#cb50-135" aria-hidden="true" tabindex="-1"></a>mm_kam <span class="ot">&lt;-</span> <span class="fu">mutation_model</span>(<span class="at">rate =</span> <span class="fl">0.001</span>, <span class="at">model =</span> <span class="st">"kam"</span>, <span class="at">k =</span> <span class="dv">10</span>)</span>
+<span id="cb50-136"><a href="#cb50-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-137"><a href="#cb50-137" aria-hidden="true" tabindex="-1"></a><span class="co"># Stepwise Mutation Model</span></span>
+<span id="cb50-138"><a href="#cb50-138" aria-hidden="true" tabindex="-1"></a>mm_smm <span class="ot">&lt;-</span> <span class="fu">mutation_model</span>(<span class="at">rate =</span> <span class="fl">0.001</span>, <span class="at">model =</span> <span class="st">"smm"</span>)</span>
+<span id="cb50-139"><a href="#cb50-139" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-140"><a href="#cb50-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-141"><a href="#cb50-141" aria-hidden="true" tabindex="-1"></a><span class="fu">## Forward-Time Simulation</span></span>
+<span id="cb50-142"><a href="#cb50-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-143"><a href="#cb50-143" aria-hidden="true" tabindex="-1"></a>The <span class="in">`simulate_pop()`</span> function runs a multi-generation forward-time simulation. Each generation cycle: census, migrate, mate, mutate.</span>
+<span id="cb50-144"><a href="#cb50-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-145"><a href="#cb50-145" aria-hidden="true" tabindex="-1"></a><span class="fu">### Basic Simulation</span></span>
+<span id="cb50-146"><a href="#cb50-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-149"><a href="#cb50-149" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-150"><a href="#cb50-150" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
+<span id="cb50-151"><a href="#cb50-151" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">20</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb50-152"><a href="#cb50-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-153"><a href="#cb50-153" aria-hidden="true" tabindex="-1"></a>result <span class="sc">|&gt;</span></span>
+<span id="cb50-154"><a href="#cb50-154" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb50-155"><a href="#cb50-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-156"><a href="#cb50-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-157"><a href="#cb50-157" aria-hidden="true" tabindex="-1"></a><span class="fu">### With Migration</span></span>
+<span id="cb50-158"><a href="#cb50-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-161"><a href="#cb50-161" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-162"><a href="#cb50-162" aria-hidden="true" tabindex="-1"></a>evt <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
+<span id="cb50-163"><a href="#cb50-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Population) <span class="sc">|&gt;</span></span>
+<span id="cb50-164"><a href="#cb50-164" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span></span>
+<span id="cb50-165"><a href="#cb50-165" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"island"</span>, <span class="at">m =</span> <span class="fl">0.05</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-166"><a href="#cb50-166" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_event</span>(<span class="at">start =</span> <span class="dv">1</span>)</span>
+<span id="cb50-167"><a href="#cb50-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-168"><a href="#cb50-168" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
+<span id="cb50-169"><a href="#cb50-169" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">20</span>, <span class="at">migration =</span> evt, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb50-170"><a href="#cb50-170" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-171"><a href="#cb50-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-172"><a href="#cb50-172" aria-hidden="true" tabindex="-1"></a><span class="fu">### With Mutation</span></span>
+<span id="cb50-173"><a href="#cb50-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-176"><a href="#cb50-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-177"><a href="#cb50-177" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> <span class="fu">mutation_model</span>(<span class="at">rate =</span> <span class="fl">0.01</span>, <span class="at">model =</span> <span class="st">"iam"</span>)</span>
+<span id="cb50-178"><a href="#cb50-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-179"><a href="#cb50-179" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
+<span id="cb50-180"><a href="#cb50-180" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">20</span>, <span class="at">mutation =</span> mm, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb50-181"><a href="#cb50-181" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-182"><a href="#cb50-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-183"><a href="#cb50-183" aria-hidden="true" tabindex="-1"></a><span class="fu">### With Mixed Mating (Selfing)</span></span>
+<span id="cb50-184"><a href="#cb50-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-187"><a href="#cb50-187" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-188"><a href="#cb50-188" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
+<span id="cb50-189"><a href="#cb50-189" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">20</span>, <span class="at">selfing_rate =</span> <span class="fl">0.3</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb50-190"><a href="#cb50-190" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-191"><a href="#cb50-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-192"><a href="#cb50-192" aria-hidden="true" tabindex="-1"></a><span class="fu">### Census Snapshots</span></span>
+<span id="cb50-193"><a href="#cb50-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-194"><a href="#cb50-194" aria-hidden="true" tabindex="-1"></a>Save population snapshots at regular intervals:</span>
+<span id="cb50-195"><a href="#cb50-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-198"><a href="#cb50-198" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-199"><a href="#cb50-199" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb50-200"><a href="#cb50-200" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
+<span id="cb50-201"><a href="#cb50-201" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">100</span>, <span class="at">census_interval =</span> <span class="dv">25</span>, <span class="at">census_dir =</span> <span class="fu">tempdir</span>(), <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb50-202"><a href="#cb50-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-203"><a href="#cb50-203" aria-hidden="true" tabindex="-1"></a><span class="co"># Snapshots saved as gen_0025.rds, gen_0050.rds, etc.</span></span>
+<span id="cb50-204"><a href="#cb50-204" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-205"><a href="#cb50-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-206"><a href="#cb50-206" aria-hidden="true" tabindex="-1"></a><span class="fu">### Complete Worked Example</span></span>
+<span id="cb50-207"><a href="#cb50-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-208"><a href="#cb50-208" aria-hidden="true" tabindex="-1"></a>Simulate drift and migration in a 3-population system, then analyze the outcome:</span>
+<span id="cb50-209"><a href="#cb50-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-212"><a href="#cb50-212" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-213"><a href="#cb50-213" aria-hidden="true" tabindex="-1"></a><span class="co"># Create starting populations</span></span>
+<span id="cb50-214"><a href="#cb50-214" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> freqs <span class="sc">|&gt;</span></span>
+<span id="cb50-215"><a href="#cb50-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_populations</span>(<span class="at">N =</span> <span class="dv">50</span>)</span>
+<span id="cb50-216"><a href="#cb50-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-217"><a href="#cb50-217" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up island model migration among the simulated populations</span></span>
+<span id="cb50-218"><a href="#cb50-218" aria-hidden="true" tabindex="-1"></a>evt <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
+<span id="cb50-219"><a href="#cb50-219" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Population) <span class="sc">|&gt;</span></span>
+<span id="cb50-220"><a href="#cb50-220" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span></span>
+<span id="cb50-221"><a href="#cb50-221" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"island"</span>, <span class="at">m =</span> <span class="fl">0.02</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-222"><a href="#cb50-222" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_event</span>(<span class="at">start =</span> <span class="dv">1</span>)</span>
+<span id="cb50-223"><a href="#cb50-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-224"><a href="#cb50-224" aria-hidden="true" tabindex="-1"></a><span class="co"># Run simulation</span></span>
+<span id="cb50-225"><a href="#cb50-225" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb50-226"><a href="#cb50-226" aria-hidden="true" tabindex="-1"></a>final <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span></span>
+<span id="cb50-227"><a href="#cb50-227" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">50</span>, <span class="at">migration =</span> evt, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb50-228"><a href="#cb50-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-229"><a href="#cb50-229" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyze structure in the final generation</span></span>
+<span id="cb50-230"><a href="#cb50-230" aria-hidden="true" tabindex="-1"></a>final <span class="sc">|&gt;</span></span>
+<span id="cb50-231"><a href="#cb50-231" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>)</span>
+<span id="cb50-232"><a href="#cb50-232" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-233"><a href="#cb50-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-236"><a href="#cb50-236" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-237"><a href="#cb50-237" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare diversity before and after</span></span>
+<span id="cb50-238"><a href="#cb50-238" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">Start =</span> pop, <span class="at">Final =</span> final) <span class="sc">|&gt;</span></span>
+<span id="cb50-239"><a href="#cb50-239" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(genetic_diversity, <span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">mode =</span> <span class="st">"He"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-240"><a href="#cb50-240" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="at">.id =</span> <span class="st">"Generation"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-241"><a href="#cb50-241" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Generation, Stratum) <span class="sc">|&gt;</span></span>
+<span id="cb50-242"><a href="#cb50-242" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_He =</span> <span class="fu">mean</span>(He), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb50-243"><a href="#cb50-243" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-244"><a href="#cb50-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-245"><a href="#cb50-245" aria-hidden="true" tabindex="-1"></a><span class="fu">## Parentage Analysis</span></span>
+<span id="cb50-246"><a href="#cb50-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-247"><a href="#cb50-247" aria-hidden="true" tabindex="-1"></a><span class="fu">### Mating and Offspring</span></span>
+<span id="cb50-248"><a href="#cb50-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-249"><a href="#cb50-249" aria-hidden="true" tabindex="-1"></a>The <span class="in">`mate()`</span> function creates offspring from two parents:</span>
+<span id="cb50-250"><a href="#cb50-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-253"><a href="#cb50-253" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-254"><a href="#cb50-254" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb50-255"><a href="#cb50-255" aria-hidden="true" tabindex="-1"></a>  <span class="at">Locus =</span> <span class="fu">rep</span>(<span class="fu">paste0</span>(<span class="st">"Loc"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>), <span class="at">each =</span> <span class="dv">3</span>),</span>
+<span id="cb50-256"><a href="#cb50-256" aria-hidden="true" tabindex="-1"></a>  <span class="at">Allele =</span> <span class="fu">rep</span>(LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="at">times =</span> <span class="dv">4</span>),</span>
+<span id="cb50-257"><a href="#cb50-257" aria-hidden="true" tabindex="-1"></a>  <span class="at">Frequency =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>), <span class="at">times =</span> <span class="dv">4</span>)</span>
+<span id="cb50-258"><a href="#cb50-258" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb50-259"><a href="#cb50-259" aria-hidden="true" tabindex="-1"></a>adults <span class="ot">&lt;-</span> f <span class="sc">|&gt;</span></span>
+<span id="cb50-260"><a href="#cb50-260" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_population</span>(<span class="at">N =</span> <span class="dv">20</span>)</span>
+<span id="cb50-261"><a href="#cb50-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-262"><a href="#cb50-262" aria-hidden="true" tabindex="-1"></a>offs <span class="ot">&lt;-</span> adults <span class="sc">|&gt;</span></span>
+<span id="cb50-263"><a href="#cb50-263" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-264"><a href="#cb50-264" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mate</span>(<span class="fu">slice</span>(adults, <span class="dv">2</span>), <span class="at">N =</span> <span class="dv">5</span>)</span>
+<span id="cb50-265"><a href="#cb50-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-266"><a href="#cb50-266" aria-hidden="true" tabindex="-1"></a>offs</span>
+<span id="cb50-267"><a href="#cb50-267" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-268"><a href="#cb50-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-269"><a href="#cb50-269" aria-hidden="true" tabindex="-1"></a><span class="fu">### Maternal Subtraction</span></span>
+<span id="cb50-270"><a href="#cb50-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-271"><a href="#cb50-271" aria-hidden="true" tabindex="-1"></a>The <span class="in">`minus_mom()`</span> function removes the maternal contribution from offspring genotypes. It takes a single data.frame where mothers have <span class="in">`OffID = 0`</span> and offspring have <span class="in">`OffID != 0`</span>:</span>
+<span id="cb50-272"><a href="#cb50-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-275"><a href="#cb50-275" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-276"><a href="#cb50-276" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine mother (OffID = 0) and offspring into one data.frame</span></span>
+<span id="cb50-277"><a href="#cb50-277" aria-hidden="true" tabindex="-1"></a>family <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(adults <span class="sc">|&gt;</span></span>
+<span id="cb50-278"><a href="#cb50-278" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-279"><a href="#cb50-279" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">mutate</span>(<span class="at">OffID =</span> <span class="dv">0</span>),</span>
+<span id="cb50-280"><a href="#cb50-280" aria-hidden="true" tabindex="-1"></a>                    offs <span class="sc">|&gt;</span></span>
+<span id="cb50-281"><a href="#cb50-281" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">mutate</span>(<span class="at">OffID =</span> <span class="fu">row_number</span>()))</span>
+<span id="cb50-282"><a href="#cb50-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-283"><a href="#cb50-283" aria-hidden="true" tabindex="-1"></a>family <span class="sc">|&gt;</span></span>
+<span id="cb50-284"><a href="#cb50-284" aria-hidden="true" tabindex="-1"></a>  <span class="fu">minus_mom</span>()</span>
+<span id="cb50-285"><a href="#cb50-285" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-286"><a href="#cb50-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-287"><a href="#cb50-287" aria-hidden="true" tabindex="-1"></a><span class="fu">### Fractional Paternity</span></span>
+<span id="cb50-288"><a href="#cb50-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-289"><a href="#cb50-289" aria-hidden="true" tabindex="-1"></a>The <span class="in">`paternity()`</span> function estimates the probability of each potential father siring each offspring:</span>
+<span id="cb50-290"><a href="#cb50-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-293"><a href="#cb50-293" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-294"><a href="#cb50-294" aria-hidden="true" tabindex="-1"></a>offs <span class="ot">&lt;-</span> offs <span class="sc">|&gt;</span></span>
+<span id="cb50-295"><a href="#cb50-295" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">OffID =</span> <span class="fu">row_number</span>(),</span>
+<span id="cb50-296"><a href="#cb50-296" aria-hidden="true" tabindex="-1"></a>         <span class="at">MomID =</span> adults<span class="sc">$</span>ID[<span class="dv">1</span>])</span>
+<span id="cb50-297"><a href="#cb50-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-298"><a href="#cb50-298" aria-hidden="true" tabindex="-1"></a>pat <span class="ot">&lt;-</span> offs <span class="sc">|&gt;</span></span>
+<span id="cb50-299"><a href="#cb50-299" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paternity</span>(<span class="fu">slice</span>(adults, <span class="dv">1</span>), adults)</span>
+<span id="cb50-300"><a href="#cb50-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-301"><a href="#cb50-301" aria-hidden="true" tabindex="-1"></a>pat <span class="sc">|&gt;</span></span>
+<span id="cb50-302"><a href="#cb50-302" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb50-303"><a href="#cb50-303" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-304"><a href="#cb50-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-305"><a href="#cb50-305" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Fij`</span> column gives the fractional paternity probability. Use <span class="in">`strict = TRUE`</span> to retain only unambiguous assignments:</span>
+<span id="cb50-306"><a href="#cb50-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-309"><a href="#cb50-309" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-310"><a href="#cb50-310" aria-hidden="true" tabindex="-1"></a>offs <span class="sc">|&gt;</span></span>
+<span id="cb50-311"><a href="#cb50-311" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paternity</span>(<span class="fu">slice</span>(adults, <span class="dv">1</span>), adults, <span class="at">strict =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb50-312"><a href="#cb50-312" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-313"><a href="#cb50-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-314"><a href="#cb50-314" aria-hidden="true" tabindex="-1"></a><span class="fu">### Transition Probabilities and the Paternity Index</span></span>
+<span id="cb50-315"><a href="#cb50-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-316"><a href="#cb50-316" aria-hidden="true" tabindex="-1"></a><span class="in">`transition_probability()`</span> gives the Mendelian probability of an offspring genotype from a pair of parents, as a product across loci (<span class="in">`multilocus = FALSE`</span> returns the per-locus values):</span>
+<span id="cb50-317"><a href="#cb50-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-320"><a href="#cb50-320" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-321"><a href="#cb50-321" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">slice</span>(adults, <span class="dv">1</span>)</span>
+<span id="cb50-322"><a href="#cb50-322" aria-hidden="true" tabindex="-1"></a>dad <span class="ot">&lt;-</span> <span class="fu">slice</span>(adults, <span class="dv">2</span>)</span>
+<span id="cb50-323"><a href="#cb50-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-324"><a href="#cb50-324" aria-hidden="true" tabindex="-1"></a><span class="fu">transition_probability</span>(<span class="fu">slice</span>(offs, <span class="dv">1</span>), mom, dad)</span>
+<span id="cb50-325"><a href="#cb50-325" aria-hidden="true" tabindex="-1"></a><span class="fu">transition_probability</span>(<span class="fu">slice</span>(offs, <span class="dv">1</span>), mom, dad, <span class="at">multilocus =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb50-326"><a href="#cb50-326" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-327"><a href="#cb50-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-328"><a href="#cb50-328" aria-hidden="true" tabindex="-1"></a>To judge a putative father, compare that value with the probability of the offspring given the mother and a *random* male. Pass only the mother and an allele frequency table from <span class="in">`frequencies()`</span>; at each locus this is the chance the mother transmits an allele the offspring carries times the frequency of the offspring's other allele. The ratio is the paternity index, how many times more likely the male is to be the father than a random male:</span>
+<span id="cb50-329"><a href="#cb50-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-332"><a href="#cb50-332" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-333"><a href="#cb50-333" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> adults <span class="sc">|&gt;</span></span>
+<span id="cb50-334"><a href="#cb50-334" aria-hidden="true" tabindex="-1"></a>  <span class="fu">frequencies</span>()</span>
+<span id="cb50-335"><a href="#cb50-335" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-336"><a href="#cb50-336" aria-hidden="true" tabindex="-1"></a>T_random <span class="ot">&lt;-</span> <span class="fu">transition_probability</span>(<span class="fu">slice</span>(offs, <span class="dv">1</span>), mom, <span class="at">freqs =</span> freqs)</span>
+<span id="cb50-337"><a href="#cb50-337" aria-hidden="true" tabindex="-1"></a><span class="fu">transition_probability</span>(<span class="fu">slice</span>(offs, <span class="dv">1</span>), mom, dad) <span class="sc">/</span> T_random</span>
+<span id="cb50-338"><a href="#cb50-338" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-339"><a href="#cb50-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-340"><a href="#cb50-340" aria-hidden="true" tabindex="-1"></a>Without <span class="in">`freqs`</span>, the one-parent value is only a compatibility score (zero when the parent is excluded), not a likelihood, so do not use it as the denominator of a paternity index.</span>
+<span id="cb50-341"><a href="#cb50-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-342"><a href="#cb50-342" aria-hidden="true" tabindex="-1"></a><span class="fu">### Single-Parent Exclusion</span></span>
+<span id="cb50-343"><a href="#cb50-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-344"><a href="#cb50-344" aria-hidden="true" tabindex="-1"></a>The <span class="in">`parent_finder()`</span> function identifies compatible parents for each offspring using exclusion. It requires a data.frame with <span class="in">`ID`</span> and <span class="in">`OffID`</span> columns, where adults have <span class="in">`OffID = 0`</span>:</span>
+<span id="cb50-345"><a href="#cb50-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-348"><a href="#cb50-348" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-349"><a href="#cb50-349" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare a combined data.frame: adults (OffID = 0) then offspring</span></span>
+<span id="cb50-350"><a href="#cb50-350" aria-hidden="true" tabindex="-1"></a>locus_cols <span class="ot">&lt;-</span> adults <span class="sc">|&gt;</span></span>
+<span id="cb50-351"><a href="#cb50-351" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_class</span>(<span class="st">"locus"</span>)</span>
+<span id="cb50-352"><a href="#cb50-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-353"><a href="#cb50-353" aria-hidden="true" tabindex="-1"></a>combined <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(adults <span class="sc">|&gt;</span></span>
+<span id="cb50-354"><a href="#cb50-354" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">select</span>(ID, <span class="fu">all_of</span>(locus_cols)) <span class="sc">|&gt;</span></span>
+<span id="cb50-355"><a href="#cb50-355" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">mutate</span>(<span class="at">OffID =</span> <span class="dv">0</span>),</span>
+<span id="cb50-356"><a href="#cb50-356" aria-hidden="true" tabindex="-1"></a>                      offs <span class="sc">|&gt;</span></span>
+<span id="cb50-357"><a href="#cb50-357" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">select</span>(ID, <span class="fu">all_of</span>(locus_cols)) <span class="sc">|&gt;</span></span>
+<span id="cb50-358"><a href="#cb50-358" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">mutate</span>(<span class="at">OffID =</span> <span class="fu">row_number</span>()))</span>
+<span id="cb50-359"><a href="#cb50-359" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-360"><a href="#cb50-360" aria-hidden="true" tabindex="-1"></a>combined <span class="sc">|&gt;</span></span>
+<span id="cb50-361"><a href="#cb50-361" aria-hidden="true" tabindex="-1"></a>  <span class="fu">parent_finder</span>() <span class="sc">|&gt;</span></span>
+<span id="cb50-362"><a href="#cb50-362" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb50-363"><a href="#cb50-363" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-364"><a href="#cb50-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-365"><a href="#cb50-365" aria-hidden="true" tabindex="-1"></a>Its <span class="in">`T`</span> column is the one-parent compatibility score from <span class="in">`transition_probability()`</span> (without <span class="in">`freqs`</span>): it ranks the compatible parents of each offspring, but it is not a likelihood.</span>
+<span id="cb50-366"><a href="#cb50-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-367"><a href="#cb50-367" aria-hidden="true" tabindex="-1"></a><span class="fu">### Identifying Bad Parents</span></span>
+<span id="cb50-368"><a href="#cb50-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-369"><a href="#cb50-369" aria-hidden="true" tabindex="-1"></a>The <span class="in">`bad_parents()`</span> function flags parent-offspring pairs that are genetically incompatible:</span>
+<span id="cb50-370"><a href="#cb50-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-373"><a href="#cb50-373" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-374"><a href="#cb50-374" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb50-375"><a href="#cb50-375" aria-hidden="true" tabindex="-1"></a>offs <span class="sc">|&gt;</span></span>
+<span id="cb50-376"><a href="#cb50-376" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bad_parents</span>(adults)</span>
+<span id="cb50-377"><a href="#cb50-377" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-378"><a href="#cb50-378" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-379"><a href="#cb50-379" aria-hidden="true" tabindex="-1"></a><span class="fu">## Bundled Parentage Datasets</span></span>
+<span id="cb50-380"><a href="#cb50-380" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-381"><a href="#cb50-381" aria-hidden="true" tabindex="-1"></a>The <span class="in">`cornus`</span> and <span class="in">`cornus_florida`</span> datasets contain *Cornus florida* genotype data for parentage analysis:</span>
+<span id="cb50-382"><a href="#cb50-382" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-385"><a href="#cb50-385" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-386"><a href="#cb50-386" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(cornus)</span>
+<span id="cb50-387"><a href="#cb50-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-388"><a href="#cb50-388" aria-hidden="true" tabindex="-1"></a>cornus <span class="sc">|&gt;</span></span>
+<span id="cb50-389"><a href="#cb50-389" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb50-390"><a href="#cb50-390" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-391"><a href="#cb50-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-394"><a href="#cb50-394" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-395"><a href="#cb50-395" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(cornus_florida)</span>
+<span id="cb50-396"><a href="#cb50-396" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-397"><a href="#cb50-397" aria-hidden="true" tabindex="-1"></a>cornus_florida <span class="sc">|&gt;</span></span>
+<span id="cb50-398"><a href="#cb50-398" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb50-399"><a href="#cb50-399" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-400"><a href="#cb50-400" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-401"><a href="#cb50-401" aria-hidden="true" tabindex="-1"></a><span class="fu">## Without Pipes</span></span>
+<span id="cb50-402"><a href="#cb50-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-405"><a href="#cb50-405" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-406"><a href="#cb50-406" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb50-407"><a href="#cb50-407" aria-hidden="true" tabindex="-1"></a>pop    <span class="ot">&lt;-</span> <span class="fu">make_populations</span>(freqs, <span class="at">N =</span> <span class="dv">50</span>)</span>
+<span id="cb50-408"><a href="#cb50-408" aria-hidden="true" tabindex="-1"></a>m      <span class="ot">&lt;-</span> <span class="fu">migration_matrix</span>(<span class="fu">unique</span>(pop<span class="sc">$</span>Population), <span class="at">model =</span> <span class="st">"island"</span>, <span class="at">m =</span> <span class="fl">0.02</span>)</span>
+<span id="cb50-409"><a href="#cb50-409" aria-hidden="true" tabindex="-1"></a>evt    <span class="ot">&lt;-</span> <span class="fu">migration_event</span>(m, <span class="at">start =</span> <span class="dv">1</span>)</span>
+<span id="cb50-410"><a href="#cb50-410" aria-hidden="true" tabindex="-1"></a>final  <span class="ot">&lt;-</span> <span class="fu">simulate_pop</span>(pop, <span class="at">ngen =</span> <span class="dv">50</span>, <span class="at">migration =</span> evt, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb50-411"><a href="#cb50-411" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>(final, <span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>)</span>
+<span id="cb50-412"><a href="#cb50-412" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-413"><a href="#cb50-413" aria-hidden="true" tabindex="-1"></a>adults <span class="ot">&lt;-</span> <span class="fu">make_population</span>(f, <span class="at">N =</span> <span class="dv">20</span>)</span>
+<span id="cb50-414"><a href="#cb50-414" aria-hidden="true" tabindex="-1"></a>offs   <span class="ot">&lt;-</span> <span class="fu">mate</span>(adults[<span class="dv">1</span>, ], adults[<span class="dv">2</span>, ], <span class="at">N =</span> <span class="dv">5</span>)</span>
+<span id="cb50-415"><a href="#cb50-415" aria-hidden="true" tabindex="-1"></a>pat    <span class="ot">&lt;-</span> <span class="fu">paternity</span>(offs, adults[<span class="dv">1</span>, ], adults)</span>
+<span id="cb50-416"><a href="#cb50-416" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
