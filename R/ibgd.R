@@ -132,15 +132,11 @@ ibgd <- function(graph, x = NULL, mode = c("cgd", "pgd"), gamma = 0.5,
 
   if (mode == "cgd") {
     nperm <- as.integer(nperm)
-    r_null <- vapply(seq_len(nperm), function(b) {
-      idx <- sample.int(length(nodes))
-      stats::cor(C[ok], X[idx, idx][ok])
-    }, numeric(1))
     fit <- stats::lm(C[ok] ~ X[ok])
     res <- list(
       statistic   = c(r = r_obs),
       parameter   = c(pairs = sum(ok), nperm = nperm),
-      p.value     = (1 + sum(r_null >= r_obs)) / (1 + nperm),
+      p.value     = .mantel_p(C, X, ok, nperm),
       estimate    = c(R2 = r_obs^2, slope = unname(stats::coef(fit)[2])),
       null.value  = c(r = 0),
       alternative = "greater",

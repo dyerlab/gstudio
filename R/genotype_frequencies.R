@@ -3,7 +3,7 @@
 #' Provides a summary of genotype frequencies (observed and expected) from
 #'  a vector of \code{locus} objects.
 #' @param x An object of type \code{locus}
-#' @param supress_warnings A flag that will prevent warnings in output
+#' @param suppress_warnings A flag that will prevent warnings in output
 #'  for ease in simulation without loosing materials in the 50 warnings()
 #' @return A \code{data.frame} with genotype, observed, and expected as counts.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -15,7 +15,7 @@
 #'   data <- make_population(f,N=20)
 #'   table(data$PGM)
 #'   genotype_frequencies( data$PGM )
-genotype_frequencies <- function( x, supress_warnings=FALSE ) {
+genotype_frequencies <- function( x, suppress_warnings=FALSE ) {
   if( missing(x))
     stop("You need to pass this function a vector of locus objects.")
   
@@ -24,7 +24,7 @@ genotype_frequencies <- function( x, supress_warnings=FALSE ) {
     
     for( locus_name in column_class(x,"locus")){
       theLoc <- x[[locus_name]]
-      df <- genotype_frequencies(theLoc)
+      df <- genotype_frequencies(theLoc, suppress_warnings=suppress_warnings)
       df$Locus <- locus_name
       ret <- rbind(ret,df)
     }
@@ -60,8 +60,8 @@ genotype_frequencies <- function( x, supress_warnings=FALSE ) {
   
   ret$Expected <- ret$Expected * length(x)
   
-  if( any( ret$Expected < 5.0 ) & !supress_warnings)
-    warning("Some genotype expectations are < 5, a continuity correction should be applied.  See ?hwe")
+  if( any( ret$Expected < 5.0 ) & !suppress_warnings)
+    warning("Some genotype expectations are < 5, a continuity correction should be applied.  See ?hwe.test")
   
   return( ret )
 }

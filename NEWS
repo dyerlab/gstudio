@@ -1,3 +1,16 @@
+gstudio 1.15.4 - 20261111
+------------------
+* [BREAKING] (1.15.4) Removed exports multilocus_diversity() and exclusion_probability(); use genetic_diversity(mode = "Dm") and genetic_diversity(mode = "Pex").  Pex no longer reports PexclMax or Fraction.
+* [BREAKING] (1.15.4) hwe() is now hwe.test(), named like cor.test().  A single test (one locus, no stratum) returns an htest that prints like chisq.test(); several loci or a stratum give a table of Stratum, Locus, statistic, df, p.value and method.
+* [BREAKING] (1.15.4) rarefaction() is now rarefaction.test(x, mode, stratum = "Population", loci, size, nperm, conf.level) and does rarefaction properly: each locus is rarefied to the smallest number of genotyped individuals in any stratum by resampling the larger strata without replacement (rarefaction() resampled with replacement, a bootstrap).  It takes a data.frame and several modes and returns a table of Stratum, Locus, Mode, N, size, observed, estimate, conf.low and conf.high, with a Multilocus row per stratum (NA if any locus is NA in that stratum, unless na.rm = TRUE) and the resampled values in a list-column 'values', printed with a test-style header.  A locus vector still works with size =.
+* [BREAKING] (1.15.4) The supress_warnings argument of genotype_frequencies() and hwe.test() is now spelled suppress_warnings.
+* [ADD] (1.15.4) genetic_diversity() modes Dm (fraction of unique multilocus genotypes; one Multilocus row), Sh (Shannon index, -sum p ln p) and Pex (paternity exclusion probability with one known parent, plus a combined Multilocus row, 1 - prod(1 - P)).
+* [ADD] (1.15.4) genetic_isolation(x, stratum, mode = c("IBD", "IBGD", "PGD")): isolation by distance from genotypes.  IBD is a Mantel test of genetic_distance(mode = genetic, default "Nei") on separation among strata; IBGD and PGD build the Population Graph and call ibgd(), which remains exported for work that starts from a graph.  Separation comes from spatial= (a matrix), axis= (a column or named vector of positions, which also sets the direction for PGD) or great-circle distance between stratum coordinates.
+* [ADD] (1.15.4) hwe.test(stratum = , loci = ) tests within strata (or dplyr groups) and on a subset of loci.
+* [FIX] (1.15.4) genetic_diversity() per-locus modes are NA for a locus with no genotypes (in a stratum); they returned values such as A = 0, He = 1 and Ae = Inf.  The Pex Multilocus row is then NA too.
+* [FIX] (1.15.4) hwe.test() applies the continuity correction whenever an expected count is under 5; hwe() skipped it when supress_warnings = TRUE.  genotype_frequencies() now passes suppress_warnings to each locus of a data.frame.
+
+
 gstudio 1.15.3 - 20261027
 ------------------
 * [ADD] (1.15.3) transition_probability(freqs = ): with one parent and an allele frequency table (from frequencies()), returns the probability of the offspring given that parent and a random mate, so a two-parent value divided by it is the paternity index. Without freqs the one-parent value is unchanged, and its documentation now says what it is: a compatibility score (the probability under a mate with the offspring's own genotype), not a likelihood.

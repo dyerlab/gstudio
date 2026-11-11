@@ -64,14 +64,16 @@ test_that("every test returns an htest that broom can tidy", {
   skip_if_not_installed("broom")
   data(gravity, package = "gstudio", envir = environment())
   g    <- population_graph(gravity)
-  deme <- as.integer(sub("Pop", "", igraph::V(g)$name))
+  deme <- setNames(as.integer(sub("Pop", "", igraph::V(g)$name)), igraph::V(g)$name)
   set.seed(1)
   tests <- list(
     source_sink_test       = source_sink_test(g, x = deme, nperm = 49),
     ibgd_cgd               = ibgd(g, x = deme, nperm = 49),
     ibgd_pgd               = ibgd(g, x = deme, mode = "pgd"),
     directional_test       = directional_test(g, orientation = deme),
-    asymmetry_existence    = asymmetry_significance(g, nperm = 19))
+    asymmetry_existence    = asymmetry_significance(g, nperm = 19),
+    genetic_isolation      = genetic_isolation(gravity, axis = deme, nperm = 19),
+    hwe.test               = hwe.test(gravity$L01, suppress_warnings = TRUE))
   for (nm in names(tests)) {
     expect_s3_class(tests[[nm]], "htest")
     td <- broom::tidy(tests[[nm]])

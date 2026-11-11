@@ -8,7 +8,8 @@ genetic_diversity(
   x,
   stratum = NULL,
   loci = NULL,
-  mode = c("A", "Ae", "A95", "He", "Ho", "Hi", "Hos", "Hes", "Ht", "Fis", "Pe")[2],
+  mode = c("A", "Ae", "A95", "He", "Ho", "Hi", "Hos", "Hes", "Ht", "Fis", "Pe", "Sh",
+    "Pex", "Dm")[2],
   small.N = FALSE,
   ...
 )
@@ -49,7 +50,17 @@ with other modes and, with a stratum, the pooled modes (\code{Hes},
     \code{stratum}).}
   \item{Fis}{Wright's inbreeding coefficient, 1 - Ho/He.}
   \item{Pe}{Locus polymorphic index, sum(p(1-p)).}
-}}
+  \item{Sh}{Shannon information index, \eqn{-\sum p \ln p}, using the
+    natural logarithm as in GenAlEx.}
+  \item{Pex}{Paternity exclusion probability with one known parent
+    (Jamieson & Taylor 1997).  With several loci, a \code{Multilocus}
+    row gives the combined probability \eqn{1 - \prod (1 - P_\ell)}.}
+  \item{Dm}{Multilocus diversity, the fraction of individuals with
+    unique multilocus genotypes across all requested loci.  Returns a
+    single \code{Multilocus} row (per stratum if given).}
+}
+Per-locus modes are \code{NA} for a locus with no genotypes (in a
+stratum, if given).}
 
 \item{small.N}{Apply the 2N/(2N-1) small sample size correction to the
 expected heterozygosity (modes \code{He}, \code{Fis}).}
@@ -59,7 +70,9 @@ expected heterozygosity (modes \code{He}, \code{Fis}).}
 \value{
 A \code{data.frame} with columns \code{Locus} and one named for the
    mode, plus \code{Stratum} if estimated within strata.  \code{Hes} and
-   \code{Hos} add a \code{Multilocus} row when several loci are used.
+   \code{Hos} and \code{Pex} add a \code{Multilocus} row when several loci
+   are used, and
+   \code{Dm} returns only a \code{Multilocus} row.
    \code{Hi} returns one row per individual (see above).  With several
    modes there is one column per mode, in the order requested; rows present
    for only some modes (e.g. the \code{Multilocus} row) are \code{NA} for
@@ -84,6 +97,8 @@ This function is the main one used for estimating genetic diversity among
  genetic_diversity( df, stratum="Population", mode="Hes")
  genetic_diversity( df, mode="Hi")
  genetic_diversity( locus, mode="Fis")
+ genetic_diversity( df, stratum="Population", mode="Dm")
+ genetic_diversity( df, mode=c("Sh","Pex") )
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

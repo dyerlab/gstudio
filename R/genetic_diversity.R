@@ -35,13 +35,25 @@
 #'        \code{stratum}).}
 #'      \item{Fis}{Wright's inbreeding coefficient, 1 - Ho/He.}
 #'      \item{Pe}{Locus polymorphic index, sum(p(1-p)).}
+#'      \item{Sh}{Shannon information index, \eqn{-\sum p \ln p}, using the
+#'        natural logarithm as in GenAlEx.}
+#'      \item{Pex}{Paternity exclusion probability with one known parent
+#'        (Jamieson & Taylor 1997).  With several loci, a \code{Multilocus}
+#'        row gives the combined probability \eqn{1 - \prod (1 - P_\ell)}.}
+#'      \item{Dm}{Multilocus diversity, the fraction of individuals with
+#'        unique multilocus genotypes across all requested loci.  Returns a
+#'        single \code{Multilocus} row (per stratum if given).}
 #'    }
+#'    Per-locus modes are \code{NA} for a locus with no genotypes (in a
+#'    stratum, if given).
 #' @param small.N Apply the 2N/(2N-1) small sample size correction to the
 #'    expected heterozygosity (modes \code{He}, \code{Fis}).
 #' @param ... Other parameters
 #' @return A \code{data.frame} with columns \code{Locus} and one named for the
 #'    mode, plus \code{Stratum} if estimated within strata.  \code{Hes} and
-#'    \code{Hos} add a \code{Multilocus} row when several loci are used.
+#'    \code{Hos} and \code{Pex} add a \code{Multilocus} row when several loci
+#'    are used, and
+#'    \code{Dm} returns only a \code{Multilocus} row.
 #'    \code{Hi} returns one row per individual (see above).  With several
 #'    modes there is one column per mode, in the order requested; rows present
 #'    for only some modes (e.g. the \code{Multilocus} row) are \code{NA} for
@@ -62,7 +74,9 @@
 #'  genetic_diversity( df, stratum="Population", mode="Hes")
 #'  genetic_diversity( df, mode="Hi")
 #'  genetic_diversity( locus, mode="Fis")
-genetic_diversity <- function( x, stratum=NULL, loci=NULL, mode=c("A","Ae","A95","He", "Ho", "Hi", "Hos", "Hes", "Ht", "Fis","Pe")[2] , small.N=FALSE, ... ){
+#'  genetic_diversity( df, stratum="Population", mode="Dm")
+#'  genetic_diversity( df, mode=c("Sh","Pex") )
+genetic_diversity <- function( x, stratum=NULL, loci=NULL, mode=c("A","Ae","A95","He", "Ho", "Hi", "Hos", "Hes", "Ht", "Fis","Pe","Sh","Pex","Dm")[2] , small.N=FALSE, ... ){
   rmode <- mode
   mode <- tolower(mode)
   
@@ -70,7 +84,7 @@ genetic_diversity <- function( x, stratum=NULL, loci=NULL, mode=c("A","Ae","A95"
     x <- data.frame(Locus=x)
   if( !is(x,"data.frame") || length( column_class(x,"locus")) < 1 )
     stop("Either pass a data.frame or an object of type locus to this function.")
-  if( length(mode) < 1 || !all(mode %in% c("a","ae","a95","he", "ho", "hi", "hos", "hes", "ht", "fis","pe")))
+  if( length(mode) < 1 || !all(mode %in% c("a","ae","a95","he", "ho", "hi", "hos", "hes", "ht", "fis","pe","sh","pex","dm")))
     stop("Unrecognized mode passed to genetic_diversity().")
   
   stratum <- .detect_stratum(x, stratum, default = NULL, explicit = !missing(stratum))
@@ -144,13 +158,21 @@ genetic_diversity <- function( x, stratum=NULL, loci=NULL, mode=c("A","Ae","A95"
     }
   }
   
+  ## Multilocus diversity is a single value across all loci
+  else if( mode == "dm" ) {
+    ret <- data.frame( Locus="Multilocus", Value=Dm(x) )
+  }
+  
   ## Passed without Stratum
   else { 
     ret <- data.frame( Locus=NA, Value=NA )
     
     
     for( locus in loci ){
-      if( mode == "a")
+      # No genotypes at this locus: nothing to estimate
+      if( all( is.na( x[[locus]] ) ) )
+        val <- NA_real_
+      else if( mode == "a")
         val <- A(x[[locus]], ...)
       else if( mode == "ae")
         val <- Ae(x[[locus]], ...)
@@ -164,6 +186,10 @@ genetic_diversity <- function( x, stratum=NULL, loci=NULL, mode=c("A","Ae","A95"
         val <- Fis(x[[locus]], stratum=stratum, small.N = small.N, ...)
       else if( mode == "pe")
         val <- Pe(x[[locus]], ...)
+      else if( mode == "sh")
+        val <- Sh(x[[locus]])
+      else if( mode == "pex")
+        val <- Pex(x[[locus]])
       else
         stop(paste("The type of diversity measure '", mode, "' you requested was not recognized.", sep=""))
 
@@ -171,8 +197,9 @@ genetic_diversity <- function( x, stratum=NULL, loci=NULL, mode=c("A","Ae","A95"
 
     }
     
-    names(ret)[2] <- mode
     ret <- ret[ !is.na(ret$Locus), ]
+    if( mode == "pex" && nrow(ret) > 1 )
+      ret <- rbind( ret, data.frame( Locus="Multilocus", Value=1 - prod(1 - ret$Value) ) )
     rownames(ret) <- seq(1,nrow(ret))
   }
     

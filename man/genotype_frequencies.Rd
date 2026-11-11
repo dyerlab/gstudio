@@ -4,12 +4,12 @@
 \alias{genotype_frequencies}
 \title{Genotype Frequencies}
 \usage{
-genotype_frequencies(x, supress_warnings = FALSE)
+genotype_frequencies(x, suppress_warnings = FALSE)
 }
 \arguments{
 \item{x}{An object of type \code{locus}}
 
-\item{supress_warnings}{A flag that will prevent warnings in output
+\item{suppress_warnings}{A flag that will prevent warnings in output
 for ease in simulation without loosing materials in the 50 warnings()}
 }
 \value{

@@ -27,6 +27,9 @@ The `genetic_diversity()` function is the main entry point for diversity estimat
 | `"Ht"` | Total He | Nei's unbiased total $H_T$ (needs `stratum`) |
 | `"Fis"` | Inbreeding coefficient | $1 - H_o/H_e$ |
 | `"Pe"` | Polymorphic index | $\sum p_i(1-p_i)$ |
+| `"Sh"` | Shannon index | $-\sum p_i \ln p_i$ |
+| `"Pex"` | Paternity exclusion | One known parent (Jamieson & Taylor 1997); adds a `Multilocus` row, $1 - \prod (1 - P_\ell)$ |
+| `"Dm"` | Multilocus diversity | Fraction of unique multilocus genotypes (one `Multilocus` row) |
 
 ## Global (Unstratified) Estimates
 
@@ -101,11 +104,13 @@ arapat |>
 
 ## Multilocus Diversity
 
-The `multilocus_diversity()` function computes a summary across all loci:
+The `Dm` mode gives the fraction of individuals with unique multilocus genotypes across all loci, returned as a single `Multilocus` row (one per stratum if a stratum is given):
 
 ```{r}
 arapat |>
-  multilocus_diversity()
+  genetic_diversity(mode = "Dm")
+arapat |>
+  genetic_diversity(stratum = "Species", mode = "Dm")
 ```
 
 ## Selecting Specific Loci
@@ -158,7 +163,8 @@ genetic_diversity(arapat, stratum = "Species", mode = "He")
 genetic_diversity(arapat, loci = c("LTRS", "WNT"), mode = "He")
 genetic_diversity(arapat$LTRS, mode = "Fis")
 genetic_diversity(arapat, mode = "Hi")
-multilocus_diversity(arapat)
+genetic_diversity(arapat, mode = "Dm")
+genetic_diversity(arapat, mode = c("Sh", "Pex"))
 he_by_pop <- genetic_diversity(arapat, stratum = "Species", mode = "He")
 ggplot(he_by_pop, aes(x = Stratum, y = He, fill = Stratum)) +
   geom_boxplot()
