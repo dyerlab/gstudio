@@ -73,6 +73,15 @@ ibgd(beetles, x = lat, mode = "cgd")
 ibgd(beetles, x = lat, mode = "pgd")
 ```
 
+Starting from the genotypes rather than a graph, `genetic_isolation()` builds
+the graph and runs the same tests, with the axis given as a column:
+
+```{r arapat-isolation}
+#| eval: false
+genetic_isolation(arapat, mode = "IBGD", axis = "Latitude")
+genetic_isolation(arapat, mode = "PGD", axis = "Latitude")
+```
+
 The two tests answer different questions.  Under strong drift the model
 comparison can prefer a directional fit by chance, so read it alongside the
 source-sink test.  Edge-level permutation tests of $\Delta$

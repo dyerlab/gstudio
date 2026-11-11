@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6302357f959a8f7748413a5996c6581e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-868c16dd3ff1719441578aa0872de989.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -376,9 +376,9 @@ p_{ij} = e_{ij} \, \frac{w_{j\mid i}}{w_{j\mid i} + w_{i\mid j}}, \qquad p_{ij} 
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>graph</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH f9a6152 UNW- 25 81 -- 
+<pre><code>IGRAPH 4e4f497 UNW- 25 81 -- 
 + attr: name (v/c), size (v/n), weight (e/n)
-+ edges from f9a6152 (vertex names):
++ edges from 4e4f497 (vertex names):
  [1] Pop01--Pop02 Pop01--Pop05 Pop02--Pop04 Pop02--Pop05 Pop03--Pop04
  [6] Pop03--Pop05 Pop03--Pop06 Pop03--Pop07 Pop03--Pop09 Pop04--Pop05
 [11] Pop04--Pop06 Pop05--Pop06 Pop05--Pop09 Pop06--Pop07 Pop06--Pop09
@@ -783,31 +783,36 @@ No p-value: the fits are not nested (see ?ibgd); corroborate with source_sink_te
 <span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"cgd"</span>)</span>
 <span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Starting from the genotypes rather than a graph, <code>genetic_isolation()</code> builds the graph and runs the same tests, with the axis given as a column:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_isolation</span>(arapat, <span class="at">mode =</span> <span class="st">"IBGD"</span>, <span class="at">axis =</span> <span class="st">"Latitude"</span>)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_isolation</span>(arapat, <span class="at">mode =</span> <span class="st">"PGD"</span>, <span class="at">axis =</span> <span class="st">"Latitude"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <p>The two tests answer different questions. Under strong drift the model comparison can prefer a directional fit by chance, so read it alongside the source-sink test. Edge-level permutation tests of <span class="math inline">\(\Delta\)</span> (<code>asymmetry_significance()</code> and its modes) are not recommended as tests of direction: under symmetric migration they are anti-conservative, or never reject.</p>
 </section>
 <section id="data-quality-information-loss" class="level2" data-number="9.11">
 <h2 data-number="9.11" class="anchored" data-anchor-id="data-quality-information-loss"><span class="header-section-number">9.11</span> Data quality: information loss</h2>
 <p>As loci fix, graphs are estimated from fewer informative loci, which inflates <span class="math inline">\(|\Delta|\)</span> whatever the direction of gene flow. <code>locus_subsample_null()</code> rebuilds the graph from random subsets of polymorphic loci, to show how much <span class="math inline">\(|\Delta|\)</span> information loss alone can produce at a given level of polymorphism:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus_subsample_null</span>(<span class="at">k =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>), <span class="at">nsub =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus_subsample_null</span>(<span class="at">k =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>), <span class="at">nsub =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="simulating-directional-gene-flow" class="level2" data-number="9.12">
 <h2 data-number="9.12" class="anchored" data-anchor-id="simulating-directional-gene-flow"><span class="header-section-number">9.12</span> Simulating directional gene flow</h2>
 <p>A directional stepping stone, with rates to the next population downstream (<code>m_fwd</code>) and upstream (<code>m_rev</code>), plugs into <code>simulate_pop()</code>; this is how the <code>gravity</code> data were generated (at a much larger scale):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>demes <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"Pop%02d"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> demes <span class="sc">|&gt;</span></span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"stepping_stone_1d_asym"</span>, <span class="at">m_fwd =</span> <span class="fl">0.04</span>, <span class="at">m_rev =</span> <span class="fl">0.01</span>)</span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Population =</span> <span class="fu">rep</span>(demes, <span class="at">each =</span> <span class="dv">2</span>),</span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Locus =</span> <span class="st">"L1"</span>,</span>
-<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Allele =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"01"</span>, <span class="st">"02"</span>), <span class="dv">10</span>),</span>
-<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Frequency =</span> <span class="fl">0.5</span>) <span class="sc">|&gt;</span></span>
-<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_populations</span>(<span class="at">N =</span> <span class="dv">50</span>) <span class="sc">|&gt;</span></span>
-<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">200</span>, <span class="at">migration =</span> <span class="fu">migration_event</span>(mm), <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>demes <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"Pop%02d"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> demes <span class="sc">|&gt;</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"stepping_stone_1d_asym"</span>, <span class="at">m_fwd =</span> <span class="fl">0.04</span>, <span class="at">m_rev =</span> <span class="fl">0.01</span>)</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Population =</span> <span class="fu">rep</span>(demes, <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Locus =</span> <span class="st">"L1"</span>,</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Allele =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"01"</span>, <span class="st">"02"</span>), <span class="dv">10</span>),</span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Frequency =</span> <span class="fl">0.5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_populations</span>(<span class="at">N =</span> <span class="dv">50</span>) <span class="sc">|&gt;</span></span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">200</span>, <span class="at">migration =</span> <span class="fu">migration_event</span>(mm), <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <!-- Shared closing sections of the genetic gravity walkthrough (see
      genetic_gravity_body.Rmd). -->
@@ -1414,123 +1419,132 @@ No p-value: the fits are not nested (see ?ibgd); corroborate with source_sink_te
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb54" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Genetic Gravity {#sec-genetic-gravity}</span></span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- The walkthrough below is shared with the package vignette</span></span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="co">     (vignette("genetic_gravity")); edit it in vignettes/children/genetic_gravity_body.Rmd</span></span>
-<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="co">     and vignettes/children/genetic_gravity_summary.Rmd, not here. --&gt;</span></span>
-<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>{{&lt; include ../vignettes/children/genetic_gravity_body.Rmd &gt;}}</span>
-<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Empirical data: *Araptus attenuatus*</span></span>
-<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>The same analysis applies directly to field data.  Here the Population Graph</span>
-<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a>is built from the <span class="in">`arapat`</span> genotypes with <span class="in">`population_graph()`</span>, and the</span>
-<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a>populations' geographic centroids give both the map layout and a covariate to</span>
-<span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a>test against: latitude along the Baja California peninsula.</span>
-<span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{r arapat-graph}</span></span>
-<span id="cb54-17"><a href="#cb54-17" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
-<span id="cb54-18"><a href="#cb54-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-19"><a href="#cb54-19" aria-hidden="true" tabindex="-1"></a>beetles <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb54-20"><a href="#cb54-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population_graph</span>()</span>
-<span id="cb54-21"><a href="#cb54-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-22"><a href="#cb54-22" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb54-23"><a href="#cb54-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">strata_coordinates</span>()</span>
-<span id="cb54-24"><a href="#cb54-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-25"><a href="#cb54-25" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> coords <span class="sc">|&gt;</span></span>
-<span id="cb54-26"><a href="#cb54-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Latitude, <span class="at">name =</span> Stratum)</span>
-<span id="cb54-27"><a href="#cb54-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb54-28"><a href="#cb54-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-29"><a href="#cb54-29" aria-hidden="true" tabindex="-1"></a>Passing the centroids as <span class="in">`layout`</span> draws the gravity field on geographic</span>
-<span id="cb54-30"><a href="#cb54-30" aria-hidden="true" tabindex="-1"></a>coordinates.  Sampling locations are clustered, so the surface is extended with</span>
-<span id="cb54-31"><a href="#cb54-31" aria-hidden="true" tabindex="-1"></a><span class="in">`mask_dist`</span> (by default it reaches 1.2 times the median nearest-neighbour</span>
-<span id="cb54-32"><a href="#cb54-32" aria-hidden="true" tabindex="-1"></a>distance between populations).  Comparing the two bandwidths shows how much of</span>
-<span id="cb54-33"><a href="#cb54-33" aria-hidden="true" tabindex="-1"></a>the local-mean picture is degree:</span>
-<span id="cb54-34"><a href="#cb54-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-35"><a href="#cb54-35" aria-hidden="true" tabindex="-1"></a><span class="in">```{r arapat-field}</span></span>
-<span id="cb54-36"><a href="#cb54-36" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
-<span id="cb54-37"><a href="#cb54-37" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 5</span></span>
-<span id="cb54-38"><a href="#cb54-38" aria-hidden="true" tabindex="-1"></a>both <span class="ot">&lt;-</span> beetles <span class="sc">|&gt;</span></span>
-<span id="cb54-39"><a href="#cb54-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gravity_field</span>(<span class="at">gamma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>))</span>
-<span id="cb54-40"><a href="#cb54-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-41"><a href="#cb54-41" aria-hidden="true" tabindex="-1"></a>both <span class="sc">|&gt;</span></span>
-<span id="cb54-42"><a href="#cb54-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(<span class="at">what =</span> <span class="st">"diagnostics"</span>)</span>
-<span id="cb54-43"><a href="#cb54-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-44"><a href="#cb54-44" aria-hidden="true" tabindex="-1"></a>both <span class="sc">|&gt;</span></span>
-<span id="cb54-45"><a href="#cb54-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">layout =</span> coords, <span class="at">mask_dist =</span> <span class="fl">0.6</span>)</span>
-<span id="cb54-46"><a href="#cb54-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb54-47"><a href="#cb54-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-48"><a href="#cb54-48" aria-hidden="true" tabindex="-1"></a>Both tests take latitude as the hypothesized axis:</span>
-<span id="cb54-49"><a href="#cb54-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-50"><a href="#cb54-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{r arapat-tests}</span></span>
-<span id="cb54-51"><a href="#cb54-51" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb54-52"><a href="#cb54-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-53"><a href="#cb54-53" aria-hidden="true" tabindex="-1"></a>beetles <span class="sc">|&gt;</span></span>
-<span id="cb54-54"><a href="#cb54-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">source_sink_test</span>(<span class="at">x =</span> lat, <span class="at">nperm =</span> <span class="dv">499</span>)</span>
-<span id="cb54-55"><a href="#cb54-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-56"><a href="#cb54-56" aria-hidden="true" tabindex="-1"></a>beetles <span class="sc">|&gt;</span></span>
-<span id="cb54-57"><a href="#cb54-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> lat)</span>
-<span id="cb54-58"><a href="#cb54-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-59"><a href="#cb54-59" aria-hidden="true" tabindex="-1"></a>beetles <span class="sc">|&gt;</span></span>
-<span id="cb54-60"><a href="#cb54-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span>
-<span id="cb54-61"><a href="#cb54-61" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb54-62"><a href="#cb54-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-63"><a href="#cb54-63" aria-hidden="true" tabindex="-1"></a>Without pipes, the same steps are:</span>
-<span id="cb54-64"><a href="#cb54-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-65"><a href="#cb54-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{r arapat-no-pipes}</span></span>
-<span id="cb54-66"><a href="#cb54-66" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb54-67"><a href="#cb54-67" aria-hidden="true" tabindex="-1"></a>beetles   <span class="ot">&lt;-</span> <span class="fu">population_graph</span>(arapat, <span class="at">stratum =</span> <span class="st">"Population"</span>)</span>
-<span id="cb54-68"><a href="#cb54-68" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">strata_coordinates</span>(arapat, <span class="at">stratum =</span> <span class="st">"Population"</span>)</span>
-<span id="cb54-69"><a href="#cb54-69" aria-hidden="true" tabindex="-1"></a>lat    <span class="ot">&lt;-</span> <span class="fu">setNames</span>(coords<span class="sc">$</span>Latitude, coords<span class="sc">$</span>Stratum)</span>
-<span id="cb54-70"><a href="#cb54-70" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">gravity_field</span>(beetles, <span class="at">gamma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>)), <span class="at">layout =</span> coords, <span class="at">mask_dist =</span> <span class="fl">0.6</span>)</span>
-<span id="cb54-71"><a href="#cb54-71" aria-hidden="true" tabindex="-1"></a><span class="fu">source_sink_test</span>(beetles, <span class="at">x =</span> lat, <span class="at">nperm =</span> <span class="dv">499</span>)</span>
-<span id="cb54-72"><a href="#cb54-72" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"cgd"</span>)</span>
-<span id="cb54-73"><a href="#cb54-73" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span>
-<span id="cb54-74"><a href="#cb54-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb54-75"><a href="#cb54-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-76"><a href="#cb54-76" aria-hidden="true" tabindex="-1"></a>The two tests answer different questions.  Under strong drift the model</span>
-<span id="cb54-77"><a href="#cb54-77" aria-hidden="true" tabindex="-1"></a>comparison can prefer a directional fit by chance, so read it alongside the</span>
-<span id="cb54-78"><a href="#cb54-78" aria-hidden="true" tabindex="-1"></a>source-sink test.  Edge-level permutation tests of $\Delta$</span>
-<span id="cb54-79"><a href="#cb54-79" aria-hidden="true" tabindex="-1"></a>(<span class="in">`asymmetry_significance()`</span> and its modes) are not recommended as tests of</span>
-<span id="cb54-80"><a href="#cb54-80" aria-hidden="true" tabindex="-1"></a>direction: under symmetric migration they are anti-conservative, or never</span>
-<span id="cb54-81"><a href="#cb54-81" aria-hidden="true" tabindex="-1"></a>reject.</span>
-<span id="cb54-82"><a href="#cb54-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-83"><a href="#cb54-83" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data quality: information loss</span></span>
-<span id="cb54-84"><a href="#cb54-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-85"><a href="#cb54-85" aria-hidden="true" tabindex="-1"></a>As loci fix, graphs are estimated from fewer informative loci, which inflates</span>
-<span id="cb54-86"><a href="#cb54-86" aria-hidden="true" tabindex="-1"></a>$|\Delta|$ whatever the direction of gene flow.  <span class="in">`locus_subsample_null()`</span></span>
-<span id="cb54-87"><a href="#cb54-87" aria-hidden="true" tabindex="-1"></a>rebuilds the graph from random subsets of polymorphic loci, to show how much</span>
-<span id="cb54-88"><a href="#cb54-88" aria-hidden="true" tabindex="-1"></a>$|\Delta|$ information loss alone can produce at a given level of polymorphism:</span>
-<span id="cb54-89"><a href="#cb54-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-90"><a href="#cb54-90" aria-hidden="true" tabindex="-1"></a><span class="in">```{r info-loss}</span></span>
-<span id="cb54-91"><a href="#cb54-91" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb54-92"><a href="#cb54-92" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb54-93"><a href="#cb54-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus_subsample_null</span>(<span class="at">k =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>), <span class="at">nsub =</span> <span class="dv">3</span>)</span>
-<span id="cb54-94"><a href="#cb54-94" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb54-95"><a href="#cb54-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-96"><a href="#cb54-96" aria-hidden="true" tabindex="-1"></a><span class="fu">## Simulating directional gene flow</span></span>
-<span id="cb54-97"><a href="#cb54-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-98"><a href="#cb54-98" aria-hidden="true" tabindex="-1"></a>A directional stepping stone, with rates to the next population downstream</span>
-<span id="cb54-99"><a href="#cb54-99" aria-hidden="true" tabindex="-1"></a>(<span class="in">`m_fwd`</span>) and upstream (<span class="in">`m_rev`</span>), plugs into <span class="in">`simulate_pop()`</span>; this is how the</span>
-<span id="cb54-100"><a href="#cb54-100" aria-hidden="true" tabindex="-1"></a><span class="in">`gravity`</span> data were generated (at a much larger scale):</span>
-<span id="cb54-101"><a href="#cb54-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-102"><a href="#cb54-102" aria-hidden="true" tabindex="-1"></a><span class="in">```{r simulate}</span></span>
-<span id="cb54-103"><a href="#cb54-103" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb54-104"><a href="#cb54-104" aria-hidden="true" tabindex="-1"></a>demes <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"Pop%02d"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
-<span id="cb54-105"><a href="#cb54-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-106"><a href="#cb54-106" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> demes <span class="sc">|&gt;</span></span>
-<span id="cb54-107"><a href="#cb54-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"stepping_stone_1d_asym"</span>, <span class="at">m_fwd =</span> <span class="fl">0.04</span>, <span class="at">m_rev =</span> <span class="fl">0.01</span>)</span>
-<span id="cb54-108"><a href="#cb54-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-109"><a href="#cb54-109" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Population =</span> <span class="fu">rep</span>(demes, <span class="at">each =</span> <span class="dv">2</span>),</span>
-<span id="cb54-110"><a href="#cb54-110" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Locus =</span> <span class="st">"L1"</span>,</span>
-<span id="cb54-111"><a href="#cb54-111" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Allele =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"01"</span>, <span class="st">"02"</span>), <span class="dv">10</span>),</span>
-<span id="cb54-112"><a href="#cb54-112" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Frequency =</span> <span class="fl">0.5</span>) <span class="sc">|&gt;</span></span>
-<span id="cb54-113"><a href="#cb54-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_populations</span>(<span class="at">N =</span> <span class="dv">50</span>) <span class="sc">|&gt;</span></span>
-<span id="cb54-114"><a href="#cb54-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">200</span>, <span class="at">migration =</span> <span class="fu">migration_event</span>(mm), <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb54-115"><a href="#cb54-115" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb54-116"><a href="#cb54-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-117"><a href="#cb54-117" aria-hidden="true" tabindex="-1"></a>{{&lt; include ../vignettes/children/genetic_gravity_summary.Rmd &gt;}}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb55" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Genetic Gravity {#sec-genetic-gravity}</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- The walkthrough below is shared with the package vignette</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="co">     (vignette("genetic_gravity")); edit it in vignettes/children/genetic_gravity_body.Rmd</span></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="co">     and vignettes/children/genetic_gravity_summary.Rmd, not here. --&gt;</span></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>{{&lt; include ../vignettes/children/genetic_gravity_body.Rmd &gt;}}</span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Empirical data: *Araptus attenuatus*</span></span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>The same analysis applies directly to field data.  Here the Population Graph</span>
+<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a>is built from the <span class="in">`arapat`</span> genotypes with <span class="in">`population_graph()`</span>, and the</span>
+<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a>populations' geographic centroids give both the map layout and a covariate to</span>
+<span id="cb55-14"><a href="#cb55-14" aria-hidden="true" tabindex="-1"></a>test against: latitude along the Baja California peninsula.</span>
+<span id="cb55-15"><a href="#cb55-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-16"><a href="#cb55-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{r arapat-graph}</span></span>
+<span id="cb55-17"><a href="#cb55-17" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb55-18"><a href="#cb55-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-19"><a href="#cb55-19" aria-hidden="true" tabindex="-1"></a>beetles <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb55-20"><a href="#cb55-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population_graph</span>()</span>
+<span id="cb55-21"><a href="#cb55-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-22"><a href="#cb55-22" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb55-23"><a href="#cb55-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">strata_coordinates</span>()</span>
+<span id="cb55-24"><a href="#cb55-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-25"><a href="#cb55-25" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> coords <span class="sc">|&gt;</span></span>
+<span id="cb55-26"><a href="#cb55-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Latitude, <span class="at">name =</span> Stratum)</span>
+<span id="cb55-27"><a href="#cb55-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb55-28"><a href="#cb55-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-29"><a href="#cb55-29" aria-hidden="true" tabindex="-1"></a>Passing the centroids as <span class="in">`layout`</span> draws the gravity field on geographic</span>
+<span id="cb55-30"><a href="#cb55-30" aria-hidden="true" tabindex="-1"></a>coordinates.  Sampling locations are clustered, so the surface is extended with</span>
+<span id="cb55-31"><a href="#cb55-31" aria-hidden="true" tabindex="-1"></a><span class="in">`mask_dist`</span> (by default it reaches 1.2 times the median nearest-neighbour</span>
+<span id="cb55-32"><a href="#cb55-32" aria-hidden="true" tabindex="-1"></a>distance between populations).  Comparing the two bandwidths shows how much of</span>
+<span id="cb55-33"><a href="#cb55-33" aria-hidden="true" tabindex="-1"></a>the local-mean picture is degree:</span>
+<span id="cb55-34"><a href="#cb55-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-35"><a href="#cb55-35" aria-hidden="true" tabindex="-1"></a><span class="in">```{r arapat-field}</span></span>
+<span id="cb55-36"><a href="#cb55-36" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
+<span id="cb55-37"><a href="#cb55-37" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 5</span></span>
+<span id="cb55-38"><a href="#cb55-38" aria-hidden="true" tabindex="-1"></a>both <span class="ot">&lt;-</span> beetles <span class="sc">|&gt;</span></span>
+<span id="cb55-39"><a href="#cb55-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gravity_field</span>(<span class="at">gamma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>))</span>
+<span id="cb55-40"><a href="#cb55-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-41"><a href="#cb55-41" aria-hidden="true" tabindex="-1"></a>both <span class="sc">|&gt;</span></span>
+<span id="cb55-42"><a href="#cb55-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(<span class="at">what =</span> <span class="st">"diagnostics"</span>)</span>
+<span id="cb55-43"><a href="#cb55-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-44"><a href="#cb55-44" aria-hidden="true" tabindex="-1"></a>both <span class="sc">|&gt;</span></span>
+<span id="cb55-45"><a href="#cb55-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">layout =</span> coords, <span class="at">mask_dist =</span> <span class="fl">0.6</span>)</span>
+<span id="cb55-46"><a href="#cb55-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb55-47"><a href="#cb55-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-48"><a href="#cb55-48" aria-hidden="true" tabindex="-1"></a>Both tests take latitude as the hypothesized axis:</span>
+<span id="cb55-49"><a href="#cb55-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-50"><a href="#cb55-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{r arapat-tests}</span></span>
+<span id="cb55-51"><a href="#cb55-51" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb55-52"><a href="#cb55-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-53"><a href="#cb55-53" aria-hidden="true" tabindex="-1"></a>beetles <span class="sc">|&gt;</span></span>
+<span id="cb55-54"><a href="#cb55-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">source_sink_test</span>(<span class="at">x =</span> lat, <span class="at">nperm =</span> <span class="dv">499</span>)</span>
+<span id="cb55-55"><a href="#cb55-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-56"><a href="#cb55-56" aria-hidden="true" tabindex="-1"></a>beetles <span class="sc">|&gt;</span></span>
+<span id="cb55-57"><a href="#cb55-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> lat)</span>
+<span id="cb55-58"><a href="#cb55-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-59"><a href="#cb55-59" aria-hidden="true" tabindex="-1"></a>beetles <span class="sc">|&gt;</span></span>
+<span id="cb55-60"><a href="#cb55-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span>
+<span id="cb55-61"><a href="#cb55-61" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb55-62"><a href="#cb55-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-63"><a href="#cb55-63" aria-hidden="true" tabindex="-1"></a>Without pipes, the same steps are:</span>
+<span id="cb55-64"><a href="#cb55-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-65"><a href="#cb55-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{r arapat-no-pipes}</span></span>
+<span id="cb55-66"><a href="#cb55-66" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb55-67"><a href="#cb55-67" aria-hidden="true" tabindex="-1"></a>beetles   <span class="ot">&lt;-</span> <span class="fu">population_graph</span>(arapat, <span class="at">stratum =</span> <span class="st">"Population"</span>)</span>
+<span id="cb55-68"><a href="#cb55-68" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">strata_coordinates</span>(arapat, <span class="at">stratum =</span> <span class="st">"Population"</span>)</span>
+<span id="cb55-69"><a href="#cb55-69" aria-hidden="true" tabindex="-1"></a>lat    <span class="ot">&lt;-</span> <span class="fu">setNames</span>(coords<span class="sc">$</span>Latitude, coords<span class="sc">$</span>Stratum)</span>
+<span id="cb55-70"><a href="#cb55-70" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">gravity_field</span>(beetles, <span class="at">gamma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>)), <span class="at">layout =</span> coords, <span class="at">mask_dist =</span> <span class="fl">0.6</span>)</span>
+<span id="cb55-71"><a href="#cb55-71" aria-hidden="true" tabindex="-1"></a><span class="fu">source_sink_test</span>(beetles, <span class="at">x =</span> lat, <span class="at">nperm =</span> <span class="dv">499</span>)</span>
+<span id="cb55-72"><a href="#cb55-72" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"cgd"</span>)</span>
+<span id="cb55-73"><a href="#cb55-73" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span>
+<span id="cb55-74"><a href="#cb55-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb55-75"><a href="#cb55-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-76"><a href="#cb55-76" aria-hidden="true" tabindex="-1"></a>Starting from the genotypes rather than a graph, <span class="in">`genetic_isolation()`</span> builds</span>
+<span id="cb55-77"><a href="#cb55-77" aria-hidden="true" tabindex="-1"></a>the graph and runs the same tests, with the axis given as a column:</span>
+<span id="cb55-78"><a href="#cb55-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-79"><a href="#cb55-79" aria-hidden="true" tabindex="-1"></a><span class="in">```{r arapat-isolation}</span></span>
+<span id="cb55-80"><a href="#cb55-80" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb55-81"><a href="#cb55-81" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_isolation</span>(arapat, <span class="at">mode =</span> <span class="st">"IBGD"</span>, <span class="at">axis =</span> <span class="st">"Latitude"</span>)</span>
+<span id="cb55-82"><a href="#cb55-82" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_isolation</span>(arapat, <span class="at">mode =</span> <span class="st">"PGD"</span>, <span class="at">axis =</span> <span class="st">"Latitude"</span>)</span>
+<span id="cb55-83"><a href="#cb55-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb55-84"><a href="#cb55-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-85"><a href="#cb55-85" aria-hidden="true" tabindex="-1"></a>The two tests answer different questions.  Under strong drift the model</span>
+<span id="cb55-86"><a href="#cb55-86" aria-hidden="true" tabindex="-1"></a>comparison can prefer a directional fit by chance, so read it alongside the</span>
+<span id="cb55-87"><a href="#cb55-87" aria-hidden="true" tabindex="-1"></a>source-sink test.  Edge-level permutation tests of $\Delta$</span>
+<span id="cb55-88"><a href="#cb55-88" aria-hidden="true" tabindex="-1"></a>(<span class="in">`asymmetry_significance()`</span> and its modes) are not recommended as tests of</span>
+<span id="cb55-89"><a href="#cb55-89" aria-hidden="true" tabindex="-1"></a>direction: under symmetric migration they are anti-conservative, or never</span>
+<span id="cb55-90"><a href="#cb55-90" aria-hidden="true" tabindex="-1"></a>reject.</span>
+<span id="cb55-91"><a href="#cb55-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-92"><a href="#cb55-92" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data quality: information loss</span></span>
+<span id="cb55-93"><a href="#cb55-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-94"><a href="#cb55-94" aria-hidden="true" tabindex="-1"></a>As loci fix, graphs are estimated from fewer informative loci, which inflates</span>
+<span id="cb55-95"><a href="#cb55-95" aria-hidden="true" tabindex="-1"></a>$|\Delta|$ whatever the direction of gene flow.  <span class="in">`locus_subsample_null()`</span></span>
+<span id="cb55-96"><a href="#cb55-96" aria-hidden="true" tabindex="-1"></a>rebuilds the graph from random subsets of polymorphic loci, to show how much</span>
+<span id="cb55-97"><a href="#cb55-97" aria-hidden="true" tabindex="-1"></a>$|\Delta|$ information loss alone can produce at a given level of polymorphism:</span>
+<span id="cb55-98"><a href="#cb55-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-99"><a href="#cb55-99" aria-hidden="true" tabindex="-1"></a><span class="in">```{r info-loss}</span></span>
+<span id="cb55-100"><a href="#cb55-100" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb55-101"><a href="#cb55-101" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb55-102"><a href="#cb55-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus_subsample_null</span>(<span class="at">k =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>), <span class="at">nsub =</span> <span class="dv">3</span>)</span>
+<span id="cb55-103"><a href="#cb55-103" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb55-104"><a href="#cb55-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-105"><a href="#cb55-105" aria-hidden="true" tabindex="-1"></a><span class="fu">## Simulating directional gene flow</span></span>
+<span id="cb55-106"><a href="#cb55-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-107"><a href="#cb55-107" aria-hidden="true" tabindex="-1"></a>A directional stepping stone, with rates to the next population downstream</span>
+<span id="cb55-108"><a href="#cb55-108" aria-hidden="true" tabindex="-1"></a>(<span class="in">`m_fwd`</span>) and upstream (<span class="in">`m_rev`</span>), plugs into <span class="in">`simulate_pop()`</span>; this is how the</span>
+<span id="cb55-109"><a href="#cb55-109" aria-hidden="true" tabindex="-1"></a><span class="in">`gravity`</span> data were generated (at a much larger scale):</span>
+<span id="cb55-110"><a href="#cb55-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-111"><a href="#cb55-111" aria-hidden="true" tabindex="-1"></a><span class="in">```{r simulate}</span></span>
+<span id="cb55-112"><a href="#cb55-112" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb55-113"><a href="#cb55-113" aria-hidden="true" tabindex="-1"></a>demes <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"Pop%02d"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb55-114"><a href="#cb55-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-115"><a href="#cb55-115" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> demes <span class="sc">|&gt;</span></span>
+<span id="cb55-116"><a href="#cb55-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">migration_matrix</span>(<span class="at">model =</span> <span class="st">"stepping_stone_1d_asym"</span>, <span class="at">m_fwd =</span> <span class="fl">0.04</span>, <span class="at">m_rev =</span> <span class="fl">0.01</span>)</span>
+<span id="cb55-117"><a href="#cb55-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-118"><a href="#cb55-118" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Population =</span> <span class="fu">rep</span>(demes, <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb55-119"><a href="#cb55-119" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Locus =</span> <span class="st">"L1"</span>,</span>
+<span id="cb55-120"><a href="#cb55-120" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Allele =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"01"</span>, <span class="st">"02"</span>), <span class="dv">10</span>),</span>
+<span id="cb55-121"><a href="#cb55-121" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Frequency =</span> <span class="fl">0.5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb55-122"><a href="#cb55-122" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_populations</span>(<span class="at">N =</span> <span class="dv">50</span>) <span class="sc">|&gt;</span></span>
+<span id="cb55-123"><a href="#cb55-123" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulate_pop</span>(<span class="at">ngen =</span> <span class="dv">200</span>, <span class="at">migration =</span> <span class="fu">migration_event</span>(mm), <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb55-124"><a href="#cb55-124" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb55-125"><a href="#cb55-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-126"><a href="#cb55-126" aria-hidden="true" tabindex="-1"></a>{{&lt; include ../vignettes/children/genetic_gravity_summary.Rmd &gt;}}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6302357f959a8f7748413a5996c6581e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-868c16dd3ff1719441578aa0872de989.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -247,8 +247,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#single-locus-relatedness" id="toc-single-locus-relatedness" class="nav-link" data-scroll-target="#single-locus-relatedness"><span class="header-section-number">7.2.3</span> Single-Locus Relatedness</a></li>
   </ul></li>
   <li><a href="#spatial-autocorrelation" id="toc-spatial-autocorrelation" class="nav-link" data-scroll-target="#spatial-autocorrelation"><span class="header-section-number">7.3</span> Spatial Autocorrelation</a></li>
-  <li><a href="#strata-distances" id="toc-strata-distances" class="nav-link" data-scroll-target="#strata-distances"><span class="header-section-number">7.4</span> Strata Distances</a></li>
-  <li><a href="#without-pipes" id="toc-without-pipes" class="nav-link" data-scroll-target="#without-pipes"><span class="header-section-number">7.5</span> Without Pipes</a></li>
+  <li><a href="#isolation-by-distance" id="toc-isolation-by-distance" class="nav-link" data-scroll-target="#isolation-by-distance"><span class="header-section-number">7.4</span> Isolation by Distance</a></li>
+  <li><a href="#strata-distances" id="toc-strata-distances" class="nav-link" data-scroll-target="#strata-distances"><span class="header-section-number">7.5</span> Strata Distances</a></li>
+  <li><a href="#without-pipes" id="toc-without-pipes" class="nav-link" data-scroll-target="#without-pipes"><span class="header-section-number">7.6</span> Without Pipes</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyerlab/gstudio/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -525,13 +526,34 @@ Some of your loci are missing, Fij will treat these as loci with all alleles wit
 </div>
 <p>The output includes the spatial autocorrelation coefficient (R) for each distance class, the number of pairwise comparisons (N), and a p-value from the permutation test (P).</p>
 </section>
-<section id="strata-distances" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="strata-distances"><span class="header-section-number">7.4</span> Strata Distances</h2>
+<section id="isolation-by-distance" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="isolation-by-distance"><span class="header-section-number">7.4</span> Isolation by Distance</h2>
+<p><code>genetic_isolation()</code> tests whether genetic distance among strata grows with their separation, starting from the genotypes. The default, <code>mode = "IBD"</code>, correlates Nei’s genetic distance (change it with <code>genetic =</code>) with great-circle distance between strata and tests it with a Mantel permutation test:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_isolation</span>(<span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">nperm =</span> <span class="dv">499</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Isolation by distance (Nei genetic distance; Mantel permutation test)
+
+data:  arapat by Population, and great-circle distance (km)
+r = 0.56232, pairs = 741, nperm = 499, p-value = 0.002
+alternative hypothesis: true r is greater than 0
+sample estimates:
+         R2       slope 
+0.316201330 0.001337526 </code></pre>
+</div>
+</div>
+<p><code>mode = "IBGD"</code> uses the conditional genetic distance through a Population Graph instead, and <code>mode = "PGD"</code> asks whether a directional model fits better, given an <code>axis</code> (see <a href="genetic-gravity.html" class="quarto-xref"><span>Chapter 9</span></a>). Separation can also come from your own matrix (<code>spatial =</code>, e.g.&nbsp;resistance distances) or positions along an axis (<code>axis =</code>). If you already have a Population Graph, <code>ibgd()</code> works on it directly.</p>
+</section>
+<section id="strata-distances" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="strata-distances"><span class="header-section-number">7.5</span> Strata Distances</h2>
 <p>The <code>strata_coordinates()</code> function extracts per-stratum centroid coordinates, and <code>strata_distance()</code> computes physical (geographic) distances between them:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">strata_coordinates</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">longitude =</span> <span class="st">"Longitude"</span>, <span class="at">latitude =</span> <span class="st">"Latitude"</span>)</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>coords</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">strata_coordinates</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">longitude =</span> <span class="st">"Longitude"</span>, <span class="at">latitude =</span> <span class="st">"Latitude"</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>coords</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    Stratum Longitude Latitude
 3 Peninsula -111.9226 26.18956
@@ -540,8 +562,8 @@ Some of your loci are missing, Fij will treat these as loci with all alleles wit
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>coords <span class="sc">|&gt;</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">strata_distance</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>coords <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">strata_distance</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          Peninsula     Cape Mainland
 Peninsula    0.0000 254.0525 239.8471
@@ -550,16 +572,17 @@ Mainland   239.8471 315.7868   0.0000</code></pre>
 </div>
 </div>
 </section>
-<section id="without-pipes" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="without-pipes"><span class="header-section-number">7.5</span> Without Pipes</h2>
+<section id="without-pipes" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="without-pipes"><span class="header-section-number">7.6</span> Without Pipes</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>D_amova <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, ], <span class="at">mode =</span> <span class="st">"AMOVA"</span>)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>D_nei   <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Nei"</span>)</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>D_pgd   <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"pGD"</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>R       <span class="ot">&lt;-</span> <span class="fu">genetic_relatedness</span>(arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="fu">c</span>(<span class="st">"Species"</span>, <span class="st">"WNT"</span>, <span class="st">"EN"</span>, <span class="st">"EF"</span>, <span class="st">"ZMP"</span>, <span class="st">"AML"</span>, <span class="st">"MP20"</span>)],</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>                               <span class="at">mode =</span> <span class="st">"Nason"</span>)</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>coords  <span class="ot">&lt;-</span> <span class="fu">strata_coordinates</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="fu">strata_distance</span>(coords)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>D_amova <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, ], <span class="at">mode =</span> <span class="st">"AMOVA"</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>D_nei   <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Nei"</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>D_pgd   <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"pGD"</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>R       <span class="ot">&lt;-</span> <span class="fu">genetic_relatedness</span>(arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="fu">c</span>(<span class="st">"Species"</span>, <span class="st">"WNT"</span>, <span class="st">"EN"</span>, <span class="st">"EF"</span>, <span class="st">"ZMP"</span>, <span class="st">"AML"</span>, <span class="st">"MP20"</span>)],</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                               <span class="at">mode =</span> <span class="st">"Nason"</span>)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>coords  <span class="ot">&lt;-</span> <span class="fu">strata_coordinates</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="fu">strata_distance</span>(coords)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_isolation</span>(arapat, <span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">mode =</span> <span class="st">"IBD"</span>, <span class="at">nperm =</span> <span class="dv">499</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
@@ -1107,168 +1130,181 @@ Mainland   239.8471 315.7868   0.0000</code></pre>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Genetic Distance &amp; Relatedness</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>This chapter covers inter-individual and inter-population distance estimation, pairwise relatedness, and spatial autocorrelation analysis.</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Genetic Distance</span></span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>The <span class="in">`genetic_distance()`</span> function computes distance matrices from genetic data. Some modes operate among individuals, others among populations (strata).</span>
-<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a><span class="fu">### Available Distance Metrics</span></span>
-<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mode <span class="pp">|</span> Level <span class="pp">|</span> Description <span class="pp">|</span></span>
-<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|-------|-------------|</span></span>
-<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"AMOVA"`</span> <span class="pp">|</span> Individual <span class="pp">|</span> Inter-individual AMOVA distance <span class="pp">|</span></span>
-<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Bray"`</span> <span class="pp">|</span> Individual <span class="pp">|</span> Proportion of shared alleles <span class="pp">|</span></span>
-<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Euclidean"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Euclidean frequency distance <span class="pp">|</span></span>
-<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"cGD"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Conditional genetic distance <span class="pp">|</span></span>
-<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"pGD"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Partitioned (directed) conditional genetic distance; asymmetric <span class="pp">|</span></span>
-<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Nei"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Nei's genetic distance (1978) <span class="pp">|</span></span>
-<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Dps"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Shared allele distance (1 - Ps) <span class="pp">|</span></span>
-<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Jaccard"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Jaccard set dissimilarity <span class="pp">|</span></span>
-<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a><span class="fu">### Individual-Level Distances</span></span>
-<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a>AMOVA distance computes inter-individual genetic distances:</span>
-<span id="cb34-34"><a href="#cb34-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-37"><a href="#cb34-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-38"><a href="#cb34-38" aria-hidden="true" tabindex="-1"></a><span class="co"># The first 20 individuals, for a manageable example</span></span>
-<span id="cb34-39"><a href="#cb34-39" aria-hidden="true" tabindex="-1"></a>D_amova <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb34-40"><a href="#cb34-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) <span class="sc">|&gt;</span></span>
-<span id="cb34-41"><a href="#cb34-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">mode =</span> <span class="st">"AMOVA"</span>)</span>
-<span id="cb34-42"><a href="#cb34-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-43"><a href="#cb34-43" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(D_amova)</span>
-<span id="cb34-44"><a href="#cb34-44" aria-hidden="true" tabindex="-1"></a>D_amova[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
-<span id="cb34-45"><a href="#cb34-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-46"><a href="#cb34-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-47"><a href="#cb34-47" aria-hidden="true" tabindex="-1"></a><span class="fu">### Population-Level Distances</span></span>
-<span id="cb34-48"><a href="#cb34-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-49"><a href="#cb34-49" aria-hidden="true" tabindex="-1"></a>Population-level distances require a stratum column:</span>
-<span id="cb34-50"><a href="#cb34-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-53"><a href="#cb34-53" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-54"><a href="#cb34-54" aria-hidden="true" tabindex="-1"></a>D_nei <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb34-55"><a href="#cb34-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Nei"</span>)</span>
-<span id="cb34-56"><a href="#cb34-56" aria-hidden="true" tabindex="-1"></a>D_nei</span>
-<span id="cb34-57"><a href="#cb34-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-58"><a href="#cb34-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-61"><a href="#cb34-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-62"><a href="#cb34-62" aria-hidden="true" tabindex="-1"></a>D_cgd <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb34-63"><a href="#cb34-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"cGD"</span>)</span>
-<span id="cb34-64"><a href="#cb34-64" aria-hidden="true" tabindex="-1"></a>D_cgd</span>
-<span id="cb34-65"><a href="#cb34-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-66"><a href="#cb34-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-67"><a href="#cb34-67" aria-hidden="true" tabindex="-1"></a>Partitioned conditional genetic distance (pGD) splits each Population Graph edge's cGD into two directed shares using the genetic-gravity neighbourhood weights, so the matrix is asymmetric: <span class="in">`[i, j]`</span> is the distance from <span class="in">`i`</span> to <span class="in">`j`</span>, shorter in the direction of gene flow. The bandwidth multiplier is set with <span class="in">`gamma`</span> (default 0.5); see <span class="in">`vignette("genetic_gravity")`</span>.</span>
-<span id="cb34-68"><a href="#cb34-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-71"><a href="#cb34-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-72"><a href="#cb34-72" aria-hidden="true" tabindex="-1"></a>D_pgd <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb34-73"><a href="#cb34-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"pGD"</span>)</span>
-<span id="cb34-74"><a href="#cb34-74" aria-hidden="true" tabindex="-1"></a>D_pgd</span>
-<span id="cb34-75"><a href="#cb34-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-76"><a href="#cb34-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-79"><a href="#cb34-79" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-80"><a href="#cb34-80" aria-hidden="true" tabindex="-1"></a>D_euc <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb34-81"><a href="#cb34-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Euclidean"</span>)</span>
-<span id="cb34-82"><a href="#cb34-82" aria-hidden="true" tabindex="-1"></a>D_euc</span>
-<span id="cb34-83"><a href="#cb34-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-84"><a href="#cb34-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-85"><a href="#cb34-85" aria-hidden="true" tabindex="-1"></a><span class="fu">## Genetic Relatedness</span></span>
-<span id="cb34-86"><a href="#cb34-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-87"><a href="#cb34-87" aria-hidden="true" tabindex="-1"></a>The <span class="in">`genetic_relatedness()`</span> function computes pairwise relatedness among individuals.</span>
-<span id="cb34-88"><a href="#cb34-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-89"><a href="#cb34-89" aria-hidden="true" tabindex="-1"></a><span class="fu">### Available Relatedness Estimators</span></span>
-<span id="cb34-90"><a href="#cb34-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-91"><a href="#cb34-91" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mode <span class="pp">|</span> Description <span class="pp">|</span></span>
-<span id="cb34-92"><a href="#cb34-92" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|-------------|</span></span>
-<span id="cb34-93"><a href="#cb34-93" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Nason"`</span> <span class="pp">|</span> Nason's kinship coefficient (Fij) <span class="pp">|</span></span>
-<span id="cb34-94"><a href="#cb34-94" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"LynchRitland"`</span> <span class="pp">|</span> Lynch &amp; Ritland estimator <span class="pp">|</span></span>
-<span id="cb34-95"><a href="#cb34-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Ritland"`</span> <span class="pp">|</span> Ritland estimator <span class="pp">|</span></span>
-<span id="cb34-96"><a href="#cb34-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-97"><a href="#cb34-97" aria-hidden="true" tabindex="-1"></a><span class="fu">### Basic Usage</span></span>
-<span id="cb34-98"><a href="#cb34-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-99"><a href="#cb34-99" aria-hidden="true" tabindex="-1"></a>The Nason estimator divides by the polymorphic index (<span class="in">`genetic_diversity(mode = "Pe")`</span>), so monomorphic loci (where <span class="in">`Pe = 0`</span>) will produce <span class="in">`NaN`</span>. In the <span class="in">`arapat`</span> dataset, <span class="in">`LTRS`</span> and <span class="in">`ATPS`</span> can be monomorphic in small subsets. To avoid this, restrict the data to polymorphic loci:</span>
-<span id="cb34-100"><a href="#cb34-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-103"><a href="#cb34-103" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-104"><a href="#cb34-104" aria-hidden="true" tabindex="-1"></a><span class="co"># Use loci that are polymorphic in this subset</span></span>
-<span id="cb34-105"><a href="#cb34-105" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb34-106"><a href="#cb34-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">|&gt;</span></span>
-<span id="cb34-107"><a href="#cb34-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Species, WNT, EN, EF, ZMP, AML, MP20) <span class="sc">|&gt;</span></span>
-<span id="cb34-108"><a href="#cb34-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_relatedness</span>(<span class="at">mode =</span> <span class="st">"Nason"</span>)</span>
-<span id="cb34-109"><a href="#cb34-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-110"><a href="#cb34-110" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(R)</span>
-<span id="cb34-111"><a href="#cb34-111" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(R[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="dv">4</span>)</span>
-<span id="cb34-112"><a href="#cb34-112" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-113"><a href="#cb34-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-114"><a href="#cb34-114" aria-hidden="true" tabindex="-1"></a><span class="fu">### Single-Locus Relatedness</span></span>
-<span id="cb34-115"><a href="#cb34-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-116"><a href="#cb34-116" aria-hidden="true" tabindex="-1"></a>Relatedness at a single locus uses the same function, with <span class="in">`loci =`</span>:</span>
-<span id="cb34-117"><a href="#cb34-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-120"><a href="#cb34-120" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-121"><a href="#cb34-121" aria-hidden="true" tabindex="-1"></a>r_nason <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb34-122"><a href="#cb34-122" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">|&gt;</span></span>
-<span id="cb34-123"><a href="#cb34-123" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_relatedness</span>(<span class="at">loci =</span> <span class="st">"EN"</span>, <span class="at">mode =</span> <span class="st">"Nason"</span>)</span>
-<span id="cb34-124"><a href="#cb34-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-125"><a href="#cb34-125" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(r_nason[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="dv">4</span>)</span>
-<span id="cb34-126"><a href="#cb34-126" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-127"><a href="#cb34-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-128"><a href="#cb34-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## Spatial Autocorrelation</span></span>
-<span id="cb34-129"><a href="#cb34-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-130"><a href="#cb34-130" aria-hidden="true" tabindex="-1"></a>The <span class="in">`genetic_autocorrelation()`</span> function performs the spatial autocorrelation analysis of Smouse &amp; Peakall (1999). It requires two square distance matrices --- one physical, one genetic --- and a vector of distance bin boundaries:</span>
-<span id="cb34-131"><a href="#cb34-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-134"><a href="#cb34-134" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-135"><a href="#cb34-135" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb34-136"><a href="#cb34-136" aria-hidden="true" tabindex="-1"></a><span class="co"># Physical distance matrix</span></span>
-<span id="cb34-137"><a href="#cb34-137" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb34-138"><a href="#cb34-138" aria-hidden="true" tabindex="-1"></a>  <span class="fu">strata_distance</span>(<span class="at">longitude =</span> <span class="st">"Longitude"</span>, <span class="at">latitude =</span> <span class="st">"Latitude"</span>)</span>
-<span id="cb34-139"><a href="#cb34-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-140"><a href="#cb34-140" aria-hidden="true" tabindex="-1"></a><span class="co"># Genetic distance matrix</span></span>
-<span id="cb34-141"><a href="#cb34-141" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb34-142"><a href="#cb34-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">mode =</span> <span class="st">"AMOVA"</span>)</span>
-<span id="cb34-143"><a href="#cb34-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-144"><a href="#cb34-144" aria-hidden="true" tabindex="-1"></a><span class="co"># Define distance bins</span></span>
-<span id="cb34-145"><a href="#cb34-145" aria-hidden="true" tabindex="-1"></a>bins <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(P), <span class="at">length.out =</span> <span class="dv">6</span>)</span>
-<span id="cb34-146"><a href="#cb34-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-147"><a href="#cb34-147" aria-hidden="true" tabindex="-1"></a><span class="co"># Run autocorrelation</span></span>
-<span id="cb34-148"><a href="#cb34-148" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">genetic_autocorrelation</span>(P, G, <span class="at">bins =</span> bins, <span class="at">perms =</span> <span class="dv">99</span>)</span>
-<span id="cb34-149"><a href="#cb34-149" aria-hidden="true" tabindex="-1"></a>result</span>
-<span id="cb34-150"><a href="#cb34-150" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-151"><a href="#cb34-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-152"><a href="#cb34-152" aria-hidden="true" tabindex="-1"></a>The output includes the spatial autocorrelation coefficient (R) for each distance class, the number of pairwise comparisons (N), and a p-value from the permutation test (P).</span>
-<span id="cb34-153"><a href="#cb34-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-154"><a href="#cb34-154" aria-hidden="true" tabindex="-1"></a><span class="fu">## Strata Distances</span></span>
-<span id="cb34-155"><a href="#cb34-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-156"><a href="#cb34-156" aria-hidden="true" tabindex="-1"></a>The <span class="in">`strata_coordinates()`</span> function extracts per-stratum centroid coordinates, and <span class="in">`strata_distance()`</span> computes physical (geographic) distances between them:</span>
-<span id="cb34-157"><a href="#cb34-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-160"><a href="#cb34-160" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-161"><a href="#cb34-161" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb34-162"><a href="#cb34-162" aria-hidden="true" tabindex="-1"></a>  <span class="fu">strata_coordinates</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">longitude =</span> <span class="st">"Longitude"</span>, <span class="at">latitude =</span> <span class="st">"Latitude"</span>)</span>
-<span id="cb34-163"><a href="#cb34-163" aria-hidden="true" tabindex="-1"></a>coords</span>
-<span id="cb34-164"><a href="#cb34-164" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-165"><a href="#cb34-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-168"><a href="#cb34-168" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-169"><a href="#cb34-169" aria-hidden="true" tabindex="-1"></a>coords <span class="sc">|&gt;</span></span>
-<span id="cb34-170"><a href="#cb34-170" aria-hidden="true" tabindex="-1"></a>  <span class="fu">strata_distance</span>()</span>
-<span id="cb34-171"><a href="#cb34-171" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-172"><a href="#cb34-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-173"><a href="#cb34-173" aria-hidden="true" tabindex="-1"></a><span class="fu">## Without Pipes</span></span>
-<span id="cb34-174"><a href="#cb34-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-177"><a href="#cb34-177" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-178"><a href="#cb34-178" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb34-179"><a href="#cb34-179" aria-hidden="true" tabindex="-1"></a>D_amova <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, ], <span class="at">mode =</span> <span class="st">"AMOVA"</span>)</span>
-<span id="cb34-180"><a href="#cb34-180" aria-hidden="true" tabindex="-1"></a>D_nei   <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Nei"</span>)</span>
-<span id="cb34-181"><a href="#cb34-181" aria-hidden="true" tabindex="-1"></a>D_pgd   <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"pGD"</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
-<span id="cb34-182"><a href="#cb34-182" aria-hidden="true" tabindex="-1"></a>R       <span class="ot">&lt;-</span> <span class="fu">genetic_relatedness</span>(arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="fu">c</span>(<span class="st">"Species"</span>, <span class="st">"WNT"</span>, <span class="st">"EN"</span>, <span class="st">"EF"</span>, <span class="st">"ZMP"</span>, <span class="st">"AML"</span>, <span class="st">"MP20"</span>)],</span>
-<span id="cb34-183"><a href="#cb34-183" aria-hidden="true" tabindex="-1"></a>                               <span class="at">mode =</span> <span class="st">"Nason"</span>)</span>
-<span id="cb34-184"><a href="#cb34-184" aria-hidden="true" tabindex="-1"></a>coords  <span class="ot">&lt;-</span> <span class="fu">strata_coordinates</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
-<span id="cb34-185"><a href="#cb34-185" aria-hidden="true" tabindex="-1"></a><span class="fu">strata_distance</span>(coords)</span>
-<span id="cb34-186"><a href="#cb34-186" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Genetic Distance &amp; Relatedness</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>This chapter covers inter-individual and inter-population distance estimation, pairwise relatedness, and spatial autocorrelation analysis.</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Genetic Distance</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>The <span class="in">`genetic_distance()`</span> function computes distance matrices from genetic data. Some modes operate among individuals, others among populations (strata).</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="fu">### Available Distance Metrics</span></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mode <span class="pp">|</span> Level <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|-------|-------------|</span></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"AMOVA"`</span> <span class="pp">|</span> Individual <span class="pp">|</span> Inter-individual AMOVA distance <span class="pp">|</span></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Bray"`</span> <span class="pp">|</span> Individual <span class="pp">|</span> Proportion of shared alleles <span class="pp">|</span></span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Euclidean"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Euclidean frequency distance <span class="pp">|</span></span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"cGD"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Conditional genetic distance <span class="pp">|</span></span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"pGD"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Partitioned (directed) conditional genetic distance; asymmetric <span class="pp">|</span></span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Nei"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Nei's genetic distance (1978) <span class="pp">|</span></span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Dps"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Shared allele distance (1 - Ps) <span class="pp">|</span></span>
+<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Jaccard"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Jaccard set dissimilarity <span class="pp">|</span></span>
+<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a><span class="fu">### Individual-Level Distances</span></span>
+<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a>AMOVA distance computes inter-individual genetic distances:</span>
+<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a><span class="co"># The first 20 individuals, for a manageable example</span></span>
+<span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a>D_amova <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-41"><a href="#cb36-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">mode =</span> <span class="st">"AMOVA"</span>)</span>
+<span id="cb36-42"><a href="#cb36-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-43"><a href="#cb36-43" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(D_amova)</span>
+<span id="cb36-44"><a href="#cb36-44" aria-hidden="true" tabindex="-1"></a>D_amova[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb36-45"><a href="#cb36-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-46"><a href="#cb36-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-47"><a href="#cb36-47" aria-hidden="true" tabindex="-1"></a><span class="fu">### Population-Level Distances</span></span>
+<span id="cb36-48"><a href="#cb36-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-49"><a href="#cb36-49" aria-hidden="true" tabindex="-1"></a>Population-level distances require a stratum column:</span>
+<span id="cb36-50"><a href="#cb36-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-53"><a href="#cb36-53" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-54"><a href="#cb36-54" aria-hidden="true" tabindex="-1"></a>D_nei <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb36-55"><a href="#cb36-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Nei"</span>)</span>
+<span id="cb36-56"><a href="#cb36-56" aria-hidden="true" tabindex="-1"></a>D_nei</span>
+<span id="cb36-57"><a href="#cb36-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-58"><a href="#cb36-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-61"><a href="#cb36-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-62"><a href="#cb36-62" aria-hidden="true" tabindex="-1"></a>D_cgd <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb36-63"><a href="#cb36-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"cGD"</span>)</span>
+<span id="cb36-64"><a href="#cb36-64" aria-hidden="true" tabindex="-1"></a>D_cgd</span>
+<span id="cb36-65"><a href="#cb36-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-66"><a href="#cb36-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-67"><a href="#cb36-67" aria-hidden="true" tabindex="-1"></a>Partitioned conditional genetic distance (pGD) splits each Population Graph edge's cGD into two directed shares using the genetic-gravity neighbourhood weights, so the matrix is asymmetric: <span class="in">`[i, j]`</span> is the distance from <span class="in">`i`</span> to <span class="in">`j`</span>, shorter in the direction of gene flow. The bandwidth multiplier is set with <span class="in">`gamma`</span> (default 0.5); see <span class="in">`vignette("genetic_gravity")`</span>.</span>
+<span id="cb36-68"><a href="#cb36-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-71"><a href="#cb36-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-72"><a href="#cb36-72" aria-hidden="true" tabindex="-1"></a>D_pgd <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb36-73"><a href="#cb36-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"pGD"</span>)</span>
+<span id="cb36-74"><a href="#cb36-74" aria-hidden="true" tabindex="-1"></a>D_pgd</span>
+<span id="cb36-75"><a href="#cb36-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-76"><a href="#cb36-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-79"><a href="#cb36-79" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-80"><a href="#cb36-80" aria-hidden="true" tabindex="-1"></a>D_euc <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb36-81"><a href="#cb36-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Euclidean"</span>)</span>
+<span id="cb36-82"><a href="#cb36-82" aria-hidden="true" tabindex="-1"></a>D_euc</span>
+<span id="cb36-83"><a href="#cb36-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-84"><a href="#cb36-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-85"><a href="#cb36-85" aria-hidden="true" tabindex="-1"></a><span class="fu">## Genetic Relatedness</span></span>
+<span id="cb36-86"><a href="#cb36-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-87"><a href="#cb36-87" aria-hidden="true" tabindex="-1"></a>The <span class="in">`genetic_relatedness()`</span> function computes pairwise relatedness among individuals.</span>
+<span id="cb36-88"><a href="#cb36-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-89"><a href="#cb36-89" aria-hidden="true" tabindex="-1"></a><span class="fu">### Available Relatedness Estimators</span></span>
+<span id="cb36-90"><a href="#cb36-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-91"><a href="#cb36-91" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mode <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb36-92"><a href="#cb36-92" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|-------------|</span></span>
+<span id="cb36-93"><a href="#cb36-93" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Nason"`</span> <span class="pp">|</span> Nason's kinship coefficient (Fij) <span class="pp">|</span></span>
+<span id="cb36-94"><a href="#cb36-94" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"LynchRitland"`</span> <span class="pp">|</span> Lynch &amp; Ritland estimator <span class="pp">|</span></span>
+<span id="cb36-95"><a href="#cb36-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Ritland"`</span> <span class="pp">|</span> Ritland estimator <span class="pp">|</span></span>
+<span id="cb36-96"><a href="#cb36-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-97"><a href="#cb36-97" aria-hidden="true" tabindex="-1"></a><span class="fu">### Basic Usage</span></span>
+<span id="cb36-98"><a href="#cb36-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-99"><a href="#cb36-99" aria-hidden="true" tabindex="-1"></a>The Nason estimator divides by the polymorphic index (<span class="in">`genetic_diversity(mode = "Pe")`</span>), so monomorphic loci (where <span class="in">`Pe = 0`</span>) will produce <span class="in">`NaN`</span>. In the <span class="in">`arapat`</span> dataset, <span class="in">`LTRS`</span> and <span class="in">`ATPS`</span> can be monomorphic in small subsets. To avoid this, restrict the data to polymorphic loci:</span>
+<span id="cb36-100"><a href="#cb36-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-103"><a href="#cb36-103" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-104"><a href="#cb36-104" aria-hidden="true" tabindex="-1"></a><span class="co"># Use loci that are polymorphic in this subset</span></span>
+<span id="cb36-105"><a href="#cb36-105" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb36-106"><a href="#cb36-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-107"><a href="#cb36-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Species, WNT, EN, EF, ZMP, AML, MP20) <span class="sc">|&gt;</span></span>
+<span id="cb36-108"><a href="#cb36-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_relatedness</span>(<span class="at">mode =</span> <span class="st">"Nason"</span>)</span>
+<span id="cb36-109"><a href="#cb36-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-110"><a href="#cb36-110" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(R)</span>
+<span id="cb36-111"><a href="#cb36-111" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(R[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="dv">4</span>)</span>
+<span id="cb36-112"><a href="#cb36-112" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-113"><a href="#cb36-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-114"><a href="#cb36-114" aria-hidden="true" tabindex="-1"></a><span class="fu">### Single-Locus Relatedness</span></span>
+<span id="cb36-115"><a href="#cb36-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-116"><a href="#cb36-116" aria-hidden="true" tabindex="-1"></a>Relatedness at a single locus uses the same function, with <span class="in">`loci =`</span>:</span>
+<span id="cb36-117"><a href="#cb36-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-120"><a href="#cb36-120" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-121"><a href="#cb36-121" aria-hidden="true" tabindex="-1"></a>r_nason <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb36-122"><a href="#cb36-122" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-123"><a href="#cb36-123" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_relatedness</span>(<span class="at">loci =</span> <span class="st">"EN"</span>, <span class="at">mode =</span> <span class="st">"Nason"</span>)</span>
+<span id="cb36-124"><a href="#cb36-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-125"><a href="#cb36-125" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(r_nason[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="dv">4</span>)</span>
+<span id="cb36-126"><a href="#cb36-126" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-127"><a href="#cb36-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-128"><a href="#cb36-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## Spatial Autocorrelation</span></span>
+<span id="cb36-129"><a href="#cb36-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-130"><a href="#cb36-130" aria-hidden="true" tabindex="-1"></a>The <span class="in">`genetic_autocorrelation()`</span> function performs the spatial autocorrelation analysis of Smouse &amp; Peakall (1999). It requires two square distance matrices --- one physical, one genetic --- and a vector of distance bin boundaries:</span>
+<span id="cb36-131"><a href="#cb36-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-134"><a href="#cb36-134" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-135"><a href="#cb36-135" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb36-136"><a href="#cb36-136" aria-hidden="true" tabindex="-1"></a><span class="co"># Physical distance matrix</span></span>
+<span id="cb36-137"><a href="#cb36-137" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb36-138"><a href="#cb36-138" aria-hidden="true" tabindex="-1"></a>  <span class="fu">strata_distance</span>(<span class="at">longitude =</span> <span class="st">"Longitude"</span>, <span class="at">latitude =</span> <span class="st">"Latitude"</span>)</span>
+<span id="cb36-139"><a href="#cb36-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-140"><a href="#cb36-140" aria-hidden="true" tabindex="-1"></a><span class="co"># Genetic distance matrix</span></span>
+<span id="cb36-141"><a href="#cb36-141" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb36-142"><a href="#cb36-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">mode =</span> <span class="st">"AMOVA"</span>)</span>
+<span id="cb36-143"><a href="#cb36-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-144"><a href="#cb36-144" aria-hidden="true" tabindex="-1"></a><span class="co"># Define distance bins</span></span>
+<span id="cb36-145"><a href="#cb36-145" aria-hidden="true" tabindex="-1"></a>bins <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(P), <span class="at">length.out =</span> <span class="dv">6</span>)</span>
+<span id="cb36-146"><a href="#cb36-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-147"><a href="#cb36-147" aria-hidden="true" tabindex="-1"></a><span class="co"># Run autocorrelation</span></span>
+<span id="cb36-148"><a href="#cb36-148" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">genetic_autocorrelation</span>(P, G, <span class="at">bins =</span> bins, <span class="at">perms =</span> <span class="dv">99</span>)</span>
+<span id="cb36-149"><a href="#cb36-149" aria-hidden="true" tabindex="-1"></a>result</span>
+<span id="cb36-150"><a href="#cb36-150" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-151"><a href="#cb36-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-152"><a href="#cb36-152" aria-hidden="true" tabindex="-1"></a>The output includes the spatial autocorrelation coefficient (R) for each distance class, the number of pairwise comparisons (N), and a p-value from the permutation test (P).</span>
+<span id="cb36-153"><a href="#cb36-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-154"><a href="#cb36-154" aria-hidden="true" tabindex="-1"></a><span class="fu">## Isolation by Distance</span></span>
+<span id="cb36-155"><a href="#cb36-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-156"><a href="#cb36-156" aria-hidden="true" tabindex="-1"></a><span class="in">`genetic_isolation()`</span> tests whether genetic distance among strata grows with their separation, starting from the genotypes.  The default, <span class="in">`mode = "IBD"`</span>, correlates Nei's genetic distance (change it with <span class="in">`genetic =`</span>) with great-circle distance between strata and tests it with a Mantel permutation test:</span>
+<span id="cb36-157"><a href="#cb36-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-160"><a href="#cb36-160" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-161"><a href="#cb36-161" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb36-162"><a href="#cb36-162" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb36-163"><a href="#cb36-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_isolation</span>(<span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">nperm =</span> <span class="dv">499</span>)</span>
+<span id="cb36-164"><a href="#cb36-164" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-165"><a href="#cb36-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-166"><a href="#cb36-166" aria-hidden="true" tabindex="-1"></a><span class="in">`mode = "IBGD"`</span> uses the conditional genetic distance through a Population Graph instead, and <span class="in">`mode = "PGD"`</span> asks whether a directional model fits better, given an <span class="in">`axis`</span> (see @sec-genetic-gravity).  Separation can also come from your own matrix (<span class="in">`spatial =`</span>, e.g. resistance distances) or positions along an axis (<span class="in">`axis =`</span>).  If you already have a Population Graph, <span class="in">`ibgd()`</span> works on it directly.</span>
+<span id="cb36-167"><a href="#cb36-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-168"><a href="#cb36-168" aria-hidden="true" tabindex="-1"></a><span class="fu">## Strata Distances</span></span>
+<span id="cb36-169"><a href="#cb36-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-170"><a href="#cb36-170" aria-hidden="true" tabindex="-1"></a>The <span class="in">`strata_coordinates()`</span> function extracts per-stratum centroid coordinates, and <span class="in">`strata_distance()`</span> computes physical (geographic) distances between them:</span>
+<span id="cb36-171"><a href="#cb36-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-174"><a href="#cb36-174" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-175"><a href="#cb36-175" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb36-176"><a href="#cb36-176" aria-hidden="true" tabindex="-1"></a>  <span class="fu">strata_coordinates</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">longitude =</span> <span class="st">"Longitude"</span>, <span class="at">latitude =</span> <span class="st">"Latitude"</span>)</span>
+<span id="cb36-177"><a href="#cb36-177" aria-hidden="true" tabindex="-1"></a>coords</span>
+<span id="cb36-178"><a href="#cb36-178" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-179"><a href="#cb36-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-182"><a href="#cb36-182" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-183"><a href="#cb36-183" aria-hidden="true" tabindex="-1"></a>coords <span class="sc">|&gt;</span></span>
+<span id="cb36-184"><a href="#cb36-184" aria-hidden="true" tabindex="-1"></a>  <span class="fu">strata_distance</span>()</span>
+<span id="cb36-185"><a href="#cb36-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-186"><a href="#cb36-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-187"><a href="#cb36-187" aria-hidden="true" tabindex="-1"></a><span class="fu">## Without Pipes</span></span>
+<span id="cb36-188"><a href="#cb36-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-191"><a href="#cb36-191" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-192"><a href="#cb36-192" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb36-193"><a href="#cb36-193" aria-hidden="true" tabindex="-1"></a>D_amova <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, ], <span class="at">mode =</span> <span class="st">"AMOVA"</span>)</span>
+<span id="cb36-194"><a href="#cb36-194" aria-hidden="true" tabindex="-1"></a>D_nei   <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Nei"</span>)</span>
+<span id="cb36-195"><a href="#cb36-195" aria-hidden="true" tabindex="-1"></a>D_pgd   <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"pGD"</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
+<span id="cb36-196"><a href="#cb36-196" aria-hidden="true" tabindex="-1"></a>R       <span class="ot">&lt;-</span> <span class="fu">genetic_relatedness</span>(arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="fu">c</span>(<span class="st">"Species"</span>, <span class="st">"WNT"</span>, <span class="st">"EN"</span>, <span class="st">"EF"</span>, <span class="st">"ZMP"</span>, <span class="st">"AML"</span>, <span class="st">"MP20"</span>)],</span>
+<span id="cb36-197"><a href="#cb36-197" aria-hidden="true" tabindex="-1"></a>                               <span class="at">mode =</span> <span class="st">"Nason"</span>)</span>
+<span id="cb36-198"><a href="#cb36-198" aria-hidden="true" tabindex="-1"></a>coords  <span class="ot">&lt;-</span> <span class="fu">strata_coordinates</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
+<span id="cb36-199"><a href="#cb36-199" aria-hidden="true" tabindex="-1"></a><span class="fu">strata_distance</span>(coords)</span>
+<span id="cb36-200"><a href="#cb36-200" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_isolation</span>(arapat, <span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">mode =</span> <span class="st">"IBD"</span>, <span class="at">nperm =</span> <span class="dv">499</span>)</span>
+<span id="cb36-201"><a href="#cb36-201" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

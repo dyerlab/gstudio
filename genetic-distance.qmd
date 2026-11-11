@@ -133,6 +133,18 @@ result
 
 The output includes the spatial autocorrelation coefficient (R) for each distance class, the number of pairwise comparisons (N), and a p-value from the permutation test (P).
 
+## Isolation by Distance
+
+`genetic_isolation()` tests whether genetic distance among strata grows with their separation, starting from the genotypes.  The default, `mode = "IBD"`, correlates Nei's genetic distance (change it with `genetic =`) with great-circle distance between strata and tests it with a Mantel permutation test:
+
+```{r}
+set.seed(1)
+arapat |>
+  genetic_isolation(stratum = "Population", nperm = 499)
+```
+
+`mode = "IBGD"` uses the conditional genetic distance through a Population Graph instead, and `mode = "PGD"` asks whether a directional model fits better, given an `axis` (see @sec-genetic-gravity).  Separation can also come from your own matrix (`spatial =`, e.g. resistance distances) or positions along an axis (`axis =`).  If you already have a Population Graph, `ibgd()` works on it directly.
+
 ## Strata Distances
 
 The `strata_coordinates()` function extracts per-stratum centroid coordinates, and `strata_distance()` computes physical (geographic) distances between them:
@@ -159,4 +171,5 @@ R       <- genetic_relatedness(arapat[1:10, c("Species", "WNT", "EN", "EF", "ZMP
                                mode = "Nason")
 coords  <- strata_coordinates(arapat, stratum = "Species")
 strata_distance(coords)
+genetic_isolation(arapat, stratum = "Population", mode = "IBD", nperm = 499)
 ```

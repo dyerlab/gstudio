@@ -102,15 +102,22 @@ arapat |>
 
 ## Hardy-Weinberg Equilibrium
 
-The `hwe()` function tests for HWE using a chi-square approximation:
+The `hwe.test()` function tests for HWE using a chi-square approximation.  A single locus gives a standard test, printed like `chisq.test()`:
 
 ```{r}
 arapat |>
   filter(Species == "Mainland") |>
-  hwe()
+  pull(LTRS) |>
+  hwe.test()
 ```
 
-The output includes the chi-square statistic, degrees of freedom, and p-value for each locus. Significant p-values indicate departures from HWE expectations.
+Several loci, or a `stratum`, give a table with one row per test: the chi-square statistic, degrees of freedom, p-value and method.  Significant p-values indicate departures from HWE expectations.
+
+```{r}
+#| warning: false
+arapat |>
+  hwe.test(stratum = "Species", loci = c("LTRS", "WNT"))
+```
 
 ### Interpreting Results
 
@@ -123,21 +130,27 @@ Departures from HWE can arise from:
 
 ## Rarefaction
 
-The `rarefaction()` function subsamples the data repeatedly at a smaller sample size to estimate the distribution of a diversity statistic:
+Diversity statistics such as allelic richness grow with sample size, so strata sampled unequally cannot be compared directly.  `rarefaction.test()` rarefies each locus to the smallest number of genotyped individuals in any stratum: every larger stratum is resampled `nperm` times without replacement at that size, and the table gives the observed value, the mean across resamples (`estimate`) and a percentile interval (`conf.low`, `conf.high`) for each stratum, locus and mode.  With several loci, a `Multilocus` row per stratum combines each resample across loci.  It is `NA` for a stratum missing any of the loci, so strata are compared over the same loci; `na.rm = TRUE` combines the loci that are available instead.
 
 ```{r}
-rare_vals <- arapat |>
-  pull(LTRS) |>
-  rarefaction(mode = "Ae", size = 20, nperm = 199)
+set.seed(1)
+rare <- arapat |>
+  rarefaction.test(stratum = "Species", mode = c("A", "Ae"), nperm = 199)
+rare |>
+  filter(Locus == "Multilocus")
+```
 
-data.frame(Ae = rare_vals) |>
-  ggplot(aes(Ae)) +
-  geom_histogram(bins = 20, fill = "steelblue") +
-  labs(title = "Rarefied Ae at LTRS", x = "Effective alleles", y = "Count") +
+```{r}
+rare |>
+  filter(Mode == "A", Locus != "Multilocus") |>
+  ggplot(aes(Locus, estimate, colour = Stratum)) +
+  geom_pointrange(aes(ymin = conf.low, ymax = conf.high),
+                  position = position_dodge(width = 0.5)) +
+  labs(y = "Rarefied allelic richness") +
   theme_minimal()
 ```
 
-This is useful for comparing diversity across populations with unequal sample sizes.
+Set `size =` to rarefy to a fixed number of individuals instead; strata with fewer genotypes at a locus are `NA`.  The resampled values for each row are kept in the list-column `values`, which printing hides.
 
 ## Optimal Sampling
 
@@ -160,8 +173,8 @@ frequencies(arapat, loci = c("LTRS", "WNT"))
 frequency_matrix(arapat, stratum = "Species")
 genotype_counts(arapat, stratum = "Species")
 genotype_frequencies(arapat$LTRS)
-hwe(arapat[arapat$Species == "Mainland", ])
-rare_vals <- rarefaction(arapat$LTRS, mode = "Ae", size = 20, nperm = 199)
-hist(rare_vals)
+hwe.test(arapat[arapat$Species == "Mainland", ])
+rare <- rarefaction.test(arapat, stratum = "Species", mode = c("A", "Ae"), nperm = 199)
+rare[rare$Locus == "Multilocus", ]
 optimal_sampling(arapat$LTRS, nrep = 99)
 ```
