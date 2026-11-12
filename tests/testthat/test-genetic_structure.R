@@ -47,7 +47,7 @@ test_that("checking",{
   # Test Gst_prime mode
   gs_gstp <- genetic_structure( df, mode = "gst_prime" )
   expect_s3_class( gs_gstp, "data.frame" )
-  expect_true( all(c("Locus", "Gst", "Hs", "Ht", "p.value") %in% names(gs_gstp)) )
+  expect_true( all(c("Locus", "Gst_prime", "Hs", "Ht", "p.value") %in% names(gs_gstp)) )
 
   # Test Dest mode
   gs_dest <- genetic_structure( df, mode = "dest" )
@@ -72,4 +72,40 @@ test_that("permutation gives the Multilocus row a p-value", {
   expect_true(ml$p.value >= 1 / 20 && ml$p.value <= 1)
   expect_false(anyNA(gs$p.value))
   expect_true(all(is.na(genetic_structure(arapat, stratum = "Species")$p.value)))
+})
+
+test_that("structure estimators: D_est scaling, naming, column order, small strata", {
+  AA <- locus(c("A","A")); BB <- locus(c("B","B")); AB <- locus(c("A","B"))
+  df <- data.frame(Population = rep(c("P1","P2"), each = 4),
+                   L1 = c(AA,AA,AA,AA,BB,BB,BB,BB),
+                   L2 = c(AA,AB,AB,AA,BB,AB,AB,BB),
+                   L3 = c(AA,AA,AA,AA,AA,AA,AA,AA))   # monomorphic
+
+  # Jost (2008): D = (Ht - Hs)/(1 - Hs) * k/(k-1); fixed differences give 1
+  d <- genetic_structure(df, mode = "Dest", size.correct = FALSE)
+  expect_equal(d$Dest[1], 1)
+  expect_equal(d$Dest[2], (0.5 - 0.375) / (1 - 0.375) * 2)
+
+  # Same column layout in every mode; estimate column named for the mode
+  for (m in c("Gst", "Gst_prime", "Dest", "Fst")) {
+    r <- suppressWarnings(genetic_structure(df, mode = m))
+    expect_equal(names(r), c("Locus", m, "Hs", "Ht", "p.value"))
+    expect_equal(r$Locus, c("L1", "L2", "L3", "Multilocus"))
+    # A monomorphic locus has no estimate and does not zero the multilocus row
+    expect_true(is.na(r[[m]][3]))
+    expect_gt(r[[m]][4], 0)
+    expect_gt(r$Hs[4], 0)
+    expect_gt(r$Ht[4], 0)
+  }
+
+  # A stratum with a single heterozygote has Hs = 0.5, not 0
+  g <- Gst(c(AB, AA, AB, BB), c("A","B","B","B"), size.correct = FALSE)
+  expect_equal(g$Hs, 0.5)
+  expect_equal(g$Gst, 0)
+
+  # Permutations test every row, including Multilocus
+  set.seed(2)
+  p <- genetic_structure(df, mode = "Dest", nperm = 49)
+  expect_false(anyNA(p$p.value[-3]))
+  expect_true(is.na(p$p.value[3]))
 })

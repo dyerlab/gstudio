@@ -4,6 +4,20 @@
 \name{arapat}
 \alias{arapat}
 \title{Data for Araptus attenuatus}
+\format{
+A \code{data.frame} with 363 individuals and 14 columns:
+\describe{
+ \item{Species}{Factor: \code{Cape} (75), \code{Mainland} (36), \code{Peninsula} (252).}
+ \item{Cluster}{Factor with five levels nested within \code{Species}:
+  \code{CBP-C}, \code{NBP-C} and \code{SBP-C} (Peninsula), \code{SCBP-A} (Cape) and
+  \code{SON-B} (Mainland).}
+ \item{Population}{Factor, 39 sampling sites.}
+ \item{ID}{Factor, individual identifier.}
+ \item{Latitude, Longitude}{Site coordinates (decimal degrees).}
+ \item{LTRS, WNT, EN, EF, ZMP, AML, ATPS, MP20}{\code{\link{locus}} columns,
+  codominant genotypes.}
+}
+}
 \description{
 This is a EPIC genetic dataset for the Sonoran desert
  beetle Araptus attenuatus

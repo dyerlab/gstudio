@@ -20,12 +20,20 @@
 #'  strata (default=FALSE).
 #' @param locus An optional parameter specifying the locus or loci to be used
 #'  in the analysis. If this is not specified, then all loci are used.
-#' @return An object of type \code{data.frame} containing estimates for each locus and
-#'  (for Gst, Gst' and Dest) a \code{Multilocus} row, whose \code{Hs} and \code{Ht} are
-#'  sums across loci.  With \code{nperm > 0}, \code{p.value} holds permutation
-#'  p-values; for the \code{Multilocus} row, strata are permuted across individuals
-#'  (the same permutation for every locus) and the multilocus estimate recomputed.
-#'  If \code{pairwise=TRUE}, then it returns a pairwise matrix.
+#' @return An object of type \code{data.frame} with columns \code{Locus}, the
+#'  estimate (named for the mode: \code{Gst}, \code{Gst_prime}, \code{Dest} or
+#'  \code{Fst}), \code{Hs}, \code{Ht} and \code{p.value}, in that order for every
+#'  mode.  There is one row per locus and, when more than one locus is analysed, a
+#'  \code{Multilocus} row whose \code{Hs} and \code{Ht} are means across loci.
+#'  The multilocus estimate is 1 - mean(Hs)/mean(Ht) for \code{Gst} and \code{Fst}
+#'  (Culley et al. 2001), and the harmonic mean of the per-locus estimates for
+#'  \code{Gst_prime} and \code{Dest}.  Monomorphic loci have no estimate (\code{NA})
+#'  and are left out of the multilocus estimate, as are negative per-locus
+#'  \code{Gst_prime} and \code{Dest} values.  With \code{nperm > 0},
+#'  \code{p.value} holds add-one permutation p-values; strata are permuted across
+#'  individuals (the same permutation for every locus) so the \code{Multilocus} row
+#'  is tested too.  If \code{pairwise=TRUE}, then it returns a pairwise matrix of the
+#'  multilocus estimate (or the single-locus estimate when only one locus is used).
 #' @note The multilocus estimation of Gst parameters is estimated following the
 #'  suggestions of Culley et al. (2001) American Journal of Botany 89(3): 460-465.
 #' @export
@@ -100,20 +108,9 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
     else if( mode_clean == "fst" ) 
       ret <- Fst( x, stratum, nperm )
 
-    # The per-locus tests leave the Multilocus row untested; permute strata
-    # across individuals (shared by all loci) and recompute it.
-    ml <- which(ret$Locus == "Multilocus")
-    if( nperm > 0 && length(ml) == 1 ) {
-      obs  <- ret[ml, 2]
-      null <- vapply(seq_len(nperm), function(b) {
-        y <- x
-        y[[stratum]] <- sample(y[[stratum]])
-        r <- genetic_structure(y, stratum = stratum, mode = mode_clean, nperm = 0,
-                               size.correct = size.correct)
-        r[r$Locus == "Multilocus", 2]
-      }, numeric(1))
-      ret$P[ml] <- (1 + sum(null >= obs, na.rm = TRUE)) / (1 + sum(!is.na(null)))
-    }
+    if( !("P" %in% names(ret)) )
+      ret$P <- NA_real_
+
     names(ret)[names(ret) == "P"] <- "p.value"
   }
   

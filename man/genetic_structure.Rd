@@ -41,12 +41,20 @@ strata (default=FALSE).}
 in the analysis. If this is not specified, then all loci are used.}
 }
 \value{
-An object of type \code{data.frame} containing estimates for each locus and
- (for Gst, Gst' and Dest) a \code{Multilocus} row, whose \code{Hs} and \code{Ht} are
- sums across loci.  With \code{nperm > 0}, \code{p.value} holds permutation
- p-values; for the \code{Multilocus} row, strata are permuted across individuals
- (the same permutation for every locus) and the multilocus estimate recomputed.
- If \code{pairwise=TRUE}, then it returns a pairwise matrix.
+An object of type \code{data.frame} with columns \code{Locus}, the
+ estimate (named for the mode: \code{Gst}, \code{Gst_prime}, \code{Dest} or
+ \code{Fst}), \code{Hs}, \code{Ht} and \code{p.value}, in that order for every
+ mode.  There is one row per locus and, when more than one locus is analysed, a
+ \code{Multilocus} row whose \code{Hs} and \code{Ht} are means across loci.
+ The multilocus estimate is 1 - mean(Hs)/mean(Ht) for \code{Gst} and \code{Fst}
+ (Culley et al. 2001), and the harmonic mean of the per-locus estimates for
+ \code{Gst_prime} and \code{Dest}.  Monomorphic loci have no estimate (\code{NA})
+ and are left out of the multilocus estimate, as are negative per-locus
+ \code{Gst_prime} and \code{Dest} values.  With \code{nperm > 0},
+ \code{p.value} holds add-one permutation p-values; strata are permuted across
+ individuals (the same permutation for every locus) so the \code{Multilocus} row
+ is tested too.  If \code{pairwise=TRUE}, then it returns a pairwise matrix of the
+ multilocus estimate (or the single-locus estimate when only one locus is used).
 }
 \description{
 This function is the primary front-end for estimating common genetic structure

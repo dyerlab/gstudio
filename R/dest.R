@@ -1,17 +1,17 @@
-#' Estimation Joost's Dest parameter 
+#' Estimation of Jost's D_est 
 #' 
 #' This function estimates the parameter (and potentially the confidence
-#'  surrounding its value) for Joost's Dest.
+#'  surrounding its value) for Jost's (2008) D_est, [(Ht - Hs)/(1 - Hs)] * [k/(k - 1)].
 #' @param x  A vector of \code{\link{locus}} objects or a \code{data.frame} with \code{locus} objects.
 #' @param stratum Either a vector of strata variables if \code{x} is a \code{locus} vector or 
 #'  the name of the column representing strata in \code{x} if it is a \code{data.frame}.
 #' @param nperm The number of permutations to run for significance of the
 #'  estimator.
 #' @param size.correct A flag indicating that the estimate should be corrected for
-#'  based upon sample sizes (default=TRUE).
+#'  based upon sample sizes (default=FALSE).
 #' @return A \code{data.frame} with Dest, Hs, Ht, and P (if asked for).  When multiple 
 #'  loci are provided, the results also provide a multilocus estimate using the 
-#'  harmonic mean.
+#'  harmonic mean of the per-locus estimates (monomorphic loci and negative estimates excluded).
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @noRd
 #' @examples
@@ -28,123 +28,22 @@
 #'  df <- data.frame( Population, TPI=locus, PGM=locus2 )
 #'  Dest( df, nperm=99)
 Dest <- function( x, stratum="Population", nperm=0, size.correct=FALSE ) {
-  
-  
-  # Do this function recursively if a data.frame is passed as loci
+
   if( is(x,"data.frame") ) {
     stratum <- .detect_stratum(x, stratum, default = "Population")
-    
-    locus_names <- column_class(x,"locus")
-    
-    if( length(locus_names)==0 )
-      stop("You must pass some loci to this function")
-    
     if( !(stratum %in% names(x)) )
       stop("If you pass a data.frame to Dest(), you need to indicate a stratum variable column.")
-    
-    strata <- factor(as.character(x[[stratum]]))
-    K <- length(locus_names)
-    ret <- data.frame(Locus=locus_names, Dest=numeric(K), Hs=numeric(K), Ht=numeric(K), P=NA_real_, stringsAsFactors=FALSE)
-    
-    for( i in 1:length(locus_names) ){
-      data <- x[[locus_names[i]]] 
-      r <- Dest( data, strata, nperm, size.correct)
-      ret$Dest[i] <- r$Dest[1]
-      ret$Hs[i]   <- r$Hs[1]
-      ret$Ht[i]   <- r$Ht[1]
-      if( nperm > 0 && "P" %in% names(r) )
-        ret$P[i]  <- r$P[1]
-    }
-    
-    if( length(locus_names) > 1 ) {
-      k <- length(levels(strata))
-      Hs.tot <- mean(ret$Hs[1:K], na.rm=TRUE )
-      Ht.tot <- mean(ret$Ht[1:K], na.rm=TRUE )
-      d_vals <- ret$Dest[1:K]
-      d_vals[ d_vals < 0 ] <- NA
-      Dest.tot <- 1.0 / ( mean( 1/d_vals, na.rm=TRUE))
-      
-      ret[K+1,1] <- "Multilocus"
-      ret[K+1,2] <- Dest.tot
-      ret[K+1,3] <- Hs.tot
-      ret[K+1,4] <- Ht.tot
-      ret[K+1,5] <- NA_real_
-    }
-    
+    return( .structure_table( "dest", "Dest", x, stratum, nperm, size.correct ) )
   }
-  
-  # do this for a single locus
-  else {
-    
-    if( !inherits(x,"locus") )
-      stop("This function requires objects of type 'locus' to function.")
-    
-    stratum <- factor( as.character(stratum) )
-    
-    if( length(stratum) != length(x))
-      stop("If you are going to pass vector loci and strata, they should be the same size...")
-    
-    k <- length(levels(stratum))
-    strata.lvls <- levels(stratum)
-    
-    totfreq <- frequencies( x )
-    inds <- to_mv.locus( x )
-    p.vec <- colSums(inds)
-    ht <- 1-sum((p.vec/sum(p.vec))^2)
-    hs <- mean(unlist(lapply( strata.lvls, 
-                              function(strat,inds,strata ) {
-                                s <- colSums(as.matrix(inds[strata==strat,]))
-                                f <- 1-sum((s/sum(s))^2)
-                              }, inds=inds, strata=stratum)),na.rm=TRUE)
-    
-    n.harmonic <- 1/mean(1/table(stratum))
-    hs.estimated <- (2*n.harmonic)/(2*n.harmonic -1) * hs
-    ht.estimated <- ht + hs.estimated/(2*k*n.harmonic)
-    
-    if( size.correct ) 
-      D <- ((ht.estimated-hs.estimated) / (1-hs.estimated))  
-    else
-      D <- ((ht-hs) / (1-hs))
-    
-    D <- D / (k/(k-1))
-    
-    ret <- data.frame( Dest=D, Hs=hs.estimated, Ht=ht.estimated)
-    
-    if( nperm > 0 ) {
-      
-      perms <- rep(NA,nperm)
-      for(i in 1:nperm ) {
-        hs.perm <- lapply( strata.lvls, 
-                           function( strat, inds, strata ) {
-                             s <- colSums( as.matrix( inds[ strata==strat, ]) )
-                             f <- 1 - sum((s/sum(s))^2) 
-                           }, 
-                           inds=inds, 
-                           strata=sample( stratum ) )
-        perms[i] <- mean( unlist( hs.perm ) , na.rm=TRUE)
-      }
-      
-      if( size.correct ) {
-        perms <- (2*n.harmonic) / (2*n.harmonic-1) * perms
-        D.perm <- ((ht.estimated-perms) / (1-perms))      
-      }
-      
-      else
-        D.perm <- (ht-perms) /(1-perms)
-      
-      D.perm <- D.perm / (k/(k-1))
-      D.perm <- D.perm[ !is.na( D.perm ) ]
-      # Add-one permutation p-value: (1 + #{perm >= obs}) / (1 + B), strictly
-      # positive (Phipson & Smyth 2010, Stat. Appl. Genet. Mol. Biol. 9:Article39).
-      P <- ( 1 + sum( D.perm >= D ) ) / ( 1 + length( D.perm ) )
 
-      ret$P <- P
-    }
-    
-  }
-  
+  if( !inherits(x,"locus") )
+    stop("This function requires objects of type 'locus' to function.")
+  if( length(stratum) != length(x))
+    stop("If you are going to pass vector loci and strata, they should be the same size...")
+
+  r <- .structure_single( "dest", x, stratum, nperm, size.correct )
+  ret <- data.frame( Dest=r$est, Hs=r$hs, Ht=r$ht )
+  if( nperm > 0 )
+    ret$P <- r$P
   return( ret )
 }
-
-
-

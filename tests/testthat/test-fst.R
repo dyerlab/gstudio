@@ -29,7 +29,9 @@ test_that("checking",{
   df$PGM <- loci
   
   fst <- Fst( df )
-  expect_that( fst$Fst, equals(c(1.0, NaN)) )
+  expect_that( fst$Fst[1:2], equals(c(NaN, 1.0)) )   # loci in column order
+  expect_equal( fst$Locus, c("TPI","PGM","Multilocus") )
+  expect_equal( fst$Fst[3], 1.0 )                      # monomorphic TPI excluded
   
   AA <- locus( c("A","A") )
   AB <- locus( c("A","B") )
@@ -46,8 +48,10 @@ test_that("checking",{
   df <- data.frame( Population, TPI=locus, PGM=locus2 )
   fst <- Fst( df )
   
-  expect_that( fst$Hs, equals( c(0, 0.475)))
-  expect_that( fst$Ht, equals( c(0.5, 0.5175)))
+  expect_equal( names(fst), c("Locus","Fst","Hs","Ht") )
+  expect_that( fst$Hs[1:2], equals( c(0.475, 0)))
+  expect_that( fst$Ht[1:2], equals( c(0.5175, 0.5)))
+  expect_equal( fst$Fst[3], 1 - mean(c(0.475, 0)) / mean(c(0.5175, 0.5)) )
 
 })
 
