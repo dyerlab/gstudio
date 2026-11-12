@@ -330,10 +330,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6        AML 0.2723689 0.6045761 0.8308826      NA
 7       ATPS 0.5856500 0.2983785 0.7201122      NA
 8       MP20 0.2358115 0.6267430 0.8201419      NA
-9 Multilocus 0.3835972 2.9284713 4.7509048      NA</code></pre>
+9 Multilocus 0.3835972 0.3660589 0.5938631      NA</code></pre>
 </div>
 </div>
-<p>The output provides per-locus estimates plus a multilocus estimate (last row). The multilocus estimate follows the approach of Culley et al.&nbsp;(2001).</p>
+<p>The output provides per-locus estimates plus a multilocus estimate (last row). Every mode returns the same columns, <code>Locus</code>, the estimate (named <code>Gst</code>, <code>Gst_prime</code>, <code>Dest</code> or <code>Fst</code>), <code>Hs</code>, <code>Ht</code> and <code>p.value</code>, and the <code>Multilocus</code> row reports mean <code>Hs</code> and <code>Ht</code> across loci. For <code>Gst</code> and <code>Fst</code> the multilocus estimate is 1 - mean(Hs)/mean(Ht), following Culley et al.&nbsp;(2001); for <code>Gst_prime</code> and <code>Dest</code> it is the harmonic mean of the per-locus values. Monomorphic loci have no estimate (<code>NA</code>) and are left out of the multilocus value.</p>
 </section>
 <section id="hedricks-correction" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="hedricks-correction"><span class="header-section-number">6.3</span> Hedrick’s Correction</h2>
@@ -342,7 +342,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst_prime"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       Locus       Gst        Hs        Ht p.value
+<pre><code>       Locus Gst_prime        Hs        Ht p.value
 1       LTRS 0.6067798 0.3229669 0.4997122      NA
 2        WNT 0.9198112 0.2595040 0.6534819      NA
 3         EN 0.3415214 0.3678145 0.4498525      NA
@@ -351,7 +351,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6        AML 0.8970188 0.6045761 0.8308826      NA
 7       ATPS 0.9592390 0.2983785 0.7201122      NA
 8       MP20 0.8297450 0.6267430 0.8201419      NA
-9 Multilocus 0.6503121 0.3110927 0.5406400      NA</code></pre>
+9 Multilocus 0.6503121 0.3660589 0.5938631      NA</code></pre>
 </div>
 </div>
 </section>
@@ -362,16 +362,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Dest"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       Locus       Dest        Hs        Ht p.value
-1       LTRS 0.17403908 0.3229669 0.4997122      NA
-2        WNT 0.35469734 0.2595040 0.6534819      NA
-3         EN 0.08651255 0.3678145 0.4498525      NA
-4         EF 0.14722985 0.2772276 0.4368481      NA
-5        ZMP 0.13563788 0.1712607 0.3398734      NA
-6        AML 0.38154249 0.6045761 0.8308826      NA
-7       ATPS 0.40072291 0.2983785 0.7201122      NA
-8       MP20 0.34542581 0.6267430 0.8201419      NA
-9 Multilocus 0.18912423 0.3660589 0.5938631      NA</code></pre>
+<pre><code>       Locus      Dest        Hs        Ht p.value
+1       LTRS 0.3915879 0.3229669 0.4997122      NA
+2        WNT 0.7980690 0.2595040 0.6534819      NA
+3         EN 0.1946532 0.3678145 0.4498525      NA
+4         EF 0.3312672 0.2772276 0.4368481      NA
+5        ZMP 0.3051852 0.1712607 0.3398734      NA
+6        AML 0.8584706 0.6045761 0.8308826      NA
+7       ATPS 0.9016266 0.2983785 0.7201122      NA
+8       MP20 0.7772081 0.6267430 0.8201419      NA
+9 Multilocus 0.4255295 0.3660589 0.5938631      NA</code></pre>
 </div>
 </div>
 </section>
@@ -391,7 +391,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6        AML 0.2723689 0.6045761 0.8308826    0.01
 7       ATPS 0.5856500 0.2983785 0.7201122    0.01
 8       MP20 0.2358115 0.6267430 0.8201419    0.01
-9 Multilocus 0.3835972 2.9284713 4.7509048    0.01</code></pre>
+9 Multilocus 0.3835972 0.3660589 0.5938631    0.01</code></pre>
 </div>
 </div>
 <p>The resulting P column indicates the probability of observing a value as extreme as the estimate under random permutation of individuals among strata.</p>
@@ -430,7 +430,7 @@ Peninsula 0.3609387 0.2024045        NA</code></pre>
 <pre><code>       Locus       Gst        Hs        Ht p.value
 1       LTRS 0.3536942 0.3229669 0.4997122      NA
 2        WNT 0.6028903 0.2595040 0.6534819      NA
-3 Multilocus 0.4949065 0.5824709 1.1531942      NA</code></pre>
+3 Multilocus 0.4949065 0.2912354 0.5765971      NA</code></pre>
 </div>
 </div>
 </section>
@@ -1045,7 +1045,7 @@ not have missing data.</code></pre>
 <span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>)</span>
 <span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>The output provides per-locus estimates plus a multilocus estimate (last row). The multilocus estimate follows the approach of Culley et al. (2001).</span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>The output provides per-locus estimates plus a multilocus estimate (last row). Every mode returns the same columns, <span class="in">`Locus`</span>, the estimate (named <span class="in">`Gst`</span>, <span class="in">`Gst_prime`</span>, <span class="in">`Dest`</span> or <span class="in">`Fst`</span>), <span class="in">`Hs`</span>, <span class="in">`Ht`</span> and <span class="in">`p.value`</span>, and the <span class="in">`Multilocus`</span> row reports mean <span class="in">`Hs`</span> and <span class="in">`Ht`</span> across loci. For <span class="in">`Gst`</span> and <span class="in">`Fst`</span> the multilocus estimate is 1 - mean(Hs)/mean(Ht), following Culley et al. (2001); for <span class="in">`Gst_prime`</span> and <span class="in">`Dest`</span> it is the harmonic mean of the per-locus values. Monomorphic loci have no estimate (<span class="in">`NA`</span>) and are left out of the multilocus value.</span>
 <span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hedrick's Correction</span></span>
 <span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a></span>

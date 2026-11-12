@@ -29,7 +29,7 @@ arapat |>
   genetic_structure(stratum = "Species", mode = "Gst")
 ```
 
-The output provides per-locus estimates plus a multilocus estimate (last row). The multilocus estimate follows the approach of Culley et al. (2001).
+The output provides per-locus estimates plus a multilocus estimate (last row). Every mode returns the same columns, `Locus`, the estimate (named `Gst`, `Gst_prime`, `Dest` or `Fst`), `Hs`, `Ht` and `p.value`, and the `Multilocus` row reports mean `Hs` and `Ht` across loci. For `Gst` and `Fst` the multilocus estimate is 1 - mean(Hs)/mean(Ht), following Culley et al. (2001); for `Gst_prime` and `Dest` it is the harmonic mean of the per-locus values. Monomorphic loci have no estimate (`NA`) and are left out of the multilocus value.
 
 ## Hedrick's Correction
 
