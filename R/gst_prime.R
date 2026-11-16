@@ -10,8 +10,13 @@
 #'  estimator.
 #' @param size.correct A flag indicating that the estimate should be corrected for
 #'  based upon sample sizes (default=TRUE).
-#' @return A \code{data.frame} with Gst_prime, Hs, Ht and P.  If more than one locus is provided,
-#'  then a 'mutlilocus' estimate is shown using the harmonic mean of individual locus Gst_prime values (monomorphic loci and negative estimates excluded).
+#' @param multilocus How the multilocus estimate is formed: \code{"harmonic"} (harmonic
+#'  mean of per-locus estimates, monomorphic loci and negative estimates excluded) or
+#'  \code{"average"} (the estimator applied to the across-locus means of Hs and Ht).
+#'  Only used for a \code{data.frame} with more than one locus.
+#' @return A \code{data.frame} with Gst_prime, Hs, Ht and P.  If more than one locus is
+#'  provided, a \code{Multilocus} row is added.  Estimators, assumptions and
+#'  differences from mmod and hierfstat are documented in \code{?genetic_structure}.
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @noRd
 #' @examples
@@ -27,11 +32,11 @@
 #'  locus2 <- locus( raw_alleles, type="column")
 #'  df <- data.frame( Population, TPI=locus, PGM=locus2 )
 #'  Gst_prime( df, nperm=99)
-Gst_prime <- function(  x, stratum="Population",  nperm=0, size.correct=TRUE ) {
+Gst_prime <- function(  x, stratum="Population",  nperm=0, size.correct=TRUE, multilocus=c("harmonic","average") ) {
 
   if( is(x,"data.frame") ) {
     stratum <- .detect_stratum(x, stratum, default = "Population")
-    return( .structure_table( "gst_prime", "Gst_prime", x, stratum, nperm, size.correct ) )
+    return( .structure_table( "gst_prime", "Gst_prime", x, stratum, nperm, size.correct, multilocus ) )
   }
 
   if( !is(x,"locus") )

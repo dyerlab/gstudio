@@ -39,16 +39,23 @@
 #'  strata (default=FALSE).
 #' @param locus An optional parameter specifying the locus or loci to be used
 #'  in the analysis. If this is not specified, then all loci are used.
+#' @param multilocus For \code{mode = "Gst_prime"} and \code{mode = "Dest"} only:
+#'  how the \code{Multilocus} row is computed.  \code{"harmonic"} (the default)
+#'  takes the harmonic mean of the per-locus estimates; \code{"average"} applies
+#'  the estimator to the across-locus means of Hs and Ht.  See the section
+#'  \emph{Multilocus estimates} below.  Ignored by the other modes.
 #' @return An object of type \code{data.frame} with columns \code{Locus}, the
 #'  estimate (named for the mode: \code{Gst}, \code{Gst_prime}, \code{Dest} or
 #'  \code{Fst}), \code{Hs}, \code{Ht} and \code{p.value}, in that order for every
 #'  mode.  There is one row per locus and, when more than one locus is analysed, a
-#'  \code{Multilocus} row whose \code{Hs} and \code{Ht} are means across loci.
-#'  The multilocus estimate is 1 - mean(Hs)/mean(Ht) for \code{Gst} and \code{Fst}
-#'  (Culley et al. 2001), and the harmonic mean of the per-locus estimates for
-#'  \code{Gst_prime} and \code{Dest}.  Monomorphic loci have no estimate (\code{NA})
-#'  and are left out of the multilocus estimate, as are negative per-locus
-#'  \code{Gst_prime} and \code{Dest} values.  With \code{nperm > 0},
+#'  \code{Multilocus} row whose \code{Hs} and \code{Ht} are arithmetic means across
+#'  loci.  The multilocus estimate is 1 - mean(Hs)/mean(Ht) for \code{Gst} and
+#'  \code{Fst} (Culley et al. 2002), and for \code{Gst_prime} and \code{Dest}
+#'  depends on \code{multilocus} (see \emph{Multilocus estimates}).  For the
+#'  \code{Gst}, \code{Gst_prime} and \code{Dest} modes the reported \code{Hs} and
+#'  \code{Ht} are the values the estimate was built from (size-corrected when
+#'  \code{size.correct = TRUE}).  Monomorphic loci have no estimate (\code{NA}).
+#'  With \code{nperm > 0},
 #'  \code{p.value} holds add-one permutation p-values; strata are permuted across
 #'  individuals (the same permutation for every locus) so the \code{Multilocus} row
 #'  is tested too.
@@ -70,8 +77,130 @@
 #'  every pair of strata.  For \code{PhiST} and \code{PhiFT} the distances (and,
 #'  for \code{PhiFT}, the gametes and allele frequencies) come from the whole
 #'  sample, so each pair is a sub-analysis of the global one.
-#' @note The multilocus estimation of Gst parameters is estimated following the
-#'  suggestions of Culley et al. (2001) American Journal of Botany 89(3): 460-465.
+#' @section Gst, Gst_prime and Dest: estimators and assumptions:
+#'  All three statistics are built from the same two quantities, computed
+#'  separately for every locus.
+#'
+#'  \describe{
+#'   \item{Within-stratum diversity, Hs}{The unweighted mean over strata of the
+#'    expected heterozygosity 1 - sum(p^2), where p are the allele frequencies in
+#'    each stratum.  Every stratum counts equally, whatever its sample size.}
+#'   \item{Total diversity, Ht}{1 - sum(pbar^2), where pbar is the
+#'    \emph{unweighted} mean of the stratum allele frequencies (Nei 1973, 1987).
+#'    This treats the strata, not the individuals, as the units of the total
+#'    population, so a heavily sampled stratum does not pull Ht toward its own
+#'    frequencies.  Versions of gstudio before 1.15.5 pooled all individuals
+#'    (a sample-size-weighted Ht).  The two agree when strata have equal sample
+#'    sizes and can differ noticeably when they do not.}
+#'   \item{Sample sizes and missing data}{Only individuals genotyped at a locus
+#'    (and with a non-missing stratum) are used for that locus.  The number of
+#'    strata k and the harmonic mean stratum size nh are counted per locus from
+#'    those individuals.  A stratum with no genotypes at a locus is left out of
+#'    that locus entirely (it does not count towards k), and a locus genotyped in
+#'    fewer than two strata has no estimate.}
+#'   \item{Sample-size correction}{With \code{size.correct = TRUE},
+#'    Hs_est = 2nh / (2nh - 1) Hs and Ht_est = Ht + Hs_est / (2knh) (Nei & Chesser
+#'    1983, in the form given by Jost 2008, eqs. 12-13).  This form uses expected,
+#'    not observed, heterozygosity, so it assumes Hardy-Weinberg proportions
+#'    within strata, and it counts 2nh gene copies per stratum, so it assumes
+#'    diploid data.}
+#'   \item{Estimators}{Gst = 1 - Hs/Ht (Nei 1973);
+#'    Gst_prime = Gst (k - 1 + Hs) / ((k - 1)(1 - Hs)) (Hedrick 2005);
+#'    Dest = [(Ht - Hs) / (1 - Hs)] [k / (k - 1)] (Jost 2008).  A monomorphic
+#'    locus (Ht = 0) has no estimate.}
+#'  }
+#'
+#' @section Multilocus estimates:
+#'  The \code{Multilocus} row reports the arithmetic means of the per-locus Hs and
+#'  Ht.  Monomorphic loci contribute Hs = Ht = 0 to these means, as they do in
+#'  \pkg{mmod} and \pkg{hierfstat}.
+#'
+#'  \describe{
+#'   \item{\code{Gst} (and \code{Fst})}{Always the ratio of averages,
+#'    1 - mean(Hs) / mean(Ht) (Culley et al. 2002).  Gst is a ratio of
+#'    heterozygosities, and averaging the numerator and denominator separately
+#'    weights each locus by its diversity.  Averaging the per-locus ratios would
+#'    give every locus equal weight, however little variation it has.}
+#'   \item{\code{Gst_prime} and \code{Dest}, \code{multilocus = "harmonic"}}{The
+#'    harmonic mean of the per-locus estimates.  These statistics are not ratios
+#'    of quantities that add up across loci, so plugging averaged Hs and Ht into
+#'    the formula has no simple interpretation.  The harmonic mean of per-locus
+#'    values is one of the two summaries \pkg{mmod} reports (\code{D_Jost()$global.harm_mean},
+#'    \code{diff_stats()$global["D_mean"]}).  Loci with no estimate are left out.
+#'    \strong{Negative} per-locus estimates are also left out, because the
+#'    harmonic mean is undefined for negative values.  A negative estimate is
+#'    sampling noise around zero differentiation, so dropping it biases the
+#'    multilocus value upward when several loci show little or no structure.
+#'    \pkg{mmod} returns \code{NA} in that case instead.  A locus with an
+#'    estimate of exactly zero makes the harmonic mean zero.}
+#'   \item{\code{Gst_prime} and \code{Dest}, \code{multilocus = "average"}}{The
+#'    estimator applied to mean(Hs) and mean(Ht), with k the number of strata in
+#'    the data.  This is \pkg{mmod}'s \code{D_Jost()$global.het} (and
+#'    \code{diff_stats()$global["D_het"]}), and the same summary
+#'    \pkg{hierfstat}'s \code{basic.stats()} uses for its overall \code{Dest}
+#'    (built from its own Hs and Ht, below).  It keeps negative and near-zero
+#'    loci and in practice is often larger than the harmonic mean.}
+#'  }
+#'
+#' @section Agreement with other software:
+#'  With \code{size.correct = TRUE} on diploid data, the per-locus Hs, Ht,
+#'  \code{Gst} and \code{Dest}, and the multilocus \code{Gst} and \code{Dest}
+#'  (\code{multilocus = "average"} always; \code{"harmonic"} when no per-locus
+#'  estimate is negative),
+#'  agree with \pkg{mmod}'s \code{diff_stats()}, \code{D_Jost()} and
+#'  \code{Gst_Nei()} to rounding error, including loci with missing data (both
+#'  count k and nh per locus and use the total number of strata for the
+#'  averaged multilocus value).  The places where gstudio diverges, and why:
+#'
+#'  \describe{
+#'   \item{Gst_prime vs. \pkg{mmod}'s \code{Gst_Hedrick()}}{\pkg{mmod} computes
+#'    the G''st of Meirmans & Hedrick (2011),
+#'    k (Ht - Hs) / ((k Ht - Hs)(1 - Hs)).  gstudio computes Hedrick's (2005)
+#'    G'st, the statistic this mode is named for.  The two are different
+#'    estimators and differ slightly, mostly when there are few strata.
+#'    \pkg{mmod}'s global value is built from averaged Hs and Ht.}
+#'   \item{\pkg{hierfstat}'s \code{basic.stats()}}{\pkg{hierfstat} uses Nei's
+#'    (1987) estimators, which subtract an observed-heterozygosity term:
+#'    Hs = nh/(nh - 1) [1 - mean(p^2) - Ho/(2nh)].  Where there is a heterozygote
+#'    deficit (Fis > 0), as with inbreeding, selfing or a Wahlund effect within
+#'    strata, \pkg{hierfstat}'s Hs is larger and its Gst-type statistics
+#'    (\code{Fst}, \code{Dest}) are smaller.  Under Hardy-Weinberg proportions
+#'    both approaches estimate the same quantities.  gstudio uses the
+#'    expected-heterozygosity form so that Hs and Ht (and so Gst, G'st and D)
+#'    depend only on allele frequencies and can be recomputed cheaply for the
+#'    permutation tests.  \pkg{hierfstat}'s \code{Fstp} is Nei's Gst with a
+#'    corrected Ht, not Hedrick's G'st.}
+#'   \item{\code{mode = "Fst"}}{This mode uses the internal \code{Hes()} and
+#'    \code{Ht()} functions, which do include the Nei (1987) observed-heterozygosity
+#'    term.  Its Hs and Ht therefore differ from the \code{Gst} mode's, and it is
+#'    closer in spirit to \pkg{hierfstat}.  It does not match \pkg{hierfstat}
+#'    exactly, because \code{Ht()} drops strata with fewer than three genotyped
+#'    individuals.}
+#'  }
+#'
+#' @references
+#'  Culley TM, Wallace LE, Gengler-Nowak KM, Crawford DJ (2002) A comparison of
+#'  two methods of calculating GST, a genetic measure of population
+#'  differentiation. \emph{American Journal of Botany} \strong{89}: 460-465.
+#'
+#'  Hedrick PW (2005) A standardized genetic differentiation measure.
+#'  \emph{Evolution} \strong{59}: 1633-1638.
+#'
+#'  Jost L (2008) GST and its relatives do not measure differentiation.
+#'  \emph{Molecular Ecology} \strong{17}: 4015-4026.
+#'
+#'  Meirmans PG, Hedrick PW (2011) Assessing population structure: FST and
+#'  related measures. \emph{Molecular Ecology Resources} \strong{11}: 5-18.
+#'
+#'  Nei M (1973) Analysis of gene diversity in subdivided populations.
+#'  \emph{Proceedings of the National Academy of Sciences USA} \strong{70}:
+#'  3321-3323.
+#'
+#'  Nei M (1987) \emph{Molecular Evolutionary Genetics}. Columbia University
+#'  Press, New York.
+#'
+#'  Nei M, Chesser RK (1983) Estimation of fixation indices and gene diversities.
+#'  \emph{Annals of Human Genetics} \strong{47}: 253-259.
 #' @export
 #' @examples
 #'  AA <- locus( c("A","A") )
@@ -84,11 +213,13 @@
 #'  genetic_structure( df, mode="Gst")
 #'  genetic_structure( df, mode="Fst")
 #'  genetic_structure( df, mode="Dest")
+#'  # Dest from the across-locus means of Hs and Ht (as mmod's D_het, hierfstat's Dest)
+#'  genetic_structure( df, mode="Dest", multilocus="average")
 #'  genetic_structure( df, mode="PhiST", nperm=99)
 #'  data(cornus_florida)
 #'  genetic_structure( cornus_florida, mode="PhiFT" )
 #'  genetic_structure( df, mode="Gst_prime", pairwise=TRUE)
-genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime", "Dest", "Fst", "PhiST", "PhiFT")[1], nperm=0, size.correct=TRUE, pairwise=FALSE, locus, offspring="OffID" ) {
+genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime", "Dest", "Fst", "PhiST", "PhiFT")[1], nperm=0, size.correct=TRUE, pairwise=FALSE, locus, offspring="OffID", multilocus=c("harmonic","average") ) {
   
   if( !inherits(x,"data.frame") )
       stop("You need to pass a data frame to the function genetic_structure()...")
@@ -104,6 +235,7 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
     stop("You must specify which stratum to use for the estimation of genetic structure.")
 
   mode_clean <- tolower(mode)
+  multilocus <- .structure_multilocus_arg( multilocus )
   if( !(mode_clean %in% c("fst", "gst", "gst_prime", "dest", "gst'", "phist", "phi_st", "phift", "phi_ft")) )
     stop(paste("The structure mode", mode, "is not recognized"))
   
@@ -133,7 +265,7 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
       for( j in i:K){
         if( i!=j ){
           y <- rbind(x[x[[stratum]]==pops[i],], x[x[[stratum]]==pops[j],])
-          r <- genetic_structure( y, stratum, mode_clean, nperm=0, size.correct, offspring=offspring )
+          r <- genetic_structure( y, stratum, mode_clean, nperm=0, size.correct, offspring=offspring, multilocus=multilocus )
           ret[i,j] <- ret[j,i] <-  r[nrow(r),2]
         } 
       }
@@ -149,10 +281,10 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
       ret <- Gst( x, stratum=stratum, nperm=nperm, size.correct=size.correct )
     
     else if( mode_clean %in% c("gst_prime", "gst'") ) 
-      ret <- Gst_prime( x, stratum=stratum, nperm=nperm, size.correct=size.correct )
+      ret <- Gst_prime( x, stratum=stratum, nperm=nperm, size.correct=size.correct, multilocus=multilocus )
     
     else if( mode_clean == "dest" ) 
-      ret <- Dest( x, stratum=stratum, nperm=nperm, size.correct=size.correct )
+      ret <- Dest( x, stratum=stratum, nperm=nperm, size.correct=size.correct, multilocus=multilocus )
     
     else if( mode_clean == "fst" ) 
       ret <- Fst( x, stratum, nperm )

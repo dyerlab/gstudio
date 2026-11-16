@@ -29,7 +29,7 @@ arapat |>
   genetic_structure(stratum = "Species", mode = "Gst")
 ```
 
-The output provides per-locus estimates plus a multilocus estimate (last row). Every mode returns the same columns, `Locus`, the estimate (named `Gst`, `Gst_prime`, `Dest` or `Fst`), `Hs`, `Ht` and `p.value`, and the `Multilocus` row reports mean `Hs` and `Ht` across loci. For `Gst` and `Fst` the multilocus estimate is 1 - mean(Hs)/mean(Ht), following Culley et al. (2001); for `Gst_prime` and `Dest` it is the harmonic mean of the per-locus values. Monomorphic loci have no estimate (`NA`) and are left out of the multilocus value.
+The output provides per-locus estimates plus a multilocus estimate (last row). Every mode returns the same columns, `Locus`, the estimate (named `Gst`, `Gst_prime`, `Dest` or `Fst`), `Hs`, `Ht` and `p.value`, and the `Multilocus` row reports mean `Hs` and `Ht` across loci. For `Gst` and `Fst` the multilocus estimate is 1 - mean(Hs)/mean(Ht), following Culley et al. (2002); for `Gst_prime` and `Dest` it is, by default, the harmonic mean of the per-locus values (see [How the estimates are computed](#how-the-estimates-are-computed)). Monomorphic loci have no estimate (`NA`).
 
 ## Hedrick's Correction
 
@@ -48,6 +48,32 @@ An alternative differentiation measure that is independent of within-population 
 arapat |>
   genetic_structure(stratum = "Species", mode = "Dest")
 ```
+
+## How the estimates are computed
+
+`Gst`, `Gst_prime` and `Dest` share the same per-locus Hs and Ht:
+
+- **Hs** is the unweighted mean of 1 - sum(p^2) over strata, and **Ht** is 1 - sum(pbar^2), where pbar is the *unweighted* mean of the stratum allele frequencies (Nei 1973, 1987). Each stratum counts equally, whatever its sample size.
+- Each locus uses only the individuals genotyped at it. The number of strata k and the harmonic mean stratum size are counted per locus.
+- With `size.correct = TRUE`, the Nei & Chesser (1983) correction is applied in the form given by Jost (2008). It uses expected heterozygosity only, so it assumes Hardy-Weinberg proportions within strata and diploid data.
+
+The multilocus `Gst_prime` and `Dest` can be computed in two ways:
+
+```{r}
+arapat |>
+  genetic_structure(stratum = "Population", mode = "Dest")                         # harmonic mean of loci
+arapat |>
+  genetic_structure(stratum = "Population", mode = "Dest", multilocus = "average") # from mean Hs and Ht
+```
+
+The harmonic mean leaves out negative per-locus estimates, which pushes it up when several loci show no structure. The `"average"` form keeps them and usually gives a larger value.
+
+**Comparison with other packages.** Per-locus Hs, Ht, `Gst` and `Dest`, and the multilocus `Gst` and both multilocus `Dest` values, match **mmod** (`diff_stats()`, `D_Jost()`). They differ in two places:
+
+- mmod's `Gst_Hedrick()` is Meirmans & Hedrick's (2011) G''st, whereas `Gst_prime` here is Hedrick's (2005) G'st.
+- **hierfstat**'s `basic.stats()` uses Nei's (1987) estimators, which include observed heterozygosity. Where there is a heterozygote deficit (Fis > 0), its Hs is larger and its `Fst`/`Dest` smaller. Under Hardy-Weinberg proportions both approaches estimate the same quantities.
+
+`?genetic_structure` has the full details.
 
 ## Permutation Testing
 

@@ -45,6 +45,8 @@ Suggests:
     ggraph,
     gifski,
     leaflet,
-    leaflet.minicharts
+    leaflet.minicharts,
+    adegenet,
+    mmod
 VignetteBuilder: knitr
 Config/roxygen2/version: 8.1.1
