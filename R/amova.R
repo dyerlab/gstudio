@@ -21,8 +21,9 @@
 #' @param row.names,optional Ignored.
 #' @param ... Ignored.
 #' @return \code{anova()} returns the analysis table as an \code{"anova"}
-#'  \code{data.frame}, with a \code{Phi} column holding the estimate (and its
-#'  p-value) on the Among row.  \code{as.data.frame()} returns the per-locus table
+#'  \code{data.frame}, with the estimate and its p-value on the Among row in
+#'  columns named for the statistic (\code{PhiST} and \code{Pr(>=PhiST)}, or
+#'  \code{PhiFT} and \code{Pr(>=PhiFT)}).  \code{as.data.frame()} returns the per-locus table
 #'  as a plain \code{data.frame}.
 #' @name amova
 #' @examples
@@ -99,9 +100,8 @@ anova.amova <- function( object, ... ) {
   last <- nrow( object )
   rownames( tab ) <- .amova_labels( object )
   names( tab )[ names( tab ) == "Percent" ] <- "% Var"
-  tab$Phi <- c( object[[ stat ]][ last ], NA, NA )
-  tab$`Pr(>=Phi)` <- c( object$p.value[ last ], NA, NA )
-  names( tab )[ names( tab ) == "Phi" ] <- stat
+  tab[[ stat ]] <- c( object[[ stat ]][ last ], NA, NA )
+  tab[[ paste0( "Pr(>=", stat, ")" ) ]] <- c( object$p.value[ last ], NA, NA )
   structure( tab, heading = paste0( "Analysis of Molecular Variance (", stat, ")\n" ),
              class = c( "anova", "data.frame" ) )
 }

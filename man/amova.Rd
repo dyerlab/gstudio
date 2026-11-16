@@ -31,8 +31,9 @@
 }
 \value{
 \code{anova()} returns the analysis table as an \code{"anova"}
- \code{data.frame}, with a \code{Phi} column holding the estimate (and its
- p-value) on the Among row.  \code{as.data.frame()} returns the per-locus table
+ \code{data.frame}, with the estimate and its p-value on the Among row in
+ columns named for the statistic (\code{PhiST} and \code{Pr(>=PhiST)}, or
+ \code{PhiFT} and \code{Pr(>=PhiFT)}).  \code{as.data.frame()} returns the per-locus table
  as a plain \code{data.frame}.
 }
 \description{
