@@ -11,11 +11,25 @@
 #'  \item{Gst}{Nei's Gst parameter}
 #'  \item{Gst_prime}{Hedrick's (2005) standardized Gst' for diverse loci}
 #'  \item{Dest}{Jost's (2008) D_est differentiation estimate}
+#'  \item{PhiST}{Phi_ST from an analysis of molecular variance (AMOVA; Excoffier
+#'   et al. 1992) of the squared AMOVA distances among individuals (Smouse &
+#'   Peakall 1999), the same distances as \code{genetic_distance(mode = "AMOVA")}}
+#'  \item{PhiFT}{TwoGener Phi_FT (Smouse et al. 2001): differentiation of the
+#'   pollen pools sampled by different mothers.  \code{x} holds mothers and their
+#'   offspring; the maternal contribution is removed from each offspring with
+#'   \code{\link{minus_mom}} and the paternal gametes are partitioned among maternal
+#'   families as for PhiST.  The stratum is the maternal family (default \code{"ID"}
+#'   for this mode) and mothers have \code{offspring} equal to "0".  An offspring
+#'   with its mother's heterozygous genotype (an ambiguous paternal allele) is
+#'   represented by its expected allele vector; a gamete incompatible with its
+#'   mother is set to missing at that locus.}
 #' }
 #' @param nperm The number of permutations used to test the hypothesis that
 #'  the parameter = 0 (default=0).
 #' @param size.correct A flag indicating that the estimate should be corrected
 #'  based upon sample sizes (default=TRUE).
+#' @param offspring For \code{mode = "PhiFT"} only: the column of offspring numbers,
+#'  "0" for mothers (default "OffID").
 #' @param pairwise A flag indicating that the analysis should be done among all pairs of 
 #'  strata (default=FALSE).
 #' @param locus An optional parameter specifying the locus or loci to be used
@@ -32,7 +46,13 @@
 #'  \code{Gst_prime} and \code{Dest} values.  With \code{nperm > 0},
 #'  \code{p.value} holds add-one permutation p-values; strata are permuted across
 #'  individuals (the same permutation for every locus) so the \code{Multilocus} row
-#'  is tested too.  If \code{pairwise=TRUE}, then it returns a pairwise matrix of the
+#'  is tested too.  \code{PhiST} is the exception to the column layout: it returns
+#'  \code{Locus}, \code{PhiST}, \code{sigma2_among}, \code{sigma2_within} and
+#'  \code{p.value}, where PhiST = sigma2_among / (sigma2_among + sigma2_within)
+#'  (\code{PhiFT} likewise, with \code{PhiFT} in place of \code{PhiST}).  Each
+#'  locus uses the individuals genotyped at it, and the \code{Multilocus} row sums the
+#'  variance components across loci (with complete data, the same as an AMOVA of the
+#'  distances summed across loci).  \code{size.correct} does not apply to it.  If \code{pairwise=TRUE}, then it returns a pairwise matrix of the
 #'  multilocus estimate (or the single-locus estimate when only one locus is used).
 #' @note The multilocus estimation of Gst parameters is estimated following the
 #'  suggestions of Culley et al. (2001) American Journal of Botany 89(3): 460-465.
@@ -48,27 +68,34 @@
 #'  genetic_structure( df, mode="Gst")
 #'  genetic_structure( df, mode="Fst")
 #'  genetic_structure( df, mode="Dest")
+#'  genetic_structure( df, mode="PhiST", nperm=99)
+#'  data(cornus_florida)
+#'  genetic_structure( cornus_florida, mode="PhiFT" )
 #'  genetic_structure( df, mode="Gst_prime", pairwise=TRUE)
-genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime", "Dest", "Fst")[1], nperm=0, size.correct=TRUE, pairwise=FALSE, locus ) {
+genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime", "Dest", "Fst", "PhiST", "PhiFT")[1], nperm=0, size.correct=TRUE, pairwise=FALSE, locus, offspring="OffID" ) {
   
   if( !inherits(x,"data.frame") )
       stop("You need to pass a data frame to the function genetic_structure()...")
   
-  stratum <- .detect_stratum(x, stratum, default = "Population", explicit = !missing(stratum))
+  is_ft <- tolower(mode[1]) %in% c("phift", "phi_ft")
+  explicit <- !missing(stratum)
+  if( is_ft && !explicit )
+    stratum <- "ID"
+  stratum <- .detect_stratum(x, stratum, default = if( is_ft ) "ID" else "Population", explicit = explicit)
   x <- .plain_df(x)
     
   if( !(stratum %in% names(x) ) ) 
     stop("You must specify which stratum to use for the estimation of genetic structure.")
 
   mode_clean <- tolower(mode)
-  if( !(mode_clean %in% c("fst", "gst", "gst_prime", "dest", "gst'")) )
+  if( !(mode_clean %in% c("fst", "gst", "gst_prime", "dest", "gst'", "phist", "phi_st", "phift", "phi_ft")) )
     stop(paste("The structure mode", mode, "is not recognized"))
   
   # subsets of loci
   if( !missing( locus ) ){
     
     if( all( locus %in% column_class(x,"locus")) ) 
-      x <- x[, c(stratum,locus) ]
+      x <- x[, c(stratum, if( is_ft ) offspring, locus) ]
     else
       stop(paste("At least one of the loci you requested", paste(locus,collapse=", "), "is not in the data.frame you passed"))
   }
@@ -84,7 +111,7 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
       for( j in i:K){
         if( i!=j ){
           y <- rbind(x[x[[stratum]]==pops[i],], x[x[[stratum]]==pops[j],])
-          r <- genetic_structure( y, stratum, mode_clean, nperm=0, size.correct )
+          r <- genetic_structure( y, stratum, mode_clean, nperm=0, size.correct, offspring=offspring )
           ret[i,j] <- ret[j,i] <-  r[nrow(r),2]
         } 
       }
@@ -107,6 +134,12 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
     
     else if( mode_clean == "fst" ) 
       ret <- Fst( x, stratum, nperm )
+
+    else if( mode_clean %in% c( "phist", "phi_st" ) )
+      ret <- PhiST( x, stratum = stratum, nperm = nperm )
+
+    else if( mode_clean %in% c( "phift", "phi_ft" ) )
+      ret <- PhiFT( x, stratum = stratum, offspring = offspring, nperm = nperm )
 
     if( !("P" %in% names(ret)) )
       ret$P <- NA_real_

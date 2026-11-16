@@ -7,11 +7,12 @@
 genetic_structure(
   x,
   stratum = "Population",
-  mode = c("Gst", "Gst_prime", "Dest", "Fst")[1],
+  mode = c("Gst", "Gst_prime", "Dest", "Fst", "PhiST", "PhiFT")[1],
   nperm = 0,
   size.correct = TRUE,
   pairwise = FALSE,
-  locus
+  locus,
+  offspring = "OffID"
 )
 }
 \arguments{
@@ -26,6 +27,18 @@ of type \code{\link{locus}}.}
  \item{Gst}{Nei's Gst parameter}
  \item{Gst_prime}{Hedrick's (2005) standardized Gst' for diverse loci}
  \item{Dest}{Jost's (2008) D_est differentiation estimate}
+ \item{PhiST}{Phi_ST from an analysis of molecular variance (AMOVA; Excoffier
+  et al. 1992) of the squared AMOVA distances among individuals (Smouse &
+  Peakall 1999), the same distances as \code{genetic_distance(mode = "AMOVA")}}
+ \item{PhiFT}{TwoGener Phi_FT (Smouse et al. 2001): differentiation of the
+  pollen pools sampled by different mothers.  \code{x} holds mothers and their
+  offspring; the maternal contribution is removed from each offspring with
+  \code{\link{minus_mom}} and the paternal gametes are partitioned among maternal
+  families as for PhiST.  The stratum is the maternal family (default \code{"ID"}
+  for this mode) and mothers have \code{offspring} equal to "0".  An offspring
+  with its mother's heterozygous genotype (an ambiguous paternal allele) is
+  represented by its expected allele vector; a gamete incompatible with its
+  mother is set to missing at that locus.}
 }}
 
 \item{nperm}{The number of permutations used to test the hypothesis that
@@ -39,6 +52,9 @@ strata (default=FALSE).}
 
 \item{locus}{An optional parameter specifying the locus or loci to be used
 in the analysis. If this is not specified, then all loci are used.}
+
+\item{offspring}{For \code{mode = "PhiFT"} only: the column of offspring numbers,
+"0" for mothers (default "OffID").}
 }
 \value{
 An object of type \code{data.frame} with columns \code{Locus}, the
@@ -53,7 +69,13 @@ An object of type \code{data.frame} with columns \code{Locus}, the
  \code{Gst_prime} and \code{Dest} values.  With \code{nperm > 0},
  \code{p.value} holds add-one permutation p-values; strata are permuted across
  individuals (the same permutation for every locus) so the \code{Multilocus} row
- is tested too.  If \code{pairwise=TRUE}, then it returns a pairwise matrix of the
+ is tested too.  \code{PhiST} is the exception to the column layout: it returns
+ \code{Locus}, \code{PhiST}, \code{sigma2_among}, \code{sigma2_within} and
+ \code{p.value}, where PhiST = sigma2_among / (sigma2_among + sigma2_within)
+ (\code{PhiFT} likewise, with \code{PhiFT} in place of \code{PhiST}).  Each
+ locus uses the individuals genotyped at it, and the \code{Multilocus} row sums the
+ variance components across loci (with complete data, the same as an AMOVA of the
+ distances summed across loci).  \code{size.correct} does not apply to it.  If \code{pairwise=TRUE}, then it returns a pairwise matrix of the
  multilocus estimate (or the single-locus estimate when only one locus is used).
 }
 \description{
@@ -75,5 +97,8 @@ The multilocus estimation of Gst parameters is estimated following the
  genetic_structure( df, mode="Gst")
  genetic_structure( df, mode="Fst")
  genetic_structure( df, mode="Dest")
+ genetic_structure( df, mode="PhiST", nperm=99)
+ data(cornus_florida)
+ genetic_structure( cornus_florida, mode="PhiFT" )
  genetic_structure( df, mode="Gst_prime", pairwise=TRUE)
 }

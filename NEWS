@@ -1,3 +1,9 @@
+gstudio 1.15.5 - 20261116
+------------------
+* [ADD] (1.15.5) genetic_structure(mode = "PhiST"): Phi_ST from an analysis of molecular variance (Excoffier et al. 1992) of the squared AMOVA distances among individuals (Smouse & Peakall 1999; the distances of genetic_distance(mode = "AMOVA")).  Returns Locus, PhiST, sigma2_among, sigma2_within and p.value, with a Multilocus row that sums the variance components across loci; each locus uses the individuals genotyped at it.  nperm > 0 gives add-one permutation p-values (strata permuted across individuals, the same permutation for every locus), and pairwise = TRUE works as for the other modes.
+* [ADD] (1.15.5) genetic_structure(mode = "PhiFT"): TwoGener Phi_FT (Smouse et al. 2001), the differentiation of pollen pools among mothers.  Pass mothers and offspring together (mothers have OffID == "0"; the maternal family column defaults to "ID" for this mode, the offspring column is set with the new argument offspring = "OffID").  The maternal contribution is removed with minus_mom() and the paternal gametes are partitioned among families as for PhiST.  Ambiguous gametes (an offspring with its mother's heterozygous genotype) are kept as expected allele vectors weighted by the allele frequencies at the locus; gametes incompatible with their mother are set to missing (with a message), and offspring without a mother in the data are dropped.  Returns Locus, PhiFT, sigma2_among, sigma2_within and p.value.
+
+
 gstudio 1.15.4 - 20261111
 ------------------
 * [BREAKING] (1.15.4) Removed exports multilocus_diversity() and exclusion_probability(); use genetic_diversity(mode = "Dm") and genetic_diversity(mode = "Pex").  Pex no longer reports PexclMax or Fraction.
