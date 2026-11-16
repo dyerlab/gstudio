@@ -19,7 +19,8 @@ test_that("PhiFT with unambiguous gametes is an AMOVA of the paternal alleles", 
                       L = locus( paste( pmin( mat, pat ), pmax( mat, pat ), sep = ":" ), type = "separated" ) )
   x <- rbind( moms, offs )
   ft <- genetic_structure( x, mode = "PhiFT" )
-  expect_equal( names( ft ), c( "Locus", "PhiFT", "sigma2_among", "sigma2_within", "p.value" ) )
+  expect_equal( names( ft ), c( "Locus", "PhiFT", "sigma2_among", "sigma2_within", "Nep", "p.value" ) )
+  expect_equal( ft$Nep, 1 / ( 2 * ft$PhiFT ) )
   # Gamete distance: 1 when the paternal alleles differ, 0 when they match.
   D <- outer( pat, pat, function( a, b ) as.numeric( a != b ) )
   expect_equal( ft$PhiFT, .hand_phi( D, offs$ID ) )
@@ -65,4 +66,70 @@ test_that("PhiFT detects structured pollen pools and drops incompatible gametes"
   names( x )[1] <- "Mother"
   expect_equal( genetic_structure( x, stratum = "Mother", mode = "phift" )$PhiFT,
                 genetic_structure( setNames( x, c("ID","OffID","L") ), mode = "PhiFT" )$PhiFT )
+})
+
+test_that("dist_amova(pollen_pool = TRUE) treats every diploid as an ambiguous gamete", {
+  # All gametes ambiguous: without the flag these would be diploid genotypes.
+  l <- locus( c( "A:B", "A:B", "B:C" ), type = "separated" )
+  p <- c( A = 2, B = 3, C = 1 ) / 6
+  v <- rbind( c( p["A"], p["B"], 0 ) / ( p["A"] + p["B"] ), c( p["A"], p["B"], 0 ) / ( p["A"] + p["B"] ),
+              c( 0, p["B"], p["C"] ) / ( p["B"] + p["C"] ) ) / 2
+  expect_silent( D <- dist_amova( l, pollen_pool = TRUE ) )
+  expect_equal( D, unname( as.matrix( stats::dist( v ) )^2 * 2 ), tolerance = 1e-8 )
+  expect_false( isTRUE( all.equal( D, dist_amova( l ) ) ) )
+  # Haploid-only gametes are the same either way.
+  h <- locus( c( "A", "B", "C", "A" ), type = "separated" )
+  expect_equal( dist_amova( h, pollen_pool = TRUE ), dist_amova( h ) )
+})
+
+.family_data <- function( seed = 5, n = 12 ) {
+  set.seed( seed )
+  moms <- c( "A:B", "C:D", "B:D", "A:C" )
+  do.call( rbind, lapply( seq_along( moms ), function( k ) {
+    ma <- strsplit( moms[k], ":" )[[1]]
+    kids <- paste( sample( ma, n, replace = TRUE ), sample( c("A","B","C","D","E"), n, replace = TRUE ), sep = ":" )
+    data.frame( ID = paste0( "m", k ), OffID = as.character( 0:n ), L = c( moms[k], kids ) )
+  }))
+}
+
+test_that("missing maternal genotypes are reconstructed from offspring", {
+  x <- .family_data()
+  x$L <- locus( x$L, type = "separated" )
+  full <- genetic_structure( x, mode = "PhiFT" )
+
+  y <- x
+  y$L[ y$ID == "m2" & y$OffID == "0" ] <- locus( "", type = "separated" )
+  expect_message( ft <- genetic_structure( y, mode = "PhiFT" ), "m2 at L: inferred C:D" )
+  rep <- attr( ft, "maternal_inference" )
+  expect_equal( rep$Genotype, "C:D" )
+  expect_true( rep$Used )
+  expect_gte( rep$LR, 20 )
+  expect_equal( ft$PhiFT, full$PhiFT )
+
+  # Too few offspring: not inferred, and her offspring drop out at that locus.
+  z <- y[ !( y$ID == "m2" & as.numeric( y$OffID ) > 1 ), ]
+  expect_message( fz <- genetic_structure( z, mode = "PhiFT" ), "NOT inferred" )
+  expect_false( attr( fz, "maternal_inference" )$Used )
+  expect_equal( fz$PhiFT, genetic_structure( z[ z$ID != "m2", ], mode = "PhiFT" )$PhiFT )
+})
+
+test_that("pairwise PhiFT is a sub-analysis of the global gametes", {
+  x <- .family_data()
+  x$L <- locus( x$L, type = "separated" )
+  pw <- expect_silent( genetic_structure( x, mode = "PhiFT", pairwise = TRUE ) )
+  expect_equal( dim( pw ), c( 4, 4 ) )
+  expect_equal( pw, t( pw ) )
+  # Distances (and ambiguous-gamete frequencies) come from all families.
+  off <- suppressMessages( minus_mom( x ) )
+  D <- dist_amova( off$L, pollen_pool = TRUE )
+  i <- which( off$ID %in% c( "m1", "m3" ) )
+  expect_equal( pw[ "m1", "m3" ], .hand_phi( D[ i, i ], off$ID[ i ] ) )
+})
+
+test_that("mothers without offspring are not reconstructed", {
+  x <- .family_data()
+  x <- rbind( x, data.frame( ID = "m9", OffID = "0", L = "" ) )
+  x$L <- locus( x$L, type = "separated" )
+  expect_no_message( ft <- genetic_structure( x, mode = "PhiFT" ) )
+  expect_null( attr( ft, "maternal_inference" ) )
 })

@@ -41,3 +41,14 @@ test_that("PhiST handles missing data, permutations, case and pairwise", {
   expect_equal( nrow( one ), 1 )
   expect_equal( one$Locus, "MP20" )
 })
+
+test_that("PhiST drops individuals with a missing stratum, also when permuting", {
+  data(arapat)
+  x <- arapat
+  x$Population[ 1:20 ] <- NA
+  set.seed( 2 )
+  expect_no_warning( expect_message( ps <- genetic_structure( x, mode = "PhiST", nperm = 9 ), "20 individuals" ) )
+  ref <- suppressMessages( genetic_structure( x[ -( 1:20 ), ], mode = "PhiST" ) )
+  expect_equal( ps$PhiST, ref$PhiST )
+  expect_true( all( ps$p.value > 0 & ps$p.value <= 1, na.rm = TRUE ) )
+})

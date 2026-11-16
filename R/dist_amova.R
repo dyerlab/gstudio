@@ -18,6 +18,14 @@
 #' @param binary Logical (default \code{FALSE}).  When \code{TRUE} the
 #'   Excoffier (1992) formula for binary markers is used (no factor-of-2
 #'   rescaling).
+#' @param pollen_pool Logical (default \code{FALSE}).  When \code{TRUE}, \code{x}
+#'   holds paternal gametes (offspring after \code{minus_mom()}): haploid rows are
+#'   gametes and every diploid row is an ambiguous gamete (an offspring with its
+#'   mother's heterozygous genotype), represented by its expected allele vector
+#'   weighted by the gamete allele frequencies (the TwoGener approximation; Smouse
+#'   et al. 2001).  This is used for every locus, without the mixed-ploidy
+#'   warning, even one where every gamete is ambiguous.  Without it, the
+#'   approximation is used, with a warning, only for loci with mixed ploidy.
 #' @return A numeric distance matrix (N × N).
 #' @references
 #'   Smouse P.E. & Peakall R. (1999) Spatial autocorrelation analysis of
@@ -44,7 +52,7 @@
 #' D <- dist_amova( loci )
 #' rownames(D) <- colnames(D) <- as.character(loci)
 #' D
-dist_amova <- function( x, binary = FALSE ) {
+dist_amova <- function( x, binary = FALSE, pollen_pool = FALSE ) {
 
   if( is(x,"locus") )
     x <- data.frame( LOCUS=x )
@@ -59,8 +67,9 @@ dist_amova <- function( x, binary = FALSE ) {
   p <- ploidy(x)
 
   # make data vectors for 2Gener amova
-  if( any( p$Ploidy != round(p$Ploidy))){
-    warning("PLOIDY WARNING: Assuming 2Gener Approximation.")
+  if( pollen_pool || any( p$Ploidy != round(p$Ploidy))){
+    if( !pollen_pool )
+      warning("PLOIDY WARNING: Assuming 2Gener Approximation.")
     data <- FALSE
 
     if( any( p$Ploidy > 2))
@@ -74,8 +83,9 @@ dist_amova <- function( x, binary = FALSE ) {
       y <- to_mv( locus )
       p <- ploidy(locus)
 
-      for( i in seq(1:N)[p==2]){
-        f <- freqs$Frequency * y[i,]
+      fr <- freqs$Frequency[ match( colnames(y), freqs$Allele ) ]
+      for( i in which( p == 2 ) ){
+        f <- fr * y[i,]
         y[i,] <- f/sum(f)/2
       }
 

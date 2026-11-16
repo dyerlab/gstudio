@@ -138,12 +138,16 @@ plot.gravity_congruence <- function(x, y, ...,
                      underlay = underlay, overlay = overlay, node_colours = node_colours,
                      base = base)
   t <- x$tests
+  # Only add the linetype legend when there are overlay layers mapped to it;
+  # otherwise ggplot2 warns about no shared levels.
+  if (length(overlay))
+    p <- p + ggplot2::scale_linetype_manual(name = "Shared edges",
+                                            values = stats::setNames(c("solid", "22"), edge_keys),
+                                            guide = ggplot2::guide_legend(override.aes = list(linewidth = 0.6)))
   p + ggplot2::scale_fill_gradient2(low = palette[1], mid = "#f7f7f7", high = palette[2], midpoint = 0,
                                     limits = c(-lim, lim),
                                     name = "Shared source\u2013sink score\n(red = both source,\nblue = both sink)",
                                     na.value = NA) +
-    ggplot2::scale_linetype_manual(name = "Shared edges", values = stats::setNames(c("solid", "22"), edge_keys),
-                                   guide = ggplot2::guide_legend(override.aes = list(linewidth = 0.6))) +
     ggplot2::labs(subtitle = sprintf("S: rho = %.2f (p = %s);  edge direction: %.2f concordant (p = %s)",
                                      t$statistic[1], format.pval(t$p.value[1], digits = 2),
                                      t$statistic[2], format.pval(t$p.value[2], digits = 2)))

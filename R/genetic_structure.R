@@ -19,10 +19,15 @@
 #'   offspring; the maternal contribution is removed from each offspring with
 #'   \code{\link{minus_mom}} and the paternal gametes are partitioned among maternal
 #'   families as for PhiST.  The stratum is the maternal family (default \code{"ID"}
-#'   for this mode) and mothers have \code{offspring} equal to "0".  An offspring
-#'   with its mother's heterozygous genotype (an ambiguous paternal allele) is
-#'   represented by its expected allele vector; a gamete incompatible with its
-#'   mother is set to missing at that locus.}
+#'   for this mode) and mothers have \code{offspring} equal to "0"; see
+#'   \code{data(cornus_florida)} for the layout.  An offspring with its mother's
+#'   heterozygous genotype (an ambiguous paternal allele) is represented by its
+#'   expected allele vector; a gamete incompatible with its mother is set to
+#'   missing at that locus.  A mother not genotyped at a locus has her genotype
+#'   reconstructed from her offspring by maximum likelihood, used only when it is
+#'   at least 20 times as likely as the next best genotype; otherwise her offspring
+#'   are set to missing at that locus.  Each reconstruction is reported in a
+#'   message and in the \code{"maternal_inference"} attribute of the result.}
 #' }
 #' @param nperm The number of permutations used to test the hypothesis that
 #'  the parameter = 0 (default=0).
@@ -46,14 +51,25 @@
 #'  \code{Gst_prime} and \code{Dest} values.  With \code{nperm > 0},
 #'  \code{p.value} holds add-one permutation p-values; strata are permuted across
 #'  individuals (the same permutation for every locus) so the \code{Multilocus} row
-#'  is tested too.  \code{PhiST} is the exception to the column layout: it returns
-#'  \code{Locus}, \code{PhiST}, \code{sigma2_among}, \code{sigma2_within} and
-#'  \code{p.value}, where PhiST = sigma2_among / (sigma2_among + sigma2_within)
-#'  (\code{PhiFT} likewise, with \code{PhiFT} in place of \code{PhiST}).  Each
-#'  locus uses the individuals genotyped at it, and the \code{Multilocus} row sums the
-#'  variance components across loci (with complete data, the same as an AMOVA of the
-#'  distances summed across loci).  \code{size.correct} does not apply to it.  If \code{pairwise=TRUE}, then it returns a pairwise matrix of the
-#'  multilocus estimate (or the single-locus estimate when only one locus is used).
+#'  is tested too.
+#'
+#'  \code{PhiST} and \code{PhiFT} have their own layout: \code{Locus}, the
+#'  estimate, \code{sigma2_among}, \code{sigma2_within} and \code{p.value}, where
+#'  Phi = sigma2_among / (sigma2_among + sigma2_within).  \code{PhiFT} also has
+#'  \code{Nep} = 1 / (2 PhiFT), the effective number of pollen donors (\code{NA}
+#'  when PhiFT <= 0), before \code{p.value}.  Individuals with a missing stratum
+#'  are dropped, each locus uses the individuals genotyped at it, and the
+#'  \code{Multilocus} row sums the variance components across loci (with complete
+#'  data, the same as an AMOVA of the distances summed across loci).  As usual for
+#'  AMOVA, sigma2_among and so Phi can be negative when there is no structure;
+#'  negative values are kept, including in the \code{Multilocus} sums.
+#'  \code{size.correct} does not apply to these two modes.
+#'
+#'  If \code{pairwise=TRUE}, it returns a symmetric matrix of the multilocus
+#'  estimate (or the single-locus estimate when only one locus is used) between
+#'  every pair of strata.  For \code{PhiST} and \code{PhiFT} the distances (and,
+#'  for \code{PhiFT}, the gametes and allele frequencies) come from the whole
+#'  sample, so each pair is a sub-analysis of the global one.
 #' @note The multilocus estimation of Gst parameters is estimated following the
 #'  suggestions of Culley et al. (2001) American Journal of Botany 89(3): 460-465.
 #' @export
@@ -100,6 +116,12 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
       stop(paste("At least one of the loci you requested", paste(locus,collapse=", "), "is not in the data.frame you passed"))
   }
   
+  is_st <- mode_clean %in% c( "phist", "phi_st" )
+  if( pairwise && is_st )
+    return( PhiST( x, stratum = stratum, pairwise = TRUE ) )
+  if( pairwise && is_ft )
+    return( PhiFT( x, stratum = stratum, offspring = offspring, pairwise = TRUE ) )
+
   # do this in a pair-wise fashion
   if( pairwise ) {
     pops <- levels( factor( x[[stratum]] ))
@@ -136,10 +158,10 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
       ret <- Fst( x, stratum, nperm )
 
     else if( mode_clean %in% c( "phist", "phi_st" ) )
-      ret <- PhiST( x, stratum = stratum, nperm = nperm )
+      return( PhiST( x, stratum = stratum, nperm = nperm ) )
 
     else if( mode_clean %in% c( "phift", "phi_ft" ) )
-      ret <- PhiFT( x, stratum = stratum, offspring = offspring, nperm = nperm )
+      return( PhiFT( x, stratum = stratum, offspring = offspring, nperm = nperm ) )
 
     if( !("P" %in% names(ret)) )
       ret$P <- NA_real_
