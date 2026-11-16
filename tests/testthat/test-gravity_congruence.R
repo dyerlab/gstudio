@@ -148,3 +148,27 @@ test_that("plot.gravity_congruence has a legend for concordant and discordant ed
   b2 <- ggplot2::ggplot_build(plot(gc, layout = xy10, arrows = FALSE))
   expect_false(any(unlist(lapply(b2$data, function(d) "22" %in% d$linetype))))
 })
+
+test_that("the shared surface interpolates each component separately", {
+  # Both graphs: a chain plus a two-node component (S = 0, so shared = 0) set beside it.
+  gp <- chain_pair()
+  pair <- function() {
+    A <- matrix(c(0, 1, 1, 0), 2, dimnames = list(c("Q1", "Q2"), c("Q1", "Q2")))
+    igraph::graph_from_adjacency_matrix(A, mode = "undirected", weighted = TRUE)
+  }
+  g1 <- igraph::disjoint_union(gp$g1, pair()); g2 <- igraph::disjoint_union(gp$g2, pair())
+  set.seed(1)
+  gc <- gravity_congruence(g1, g2, nperm = 9)
+  xy <- rbind(xy10, cbind(x = c(4.5, 5.5), y = 0.6))
+  rownames(xy) <- gc$nodes$Stratum
+  q <- gc$nodes$Stratum %in% c("Q1", "Q2")
+  expect_true(any(gc$nodes$concordance[!q] %in% c("source", "sink")))
+  surf <- function(p) p$layers[[which(vapply(p$layers, function(l) inherits(l$geom, "GeomRaster"), logical(1)))]]$data
+  for (s in c("interpolate", "voronoi")) {
+    d <- surf(plot(gc, layout = xy, surface = s))
+    d <- d[!is.na(d$value), ]
+    near <- apply(sqrt(outer(d$x, xy[, 1], "-")^2 + outer(d$y, xy[, 2], "-")^2), 1, which.min)
+    expect_true(any(q[near]))
+    expect_equal(d$value[q[near]], rep(0, sum(q[near])), tolerance = 1e-12)
+  }
+})

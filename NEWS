@@ -1,3 +1,8 @@
+gstudio 1.15.7 - 20261116
+------------------
+* [FIX] (1.15.7) plot() on a gravity_congruence result interpolates the shared source-sink surface within groups of populations that share a component in both graphs, as plot.gravity_field() does per component since 1.15.0.  S is centred within each component, so the surface used to blend scores that are not comparable (e.g. a neutral two-node component took colour from a neighbouring component).
+
+
 gstudio 1.15.6 - 20261116
 ------------------
 * [CHANGE] (1.15.6) anova() on an amova result names the p-value column for the statistic, Pr(>=PhiST) or Pr(>=PhiFT), to match the estimate column (was Pr(>=Phi)).

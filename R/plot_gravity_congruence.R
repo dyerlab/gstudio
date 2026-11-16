@@ -103,6 +103,11 @@ plot.gravity_congruence <- function(x, y, ...,
   z <- function(s) { v <- stats::sd(s); if (is.finite(v) && v > 0) s / v else s }
   z1 <- z(x$nodes$S.1); z2 <- z(x$nodes$S.2)
   nd$shared <- ifelse(x$nodes$concordance %in% c("source", "sink"), (z1 + z2) / 2, 0)
+  # S is centred within each component of each graph, so two populations' shared
+  # scores are comparable only when they share a component in both graphs; the
+  # surface interpolates each such group apart.
+  memb <- function(g) igraph::components(g)$membership[match(nodes, igraph::V(g)$name)]
+  nd$component <- as.integer(factor(paste(memb(x$graphs$graph1), memb(x$graphs$graph2))))
 
   e <- x$edges
   seg <- .edge_segments(cbind(e$from, e$to), xy)
