@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-868c16dd3ff1719441578aa0872de989.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-27c79c0b022e6ace69c66a569c34cb8a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -348,9 +348,9 @@ dropped from the discriminant rotation.</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>graph</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH c3ff56d UNW- 3 3 -- 
+<pre><code>IGRAPH ebd74f3 UNW- 3 3 -- 
 + attr: name (v/c), size (v/n), weight (e/n)
-+ edges from c3ff56d (vertex names):
++ edges from ebd74f3 (vertex names):
 [1] Cape    --Mainland  Cape    --Peninsula Mainland--Peninsula</code></pre>
 </div>
 </div>
@@ -374,9 +374,9 @@ from the discriminant rotation.</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>graph</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH ce51cea UNW- 3 3 -- 
+<pre><code>IGRAPH 0e4168f UNW- 3 3 -- 
 + attr: name (v/c), size (v/n), weight (e/n)
-+ edges from ce51cea (vertex names):
++ edges from 0e4168f (vertex names):
 [1] Cape    --Mainland  Cape    --Peninsula Mainland--Peninsula</code></pre>
 </div>
 </div>
@@ -390,9 +390,9 @@ being dropped from the discriminant rotation.</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>graph_strict</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 756213b UNW- 3 3 -- 
+<pre><code>IGRAPH 57ba774 UNW- 3 3 -- 
 + attr: name (v/c), size (v/n), weight (e/n)
-+ edges from 756213b (vertex names):
++ edges from 57ba774 (vertex names):
 [1] Cape    --Mainland  Cape    --Peninsula Mainland--Peninsula</code></pre>
 </div>
 </div>
@@ -410,9 +410,9 @@ being dropped from the discriminant rotation.</code></pre>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.popgraph</span>()</span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH e807702 UNW- 4 4 -- 
+<pre><code>IGRAPH 04ced05 UNW- 4 4 -- 
 + attr: name (v/c), weight (e/n)
-+ edges from e807702 (vertex names):
++ edges from 04ced05 (vertex names):
 [1] A--B A--D B--C C--D</code></pre>
 </div>
 </div>
@@ -425,17 +425,17 @@ being dropped from the discriminant rotation.</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(lopho)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>lopho</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 6af7beb UNW- 21 52 -- 
+<pre><code>IGRAPH d62a582 UNW- 21 50 -- 
 + attr: name (v/c), size (v/n), region (v/c), weight (e/n)
-+ edges from 6af7beb (vertex names):
- [1] BaC--LaV    BaC--Lig    BaC--PtC    BaC--PtP    BaC--SnE    BaC--SnI   
- [7] BaC--StR    Ctv--PtP    Ctv--SLG    Ctv--SnF    Ctv--SenBas LaV--Lig   
-[13] LaV--PtC    LaV--SnE    LaV--SnF    LaV--TsS    Lig--PtC    Lig--SnI   
-[19] Lig--StR    Lig--TsS    PtC--SnE    PtC--StR    PtC--TsS    PtC--SenBas
-[25] PtP--SnF    PtP--SnI    PtP--SenBas SLG--SnF    SLG--SnI    SnE--StR   
-[31] SnE--TsS    SnF--SnI    SnI--StR    StR--TsS    StR--SenBas CP --Seri  
-[37] CP --SG     CP --SN     CP --TS     LF --PL     LF --SG     LF --SI    
-[43] PL --SenBas PL --SG     PL --SI     PL --SN    
++ edges from d62a582 (vertex names):
+ [1] BaC --LaV    BaC --Lig    BaC --PtP    BaC --SenBas BaC --SnE   
+ [6] BaC --SnI    BaC --StR    CP  --LF     CP  --Seri   CP  --SG    
+[11] CP  --SN     CP  --TS     Ctv --PtP    Ctv --SenBas Ctv --SLG   
+[16] Ctv --SnF    LaV --Lig    LaV --SnE    LaV --SnF    LaV --TsS   
+[21] LF  --PL     LF  --SG     LF  --SI     Lig --PtC    Lig --SnE   
+[26] Lig --SnI    Lig --StR    PL  --SenBas PL  --SG     PL  --SI    
+[31] PtC --SnE    PtC --StR    PtC --TsS    PtP --SenBas PtP --SnF   
+[36] PtP --SnI    StR --SenBas Seri--SG     Seri--SN     SG  --SI    
 + ... omitted several edges</code></pre>
 </div>
 </div>
@@ -510,9 +510,9 @@ For now we convert it on the fly...</code></pre>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">degree</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   BaC    Ctv    LaV    Lig    PtC    PtP    SLG    SnE    SnF    SnI    StR 
-     7      4      6      6      7      5      3      5      5      6      7 
+     7      4      5      6      4      5      3      6      5      6      7 
    TsS     CP     LF     PL SenBas   Seri     SG     SI     SN     TS 
-     5      4      3      5      5      3      5      5      5      3 </code></pre>
+     4      5      4      4      5      3      5      5      4      3 </code></pre>
 </div>
 </div>
 <div class="cell">
@@ -521,9 +521,9 @@ For now we convert it on the fly...</code></pre>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">betweenness</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   BaC    Ctv    LaV    Lig    PtC    PtP    SLG    SnE    SnF    SnI    StR 
-     9     31      4      0      0     25      3      0     16      8     30 
+    33     21      4      0      0     15      4      0      7     12     27 
    TsS     CP     LF     PL SenBas   Seri     SG     SI     SN     TS 
-     0      2      0     92     98      1     32     15      0      0 </code></pre>
+     1      2     15     91     96      1     16     30      0      0 </code></pre>
 </div>
 </div>
 </section>
@@ -605,7 +605,7 @@ Peninsula  0.00 0.0000000  0.00</code></pre>
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>(deg <span class="sc">/</span> <span class="fu">sum</span>(deg)) <span class="sc">|&gt;</span></span>
 <span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">shannon_entropy</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 4.344766</code></pre>
+<pre><code>[1] 4.350212</code></pre>
 </div>
 </div>
 </section>
@@ -638,13 +638,14 @@ For now we convert it on the fly...</code></pre>
 non-overlapping node sets!  Careful on interpretation.</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 762da6e UN-- 16 19 -- 
-+ attr: name (v/c)
-+ edges from 762da6e (vertex names):
+<pre><code>IGRAPH 47264b8 UN-- 16 19 -- 
++ attr: name (v/c), size.1 (v/n), size.2 (v/n), region (v/c), color
+| (v/c)
++ edges from 47264b8 (vertex names):
  [1] BaC --LaV    BaC --SnE    BaC --StR    Ctv --SLG    Ctv --SnF   
- [6] LaV --SnE    SLG --SnF    StR --SenBas CP  --SG     CP  --SN    
-[11] CP  --TS     LF  --PL     LF  --SI     PL  --SenBas PL  --SI    
-[16] PL  --SN     Seri--SG     Seri--SN     SN  --TS    </code></pre>
+ [6] LaV --SnE    SLG --SnF    StR --SenBas CP  --LF     CP  --SG    
+[11] CP  --SN     CP  --TS     LF  --PL     LF  --SI     PL  --SenBas
+[16] PL  --SI     Seri--SG     Seri--SN     SN  --TS    </code></pre>
 </div>
 </div>
 </section>
@@ -688,11 +689,11 @@ non-overlapping node sets!  Careful on interpretation.</code></pre>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>M[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    BaC Ctv LaV Lig PtC
-BaC   0   0   1   1   1
+BaC   0   0   1   1   0
 Ctv   0   0   0   0   0
-LaV   1   0   0   1   1
+LaV   1   0   0   1   0
 Lig   1   0   1   0   1
-PtC   1   0   1   1   0</code></pre>
+PtC   0   0   0   1   0</code></pre>
 </div>
 </div>
 </section>
@@ -749,9 +750,9 @@ PtC   1   0   1   1   0</code></pre>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 4b64893 UNW- 21 50 -- 
+<pre><code>IGRAPH f815073 UNW- 21 50 -- 
 + attr: name (v/c), size (v/n), color (v/c), weight (e/n)
-+ edges from 4b64893 (vertex names):
++ edges from f815073 (vertex names):
  [1] BaC --LaV    BaC --Lig    BaC --PtP    BaC --SnE    BaC --SnI   
  [6] BaC --StR    BaC --SenBas Ctv --PtP    Ctv --SLG    Ctv --SnF   
 [11] Ctv --SenBas LaV --Lig    LaV --SnE    LaV --SnF    LaV --TsS   
@@ -788,24 +789,24 @@ PtC   1   0   1   1   0</code></pre>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">randomize_graph</span>()</span>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>rg</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH feabf8d UN-- 21 52 -- 
+<pre><code>IGRAPH 6b7881e UN-- 21 50 -- 
 + attr: name (v/c), size (v/n), region (v/c)
-+ edges from feabf8d (vertex names):
- [1] BaC   --SnI    Lig   --PtC    StR   --SN     SnE   --StR    LaV   --StR   
- [6] PtP   --PL     CP    --Seri   LF    --SN     BaC   --LaV    Ctv   --SnI   
-[11] PtP   --SI     SLG   --PL     Lig   --TsS    Lig   --SenBas Lig   --SnE   
-[16] PtC   --StR    Ctv   --Seri   SnE   --SI     Lig   --SnF    PtC   --TsS   
-[21] LaV   --TS     PL    --SI     BaC   --SG     BaC   --StR    SG    --TS    
-[26] BaC   --PtC    StR   --TsS    PtP   --SG     LaV   --SnF    SenBas--SN    
-[31] SLG   --SG     PtC   --TS     LaV   --CP     Ctv   --LaV    TsS   --PL    
-[36] BaC   --SN     SnI   --SenBas SnF   --SenBas PtC   --PtP    CP    --PL    
++ edges from 6b7881e (vertex names):
+ [1] BaC   --CP     BaC   --LF     SnF   --SenBas SnI   --LF     SnE   --StR   
+ [6] BaC   --PL     SnE   --SnF    BaC   --SN     StR   --LF     CP    --LF    
+[11] StR   --TsS    SnI   --PL     Lig   --SG     SnI   --SG     PtC   --SI    
+[16] Lig   --TsS    PtC   --SG     PtP   --Seri   SenBas--SG     SnF   --SG    
+[21] LaV   --SI     Ctv   --PtC    LaV   --SnE    SnF   --PL     Lig   --SnE   
+[26] Ctv   --PtP    StR   --PL     BaC   --PtC    Ctv   --SN     SnI   --StR   
+[31] SenBas--SI     SLG   --SnF    TsS   --SI     Ctv   --SLG    LaV   --PtP   
+[36] SI    --TS     TsS   --TS     SLG   --CP     LaV   --SnI    BaC   --StR   
 + ... omitted several edges</code></pre>
 </div>
 </div>
 </section>
 <section id="genetic-gravity-direction-from-an-undirected-graph" class="level2" data-number="8.10">
 <h2 data-number="8.10" class="anchored" data-anchor-id="genetic-gravity-direction-from-an-undirected-graph"><span class="header-section-number">8.10</span> Genetic Gravity: Direction from an Undirected Graph</h2>
-<p>Each edge of a Population Graph is symmetric, but the two populations it joins are compared against different neighbourhoods. <em>Genetic gravity</em> reads the direction of gene flow from that difference: edge asymmetries <span class="math inline">\(\Delta\)</span>, a source–sink score <span class="math inline">\(S\)</span> for every population, the partitioned distance pGD, tests for a directional gradient, and maps of the gravity field. It has its own chapter, <a href="genetic-gravity.html" class="quarto-xref"><span>Chapter 9</span></a>, which walks through the analysis from raw genotypes.</p>
+<p>Each edge of a Population Graph is symmetric, but the two populations it joins are compared against different neighbourhoods. <em>Genetic gravity</em> reads the direction of gene flow from that difference: edge asymmetries <span class="math inline">\(\Delta\)</span>, a source–sink score <span class="math inline">\(S\)</span> for every population, the directional distance dcGD, tests for a directional gradient, and maps of the gravity field. It has its own chapter, <a href="genetic-gravity.html" class="quarto-xref"><span>Chapter 9</span></a>, which walks through the analysis from raw genotypes.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>lopho <span class="sc">|&gt;</span></span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gravity_field</span>() <span class="sc">|&gt;</span></span>
@@ -1664,7 +1665,7 @@ PtC   1   0   1   1   0</code></pre>
 <span id="cb62-340"><a href="#cb62-340" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-341"><a href="#cb62-341" aria-hidden="true" tabindex="-1"></a><span class="fu">## Genetic Gravity: Direction from an Undirected Graph</span></span>
 <span id="cb62-342"><a href="#cb62-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb62-343"><a href="#cb62-343" aria-hidden="true" tabindex="-1"></a>Each edge of a Population Graph is symmetric, but the two populations it joins are compared against different neighbourhoods. *Genetic gravity* reads the direction of gene flow from that difference: edge asymmetries $\Delta$, a source–sink score $S$ for every population, the partitioned distance pGD, tests for a directional gradient, and maps of the gravity field. It has its own chapter, @sec-genetic-gravity, which walks through the analysis from raw genotypes.</span>
+<span id="cb62-343"><a href="#cb62-343" aria-hidden="true" tabindex="-1"></a>Each edge of a Population Graph is symmetric, but the two populations it joins are compared against different neighbourhoods. *Genetic gravity* reads the direction of gene flow from that difference: edge asymmetries $\Delta$, a source–sink score $S$ for every population, the directional distance dcGD, tests for a directional gradient, and maps of the gravity field. It has its own chapter, @sec-genetic-gravity, which walks through the analysis from raw genotypes.</span>
 <span id="cb62-344"><a href="#cb62-344" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-347"><a href="#cb62-347" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb62-348"><a href="#cb62-348" aria-hidden="true" tabindex="-1"></a>lopho <span class="sc">|&gt;</span></span>

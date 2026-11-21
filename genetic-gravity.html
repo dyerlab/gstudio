@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-868c16dd3ff1719441578aa0872de989.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-27c79c0b022e6ace69c66a569c34cb8a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -340,11 +340,11 @@ w_{j\mid i} = \frac{\exp\left(-e_{ij}^2 / 2b_i^2\right)}
 \qquad \textstyle\sum_i S_i = 0 \text{ within each connected component.}
 \]</span></p>
 <p><strong>Degree and the bandwidth.</strong> As the kernel flattens, <span class="math inline">\(w_{j\mid i} \to 1/k_i\)</span> and the asymmetry falls to a floor set by degree alone, <span class="math inline">\(\Delta^0_{i \to j} = 1/k_j - 1/k_i\)</span>. The share of the variance in <span class="math inline">\(\Delta\)</span> explained by <span class="math inline">\(\Delta^0\)</span> (the <em>degree share</em>) reports how much of an analysis is topology rather than genetics. Two bandwidths answer different questions: <span class="math inline">\(\gamma = 1/2\)</span> (the default) is <em>degree-neutral</em> and is used for inferring direction; <span class="math inline">\(\gamma = 1\)</span>, the local mean, keeps the contribution of degree and describes each population’s overall pull in the network.</p>
-<p><strong>Partitioned distance.</strong> The same weights split each edge into two directed shares, the partitioned conditional genetic distance (pGD):</p>
+<p><strong>Directional distance.</strong> The same weights split each edge into two directed shares, the directional conditional genetic distance (dcGD):</p>
 <p><span class="math display">\[
 p_{ij} = e_{ij} \, \frac{w_{j\mid i}}{w_{j\mid i} + w_{i\mid j}}, \qquad p_{ij} + p_{ji} = e_{ij}.
 \]</span></p>
-<p>Being a distance, pGD is <em>shorter</em> in the direction of gene flow. It turns the undirected graph into a directed one for downstream analyses such as isolation by graph distance.</p>
+<p>Being a distance, dcGD is <em>shorter</em> in the direction of gene flow. It turns the undirected graph into a directed one for downstream analyses such as isolation by graph distance.</p>
 </section>
 <section id="the-data" class="level2" data-number="9.2">
 <h2 data-number="9.2" class="anchored" data-anchor-id="the-data"><span class="header-section-number">9.2</span> The data</h2>
@@ -376,9 +376,9 @@ p_{ij} = e_{ij} \, \frac{w_{j\mid i}}{w_{j\mid i} + w_{i\mid j}}, \qquad p_{ij} 
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>graph</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH e46dff1 UNW- 25 81 -- 
+<pre><code>IGRAPH 0259077 UNW- 25 81 -- 
 + attr: name (v/c), size (v/n), weight (e/n)
-+ edges from e46dff1 (vertex names):
++ edges from 0259077 (vertex names):
  [1] Pop01--Pop02 Pop01--Pop05 Pop02--Pop04 Pop02--Pop05 Pop03--Pop04
  [6] Pop03--Pop05 Pop03--Pop06 Pop03--Pop07 Pop03--Pop09 Pop04--Pop05
 [11] Pop04--Pop06 Pop05--Pop06 Pop05--Pop09 Pop06--Pop07 Pop06--Pop09
@@ -544,8 +544,8 @@ Bandwidth gamma = 0.5.  Sources at low values of x.</code></pre>
 </section>
 <section id="directional-isolation-by-graph-distance" class="level3" data-number="9.6.2">
 <h3 data-number="9.6.2" class="anchored" data-anchor-id="directional-isolation-by-graph-distance"><span class="header-section-number">9.6.2</span> Directional isolation by graph distance</h3>
-<p>The second procedure asks whether modelling direction improves isolation by graph distance. It regresses all-pairs cGD on spatial separation (<span class="math inline">\(R^2_{cGD}\)</span>), then regresses all-pairs directed pGD on separation with separate forward and reverse slopes (<span class="math inline">\(R^2_{pGD}\)</span>, adjusted). <span class="math inline">\(\Delta R^2 = R^2_{pGD} - R^2_{cGD} &gt; 0\)</span> means the directional description fits better; the forward-to-reverse slope ratio gives the direction and strength (below one: genetic distance accumulates more slowly downstream). This is not a nested-model test, and <span class="math inline">\(\Delta R^2 \le 0\)</span> is an absence of evidence for asymmetry, not evidence of symmetry.</p>
-<p><code>ibgd()</code> does both steps and prints each as a standard test. The default, <code>mode = "cgd"</code>, is ordinary isolation by graph distance, with a Mantel permutation test of the correlation between cGD and separation; <code>mode = "pgd"</code> adds the directional model and reports <span class="math inline">\(\Delta R^2\)</span> with the forward and reverse slopes. It gives no p-value for <span class="math inline">\(\Delta R^2\)</span>, because the two fits are not nested.</p>
+<p>The second procedure asks whether modelling direction improves isolation by graph distance. It regresses all-pairs cGD on spatial separation (<span class="math inline">\(R^2_{cGD}\)</span>), then regresses all-pairs directed dcGD on separation with separate forward and reverse slopes (<span class="math inline">\(R^2_{dcGD}\)</span>, adjusted). <span class="math inline">\(\Delta R^2 = R^2_{dcGD} - R^2_{cGD} &gt; 0\)</span> means the directional description fits better; the forward-to-reverse slope ratio gives the direction and strength (below one: genetic distance accumulates more slowly downstream). This is not a nested-model test, and <span class="math inline">\(\Delta R^2 \le 0\)</span> is an absence of evidence for asymmetry, not evidence of symmetry.</p>
+<p><code>ibgd()</code> does both steps and prints each as a standard test. The default, <code>mode = "cGD"</code>, is ordinary isolation by graph distance, with a Mantel permutation test of the correlation between cGD and separation; <code>mode = "dcGD"</code> adds the directional model and reports <span class="math inline">\(\Delta R^2\)</span> with the forward and reverse slopes. It gives no p-value for <span class="math inline">\(\Delta R^2\)</span>, because the two fits are not nested.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>graph <span class="sc">|&gt;</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> deme)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -561,15 +561,15 @@ sample estimates:
 0.6727021 0.5559210 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>graph <span class="sc">|&gt;</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> deme, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> deme, <span class="at">mode =</span> <span class="st">"dcGD"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-    Directional isolation by graph distance (pGD at gamma = 0.5 vs cGD)
+    Directional isolation by graph distance (dcGD at gamma = 0.5 vs cGD)
 
 data:  graph and deme
 delta R2 = 0.15551, pairs = 600
 sample estimates:
-       R2 cGD    adj R2 pGD forward slope reverse slope   slope ratio 
+       R2 cGD   adj R2 dcGD forward slope reverse slope   slope ratio 
   0.672702107   0.828208585   0.008784513   0.508581302   0.017272583 
 
 Directional description preferred (delta R2 &gt; 0); slope ratio 0.0173: genetic
@@ -578,10 +578,10 @@ No p-value: the fits are not nested (see ?ibgd); corroborate with source_sink_te
 </div>
 </div>
 <p>Both procedures recover the imposed direction: a strong negative gradient in <span class="math inline">\(S\)</span> (sources upstream), and a directional isolation model that fits better than the symmetric one with far shallower downstream than upstream isolation.</p>
-<p>pGD is available directly for other downstream analyses. From the genotypes, <code>genetic_distance()</code> returns all-pairs directed shortest-path pGD alongside the other distance metrics, where <code>P[i, j]</code> is the distance from <span class="math inline">\(i\)</span> to <span class="math inline">\(j\)</span>; from an existing graph, <code>pgd()</code> gives the same matrix (<code>output = "matrix"</code>) or the directed graph of edge shares (<code>output = "graph"</code>).</p>
+<p>dcGD is available directly for other downstream analyses. From the genotypes, <code>genetic_distance()</code> returns all-pairs directed shortest-path dcGD alongside the other distance metrics, where <code>P[i, j]</code> is the distance from <span class="math inline">\(i\)</span> to <span class="math inline">\(j\)</span>; from an existing graph, <code>dcgd()</code> gives the same matrix (<code>output = "matrix"</code>) or the directed graph of edge shares (<code>output = "graph"</code>).</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> gravity <span class="sc">|&gt;</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">mode =</span> <span class="st">"pgd"</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">mode =</span> <span class="st">"dcGD"</span>)</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(P[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -596,7 +596,7 @@ Pop04 0.284 0.275 0.041 0.000</code></pre>
 </section>
 <section id="mapping-the-gravity-field" class="level2" data-number="9.7">
 <h2 data-number="9.7" class="anchored" data-anchor-id="mapping-the-gravity-field"><span class="header-section-number">9.7</span> Mapping the gravity field</h2>
-<p><code>gravity_field()</code> collects every population-level and edge-level quantity; <code>plot()</code> interpolates <span class="math inline">\(S\)</span> over the node positions (red = source, blue = sink) and draws an arrow on each edge from source to sink, with length proportional to <span class="math inline">\(|\Delta|\)</span>. Node placement is a drawing choice made in <code>plot()</code>; without coordinates, layouts are computed on the directed pGD graph so that gene flow shapes the picture.</p>
+<p><code>gravity_field()</code> collects every population-level and edge-level quantity; <code>plot()</code> interpolates <span class="math inline">\(S\)</span> over the node positions (red = source, blue = sink) and draws an arrow on each edge from source to sink, with length proportional to <span class="math inline">\(|\Delta|\)</span>. Node placement is a drawing choice made in <code>plot()</code>; without coordinates, layouts are computed on the directed dcGD graph so that gene flow shapes the picture.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>field <span class="ot">&lt;-</span> graph <span class="sc">|&gt;</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gravity_field</span>()</span>
@@ -679,10 +679,10 @@ Pop04 0.284 0.275 0.041 0.000</code></pre>
 <span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">source_sink_scores</span>(graph, <span class="at">gamma =</span> <span class="fl">0.5</span>, <span class="at">x =</span> deme)</span>
 <span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="fu">source_sink_test</span>(graph, <span class="at">x =</span> deme, <span class="at">gamma =</span> <span class="fl">0.5</span>, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(graph, <span class="at">x =</span> deme, <span class="at">mode =</span> <span class="st">"cgd"</span>, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(graph, <span class="at">x =</span> deme, <span class="at">mode =</span> <span class="st">"pgd"</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(graph, <span class="at">x =</span> deme, <span class="at">mode =</span> <span class="st">"cGD"</span>, <span class="at">nperm =</span> <span class="dv">999</span>)</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(graph, <span class="at">x =</span> deme, <span class="at">mode =</span> <span class="st">"dcGD"</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
 <span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>P      <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(gravity, <span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">mode =</span> <span class="st">"pgd"</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>P      <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(gravity, <span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">mode =</span> <span class="st">"dcGD"</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
 <span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>field  <span class="ot">&lt;-</span> <span class="fu">gravity_field</span>(graph, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
 <span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(field, <span class="at">layout =</span> <span class="st">"kk"</span>, <span class="at">surface =</span> <span class="st">"interpolate"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -758,15 +758,15 @@ sample estimates:
 0.2616567 5.9675455 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>beetles <span class="sc">|&gt;</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"dcGD"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-    Directional isolation by graph distance (pGD at gamma = 0.5 vs cGD)
+    Directional isolation by graph distance (dcGD at gamma = 0.5 vs cGD)
 
 data:  beetles and lat
 delta R2 = -0.0024306, pairs = 680
 sample estimates:
-       R2 cGD    adj R2 pGD forward slope reverse slope   slope ratio 
+       R2 cGD   adj R2 dcGD forward slope reverse slope   slope ratio 
     0.2616567     0.2592261     3.4625088     2.4044852     1.4400208 
 
 Symmetric description sufficient (delta R2 &lt;= 0): no evidence for asymmetry.
@@ -780,13 +780,13 @@ No p-value: the fits are not nested (see ?ibgd); corroborate with source_sink_te
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>lat    <span class="ot">&lt;-</span> <span class="fu">setNames</span>(coords<span class="sc">$</span>Latitude, coords<span class="sc">$</span>Stratum)</span>
 <span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">gravity_field</span>(beetles, <span class="at">gamma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>)), <span class="at">layout =</span> coords, <span class="at">mask_dist =</span> <span class="fl">0.6</span>)</span>
 <span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="fu">source_sink_test</span>(beetles, <span class="at">x =</span> lat, <span class="at">nperm =</span> <span class="dv">499</span>)</span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"cgd"</span>)</span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"cGD"</span>)</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"dcGD"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Starting from the genotypes rather than a graph, <code>genetic_isolation()</code> builds the graph and runs the same tests, with the axis given as a column:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_isolation</span>(arapat, <span class="at">mode =</span> <span class="st">"IBGD"</span>, <span class="at">axis =</span> <span class="st">"Latitude"</span>)</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_isolation</span>(arapat, <span class="at">mode =</span> <span class="st">"PGD"</span>, <span class="at">axis =</span> <span class="st">"Latitude"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_isolation</span>(arapat, <span class="at">mode =</span> <span class="st">"dcGD"</span>, <span class="at">axis =</span> <span class="st">"Latitude"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The two tests answer different questions. Under strong drift the model comparison can prefer a directional fit by chance, so read it alongside the source-sink test. Edge-level permutation tests of <span class="math inline">\(\Delta\)</span> (<code>asymmetry_significance()</code> and its modes) are not recommended as tests of direction: under symmetric migration they are anti-conservative, or never reject.</p>
 </section>
@@ -848,8 +848,8 @@ No p-value: the fits are not nested (see ?ibgd); corroborate with source_sink_te
 <td><code>source_sink_scores()</code></td>
 </tr>
 <tr class="odd">
-<td>Partitioned distance pGD</td>
-<td><code>genetic_distance(mode = "pgd")</code>, <code>pgd()</code></td>
+<td>Directional distance dcGD</td>
+<td><code>genetic_distance(mode = "dcGD")</code>, <code>dcgd()</code></td>
 </tr>
 <tr class="even">
 <td>Gradient test, <span class="math inline">\(r(S, x)\)</span></td>
@@ -857,7 +857,7 @@ No p-value: the fits are not nested (see ?ibgd); corroborate with source_sink_te
 </tr>
 <tr class="odd">
 <td>Isolation by graph distance (Mantel); directional isolation, <span class="math inline">\(\Delta R^2\)</span></td>
-<td><code>ibgd(mode = "cgd")</code>, <code>ibgd(mode = "pgd")</code></td>
+<td><code>ibgd(mode = "cGD")</code>, <code>ibgd(mode = "dcGD")</code></td>
 </tr>
 <tr class="even">
 <td>Everything for mapping; the map</td>
@@ -1478,7 +1478,7 @@ No p-value: the fits are not nested (see ?ibgd); corroborate with source_sink_te
 <span id="cb55-57"><a href="#cb55-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> lat)</span>
 <span id="cb55-58"><a href="#cb55-58" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-59"><a href="#cb55-59" aria-hidden="true" tabindex="-1"></a>beetles <span class="sc">|&gt;</span></span>
-<span id="cb55-60"><a href="#cb55-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span>
+<span id="cb55-60"><a href="#cb55-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ibgd</span>(<span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"dcGD"</span>)</span>
 <span id="cb55-61"><a href="#cb55-61" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb55-62"><a href="#cb55-62" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-63"><a href="#cb55-63" aria-hidden="true" tabindex="-1"></a>Without pipes, the same steps are:</span>
@@ -1490,8 +1490,8 @@ No p-value: the fits are not nested (see ?ibgd); corroborate with source_sink_te
 <span id="cb55-69"><a href="#cb55-69" aria-hidden="true" tabindex="-1"></a>lat    <span class="ot">&lt;-</span> <span class="fu">setNames</span>(coords<span class="sc">$</span>Latitude, coords<span class="sc">$</span>Stratum)</span>
 <span id="cb55-70"><a href="#cb55-70" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">gravity_field</span>(beetles, <span class="at">gamma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>)), <span class="at">layout =</span> coords, <span class="at">mask_dist =</span> <span class="fl">0.6</span>)</span>
 <span id="cb55-71"><a href="#cb55-71" aria-hidden="true" tabindex="-1"></a><span class="fu">source_sink_test</span>(beetles, <span class="at">x =</span> lat, <span class="at">nperm =</span> <span class="dv">499</span>)</span>
-<span id="cb55-72"><a href="#cb55-72" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"cgd"</span>)</span>
-<span id="cb55-73"><a href="#cb55-73" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"pgd"</span>)</span>
+<span id="cb55-72"><a href="#cb55-72" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"cGD"</span>)</span>
+<span id="cb55-73"><a href="#cb55-73" aria-hidden="true" tabindex="-1"></a><span class="fu">ibgd</span>(beetles, <span class="at">x =</span> lat, <span class="at">mode =</span> <span class="st">"dcGD"</span>)</span>
 <span id="cb55-74"><a href="#cb55-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb55-75"><a href="#cb55-75" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-76"><a href="#cb55-76" aria-hidden="true" tabindex="-1"></a>Starting from the genotypes rather than a graph, <span class="in">`genetic_isolation()`</span> builds</span>
@@ -1500,7 +1500,7 @@ No p-value: the fits are not nested (see ?ibgd); corroborate with source_sink_te
 <span id="cb55-79"><a href="#cb55-79" aria-hidden="true" tabindex="-1"></a><span class="in">```{r arapat-isolation}</span></span>
 <span id="cb55-80"><a href="#cb55-80" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
 <span id="cb55-81"><a href="#cb55-81" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_isolation</span>(arapat, <span class="at">mode =</span> <span class="st">"IBGD"</span>, <span class="at">axis =</span> <span class="st">"Latitude"</span>)</span>
-<span id="cb55-82"><a href="#cb55-82" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_isolation</span>(arapat, <span class="at">mode =</span> <span class="st">"PGD"</span>, <span class="at">axis =</span> <span class="st">"Latitude"</span>)</span>
+<span id="cb55-82"><a href="#cb55-82" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_isolation</span>(arapat, <span class="at">mode =</span> <span class="st">"dcGD"</span>, <span class="at">axis =</span> <span class="st">"Latitude"</span>)</span>
 <span id="cb55-83"><a href="#cb55-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb55-84"><a href="#cb55-84" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-85"><a href="#cb55-85" aria-hidden="true" tabindex="-1"></a>The two tests answer different questions.  Under strong drift the model</span>

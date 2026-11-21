@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-868c16dd3ff1719441578aa0872de989.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-27c79c0b022e6ace69c66a569c34cb8a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -321,9 +321,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Conditional genetic distance</td>
 </tr>
 <tr class="odd">
-<td><code>"pGD"</code></td>
+<td><code>"dcGD"</code></td>
 <td>Population</td>
-<td>Partitioned (directed) conditional genetic distance; asymmetric</td>
+<td>Directional conditional genetic distance; asymmetric</td>
 </tr>
 <tr class="even">
 <td><code>"Nei"</code></td>
@@ -396,15 +396,15 @@ Mainland  9.913083  0.000000 16.490315
 Peninsula 7.136108 16.490315  0.000000</code></pre>
 </div>
 </div>
-<p>Partitioned conditional genetic distance (pGD) splits each Population Graph edge’s cGD into two directed shares using the genetic-gravity neighbourhood weights, so the matrix is asymmetric: <code>[i, j]</code> is the distance from <code>i</code> to <code>j</code>, shorter in the direction of gene flow. The bandwidth multiplier is set with <code>gamma</code> (default 0.5); see <code>vignette("genetic_gravity")</code>.</p>
+<p>Directional conditional genetic distance (dcGD) splits each Population Graph edge’s cGD into two directed shares using the genetic-gravity neighbourhood weights, so the matrix is asymmetric: <code>[i, j]</code> is the distance from <code>i</code> to <code>j</code>, shorter in the direction of gene flow. The bandwidth multiplier is set with <code>gamma</code> (default 0.5); see <code>vignette("genetic_gravity")</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>D_pgd <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"pGD"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>D_dcgd <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"dcGD"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in popgraph(x = mv, groups = factor(as.character(x[[stratum]]))): 1
 variables are collinear and being dropped from the discriminant rotation.</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>D_pgd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>D_dcgd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              Cape Mainland Peninsula
 Cape      0.000000 1.936519  3.214012
@@ -545,7 +545,7 @@ sample estimates:
 0.316201330 0.001337526 </code></pre>
 </div>
 </div>
-<p><code>mode = "IBGD"</code> uses the conditional genetic distance through a Population Graph instead, and <code>mode = "PGD"</code> asks whether a directional model fits better, given an <code>axis</code> (see <a href="genetic-gravity.html" class="quarto-xref"><span>Chapter 9</span></a>). Separation can also come from your own matrix (<code>spatial =</code>, e.g.&nbsp;resistance distances) or positions along an axis (<code>axis =</code>). If you already have a Population Graph, <code>ibgd()</code> works on it directly.</p>
+<p><code>mode = "IBGD"</code> uses the conditional genetic distance through a Population Graph instead, and <code>mode = "dcGD"</code> asks whether a directional model fits better, given an <code>axis</code> (see <a href="genetic-gravity.html" class="quarto-xref"><span>Chapter 9</span></a>). Separation can also come from your own matrix (<code>spatial =</code>, e.g.&nbsp;resistance distances) or positions along an axis (<code>axis =</code>). If you already have a Population Graph, <code>ibgd()</code> works on it directly.</p>
 </section>
 <section id="strata-distances" class="level2" data-number="7.5">
 <h2 data-number="7.5" class="anchored" data-anchor-id="strata-distances"><span class="header-section-number">7.5</span> Strata Distances</h2>
@@ -577,7 +577,7 @@ Mainland   239.8471 315.7868   0.0000</code></pre>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>D_amova <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, ], <span class="at">mode =</span> <span class="st">"AMOVA"</span>)</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>D_nei   <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Nei"</span>)</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>D_pgd   <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"pGD"</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>D_dcgd   <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"dcGD"</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>R       <span class="ot">&lt;-</span> <span class="fu">genetic_relatedness</span>(arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="fu">c</span>(<span class="st">"Species"</span>, <span class="st">"WNT"</span>, <span class="st">"EN"</span>, <span class="st">"EF"</span>, <span class="st">"ZMP"</span>, <span class="st">"AML"</span>, <span class="st">"MP20"</span>)],</span>
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                               <span class="at">mode =</span> <span class="st">"Nason"</span>)</span>
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>coords  <span class="ot">&lt;-</span> <span class="fu">strata_coordinates</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
@@ -1153,7 +1153,7 @@ Mainland   239.8471 315.7868   0.0000</code></pre>
 <span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Bray"`</span> <span class="pp">|</span> Individual <span class="pp">|</span> Proportion of shared alleles <span class="pp">|</span></span>
 <span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Euclidean"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Euclidean frequency distance <span class="pp">|</span></span>
 <span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"cGD"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Conditional genetic distance <span class="pp">|</span></span>
-<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"pGD"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Partitioned (directed) conditional genetic distance; asymmetric <span class="pp">|</span></span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"dcGD"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Directional conditional genetic distance; asymmetric <span class="pp">|</span></span>
 <span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Nei"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Nei's genetic distance (1978) <span class="pp">|</span></span>
 <span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Dps"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Shared allele distance (1 - Ps) <span class="pp">|</span></span>
 <span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"Jaccard"`</span> <span class="pp">|</span> Population <span class="pp">|</span> Jaccard set dissimilarity <span class="pp">|</span></span>
@@ -1188,12 +1188,12 @@ Mainland   239.8471 315.7868   0.0000</code></pre>
 <span id="cb36-64"><a href="#cb36-64" aria-hidden="true" tabindex="-1"></a>D_cgd</span>
 <span id="cb36-65"><a href="#cb36-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb36-66"><a href="#cb36-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-67"><a href="#cb36-67" aria-hidden="true" tabindex="-1"></a>Partitioned conditional genetic distance (pGD) splits each Population Graph edge's cGD into two directed shares using the genetic-gravity neighbourhood weights, so the matrix is asymmetric: <span class="in">`[i, j]`</span> is the distance from <span class="in">`i`</span> to <span class="in">`j`</span>, shorter in the direction of gene flow. The bandwidth multiplier is set with <span class="in">`gamma`</span> (default 0.5); see <span class="in">`vignette("genetic_gravity")`</span>.</span>
+<span id="cb36-67"><a href="#cb36-67" aria-hidden="true" tabindex="-1"></a>Directional conditional genetic distance (dcGD) splits each Population Graph edge's cGD into two directed shares using the genetic-gravity neighbourhood weights, so the matrix is asymmetric: <span class="in">`[i, j]`</span> is the distance from <span class="in">`i`</span> to <span class="in">`j`</span>, shorter in the direction of gene flow. The bandwidth multiplier is set with <span class="in">`gamma`</span> (default 0.5); see <span class="in">`vignette("genetic_gravity")`</span>.</span>
 <span id="cb36-68"><a href="#cb36-68" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-71"><a href="#cb36-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-72"><a href="#cb36-72" aria-hidden="true" tabindex="-1"></a>D_pgd <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb36-73"><a href="#cb36-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"pGD"</span>)</span>
-<span id="cb36-74"><a href="#cb36-74" aria-hidden="true" tabindex="-1"></a>D_pgd</span>
+<span id="cb36-72"><a href="#cb36-72" aria-hidden="true" tabindex="-1"></a>D_dcgd <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb36-73"><a href="#cb36-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_distance</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"dcGD"</span>)</span>
+<span id="cb36-74"><a href="#cb36-74" aria-hidden="true" tabindex="-1"></a>D_dcgd</span>
 <span id="cb36-75"><a href="#cb36-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb36-76"><a href="#cb36-76" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-79"><a href="#cb36-79" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
@@ -1275,7 +1275,7 @@ Mainland   239.8471 315.7868   0.0000</code></pre>
 <span id="cb36-163"><a href="#cb36-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_isolation</span>(<span class="at">stratum =</span> <span class="st">"Population"</span>, <span class="at">nperm =</span> <span class="dv">499</span>)</span>
 <span id="cb36-164"><a href="#cb36-164" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb36-165"><a href="#cb36-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-166"><a href="#cb36-166" aria-hidden="true" tabindex="-1"></a><span class="in">`mode = "IBGD"`</span> uses the conditional genetic distance through a Population Graph instead, and <span class="in">`mode = "PGD"`</span> asks whether a directional model fits better, given an <span class="in">`axis`</span> (see @sec-genetic-gravity).  Separation can also come from your own matrix (<span class="in">`spatial =`</span>, e.g. resistance distances) or positions along an axis (<span class="in">`axis =`</span>).  If you already have a Population Graph, <span class="in">`ibgd()`</span> works on it directly.</span>
+<span id="cb36-166"><a href="#cb36-166" aria-hidden="true" tabindex="-1"></a><span class="in">`mode = "IBGD"`</span> uses the conditional genetic distance through a Population Graph instead, and <span class="in">`mode = "dcGD"`</span> asks whether a directional model fits better, given an <span class="in">`axis`</span> (see @sec-genetic-gravity).  Separation can also come from your own matrix (<span class="in">`spatial =`</span>, e.g. resistance distances) or positions along an axis (<span class="in">`axis =`</span>).  If you already have a Population Graph, <span class="in">`ibgd()`</span> works on it directly.</span>
 <span id="cb36-167"><a href="#cb36-167" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-168"><a href="#cb36-168" aria-hidden="true" tabindex="-1"></a><span class="fu">## Strata Distances</span></span>
 <span id="cb36-169"><a href="#cb36-169" aria-hidden="true" tabindex="-1"></a></span>
@@ -1298,7 +1298,7 @@ Mainland   239.8471 315.7868   0.0000</code></pre>
 <span id="cb36-192"><a href="#cb36-192" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
 <span id="cb36-193"><a href="#cb36-193" aria-hidden="true" tabindex="-1"></a>D_amova <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, ], <span class="at">mode =</span> <span class="st">"AMOVA"</span>)</span>
 <span id="cb36-194"><a href="#cb36-194" aria-hidden="true" tabindex="-1"></a>D_nei   <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Nei"</span>)</span>
-<span id="cb36-195"><a href="#cb36-195" aria-hidden="true" tabindex="-1"></a>D_pgd   <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"pGD"</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
+<span id="cb36-195"><a href="#cb36-195" aria-hidden="true" tabindex="-1"></a>D_dcgd   <span class="ot">&lt;-</span> <span class="fu">genetic_distance</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"dcGD"</span>, <span class="at">gamma =</span> <span class="fl">0.5</span>)</span>
 <span id="cb36-196"><a href="#cb36-196" aria-hidden="true" tabindex="-1"></a>R       <span class="ot">&lt;-</span> <span class="fu">genetic_relatedness</span>(arapat[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="fu">c</span>(<span class="st">"Species"</span>, <span class="st">"WNT"</span>, <span class="st">"EN"</span>, <span class="st">"EF"</span>, <span class="st">"ZMP"</span>, <span class="st">"AML"</span>, <span class="st">"MP20"</span>)],</span>
 <span id="cb36-197"><a href="#cb36-197" aria-hidden="true" tabindex="-1"></a>                               <span class="at">mode =</span> <span class="st">"Nason"</span>)</span>
 <span id="cb36-198"><a href="#cb36-198" aria-hidden="true" tabindex="-1"></a>coords  <span class="ot">&lt;-</span> <span class="fu">strata_coordinates</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>

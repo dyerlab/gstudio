@@ -57,7 +57,7 @@ beetles |>
   ibgd(x = lat)
 
 beetles |>
-  ibgd(x = lat, mode = "pgd")
+  ibgd(x = lat, mode = "dcGD")
 ```
 
 Without pipes, the same steps are:
@@ -69,8 +69,8 @@ coords <- strata_coordinates(arapat, stratum = "Population")
 lat    <- setNames(coords$Latitude, coords$Stratum)
 plot(gravity_field(beetles, gamma = c(1, 0.5)), layout = coords, mask_dist = 0.6)
 source_sink_test(beetles, x = lat, nperm = 499)
-ibgd(beetles, x = lat, mode = "cgd")
-ibgd(beetles, x = lat, mode = "pgd")
+ibgd(beetles, x = lat, mode = "cGD")
+ibgd(beetles, x = lat, mode = "dcGD")
 ```
 
 Starting from the genotypes rather than a graph, `genetic_isolation()` builds
@@ -79,7 +79,7 @@ the graph and runs the same tests, with the axis given as a column:
 ```{r arapat-isolation}
 #| eval: false
 genetic_isolation(arapat, mode = "IBGD", axis = "Latitude")
-genetic_isolation(arapat, mode = "PGD", axis = "Latitude")
+genetic_isolation(arapat, mode = "dcGD", axis = "Latitude")
 ```
 
 The two tests answer different questions.  Under strong drift the model
