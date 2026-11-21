@@ -17,7 +17,7 @@
 #' @inheritParams plot.popgraph
 #' @param x A \code{\link{gravity_field}}.
 #' @param layout How to place the nodes; see \code{\link{plot.popgraph}}.  Named
-#'   and function layouts are computed on the bi-directional \code{\link{pgd}}
+#'   and function layouts are computed on the bi-directional \code{\link{dcgd}}
 #'   graph, so directional gene flow shapes the picture.  When every panel has
 #'   the same populations, one layout (from the first panel) is used for all of
 #'   them.
@@ -144,7 +144,7 @@ plot.gravity_field <- function(x, y, ...,
 
   # One layout for all panels when they share their populations.
   coords_for <- function(p) {
-    .graph_layout(p$graph, layout, layout_graph = pgd(p$graph, gamma = p$diagnostics$gamma, output = "graph"),
+    .graph_layout(p$graph, layout, layout_graph = dcgd(p$graph, gamma = p$diagnostics$gamma, output = "graph"),
                   nodes = p$nodes$Stratum)
   }
   same_nodes <- all(vapply(parts, function(p) setequal(p$nodes$Stratum, parts[[1]]$nodes$Stratum), logical(1)))

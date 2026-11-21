@@ -1,18 +1,18 @@
-#' Partitioned conditional genetic distance (pGD)
+#' Directional conditional genetic distance (dcGD)
 #'
 #' @description
 #' Splits each edge's conditional genetic distance \eqn{e_{ij}} into two
 #' directional components in proportion to the neighbourhood weights,
 #' \eqn{p_{ij} = e_{ij}\, w_{j|i} / (w_{j|i} + w_{i|j})} and
 #' \eqn{p_{ji} = e_{ij}\, w_{i|j} / (w_{j|i} + w_{i|j})}, so that
-#' \eqn{p_{ij} + p_{ji} = e_{ij}}.  Because pGD is a distance it is shorter in the
+#' \eqn{p_{ij} + p_{ji} = e_{ij}}.  Because dcGD is a distance it is shorter in the
 #' direction of gene flow: when \eqn{i} is a source for \eqn{j}, \eqn{p_{ij} < p_{ji}}.
 #'
 #' @param graph An undirected \code{popgraph}/\code{igraph} with a numeric
 #'   \code{weight} edge attribute.
 #' @param gamma Bandwidth multiplier (default \code{0.5}); see \code{\link{source_sink_scores}}.
-#' @param output \code{"graph"} (a directed igraph whose arc weights are pGD) or
-#'   \code{"matrix"} (all-pairs directed shortest-path pGD; \code{[i, j]} is the
+#' @param output \code{"graph"} (a directed igraph whose arc weights are dcGD) or
+#'   \code{"matrix"} (all-pairs directed shortest-path dcGD; \code{[i, j]} is the
 #'   distance from \eqn{i} to \eqn{j}).
 #' @return A directed \code{igraph} or a numeric matrix.
 #' @seealso \code{\link{ibgd}}, \code{\link{genetic_distance}}
@@ -23,9 +23,9 @@
 #' A["A", "B"] <- A["B", "A"] <- 1; A["B", "C"] <- A["C", "B"] <- 2
 #' A["C", "D"] <- A["D", "C"] <- 1.5; A["A", "C"] <- A["C", "A"] <- 2.5
 #' g <- graph_from_adjacency_matrix(A, mode = "undirected", weighted = TRUE)
-#' pgd(g, output = "matrix")
+#' dcgd(g, output = "matrix")
 #' @export
-pgd <- function(graph, gamma = 0.5, output = c("graph", "matrix")) {
+dcgd <- function(graph, gamma = 0.5, output = c("graph", "matrix")) {
   output <- match.arg(output)
   graph <- .gravity_check(graph)
   nodes <- igraph::V(graph)$name

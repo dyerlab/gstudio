@@ -284,7 +284,7 @@ rg
 
 ## Genetic Gravity: Direction from an Undirected Graph
 
-Each edge of a Population Graph is symmetric, but the two populations it joins are compared against different neighbourhoods. *Genetic gravity* reads the direction of gene flow from that difference: edge asymmetries $\Delta$, a source–sink score $S$ for every population, the partitioned distance pGD, tests for a directional gradient, and maps of the gravity field. It has its own chapter, @sec-genetic-gravity, which walks through the analysis from raw genotypes.
+Each edge of a Population Graph is symmetric, but the two populations it joins are compared against different neighbourhoods. *Genetic gravity* reads the direction of gene flow from that difference: edge asymmetries $\Delta$, a source–sink score $S$ for every population, the directional distance dcGD, tests for a directional gradient, and maps of the gravity field. It has its own chapter, @sec-genetic-gravity, which walks through the analysis from raw genotypes.
 
 ```{r}
 lopho |>

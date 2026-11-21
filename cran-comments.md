@@ -14,7 +14,7 @@ This submission (v1.15.0) consolidates the interface:
   with `broom::tidy()` and dplyr pipelines, including `group_by()`.
 * New genetic-gravity tools for inferring the direction of gene flow from a
   Population Graph (`gravity_field()`, `source_sink_test()`, `ibgd()`,
-  `genetic_distance(mode = "pgd")`), with a new vignette and example data.
+  `genetic_distance(mode = "dcGD")`), with a new vignette and example data.
 * `plot()` methods for Population Graphs and gravity fields return ggplot
   objects.
 

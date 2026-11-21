@@ -7,7 +7,7 @@
 genetic_isolation(
   x,
   stratum = "Population",
-  mode = c("IBD", "IBGD", "PGD"),
+  mode = c("IBD", "IBGD", "dcGD"),
   genetic = "Nei",
   spatial = NULL,
   axis = NULL,
@@ -23,7 +23,7 @@ genetic_isolation(
 \item{stratum}{The column holding strata (default \code{"Population"}), or
 taken from \code{dplyr::group_by()} when \code{x} is grouped.}
 
-\item{mode}{\code{"IBD"} (default), \code{"IBGD"} or \code{"PGD"}.}
+\item{mode}{\code{"IBD"} (default), \code{"IBGD"} or \code{"dcGD"}; case is ignored.}
 
 \item{genetic}{The \code{\link{genetic_distance}} mode used by \code{"IBD"}
 (default \code{"Nei"}); it must be a stratum-level distance.}
@@ -34,19 +34,19 @@ names matching the strata.}
 \item{axis}{Optional position of each stratum along a hypothesized axis
 (e.g. a river or a latitudinal gradient): the name of a numeric column of
 \code{x} (averaged within strata) or a numeric vector named by stratum.
-For \code{"PGD"}, a pair runs forward when \eqn{a_j > a_i}.}
+For \code{"dcGD"}, a pair runs forward when \eqn{a_j > a_i}.}
 
-\item{forward}{For \code{"PGD"} without \code{axis}, a logical matrix among
+\item{forward}{For \code{"dcGD"} without \code{axis}, a logical matrix among
 strata, \code{TRUE} where the ordered pair \eqn{(i, j)} runs forward.}
 
 \item{nperm}{Number of Mantel permutations (default 999); not used by
-\code{"PGD"}.}
+\code{"dcGD"}.}
 
-\item{gamma}{Bandwidth multiplier for pGD (default \code{0.5}); \code{"PGD"}
+\item{gamma}{Bandwidth multiplier for dcGD (default \code{0.5}); \code{"dcGD"}
 only.}
 
 \item{...}{Passed to \code{\link{genetic_distance}} (\code{"IBD"}) or
-\code{\link{population_graph}} (\code{"IBGD"}, \code{"PGD"}).}
+\code{\link{population_graph}} (\code{"IBGD"}, \code{"dcGD"}).}
 }
 \value{
 An object of class \code{"htest"} that prints as a standard test and
@@ -54,7 +54,7 @@ An object of class \code{"htest"} that prints as a standard test and
   \code{statistic}, the number of pairs and permutations as
   \code{parameter}, the Mantel \code{p.value}, and \code{R2} and the
   \code{slope} of genetic distance on separation as \code{estimate}.  For
-  \code{"IBGD"} and \code{"PGD"} it is the \code{\link{ibgd}} result.
+  \code{"IBGD"} and \code{"dcGD"} it is the \code{\link{ibgd}} result.
 }
 \description{
 The single interface for testing whether genetic differentiation among
@@ -68,11 +68,11 @@ strata increases with their separation, starting from raw genotypes.
   \item{\code{"IBGD"}}{\strong{Isolation by graph distance.}  A Population
     Graph is built with \code{\link{population_graph}} and its conditional
     genetic distance (cGD) is tested against separation the same way; see
-    \code{\link{ibgd}} (\code{mode = "cgd"}).}
-  \item{\code{"PGD"}}{\strong{Directional isolation by graph distance.}  Asks
-    whether partitioned cGD with separate forward and reverse slopes fits
+    \code{\link{ibgd}} (\code{mode = "cGD"}).}
+  \item{\code{"dcGD"}}{\strong{Directional isolation by graph distance.}  Asks
+    whether dcGD with separate forward and reverse slopes fits
     better than cGD, \eqn{\Delta R^2}; see \code{\link{ibgd}}
-    (\code{mode = "pgd"}).  It needs a direction: give \code{axis} or
+    (\code{mode = "dcGD"}).  It needs a direction: give \code{axis} or
     \code{forward}.  It has no p-value.}
 }
 If you already have a Population Graph, call \code{\link{ibgd}} on it
@@ -91,15 +91,15 @@ set.seed(1)
 genetic_isolation(arapat, nperm = 99)
 genetic_isolation(arapat, mode = "IBGD", nperm = 99)
 
-# Along an axis, which also gives the direction for PGD
+# Along an axis, which also gives the direction for dcGD
 data(gravity)
 pops <- unique(gravity$Population)
 deme <- setNames(as.integer(sub("Pop", "", pops)), pops)
 genetic_isolation(gravity, mode = "IBGD", axis = deme, nperm = 99)
-genetic_isolation(gravity, mode = "PGD", axis = deme)
+genetic_isolation(gravity, mode = "dcGD", axis = deme)
 }
 \seealso{
-\code{\link{ibgd}}, \code{\link{pgd}}, \code{\link{genetic_distance}},
+\code{\link{ibgd}}, \code{\link{dcgd}}, \code{\link{genetic_distance}},
   \code{\link{strata_distance}}
 }
 \author{

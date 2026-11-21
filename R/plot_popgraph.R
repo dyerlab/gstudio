@@ -128,7 +128,7 @@ plot.popgraph <- function(x, y, ...,
 
 # Resolve 'layout' into a node-by-2 coordinate matrix (rows named by node).
 # 'layout_graph' is the graph that named or function layouts are computed on
-# (e.g. the pGD graph for a gravity field, or the union graph of an animation).
+# (e.g. the dcGD graph for a gravity field, or the union graph of an animation).
 # attr(, "source") is "geographic", "attributes", "supplied" or "layout".
 #' @keywords internal
 #' @noRd

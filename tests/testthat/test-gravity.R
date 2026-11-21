@@ -1,5 +1,5 @@
 # Tests for the genetic-gravity functions: neighbourhood_weights(), gravity_edges(),
-# source_sink_scores(), msr_null(), source_sink_test(), pgd(), ibgd(),
+# source_sink_scores(), msr_null(), source_sink_test(), dcgd(), ibgd(),
 # gravity_field(), plot_gravity_field(), and the gamma / flat-kernel options of
 # graph_asymmetries().
 
@@ -104,9 +104,9 @@ test_that("source_sink_test is reproducible and mirror-symmetric", {
   expect_s3_class(source_sink_test(g, x, nperm = 49, null = "adjacency", adjacency = A), "source_sink_test")
 })
 
-test_that("pgd partitions each edge and ibgd returns htest results for both modes", {
+test_that("dcgd partitions each edge and ibgd returns htest results for both modes", {
   g <- make_chain()
-  dg <- pgd(g)
+  dg <- dcgd(g)
   expect_true(igraph::is_directed(dg))
   el <- igraph::as_edgelist(g); w <- igraph::E(g)$weight
   P <- igraph::as_adjacency_matrix(dg, attr = "weight", sparse = FALSE)
@@ -123,10 +123,10 @@ test_that("pgd partitions each edge and ibgd returns htest results for both mode
   expect_equal(unname(rc$parameter["nperm"]), 999)
   expect_output(print(rc), "Mantel permutation test")
 
-  rp <- ibgd(g, x = x, mode = "pgd")
+  rp <- ibgd(g, x = x, mode = "dcGD")
   expect_named(rp$statistic, "delta R2")
   expect_null(rp$p.value)
-  expect_equal(unname(rp$statistic), unname(rp$estimate["adj R2 pGD"] - rp$estimate["R2 cGD"]))
+  expect_equal(unname(rp$statistic), unname(rp$estimate["adj R2 dcGD"] - rp$estimate["R2 cGD"]))
   expect_equal(unname(rp$estimate["R2 cGD"]), unname(rc$estimate["R2"]))
   expect_equal(unname(rp$estimate["slope ratio"]),
                unname(rp$estimate["forward slope"] / rp$estimate["reverse slope"]))
@@ -134,8 +134,8 @@ test_that("pgd partitions each edge and ibgd returns htest results for both mode
 
   # a distance matrix gives the same answer as positions
   D <- abs(outer(x, x, "-")); Fw <- outer(x, x, function(a, b) b > a)
-  expect_equal(ibgd(g, distance = D, forward = Fw, mode = "pgd")$statistic, rp$statistic)
-  expect_error(ibgd(g, distance = D, mode = "pgd"), "forward")
+  expect_equal(ibgd(g, distance = D, forward = Fw, mode = "dcGD")$statistic, rp$statistic)
+  expect_error(ibgd(g, distance = D, mode = "dcGD"), "forward")
   expect_error(ibgd(g), "Supply")
   expect_error(ibgd(g, x = x, mode = "bogus"))
 })
@@ -219,7 +219,7 @@ test_that("the gravity genotypes rebuild the documented example graph and values
 
   set.seed(1); tr <- source_sink_test(g, x = deme)
   expect_equal(round(unname(tr$statistic), 3), -0.955); expect_lt(tr$p.value, 0.01)
-  di <- ibgd(g, x = deme, mode = "pgd")
+  di <- ibgd(g, x = deme, mode = "dcGD")
   expect_equal(round(unname(di$statistic), 2), 0.16); expect_lt(di$estimate[["slope ratio"]], 1)
   set.seed(1); ic <- ibgd(g, x = deme)
   expect_equal(round(unname(ic$estimate["R2"]), 2), 0.67); expect_lt(ic$p.value, 0.01)
@@ -229,10 +229,10 @@ test_that("the gravity genotypes rebuild the documented example graph and values
   p_kk <- plot(gravity_field(g), layout = "kk", node_size = "degree", node_labels = "degree")
   expect_s3_class(p_kk, "ggplot")
 
-  # Near-zero pGD arcs used to collapse node pairs under "kk", blanking the
+  # Near-zero dcGD arcs used to collapse node pairs under "kk", blanking the
   # surface and leaving geom_contour() with zero contours.
   f_r <- gravity_field(g)
-  xy <- .graph_layout(g, "kk", layout_graph = pgd(g, output = "graph"))
+  xy <- .graph_layout(g, "kk", layout_graph = dcgd(g, output = "graph"))
   dm <- as.matrix(stats::dist(xy)); diag(dm) <- Inf
   expect_gt(min(dm), 0.05 * diff(range(xy[, 1])))
   expect_no_warning(ggplot2::ggplot_build(plot(f_r, layout = "kk")))
@@ -321,8 +321,8 @@ test_that("ibgd uses great-circle distances from node coordinates only when x an
 
   # no coordinates, no inputs: still an error
   expect_error(ibgd(g0), "Longitude")
-  # pgd needs a direction
-  expect_error(ibgd(g, mode = "pgd"), "forward")
+  # dcGD needs a direction
+  expect_error(ibgd(g, mode = "dcGD"), "forward")
   # missing coordinates
   igraph::V(g)$Latitude[1] <- NA
   expect_error(ibgd(g), "lack")
@@ -499,4 +499,28 @@ test_that("plot_nodes() returns the plotted node positions, shown or not", {
   expect_equal(nrow(plot_nodes(plot(as.popgraph(g)))), igraph::vcount(g))
   expect_error(plot_nodes(ggplot2::ggplot()), "no node layer")
   expect_error(plot_nodes(1), "must be a ggplot")
+})
+
+test_that("mode is matched case-insensitively across ibgd, genetic_distance and genetic_isolation", {
+  data(gravity)
+  g    <- population_graph(gravity)
+  deme <- as.integer(sub("Pop", "", igraph::V(g)$name))
+  pops <- unique(gravity$Population)
+  ax   <- setNames(as.integer(sub("Pop", "", pops)), pops)
+
+  ref <- ibgd(g, x = deme, mode = "dcGD")$statistic
+  for (m in c("dcgd", "DCGD", "DcGd"))
+    expect_equal(ibgd(g, x = deme, mode = m)$statistic, ref)
+  for (m in c("cGD", "cgd", "CGD")) {
+    set.seed(1); r <- ibgd(g, x = deme, mode = m, nperm = 9)
+    expect_equal(r$mode, "cgd")
+  }
+  expect_equal(ibgd(g, x = deme, mode = "dcgd")$mode, "dcgd")
+
+  P <- genetic_distance(gravity, mode = "dcGD")
+  expect_equal(genetic_distance(gravity, mode = "dcgd"), P)
+  expect_equal(genetic_distance(gravity, mode = "cGD"), genetic_distance(gravity, mode = "cgd"))
+
+  expect_equal(genetic_isolation(gravity, mode = "dcgd", axis = ax)$statistic, ref)
+  expect_equal(genetic_isolation(gravity, mode = "DCGD", axis = ax)$statistic, ref)
 })

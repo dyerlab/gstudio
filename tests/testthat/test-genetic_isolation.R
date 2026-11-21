@@ -25,7 +25,7 @@ test_that("IBD is a Mantel test of genetic on spatial distance among strata", {
   expect_error(genetic_isolation(arapat, spatial = unname(D)), "names")
 })
 
-test_that("IBGD and PGD match ibgd() on the Population Graph", {
+test_that("IBGD and dcGD match ibgd() on the Population Graph", {
   data(gravity)
   pops <- unique(gravity$Population)
   deme <- setNames(as.integer(sub("Pop", "", pops)), pops)
@@ -38,24 +38,24 @@ test_that("IBGD and PGD match ibgd() on the Population Graph", {
   expect_equal(a$statistic, b$statistic)
   expect_equal(a$p.value, b$p.value)
 
-  p <- genetic_isolation(gravity, mode = "PGD", axis = deme)
-  expect_equal(p$statistic, ibgd(g, x = gx, mode = "pgd")$statistic)
+  p <- genetic_isolation(gravity, mode = "dcGD", axis = deme)
+  expect_equal(p$statistic, ibgd(g, x = gx, mode = "dcGD")$statistic)
 
-  # an explicit distance + forward matrix gives the same PGD
+  # an explicit distance + forward matrix gives the same dcGD
   D  <- abs(outer(deme, deme, "-"))
   Fw <- outer(deme, deme, function(i, j) j > i)
-  expect_equal(genetic_isolation(gravity, mode = "PGD", spatial = D, forward = Fw)$statistic,
+  expect_equal(genetic_isolation(gravity, mode = "dcGD", spatial = D, forward = Fw)$statistic,
                p$statistic)
 
   # axis as a column name
   gravity$Deme <- deme[gravity$Population]
-  expect_equal(genetic_isolation(gravity, mode = "PGD", axis = "Deme")$statistic, p$statistic)
+  expect_equal(genetic_isolation(gravity, mode = "dcGD", axis = "Deme")$statistic, p$statistic)
 })
 
 test_that("genetic_isolation errors", {
   data(arapat); data(gravity)
   expect_error(genetic_isolation(arapat, mode = "bob"), "mode")
-  expect_error(genetic_isolation(arapat, mode = "PGD"), "direction")
+  expect_error(genetic_isolation(arapat, mode = "dcGD"), "direction")
   expect_error(genetic_isolation(gravity), "Longitude")
   expect_error(genetic_isolation(arapat, stratum = "bob"), "stratum")
   expect_error(genetic_isolation(arapat, axis = c(a = 1)), "named")

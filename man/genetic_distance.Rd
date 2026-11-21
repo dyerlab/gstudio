@@ -12,7 +12,7 @@ genetic_distance(x, stratum = "Population", mode, ...)
 \item{stratum}{The strata by which genetic distances are estimated (default="Population").
 Optional for individual-based distance metrics like AMOVA, Bray and Bruvo.}
 
-\item{mode}{The genetic distance metric to use:
+\item{mode}{The genetic distance metric to use (case is ignored, so \code{"dcGD"} and \code{"dcgd"} are the same):
 \describe{
   \item{amova}{Inter-individual squared Euclidean distance (Peakall et al. 1995, Smouse & Peakall 1999)}
   \item{bray}{Inter-individual Bray-Curtis / shared allele distance (Bowcock et al. 1994)}
@@ -26,9 +26,9 @@ Optional for individual-based distance metrics like AMOVA, Bray and Bruvo.}
   \item{dps}{Stratum-level shared allele distance (1 - Ps)}
   \item{cavalli}{Cavalli-Sforza & Edwards (1967) chord distance}
   \item{cgd}{Conditional Genetic Distance via Population Graphs (Dyer & Nason 2004)}
-  \item{pgd}{Partitioned (proportional) Conditional Genetic Distance: each
+  \item{dcgd}{Directional Conditional Genetic Distance (dcGD): each
     Population Graph edge's cGD split into two directed shares in proportion to
-    the genetic-gravity neighbourhood weights (see \code{\link{pgd}} and
+    the genetic-gravity neighbourhood weights (see \code{\link{dcgd}} and
     \code{vignette("genetic_gravity")}), returned as all-pairs directed
     shortest-path distances.  The matrix is \strong{asymmetric}: \code{[i, j]}
     is the distance from \code{i} to \code{j}, shorter in the direction of
@@ -40,12 +40,12 @@ Optional for individual-based distance metrics like AMOVA, Bray and Bruvo.}
 }}
 
 \item{...}{Options for the chosen metric: \code{gamma}, the bandwidth
-multiplier for \code{mode = "pgd"}, and \code{repeat_length} for
+multiplier for \code{mode = "dcGD"}, and \code{repeat_length} for
 \code{mode = "bruvo"}; other modes take none, and unused arguments are
 reported.}
 }
 \value{
-A pairwise distance matrix (asymmetric for \code{mode = "pgd"}).
+A pairwise distance matrix (asymmetric for \code{mode = "dcGD"}).
 }
 \description{
 This is the primary front-end function for estimating genetic distances among
@@ -66,12 +66,12 @@ D <- genetic_distance(cornus_florida[1:5, ], mode = "bruvo", repeat_length = 2)
 round(D, 3)
 \donttest{
 data(gravity)
-P <- genetic_distance(gravity, mode = "pgd")
+P <- genetic_distance(gravity, mode = "dcGD")
 P[1:4, 1:4]   # rows: from, columns: to
 }
 }
 \seealso{
-\code{\link{pgd}} to compute pGD from an existing Population Graph.
+\code{\link{dcgd}} to compute dcGD from an existing Population Graph.
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

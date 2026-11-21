@@ -39,7 +39,7 @@
 plotting options below must be named.}
 
 \item{layout}{How to place the nodes; see \code{\link{plot.popgraph}}.  Named
-and function layouts are computed on the bi-directional \code{\link{pgd}}
+and function layouts are computed on the bi-directional \code{\link{dcgd}}
 graph, so directional gene flow shapes the picture.  When every panel has
 the same populations, one layout (from the first panel) is used for all of
 them.}

@@ -5,7 +5,7 @@
 #' @param x A \code{data.frame} object with \code{\link{locus}} columns, or a single \code{locus} vector.
 #' @param stratum The strata by which genetic distances are estimated (default="Population").
 #'    Optional for individual-based distance metrics like AMOVA, Bray and Bruvo.
-#' @param mode The genetic distance metric to use:
+#' @param mode The genetic distance metric to use (case is ignored, so \code{"dcGD"} and \code{"dcgd"} are the same):
 #'    \describe{
 #'      \item{amova}{Inter-individual squared Euclidean distance (Peakall et al. 1995, Smouse & Peakall 1999)}
 #'      \item{bray}{Inter-individual Bray-Curtis / shared allele distance (Bowcock et al. 1994)}
@@ -19,9 +19,9 @@
 #'      \item{dps}{Stratum-level shared allele distance (1 - Ps)}
 #'      \item{cavalli}{Cavalli-Sforza & Edwards (1967) chord distance}
 #'      \item{cgd}{Conditional Genetic Distance via Population Graphs (Dyer & Nason 2004)}
-#'      \item{pgd}{Partitioned (proportional) Conditional Genetic Distance: each
+#'      \item{dcgd}{Directional Conditional Genetic Distance (dcGD): each
 #'        Population Graph edge's cGD split into two directed shares in proportion to
-#'        the genetic-gravity neighbourhood weights (see \code{\link{pgd}} and
+#'        the genetic-gravity neighbourhood weights (see \code{\link{dcgd}} and
 #'        \code{vignette("genetic_gravity")}), returned as all-pairs directed
 #'        shortest-path distances.  The matrix is \strong{asymmetric}: \code{[i, j]}
 #'        is the distance from \code{i} to \code{j}, shorter in the direction of
@@ -32,11 +32,11 @@
 #'      \item{ss}{Partitioned Sum of Squares distance from AMOVA}
 #'    }
 #' @param ... Options for the chosen metric: \code{gamma}, the bandwidth
-#'    multiplier for \code{mode = "pgd"}, and \code{repeat_length} for
+#'    multiplier for \code{mode = "dcGD"}, and \code{repeat_length} for
 #'    \code{mode = "bruvo"}; other modes take none, and unused arguments are
 #'    reported.
-#' @return A pairwise distance matrix (asymmetric for \code{mode = "pgd"}).
-#' @seealso \code{\link{pgd}} to compute pGD from an existing Population Graph.
+#' @return A pairwise distance matrix (asymmetric for \code{mode = "dcGD"}).
+#' @seealso \code{\link{dcgd}} to compute dcGD from an existing Population Graph.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
@@ -54,7 +54,7 @@
 #' round(D, 3)
 #' \donttest{
 #' data(gravity)
-#' P <- genetic_distance(gravity, mode = "pgd")
+#' P <- genetic_distance(gravity, mode = "dcGD")
 #' P[1:4, 1:4]   # rows: from, columns: to
 #' }
 genetic_distance <- function( x, stratum="Population", mode, ... ){
@@ -76,7 +76,7 @@ genetic_distance <- function( x, stratum="Population", mode, ... ){
   x <- .plain_df(x)
 
   ret <- NULL
-  if( !(mode %in% c("pgd", "bruvo")) )
+  if( !(mode %in% c("dcgd", "bruvo")) )
     chkDots(...)
 
   if( mode == "amova" )
@@ -96,8 +96,8 @@ genetic_distance <- function( x, stratum="Population", mode, ... ){
   else if( mode == "cgd") 
     ret <- dist_cgd(x,stratum=stratum)
   
-  else if( mode == "pgd")
-    ret <- dist_pgd(x, stratum=stratum, ...)
+  else if( mode == "dcgd")
+    ret <- dist_dcgd(x, stratum=stratum, ...)
   
   else if( mode == "nei")
     ret <- dist_nei(x,stratum=stratum)

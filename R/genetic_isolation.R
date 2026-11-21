@@ -12,11 +12,11 @@
 #'   \item{\code{"IBGD"}}{\strong{Isolation by graph distance.}  A Population
 #'     Graph is built with \code{\link{population_graph}} and its conditional
 #'     genetic distance (cGD) is tested against separation the same way; see
-#'     \code{\link{ibgd}} (\code{mode = "cgd"}).}
-#'   \item{\code{"PGD"}}{\strong{Directional isolation by graph distance.}  Asks
-#'     whether partitioned cGD with separate forward and reverse slopes fits
+#'     \code{\link{ibgd}} (\code{mode = "cGD"}).}
+#'   \item{\code{"dcGD"}}{\strong{Directional isolation by graph distance.}  Asks
+#'     whether dcGD with separate forward and reverse slopes fits
 #'     better than cGD, \eqn{\Delta R^2}; see \code{\link{ibgd}}
-#'     (\code{mode = "pgd"}).  It needs a direction: give \code{axis} or
+#'     (\code{mode = "dcGD"}).  It needs a direction: give \code{axis} or
 #'     \code{forward}.  It has no p-value.}
 #' }
 #' If you already have a Population Graph, call \code{\link{ibgd}} on it
@@ -32,7 +32,7 @@
 #' @param x A \code{data.frame} with \code{\link{locus}} columns.
 #' @param stratum The column holding strata (default \code{"Population"}), or
 #'   taken from \code{dplyr::group_by()} when \code{x} is grouped.
-#' @param mode \code{"IBD"} (default), \code{"IBGD"} or \code{"PGD"}.
+#' @param mode \code{"IBD"} (default), \code{"IBGD"} or \code{"dcGD"}; case is ignored.
 #' @param genetic The \code{\link{genetic_distance}} mode used by \code{"IBD"}
 #'   (default \code{"Nei"}); it must be a stratum-level distance.
 #' @param spatial Optional distance matrix among strata, with row and column
@@ -40,22 +40,22 @@
 #' @param axis Optional position of each stratum along a hypothesized axis
 #'   (e.g. a river or a latitudinal gradient): the name of a numeric column of
 #'   \code{x} (averaged within strata) or a numeric vector named by stratum.
-#'   For \code{"PGD"}, a pair runs forward when \eqn{a_j > a_i}.
-#' @param forward For \code{"PGD"} without \code{axis}, a logical matrix among
+#'   For \code{"dcGD"}, a pair runs forward when \eqn{a_j > a_i}.
+#' @param forward For \code{"dcGD"} without \code{axis}, a logical matrix among
 #'   strata, \code{TRUE} where the ordered pair \eqn{(i, j)} runs forward.
 #' @param nperm Number of Mantel permutations (default 999); not used by
-#'   \code{"PGD"}.
-#' @param gamma Bandwidth multiplier for pGD (default \code{0.5}); \code{"PGD"}
+#'   \code{"dcGD"}.
+#' @param gamma Bandwidth multiplier for dcGD (default \code{0.5}); \code{"dcGD"}
 #'   only.
 #' @param ... Passed to \code{\link{genetic_distance}} (\code{"IBD"}) or
-#'   \code{\link{population_graph}} (\code{"IBGD"}, \code{"PGD"}).
+#'   \code{\link{population_graph}} (\code{"IBGD"}, \code{"dcGD"}).
 #' @return An object of class \code{"htest"} that prints as a standard test and
 #'   works with \code{broom::tidy()}: the correlation \code{r} as
 #'   \code{statistic}, the number of pairs and permutations as
 #'   \code{parameter}, the Mantel \code{p.value}, and \code{R2} and the
 #'   \code{slope} of genetic distance on separation as \code{estimate}.  For
-#'   \code{"IBGD"} and \code{"PGD"} it is the \code{\link{ibgd}} result.
-#' @seealso \code{\link{ibgd}}, \code{\link{pgd}}, \code{\link{genetic_distance}},
+#'   \code{"IBGD"} and \code{"dcGD"} it is the \code{\link{ibgd}} result.
+#' @seealso \code{\link{ibgd}}, \code{\link{dcgd}}, \code{\link{genetic_distance}},
 #'   \code{\link{strata_distance}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @export
@@ -65,19 +65,19 @@
 #' genetic_isolation(arapat, nperm = 99)
 #' genetic_isolation(arapat, mode = "IBGD", nperm = 99)
 #'
-#' # Along an axis, which also gives the direction for PGD
+#' # Along an axis, which also gives the direction for dcGD
 #' data(gravity)
 #' pops <- unique(gravity$Population)
 #' deme <- setNames(as.integer(sub("Pop", "", pops)), pops)
 #' genetic_isolation(gravity, mode = "IBGD", axis = deme, nperm = 99)
-#' genetic_isolation(gravity, mode = "PGD", axis = deme)
-genetic_isolation <- function( x, stratum = "Population", mode = c("IBD", "IBGD", "PGD"),
+#' genetic_isolation(gravity, mode = "dcGD", axis = deme)
+genetic_isolation <- function( x, stratum = "Population", mode = c("IBD", "IBGD", "dcGD"),
                                genetic = "Nei", spatial = NULL, axis = NULL, forward = NULL,
                                nperm = 999L, gamma = 0.5, ... ) {
   dname <- deparse1(substitute(x))
-  mode <- toupper(mode[1])
-  if( !(mode %in% c("IBD", "IBGD", "PGD")) )
-    stop("mode must be one of 'IBD', 'IBGD' or 'PGD'.")
+  mode <- tolower(mode[1])
+  if( !(mode %in% c("ibd", "ibgd", "dcgd")) )
+    stop("mode must be one of 'IBD', 'IBGD' or 'dcGD'.")
   if( !is(x, "data.frame") || length(column_class(x, "locus")) < 1 )
     stop("genetic_isolation() takes a data.frame with locus columns.")
   stratum <- .detect_stratum(x, stratum, default = "Population", explicit = !missing(stratum))
@@ -85,8 +85,8 @@ genetic_isolation <- function( x, stratum = "Population", mode = c("IBD", "IBGD"
   if( !(stratum %in% names(x)) )
     stop("Requested stratum is NOT in the data you passed to genetic_isolation().")
 
-  if( mode == "PGD" && is.null(axis) && is.null(forward) )
-    stop("mode = \"PGD\" needs a direction: give 'axis' or 'forward'.")
+  if( mode == "dcgd" && is.null(axis) && is.null(forward) )
+    stop("mode = \"dcGD\" needs a direction: give 'axis' or 'forward'.")
 
   strata <- unique( as.character(x[[stratum]]) )
 
@@ -123,7 +123,7 @@ genetic_isolation <- function( x, stratum = "Population", mode = c("IBD", "IBGD"
     sep_name <- "great-circle distance (km)"
   }
 
-  if( mode == "IBD" ) {
+  if( mode == "ibd" ) {
     G <- as.matrix( genetic_distance(x, stratum = stratum, mode = genetic, ...) )
     if( is.null(rownames(G)) || !all(strata %in% rownames(G)) )
       stop(sprintf("genetic_distance(mode = \"%s\") is not a distance among strata.", genetic))
@@ -147,7 +147,7 @@ genetic_isolation <- function( x, stratum = "Population", mode = c("IBD", "IBGD"
 
   # Graph-based modes
   graph <- population_graph( x, stratum = stratum, ... )
-  ibgd_mode <- if( mode == "IBGD" ) "cgd" else "pgd"
+  ibgd_mode <- if( mode == "ibgd" ) "cgd" else "dcgd"
   if( is.null(spatial) && !is.null(a) ) {
     res <- ibgd( graph, x = a, mode = ibgd_mode, gamma = gamma, nperm = nperm )
   } else {

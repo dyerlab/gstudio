@@ -8,7 +8,7 @@
 ibgd(
   graph,
   x = NULL,
-  mode = c("cgd", "pgd"),
+  mode = c("cGD", "dcGD"),
   gamma = 0.5,
   nperm = 999L,
   distance = NULL,
@@ -23,27 +23,27 @@ ibgd(
 
 \item{x}{Numeric position along the axis, one value per node (named by node,
 or in vertex order).  Separation is \eqn{|x_j - x_i|}, and for
-\code{"pgd"} a pair is forward when \eqn{x_j > x_i}.  Alternatively supply
-\code{distance} (and, for \code{"pgd"}, \code{forward}).}
+\code{"dcGD"} a pair is forward when \eqn{x_j > x_i}.  Alternatively supply
+\code{distance} (and, for \code{"dcGD"}, \code{forward}).}
 
-\item{mode}{\code{"cgd"} (default) or \code{"pgd"}.}
+\item{mode}{\code{"cGD"} (default) or \code{"dcGD"}; case is ignored, so \code{"cgd"} and \code{"dcgd"} also work.}
 
-\item{gamma}{Bandwidth multiplier for pGD (default \code{0.5}); used only by
-\code{"pgd"}.}
+\item{gamma}{Bandwidth multiplier for dcGD (default \code{0.5}); used only by
+\code{"dcGD"}.}
 
-\item{nperm}{Number of Mantel permutations for \code{"cgd"} (default 999).}
+\item{nperm}{Number of Mantel permutations for \code{"cGD"} (default 999).}
 
 \item{distance}{Optional \eqn{n \times n} spatial (or resistance) distance
 matrix, used instead of \eqn{|x_j - x_i|}.  When both \code{x} and
 \code{distance} are \code{NULL} and the graph has \code{Longitude} and
 \code{Latitude} vertex attributes (e.g. from
 \code{population_graph(decorate = TRUE)}), the great-circle distance in km
-between nodes is used (see \code{\link{strata_distance}}); \code{"pgd"}
+between nodes is used (see \code{\link{strata_distance}}); \code{"dcGD"}
 then still needs \code{forward}.}
 
 \item{forward}{Optional logical \eqn{n \times n} matrix, \code{TRUE} where the
 ordered pair \eqn{(i, j)} runs in the hypothesized forward direction;
-required with \code{distance} for \code{"pgd"}.}
+required with \code{distance} for \code{"dcGD"}.}
 
 \item{...}{Passed to \code{print.htest()}.}
 }
@@ -51,37 +51,37 @@ required with \code{distance} for \code{"pgd"}.}
 An object of class \code{c("ibgd", "htest")}, which prints as a
   standard test and works with \code{broom::tidy()}:
   \describe{
-    \item{\code{statistic}}{\code{r} (\code{"cgd"}) or \code{delta R2}
-      (\code{"pgd"}).}
+    \item{\code{statistic}}{\code{r} (\code{"cGD"}) or \code{delta R2}
+      (\code{"dcGD"}).}
     \item{\code{parameter}}{Number of population pairs, plus \code{nperm}
-      for \code{"cgd"}.}
-    \item{\code{p.value}}{Mantel permutation p-value (\code{"cgd"} only).}
-    \item{\code{estimate}}{\code{"cgd"}: \code{R2} and the cGD-on-separation
-      \code{slope}.  \code{"pgd"}: \code{R2 cGD}, \code{adj R2 pGD},
+      for \code{"cGD"}.}
+    \item{\code{p.value}}{Mantel permutation p-value (\code{"cGD"} only).}
+    \item{\code{estimate}}{\code{"cGD"}: \code{R2} and the cGD-on-separation
+      \code{slope}.  \code{"dcGD"}: \code{R2 cGD}, \code{adj R2 dcGD},
       \code{forward slope}, \code{reverse slope} and \code{slope ratio}.}
-    \item{\code{null.value}, \code{alternative}}{For \code{"cgd"}: \eqn{r = 0}
+    \item{\code{null.value}, \code{alternative}}{For \code{"cGD"}: \eqn{r = 0}
       against \eqn{r > 0}.}
     \item{\code{method}, \code{data.name}, \code{mode}}{Description, inputs, and
-      the mode used; \code{"pgd"} also returns \code{gamma}.}
+      the mode used; \code{"dcGD"} also returns \code{gamma}.}
   }
 }
 \description{
 Tests how well a Population Graph's genetic distances are explained by
 separation along a spatial (or hypothesized) axis, in one of two forms:
 \describe{
-  \item{\code{"cgd"}}{(default) \strong{Isolation by graph distance (IBGD).}
+  \item{\code{"cGD"}}{(default) \strong{Isolation by graph distance (IBGD).}
     All-pairs conditional genetic distance (cGD, the shortest-path distance
     over edge weights) against spatial separation.  The statistic is the
     correlation \eqn{r} between the two over population pairs, tested with a
     Mantel permutation test: populations' positions are permuted and \eqn{r}
     recomputed, with the one-sided p-value
     \eqn{(1 + \#\{r_{null} \ge r_{obs}\}) / (1 + B)}.}
-  \item{\code{"pgd"}}{\strong{Directional IBGD.}  Asks whether modelling
-    direction improves the fit.  All-pairs directed pGD (\code{\link{pgd}}) is
+  \item{\code{"dcGD"}}{\strong{Directional IBGD.}  Asks whether modelling
+    direction improves the fit.  All-pairs directed dcGD (\code{\link{dcgd}}) is
     regressed on separation with separate forward and reverse slopes,
-    \eqn{pGD_{ij} \sim d_{ij} + d_{ij} r_{ij}}, where \eqn{r_{ij} = 1} for
-    reverse (upstream) pairs, giving adjusted \eqn{R^2_{pGD}}.  The statistic is
-    \eqn{\Delta R^2 = R^2_{pGD} - R^2_{cGD}}; \eqn{\Delta R^2 > 0} favours the
+    \eqn{dcGD_{ij} \sim d_{ij} + d_{ij} r_{ij}}, where \eqn{r_{ij} = 1} for
+    reverse (upstream) pairs, giving adjusted \eqn{R^2_{dcGD}}.  The statistic is
+    \eqn{\Delta R^2 = R^2_{dcGD} - R^2_{cGD}}; \eqn{\Delta R^2 > 0} favours the
     directional description, consistent with asymmetric gene flow along the
     axis, and \eqn{\Delta R^2 \le 0} is an absence of evidence for asymmetry,
     not evidence of symmetry.  The forward-to-reverse slope ratio
@@ -90,15 +90,15 @@ separation along a spatial (or hypothesized) axis, in one of two forms:
 }
 }
 \details{
-\strong{No p-value for \code{"pgd"}.}  The two fits use different response
+\strong{No p-value for \code{"dcGD"}.}  The two fits use different response
 matrices, so the comparison is not a nested-model test and has no analytic
 p-value, and permuting positions would test for any isolation by distance
 rather than for direction.  Its error rates were characterized by simulation:
 it is anti-conservative under strong drift, so corroborate a directional fit
 with \code{\link{source_sink_test}}.
 
-\strong{Pairs.} \code{"cgd"} uses each unordered pair of connected populations
-once; \code{"pgd"} uses every ordered pair, since pGD differs by direction.
+\strong{Pairs.} \code{"cGD"} uses each unordered pair of connected populations
+once; \code{"dcGD"} uses every ordered pair, since dcGD differs by direction.
 }
 \examples{
 data(gravity)
@@ -107,7 +107,7 @@ deme  <- as.integer(sub("Pop", "", igraph::V(graph)$name))
 
 set.seed(1)
 ibgd(graph, x = deme)                 # isolation by graph distance (cGD)
-ibgd(graph, x = deme, mode = "pgd")   # does a directional model fit better?
+ibgd(graph, x = deme, mode = "dcGD")   # does a directional model fit better?
 
 # Distances from node coordinates
 data(arapat)
@@ -115,7 +115,7 @@ g <- population_graph(arapat, decorate = TRUE)
 ibgd(g, nperm = 99)
 }
 \seealso{
-\code{\link{pgd}}, \code{\link{source_sink_test}},
+\code{\link{dcgd}}, \code{\link{source_sink_test}},
   \code{\link{genetic_distance}}, \code{vignette("genetic_gravity")}
 }
 \author{

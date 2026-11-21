@@ -61,7 +61,7 @@ graph <- popgraph(to_mv(gravity), gravity$Population)
 deme  <- as.integer(sub("Pop", "", igraph::V(graph)$name))
 set.seed(1)
 source_sink_test(graph, x = deme)
-ibgd(graph, x = deme, mode = "pgd")
+ibgd(graph, x = deme, mode = "dcGD")
 \donttest{
 plot(gravity_field(graph))
 }

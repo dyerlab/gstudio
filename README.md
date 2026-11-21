@@ -31,7 +31,7 @@ arapat |>
   genetic_structure(stratum = "Species", mode = "Gst") # Gst, Gst_prime, Dest, Fst
 
 arapat |>
-  genetic_distance(stratum = "Species", mode = "cGD")  # AMOVA, Nei, cGD, pGD, ...
+  genetic_distance(stratum = "Species", mode = "cGD")  # AMOVA, Nei, cGD, dcGD, ...
 
 arapat |>
   slice(1:10) |>
@@ -105,10 +105,10 @@ graph |>
   ibgd(x = deme)                           # isolation by graph distance (Mantel test)
 
 graph |>
-  ibgd(x = deme, mode = "pgd")             # does a directional model fit better?
+  ibgd(x = deme, mode = "dcGD")             # does a directional model fit better?
 
 gravity |>
-  genetic_distance(mode = "pgd")           # partitioned (directed) cGD
+  genetic_distance(mode = "dcGD")           # directional conditional genetic distance (dcGD)
 
 graph |>
   gravity_field() |>

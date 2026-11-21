@@ -1,23 +1,23 @@
-test_that("dist_pgd validates input", {
-  expect_error(dist_pgd("Bob"))
-  expect_error(dist_pgd(data.frame(Pop = 1)))
-  expect_error(dist_pgd(data.frame(Pop = 1), stratum = "bob"))
+test_that("dist_dcgd validates input", {
+  expect_error(dist_dcgd("Bob"))
+  expect_error(dist_dcgd(data.frame(Pop = 1)))
+  expect_error(dist_dcgd(data.frame(Pop = 1), stratum = "bob"))
 })
 
-test_that("genetic_distance(mode = 'pgd') returns directed partitioned cGD", {
+test_that("genetic_distance(mode = 'dcGD') returns directional conditional genetic distance", {
   data(gravity, package = "gstudio", envir = environment())
-  P <- genetic_distance(gravity, mode = "pgd")
+  P <- genetic_distance(gravity, mode = "dcGD")
   graph <- popgraph(to_mv(gravity), factor(as.character(gravity$Population)))
 
   expect_equal(dim(P), c(25L, 25L))
   expect_equal(rownames(P), colnames(P))
-  expect_equal(P, pgd(graph, output = "matrix"))
+  expect_equal(P, dcgd(graph, output = "matrix"))
   expect_equal(unname(diag(P)), rep(0, 25))
   expect_false(isSymmetric(unname(P)))                  # direction matters
 
   # each direct edge's two shares sum to its cGD
   el <- igraph::as_edgelist(graph, names = TRUE)
-  arcs <- pgd(graph, output = "graph")
+  arcs <- dcgd(graph, output = "graph")
   A <- igraph::as_adjacency_matrix(arcs, attr = "weight", sparse = FALSE)
   expect_equal(A[el] + A[el[, 2:1]], igraph::E(graph)$weight, tolerance = 1e-12)
 
@@ -30,6 +30,6 @@ test_that("genetic_distance(mode = 'pgd') returns directed partitioned cGD", {
   expect_true(all(pmin(P, t(P)) <= C + 1e-9))
 
   # gamma is passed through; stray arguments to other modes are reported
-  expect_equal(genetic_distance(gravity, mode = "pgd", gamma = 1), pgd(graph, gamma = 1, output = "matrix"))
+  expect_equal(genetic_distance(gravity, mode = "dcGD", gamma = 1), dcgd(graph, gamma = 1, output = "matrix"))
   expect_warning(genetic_distance(gravity, mode = "nei", gamma = 1), "gamma")
 })

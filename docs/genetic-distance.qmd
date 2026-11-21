@@ -21,7 +21,7 @@ The `genetic_distance()` function computes distance matrices from genetic data. 
 | `"Bray"` | Individual | Proportion of shared alleles |
 | `"Euclidean"` | Population | Euclidean frequency distance |
 | `"cGD"` | Population | Conditional genetic distance |
-| `"pGD"` | Population | Partitioned (directed) conditional genetic distance; asymmetric |
+| `"dcGD"` | Population | Directional conditional genetic distance; asymmetric |
 | `"Nei"` | Population | Nei's genetic distance (1978) |
 | `"Dps"` | Population | Shared allele distance (1 - Ps) |
 | `"Jaccard"` | Population | Jaccard set dissimilarity |
@@ -56,12 +56,12 @@ D_cgd <- arapat |>
 D_cgd
 ```
 
-Partitioned conditional genetic distance (pGD) splits each Population Graph edge's cGD into two directed shares using the genetic-gravity neighbourhood weights, so the matrix is asymmetric: `[i, j]` is the distance from `i` to `j`, shorter in the direction of gene flow. The bandwidth multiplier is set with `gamma` (default 0.5); see `vignette("genetic_gravity")`.
+Directional conditional genetic distance (dcGD) splits each Population Graph edge's cGD into two directed shares using the genetic-gravity neighbourhood weights, so the matrix is asymmetric: `[i, j]` is the distance from `i` to `j`, shorter in the direction of gene flow. The bandwidth multiplier is set with `gamma` (default 0.5); see `vignette("genetic_gravity")`.
 
 ```{r}
-D_pgd <- arapat |>
-  genetic_distance(stratum = "Species", mode = "pGD")
-D_pgd
+D_dcgd <- arapat |>
+  genetic_distance(stratum = "Species", mode = "dcGD")
+D_dcgd
 ```
 
 ```{r}
@@ -143,7 +143,7 @@ arapat |>
   genetic_isolation(stratum = "Population", nperm = 499)
 ```
 
-`mode = "IBGD"` uses the conditional genetic distance through a Population Graph instead, and `mode = "PGD"` asks whether a directional model fits better, given an `axis` (see @sec-genetic-gravity).  Separation can also come from your own matrix (`spatial =`, e.g. resistance distances) or positions along an axis (`axis =`).  If you already have a Population Graph, `ibgd()` works on it directly.
+`mode = "IBGD"` uses the conditional genetic distance through a Population Graph instead, and `mode = "dcGD"` asks whether a directional model fits better, given an `axis` (see @sec-genetic-gravity).  Separation can also come from your own matrix (`spatial =`, e.g. resistance distances) or positions along an axis (`axis =`).  If you already have a Population Graph, `ibgd()` works on it directly.
 
 ## Strata Distances
 
@@ -166,7 +166,7 @@ coords |>
 #| eval: false
 D_amova <- genetic_distance(arapat[1:20, ], mode = "AMOVA")
 D_nei   <- genetic_distance(arapat, stratum = "Species", mode = "Nei")
-D_pgd   <- genetic_distance(arapat, stratum = "Species", mode = "pGD", gamma = 0.5)
+D_dcgd   <- genetic_distance(arapat, stratum = "Species", mode = "dcGD", gamma = 0.5)
 R       <- genetic_relatedness(arapat[1:10, c("Species", "WNT", "EN", "EF", "ZMP", "AML", "MP20")],
                                mode = "Nason")
 coords  <- strata_coordinates(arapat, stratum = "Species")

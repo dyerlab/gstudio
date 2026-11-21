@@ -9,9 +9,9 @@
 | Neighbourhood weights $w_{j\mid i}$ | `neighbourhood_weights()` |
 | Edge asymmetry $\Delta$ and degree floor $\Delta^0$ | `gravity_edges()` |
 | Gravity, balance and source-sink score $S$; degree diagnostics | `source_sink_scores()` |
-| Partitioned distance pGD | `genetic_distance(mode = "pgd")`, `pgd()` |
+| Directional distance dcGD | `genetic_distance(mode = "dcGD")`, `dcgd()` |
 | Gradient test, $r(S, x)$ | `source_sink_test()` |
-| Isolation by graph distance (Mantel); directional isolation, $\Delta R^2$ | `ibgd(mode = "cgd")`, `ibgd(mode = "pgd")` |
+| Isolation by graph distance (Mantel); directional isolation, $\Delta R^2$ | `ibgd(mode = "cGD")`, `ibgd(mode = "dcGD")` |
 | Everything for mapping; the map | `gravity_field()`, `plot()` |
 
 Use $\gamma = 1/2$ for inferring direction and $\gamma = 1$ for describing

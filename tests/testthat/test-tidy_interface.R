@@ -69,7 +69,7 @@ test_that("every test returns an htest that broom can tidy", {
   tests <- list(
     source_sink_test       = source_sink_test(g, x = deme, nperm = 49),
     ibgd_cgd               = ibgd(g, x = deme, nperm = 49),
-    ibgd_pgd               = ibgd(g, x = deme, mode = "pgd"),
+    ibgd_dcgd               = ibgd(g, x = deme, mode = "dcGD"),
     directional_test       = directional_test(g, orientation = deme),
     asymmetry_existence    = asymmetry_significance(g, nperm = 19),
     genetic_isolation      = genetic_isolation(gravity, axis = deme, nperm = 19),
