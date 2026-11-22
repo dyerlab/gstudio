@@ -16,7 +16,13 @@ popgraph(x, groups, alpha = 0.05, tol = 1e-04)
 \item{tol}{A measure of tolerance for the retention of multivariate data columns (default sdev=1e-4)}
 }
 \value{
-An object of type \code{popgraph}.
+An object of type \code{popgraph}. Its \code{"design"} attribute records how
+  much of the data entered the estimate: \code{N} (individuals), \code{K} (strata),
+  \code{n} (individuals per stratum), \code{df_within} (\eqn{N-K}, the degrees of freedom
+  for the within-stratum covariance), \code{dims} (rotated genetic variables retained),
+  \code{constant_within} (retained variables that are constant within every stratum),
+  \code{rank_within} (rank of the within-stratum covariance) and \code{rank_between}
+  (discriminant axes used).  See \code{\link{popgraph_diagnostics}}.
 }
 \description{
 This function is the default constructor for \code{PopulationGraph} objects.  Mechanistically,

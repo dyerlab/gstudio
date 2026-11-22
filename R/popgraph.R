@@ -7,7 +7,13 @@
 #' @param groups A factor indicating population membership of each row in \code{x}
 #' @param alpha The significance level to test edge retention (default = 0.05).
 #' @param tol A measure of tolerance for the retention of multivariate data columns (default sdev=1e-4)
-#' @return An object of type \code{popgraph}.
+#' @return An object of type \code{popgraph}. Its \code{"design"} attribute records how
+#'   much of the data entered the estimate: \code{N} (individuals), \code{K} (strata),
+#'   \code{n} (individuals per stratum), \code{df_within} (\eqn{N-K}, the degrees of freedom
+#'   for the within-stratum covariance), \code{dims} (rotated genetic variables retained),
+#'   \code{constant_within} (retained variables that are constant within every stratum),
+#'   \code{rank_within} (rank of the within-stratum covariance) and \code{rank_between}
+#'   (discriminant axes used).  See \code{\link{popgraph_diagnostics}}.
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @examples
@@ -66,6 +72,7 @@ popgraph <- function( x, groups, alpha=0.05, tol=1.0e-4 ) {
   X <- sqrt(fac) * (mv - pop.means[groups,]) %*% scaling
   X.s <- svd(X, nu = 0)
   rank <- sum(X.s$d > tol)
+  rank_within <- rank
   if(rank < P) 
     warning( paste( (P-rank),
                     " variables are collinear and being dropped from the discriminant rotation.",
@@ -75,6 +82,7 @@ popgraph <- function( x, groups, alpha=0.05, tol=1.0e-4 ) {
   X <- sqrt((N * Pop.priors)/(K-1)) * scale(pop.means, center=mu, scale=FALSE) %*% scaling
   X.s <- svd(X, nu = 0)
   rank <- sum(X.s$d > tol * X.s$d[1L])
+  rank_between <- rank
   scaling <- scaling %*% X.s$v[, 1L:rank]
   
   means <- colMeans(pop.means)
@@ -134,6 +142,10 @@ popgraph <- function( x, groups, alpha=0.05, tol=1.0e-4 ) {
 
 
   class( graph ) <- c("popgraph", "igraph")
+  attr( graph, "design" ) <- list( N = N, K = K, n = c(table(groups)), df_within = N - K,
+                                   dims = P, constant_within = sum( sigma.w < tol ),
+                                   rank_within = rank_within, rank_between = rank_between,
+                                   alpha = alpha )
   
   return( graph )
 }

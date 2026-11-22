@@ -1,0 +1,22 @@
+test_that("popgraph() records its design", {
+  data(arapat)
+  g <- population_graph(arapat)
+  a <- attr(g, "design")
+  expect_equal(a$N, nrow(arapat))
+  expect_equal(a$K, nlevels(factor(arapat$Population)))
+  expect_equal(a$df_within, a$N - a$K)
+  expect_true(a$rank_between <= a$K - 1)
+})
+
+test_that("popgraph_diagnostics() summarizes design and flags thin sampling", {
+  data(arapat)
+  dg <- popgraph_diagnostics(arapat)
+  expect_s3_class(dg, "popgraph_diagnostics")
+  expect_equal(nrow(dg$strata), nlevels(factor(arapat$Population)))
+  expect_true(all(c("Stratum", "n", "Hs", "nHs") %in% names(dg$strata)))
+  expect_true(dg$design[["gst"]] > 0 && dg$design[["gst"]] < 1)
+  expect_type(dg$flags, "character")
+  expect_output(print(dg), "sampling diagnostics")
+  g <- dplyr::group_by(arapat, Population)
+  expect_equal(popgraph_diagnostics(g)$design, dg$design)
+})
