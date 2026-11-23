@@ -28,7 +28,7 @@ library( ggplot2 )
 The code below is written as pipelines, with each function on its own line.
 Every gstudio function takes its data as the first argument, so the same calls
 also work in the older style, with options such as `stratum =` passed as
-arguments; those versions are collected at the end, under *Without pipes*.
+arguments; those versions are collected at the end, under *Without Pipes*.
 
 ## The model in brief
 
@@ -406,31 +406,3 @@ stabilized, and harder again as diversity was lost.  At any point, a
 non-significant result is not evidence of symmetric migration.  Because every
 edge is conditional on all sampled populations, unsampled populations change
 the topology too.
-
-## Without pipes
-
-The pipelines above are the recommended style.  Every call also works with its
-options passed as arguments, without dplyr; these are the equivalents of the
-steps above, shown here but not run:
-
-```{r no-pipes}
-#| eval: false
-graph <- popgraph( to_mv( gravity ), groups = gravity$Population )
-deme  <- as.integer( sub( "Pop", "", igraph::V( graph )$name ) )
-names( deme ) <- igraph::V( graph )$name
-
-W      <- neighbourhood_weights( graph, gamma = 0.5 )
-edges  <- gravity_edges( graph, gamma = 0.5, x = deme )
-scores <- source_sink_scores( graph, gamma = 0.5, x = deme )
-
-source_sink_test( graph, x = deme, gamma = 0.5, nperm = 999 )
-ibgd( graph, x = deme, mode = "cGD", nperm = 999 )
-ibgd( graph, x = deme, mode = "dcGD", gamma = 0.5 )
-
-P     <- genetic_distance( gravity,
-                           stratum = "Population",
-                           mode = "dcGD",
-                           gamma = 0.5 )
-field <- gravity_field( graph, gamma = 0.5 )
-plot( field, layout = "kk", surface = "interpolate" )
-```

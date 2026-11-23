@@ -41,6 +41,30 @@
 #' observed within-stratum diversity so the match can be judged, and the
 #' cutoff should be checked for sensitivity to \code{Ne} and \code{ngen}.
 #'
+#' \strong{Strata that differ in diversity.}  By default every stratum has the
+#' same \code{Ne}, so the null strata differ in diversity only by chance.  Real
+#' strata often do not: a gradient in within-stratum diversity, such as a decline
+#' away from a refugium, is itself a common signature of range expansion.
+#' Supplying one \code{Ne} per stratum lets the null reproduce such differences
+#' through drift alone.  Migration stays symmetric, so the null still contains
+#' no net flow; it asks whether diversity differences, without directional gene
+#' flow, could produce the observed statistics.  The \code{strata} element of
+#' the result compares the observed and simulated \eqn{H_S} of every stratum so
+#' that the chosen \code{Ne} can be judged; \eqn{m} is tuned to the observed
+#' \eqn{G_{ST}} as before.  Because migration is retuned and evens out the
+#' diversity of neighbouring strata, matching every stratum exactly is rarely
+#' possible; a smooth profile (e.g. \code{Ne} log-linear along \code{axis})
+#' fitted to the observed trend is usually the better choice.
+#'
+#' \strong{Graph structure.}  Besides the two test statistics, each null graph
+#' records how strongly degree shapes it: the degree share, \eqn{cor(S, S^0)}
+#' (the correlation of the source--sink score with its degree-only value), the
+#' variance of degree and the ratio of maximum to mean degree.  The
+#' \code{structure} element gives the percentile of each observed value in its
+#' null.  An observed graph far in the upper tail is more hub-like than
+#' symmetric exchange produces for this design, so its source--sink scores
+#' largely restate which strata are hubs.
+#'
 #' @param x A \code{data.frame} of genotypes with \code{locus} columns and a
 #'   stratum column.
 #' @param stratum Name of the stratum column (default \code{"Population"}, or the
@@ -58,8 +82,13 @@
 #'   level to the null graphs.
 #' @param nsim Number of null data sets (default 999).
 #' @param gamma Bandwidth multiplier (default 0.5).
-#' @param Ne Effective size of each stratum in the simulation (default 100).
-#' @param ngen Generations simulated before sampling (default \code{4 * Ne}).
+#' @param Ne Effective size of each stratum in the simulation (default 100):
+#'   one value for every stratum, or one per stratum, named by stratum (any
+#'   order) or unnamed in the order of the sorted stratum levels.  Values are
+#'   rounded to whole individuals (at least 1).  See \emph{Strata that differ
+#'   in diversity}.
+#' @param ngen Generations simulated before sampling (default
+#'   \code{4 * mean(Ne)}, rounded).
 #' @param migration Optional symmetric stratum-by-stratum migration matrix
 #'   (rows sum to one), used as is in place of the tuned kernel.
 #' @param kernel_distance Optional stratum-by-stratum distances for the
@@ -70,16 +99,34 @@
 #' @param cores Cores for the null replicates (\code{parallel::mclapply};
 #'   default 1).
 #' @param verbose Print progress (default \code{FALSE}).
-#' @return An object of class \code{popgraph_null}: \code{observed} (the
-#'   statistics of the observed graph), \code{null} (one row per null data set:
-#'   \code{dR2}, \code{slope_ratio}, \code{r_S}, \code{degree_share},
-#'   \code{n_comp}, \code{gst}, \code{hs}), \code{cutoff} (the \eqn{1-\alpha}
-#'   quantile of null \eqn{\Delta R^2}, floored at 0, over all null graphs and
-#'   over connected ones), \code{p.value} (one-sided for \eqn{\Delta R^2},
-#'   two-sided for \eqn{r(S, x)}), \code{fpr_rule} (the rate at which
-#'   \eqn{\Delta R^2 > 0} in the null), and \code{tuning} (\eqn{m}, the target
-#'   and achieved \eqn{G_{ST}}, observed and simulated \eqn{H_S}, \code{Ne},
-#'   \code{ngen}).
+#' @return An object of class \code{popgraph_null}:
+#'   \describe{
+#'     \item{\code{observed}}{The statistics of the observed graph, named as
+#'       the columns of \code{null} up to \code{max_mean_degree}.}
+#'     \item{\code{null}}{One row per null data set: \code{dR2},
+#'       \code{R2_cGD}, \code{slope_ratio}, \code{r_S}, \code{degree_share},
+#'       \code{n_comp}, \code{cor_S_S0}, \code{var_degree},
+#'       \code{max_mean_degree}, \code{gst}, \code{hs}.}
+#'     \item{\code{cutoff}}{The \eqn{1-\alpha} quantile of null
+#'       \eqn{\Delta R^2}, floored at 0, over all null graphs (\code{all})
+#'       and over connected ones (\code{connected}).}
+#'     \item{\code{p.value}}{One-sided for \eqn{\Delta R^2} (\code{dR2}),
+#'       two-sided for \eqn{r(S, x)} (\code{r_S}).}
+#'     \item{\code{fpr_rule}}{The rate at which \eqn{\Delta R^2 > 0} in the
+#'       null.}
+#'     \item{\code{structure}}{The percentile (fraction of null graphs at or
+#'       below the observed value) of the observed \code{degree_share},
+#'       \code{cor_S_S0}, \code{var_degree} and \code{max_mean_degree}.}
+#'     \item{\code{strata}}{One row per stratum: \code{Stratum}, \code{n}
+#'       (genotyped individuals), \code{Ne}, \code{hs_observed} and
+#'       \code{hs_null} (mean over the null data sets of the sampled
+#'       \eqn{H_S}, unbiased and averaged over loci).}
+#'     \item{\code{tuning}}{\eqn{m}, the kernel scale, the target and
+#'       achieved \eqn{G_{ST}}, observed and simulated \eqn{H_S}, the mean
+#'       \code{Ne} and \code{ngen}.}
+#'     \item{\code{design}, \code{alpha}, \code{gamma}, \code{nsim}}{The
+#'       design (strata, individuals per stratum, loci, alleles) and settings.}
+#'   }
 #' @seealso \code{\link{ibgd}}, \code{\link{source_sink_test}},
 #'   \code{\link{popgraph_diagnostics}}, \code{\link{optimal_sampling}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -92,10 +139,18 @@
 #' lat <- tapply(d$Latitude, d$Population, mean)
 #' nl <- popgraph_null(d, axis = -lat, nsim = 19, ngen = 100)
 #' nl
+#' nl$structure
+#'
+#' # Effective sizes that decline southward (a diversity gradient), mean 100;
+#' # compare observed and simulated Hs per stratum
+#' z <- as.vector(scale(lat))
+#' ne <- setNames(100 * exp(0.5 * z) / mean(exp(0.5 * z)), names(lat))
+#' nl2 <- popgraph_null(d, axis = -lat, Ne = ne, nsim = 19, ngen = 100)
+#' nl2$strata
 #' }
 #' @export
 popgraph_null <- function(x, stratum = "Population", axis, distance = NULL, forward = NULL,
-                          graph = NULL, nsim = 999L, gamma = 0.5, Ne = 100L, ngen = 4L * Ne,
+                          graph = NULL, nsim = 999L, gamma = 0.5, Ne = 100L, ngen = 4L * mean(Ne),
                           migration = NULL, kernel_distance = NULL, phi = NULL, alpha = 0.05,
                           pilot = 8L, cores = 1L, verbose = FALSE) {
   if (!is.data.frame(x)) stop("'x' must be a data.frame")
@@ -109,6 +164,9 @@ popgraph_null <- function(x, stratum = "Population", axis, distance = NULL, forw
   if (missing(axis) || is.null(names(axis)) || !all(strata %in% names(axis)))
     stop("'axis' must be a numeric vector named by every stratum")
   axis <- axis[strata]
+  Ne <- .pgn_check_Ne(Ne, strata)
+  ngen <- as.integer(round(ngen))
+  if (length(ngen) != 1L || is.na(ngen) || ngen < 0L) stop("'ngen' must be a single non-negative number")
   if (is.null(graph)) graph <- population_graph(x, stratum = stratum)
   if (!setequal(igraph::V(graph)$name, strata)) stop("the nodes of 'graph' must be the strata of 'x'")
 
@@ -119,7 +177,9 @@ popgraph_null <- function(x, stratum = "Population", axis, distance = NULL, forw
   mv <- mv[keep]
   n_i <- c(table(grp))
   p0 <- lapply(mv, function(m) { p <- colMeans(m, na.rm = TRUE); p / sum(p) })
-  obs_gst <- .pgn_gst(lapply(mv, function(m) .pgn_freqs(m, grp)), n_i)
+  fr_obs <- lapply(mv, function(m) .pgn_freqs(m, grp))
+  obs_gst <- .pgn_gst(fr_obs, n_i)
+  obs_hs_site <- .pgn_site_hs(fr_obs)
   # observed missing genotypes, with rows in the stratum order of the simulated data
   ord <- order(grp)
   miss <- lapply(mv, function(m) !stats::complete.cases(m)[ord])
@@ -139,12 +199,15 @@ popgraph_null <- function(x, stratum = "Population", axis, distance = NULL, forw
     nn <- apply(D + diag(Inf, K), 1, min); s <- max(nn[is.finite(nn) & nn > 0])
     B <- .pgn_balance(exp(-D / s))
     target <- if (is.null(phi)) obs_gst[["gst"]] else phi
-    sim_gst <- function(m) mean(replicate(pilot, .pgn_gst(.pgn_sample_freqs(.pgn_wf(p0, .pgn_mix(B, m), Ne, ngen), n_l), n_i)[["gst"]]))
+    # Gst is undefined (NA) for a sample in which every locus is fixed; such pilot
+    # replicates are dropped, and an all-NA step counts as above target (more migration)
+    sim_gst <- function(m) mean(replicate(pilot, .pgn_gst(.pgn_sample_freqs(.pgn_wf(p0, .pgn_mix(B, m), Ne, ngen), n_l), n_i)[["gst"]]),
+                                na.rm = TRUE)
     lo <- log(1e-4); hi <- log(0.95)
     for (it in seq_len(12)) {
       mid <- (lo + hi) / 2; g_mid <- sim_gst(exp(mid))
       if (verbose) message(sprintf("tuning m = %.4g: Gst %.4f (target %.4f)", exp(mid), g_mid, target))
-      if (g_mid > target) lo <- mid else hi <- mid
+      if (is.na(g_mid) || g_mid > target) lo <- mid else hi <- mid
     }
     m_hat <- exp((lo + hi) / 2); M <- .pgn_mix(B, m_hat)
   } else {
@@ -160,16 +223,21 @@ popgraph_null <- function(x, stratum = "Population", axis, distance = NULL, forw
     g <- tryCatch(suppressWarnings(popgraph(X$mv, groups = X$groups, alpha = g_alpha, tol = g_tol)),
                   error = function(e) NULL)
     st <- if (is.null(g)) rep(NA_real_, length(observed)) else stat(g)
-    c(st, gst = gs[["gst"]], hs = gs[["hs"]])
+    c(st, gst = gs[["gst"]], hs = gs[["hs"]], .pgn_site_hs(fr)[strata])
   }
   res <- if (cores > 1L) parallel::mclapply(seq_len(nsim), one, mc.cores = cores) else lapply(seq_len(nsim), one)
-  null <- as.data.frame(do.call(rbind, res))
-  names(null)[seq_along(observed)] <- names(observed)
+  res <- do.call(rbind, res)
+  ns <- length(observed) + 2L
+  null <- as.data.frame(res[, seq_len(ns), drop = FALSE])
+  names(null) <- c(names(observed), "gst", "hs")
+  hs_site_null <- colMeans(res[, ns + seq_len(K), drop = FALSE], na.rm = TRUE)
 
   if (is.finite(target) && abs(mean(null$gst, na.rm = TRUE) - target) > 0.2 * target)
     warning(sprintf("null Gst %.3f differs from the target %.3f by more than 20%%; adjust Ne, ngen or the kernel",
                     mean(null$gst, na.rm = TRUE), target))
   q <- function(z) max(0, unname(stats::quantile(z, 1 - alpha, na.rm = TRUE)))
+  pct <- function(v) if (all(is.na(null[[v]])) || is.na(observed[[v]])) NA_real_ else
+    mean(null[[v]] <= observed[[v]] + 1e-12, na.rm = TRUE)
   conn <- null$n_comp == 1
   out <- list(
     observed = observed,
@@ -178,8 +246,13 @@ popgraph_null <- function(x, stratum = "Population", axis, distance = NULL, forw
     p.value  = c(dR2 = (1 + sum(null$dR2 >= observed[["dR2"]], na.rm = TRUE)) / (1 + sum(!is.na(null$dR2))),
                  r_S = (1 + sum(abs(null$r_S) >= abs(observed[["r_S"]]) - 1e-12, na.rm = TRUE)) / (1 + sum(!is.na(null$r_S)))),
     fpr_rule = mean(null$dR2 > 0, na.rm = TRUE),
+    structure = vapply(c(degree_share = "degree_share", cor_S_S0 = "cor_S_S0", var_degree = "var_degree",
+                         max_mean_degree = "max_mean_degree"), pct, 1),
+    strata   = data.frame(Stratum = strata, n = as.integer(n_i), Ne = unname(Ne),
+                          hs_observed = unname(obs_hs_site[strata]), hs_null = unname(hs_site_null),
+                          row.names = NULL, stringsAsFactors = FALSE),
     tuning   = c(m = m_hat, scale = s, gst_target = target, gst_null = mean(null$gst, na.rm = TRUE),
-                 hs_observed = obs_gst[["hs"]], hs_null = mean(null$hs, na.rm = TRUE), Ne = Ne, ngen = ngen),
+                 hs_observed = obs_gst[["hs"]], hs_null = mean(null$hs, na.rm = TRUE), Ne = mean(Ne), ngen = ngen),
     design   = list(K = K, n = n_i, loci = names(mv), alleles = vapply(p0, length, 1L)),
     alpha = alpha, gamma = gamma, nsim = nsim)
   class(out) <- "popgraph_null"
@@ -195,14 +268,25 @@ print.popgraph_null <- function(x, ...) {
   cat(sprintf("  design: %d strata, %s individuals per stratum (median %g), %d loci (%s alleles)\n",
               x$design$K, paste(range(x$design$n), collapse = "-"), stats::median(x$design$n),
               length(x$design$loci), paste(range(x$design$alleles), collapse = "-")))
-  cat(sprintf("  null: %d data sets; Wright-Fisher, Ne = %g, %g generations, m = %.4g; Gst %.3f (target %.3f); Hs %.3f (observed %.3f)\n",
-              x$nsim, tu[["Ne"]], tu[["ngen"]], tu[["m"]], tu[["gst_null"]], tu[["gst_target"]], tu[["hs_null"]], tu[["hs_observed"]]))
+  ne <- if (is.null(x$strata)) tu[["Ne"]] else x$strata$Ne
+  ne_txt <- if (length(unique(ne)) == 1L) sprintf("Ne = %g", ne[1]) else
+    sprintf("Ne = %g-%g (mean %.4g)", min(ne), max(ne), mean(ne))
+  cat(sprintf("  null: %d data sets; Wright-Fisher, %s, %g generations, m = %.4g; Gst %.3f (target %.3f); Hs %.3f (observed %.3f)\n",
+              x$nsim, ne_txt, tu[["ngen"]], tu[["m"]], tu[["gst_null"]], tu[["gst_target"]], tu[["hs_null"]], tu[["hs_observed"]]))
+  if (!is.null(x$strata) && length(unique(ne)) > 1L && sum(is.finite(x$strata$hs_null)) > 2L)
+    cat(sprintf("  per-stratum Hs, observed vs null: r = %.2f\n",
+                stats::cor(x$strata$hs_observed, x$strata$hs_null, use = "complete.obs")))
   cat(sprintf("  null graphs fragmented: %.0f%%; rule dR2 > 0 fires in %.1f%% of null graphs\n",
               100 * mean(x$null$n_comp > 1, na.rm = TRUE), 100 * x$fpr_rule))
   cat(sprintf("\n  Directional isolation: observed dR2 = %.4f; cutoff (%g%%) = %.4f [connected null graphs: %.4f]; one-sided p = %.4f\n",
               o[["dR2"]], 100 * (1 - x$alpha), x$cutoff[["all"]], x$cutoff[["connected"]], x$p.value[["dR2"]]))
-  cat(sprintf("  Source-sink gradient: observed r(S, x) = %.3f; design-null two-sided p = %.4f (degree share %.2f)\n\n",
-              o[["r_S"]], x$p.value[["r_S"]], o[["degree_share"]]))
+  cat(sprintf("  Source-sink gradient: observed r(S, x) = %.3f; design-null two-sided p = %.4f\n",
+              o[["r_S"]], x$p.value[["r_S"]]))
+  if (!is.null(x$structure)) {
+    cat(sprintf("  Graph structure (percentile in null): degree share %.2f (%.1f%%); cor(S, S0) %.2f (%.1f%%); var(degree) %.2f (%.1f%%)\n\n",
+                o[["degree_share"]], 100 * x$structure[["degree_share"]], o[["cor_S_S0"]], 100 * x$structure[["cor_S_S0"]],
+                o[["var_degree"]], 100 * x$structure[["var_degree"]]))
+  } else cat("\n")
   invisible(x)
 }
 
@@ -216,11 +300,37 @@ print.popgraph_null <- function(x, ...) {
                  error = function(e) NULL)
   sc <- tryCatch(source_sink_scores(g, gamma), error = function(e) NULL)
   r <- if (is.null(sc)) NA_real_ else suppressWarnings(stats::cor(.merge_ties(sc$S), axis[sc$Stratum], method = "spearman"))
+  k <- igraph::degree(g)
   c(dR2 = if (is.null(ib)) NA_real_ else unname(ib$statistic),
     R2_cGD = if (is.null(ib)) NA_real_ else unname(ib$estimate[["R2 cGD"]]),
     slope_ratio = if (is.null(ib)) NA_real_ else unname(ib$estimate[["slope ratio"]]),
     r_S = r, degree_share = if (is.null(sc)) NA_real_ else attr(sc, "degree_share"),
-    n_comp = igraph::components(g)$no)
+    n_comp = igraph::components(g)$no,
+    cor_S_S0 = if (is.null(sc)) NA_real_ else attr(sc, "cor_S_S0"),
+    var_degree = if (length(k) > 1L) stats::var(k) else NA_real_,
+    max_mean_degree = if (length(k) && mean(k) > 0) max(k) / mean(k) else NA_real_)
+}
+
+# Ne: one value, or one per stratum (named by stratum, or unnamed in stratum order);
+# returned named by stratum, rounded to whole individuals (2 Ne gene copies are binomial sizes)
+.pgn_check_Ne <- function(Ne, strata) {
+  K <- length(strata)
+  if (!is.numeric(Ne) || !length(Ne) || anyNA(Ne) || any(!is.finite(Ne)) || any(Ne <= 0))
+    stop("'Ne' must be positive and finite")
+  if (length(Ne) == 1L) Ne <- rep(Ne, K)
+  else if (!is.null(names(Ne))) {
+    if (!all(strata %in% names(Ne))) stop("'Ne' must be named by every stratum (or have one value per stratum)")
+    Ne <- Ne[strata]
+  } else if (length(Ne) != K) stop(sprintf("'Ne' must have length 1 or %d (one per stratum)", K))
+  stats::setNames(pmax(1, round(as.numeric(Ne))), strata)
+}
+
+# Per-stratum unbiased Hs averaged over loci, from per-locus stratum frequencies (.pgn_freqs)
+.pgn_site_hs <- function(fr) {
+  K <- nrow(fr[[1]]$p)
+  he <- vapply(fr, function(f) (2 * f$n / pmax(2 * f$n - 1, 1)) * (1 - rowSums(f$p^2)), numeric(K))
+  he <- matrix(he, nrow = K)
+  stats::setNames(rowMeans(he, na.rm = TRUE), rownames(fr[[1]]$p))
 }
 
 # Stratum allele frequencies from a dosage matrix (rows individuals, NA rows missing)

@@ -1,0 +1,32 @@
+<!-- Shared "Without Pipes" section of the genetic gravity walkthrough (see
+     genetic_gravity_body.Rmd).  The vignette includes it after the body; the
+     website includes it at the end of docs/genetic-gravity.qmd and follows it
+     with the case-study calls. -->
+
+## Without Pipes
+
+The pipelines above are the recommended style.  Every call also works with its
+options passed as arguments, without dplyr; these are the equivalents of the
+steps above, shown here but not run:
+
+```{r no-pipes}
+#| eval: false
+graph <- popgraph( to_mv( gravity ), groups = gravity$Population )
+deme  <- as.integer( sub( "Pop", "", igraph::V( graph )$name ) )
+names( deme ) <- igraph::V( graph )$name
+
+W      <- neighbourhood_weights( graph, gamma = 0.5 )
+edges  <- gravity_edges( graph, gamma = 0.5, x = deme )
+scores <- source_sink_scores( graph, gamma = 0.5, x = deme )
+
+source_sink_test( graph, x = deme, gamma = 0.5, nperm = 999 )
+ibgd( graph, x = deme, mode = "cGD", nperm = 999 )
+ibgd( graph, x = deme, mode = "dcGD", gamma = 0.5 )
+
+P     <- genetic_distance( gravity,
+                           stratum = "Population",
+                           mode = "dcGD",
+                           gamma = 0.5 )
+field <- gravity_field( graph, gamma = 0.5 )
+plot( field, layout = "kk", surface = "interpolate" )
+```

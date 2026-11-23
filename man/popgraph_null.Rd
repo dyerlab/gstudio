@@ -15,7 +15,7 @@ popgraph_null(
   nsim = 999L,
   gamma = 0.5,
   Ne = 100L,
-  ngen = 4L * Ne,
+  ngen = 4L * mean(Ne),
   migration = NULL,
   kernel_distance = NULL,
   phi = NULL,
@@ -52,9 +52,14 @@ level to the null graphs.}
 
 \item{gamma}{Bandwidth multiplier (default 0.5).}
 
-\item{Ne}{Effective size of each stratum in the simulation (default 100).}
+\item{Ne}{Effective size of each stratum in the simulation (default 100):
+one value for every stratum, or one per stratum, named by stratum (any
+order) or unnamed in the order of the sorted stratum levels.  Values are
+rounded to whole individuals (at least 1).  See \emph{Strata that differ
+in diversity}.}
 
-\item{ngen}{Generations simulated before sampling (default \code{4 * Ne}).}
+\item{ngen}{Generations simulated before sampling (default
+\code{4 * mean(Ne)}, rounded).}
 
 \item{migration}{Optional symmetric stratum-by-stratum migration matrix
 (rows sum to one), used as is in place of the tuned kernel.}
@@ -76,16 +81,34 @@ default 1).}
 \item{...}{Ignored.}
 }
 \value{
-An object of class \code{popgraph_null}: \code{observed} (the
-  statistics of the observed graph), \code{null} (one row per null data set:
-  \code{dR2}, \code{slope_ratio}, \code{r_S}, \code{degree_share},
-  \code{n_comp}, \code{gst}, \code{hs}), \code{cutoff} (the \eqn{1-\alpha}
-  quantile of null \eqn{\Delta R^2}, floored at 0, over all null graphs and
-  over connected ones), \code{p.value} (one-sided for \eqn{\Delta R^2},
-  two-sided for \eqn{r(S, x)}), \code{fpr_rule} (the rate at which
-  \eqn{\Delta R^2 > 0} in the null), and \code{tuning} (\eqn{m}, the target
-  and achieved \eqn{G_{ST}}, observed and simulated \eqn{H_S}, \code{Ne},
-  \code{ngen}).
+An object of class \code{popgraph_null}:
+  \describe{
+    \item{\code{observed}}{The statistics of the observed graph, named as
+      the columns of \code{null} up to \code{max_mean_degree}.}
+    \item{\code{null}}{One row per null data set: \code{dR2},
+      \code{R2_cGD}, \code{slope_ratio}, \code{r_S}, \code{degree_share},
+      \code{n_comp}, \code{cor_S_S0}, \code{var_degree},
+      \code{max_mean_degree}, \code{gst}, \code{hs}.}
+    \item{\code{cutoff}}{The \eqn{1-\alpha} quantile of null
+      \eqn{\Delta R^2}, floored at 0, over all null graphs (\code{all})
+      and over connected ones (\code{connected}).}
+    \item{\code{p.value}}{One-sided for \eqn{\Delta R^2} (\code{dR2}),
+      two-sided for \eqn{r(S, x)} (\code{r_S}).}
+    \item{\code{fpr_rule}}{The rate at which \eqn{\Delta R^2 > 0} in the
+      null.}
+    \item{\code{structure}}{The percentile (fraction of null graphs at or
+      below the observed value) of the observed \code{degree_share},
+      \code{cor_S_S0}, \code{var_degree} and \code{max_mean_degree}.}
+    \item{\code{strata}}{One row per stratum: \code{Stratum}, \code{n}
+      (genotyped individuals), \code{Ne}, \code{hs_observed} and
+      \code{hs_null} (mean over the null data sets of the sampled
+      \eqn{H_S}, unbiased and averaged over loci).}
+    \item{\code{tuning}}{\eqn{m}, the kernel scale, the target and
+      achieved \eqn{G_{ST}}, observed and simulated \eqn{H_S}, the mean
+      \code{Ne} and \code{ngen}.}
+    \item{\code{design}, \code{alpha}, \code{gamma}, \code{nsim}}{The
+      design (strata, individuals per stratum, loci, alleles) and settings.}
+  }
 }
 \description{
 The false-positive rate of the directional isolation comparison
@@ -129,6 +152,30 @@ default) and to \code{Ne} and \code{ngen}, which together set how much
 diversity is lost before sampling; the result reports the simulated and
 observed within-stratum diversity so the match can be judged, and the
 cutoff should be checked for sensitivity to \code{Ne} and \code{ngen}.
+
+\strong{Strata that differ in diversity.}  By default every stratum has the
+same \code{Ne}, so the null strata differ in diversity only by chance.  Real
+strata often do not: a gradient in within-stratum diversity, such as a decline
+away from a refugium, is itself a common signature of range expansion.
+Supplying one \code{Ne} per stratum lets the null reproduce such differences
+through drift alone.  Migration stays symmetric, so the null still contains
+no net flow; it asks whether diversity differences, without directional gene
+flow, could produce the observed statistics.  The \code{strata} element of
+the result compares the observed and simulated \eqn{H_S} of every stratum so
+that the chosen \code{Ne} can be judged; \eqn{m} is tuned to the observed
+\eqn{G_{ST}} as before.  Because migration is retuned and evens out the
+diversity of neighbouring strata, matching every stratum exactly is rarely
+possible; a smooth profile (e.g. \code{Ne} log-linear along \code{axis})
+fitted to the observed trend is usually the better choice.
+
+\strong{Graph structure.}  Besides the two test statistics, each null graph
+records how strongly degree shapes it: the degree share, \eqn{cor(S, S^0)}
+(the correlation of the source--sink score with its degree-only value), the
+variance of degree and the ratio of maximum to mean degree.  The
+\code{structure} element gives the percentile of each observed value in its
+null.  An observed graph far in the upper tail is more hub-like than
+symmetric exchange produces for this design, so its source--sink scores
+largely restate which strata are hubs.
 }
 \examples{
 \donttest{
@@ -139,6 +186,14 @@ d <- droplevels(d)
 lat <- tapply(d$Latitude, d$Population, mean)
 nl <- popgraph_null(d, axis = -lat, nsim = 19, ngen = 100)
 nl
+nl$structure
+
+# Effective sizes that decline southward (a diversity gradient), mean 100;
+# compare observed and simulated Hs per stratum
+z <- as.vector(scale(lat))
+ne <- setNames(100 * exp(0.5 * z) / mean(exp(0.5 * z)), names(lat))
+nl2 <- popgraph_null(d, axis = -lat, Ne = ne, nsim = 19, ngen = 100)
+nl2$strata
 }
 }
 \seealso{

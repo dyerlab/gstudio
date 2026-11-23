@@ -24,8 +24,8 @@ Description: Provides classes and functions for the spatial analysis of
     'ggplot2', and interactive 'leaflet' maps.
 URL: https://github.com/dyerlab/gstudio, https://dyerlab.github.io/gstudio/
 BugReports: https://github.com/dyerlab/gstudio/issues
-Version: 1.15.8
-Date: 2026-11-22
+Version: 1.16.0
+Date: 2026-11-23
 LazyLoad: true
 Encoding: UTF-8
 Depends:

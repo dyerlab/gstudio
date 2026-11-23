@@ -4,7 +4,7 @@ This package was archived on CRAN on 2015-06-09 (last CRAN version 1.3). It has
 since been completely rewritten and is actively maintained; all check errors
 that led to archival have been resolved.
 
-This submission (v1.15.8) consolidates the interface:
+This submission (v1.16.0) consolidates the interface:
 
 * Analyses go through four gateway functions (`genetic_diversity()`,
   `genetic_structure()`, `genetic_distance()`, `genetic_relatedness()`); the
