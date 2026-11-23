@@ -1,6 +1,6 @@
 #' This function takes a data set and a group set and returns centroid variances
 #' 
-#' This is a convience function for a reduce and distance operation based upon
+#' This is a convenience function for a reduce and distance operation based upon
 #'  multivariate predictor variables.
 #' @param x The NxP matrix of raw data.
 #' @param grouping The Nx1 vector of grouping factors.

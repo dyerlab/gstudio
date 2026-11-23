@@ -52,10 +52,12 @@
 #' @examples
 #' \donttest{
 #' if (requireNamespace("gifski", quietly = TRUE)) {
-#'   data(lopho)
-#'   data(upiga)
-#'   graphs <- list(Lophocereus = lopho, Upiga = upiga)
-#'   out <- file.path(tempdir(), "baja.gif")
+#'   # Population Graphs of the beetles from two halves of the loci
+#'   data(arapat)
+#'   graphs <- list(
+#'     `LTRS-EF`   = population_graph(arapat[, c("Population", "LTRS", "WNT", "EN", "EF")]),
+#'     `ZMP-MP20` = population_graph(arapat[, c("Population", "ZMP", "AML", "ATPS", "MP20")]))
+#'   out <- file.path(tempdir(), "arapat.gif")
 #'   animate_popgraphs(graphs, file = out, layout = "kk", delay = 2)
 #'
 #'   # Style the frames yourself with ggraph

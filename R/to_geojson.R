@@ -1,6 +1,6 @@
 #' Converts popgraph to geojson for import into ArcGIS Online
 #' 
-#' This is a convienence function to convert a population graph
+#' This is a convenience function to convert a population graph
 #'   object into GeoJSON format for inclusion into ArcGIS Online
 #' @param graph A popgraph object.
 #' @param file The file for saving the GeoJSON

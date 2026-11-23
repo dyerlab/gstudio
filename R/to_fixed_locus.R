@@ -1,4 +1,4 @@
-#' returns string representation of locus for output like genepop/heirfstat
+#' returns string representation of locus for output like genepop/hierfstat
 #' 
 #' This function 
 #' @param x An object of type \code{locus}.

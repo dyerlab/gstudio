@@ -4,20 +4,20 @@
 \alias{permute_popgraph}
 \title{Bootstraps individuals to see stability of graph topology.}
 \usage{
-permute_popgraph(data, groups, nboot = 50, ...)
+permute_popgraph(data, groups, nboot = 999, ...)
 }
 \arguments{
 \item{data}{The raw multivariate data as submitted to \code{popgraph}}
 
 \item{groups}{The grouping of the data into nodes as submitted to \code{popgraph}}
 
-\item{nboot}{The nubmer of times to bootstrap the individuals per group (default=50)}
+\item{nboot}{The number of times to bootstrap the individuals per group (default 999)}
 
 \item{...}{Other arguments to be passed to \code{popgraph}}
 }
 \value{
-A weighted graph where edge weights represent the proportion of times the 
- edge was found in the perumuted data sets.
+A weighted graph where edge weights represent the proportion of times the
+ edge was found in the bootstrapped data sets.
 }
 \description{
 This function uses a permutation test to look at edge stability.  What we 

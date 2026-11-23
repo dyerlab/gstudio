@@ -9,7 +9,7 @@ mate(mom, dad = NULL, N = 1)
 \arguments{
 \item{mom}{This is the 'maternal' individual in that all the
 metadata in the \code{data.frame} that describes this individual 
-will be transfered to the offspring.}
+will be transferred to the offspring.}
 
 \item{dad}{This is the 'paternal' individual and will contribute only
 half of its genetic compliment to the offspring.}

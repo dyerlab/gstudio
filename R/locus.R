@@ -1,7 +1,7 @@
 #' General constructor for locus object
 #' 
 #' This function creates an object of type \code{locus}, a fundamental
-#'  type in the gstudio package.  Therea re several kinds of loci that
+#'  type in the gstudio package.  There are several kinds of loci that
 #'  can be created.
 #' @param x The data to be turned into a \code{locus} object
 #' @param type An indication of what kind of data it is.  By default this
@@ -134,7 +134,7 @@ as.list.locus <- function( x, ... ) {
   ret
 }
 
-#' Concatinate \code{locus} objects
+#' Concatenate \code{locus} objects
 #' 
 #' An overload of the \code{c} function for \code{locus} objects.
 #' @param \dots The \code{locus} objects to be concatenated.
@@ -315,7 +315,7 @@ rep.locus <- function( x, times,... ){
 #' An overload of the \code{-} operator for \code{locus} objects that
 #'  removes the contribution of a parental genotype to a offspring 
 #'  genotype (if possible).
-#' @param e1 A \code{locus} object reprenting the offspring.
+#' @param e1 A \code{locus} object representing the offspring.
 #' @param e2 A \code{locus} object representing the parent.
 #' @return A new \code{locus} object that represents the genotypes
 #'  left over after removing the parental part (if possible).

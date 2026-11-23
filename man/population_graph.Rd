@@ -2,7 +2,7 @@
 % Please edit documentation in R/population_graph.R
 \name{population_graph}
 \alias{population_graph}
-\title{Convience function to create population graph object from genotypes.}
+\title{Convenience function to create population graph object from genotypes.}
 \usage{
 population_graph(
   x,
@@ -35,7 +35,7 @@ categorical data use \code{\link{decorate_graph}}.}
 A \code{popgraph} object (an \code{igraph} graph).
 }
 \description{
-This function is a convience function that wraps together the subset_loci() (potentially)
+This function is a convenience function that wraps together the subset_loci() (potentially)
   function with the popgraph() function (and translations from genotypes to
   multivariate data).
 }

@@ -141,7 +141,8 @@ print.popgraph_diagnostics <- function(x, ...) {
               d[["strata"]], d[["individuals"]], d[["loci"]]))
   w1 <- max(nchar(ck$check)); w2 <- max(nchar(ck$value))
   thr <- ifelse(is.na(ck$threshold), "", paste0("(", ck$threshold, ")")); w3 <- max(nchar(thr))
-  mark <- ifelse(is.na(ck$status), " ", ifelse(ck$status == "warn", "!", "✓"))
+  tick <- if (isTRUE(l10n_info()[["UTF-8"]])) "\u2713" else "+"
+  mark <- ifelse(is.na(ck$status), " ", ifelse(ck$status == "warn", "!", tick))
   for (sec in unique(ck$section)) {
     cat("\n", sec, "\n", sep = "")
     for (i in which(ck$section == sec)) {

@@ -9,7 +9,7 @@ subsample_loci(x, numLoci)
 \arguments{
 \item{x}{A \code{data.frame} that has \code{Locus} objects in it.}
 
-\item{numLoci}{The number of loci you wnat to sample (must be \code{length(column_class("locus"))})}
+\item{numLoci}{The number of loci you want to sample (must be \code{length(column_class("locus"))})}
 }
 \value{
 A new \code{data.frame} with a subset of loci.

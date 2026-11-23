@@ -4,7 +4,7 @@
 #'  produce a set of offspring for the individuals passed.
 #' @param mom  This is the 'maternal' individual in that all the
 #'  metadata in the \code{data.frame} that describes this individual 
-#'  will be transfered to the offspring.  
+#'  will be transferred to the offspring.  
 #' @param dad This is the 'paternal' individual and will contribute only
 #'  half of its genetic compliment to the offspring.
 #' @param N The number of offspring to produce.

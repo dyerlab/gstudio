@@ -1,6 +1,6 @@
 #' Find columns of data in a data.frame for a type of class
 #' 
-#' This convienence function finds the data of a specified
+#' This convenience function finds the data of a specified
 #'  type in the passed \code{data.frame}.
 #' @param x An object of \code{data.frame} type.
 #' @param class The type of class to search for.  If this is omitted then
@@ -11,7 +11,7 @@
 #'      \item{label}{The name of the column label with the specified class.}
 #'      \item{index}{The numerical index of the column with specified class.}
 #'    }
-#' @return A list of labels or indicies indicating where
+#' @return A list of labels or indices indicating where
 #'  columns of the queried type exist or a list of all column classes.  If no
 #'  column has the queried class, a zero-length vector is returned
 #'  (\code{character(0)} for labels, \code{integer(0)} for indices).

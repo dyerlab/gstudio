@@ -22,3 +22,6 @@ _quarto.yml
 ^gravity_significance_tests\.md$
 ^vignettes/.*_files$
 ^data-raw$
+^vignettes/.*_cache$
+^Rplots\.pdf$
+^\.github$

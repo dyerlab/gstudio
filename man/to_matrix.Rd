@@ -18,7 +18,7 @@ available:
       values}
   }}
 
-\item{...}{Optional arguemnts passed on to the distance functions.}
+\item{...}{Optional arguments passed on to the distance functions.}
 }
 \value{
 A matrix (KxK) in size (where K is the number of nodes)

@@ -1,6 +1,6 @@
 #' This function takes a data set and a group set and returns centroid distances
 #' 
-#' This is a convience function for a reduce and distance operation based upon
+#' This is a convenience function for a reduce and distance operation based upon
 #'  multivariate predictor variables.
 #' @param x The NxP matrix of raw data.
 #' @param grouping The Nx1 vector of grouping factors.
@@ -19,7 +19,7 @@ centroid_distance <- function( x, grouping ){
   if( length(grouping) != N )
     stop("Your grouping and predictor variables should have the same number of rows....  Come on now.")
   
-  ret <- matrix(unlist(by( x, grouping, colMeans)),nrow=length(levels(grouping)), byrow=T)
+  ret <- matrix(unlist(by( x, grouping, colMeans)),nrow=length(levels(grouping)), byrow=TRUE)
   rownames( ret ) <- levels( grouping )
   return( ret )
 } 

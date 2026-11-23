@@ -2,7 +2,7 @@
 #' 
 #' This function takes a population graph that has been 'decorated' with
 #'  sufficient spatial data to make a html file that uses the D3 visualization
-#'  javascript mateirals to view it interactively.
+#'  javascript materials to view it interactively.
 #' @param graph A \code{popgraph} object.
 #' @param file The path to the html file to be saved.  If not given then the html
 #'  text is returned by the function.
@@ -10,10 +10,10 @@
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
 #' @examples
-#' \dontrun{
-#'   data(lopho)
-#'   to_html(lopho, file = "lopho.html")
-#' }
+#' data(lopho)
+#' file <- tempfile(fileext = ".html")
+#' to_html(lopho, file = file)
+#' unlink(file)
 to_html <- function( graph, file ) {
   if( !inherits( graph, "popgraph") )
     stop("Cannot save a html file from a popgraph that is not made from a popgraph...")

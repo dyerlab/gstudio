@@ -13,7 +13,7 @@
 A logical flag indicating if \code{x} is NA
 }
 \description{
-Convienence function to determine if the \code{locus} object is NA
+Convenience function to determine if the \code{locus} object is NA
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

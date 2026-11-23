@@ -2,7 +2,7 @@
 % Please edit documentation in R/locus.R
 \name{c.locus}
 \alias{c.locus}
-\title{Concatinate \code{locus} objects}
+\title{Concatenate \code{locus} objects}
 \usage{
 \method{c}{locus}(..., recursive = FALSE)
 }

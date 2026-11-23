@@ -1,6 +1,6 @@
 #' Returns the max digits of all loci passed.
 #' 
-#' This is a convienence function that returns the number of digits for a locus
+#' This is a convenience function that returns the number of digits for a locus
 #'  or set of loci.
 #' @param x A \code{data.frame} or vector of \code{locus} objects
 #' @return An integer depicting the maximum number of digits in alleles at the 

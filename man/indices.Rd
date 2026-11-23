@@ -13,7 +13,7 @@ indices(seq, only.unique = TRUE)
 both [i,j] and [j,i] values}
 }
 \value{
-A matrix of indicies
+A matrix of indices
 }
 \description{
 This is used in conjunction with apply to get around

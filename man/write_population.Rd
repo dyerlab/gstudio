@@ -42,10 +42,10 @@ This is a basic output file formatter for saving files necessary for saving
  output in textual formats.
 }
 \examples{
-\dontrun{
-  data(arapat)
-  write_population(arapat, file = "arapat.txt", mode = "text")
-}
+data(arapat)
+file <- tempfile(fileext = ".txt")
+write_population(arapat, file = file, mode = "text")
+unlink(file)
 }
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>

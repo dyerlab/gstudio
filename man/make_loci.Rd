@@ -12,7 +12,7 @@ the names of the alleles to be used and the Frequency one gives their occurrence
 
 \item{N}{The number of loci to return (default=20)}
 
-\item{F}{A numeric value for the inbeeding statistic (default=0)}
+\item{F}{A numeric value for the inbreeding statistic (default=0)}
 }
 \value{
 A vector of \code{locus} objects.

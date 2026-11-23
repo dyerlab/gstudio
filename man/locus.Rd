@@ -30,7 +30,7 @@ Either a single or vector of objects of type \code{locus}.
 }
 \description{
 This function creates an object of type \code{locus}, a fundamental
- type in the gstudio package.  Therea re several kinds of loci that
+ type in the gstudio package.  There are several kinds of loci that
  can be created.
 }
 \examples{

@@ -14,7 +14,7 @@ An integer depicting the maximum number of digits in alleles at the
  locus.
 }
 \description{
-This is a convienence function that returns the number of digits for a locus
+This is a convenience function that returns the number of digits for a locus
  or set of loci.
 }
 \examples{

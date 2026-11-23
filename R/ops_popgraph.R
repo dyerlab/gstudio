@@ -2,10 +2,10 @@
 #' 
 #' An overload of the \code{-} operator for \code{popgraph} objects that
 #'  removes the edges in the first one that are in the second one.
-#' @param e1 A \code{popgraph} object reprenting the offspring.
-#' @param e2 A \code{popgraph} object representing the parent.
-#' @return A new \code{popgraph} object that represents the genotypes
-#'  left over after removing the parental part (if possible).
+#' @param e1 A \code{popgraph} object.
+#' @param e2 A \code{popgraph} object whose edges are removed from \code{e1}.
+#' @return A new \code{popgraph} object with the edges of \code{e1} that
+#'  are not in \code{e2}.
 #' @rdname popgraph-operator-minus
 #' @method - popgraph
 #' @importFrom igraph V

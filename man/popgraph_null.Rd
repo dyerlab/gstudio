@@ -12,7 +12,7 @@ popgraph_null(
   distance = NULL,
   forward = NULL,
   graph = NULL,
-  nsim = 199L,
+  nsim = 999L,
   gamma = 0.5,
   Ne = 100L,
   ngen = 4L * Ne,
@@ -48,7 +48,7 @@ component of a larger graph; its nodes must be the strata of \code{x}.  A
 graph made with \code{population_graph(x, alpha = )} passes its edge-retention
 level to the null graphs.}
 
-\item{nsim}{Number of null data sets (default 199).}
+\item{nsim}{Number of null data sets (default 999).}
 
 \item{gamma}{Bandwidth multiplier (default 0.5).}
 

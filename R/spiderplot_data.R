@@ -1,6 +1,6 @@
 #' Translate paternity output into segments for geom_segments
 #' 
-#' This is a convienence function that takes the output of a \code{paternity()} 
+#' This is a convenience function that takes the output of a \code{paternity()} 
 #'  function and the raw \code{data.frame} with the coordinates and turns it
 #'  into a \code{data.frame} that can be used in \code{geom_segments}.
 #' @param pat The output from the \code{paterntiy()} function.
@@ -13,7 +13,7 @@
 #'  in the \code{df} object (default="Longitude")
 #' @param latitude The label for the y-coordinate for the adults as it is found
 #'  in the \code{df} object (default="Latitude")
-#' @return A \code{data.frame} with the segments correctly formated for 
+#' @return A \code{data.frame} with the segments correctly formatted for 
 #'  \code{geom_segment}.
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export

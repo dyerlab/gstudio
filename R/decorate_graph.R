@@ -5,7 +5,7 @@
 #' @param graph An object of type \code{igraph} to populate
 #' @param data An object of type \code{data.frame} that has a Node column 
 #'  that is the same as the \code{V(graph)$name} values.
-#' @param stratum The column name of node lables to match up with graph.stratum
+#' @param stratum The column name of node labels to match up with graph.stratum
 #'  (default 'Population') to be matched with V(graph)$name attribute
 #' @return A populated igraph object with as much of the metadata in 
 #'  the data.frame as possible stitched into the \code{igraph} object

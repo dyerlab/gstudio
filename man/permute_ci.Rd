@@ -8,7 +8,7 @@ permute_ci(
   x,
   stratum = NULL,
   allele_perm = TRUE,
-  nperm = 99,
+  nperm = 999,
   FUN = NULL,
   replace = FALSE,
   ...
@@ -23,7 +23,7 @@ strata and gives the results to the function.}
 \item{allele_perm}{A flag (default=TRUE) to permute alleles in the
 creating the new data set.}
 
-\item{nperm}{The number of perms to use (default 99).}
+\item{nperm}{The number of perms to use (default 999).}
 
 \item{FUN}{The function to pass the permuted data to.  It is called on a
 \code{locus} vector (and the permuted strata, if given) and must return a

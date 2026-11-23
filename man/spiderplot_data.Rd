@@ -31,11 +31,11 @@ in the \code{df} object (default="Longitude")}
 in the \code{df} object (default="Latitude")}
 }
 \value{
-A \code{data.frame} with the segments correctly formated for 
+A \code{data.frame} with the segments correctly formatted for 
  \code{geom_segment}.
 }
 \description{
-This is a convienence function that takes the output of a \code{paternity()} 
+This is a convenience function that takes the output of a \code{paternity()} 
  function and the raw \code{data.frame} with the coordinates and turns it
  into a \code{data.frame} that can be used in \code{geom_segments}.
 }

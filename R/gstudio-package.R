@@ -158,7 +158,7 @@ NULL
 #' Metadata for Baja Populations.
 #'
 #' This is metadata associated with the sampling locations
-#'  for the Lophocereus and Upiga data sets.
+#'  for the Lophocereus data set (\code{lopho}).
 #' @name baja
 #' @docType data
 #' @keywords data
@@ -187,14 +187,6 @@ NULL
 #' @keywords data
 NULL
 
-#' Upiga population graph
-#'
-#' This is the population graph for the Upiga data
-#'  that is currently unpublished.
-#' @name upiga
-#' @docType data
-#' @keywords data
-NULL
 
 
 
@@ -253,7 +245,7 @@ NULL
 #'  & Fire} (with E.M. Garcia Jr. and L. Antonsson; Bantam, 2014) and
 #'  \emph{Fire & Blood} (Bantam, 2018).  Parent links were cross-checked
 #'  against the father (P22) and mother (P25) statements in Wikidata
-#'  (\url{https://www.wikidata.org}, CC0).  Built by
+#'  (\url{https://www.wikidata.org/wiki/Wikidata:Main_Page}, CC0).  Built by
 #'  \code{data-raw/targaryen.R} in the package sources.
 #'
 #'  This is an unofficial compilation for teaching. It is not affiliated with

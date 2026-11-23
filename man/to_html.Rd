@@ -18,13 +18,13 @@ The text of the html file to be saved or viewed in the appropriate browser.
 \description{
 This function takes a population graph that has been 'decorated' with
  sufficient spatial data to make a html file that uses the D3 visualization
- javascript mateirals to view it interactively.
+ javascript materials to view it interactively.
 }
 \examples{
-\dontrun{
-  data(lopho)
-  to_html(lopho, file = "lopho.html")
-}
+data(lopho)
+file <- tempfile(fileext = ".html")
+to_html(lopho, file = file)
+unlink(file)
 }
 \author{
 Rodney J. Dyer <rjdyer@vcu.edu>

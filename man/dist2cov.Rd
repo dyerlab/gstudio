@@ -2,7 +2,7 @@
 % Please edit documentation in R/dist2cov.R
 \name{dist2cov}
 \alias{dist2cov}
-\title{Converts distance matrix to covarance one.}
+\title{Converts distance matrix to covariance one.}
 \usage{
 dist2cov(D)
 }

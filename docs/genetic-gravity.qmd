@@ -6,131 +6,271 @@
 
 {{< include ../vignettes/children/genetic_gravity_body.Rmd >}}
 
-## Empirical data: *Araptus attenuatus*
+## Case study: *Araptus attenuatus*
 
-The same analysis applies directly to field data.  Here the Population Graph
-is built from the `arapat` genotypes with `population_graph()`, and the
-populations' geographic centroids give both the map layout and a covariate to
-test against: latitude along the Baja California peninsula.
+The same analysis applies to field data, with two additions that real
+samples need: tests are run within each connected component, against a
+hypothesis of direction stated in advance, and the directional isolation
+comparison is calibrated for the sampling design.
+
+Garrick et al. (2013) inferred two range expansions of the peninsular lineage
+of the bark beetle *Araptus attenuatus* out of a Pleistocene refugium near
+27.5°N on the Baja California peninsula: a central group of populations
+expanding south and a northern group expanding north.  If so, populations near
+the refugium should read as sources and those farther from it as sinks, and
+genetic distance should accumulate more slowly moving away from the refugium
+than toward it.
+
+### One graph, several components
+
+The Population Graph is estimated from all peninsular sites with at least four
+beetles; `decorate = TRUE` adds each site's mean coordinates to its node.
 
 ```{r arapat-graph}
+#| cache: true
+#| warning: false
 data( arapat )
 
-beetles <- arapat |>
-  population_graph()
+peninsula <- arapat |>
+  filter( Species == "Peninsula" ) |>
+  group_by( Population ) |>
+  filter( n() >= 4 ) |>
+  ungroup() |>
+  droplevels()
 
-coords <- arapat |>
-  strata_coordinates()
+beetles <- peninsula |>
+  population_graph( decorate = TRUE )
 
-lat <- coords |>
-  pull( Latitude, name = Stratum )
+beetles
+
+igraph::components( beetles )$csize
 ```
 
-Passing the centroids as `layout` draws the gravity field on geographic
-coordinates.  Sampling locations are clustered, so the surface is extended with
-`mask_dist` (by default it reaches 1.2 times the median nearest-neighbour
-distance between populations).  Comparing the two bandwidths shows how much of
-the local-mean picture is degree:
+The components recapitulate the regional populations of Garrick et al.
+(2013): a central group, a northern group, and two southern dyads, which carry
+no directional information.  At the degree-neutral bandwidth, the gravity field
+drawn on the sites' coordinates shows the source-sink surface of each
+component separately; because $S$ sums to zero within a component, colours are
+comparable only within one.  A grey outline of the land from Natural Earth
+(`rnaturalearth`), passed as `base =`, goes underneath, and `clip_to_base`
+keeps the surface on land; the Visualization
+chapter (@sec-visualization) builds a fuller base map with labels and a north
+arrow.
 
 ```{r arapat-field}
-#| fig-width: 9
-#| fig-height: 5
-both <- beetles |>
-  gravity_field( gamma = c( 1, 0.5 ) )
+#| fig-width: 7
+#| fig-height: 7
+#| message: false
+coords <- peninsula |>
+  strata_coordinates()
 
-both |>
-  as.data.frame( what = "diagnostics" )
+land <- rnaturalearth::ne_countries( country = "Mexico",
+                                     scale = "medium",
+                                     returnclass = "sf" )
 
-both |>
-  plot( layout = coords, mask_dist = 0.6 )
-```
-
-Both tests take latitude as the hypothesized axis:
-
-```{r arapat-tests}
-set.seed( 1 )
-
-beetles |>
-  source_sink_test( x = lat, nperm = 499 )
-
-beetles |>
-  ibgd( x = lat )
+land_map <- ggplot() +
+  geom_sf( data = land,
+           fill = "grey92",
+           colour = "grey55",
+           linewidth = 0.3 ) +
+  coord_sf( xlim = c( -115.5, -108.5 ),
+            ylim = c( 22.5, 30 ) ) +
+  labs( x = NULL, y = NULL ) +
+  theme_minimal()
 
 beetles |>
-  ibgd( x = lat, mode = "dcGD" )
+  gravity_field() |>
+  plot( layout = coords,
+        base = land_map,
+        clip_to_base = TRUE,
+        mask_dist = 0.6 )
 ```
 
-Without pipes, the same steps are:
+### The axis: distance from the refugium
 
-```{r arapat-no-pipes}
-#| eval: false
-beetles <- population_graph( arapat, stratum = "Population" )
-coords  <- strata_coordinates( arapat, stratum = "Population" )
-lat     <- setNames( coords$Latitude, coords$Stratum )
-plot( gravity_field( beetles, gamma = c( 1, 0.5 ) ),
-      layout = coords,
-      mask_dist = 0.6 )
-source_sink_test( beetles, x = lat, nperm = 499 )
-ibgd( beetles, x = lat, mode = "cGD" )
-ibgd( beetles, x = lat, mode = "dcGD" )
+Position along the peninsula is the first principal axis of the site
+coordinates (in km), and each site's distance from the refugium, $d_i$, is
+measured along it.  A pair of sites is *forward* when $j$ lies farther from the
+refugium than $i$.
+
+```{r arapat-axis}
+#| cache: true
+#| dependson: arapat-graph
+nodes <- igraph::V( beetles )$name
+lon   <- igraph::V( beetles )$Longitude
+lat   <- igraph::V( beetles )$Latitude
+xy    <- cbind( x = lon * 111.32 * cos( mean( lat ) * pi / 180 ),
+                y = lat * 110.57 )
+axis  <- prcomp( xy )
+v     <- axis$rotation[, 1] * sign( axis$rotation["y", 1] )
+along <- setNames( as.vector( sweep( xy, 2, axis$center ) %*% v ), nodes )
+refugium <- ( 27.5 * 110.57 - axis$center["y"] ) / v["y"]
+d        <- abs( along - refugium )
 ```
 
-Starting from the genotypes rather than a graph, `genetic_isolation()` builds
-the graph and runs the same tests, with the axis given as a column:
+### Testing each expansion within its component
 
-```{r arapat-isolation}
-#| eval: false
-genetic_isolation( arapat, mode = "IBGD", axis = "Latitude" )
-genetic_isolation( arapat, mode = "dcGD", axis = "Latitude" )
+A small helper runs both tests on one component: the source-sink gradient
+test with $d$ as the covariate, and the directional isolation comparison with
+separation $|d_i - d_j|$ and forward pairs moving away from the refugium.  The
+hypothesis predicts $r(S, d) < 0$ (sources near the refugium), $\Delta R^2 > 0$
+and a forward-to-reverse slope ratio below one.
+
+```{r arapat-tests-fn}
+#| cache: true
+#| dependson: [arapat-graph, arapat-axis]
+membership <- igraph::components( beetles )$membership
+
+component_of <- function( site ) {
+  same <- membership == membership[nodes == site]
+  igraph::induced_subgraph( beetles, nodes[same] )
+}
+
+test_expansion <- function( graph ) {
+  dk  <- d[igraph::V( graph )$name]
+  sep <- abs( outer( dk, dk, "-" ) )
+  fwd <- outer( dk, dk, function( di, dj ) dj > di )
+  list( gradient    = source_sink_test( graph, x = dk, nperm = 999 ),
+        isolation   = ibgd( graph, distance = sep, nperm = 999 ),
+        directional = ibgd( graph,
+                            mode = "dcGD",
+                            distance = sep,
+                            forward = fwd ) )
+}
 ```
 
-The two tests answer different questions.  Under strong drift the model
-comparison can prefer a directional fit by chance, so read it alongside the
-source-sink test.  Edge-level permutation tests of $\Delta$
-(`asymmetry_significance()` and its modes) are not recommended as tests of
-direction: under symmetric migration they are anti-conservative, or never
-reject.
+**Southward expansion (central component).**  Site `93` lies in the central
+group:
+
+```{r arapat-south}
+#| cache: true
+#| dependson: arapat-tests-fn
+set.seed( 2013 )
+central <- component_of( "93" )
+south   <- test_expansion( central )
+south
+```
+
+Symmetric isolation by graph distance is absent here, but the directional
+model recovers it: genetic distance accumulates moving north, toward the
+refugium, and not moving south, away from it, the signature of a southward
+expansion that averaging the two directions hides.  The source-sink scores
+decline away from the refugium as predicted, but the gradient test does not
+reject: the component is sparse, and its degree share is large (see the
+diagnostics below).
+
+**Northward expansion (northern component).**  Site `9` lies in the
+northern group:
+
+```{r arapat-north}
+#| cache: true
+#| dependson: arapat-tests-fn
+set.seed( 2013 )
+northern <- component_of( "9" )
+north    <- test_expansion( northern )
+north
+```
+
+Here symmetric isolation by distance is strong, and separate slopes do not
+improve on it: distance accumulates at about the same rate in both directions.
+With nine sites the source-sink test has little power, so this is weak
+evidence about direction either way.
 
 ## Is the design adequate? Calibrating the tests
 
 How often the directional tests point somewhere by chance depends on the
-sampling design: the number of strata, the individuals in each and the loci.
-`popgraph_diagnostics()` summarizes the design and flags the common problems
-(thin sampling within strata, a fragmented graph, a degree-driven source-sink
-score, few strata or loci):
+sampling design: the number of populations, the individuals in each, and the
+loci.  `popgraph_diagnostics()` summarizes the design of the central component
+and flags the common problems:
 
 ```{r arapat-diagnostics}
-dg <- popgraph_diagnostics( arapat )
+#| cache: true
+#| dependson: arapat-south
+central_sites <- igraph::V( central )$name
+central_data  <- peninsula |>
+  filter( Population %in% central_sites ) |>
+  droplevels()
+
+dg <- central_data |>
+  popgraph_diagnostics( graph = central )
 dg
 ```
 
 Each check that has a threshold is marked `✓` or `!`, with a note saying what
 a failed check means for the tests.  The same checks are available as a
-data frame, and the per-stratum detail is in `dg$strata`:
+data frame, and the per-population detail is in `dg$strata`:
 
 ```{r arapat-diagnostics-df}
 as.data.frame( dg ) |>
-  subset( status == "warn", select = c( check, value, threshold, note ) )
-
-head( dg$strata )
+  filter( status == "warn" ) |>
+  select( check, value, note )
 ```
 
-`popgraph_null()` then calibrates the tests for that design.  It simulates
-data sets with the same strata, sample sizes, loci and missing genotypes under
-*symmetric* migration tuned to the observed $G_{ST}$, rebuilds each Population
-Graph and returns the null distributions of $\Delta R^2$ and $r(S, x)$.  The
-95th percentile of the null $\Delta R^2$ replaces the rule $\Delta R^2 > 0$:
+With five to ten beetles per site, every site falls below five expected
+heterozygotes per locus, and the degree share is large: in such a graph a
+population's score depends largely on how many neighbours it has, which is why
+the gradient test above could not reject.  The calibrated isolation comparison
+is the more reliable test here.
+
+`popgraph_null()` calibrates it.  It simulates data sets with the component's
+own sites, sample sizes, loci, alleles and missing genotypes under *symmetric*
+migration (Wright-Fisher drift through a symmetric distance kernel, tuned to
+the observed $G_{ST}$), rebuilds each Population Graph, and returns the null
+distributions of $\Delta R^2$ and $r(S, x)$.  The 95th percentile of the null
+$\Delta R^2$ replaces the rule $\Delta R^2 > 0$, and the fraction of null values
+at or above the observed one is a one-sided $p$-value.  As for a published
+analysis, 999 data sets are simulated:
 
 ```{r arapat-null}
+#| cache: true
+#| dependson: [arapat-south, arapat-diagnostics]
+dk  <- d[central_sites]
+sep <- abs( outer( dk, dk, "-" ) )
+fwd <- outer( dk, dk, function( di, dj ) dj > di )
+
+set.seed( 1 )
+calibration <- central_data |>
+  popgraph_null( axis = dk,
+                 distance = sep,
+                 forward = fwd,
+                 graph = central,
+                 nsim = 999 )
+calibration
+```
+
+Under symmetric migration with this design, $\Delta R^2 > 0$ arises in a large
+fraction of the null data sets, so the observed value alone would mean little;
+against the calibrated cutoff, the southward expansion is significant.
+Because the null depends on its migration model, check the cutoff's
+sensitivity to `Ne`, `ngen` and the kernel (for example a two-dimensional,
+great-circle `kernel_distance`).
+
+### Designing a study
+
+- **Individuals per population.**  Each edge is estimated from the variation
+  *within* the populations it joins.  The allocation that is optimal for
+  estimating differentiation (about $1/\Phi$ individuals per population;
+  Falconer 1981, `optimal_sampling()`) is too thin for a Population Graph.
+  Aim for roughly five expected heterozygotes per locus in each population
+  ($n_i H_S \gtrsim 5$; about 30 individuals at moderate diversity); with ten,
+  about half of simulated graphs fragment.
+- **Populations.**  Once each is adequately sampled, more populations raise
+  the power of the source-sink test.  With fewer than about ten, neither test
+  establishes direction from one graph.
+- **Loci and coverage.**  More loci raise the power of both tests, and sites
+  should span the whole length of the hypothesized direction of flow.
+- **Calibrate.**  These guidelines come from a one-dimensional simulation with
+  two-allele loci; what carries over is calibrating with `popgraph_null()` for
+  your own design.
+
+Starting from the genotypes rather than a graph, `genetic_isolation()` builds
+the graph and runs isolation by graph distance in one step, with the axis
+given as a column:
+
+```{r arapat-isolation}
 #| eval: false
-peninsula <- droplevels( arapat[arapat$Species == "Peninsula", ] )
-big       <- names( which( table( peninsula$Population ) >= 8 ) )
-peninsula <- droplevels( peninsula[peninsula$Population %in% big, ] )
-lat_p     <- tapply( peninsula$Latitude, peninsula$Population, mean )
-popgraph_null( peninsula,
-               axis = -lat_p,
-               nsim = 199,
-               cores = 4 )
+genetic_isolation( peninsula, mode = "IBGD", axis = "Latitude" )
+genetic_isolation( peninsula, mode = "dcGD", axis = "Latitude" )
 ```
 
 ## Data quality: information loss
@@ -148,27 +288,10 @@ arapat |>
 
 ## Simulating directional gene flow
 
-A directional stepping stone, with rates to the next population downstream
-(`m_fwd`) and upstream (`m_rev`), plugs into `simulate_pop()`; this is how the
-`gravity` data were generated (at a much larger scale):
-
-```{r simulate}
-#| eval: false
-demes <- sprintf( "Pop%02d", 1:10 )
-
-mm <- demes |>
-  migration_matrix( model = "stepping_stone_1d_asym",
-                    m_fwd = 0.04,
-                    m_rev = 0.01 )
-
-out <- data.frame( Population = rep( demes, each = 2 ),
-                   Locus = "L1",
-                   Allele = rep( c( "01", "02" ), 10 ),
-                   Frequency = 0.5 ) |>
-  make_populations( N = 50 ) |>
-  simulate_pop( ngen = 200,
-                migration = migration_event( mm ),
-                verbose = FALSE )
-```
+The `gravity` data come from an individual-based simulation of a directional
+stepping stone.  @sec-simulation builds that simulation from scratch with
+`make_populations()`, `migration_matrix( model = "stepping_stone_1d_asym" )`
+and `simulate_pop()`, and follows the Population Graph and the source-sink
+scores through a symmetric burn-in and three forward scenarios.
 
 {{< include ../vignettes/children/genetic_gravity_summary.Rmd >}}

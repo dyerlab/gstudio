@@ -8,7 +8,7 @@
 shannon_entropy(p)
 }
 \arguments{
-\item{p}{The probility}
+\item{p}{The probability}
 }
 \value{
 An estimate of entropy

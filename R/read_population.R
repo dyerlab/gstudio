@@ -6,7 +6,7 @@
 #'  \code{https://}, \code{ftp://}, or \code{file://}) pointing to one.  Remote files are
 #'  downloaded to a temporary file before being read.
 #' @param type An indication of what kind of loci that the data represent. The 
-#'  following kinds are recoginzed (n.b., if you have several types load them
+#'  following kinds are recognized (n.b., if you have several types load them
 #'  separately and \code{merge} them).
 #' \describe{
 #'  \item{missing}{The default. This will cause \code{read.population()} to read each column as a single locus with one allele}
@@ -33,10 +33,9 @@
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
+#' path <- system.file("extdata", "data_2_column.csv", package = "gstudio")
+#' pop <- read_population(path, type = "column", locus.columns = 4:7)
 #' \dontrun{
-#'   path <- system.file("extdata", "data_2_column.csv", package = "gstudio")
-#'   pop <- read_population(path, type = "column", locus.columns = 4:7)
-#'
 #'   # Files may also be read directly from a URL
 #'   url <- "https://example.com/data_2_column.csv"
 #'   pop <- read_population(url, type = "column", locus.columns = 4:7)

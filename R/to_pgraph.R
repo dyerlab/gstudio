@@ -5,7 +5,7 @@
 #'  in other software.
 #' @param graph An object of type \code{popgraph}
 #' @param file The name and location of where the *.pgraph file is to be saved.
-#'  If ommitted, this function will return a single text file.
+#'  If omitted, this function will return a single text file.
 #' @return Nothing if passed a file or the raw text of the *.pgraph file if
 #'  you do not provide a file object.
 #' @export

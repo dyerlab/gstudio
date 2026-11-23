@@ -56,7 +56,7 @@
 #'   component of a larger graph; its nodes must be the strata of \code{x}.  A
 #'   graph made with \code{population_graph(x, alpha = )} passes its edge-retention
 #'   level to the null graphs.
-#' @param nsim Number of null data sets (default 199).
+#' @param nsim Number of null data sets (default 999).
 #' @param gamma Bandwidth multiplier (default 0.5).
 #' @param Ne Effective size of each stratum in the simulation (default 100).
 #' @param ngen Generations simulated before sampling (default \code{4 * Ne}).
@@ -95,7 +95,7 @@
 #' }
 #' @export
 popgraph_null <- function(x, stratum = "Population", axis, distance = NULL, forward = NULL,
-                          graph = NULL, nsim = 199L, gamma = 0.5, Ne = 100L, ngen = 4L * Ne,
+                          graph = NULL, nsim = 999L, gamma = 0.5, Ne = 100L, ngen = 4L * Ne,
                           migration = NULL, kernel_distance = NULL, phi = NULL, alpha = 0.05,
                           pilot = 8L, cores = 1L, verbose = FALSE) {
   if (!is.data.frame(x)) stop("'x' must be a data.frame")

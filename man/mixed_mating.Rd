@@ -7,22 +7,31 @@
 mixed_mating(data, N = 1, s = 0)
 }
 \arguments{
-\item{data}{A \code{data.frame} containing individuals with objects of type \code{locus}}
+\item{data}{A \code{data.frame} containing individuals with objects of
+type \code{locus}}
 
-\item{N}{The total number of individuals in the next generation to be produced by the mating
-of each individual.  If empty, it will default to 1 offspring per pair.}
+\item{N}{The number of offspring produced by each mating (default 1).}
 
-\item{s}{The fraction of adults you want to be selected to produce selfed offspring, the 
-default is 0 and this will produce a randomly mating population just like if you called
-\code{mate()}.}
+\item{s}{The fraction of matings that are selfed.  The default, 0,
+pairs each adult as a mother with a father drawn by a random
+permutation of the adults, as \code{mate()} does without a father.
+With \code{s > 0}, mothers and fathers are drawn with replacement.}
 }
 \value{
-A \code{data.frame} that has new individuals that are the result of mixed mating
+A \code{data.frame} of offspring.  Non-locus columns are copied
+ from each offspring's mother; \code{ID}, if present, is renumbered
+ \code{1:n}, a \code{Sex} column is drawn at random from its values, and
+ an \code{OffID} column numbers the offspring within each mating.  An
+ offspring is missing at a locus when either parent is.
 }
 \description{
-This function is a bit of a wrapper around the \code{mate} function in that
- it allows you to specify the inbreeding parameter F (the fraction of individuals
- that produce offspring via selfing).
+Each adult is the mother of one mating; a fraction \code{s} of the
+ matings are selfed and the rest are with a random father.  Every
+ mating produces \code{N} offspring, each receiving one random allele
+ from each parent at every locus (independent segregation).  The result
+ is the same as calling \code{mate()} on the mating pairs, but all loci
+ and offspring are drawn at once, so it is fast enough for
+ forward-time simulation with \code{simulate_pop()}.
 }
 \examples{
 data(arapat)

@@ -15,7 +15,7 @@ centroid_distance(x, grouping)
 An NxN pairwise distance matrix.
 }
 \description{
-This is a convience function for a reduce and distance operation based upon
+This is a convenience function for a reduce and distance operation based upon
  multivariate predictor variables.
 }
 \examples{

@@ -8,7 +8,7 @@
 #'  strata and gives the results to the function.
 #' @param allele_perm A flag (default=TRUE) to permute alleles in the
 #'  creating the new data set.
-#' @param nperm The number of perms to use (default 99).
+#' @param nperm The number of perms to use (default 999).
 #' @param FUN The function to pass the permuted data to.  It is called on a
 #'  \code{locus} vector (and the permuted strata, if given) and must return a
 #'  single number; wrap \code{\link{genetic_diversity}} as in the example to
@@ -22,7 +22,7 @@
 #' loc <- c(locus(1:2), locus(c(1,1)), locus(c(2,2)))
 #' he <- function(x) genetic_diversity(x, mode = "He")$He
 #' permute_ci(loc, FUN = he, nperm = 19)
-permute_ci <- function( x, stratum=NULL, allele_perm=TRUE, nperm=99, FUN=NULL, replace=FALSE, ... ) {
+permute_ci <- function( x, stratum=NULL, allele_perm=TRUE, nperm=999, FUN=NULL, replace=FALSE, ... ) {
   
   if( is.null(FUN) )
     stop("Cannot run function permute_ci() without a function to pass the data to...")

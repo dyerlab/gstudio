@@ -13,7 +13,7 @@ is.locus(x)
 A logical flag indicating if \code{x} is a type of \code{locus}
 }
 \description{
-A quick convienence function to determine if an object is
+A quick convenience function to determine if an object is
  inherited from the \code{locus} object.
 }
 \examples{

@@ -25,7 +25,7 @@ Compiled by R.J. Dyer from the books of George R.R. Martin:
  & Fire} (with E.M. Garcia Jr. and L. Antonsson; Bantam, 2014) and
  \emph{Fire & Blood} (Bantam, 2018).  Parent links were cross-checked
  against the father (P22) and mother (P25) statements in Wikidata
- (\url{https://www.wikidata.org}, CC0).  Built by
+ (\url{https://www.wikidata.org/wiki/Wikidata:Main_Page}, CC0).  Built by
  \code{data-raw/targaryen.R} in the package sources.
 
  This is an unofficial compilation for teaching. It is not affiliated with

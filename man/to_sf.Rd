@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_sf.R
 \name{to_sf}
 \alias{to_sf}
-\title{This function convers the popgraph object into an object that can be plot using
+\title{This function converts the popgraph object into an object that can be plot using
  the leaflet library.}
 \usage{
 to_sf(
@@ -29,7 +29,7 @@ for plotting on a leaflet object.}
 A \code{data.frame} object suitable for passing to \code{leaflet}.
 }
 \description{
-This function convers the popgraph object into an object that can be plot using
+This function converts the popgraph object into an object that can be plot using
  the leaflet library.
 }
 \examples{

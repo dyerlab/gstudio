@@ -5,11 +5,21 @@
 A Population Graph is undirected: each edge is a single, symmetric conditional
 genetic distance between two populations.  *Genetic gravity* reads direction
 out of that symmetric graph by asking, for every edge, how near it looks from
-each of its two ends.  The few quantities involved are set out first, followed by a complete analysis, from raw genotypes to a Population Graph,
-source-sink scores, tests for a directional gradient and a map of the gravity
-field.
+each of its two ends.  It needs no demographic model, no assumption of
+migration-drift equilibrium and no covariates, and it works from a single
+sample (Dyer 2026).  Despite the shared name, it is unrelated to the *gravity
+models* of landscape genetics (Murphy et al. 2010; DiLeo et al. 2014), which
+regress connectivity between sites on at-site and between-site covariates.
+Nor is it a pairwise estimator of directional migration such as `divMigrate`
+(Sundqvist et al. 2016): every edge is read in the context of the whole
+conditional network, so gene flow from $A$ to $C$ through $B$ is not mistaken
+for direct exchange between $A$ and $C$.
 
-```{r libraries, message = FALSE}
+The few quantities involved are set out first, followed by a complete
+analysis, from raw genotypes to a Population Graph, source-sink scores, tests
+for a directional gradient and a map of the gravity field.
+
+```{r libraries, message = FALSE, warning = FALSE}
 library( gstudio )
 library( dplyr )
 library( ggplot2 )
@@ -60,14 +70,31 @@ $$
 \qquad \textstyle\sum_i S_i = 0 \text{ within each connected component.}
 $$
 
+Gravity and $S$ are two views of the same quantity: the balance is the net
+asymmetry over a population's edges, $g_i - 1 = \sum_{j \in N(i)} \Delta_{i \to j}$,
+and the scores solve $L\hat{S} = g - 1$, where $L$ is the Laplacian of the
+graph.  The scores assemble local imbalances into one surface, much as
+elevations are recovered from height differences between neighbouring points:
+populations high on it are those whose genetic structure has spread to their
+neighbours (an upstream deme, the core of a range expansion), and populations
+low on it have received it.  Smoothed over the node positions, $S$ is the
+*source-sink surface*.  Because $S$ sums to zero within each component, scores
+are comparable only within a component, and a two-population component carries
+no directional information (its scores are zero by symmetry).
+
 **Degree and the bandwidth.**  As the kernel flattens, $w_{j\mid i} \to 1/k_i$
-and the asymmetry falls to a floor set by degree alone,
-$\Delta^0_{i \to j} = 1/k_j - 1/k_i$.  The share of the variance in $\Delta$
-explained by $\Delta^0$ (the *degree share*) reports how much of an analysis is
-topology rather than genetics.  Two bandwidths answer different questions:
-$\gamma = 1/2$ (the default) is *degree-neutral* and is used for inferring
-direction; $\gamma = 1$, the local mean, keeps the contribution of degree and
-describes each population's overall pull in the network.
+and the asymmetry falls to a *topological floor* set by degree alone,
+$\Delta^0_{i \to j} = 1/k_j - 1/k_i$, with scores $S^0_i = -1/k_i$.  The
+$R^2$ of $\Delta$ on $\Delta^0$ (the *degree share*) reports how much of an
+analysis is topology rather than genetics.  Two bandwidths answer different
+questions.  $\gamma = 1/2$ (the default) is *degree-neutral*: it is the
+multiplier at which $S$ carries no degree signature under symmetric migration,
+and it is used for inferring direction.  It is fixed in advance from that
+symmetric null rather than tuned on each graph, because tuning it lets the
+signal under test move the bandwidth and loses power.  $\gamma = 1$, the local
+mean, keeps the contribution of degree, so hubs read as sources and leaves as
+sinks; it describes each population's overall weight in the network but is not
+suited to testing direction.
 
 **Directional distance.**  The same weights split each edge into two directed
 shares, the directional conditional genetic distance (dcGD):
@@ -102,7 +129,7 @@ gravity |>
 `population_graph()` encodes the genotypes and builds the graph among the
 strata in the `Population` column (its default `stratum`).
 
-```{r graph}
+```{r graph, cache = TRUE}
 graph <- gravity |>
   population_graph()
 
@@ -112,7 +139,7 @@ graph
 The hypothesized axis of flow is position along the stepping stone, which here
 is the population number:
 
-```{r deme}
+```{r deme, cache = TRUE, dependson = "graph"}
 nodes <- igraph::V( graph )$name
 
 deme <- nodes |>
@@ -213,14 +240,18 @@ drift on the graph, and nulls that ignore it are anti-conservative.
 ### Source-sink gradient test
 
 The statistic is Spearman's $r(S, x)$.  The null is Moran spectral
-randomization of $S$ on the graph itself, which reproduces the smoothness $S$
-inherits from the topology.  A negative $r$ places the sources at low $x$.
+randomization (Wagner & Dray 2015) of $S$ on the kernel-weighted graph itself
+(999 randomizations by default), which reproduces the smoothness $S$ inherits
+from drift on the topology, and the test is two-sided.  A negative $r$ places
+the sources at low $x$.  Because the null comes from the study's own graph, the
+test keeps its nominal false-positive rate whatever the design; the design
+changes only its power, which falls steeply with the number of populations.
 
-```{r ss-test}
+```{r ss-test, cache = TRUE, dependson = c( "graph", "deme" )}
 set.seed( 1 )
 
 graph |>
-  source_sink_test( x = deme )
+  source_sink_test( x = deme, nperm = 999 )
 ```
 
 ### Directional isolation by graph distance
@@ -242,9 +273,11 @@ permutation test of the correlation between cGD and separation;
 forward and reverse slopes.  It gives no p-value for $\Delta R^2$, because the
 two fits are not nested.
 
-```{r ibgd}
+```{r ibgd, cache = TRUE, dependson = c( "graph", "deme" )}
+set.seed( 1 )
+
 graph |>
-  ibgd( x = deme )
+  ibgd( x = deme, nperm = 999 )
 
 graph |>
   ibgd( x = deme, mode = "dcGD" )
@@ -318,6 +351,61 @@ lopho |>
   gravity_field() |>
   plot()
 ```
+
+## Reading the results
+
+**Test within a component, against an *a priori* axis.**  Edges, distances and
+scores are only defined among connected populations, so each directional test
+is run on one component, with an axis of flow (a refugium, a river, a
+prevailing wind) chosen before looking at the scores.
+
+**Interpreting the directional isolation comparison.**  The rule
+$\Delta R^2 > 0$ only asks whether separate forward and reverse slopes improve
+the fit, and in small or thinly sampled graphs they often do by chance.
+Calibrate it for the design with `popgraph_null()`, which gives a cutoff (the
+95th percentile of $\Delta R^2$ under symmetric migration) and a one-sided
+$p$-value.  If $\Delta R^2$ exceeds the cutoff, the directional model explains
+isolation better than symmetric migration would for that design, and the slope
+ratio gives the direction.  If it is positive but below the cutoff, the
+improvement is no larger than symmetric migration produces by chance; if it is
+negative, the symmetric model suffices.  Neither case is evidence of symmetric
+migration.  Under strong drift (about 0.5 or fewer migrants per population per
+generation in each direction) even a calibrated cutoff fires too often, so a
+directional fit there is best corroborated by the source-sink test.
+
+**Interpreting the source-sink test.**  A rejection means a gradient in $S$
+along $x$ beyond what drift on this graph produces.  A test that does not
+reject is weighed against its power: with fewer than about ten populations,
+neither test can establish direction from one graph, and the sign of $r(S, x)$
+is best reported as a description.  A large degree share, or a fragmented
+graph, means too few individuals per population for the degree-neutral
+bandwidth to remove the effect of degree; the calibrated isolation comparison
+is then the more reliable test.
+
+**Populations, not edges.**  Direction is recovered reliably at the level of
+populations and poorly at the level of single edges: between $\gamma = 1$ and
+$\gamma = 1/2$ about a quarter of edges can change sign while the ordering of
+sources and sinks holds.  No edge-level test is calibrated (permutation tests
+of $\Delta$, such as `asymmetry_significance()`, are anti-conservative under
+symmetric migration), so the arrows on a gravity field are leads, not
+findings.  Report the degree share, and check that conclusions hold across a
+range of $\gamma$.
+
+**What $S$ is and is not.**  $S$ measures the relative influence of populations
+on standing conditional genetic structure.  It is not a migration rate, and a
+genetic sink is not a demographic sink in the sense of Pulliam (1988).  An
+isolated, strongly drifted population can also read as a sink, so interpret $S$
+alongside within-population diversity and node degree.  dcGD does not replace
+cGD: for ordinary, symmetric isolation by distance, cGD remains the
+appropriate distance.
+
+**A single snapshot.**  A sample sits at an unknown point in a system's
+history.  In simulations, asymmetry was hardest to detect soon after the
+direction of gene flow changed, easiest once the covariance structure had
+stabilized, and harder again as diversity was lost.  At any point, a
+non-significant result is not evidence of symmetric migration.  Because every
+edge is conditional on all sampled populations, unsampled populations change
+the topology too.
 
 ## Without pipes
 

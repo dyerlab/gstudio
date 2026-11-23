@@ -7,13 +7,13 @@
 \method{-}{popgraph}(e1, e2)
 }
 \arguments{
-\item{e1}{A \code{popgraph} object reprenting the offspring.}
+\item{e1}{A \code{popgraph} object.}
 
-\item{e2}{A \code{popgraph} object representing the parent.}
+\item{e2}{A \code{popgraph} object whose edges are removed from \code{e1}.}
 }
 \value{
-A new \code{popgraph} object that represents the genotypes
- left over after removing the parental part (if possible).
+A new \code{popgraph} object with the edges of \code{e1} that
+ are not in \code{e2}.
 }
 \description{
 An overload of the \code{-} operator for \code{popgraph} objects that

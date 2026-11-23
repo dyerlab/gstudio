@@ -47,6 +47,7 @@ msr_null <- function(z, W, nrepet = 999L) {
 
 #' Orthonormal Moran eigenvector basis (n - 1 vectors), as adespatial::scores.listw(MEM.autocor = "all")
 #' @keywords internal
+#' @noRd
 .mem_basis <- function(W) {
   n <- nrow(W); wt <- rep(1 / n, n)
   rm <- colSums(wt * W); cm <- colSums(wt * t(W)); cm <- cm - sum(rm * wt)      # ade4::bicenter.wt

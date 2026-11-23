@@ -7,7 +7,7 @@
 \method{-}{locus}(e1, e2)
 }
 \arguments{
-\item{e1}{A \code{locus} object reprenting the offspring.}
+\item{e1}{A \code{locus} object representing the offspring.}
 
 \item{e2}{A \code{locus} object representing the parent.}
 }

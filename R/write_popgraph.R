@@ -28,10 +28,10 @@
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @examples
-#' \dontrun{
-#'   data(lopho)
-#'   write_popgraph(lopho, file = "lopho.json", format = "json")
-#' }
+#' data(lopho)
+#' file <- tempfile(fileext = ".json")
+#' write_popgraph(lopho, file = file, format = "json")
+#' unlink(file)
 write_popgraph <- function(graph, file, format = "pgraph",
                             label = "Population Graph", loci = NULL, ...) {
 

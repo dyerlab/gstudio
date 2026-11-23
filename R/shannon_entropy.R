@@ -1,6 +1,6 @@
 #' Shannon Entry Function
 #'  The degree of uncertainty in a system based on probability and information theory.
-#' @param p The probility
+#' @param p The probability
 #' @return An estimate of entropy
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export

@@ -1,0 +1,159 @@
+# Parentage {#sec-parentage}
+
+This chapter covers making offspring from known parents and the parentage tools in `gstudio`: maternal subtraction, fractional paternity, transition probabilities and exclusion.  Forward-time simulation of whole populations has its own chapter, @sec-simulation.
+
+```{r}
+#| message: false
+#| warning: false
+library( gstudio )
+library( dplyr )
+```
+
+## Mating and Offspring
+
+The `mate()` function creates offspring from two parents:
+
+```{r}
+f      <- data.frame( Locus = rep( paste0( "Loc", 1:4 ), each = 3 ),
+                      Allele = rep( LETTERS[1:3], times = 4 ),
+                      Frequency = rep( 1 / 3, times = 12 ) )
+adults <- f |>
+  make_population( N = 20 )
+
+offs <- adults |>
+  slice( 1 ) |>
+  mate( slice( adults, 2 ), N = 5 )
+
+offs
+```
+
+## Maternal Subtraction
+
+The `minus_mom()` function removes the maternal contribution from offspring genotypes. It takes a single data.frame where mothers have `OffID = 0` and offspring have `OffID != 0`:
+
+```{r}
+# Combine mother (OffID = 0) and offspring into one data.frame
+family <- bind_rows( adults |>
+                      slice( 1 ) |>
+                      mutate( OffID = 0 ),
+                     offs |>
+                      mutate( OffID = row_number() ) )
+
+family |>
+  minus_mom()
+```
+
+## Fractional Paternity
+
+The `paternity()` function estimates the probability of each potential father siring each offspring:
+
+```{r}
+offs <- offs |>
+  mutate( OffID = row_number(),
+          MomID = adults$ID[1] )
+
+pat <- offs |>
+  paternity( slice( adults, 1 ), adults )
+
+pat |>
+  head()
+```
+
+The `Fij` column gives the fractional paternity probability. Use `strict = TRUE` to retain only unambiguous assignments:
+
+```{r}
+offs |>
+  paternity( slice( adults, 1 ), adults, strict = TRUE )
+```
+
+## Transition Probabilities and the Paternity Index
+
+`transition_probability()` gives the Mendelian probability of an offspring genotype from a pair of parents, as a product across loci (`multilocus = FALSE` returns the per-locus values):
+
+```{r}
+mom <- slice( adults, 1 )
+dad <- slice( adults, 2 )
+
+transition_probability( slice( offs, 1 ), mom, dad )
+transition_probability( slice( offs, 1 ), mom, dad, multilocus = FALSE )
+```
+
+To judge a putative father, compare that value with the probability of the offspring given the mother and a *random* male. Pass only the mother and an allele frequency table from `frequencies()`; at each locus this is the chance the mother transmits an allele the offspring carries times the frequency of the offspring's other allele. The ratio is the paternity index, how many times more likely the male is to be the father than a random male:
+
+```{r}
+adult_freqs <- adults |>
+  frequencies()
+
+T_random <- transition_probability( slice( offs, 1 ),
+                                    mom,
+                                    freqs = adult_freqs )
+transition_probability( slice( offs, 1 ), mom, dad ) / T_random
+```
+
+Without `freqs`, the one-parent value is only a compatibility score (zero when the parent is excluded), not a likelihood, so do not use it as the denominator of a paternity index.
+
+## Single-Parent Exclusion
+
+The `parent_finder()` function identifies compatible parents for each offspring using exclusion. It requires a data.frame with `ID` and `OffID` columns, where adults have `OffID = 0`:
+
+```{r}
+# Prepare a combined data.frame: adults (OffID = 0) then offspring
+locus_cols <- adults |>
+  column_class( "locus" )
+
+combined <- bind_rows( adults |>
+                        select( ID, all_of( locus_cols ) ) |>
+                        mutate( OffID = 0 ),
+                       offs |>
+                        select( ID, all_of( locus_cols ) ) |>
+                        mutate( OffID = row_number() ) )
+
+combined |>
+  parent_finder() |>
+  head()
+```
+
+Its `T` column is the one-parent compatibility score from `transition_probability()` (without `freqs`): it ranks the compatible parents of each offspring, but it is not a likelihood.
+
+## Identifying Bad Parents
+
+The `bad_parents()` function takes the same combined data.frame and flags each offspring's listed parent as compatible (`PossibleParent = TRUE`) or excluded:
+
+```{r}
+combined |>
+  bad_parents()
+```
+
+## Bundled Parentage Datasets
+
+The `cornus` and `cornus_florida` datasets contain *Cornus florida* genotype data for parentage analysis:
+
+```{r}
+data( cornus )
+
+cornus |>
+  head()
+```
+
+```{r}
+data( cornus_florida )
+
+cornus_florida |>
+  head()
+```
+
+## Without Pipes
+
+```{r}
+#| eval: false
+adults <- make_population( f, N = 20 )
+offs   <- mate( adults[1, ], adults[2, ], N = 5 )
+offs$OffID <- seq_len( nrow( offs ) )
+offs$MomID <- adults$ID[1]
+pat    <- paternity( offs, adults[1, ], adults )
+T_random <- transition_probability( offs[1, ],
+                                    adults[1, ],
+                                    freqs = frequencies( adults ) )
+parent_finder( combined )
+bad_parents( combined )
+```

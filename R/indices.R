@@ -7,7 +7,7 @@
 #' @param seq The first Sequence.
 #' @param only.unique Makes sure to return only i,j and not 
 #'  both [i,j] and [j,i] values
-#' @return A matrix of indicies
+#' @return A matrix of indices
 #' @export
 #' @examples
 #' indices(1:4)

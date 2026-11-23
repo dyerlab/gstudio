@@ -11,7 +11,7 @@
 #'      \item{edge weight}{Similar to the adjacency matrix but using edge weights instead of binary
 #'        values}
 #'    }
-#' @param ... Optional arguemnts passed on to the distance functions.
+#' @param ... Optional arguments passed on to the distance functions.
 #' @return A matrix (KxK) in size (where K is the number of nodes)
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu> 

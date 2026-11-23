@@ -1,6 +1,6 @@
 #' 
 #' 
-#' This function convers the popgraph object into an object that can be plot using
+#' This function converts the popgraph object into an object that can be plot using
 #'  the leaflet library.
 #' 
 #' @param x A population graph

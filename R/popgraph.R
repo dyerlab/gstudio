@@ -53,7 +53,7 @@ popgraph <- function( x, groups, alpha=0.05, tol=1.0e-4 ) {
   EdgeStr <- matrix(0,K,K)
   
   # rotate all data and keep stuff that is not invariant.
-  pcfit <- prcomp(x,retx=T)
+  pcfit <- prcomp(x,retx=TRUE)
   mv <-pcfit$x[,pcfit$sdev > tol] 
   
   P <- ncol(mv)
@@ -112,8 +112,8 @@ popgraph <- function( x, groups, alpha=0.05, tol=1.0e-4 ) {
   rownames(D) <- colnames(D) <- rownames(allLD)
   totMean <- mean(D)
   colMean <- colMeans(D)
-  colMeanMatrix <- matrix(colMean,K,K,byrow=T)
-  rowMeanMatrix <- matrix(colMean,K,K,byrow=F)
+  colMeanMatrix <- matrix(colMean,K,K,byrow=TRUE)
+  rowMeanMatrix <- matrix(colMean,K,K,byrow=FALSE)
   C <- -0.5 * (D - colMeanMatrix - rowMeanMatrix + totMean)
   R <- matrix(1,K,K)
   

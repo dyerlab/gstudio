@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_fixed_locus.R
 \name{to_fixed_locus}
 \alias{to_fixed_locus}
-\title{returns string representation of locus for output like genepop/heirfstat}
+\title{returns string representation of locus for output like genepop/hierfstat}
 \usage{
 to_fixed_locus(x, digits = NULL)
 }

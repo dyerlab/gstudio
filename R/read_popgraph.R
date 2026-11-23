@@ -9,10 +9,8 @@
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @export
 #' @examples
-#' \dontrun{
-#'   path <- system.file("extdata", "lopho.pgraph", package = "gstudio")
-#'   graph <- read_popgraph(path)
-#' }
+#' path <- system.file("extdata", "lopho.pgraph", package = "gstudio")
+#' graph <- read_popgraph(path)
 read_popgraph <- function( file, sep="\t" ) { 
     
   # load in the raw stuff

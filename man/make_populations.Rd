@@ -17,7 +17,7 @@ make_populations(freqs, N, F = 0)
 A data.frame of fully formed individuals
 }
 \description{
-Creates a series of populaitons from a data.frame of \code{frequencies}.
+Creates a series of populations from a data.frame of \code{frequencies}.
 }
 \examples{
 f1 <- data.frame(

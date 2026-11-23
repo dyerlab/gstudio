@@ -42,7 +42,7 @@ bad_parents <- function( df, AdultID="ID", OffID="OffID", verbose=FALSE) {
   
   status <- c( rep(TRUE,length(matched)), rep(FALSE,length(unmatched)))
   
-  res <- data.frame(matrix(unlist(strsplit(m,split=":")),ncol=2,byrow=T),stringsAsFactors=FALSE)
+  res <- data.frame(matrix(unlist(strsplit(m,split=":")),ncol=2,byrow=TRUE),stringsAsFactors=FALSE)
   res$PossibleParent <- status
   names(res)[1:2] <- c("ID","OffID")
   

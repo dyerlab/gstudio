@@ -4,6 +4,7 @@ This chapter covers the estimation of genetic structure statistics --- measures 
 
 ```{r}
 #| message: false
+#| warning: false
 library( gstudio )
 library( dplyr )
 data( arapat )
@@ -57,8 +58,9 @@ Use the `nperm` parameter to test the null hypothesis that the structure paramet
 
 ```{r}
 #| message: false
+#| cache: true
 arapat |>
-  genetic_structure( stratum = "Species", mode = "Gst", nperm = 99 )
+  genetic_structure( stratum = "Species", mode = "Gst", nperm = 999 )
 ```
 
 The resulting `p.value` column indicates the probability of observing a value as extreme as the estimate under random permutation of individuals among strata.
@@ -97,8 +99,9 @@ arapat |>
 
 ```{r}
 #| message: false
+#| cache: true
 fit <- arapat |>
-  genetic_structure( stratum = "Species", mode = "PhiST", nperm = 99 )
+  genetic_structure( stratum = "Species", mode = "PhiST", nperm = 999 )
 fit
 ```
 
@@ -118,9 +121,10 @@ As usual for AMOVA, sigma2_among and so PhiST can be negative when there is no s
 
 ```{r}
 #| message: false
+#| cache: true
 data( cornus_florida )
 cornus_florida |>
-  genetic_structure( mode = "PhiFT", nperm = 99 )
+  genetic_structure( mode = "PhiFT", nperm = 999 )
 ```
 
 `Nep` = 1 / (2 PhiFT) is the effective number of pollen donors. A mother not genotyped at a locus is reconstructed from her offspring when one genotype is at least 20 times as likely as the next best. Those reconstructions are listed in `attr(result, "maternal_inference")`.
@@ -147,7 +151,7 @@ The `Posterior` column gives the relative probability of assignment to each stra
 ```{r}
 #| eval: false
 genetic_structure( arapat, stratum = "Species", mode = "Gst" )
-genetic_structure( arapat, stratum = "Species", mode = "Gst", nperm = 99 )
+genetic_structure( arapat, stratum = "Species", mode = "Gst", nperm = 999 )
 pw <- genetic_structure( arapat,
                          stratum = "Species",
                          mode = "Gst",

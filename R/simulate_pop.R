@@ -136,6 +136,7 @@ simulate_pop <- function(pop, ngen, mutation = NULL, selfing_rate = 0,
 #' @param gen Generation number.
 #' @param census_dir Directory to write to.
 #' @keywords internal
+#' @noRd
 .save_census <- function(pop, gen, census_dir) {
   if (!dir.exists(census_dir))
     dir.create(census_dir, recursive = TRUE)

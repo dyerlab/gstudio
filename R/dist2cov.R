@@ -1,4 +1,4 @@
-#' Converts distance matrix to covarance one.
+#' Converts distance matrix to covariance one.
 #' 
 #' This function takes a distance matrix and turns it into a covariance
 #'   matrix following Gower (1966).

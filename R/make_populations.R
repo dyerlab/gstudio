@@ -2,7 +2,7 @@ utils::globalVariables(c("Population", "everything"))
 
 #' Make Populations
 #'
-#' Creates a series of populaitons from a data.frame of \code{frequencies}.
+#' Creates a series of populations from a data.frame of \code{frequencies}.
 #'
 #' @param freqs The data.frame with Population, Locus, Allele, and Frequency columns
 #' @param N The number of individuals to make in each population

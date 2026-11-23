@@ -1,6 +1,6 @@
-#' Convience function to create population graph object from genotypes.
+#' Convenience function to create population graph object from genotypes.
 #' 
-#' This function is a convience function that wraps together the subset_loci() (potentially)
+#' This function is a convenience function that wraps together the subset_loci() (potentially)
 #'   function with the popgraph() function (and translations from genotypes to
 #'   multivariate data).
 #' @param x A \code{data.frame} with \code{locus} objects

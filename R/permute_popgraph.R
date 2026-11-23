@@ -5,10 +5,10 @@
 #'  provides an estimate of edge stability.
 #' @param data The raw multivariate data as submitted to \code{popgraph}
 #' @param groups The grouping of the data into nodes as submitted to \code{popgraph}
-#' @param nboot The nubmer of times to bootstrap the individuals per group (default=50)
+#' @param nboot The number of times to bootstrap the individuals per group (default 999)
 #' @param ... Other arguments to be passed to \code{popgraph}
-#' @return A weighted graph where edge weights represent the proportion of times the 
-#'  edge was found in the perumuted data sets.
+#' @return A weighted graph where edge weights represent the proportion of times the
+#'  edge was found in the bootstrapped data sets.
 #' @export
 #' @examples
 #' data(arapat)
@@ -16,7 +16,7 @@
 #' \donttest{
 #'   boot_g <- permute_popgraph(mv, arapat$Population, nboot = 5)
 #' } 
-permute_popgraph <- function( data, groups, nboot=50, ...){
+permute_popgraph <- function( data, groups, nboot = 999, ... ){
   if( !is(data,"matrix"))
     stop("Cannot use non-matrix data to make a graph, let alone bootstrap it...")
   if( nrow(data) != length(groups))

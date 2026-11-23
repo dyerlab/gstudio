@@ -16,7 +16,7 @@ A \code{data.frame} with one row per group: \code{Stratum} and
   \code{variance}, the sum of the within-stratum variances.
 }
 \description{
-This is a convience function for a reduce and distance operation based upon
+This is a convenience function for a reduce and distance operation based upon
  multivariate predictor variables.
 }
 \examples{

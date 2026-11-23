@@ -6,7 +6,7 @@
 #'  work to provide as close of an approximation as possible.
 #' @param x A \code{data.frame} with Allele and Frequency columns.  The Locus column specifies
 #'  the names of the alleles to be used and the Frequency one gives their occurrence.
-#' @param F A numeric value for the inbeeding statistic (default=0)
+#' @param F A numeric value for the inbreeding statistic (default=0)
 #' @param N The number of loci to return (default=20)
 #' @return A vector of \code{locus} objects.
 #' @export

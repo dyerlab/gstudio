@@ -29,6 +29,15 @@ LazyLoad: \tab yes\cr
 There are some very good examples of the components of this package are used
 in the vignettes for this package.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/dyerlab/gstudio}
+  \item \url{https://dyerlab.github.io/gstudio/}
+  \item Report bugs at \url{https://github.com/dyerlab/gstudio/issues}
+}
+
+}
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}
 }

@@ -22,10 +22,10 @@
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @examples
-#' \dontrun{
-#'   data(arapat)
-#'   write_population(arapat, file = "arapat.txt", mode = "text")
-#' }
+#' data(arapat)
+#' file <- tempfile(fileext = ".txt")
+#' write_population(arapat, file = file, mode = "text")
+#' unlink(file)
 write_population <- function( df, file, mode=c("text","genepop", "structure","dfdist")[1], stratum=NULL, ... ) {
   
   if( missing(df) )

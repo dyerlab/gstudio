@@ -3,7 +3,7 @@
 #' This function is to assist in estimating statistical strength of your
 #'   inferences by subsampling the loci you have.  
 #' @param x A \code{data.frame} that has \code{Locus} objects in it.
-#' @param numLoci The number of loci you wnat to sample (must be \code{length(column_class("locus"))})
+#' @param numLoci The number of loci you want to sample (must be \code{length(column_class("locus"))})
 #' @return A new \code{data.frame} with a subset of loci.
 #' @export
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}

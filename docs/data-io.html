@@ -210,14 +210,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./visualization.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Visualization</span></span></a>
+  <a href="./simulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Individual-Based Simulation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./simulation-parentage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Simulation &amp; Parentage</span></span></a>
+  <a href="./parentage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Parentage</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Visualization</span></span></a>
   </div>
 </li>
     </ul>
@@ -1630,12 +1636,12 @@ NA</code></pre>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  ID PGM TPI
-1  1 H:H B:C
-2  2 I:J C:C
-3  3 I:J A:B
-4  4 H:I A:B
-5  5 H:I A:A
-6  6 H:I A:A</code></pre>
+1  1 H:I A:A
+2  2 H:I A:C
+3  3 H:H A:B
+4  4 J:J A:A
+5  5 I:J A:B
+6  6 H:I A:C</code></pre>
 </div>
 </div>
 </section>
@@ -1659,11 +1665,11 @@ NA</code></pre>
 <span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Population ID  Loc1  Loc2
-1          A  1 02:02 01:02
-2          A  2 02:02 01:02
-3          A  3 01:02 02:02
-4          A  4 02:02 02:02
-5          A  5 02:02 01:02
+1          A  1 02:02 02:02
+2          A  2 01:02 02:02
+3          A  3 02:02 01:02
+4          A  4 01:02 01:02
+5          A  5 01:02 02:02
 6          A  6 02:02 02:02</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>pops <span class="sc">|&gt;</span></span>
@@ -1685,7 +1691,7 @@ NA</code></pre>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>loci</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "A:A" "A:A" "A:B" "B:B" "A:A" "A:B" "A:A" "A:B" "A:B" "A:A"</code></pre>
+<pre><code> [1] "A:A" "A:B" "A:B" "B:B" "A:A" "A:A" "B:B" "A:B" "B:B" "A:B"</code></pre>
 </div>
 </div>
 </section>
@@ -2184,246 +2190,247 @@ NA</code></pre>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( gstudio )</span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( dplyr )</span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>( arapat )</span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reading Population Data</span></span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>The <span class="in">`read_population()`</span> function is the primary data import tool. It reads text files and converts specified columns to <span class="in">`locus`</span> objects.</span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a><span class="fu">### Function Signature</span></span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a><span class="fu">read_population</span>( path, type, locus.columns, <span class="at">phased =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>                 <span class="at">sep =</span> <span class="st">","</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">delim =</span> <span class="st">":"</span> )</span>
-<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>The key parameters:</span>
-<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`path`</span> --- file path to the data</span>
-<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`type`</span> --- marker encoding format</span>
-<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`locus.columns`</span> --- integer vector indicating which columns contain genetic data</span>
-<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a><span class="fu">### Separated Format</span></span>
-<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>The most common format uses colon-separated alleles (e.g., <span class="in">`"A:B"`</span>):</span>
-<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a>data_sep <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>,</span>
-<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"data_separated.csv"</span>,</span>
-<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a>                         <span class="at">package =</span> <span class="st">"gstudio"</span> ) <span class="sc">|&gt;</span></span>
-<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_population</span>( <span class="at">type =</span> <span class="st">"separated"</span>,</span>
-<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a>                   <span class="at">locus.columns =</span> <span class="fu">c</span>( <span class="dv">4</span>, <span class="dv">5</span> ) )</span>
-<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a>data_sep <span class="sc">|&gt;</span></span>
-<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a><span class="fu">### Column Format</span></span>
-<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-50"><a href="#cb31-50" aria-hidden="true" tabindex="-1"></a>Two adjacent columns per locus (one column per allele):</span>
-<span id="cb31-51"><a href="#cb31-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-54"><a href="#cb31-54" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-55"><a href="#cb31-55" aria-hidden="true" tabindex="-1"></a>data_col <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>,</span>
-<span id="cb31-56"><a href="#cb31-56" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"data_2_column.csv"</span>,</span>
-<span id="cb31-57"><a href="#cb31-57" aria-hidden="true" tabindex="-1"></a>                         <span class="at">package =</span> <span class="st">"gstudio"</span> ) <span class="sc">|&gt;</span></span>
-<span id="cb31-58"><a href="#cb31-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_population</span>( <span class="at">type =</span> <span class="st">"column"</span>,</span>
-<span id="cb31-59"><a href="#cb31-59" aria-hidden="true" tabindex="-1"></a>                   <span class="at">locus.columns =</span> <span class="fu">c</span>( <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span> ) )</span>
-<span id="cb31-60"><a href="#cb31-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-61"><a href="#cb31-61" aria-hidden="true" tabindex="-1"></a>data_col <span class="sc">|&gt;</span></span>
-<span id="cb31-62"><a href="#cb31-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb31-63"><a href="#cb31-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-64"><a href="#cb31-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-65"><a href="#cb31-65" aria-hidden="true" tabindex="-1"></a><span class="fu">### SNP Format</span></span>
-<span id="cb31-66"><a href="#cb31-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-67"><a href="#cb31-67" aria-hidden="true" tabindex="-1"></a>Encoded as 0, 1, 2 (minor allele count):</span>
-<span id="cb31-68"><a href="#cb31-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-71"><a href="#cb31-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-72"><a href="#cb31-72" aria-hidden="true" tabindex="-1"></a>data_snp <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>,</span>
-<span id="cb31-73"><a href="#cb31-73" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"data_snp.csv"</span>,</span>
-<span id="cb31-74"><a href="#cb31-74" aria-hidden="true" tabindex="-1"></a>                         <span class="at">package =</span> <span class="st">"gstudio"</span> ) <span class="sc">|&gt;</span></span>
-<span id="cb31-75"><a href="#cb31-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_population</span>( <span class="at">type =</span> <span class="st">"snp"</span>, <span class="at">locus.columns =</span> <span class="fu">c</span>( <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span> ) )</span>
-<span id="cb31-76"><a href="#cb31-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-77"><a href="#cb31-77" aria-hidden="true" tabindex="-1"></a>data_snp <span class="sc">|&gt;</span></span>
-<span id="cb31-78"><a href="#cb31-78" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb31-79"><a href="#cb31-79" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-80"><a href="#cb31-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-81"><a href="#cb31-81" aria-hidden="true" tabindex="-1"></a><span class="fu">### AFLP Format</span></span>
-<span id="cb31-82"><a href="#cb31-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-83"><a href="#cb31-83" aria-hidden="true" tabindex="-1"></a>Binary (0/1) presence-absence:</span>
-<span id="cb31-84"><a href="#cb31-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-87"><a href="#cb31-87" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-88"><a href="#cb31-88" aria-hidden="true" tabindex="-1"></a>data_aflp <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>,</span>
-<span id="cb31-89"><a href="#cb31-89" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"data_aflp.csv"</span>,</span>
-<span id="cb31-90"><a href="#cb31-90" aria-hidden="true" tabindex="-1"></a>                          <span class="at">package =</span> <span class="st">"gstudio"</span> ) <span class="sc">|&gt;</span></span>
-<span id="cb31-91"><a href="#cb31-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_population</span>( <span class="at">type =</span> <span class="st">"aflp"</span>,</span>
-<span id="cb31-92"><a href="#cb31-92" aria-hidden="true" tabindex="-1"></a>                   <span class="at">locus.columns =</span> <span class="fu">c</span>( <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span> ) )</span>
-<span id="cb31-93"><a href="#cb31-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-94"><a href="#cb31-94" aria-hidden="true" tabindex="-1"></a>data_aflp <span class="sc">|&gt;</span></span>
-<span id="cb31-95"><a href="#cb31-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb31-96"><a href="#cb31-96" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-97"><a href="#cb31-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-98"><a href="#cb31-98" aria-hidden="true" tabindex="-1"></a><span class="fu">### Allozyme (Zyme) Format</span></span>
-<span id="cb31-99"><a href="#cb31-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-100"><a href="#cb31-100" aria-hidden="true" tabindex="-1"></a>Concatenated integer alleles (e.g., "12" for alleles 1 and 2):</span>
-<span id="cb31-101"><a href="#cb31-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-104"><a href="#cb31-104" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-105"><a href="#cb31-105" aria-hidden="true" tabindex="-1"></a>data_zyme <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>,</span>
-<span id="cb31-106"><a href="#cb31-106" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"data_zymelike.csv"</span>,</span>
-<span id="cb31-107"><a href="#cb31-107" aria-hidden="true" tabindex="-1"></a>                          <span class="at">package =</span> <span class="st">"gstudio"</span> ) <span class="sc">|&gt;</span></span>
-<span id="cb31-108"><a href="#cb31-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_population</span>( <span class="at">type =</span> <span class="st">"zyme"</span>,</span>
-<span id="cb31-109"><a href="#cb31-109" aria-hidden="true" tabindex="-1"></a>                   <span class="at">locus.columns =</span> <span class="fu">c</span>( <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span> ) )</span>
-<span id="cb31-110"><a href="#cb31-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-111"><a href="#cb31-111" aria-hidden="true" tabindex="-1"></a>data_zyme <span class="sc">|&gt;</span></span>
-<span id="cb31-112"><a href="#cb31-112" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb31-113"><a href="#cb31-113" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-114"><a href="#cb31-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-115"><a href="#cb31-115" aria-hidden="true" tabindex="-1"></a><span class="fu">### Genepop Format</span></span>
-<span id="cb31-116"><a href="#cb31-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-117"><a href="#cb31-117" aria-hidden="true" tabindex="-1"></a>Genepop files have their own structure with <span class="in">`Pop`</span> delimiters:</span>
-<span id="cb31-118"><a href="#cb31-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-121"><a href="#cb31-121" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-122"><a href="#cb31-122" aria-hidden="true" tabindex="-1"></a>data_gp <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>, <span class="st">"genepop.txt"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span> ) <span class="sc">|&gt;</span></span>
-<span id="cb31-123"><a href="#cb31-123" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_population</span>( <span class="at">type =</span> <span class="st">"genepop"</span> )</span>
-<span id="cb31-124"><a href="#cb31-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-125"><a href="#cb31-125" aria-hidden="true" tabindex="-1"></a>data_gp <span class="sc">|&gt;</span></span>
-<span id="cb31-126"><a href="#cb31-126" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb31-127"><a href="#cb31-127" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-128"><a href="#cb31-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-129"><a href="#cb31-129" aria-hidden="true" tabindex="-1"></a><span class="fu">### Structure Format</span></span>
-<span id="cb31-130"><a href="#cb31-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-131"><a href="#cb31-131" aria-hidden="true" tabindex="-1"></a>Two-row-per-individual STRUCTURE format:</span>
-<span id="cb31-132"><a href="#cb31-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-135"><a href="#cb31-135" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-136"><a href="#cb31-136" aria-hidden="true" tabindex="-1"></a>data_str <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>,</span>
-<span id="cb31-137"><a href="#cb31-137" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"data_structure.str"</span>,</span>
-<span id="cb31-138"><a href="#cb31-138" aria-hidden="true" tabindex="-1"></a>                         <span class="at">package =</span> <span class="st">"gstudio"</span> ) <span class="sc">|&gt;</span></span>
-<span id="cb31-139"><a href="#cb31-139" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_population</span>( <span class="at">type =</span> <span class="st">"structure"</span> )</span>
-<span id="cb31-140"><a href="#cb31-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-141"><a href="#cb31-141" aria-hidden="true" tabindex="-1"></a>data_str <span class="sc">|&gt;</span></span>
-<span id="cb31-142"><a href="#cb31-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb31-143"><a href="#cb31-143" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-144"><a href="#cb31-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-145"><a href="#cb31-145" aria-hidden="true" tabindex="-1"></a><span class="fu">## Writing Population Data</span></span>
-<span id="cb31-146"><a href="#cb31-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-147"><a href="#cb31-147" aria-hidden="true" tabindex="-1"></a>The <span class="in">`write_population()`</span> function exports a data.frame to various formats:</span>
-<span id="cb31-148"><a href="#cb31-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-151"><a href="#cb31-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-152"><a href="#cb31-152" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb31-153"><a href="#cb31-153" aria-hidden="true" tabindex="-1"></a><span class="co"># Plain text (colon-separated loci)</span></span>
-<span id="cb31-154"><a href="#cb31-154" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb31-155"><a href="#cb31-155" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_population</span>( <span class="at">file =</span> <span class="st">"arapat.csv"</span> )</span>
-<span id="cb31-156"><a href="#cb31-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-157"><a href="#cb31-157" aria-hidden="true" tabindex="-1"></a><span class="co"># Genepop format, for one species only</span></span>
-<span id="cb31-158"><a href="#cb31-158" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb31-159"><a href="#cb31-159" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>( Species <span class="sc">==</span> <span class="st">"Cape"</span> ) <span class="sc">|&gt;</span></span>
-<span id="cb31-160"><a href="#cb31-160" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_population</span>( <span class="at">file =</span> <span class="st">"cape.gen"</span>,</span>
-<span id="cb31-161"><a href="#cb31-161" aria-hidden="true" tabindex="-1"></a>                    <span class="at">mode =</span> <span class="st">"genepop"</span>,</span>
-<span id="cb31-162"><a href="#cb31-162" aria-hidden="true" tabindex="-1"></a>                    <span class="at">stratum =</span> <span class="st">"Population"</span> )</span>
-<span id="cb31-163"><a href="#cb31-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-164"><a href="#cb31-164" aria-hidden="true" tabindex="-1"></a><span class="co"># Structure format</span></span>
-<span id="cb31-165"><a href="#cb31-165" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb31-166"><a href="#cb31-166" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_population</span>( <span class="at">file =</span> <span class="st">"arapat.str"</span>,</span>
-<span id="cb31-167"><a href="#cb31-167" aria-hidden="true" tabindex="-1"></a>                    <span class="at">mode =</span> <span class="st">"structure"</span>,</span>
-<span id="cb31-168"><a href="#cb31-168" aria-hidden="true" tabindex="-1"></a>                    <span class="at">stratum =</span> <span class="st">"Species"</span> )</span>
-<span id="cb31-169"><a href="#cb31-169" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-170"><a href="#cb31-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-171"><a href="#cb31-171" aria-hidden="true" tabindex="-1"></a><span class="fu">## Direct Format Conversion</span></span>
-<span id="cb31-172"><a href="#cb31-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-173"><a href="#cb31-173" aria-hidden="true" tabindex="-1"></a>You can also convert data.frames directly without writing to disk:</span>
-<span id="cb31-174"><a href="#cb31-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-177"><a href="#cb31-177" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-178"><a href="#cb31-178" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>( arapat )</span>
-<span id="cb31-179"><a href="#cb31-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-180"><a href="#cb31-180" aria-hidden="true" tabindex="-1"></a>gp <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb31-181"><a href="#cb31-181" aria-hidden="true" tabindex="-1"></a>  <span class="fu">to_genepop</span>( <span class="at">stratum =</span> <span class="st">"Species"</span> )</span>
-<span id="cb31-182"><a href="#cb31-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-183"><a href="#cb31-183" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>( gp[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>], <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span> )</span>
-<span id="cb31-184"><a href="#cb31-184" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-185"><a href="#cb31-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-188"><a href="#cb31-188" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-189"><a href="#cb31-189" aria-hidden="true" tabindex="-1"></a>st <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb31-190"><a href="#cb31-190" aria-hidden="true" tabindex="-1"></a>  <span class="fu">to_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span> )</span>
-<span id="cb31-191"><a href="#cb31-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-192"><a href="#cb31-192" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>( st[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span> )</span>
-<span id="cb31-193"><a href="#cb31-193" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-194"><a href="#cb31-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-195"><a href="#cb31-195" aria-hidden="true" tabindex="-1"></a><span class="fu">## Generating Synthetic Data</span></span>
-<span id="cb31-196"><a href="#cb31-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-197"><a href="#cb31-197" aria-hidden="true" tabindex="-1"></a><span class="fu">### From Allele Frequencies</span></span>
-<span id="cb31-198"><a href="#cb31-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-199"><a href="#cb31-199" aria-hidden="true" tabindex="-1"></a>The <span class="in">`make_population()`</span> function creates a random population from a frequency table:</span>
-<span id="cb31-200"><a href="#cb31-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-203"><a href="#cb31-203" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-204"><a href="#cb31-204" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb31-205"><a href="#cb31-205" aria-hidden="true" tabindex="-1"></a>  <span class="at">Locus =</span> <span class="fu">rep</span>( <span class="fu">c</span>( <span class="st">"TPI"</span>, <span class="st">"PGM"</span> ), <span class="at">each =</span> <span class="dv">3</span> ),</span>
-<span id="cb31-206"><a href="#cb31-206" aria-hidden="true" tabindex="-1"></a>  <span class="at">Allele =</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"H"</span>, <span class="st">"I"</span>, <span class="st">"J"</span> ),</span>
-<span id="cb31-207"><a href="#cb31-207" aria-hidden="true" tabindex="-1"></a>  <span class="at">Frequency =</span> <span class="fu">c</span>( <span class="fl">0.55</span>, <span class="fl">0.30</span>, <span class="fl">0.15</span>, <span class="fl">0.34</span>, <span class="fl">0.34</span>, <span class="fl">0.32</span> )</span>
-<span id="cb31-208"><a href="#cb31-208" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb31-209"><a href="#cb31-209" aria-hidden="true" tabindex="-1"></a>pop   <span class="ot">&lt;-</span> freqs <span class="sc">|&gt;</span></span>
-<span id="cb31-210"><a href="#cb31-210" aria-hidden="true" tabindex="-1"></a>    <span class="fu">make_population</span>( <span class="at">N =</span> <span class="dv">10</span> )</span>
-<span id="cb31-211"><a href="#cb31-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-212"><a href="#cb31-212" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
-<span id="cb31-213"><a href="#cb31-213" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb31-214"><a href="#cb31-214" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-215"><a href="#cb31-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-216"><a href="#cb31-216" aria-hidden="true" tabindex="-1"></a><span class="fu">### Multiple Populations</span></span>
-<span id="cb31-217"><a href="#cb31-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-218"><a href="#cb31-218" aria-hidden="true" tabindex="-1"></a>The <span class="in">`make_populations()`</span> function creates several populations at once from a frequency data.frame with a <span class="in">`Population`</span> column:</span>
-<span id="cb31-219"><a href="#cb31-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-222"><a href="#cb31-222" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-223"><a href="#cb31-223" aria-hidden="true" tabindex="-1"></a>pop_freqs <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>( <span class="at">Allele =</span> <span class="fu">c</span>( <span class="st">"01"</span>, <span class="st">"02"</span> ),</span>
-<span id="cb31-224"><a href="#cb31-224" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Locus =</span> <span class="fu">c</span>( <span class="st">"Loc1"</span>, <span class="st">"Loc2"</span> ),</span>
-<span id="cb31-225"><a href="#cb31-225" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Population =</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ),</span>
-<span id="cb31-226"><a href="#cb31-226" aria-hidden="true" tabindex="-1"></a>                          <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span> ) <span class="sc">|&gt;</span></span>
-<span id="cb31-227"><a href="#cb31-227" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">Frequency =</span> <span class="fu">c</span>( <span class="fl">0.2</span>, <span class="fl">0.8</span>, <span class="fl">0.3</span>, <span class="fl">0.7</span>,</span>
-<span id="cb31-228"><a href="#cb31-228" aria-hidden="true" tabindex="-1"></a>                         <span class="fl">0.7</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span> ),</span>
-<span id="cb31-229"><a href="#cb31-229" aria-hidden="true" tabindex="-1"></a>          <span class="at">Population =</span> <span class="fu">factor</span>( Population, <span class="at">ordered =</span> <span class="cn">TRUE</span> ) ) <span class="sc">|&gt;</span></span>
-<span id="cb31-230"><a href="#cb31-230" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>( Population, Locus, Allele, Frequency )</span>
-<span id="cb31-231"><a href="#cb31-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-232"><a href="#cb31-232" aria-hidden="true" tabindex="-1"></a>pops <span class="ot">&lt;-</span> pop_freqs <span class="sc">|&gt;</span></span>
-<span id="cb31-233"><a href="#cb31-233" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_populations</span>( <span class="at">N =</span> <span class="dv">15</span> )</span>
-<span id="cb31-234"><a href="#cb31-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-235"><a href="#cb31-235" aria-hidden="true" tabindex="-1"></a>pops <span class="sc">|&gt;</span></span>
-<span id="cb31-236"><a href="#cb31-236" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb31-237"><a href="#cb31-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-238"><a href="#cb31-238" aria-hidden="true" tabindex="-1"></a>pops <span class="sc">|&gt;</span></span>
-<span id="cb31-239"><a href="#cb31-239" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>( Population )</span>
-<span id="cb31-240"><a href="#cb31-240" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-241"><a href="#cb31-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-242"><a href="#cb31-242" aria-hidden="true" tabindex="-1"></a><span class="fu">### From Individual Loci</span></span>
-<span id="cb31-243"><a href="#cb31-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-244"><a href="#cb31-244" aria-hidden="true" tabindex="-1"></a>The <span class="in">`make_loci()`</span> function generates a vector of random locus objects:</span>
-<span id="cb31-245"><a href="#cb31-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-248"><a href="#cb31-248" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-249"><a href="#cb31-249" aria-hidden="true" tabindex="-1"></a>f    <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">Allele =</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ), <span class="at">Frequency =</span> <span class="fu">c</span>( <span class="fl">0.6</span>, <span class="fl">0.4</span> ) )</span>
-<span id="cb31-250"><a href="#cb31-250" aria-hidden="true" tabindex="-1"></a>loci <span class="ot">&lt;-</span> f <span class="sc">|&gt;</span></span>
-<span id="cb31-251"><a href="#cb31-251" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_loci</span>( <span class="at">N =</span> <span class="dv">10</span> )</span>
-<span id="cb31-252"><a href="#cb31-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-253"><a href="#cb31-253" aria-hidden="true" tabindex="-1"></a>loci</span>
-<span id="cb31-254"><a href="#cb31-254" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-255"><a href="#cb31-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-256"><a href="#cb31-256" aria-hidden="true" tabindex="-1"></a><span class="fu">## Without Pipes</span></span>
-<span id="cb31-257"><a href="#cb31-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-260"><a href="#cb31-260" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-261"><a href="#cb31-261" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb31-262"><a href="#cb31-262" aria-hidden="true" tabindex="-1"></a>path     <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>,</span>
-<span id="cb31-263"><a href="#cb31-263" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"data_separated.csv"</span>,</span>
-<span id="cb31-264"><a href="#cb31-264" aria-hidden="true" tabindex="-1"></a>                         <span class="at">package =</span> <span class="st">"gstudio"</span> )</span>
-<span id="cb31-265"><a href="#cb31-265" aria-hidden="true" tabindex="-1"></a>data_sep <span class="ot">&lt;-</span> <span class="fu">read_population</span>( path,</span>
-<span id="cb31-266"><a href="#cb31-266" aria-hidden="true" tabindex="-1"></a>                             <span class="at">type =</span> <span class="st">"separated"</span>,</span>
-<span id="cb31-267"><a href="#cb31-267" aria-hidden="true" tabindex="-1"></a>                             <span class="at">locus.columns =</span> <span class="fu">c</span>( <span class="dv">4</span>, <span class="dv">5</span> ) )</span>
-<span id="cb31-268"><a href="#cb31-268" aria-hidden="true" tabindex="-1"></a><span class="fu">write_population</span>( arapat,</span>
-<span id="cb31-269"><a href="#cb31-269" aria-hidden="true" tabindex="-1"></a>                  <span class="at">file =</span> <span class="st">"arapat.str"</span>,</span>
-<span id="cb31-270"><a href="#cb31-270" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mode =</span> <span class="st">"structure"</span>,</span>
-<span id="cb31-271"><a href="#cb31-271" aria-hidden="true" tabindex="-1"></a>                  <span class="at">stratum =</span> <span class="st">"Species"</span> )</span>
-<span id="cb31-272"><a href="#cb31-272" aria-hidden="true" tabindex="-1"></a>gp   <span class="ot">&lt;-</span> <span class="fu">to_genepop</span>( arapat, <span class="at">stratum =</span> <span class="st">"Species"</span> )</span>
-<span id="cb31-273"><a href="#cb31-273" aria-hidden="true" tabindex="-1"></a>pop  <span class="ot">&lt;-</span> <span class="fu">make_population</span>( freqs, <span class="at">N =</span> <span class="dv">10</span> )</span>
-<span id="cb31-274"><a href="#cb31-274" aria-hidden="true" tabindex="-1"></a>pops <span class="ot">&lt;-</span> <span class="fu">make_populations</span>( pop_freqs, <span class="at">N =</span> <span class="dv">15</span> )</span>
-<span id="cb31-275"><a href="#cb31-275" aria-hidden="true" tabindex="-1"></a>loci <span class="ot">&lt;-</span> <span class="fu">make_loci</span>( f, <span class="at">N =</span> <span class="dv">10</span> )</span>
-<span id="cb31-276"><a href="#cb31-276" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( gstudio )</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( dplyr )</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>( arapat )</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reading Population Data</span></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>The <span class="in">`read_population()`</span> function is the primary data import tool. It reads text files and converts specified columns to <span class="in">`locus`</span> objects.</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a><span class="fu">### Function Signature</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a><span class="fu">read_population</span>( path, type, locus.columns, <span class="at">phased =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>                 <span class="at">sep =</span> <span class="st">","</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">delim =</span> <span class="st">":"</span> )</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>The key parameters:</span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`path`</span> --- file path to the data</span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`type`</span> --- marker encoding format</span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`locus.columns`</span> --- integer vector indicating which columns contain genetic data</span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a><span class="fu">### Separated Format</span></span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>The most common format uses colon-separated alleles (e.g., <span class="in">`"A:B"`</span>):</span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>data_sep <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>,</span>
+<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"data_separated.csv"</span>,</span>
+<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a>                         <span class="at">package =</span> <span class="st">"gstudio"</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_population</span>( <span class="at">type =</span> <span class="st">"separated"</span>,</span>
+<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a>                   <span class="at">locus.columns =</span> <span class="fu">c</span>( <span class="dv">4</span>, <span class="dv">5</span> ) )</span>
+<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a>data_sep <span class="sc">|&gt;</span></span>
+<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a><span class="fu">### Column Format</span></span>
+<span id="cb31-50"><a href="#cb31-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-51"><a href="#cb31-51" aria-hidden="true" tabindex="-1"></a>Two adjacent columns per locus (one column per allele):</span>
+<span id="cb31-52"><a href="#cb31-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-55"><a href="#cb31-55" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-56"><a href="#cb31-56" aria-hidden="true" tabindex="-1"></a>data_col <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>,</span>
+<span id="cb31-57"><a href="#cb31-57" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"data_2_column.csv"</span>,</span>
+<span id="cb31-58"><a href="#cb31-58" aria-hidden="true" tabindex="-1"></a>                         <span class="at">package =</span> <span class="st">"gstudio"</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb31-59"><a href="#cb31-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_population</span>( <span class="at">type =</span> <span class="st">"column"</span>,</span>
+<span id="cb31-60"><a href="#cb31-60" aria-hidden="true" tabindex="-1"></a>                   <span class="at">locus.columns =</span> <span class="fu">c</span>( <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span> ) )</span>
+<span id="cb31-61"><a href="#cb31-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-62"><a href="#cb31-62" aria-hidden="true" tabindex="-1"></a>data_col <span class="sc">|&gt;</span></span>
+<span id="cb31-63"><a href="#cb31-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb31-64"><a href="#cb31-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-65"><a href="#cb31-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-66"><a href="#cb31-66" aria-hidden="true" tabindex="-1"></a><span class="fu">### SNP Format</span></span>
+<span id="cb31-67"><a href="#cb31-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-68"><a href="#cb31-68" aria-hidden="true" tabindex="-1"></a>Encoded as 0, 1, 2 (minor allele count):</span>
+<span id="cb31-69"><a href="#cb31-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-72"><a href="#cb31-72" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-73"><a href="#cb31-73" aria-hidden="true" tabindex="-1"></a>data_snp <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>,</span>
+<span id="cb31-74"><a href="#cb31-74" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"data_snp.csv"</span>,</span>
+<span id="cb31-75"><a href="#cb31-75" aria-hidden="true" tabindex="-1"></a>                         <span class="at">package =</span> <span class="st">"gstudio"</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb31-76"><a href="#cb31-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_population</span>( <span class="at">type =</span> <span class="st">"snp"</span>, <span class="at">locus.columns =</span> <span class="fu">c</span>( <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span> ) )</span>
+<span id="cb31-77"><a href="#cb31-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-78"><a href="#cb31-78" aria-hidden="true" tabindex="-1"></a>data_snp <span class="sc">|&gt;</span></span>
+<span id="cb31-79"><a href="#cb31-79" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb31-80"><a href="#cb31-80" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-81"><a href="#cb31-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-82"><a href="#cb31-82" aria-hidden="true" tabindex="-1"></a><span class="fu">### AFLP Format</span></span>
+<span id="cb31-83"><a href="#cb31-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-84"><a href="#cb31-84" aria-hidden="true" tabindex="-1"></a>Binary (0/1) presence-absence:</span>
+<span id="cb31-85"><a href="#cb31-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-88"><a href="#cb31-88" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-89"><a href="#cb31-89" aria-hidden="true" tabindex="-1"></a>data_aflp <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>,</span>
+<span id="cb31-90"><a href="#cb31-90" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"data_aflp.csv"</span>,</span>
+<span id="cb31-91"><a href="#cb31-91" aria-hidden="true" tabindex="-1"></a>                          <span class="at">package =</span> <span class="st">"gstudio"</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb31-92"><a href="#cb31-92" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_population</span>( <span class="at">type =</span> <span class="st">"aflp"</span>,</span>
+<span id="cb31-93"><a href="#cb31-93" aria-hidden="true" tabindex="-1"></a>                   <span class="at">locus.columns =</span> <span class="fu">c</span>( <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span> ) )</span>
+<span id="cb31-94"><a href="#cb31-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-95"><a href="#cb31-95" aria-hidden="true" tabindex="-1"></a>data_aflp <span class="sc">|&gt;</span></span>
+<span id="cb31-96"><a href="#cb31-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb31-97"><a href="#cb31-97" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-98"><a href="#cb31-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-99"><a href="#cb31-99" aria-hidden="true" tabindex="-1"></a><span class="fu">### Allozyme (Zyme) Format</span></span>
+<span id="cb31-100"><a href="#cb31-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-101"><a href="#cb31-101" aria-hidden="true" tabindex="-1"></a>Concatenated integer alleles (e.g., "12" for alleles 1 and 2):</span>
+<span id="cb31-102"><a href="#cb31-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-105"><a href="#cb31-105" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-106"><a href="#cb31-106" aria-hidden="true" tabindex="-1"></a>data_zyme <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>,</span>
+<span id="cb31-107"><a href="#cb31-107" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"data_zymelike.csv"</span>,</span>
+<span id="cb31-108"><a href="#cb31-108" aria-hidden="true" tabindex="-1"></a>                          <span class="at">package =</span> <span class="st">"gstudio"</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb31-109"><a href="#cb31-109" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_population</span>( <span class="at">type =</span> <span class="st">"zyme"</span>,</span>
+<span id="cb31-110"><a href="#cb31-110" aria-hidden="true" tabindex="-1"></a>                   <span class="at">locus.columns =</span> <span class="fu">c</span>( <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span> ) )</span>
+<span id="cb31-111"><a href="#cb31-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-112"><a href="#cb31-112" aria-hidden="true" tabindex="-1"></a>data_zyme <span class="sc">|&gt;</span></span>
+<span id="cb31-113"><a href="#cb31-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb31-114"><a href="#cb31-114" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-115"><a href="#cb31-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-116"><a href="#cb31-116" aria-hidden="true" tabindex="-1"></a><span class="fu">### Genepop Format</span></span>
+<span id="cb31-117"><a href="#cb31-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-118"><a href="#cb31-118" aria-hidden="true" tabindex="-1"></a>Genepop files have their own structure with <span class="in">`Pop`</span> delimiters:</span>
+<span id="cb31-119"><a href="#cb31-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-122"><a href="#cb31-122" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-123"><a href="#cb31-123" aria-hidden="true" tabindex="-1"></a>data_gp <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>, <span class="st">"genepop.txt"</span>, <span class="at">package =</span> <span class="st">"gstudio"</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb31-124"><a href="#cb31-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_population</span>( <span class="at">type =</span> <span class="st">"genepop"</span> )</span>
+<span id="cb31-125"><a href="#cb31-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-126"><a href="#cb31-126" aria-hidden="true" tabindex="-1"></a>data_gp <span class="sc">|&gt;</span></span>
+<span id="cb31-127"><a href="#cb31-127" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb31-128"><a href="#cb31-128" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-129"><a href="#cb31-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-130"><a href="#cb31-130" aria-hidden="true" tabindex="-1"></a><span class="fu">### Structure Format</span></span>
+<span id="cb31-131"><a href="#cb31-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-132"><a href="#cb31-132" aria-hidden="true" tabindex="-1"></a>Two-row-per-individual STRUCTURE format:</span>
+<span id="cb31-133"><a href="#cb31-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-136"><a href="#cb31-136" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-137"><a href="#cb31-137" aria-hidden="true" tabindex="-1"></a>data_str <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>,</span>
+<span id="cb31-138"><a href="#cb31-138" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"data_structure.str"</span>,</span>
+<span id="cb31-139"><a href="#cb31-139" aria-hidden="true" tabindex="-1"></a>                         <span class="at">package =</span> <span class="st">"gstudio"</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb31-140"><a href="#cb31-140" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_population</span>( <span class="at">type =</span> <span class="st">"structure"</span> )</span>
+<span id="cb31-141"><a href="#cb31-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-142"><a href="#cb31-142" aria-hidden="true" tabindex="-1"></a>data_str <span class="sc">|&gt;</span></span>
+<span id="cb31-143"><a href="#cb31-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb31-144"><a href="#cb31-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-145"><a href="#cb31-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-146"><a href="#cb31-146" aria-hidden="true" tabindex="-1"></a><span class="fu">## Writing Population Data</span></span>
+<span id="cb31-147"><a href="#cb31-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-148"><a href="#cb31-148" aria-hidden="true" tabindex="-1"></a>The <span class="in">`write_population()`</span> function exports a data.frame to various formats:</span>
+<span id="cb31-149"><a href="#cb31-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-152"><a href="#cb31-152" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-153"><a href="#cb31-153" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-154"><a href="#cb31-154" aria-hidden="true" tabindex="-1"></a><span class="co"># Plain text (colon-separated loci)</span></span>
+<span id="cb31-155"><a href="#cb31-155" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb31-156"><a href="#cb31-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_population</span>( <span class="at">file =</span> <span class="st">"arapat.csv"</span> )</span>
+<span id="cb31-157"><a href="#cb31-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-158"><a href="#cb31-158" aria-hidden="true" tabindex="-1"></a><span class="co"># Genepop format, for one species only</span></span>
+<span id="cb31-159"><a href="#cb31-159" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb31-160"><a href="#cb31-160" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>( Species <span class="sc">==</span> <span class="st">"Cape"</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb31-161"><a href="#cb31-161" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_population</span>( <span class="at">file =</span> <span class="st">"cape.gen"</span>,</span>
+<span id="cb31-162"><a href="#cb31-162" aria-hidden="true" tabindex="-1"></a>                    <span class="at">mode =</span> <span class="st">"genepop"</span>,</span>
+<span id="cb31-163"><a href="#cb31-163" aria-hidden="true" tabindex="-1"></a>                    <span class="at">stratum =</span> <span class="st">"Population"</span> )</span>
+<span id="cb31-164"><a href="#cb31-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-165"><a href="#cb31-165" aria-hidden="true" tabindex="-1"></a><span class="co"># Structure format</span></span>
+<span id="cb31-166"><a href="#cb31-166" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb31-167"><a href="#cb31-167" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_population</span>( <span class="at">file =</span> <span class="st">"arapat.str"</span>,</span>
+<span id="cb31-168"><a href="#cb31-168" aria-hidden="true" tabindex="-1"></a>                    <span class="at">mode =</span> <span class="st">"structure"</span>,</span>
+<span id="cb31-169"><a href="#cb31-169" aria-hidden="true" tabindex="-1"></a>                    <span class="at">stratum =</span> <span class="st">"Species"</span> )</span>
+<span id="cb31-170"><a href="#cb31-170" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-171"><a href="#cb31-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-172"><a href="#cb31-172" aria-hidden="true" tabindex="-1"></a><span class="fu">## Direct Format Conversion</span></span>
+<span id="cb31-173"><a href="#cb31-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-174"><a href="#cb31-174" aria-hidden="true" tabindex="-1"></a>You can also convert data.frames directly without writing to disk:</span>
+<span id="cb31-175"><a href="#cb31-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-178"><a href="#cb31-178" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-179"><a href="#cb31-179" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>( arapat )</span>
+<span id="cb31-180"><a href="#cb31-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-181"><a href="#cb31-181" aria-hidden="true" tabindex="-1"></a>gp <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb31-182"><a href="#cb31-182" aria-hidden="true" tabindex="-1"></a>  <span class="fu">to_genepop</span>( <span class="at">stratum =</span> <span class="st">"Species"</span> )</span>
+<span id="cb31-183"><a href="#cb31-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-184"><a href="#cb31-184" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>( gp[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>], <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span> )</span>
+<span id="cb31-185"><a href="#cb31-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-186"><a href="#cb31-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-189"><a href="#cb31-189" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-190"><a href="#cb31-190" aria-hidden="true" tabindex="-1"></a>st <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb31-191"><a href="#cb31-191" aria-hidden="true" tabindex="-1"></a>  <span class="fu">to_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span> )</span>
+<span id="cb31-192"><a href="#cb31-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-193"><a href="#cb31-193" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>( st[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span> )</span>
+<span id="cb31-194"><a href="#cb31-194" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-195"><a href="#cb31-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-196"><a href="#cb31-196" aria-hidden="true" tabindex="-1"></a><span class="fu">## Generating Synthetic Data</span></span>
+<span id="cb31-197"><a href="#cb31-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-198"><a href="#cb31-198" aria-hidden="true" tabindex="-1"></a><span class="fu">### From Allele Frequencies</span></span>
+<span id="cb31-199"><a href="#cb31-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-200"><a href="#cb31-200" aria-hidden="true" tabindex="-1"></a>The <span class="in">`make_population()`</span> function creates a random population from a frequency table:</span>
+<span id="cb31-201"><a href="#cb31-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-204"><a href="#cb31-204" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-205"><a href="#cb31-205" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb31-206"><a href="#cb31-206" aria-hidden="true" tabindex="-1"></a>  <span class="at">Locus =</span> <span class="fu">rep</span>( <span class="fu">c</span>( <span class="st">"TPI"</span>, <span class="st">"PGM"</span> ), <span class="at">each =</span> <span class="dv">3</span> ),</span>
+<span id="cb31-207"><a href="#cb31-207" aria-hidden="true" tabindex="-1"></a>  <span class="at">Allele =</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"H"</span>, <span class="st">"I"</span>, <span class="st">"J"</span> ),</span>
+<span id="cb31-208"><a href="#cb31-208" aria-hidden="true" tabindex="-1"></a>  <span class="at">Frequency =</span> <span class="fu">c</span>( <span class="fl">0.55</span>, <span class="fl">0.30</span>, <span class="fl">0.15</span>, <span class="fl">0.34</span>, <span class="fl">0.34</span>, <span class="fl">0.32</span> )</span>
+<span id="cb31-209"><a href="#cb31-209" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb31-210"><a href="#cb31-210" aria-hidden="true" tabindex="-1"></a>pop   <span class="ot">&lt;-</span> freqs <span class="sc">|&gt;</span></span>
+<span id="cb31-211"><a href="#cb31-211" aria-hidden="true" tabindex="-1"></a>    <span class="fu">make_population</span>( <span class="at">N =</span> <span class="dv">10</span> )</span>
+<span id="cb31-212"><a href="#cb31-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-213"><a href="#cb31-213" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
+<span id="cb31-214"><a href="#cb31-214" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb31-215"><a href="#cb31-215" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-216"><a href="#cb31-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-217"><a href="#cb31-217" aria-hidden="true" tabindex="-1"></a><span class="fu">### Multiple Populations</span></span>
+<span id="cb31-218"><a href="#cb31-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-219"><a href="#cb31-219" aria-hidden="true" tabindex="-1"></a>The <span class="in">`make_populations()`</span> function creates several populations at once from a frequency data.frame with a <span class="in">`Population`</span> column:</span>
+<span id="cb31-220"><a href="#cb31-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-223"><a href="#cb31-223" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-224"><a href="#cb31-224" aria-hidden="true" tabindex="-1"></a>pop_freqs <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>( <span class="at">Allele =</span> <span class="fu">c</span>( <span class="st">"01"</span>, <span class="st">"02"</span> ),</span>
+<span id="cb31-225"><a href="#cb31-225" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Locus =</span> <span class="fu">c</span>( <span class="st">"Loc1"</span>, <span class="st">"Loc2"</span> ),</span>
+<span id="cb31-226"><a href="#cb31-226" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Population =</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ),</span>
+<span id="cb31-227"><a href="#cb31-227" aria-hidden="true" tabindex="-1"></a>                          <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb31-228"><a href="#cb31-228" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">Frequency =</span> <span class="fu">c</span>( <span class="fl">0.2</span>, <span class="fl">0.8</span>, <span class="fl">0.3</span>, <span class="fl">0.7</span>,</span>
+<span id="cb31-229"><a href="#cb31-229" aria-hidden="true" tabindex="-1"></a>                         <span class="fl">0.7</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span> ),</span>
+<span id="cb31-230"><a href="#cb31-230" aria-hidden="true" tabindex="-1"></a>          <span class="at">Population =</span> <span class="fu">factor</span>( Population, <span class="at">ordered =</span> <span class="cn">TRUE</span> ) ) <span class="sc">|&gt;</span></span>
+<span id="cb31-231"><a href="#cb31-231" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>( Population, Locus, Allele, Frequency )</span>
+<span id="cb31-232"><a href="#cb31-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-233"><a href="#cb31-233" aria-hidden="true" tabindex="-1"></a>pops <span class="ot">&lt;-</span> pop_freqs <span class="sc">|&gt;</span></span>
+<span id="cb31-234"><a href="#cb31-234" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_populations</span>( <span class="at">N =</span> <span class="dv">15</span> )</span>
+<span id="cb31-235"><a href="#cb31-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-236"><a href="#cb31-236" aria-hidden="true" tabindex="-1"></a>pops <span class="sc">|&gt;</span></span>
+<span id="cb31-237"><a href="#cb31-237" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
+<span id="cb31-238"><a href="#cb31-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-239"><a href="#cb31-239" aria-hidden="true" tabindex="-1"></a>pops <span class="sc">|&gt;</span></span>
+<span id="cb31-240"><a href="#cb31-240" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>( Population )</span>
+<span id="cb31-241"><a href="#cb31-241" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-242"><a href="#cb31-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-243"><a href="#cb31-243" aria-hidden="true" tabindex="-1"></a><span class="fu">### From Individual Loci</span></span>
+<span id="cb31-244"><a href="#cb31-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-245"><a href="#cb31-245" aria-hidden="true" tabindex="-1"></a>The <span class="in">`make_loci()`</span> function generates a vector of random locus objects:</span>
+<span id="cb31-246"><a href="#cb31-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-249"><a href="#cb31-249" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-250"><a href="#cb31-250" aria-hidden="true" tabindex="-1"></a>f    <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">Allele =</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ), <span class="at">Frequency =</span> <span class="fu">c</span>( <span class="fl">0.6</span>, <span class="fl">0.4</span> ) )</span>
+<span id="cb31-251"><a href="#cb31-251" aria-hidden="true" tabindex="-1"></a>loci <span class="ot">&lt;-</span> f <span class="sc">|&gt;</span></span>
+<span id="cb31-252"><a href="#cb31-252" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_loci</span>( <span class="at">N =</span> <span class="dv">10</span> )</span>
+<span id="cb31-253"><a href="#cb31-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-254"><a href="#cb31-254" aria-hidden="true" tabindex="-1"></a>loci</span>
+<span id="cb31-255"><a href="#cb31-255" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-256"><a href="#cb31-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-257"><a href="#cb31-257" aria-hidden="true" tabindex="-1"></a><span class="fu">## Without Pipes</span></span>
+<span id="cb31-258"><a href="#cb31-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-261"><a href="#cb31-261" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-262"><a href="#cb31-262" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-263"><a href="#cb31-263" aria-hidden="true" tabindex="-1"></a>path     <span class="ot">&lt;-</span> <span class="fu">system.file</span>( <span class="st">"extdata"</span>,</span>
+<span id="cb31-264"><a href="#cb31-264" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"data_separated.csv"</span>,</span>
+<span id="cb31-265"><a href="#cb31-265" aria-hidden="true" tabindex="-1"></a>                         <span class="at">package =</span> <span class="st">"gstudio"</span> )</span>
+<span id="cb31-266"><a href="#cb31-266" aria-hidden="true" tabindex="-1"></a>data_sep <span class="ot">&lt;-</span> <span class="fu">read_population</span>( path,</span>
+<span id="cb31-267"><a href="#cb31-267" aria-hidden="true" tabindex="-1"></a>                             <span class="at">type =</span> <span class="st">"separated"</span>,</span>
+<span id="cb31-268"><a href="#cb31-268" aria-hidden="true" tabindex="-1"></a>                             <span class="at">locus.columns =</span> <span class="fu">c</span>( <span class="dv">4</span>, <span class="dv">5</span> ) )</span>
+<span id="cb31-269"><a href="#cb31-269" aria-hidden="true" tabindex="-1"></a><span class="fu">write_population</span>( arapat,</span>
+<span id="cb31-270"><a href="#cb31-270" aria-hidden="true" tabindex="-1"></a>                  <span class="at">file =</span> <span class="st">"arapat.str"</span>,</span>
+<span id="cb31-271"><a href="#cb31-271" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mode =</span> <span class="st">"structure"</span>,</span>
+<span id="cb31-272"><a href="#cb31-272" aria-hidden="true" tabindex="-1"></a>                  <span class="at">stratum =</span> <span class="st">"Species"</span> )</span>
+<span id="cb31-273"><a href="#cb31-273" aria-hidden="true" tabindex="-1"></a>gp   <span class="ot">&lt;-</span> <span class="fu">to_genepop</span>( arapat, <span class="at">stratum =</span> <span class="st">"Species"</span> )</span>
+<span id="cb31-274"><a href="#cb31-274" aria-hidden="true" tabindex="-1"></a>pop  <span class="ot">&lt;-</span> <span class="fu">make_population</span>( freqs, <span class="at">N =</span> <span class="dv">10</span> )</span>
+<span id="cb31-275"><a href="#cb31-275" aria-hidden="true" tabindex="-1"></a>pops <span class="ot">&lt;-</span> <span class="fu">make_populations</span>( pop_freqs, <span class="at">N =</span> <span class="dv">15</span> )</span>
+<span id="cb31-276"><a href="#cb31-276" aria-hidden="true" tabindex="-1"></a>loci <span class="ot">&lt;-</span> <span class="fu">make_loci</span>( f, <span class="at">N =</span> <span class="dv">10</span> )</span>
+<span id="cb31-277"><a href="#cb31-277" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

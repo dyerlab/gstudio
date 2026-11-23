@@ -4,7 +4,7 @@ This package was archived on CRAN on 2015-06-09 (last CRAN version 1.3). It has
 since been completely rewritten and is actively maintained; all check errors
 that led to archival have been resolved.
 
-This submission (v1.15.0) consolidates the interface:
+This submission (v1.15.8) consolidates the interface:
 
 * Analyses go through four gateway functions (`genetic_diversity()`,
   `genetic_structure()`, `genetic_distance()`, `genetic_relatedness()`); the
@@ -17,18 +17,23 @@ This submission (v1.15.0) consolidates the interface:
   `genetic_distance(mode = "dcGD")`), with a new vignette and example data.
 * `plot()` methods for Population Graphs and gravity fields return ggplot
   objects.
+* Design diagnostics and a design-matched null for the directional tests
+  (`popgraph_diagnostics()`, `popgraph_null()`), and a much faster
+  individual-based simulator (`simulate_pop()`).
 
 The interface changes are listed in NEWS as [BREAKING] entries.
 
 ## Test environments
 
-* macOS (aarch64-apple-darwin20), R 4.6.0: `devtools::check(cran = TRUE)`
+* macOS (aarch64-apple-darwin20), R 4.6.0: `devtools::check(cran = TRUE)` and
+  `R CMD check --as-cran` with the remote incoming checks
 * win-builder, R-release: TODO (`devtools::check_win_release()`)
 * win-builder, R-devel: TODO (`devtools::check_win_devel()`)
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes (local)
+0 errors | 0 warnings | 0 notes (local), apart from a local NOTE that HTML
+Tidy is too old to validate the HTML manual.
 
 Expected on CRAN incoming checks:
 

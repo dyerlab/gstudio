@@ -15,7 +15,7 @@ to_geojson(graph, file)
 A textual version of the popgraph
 }
 \description{
-This is a convienence function to convert a population graph
+This is a convenience function to convert a population graph
   object into GeoJSON format for inclusion into ArcGIS Online
 }
 \examples{

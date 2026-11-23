@@ -34,8 +34,7 @@ migrate <- function( data, stratum="Population", m=0.1, relabel=TRUE){
   if( !(stratum %in% names(data) ) )
     stop("You need to indicate the stratum to use for migration.")
   
-  pops <- partition( data, stratum )
-  strata <- names(pops)
+  strata <- names( partition( data, stratum ) )
   K <- length(strata)
   if( !is(m,"matrix") ){
     mat <- matrix( m / (K - 1), K, K)
@@ -60,35 +59,21 @@ migrate <- function( data, stratum="Population", m=0.1, relabel=TRUE){
   for( i in seq_len(K) )
     to_move[i, ] <- as.integer(stats::rmultinom(1L, n[i], m[i, ]))
 
-  # do the off-diagonals from(row) to(col) movements
-  newpops <- vector('list',K)
-  names(newpops) <- strata
-  for( i in seq_len(K) ){
-    for( j in seq_len(K) ){
-      moving <- to_move[i,j]
-      all_indx <- seq_len(nrow(pops[[i]]))
-      idx <- sample( all_indx, size=moving, replace=FALSE)
-      df <- pops[[i]][idx,]
-      
-      if( is.null(newpops[[j]]))
-        newpops[[j]] <- df
-      else
-        newpops[[j]] <- rbind( newpops[[j]], df)    
-      
-      idx <- setdiff( all_indx,idx)
-      pops[[i]] <- pops[[i]][idx,]
-      
-    }
+  # draw each individual's destination, then reorder once: individuals are
+  # grouped by destination, and by source within destination
+  src  <- as.character( data[[stratum]] )
+  dest <- rep( NA_character_, length( src ) )
+  for( i in seq_len( K ) ) {
+    rows <- which( src == strata[i] )
+    if( length( rows ) )
+      dest[rows] <- sample( rep( strata, to_move[i, ] ) )
   }
-  
-  ret <- data.frame()
-  for( pop in strata ){
-    df <- newpops[[pop]]
-    if( relabel )
-      df[[stratum]] <- pop
-    ret <- rbind(ret,df) 
-  }
-  
+  keep <- which( !is.na( dest ) )
+  ord  <- keep[order( match( dest[keep], strata ), match( src[keep], strata ) )]
+  ret  <- data[ord, , drop = FALSE]
+  if( relabel )
+    ret[[stratum]] <- dest[ord]
+
   rownames(ret) <- seq(1,nrow(ret))
   return( ret )
 }
