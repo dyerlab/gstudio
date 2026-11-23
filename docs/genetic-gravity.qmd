@@ -14,7 +14,7 @@ populations' geographic centroids give both the map layout and a covariate to
 test against: latitude along the Baja California peninsula.
 
 ```{r arapat-graph}
-data(arapat)
+data( arapat )
 
 beetles <- arapat |>
   population_graph()
@@ -23,7 +23,7 @@ coords <- arapat |>
   strata_coordinates()
 
 lat <- coords |>
-  pull(Latitude, name = Stratum)
+  pull( Latitude, name = Stratum )
 ```
 
 Passing the centroids as `layout` draws the gravity field on geographic
@@ -36,41 +36,43 @@ the local-mean picture is degree:
 #| fig-width: 9
 #| fig-height: 5
 both <- beetles |>
-  gravity_field(gamma = c(1, 0.5))
+  gravity_field( gamma = c( 1, 0.5 ) )
 
 both |>
-  as.data.frame(what = "diagnostics")
+  as.data.frame( what = "diagnostics" )
 
 both |>
-  plot(layout = coords, mask_dist = 0.6)
+  plot( layout = coords, mask_dist = 0.6 )
 ```
 
 Both tests take latitude as the hypothesized axis:
 
 ```{r arapat-tests}
-set.seed(1)
+set.seed( 1 )
 
 beetles |>
-  source_sink_test(x = lat, nperm = 499)
+  source_sink_test( x = lat, nperm = 499 )
 
 beetles |>
-  ibgd(x = lat)
+  ibgd( x = lat )
 
 beetles |>
-  ibgd(x = lat, mode = "dcGD")
+  ibgd( x = lat, mode = "dcGD" )
 ```
 
 Without pipes, the same steps are:
 
 ```{r arapat-no-pipes}
 #| eval: false
-beetles   <- population_graph(arapat, stratum = "Population")
-coords <- strata_coordinates(arapat, stratum = "Population")
-lat    <- setNames(coords$Latitude, coords$Stratum)
-plot(gravity_field(beetles, gamma = c(1, 0.5)), layout = coords, mask_dist = 0.6)
-source_sink_test(beetles, x = lat, nperm = 499)
-ibgd(beetles, x = lat, mode = "cGD")
-ibgd(beetles, x = lat, mode = "dcGD")
+beetles <- population_graph( arapat, stratum = "Population" )
+coords  <- strata_coordinates( arapat, stratum = "Population" )
+lat     <- setNames( coords$Latitude, coords$Stratum )
+plot( gravity_field( beetles, gamma = c( 1, 0.5 ) ),
+      layout = coords,
+      mask_dist = 0.6 )
+source_sink_test( beetles, x = lat, nperm = 499 )
+ibgd( beetles, x = lat, mode = "cGD" )
+ibgd( beetles, x = lat, mode = "dcGD" )
 ```
 
 Starting from the genotypes rather than a graph, `genetic_isolation()` builds
@@ -78,8 +80,8 @@ the graph and runs the same tests, with the axis given as a column:
 
 ```{r arapat-isolation}
 #| eval: false
-genetic_isolation(arapat, mode = "IBGD", axis = "Latitude")
-genetic_isolation(arapat, mode = "dcGD", axis = "Latitude")
+genetic_isolation( arapat, mode = "IBGD", axis = "Latitude" )
+genetic_isolation( arapat, mode = "dcGD", axis = "Latitude" )
 ```
 
 The two tests answer different questions.  Under strong drift the model
@@ -98,7 +100,7 @@ sampling design: the number of strata, the individuals in each and the loci.
 score, few strata or loci):
 
 ```{r arapat-diagnostics}
-dg <- popgraph_diagnostics(arapat)
+dg <- popgraph_diagnostics( arapat )
 dg
 ```
 
@@ -107,10 +109,10 @@ a failed check means for the tests.  The same checks are available as a
 data frame, and the per-stratum detail is in `dg$strata`:
 
 ```{r arapat-diagnostics-df}
-as.data.frame(dg) |>
-  subset(status == "warn", select = c(check, value, threshold, note))
+as.data.frame( dg ) |>
+  subset( status == "warn", select = c( check, value, threshold, note ) )
 
-head(dg$strata)
+head( dg$strata )
 ```
 
 `popgraph_null()` then calibrates the tests for that design.  It simulates
@@ -121,11 +123,14 @@ Graph and returns the null distributions of $\Delta R^2$ and $r(S, x)$.  The
 
 ```{r arapat-null}
 #| eval: false
-peninsula <- droplevels(arapat[arapat$Species == "Peninsula", ])
-peninsula <- droplevels(peninsula[peninsula$Population %in%
-                                  names(which(table(peninsula$Population) >= 8)), ])
-lat_p <- tapply(peninsula$Latitude, peninsula$Population, mean)
-popgraph_null(peninsula, axis = -lat_p, nsim = 199, cores = 4)
+peninsula <- droplevels( arapat[arapat$Species == "Peninsula", ] )
+big       <- names( which( table( peninsula$Population ) >= 8 ) )
+peninsula <- droplevels( peninsula[peninsula$Population %in% big, ] )
+lat_p     <- tapply( peninsula$Latitude, peninsula$Population, mean )
+popgraph_null( peninsula,
+               axis = -lat_p,
+               nsim = 199,
+               cores = 4 )
 ```
 
 ## Data quality: information loss
@@ -138,7 +143,7 @@ $|\Delta|$ information loss alone can produce at a given level of polymorphism:
 ```{r info-loss}
 #| eval: false
 arapat |>
-  locus_subsample_null(k = c(2, 3, 4, 6), nsub = 3)
+  locus_subsample_null( k = c( 2, 3, 4, 6 ), nsub = 3 )
 ```
 
 ## Simulating directional gene flow
@@ -149,17 +154,21 @@ A directional stepping stone, with rates to the next population downstream
 
 ```{r simulate}
 #| eval: false
-demes <- sprintf("Pop%02d", 1:10)
+demes <- sprintf( "Pop%02d", 1:10 )
 
 mm <- demes |>
-  migration_matrix(model = "stepping_stone_1d_asym", m_fwd = 0.04, m_rev = 0.01)
+  migration_matrix( model = "stepping_stone_1d_asym",
+                    m_fwd = 0.04,
+                    m_rev = 0.01 )
 
-out <- data.frame(Population = rep(demes, each = 2),
-                  Locus = "L1",
-                  Allele = rep(c("01", "02"), 10),
-                  Frequency = 0.5) |>
-  make_populations(N = 50) |>
-  simulate_pop(ngen = 200, migration = migration_event(mm), verbose = FALSE)
+out <- data.frame( Population = rep( demes, each = 2 ),
+                   Locus = "L1",
+                   Allele = rep( c( "01", "02" ), 10 ),
+                   Frequency = 0.5 ) |>
+  make_populations( N = 50 ) |>
+  simulate_pop( ngen = 200,
+                migration = migration_event( mm ),
+                verbose = FALSE )
 ```
 
 {{< include ../vignettes/children/genetic_gravity_summary.Rmd >}}

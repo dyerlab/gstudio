@@ -270,9 +270,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>This chapter covers the estimation of genetic structure statistics — measures of how genetic variation is partitioned among populations.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( gstudio )</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( dplyr )</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>( arapat )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="the-genetic_structure-wrapper" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="the-genetic_structure-wrapper"><span class="header-section-number">6.1</span> The <code>genetic_structure()</code> Wrapper</h2>
@@ -329,39 +329,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Estimate Gst across species:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       Locus       Gst        Hs        Ht p.value
-1       LTRS 0.3536942 0.3229669 0.4997122      NA
-2        WNT 0.6028903 0.2595040 0.6534819      NA
-3         EN 0.1823664 0.3678145 0.4498525      NA
-4         EF 0.3653913 0.2772276 0.4368481      NA
-5        ZMP 0.4961044 0.1712607 0.3398734      NA
-6        AML 0.2723689 0.6045761 0.8308826      NA
-7       ATPS 0.5856500 0.2983785 0.7201122      NA
-8       MP20 0.2358115 0.6267430 0.8201419      NA
-9 Multilocus 0.3835972 0.3660589 0.5938631      NA</code></pre>
+<pre><code>       Locus       Gst        Hs        Ht
+1       LTRS 0.3536942 0.3229669 0.4997122
+2        WNT 0.6028903 0.2595040 0.6534819
+3         EN 0.1823664 0.3678145 0.4498525
+4         EF 0.3653913 0.2772276 0.4368481
+5        ZMP 0.4961044 0.1712607 0.3398734
+6        AML 0.2723689 0.6045761 0.8308826
+7       ATPS 0.5856500 0.2983785 0.7201122
+8       MP20 0.2358115 0.6267430 0.8201419
+9 Multilocus 0.3835972 0.3660589 0.5938631</code></pre>
 </div>
 </div>
-<p>The output provides per-locus estimates plus a multilocus estimate (last row). Every mode returns the same columns, <code>Locus</code>, the estimate (named <code>Gst</code>, <code>Gst_prime</code>, <code>Dest</code> or <code>Fst</code>), <code>Hs</code>, <code>Ht</code> and <code>p.value</code>, and the <code>Multilocus</code> row reports mean <code>Hs</code> and <code>Ht</code> across loci. For <code>Gst</code> and <code>Fst</code> the multilocus estimate is 1 - mean(Hs)/mean(Ht), following Culley et al.&nbsp;(2001); for <code>Gst_prime</code> and <code>Dest</code> it is the harmonic mean of the per-locus values. Monomorphic loci have no estimate (<code>NA</code>) and are left out of the multilocus value.</p>
+<p>The output provides per-locus estimates plus a multilocus estimate (last row). Every mode returns the same columns, <code>Locus</code>, the estimate (named <code>Gst</code>, <code>Gst_prime</code>, <code>Dest</code> or <code>Fst</code>), <code>Hs</code> and <code>Ht</code> (plus <code>p.value</code> when you ask for permutations, below), and the <code>Multilocus</code> row reports mean <code>Hs</code> and <code>Ht</code> across loci. For <code>Gst</code> and <code>Fst</code> the multilocus estimate is 1 - mean(Hs)/mean(Ht), following Culley et al.&nbsp;(2001); for <code>Gst_prime</code> and <code>Dest</code> it is the harmonic mean of the per-locus values. Monomorphic loci have no estimate (<code>NA</code>) and are left out of the multilocus value.</p>
 </section>
 <section id="hedricks-correction" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="hedricks-correction"><span class="header-section-number">6.3</span> Hedrick’s Correction</h2>
 <p>For highly polymorphic markers, <code>Gst</code> is constrained to small values. Hedrick’s correction accounts for this:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst_prime"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst_prime"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       Locus Gst_prime        Hs        Ht p.value
-1       LTRS 0.6067798 0.3229669 0.4997122      NA
-2        WNT 0.9198112 0.2595040 0.6534819      NA
-3         EN 0.3415214 0.3678145 0.4498525      NA
-4         EF 0.5756163 0.2772276 0.4368481      NA
-5        ZMP 0.6498859 0.1712607 0.3398734      NA
-6        AML 0.8970188 0.6045761 0.8308826      NA
-7       ATPS 0.9592390 0.2983785 0.7201122      NA
-8       MP20 0.8297450 0.6267430 0.8201419      NA
-9 Multilocus 0.6503121 0.3660589 0.5938631      NA</code></pre>
+<pre><code>       Locus Gst_prime        Hs        Ht
+1       LTRS 0.6067798 0.3229669 0.4997122
+2        WNT 0.9198112 0.2595040 0.6534819
+3         EN 0.3415214 0.3678145 0.4498525
+4         EF 0.5756163 0.2772276 0.4368481
+5        ZMP 0.6498859 0.1712607 0.3398734
+6        AML 0.8970188 0.6045761 0.8308826
+7       ATPS 0.9592390 0.2983785 0.7201122
+8       MP20 0.8297450 0.6267430 0.8201419
+9 Multilocus 0.6503121 0.3660589 0.5938631</code></pre>
 </div>
 </div>
 </section>
@@ -370,18 +370,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>An alternative differentiation measure that is independent of within-population diversity:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Dest"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Dest"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       Locus      Dest        Hs        Ht p.value
-1       LTRS 0.3915879 0.3229669 0.4997122      NA
-2        WNT 0.7980690 0.2595040 0.6534819      NA
-3         EN 0.1946532 0.3678145 0.4498525      NA
-4         EF 0.3312672 0.2772276 0.4368481      NA
-5        ZMP 0.3051852 0.1712607 0.3398734      NA
-6        AML 0.8584706 0.6045761 0.8308826      NA
-7       ATPS 0.9016266 0.2983785 0.7201122      NA
-8       MP20 0.7772081 0.6267430 0.8201419      NA
-9 Multilocus 0.4255295 0.3660589 0.5938631      NA</code></pre>
+<pre><code>       Locus      Dest        Hs        Ht
+1       LTRS 0.3915879 0.3229669 0.4997122
+2        WNT 0.7980690 0.2595040 0.6534819
+3         EN 0.1946532 0.3678145 0.4498525
+4         EF 0.3312672 0.2772276 0.4368481
+5        ZMP 0.3051852 0.1712607 0.3398734
+6        AML 0.8584706 0.6045761 0.8308826
+7       ATPS 0.9016266 0.2983785 0.7201122
+8       MP20 0.7772081 0.6267430 0.8201419
+9 Multilocus 0.4255295 0.3660589 0.5938631</code></pre>
 </div>
 </div>
 </section>
@@ -390,12 +390,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Use the <code>nperm</code> parameter to test the null hypothesis that the structure parameter equals zero:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">nperm =</span> <span class="dv">99</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">nperm =</span> <span class="dv">99</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Locus       Gst        Hs        Ht p.value
 1       LTRS 0.3536942 0.3229669 0.4997122    0.01
 2        WNT 0.6028903 0.2595040 0.6534819    0.01
-3         EN 0.1823664 0.3678145 0.4498525    0.02
+3         EN 0.1823664 0.3678145 0.4498525    0.01
 4         EF 0.3653913 0.2772276 0.4368481    0.01
 5        ZMP 0.4961044 0.1712607 0.3398734    0.01
 6        AML 0.2723689 0.6045761 0.8308826    0.01
@@ -411,7 +411,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Set <code>pairwise = TRUE</code> to compute structure between all pairs of strata:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pw <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">pairwise =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">pairwise =</span> <span class="cn">TRUE</span> )</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>pw</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>               Cape  Mainland Peninsula
@@ -427,20 +427,22 @@ Peninsula 0.3609387 0.2024045        NA</code></pre>
 <p>Use the <code>locus</code> parameter to restrict the analysis:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">locus =</span> <span class="st">"LTRS"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">locus =</span> <span class="st">"LTRS"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  Locus       Gst        Hs        Ht p.value
-1  LTRS 0.3536942 0.3229669 0.4997122      NA</code></pre>
+<pre><code>  Locus       Gst        Hs        Ht
+1  LTRS 0.3536942 0.3229669 0.4997122</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">locus =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mode =</span> <span class="st">"Gst"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">locus =</span> <span class="fu">c</span>( <span class="st">"LTRS"</span>, <span class="st">"WNT"</span> ) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       Locus       Gst        Hs        Ht p.value
-1       LTRS 0.3536942 0.3229669 0.4997122      NA
-2        WNT 0.6028903 0.2595040 0.6534819      NA
-3 Multilocus 0.4949065 0.2912354 0.5765971      NA</code></pre>
+<pre><code>       Locus       Gst        Hs        Ht
+1       LTRS 0.3536942 0.3229669 0.4997122
+2        WNT 0.6028903 0.2595040 0.6534819
+3 Multilocus 0.4949065 0.2912354 0.5765971</code></pre>
 </div>
 </div>
 </section>
@@ -449,7 +451,7 @@ Peninsula 0.3609387 0.2024045        NA</code></pre>
 <p><code>mode = "PhiST"</code> partitions the squared AMOVA distances among individuals (those of <code>genetic_distance(mode = "AMOVA")</code>) into variance among and within strata (Excoffier et al.&nbsp;1992). PhiST is sigma2_among / (sigma2_among + sigma2_within). The result is still a per-locus table, but it prints as an AMOVA table for the multilocus estimate:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"PhiST"</span>, <span class="at">nperm =</span> <span class="dv">99</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"PhiST"</span>, <span class="at">nperm =</span> <span class="dv">99</span> )</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>fit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -467,7 +469,7 @@ PhiST = 0.5314;  p = 0.01 (99 permutations)</code></pre>
 </div>
 <p>The multilocus sums of squares and variance components are sums over loci. When loci were genotyped in different numbers of individuals their degrees of freedom differ, so the multilocus <code>Df</code> is left blank. Significance comes from permuting strata across individuals, not from an F distribution. <code>anova()</code> returns the table itself, <code>as.data.frame()</code> the per-locus estimates, and <code>plot()</code> the permutation null distribution:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>( fit )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Molecular Variance (PhiST)
 
@@ -478,7 +480,7 @@ Total            2678.29        10.6678 100.000
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>( fit )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Locus     PhiST sigma2_among sigma2_within p.value
 1       LTRS 0.5349341    0.5710106     0.4964303    0.01
@@ -491,7 +493,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 8       MP20 0.4884087    0.7911063     0.8286566    0.01
 9 Multilocus 0.5314274    5.6691450     4.9986250    0.01</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( fit )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -505,9 +507,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <h3 data-number="6.8.1" class="anchored" data-anchor-id="twogener-phift"><span class="header-section-number">6.8.1</span> TwoGener PhiFT</h3>
 <p><code>mode = "PhiFT"</code> is the TwoGener analysis of pollen pools (Smouse et al.&nbsp;2001). Pass mothers and their offspring together. Mothers have <code>OffID == "0"</code>, and the maternal family column is <code>stratum</code> (default <code>"ID"</code> for this mode). Each mother’s contribution is removed from her offspring with <code>minus_mom()</code>, and the paternal gametes are partitioned among families:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(cornus_florida)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>( cornus_florida )</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>cornus_florida <span class="sc">|&gt;</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">mode =</span> <span class="st">"PhiFT"</span>, <span class="at">nperm =</span> <span class="dv">99</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">mode =</span> <span class="st">"PhiFT"</span>, <span class="at">nperm =</span> <span class="dv">99</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 TwoGener Analysis of Molecular Variance (PhiFT)
@@ -519,7 +521,7 @@ Among families   1  2.043 2.043 0.01733   1.0
 Within families 38 64.466 1.696 1.69648  99.0
 Total           39 66.509       1.71381 100.0
 
-PhiFT = 0.01011;  Nep = 49.44;  p = 0.24 (99 permutations)</code></pre>
+PhiFT = 0.01011;  Nep = 49.44;  p = 0.27 (99 permutations)</code></pre>
 </div>
 </div>
 <p><code>Nep</code> = 1 / (2 PhiFT) is the effective number of pollen donors. A mother not genotyped at a locus is reconstructed from her offspring when one genotype is at least 20 times as likely as the next best. Those reconstructions are listed in <code>attr(result, "maternal_inference")</code>.</p>
@@ -531,12 +533,12 @@ PhiFT = 0.01011;  Nep = 49.44;  p = 0.24 (99 permutations)</code></pre>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute stratum-level frequencies</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">frequencies</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">frequencies</span>( <span class="at">stratum =</span> <span class="st">"Species"</span> )</span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign the first individual</span></span>
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">multilocus_assignment</span>(freqs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>( <span class="dv">1</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">multilocus_assignment</span>( freqs )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in multilocus_assignment(slice(arapat, 1), freqs): This individual has
 missing genotypes, cannot compre assignment probability to individuals who do
@@ -552,12 +554,18 @@ not have missing data.</code></pre>
 <section id="without-pipes" class="level2" data-number="6.10">
 <h2 data-number="6.10" class="anchored" data-anchor-id="without-pipes"><span class="header-section-number">6.10</span> Without Pipes</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">nperm =</span> <span class="dv">99</span>)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>pw <span class="ot">&lt;-</span> <span class="fu">genetic_structure</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">pairwise =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">locus =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>))</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> <span class="fu">frequencies</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">multilocus_assignment</span>(arapat[<span class="dv">1</span>, ], freqs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>( arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span> )</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>( arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">nperm =</span> <span class="dv">99</span> )</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>pw <span class="ot">&lt;-</span> <span class="fu">genetic_structure</span>( arapat,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">stratum =</span> <span class="st">"Species"</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mode =</span> <span class="st">"Gst"</span>,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">pairwise =</span> <span class="cn">TRUE</span> )</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>( arapat,</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">stratum =</span> <span class="st">"Species"</span>,</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">mode =</span> <span class="st">"Gst"</span>,</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">locus =</span> <span class="fu">c</span>( <span class="st">"LTRS"</span>, <span class="st">"WNT"</span> ) )</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> <span class="fu">frequencies</span>( arapat, <span class="at">stratum =</span> <span class="st">"Species"</span> )</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="fu">multilocus_assignment</span>( arapat[<span class="dv">1</span>, ], freqs )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
@@ -1035,9 +1043,9 @@ not have missing data.</code></pre>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( gstudio )</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( dplyr )</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>( arapat )</span>
 <span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `genetic_structure()` Wrapper</span></span>
@@ -1059,10 +1067,10 @@ not have missing data.</code></pre>
 <span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>)</span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span> )</span>
 <span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>The output provides per-locus estimates plus a multilocus estimate (last row). Every mode returns the same columns, <span class="in">`Locus`</span>, the estimate (named <span class="in">`Gst`</span>, <span class="in">`Gst_prime`</span>, <span class="in">`Dest`</span> or <span class="in">`Fst`</span>), <span class="in">`Hs`</span>, <span class="in">`Ht`</span> and <span class="in">`p.value`</span>, and the <span class="in">`Multilocus`</span> row reports mean <span class="in">`Hs`</span> and <span class="in">`Ht`</span> across loci. For <span class="in">`Gst`</span> and <span class="in">`Fst`</span> the multilocus estimate is 1 - mean(Hs)/mean(Ht), following Culley et al. (2001); for <span class="in">`Gst_prime`</span> and <span class="in">`Dest`</span> it is the harmonic mean of the per-locus values. Monomorphic loci have no estimate (<span class="in">`NA`</span>) and are left out of the multilocus value.</span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>The output provides per-locus estimates plus a multilocus estimate (last row). Every mode returns the same columns, <span class="in">`Locus`</span>, the estimate (named <span class="in">`Gst`</span>, <span class="in">`Gst_prime`</span>, <span class="in">`Dest`</span> or <span class="in">`Fst`</span>), <span class="in">`Hs`</span> and <span class="in">`Ht`</span> (plus <span class="in">`p.value`</span> when you ask for permutations, below), and the <span class="in">`Multilocus`</span> row reports mean <span class="in">`Hs`</span> and <span class="in">`Ht`</span> across loci. For <span class="in">`Gst`</span> and <span class="in">`Fst`</span> the multilocus estimate is 1 - mean(Hs)/mean(Ht), following Culley et al. (2001); for <span class="in">`Gst_prime`</span> and <span class="in">`Dest`</span> it is the harmonic mean of the per-locus values. Monomorphic loci have no estimate (<span class="in">`NA`</span>) and are left out of the multilocus value.</span>
 <span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hedrick's Correction</span></span>
 <span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a></span>
@@ -1070,7 +1078,7 @@ not have missing data.</code></pre>
 <span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst_prime"</span>)</span>
+<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst_prime"</span> )</span>
 <span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a><span class="fu">## Jost's D</span></span>
@@ -1079,7 +1087,7 @@ not have missing data.</code></pre>
 <span id="cb29-54"><a href="#cb29-54" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-57"><a href="#cb29-57" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb29-58"><a href="#cb29-58" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb29-59"><a href="#cb29-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Dest"</span>)</span>
+<span id="cb29-59"><a href="#cb29-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Dest"</span> )</span>
 <span id="cb29-60"><a href="#cb29-60" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-61"><a href="#cb29-61" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-62"><a href="#cb29-62" aria-hidden="true" tabindex="-1"></a><span class="fu">## Permutation Testing</span></span>
@@ -1089,7 +1097,7 @@ not have missing data.</code></pre>
 <span id="cb29-68"><a href="#cb29-68" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb29-69"><a href="#cb29-69" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
 <span id="cb29-70"><a href="#cb29-70" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb29-71"><a href="#cb29-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">nperm =</span> <span class="dv">99</span>)</span>
+<span id="cb29-71"><a href="#cb29-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">nperm =</span> <span class="dv">99</span> )</span>
 <span id="cb29-72"><a href="#cb29-72" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-73"><a href="#cb29-73" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-74"><a href="#cb29-74" aria-hidden="true" tabindex="-1"></a>The resulting <span class="in">`p.value`</span> column indicates the probability of observing a value as extreme as the estimate under random permutation of individuals among strata.</span>
@@ -1100,7 +1108,7 @@ not have missing data.</code></pre>
 <span id="cb29-79"><a href="#cb29-79" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-82"><a href="#cb29-82" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb29-83"><a href="#cb29-83" aria-hidden="true" tabindex="-1"></a>pw <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb29-84"><a href="#cb29-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">pairwise =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb29-84"><a href="#cb29-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">pairwise =</span> <span class="cn">TRUE</span> )</span>
 <span id="cb29-85"><a href="#cb29-85" aria-hidden="true" tabindex="-1"></a>pw</span>
 <span id="cb29-86"><a href="#cb29-86" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-87"><a href="#cb29-87" aria-hidden="true" tabindex="-1"></a></span>
@@ -1112,76 +1120,84 @@ not have missing data.</code></pre>
 <span id="cb29-93"><a href="#cb29-93" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-96"><a href="#cb29-96" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb29-97"><a href="#cb29-97" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb29-98"><a href="#cb29-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">locus =</span> <span class="st">"LTRS"</span>)</span>
+<span id="cb29-98"><a href="#cb29-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">locus =</span> <span class="st">"LTRS"</span> )</span>
 <span id="cb29-99"><a href="#cb29-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-100"><a href="#cb29-100" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-103"><a href="#cb29-103" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb29-104"><a href="#cb29-104" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb29-105"><a href="#cb29-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">locus =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>))</span>
-<span id="cb29-106"><a href="#cb29-106" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-107"><a href="#cb29-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-108"><a href="#cb29-108" aria-hidden="true" tabindex="-1"></a><span class="fu">## Analysis of Molecular Variance</span></span>
+<span id="cb29-105"><a href="#cb29-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>,</span>
+<span id="cb29-106"><a href="#cb29-106" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mode =</span> <span class="st">"Gst"</span>,</span>
+<span id="cb29-107"><a href="#cb29-107" aria-hidden="true" tabindex="-1"></a>                     <span class="at">locus =</span> <span class="fu">c</span>( <span class="st">"LTRS"</span>, <span class="st">"WNT"</span> ) )</span>
+<span id="cb29-108"><a href="#cb29-108" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-109"><a href="#cb29-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-110"><a href="#cb29-110" aria-hidden="true" tabindex="-1"></a><span class="in">`mode = "PhiST"`</span> partitions the squared AMOVA distances among individuals (those of <span class="in">`genetic_distance(mode = "AMOVA")`</span>) into variance among and within strata (Excoffier et al. 1992). PhiST is sigma2_among / (sigma2_among + sigma2_within). The result is still a per-locus table, but it prints as an AMOVA table for the multilocus estimate:</span>
+<span id="cb29-110"><a href="#cb29-110" aria-hidden="true" tabindex="-1"></a><span class="fu">## Analysis of Molecular Variance</span></span>
 <span id="cb29-111"><a href="#cb29-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-114"><a href="#cb29-114" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-115"><a href="#cb29-115" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb29-116"><a href="#cb29-116" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb29-117"><a href="#cb29-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"PhiST"</span>, <span class="at">nperm =</span> <span class="dv">99</span>)</span>
-<span id="cb29-118"><a href="#cb29-118" aria-hidden="true" tabindex="-1"></a>fit</span>
-<span id="cb29-119"><a href="#cb29-119" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-120"><a href="#cb29-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-121"><a href="#cb29-121" aria-hidden="true" tabindex="-1"></a>The multilocus sums of squares and variance components are sums over loci. When loci were genotyped in different numbers of individuals their degrees of freedom differ, so the multilocus <span class="in">`Df`</span> is left blank. Significance comes from permuting strata across individuals, not from an F distribution. <span class="in">`anova()`</span> returns the table itself, <span class="in">`as.data.frame()`</span> the per-locus estimates, and <span class="in">`plot()`</span> the permutation null distribution:</span>
+<span id="cb29-112"><a href="#cb29-112" aria-hidden="true" tabindex="-1"></a><span class="in">`mode = "PhiST"`</span> partitions the squared AMOVA distances among individuals (those of <span class="in">`genetic_distance(mode = "AMOVA")`</span>) into variance among and within strata (Excoffier et al. 1992). PhiST is sigma2_among / (sigma2_among + sigma2_within). The result is still a per-locus table, but it prints as an AMOVA table for the multilocus estimate:</span>
+<span id="cb29-113"><a href="#cb29-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-116"><a href="#cb29-116" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-117"><a href="#cb29-117" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb29-118"><a href="#cb29-118" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb29-119"><a href="#cb29-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"PhiST"</span>, <span class="at">nperm =</span> <span class="dv">99</span> )</span>
+<span id="cb29-120"><a href="#cb29-120" aria-hidden="true" tabindex="-1"></a>fit</span>
+<span id="cb29-121"><a href="#cb29-121" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-122"><a href="#cb29-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-125"><a href="#cb29-125" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-126"><a href="#cb29-126" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(fit)</span>
-<span id="cb29-127"><a href="#cb29-127" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(fit)</span>
-<span id="cb29-128"><a href="#cb29-128" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit)</span>
-<span id="cb29-129"><a href="#cb29-129" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-130"><a href="#cb29-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-131"><a href="#cb29-131" aria-hidden="true" tabindex="-1"></a>As usual for AMOVA, sigma2_among and so PhiST can be negative when there is no structure; read that as an estimate of zero.</span>
+<span id="cb29-123"><a href="#cb29-123" aria-hidden="true" tabindex="-1"></a>The multilocus sums of squares and variance components are sums over loci. When loci were genotyped in different numbers of individuals their degrees of freedom differ, so the multilocus <span class="in">`Df`</span> is left blank. Significance comes from permuting strata across individuals, not from an F distribution. <span class="in">`anova()`</span> returns the table itself, <span class="in">`as.data.frame()`</span> the per-locus estimates, and <span class="in">`plot()`</span> the permutation null distribution:</span>
+<span id="cb29-124"><a href="#cb29-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-127"><a href="#cb29-127" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-128"><a href="#cb29-128" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>( fit )</span>
+<span id="cb29-129"><a href="#cb29-129" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>( fit )</span>
+<span id="cb29-130"><a href="#cb29-130" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( fit )</span>
+<span id="cb29-131"><a href="#cb29-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-132"><a href="#cb29-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-133"><a href="#cb29-133" aria-hidden="true" tabindex="-1"></a><span class="fu">### TwoGener PhiFT</span></span>
+<span id="cb29-133"><a href="#cb29-133" aria-hidden="true" tabindex="-1"></a>As usual for AMOVA, sigma2_among and so PhiST can be negative when there is no structure; read that as an estimate of zero.</span>
 <span id="cb29-134"><a href="#cb29-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-135"><a href="#cb29-135" aria-hidden="true" tabindex="-1"></a><span class="in">`mode = "PhiFT"`</span> is the TwoGener analysis of pollen pools (Smouse et al. 2001). Pass mothers and their offspring together. Mothers have <span class="in">`OffID == "0"`</span>, and the maternal family column is <span class="in">`stratum`</span> (default <span class="in">`"ID"`</span> for this mode). Each mother's contribution is removed from her offspring with <span class="in">`minus_mom()`</span>, and the paternal gametes are partitioned among families:</span>
+<span id="cb29-135"><a href="#cb29-135" aria-hidden="true" tabindex="-1"></a><span class="fu">### TwoGener PhiFT</span></span>
 <span id="cb29-136"><a href="#cb29-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-139"><a href="#cb29-139" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-140"><a href="#cb29-140" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb29-141"><a href="#cb29-141" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(cornus_florida)</span>
-<span id="cb29-142"><a href="#cb29-142" aria-hidden="true" tabindex="-1"></a>cornus_florida <span class="sc">|&gt;</span></span>
-<span id="cb29-143"><a href="#cb29-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>(<span class="at">mode =</span> <span class="st">"PhiFT"</span>, <span class="at">nperm =</span> <span class="dv">99</span>)</span>
-<span id="cb29-144"><a href="#cb29-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-145"><a href="#cb29-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-146"><a href="#cb29-146" aria-hidden="true" tabindex="-1"></a><span class="in">`Nep`</span> = 1 / (2 PhiFT) is the effective number of pollen donors. A mother not genotyped at a locus is reconstructed from her offspring when one genotype is at least 20 times as likely as the next best. Those reconstructions are listed in <span class="in">`attr(result, "maternal_inference")`</span>.</span>
+<span id="cb29-137"><a href="#cb29-137" aria-hidden="true" tabindex="-1"></a><span class="in">`mode = "PhiFT"`</span> is the TwoGener analysis of pollen pools (Smouse et al. 2001). Pass mothers and their offspring together. Mothers have <span class="in">`OffID == "0"`</span>, and the maternal family column is <span class="in">`stratum`</span> (default <span class="in">`"ID"`</span> for this mode). Each mother's contribution is removed from her offspring with <span class="in">`minus_mom()`</span>, and the paternal gametes are partitioned among families:</span>
+<span id="cb29-138"><a href="#cb29-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-141"><a href="#cb29-141" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-142"><a href="#cb29-142" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb29-143"><a href="#cb29-143" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>( cornus_florida )</span>
+<span id="cb29-144"><a href="#cb29-144" aria-hidden="true" tabindex="-1"></a>cornus_florida <span class="sc">|&gt;</span></span>
+<span id="cb29-145"><a href="#cb29-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_structure</span>( <span class="at">mode =</span> <span class="st">"PhiFT"</span>, <span class="at">nperm =</span> <span class="dv">99</span> )</span>
+<span id="cb29-146"><a href="#cb29-146" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-147"><a href="#cb29-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-148"><a href="#cb29-148" aria-hidden="true" tabindex="-1"></a><span class="fu">## Multilocus Assignment</span></span>
+<span id="cb29-148"><a href="#cb29-148" aria-hidden="true" tabindex="-1"></a><span class="in">`Nep`</span> = 1 / (2 PhiFT) is the effective number of pollen donors. A mother not genotyped at a locus is reconstructed from her offspring when one genotype is at least 20 times as likely as the next best. Those reconstructions are listed in <span class="in">`attr(result, "maternal_inference")`</span>.</span>
 <span id="cb29-149"><a href="#cb29-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-150"><a href="#cb29-150" aria-hidden="true" tabindex="-1"></a>The <span class="in">`multilocus_assignment()`</span> function estimates the probability that an individual originates from each population based on multilocus genotype frequencies:</span>
+<span id="cb29-150"><a href="#cb29-150" aria-hidden="true" tabindex="-1"></a><span class="fu">## Multilocus Assignment</span></span>
 <span id="cb29-151"><a href="#cb29-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-154"><a href="#cb29-154" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-155"><a href="#cb29-155" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute stratum-level frequencies</span></span>
-<span id="cb29-156"><a href="#cb29-156" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb29-157"><a href="#cb29-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">frequencies</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
-<span id="cb29-158"><a href="#cb29-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-159"><a href="#cb29-159" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign the first individual</span></span>
-<span id="cb29-160"><a href="#cb29-160" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb29-161"><a href="#cb29-161" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb29-162"><a href="#cb29-162" aria-hidden="true" tabindex="-1"></a>  <span class="fu">multilocus_assignment</span>(freqs)</span>
-<span id="cb29-163"><a href="#cb29-163" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-164"><a href="#cb29-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-165"><a href="#cb29-165" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Posterior`</span> column gives the relative probability of assignment to each stratum given the individual's multilocus genotype.</span>
+<span id="cb29-152"><a href="#cb29-152" aria-hidden="true" tabindex="-1"></a>The <span class="in">`multilocus_assignment()`</span> function estimates the probability that an individual originates from each population based on multilocus genotype frequencies:</span>
+<span id="cb29-153"><a href="#cb29-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-156"><a href="#cb29-156" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-157"><a href="#cb29-157" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute stratum-level frequencies</span></span>
+<span id="cb29-158"><a href="#cb29-158" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
+<span id="cb29-159"><a href="#cb29-159" aria-hidden="true" tabindex="-1"></a>  <span class="fu">frequencies</span>( <span class="at">stratum =</span> <span class="st">"Species"</span> )</span>
+<span id="cb29-160"><a href="#cb29-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-161"><a href="#cb29-161" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign the first individual</span></span>
+<span id="cb29-162"><a href="#cb29-162" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
+<span id="cb29-163"><a href="#cb29-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>( <span class="dv">1</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb29-164"><a href="#cb29-164" aria-hidden="true" tabindex="-1"></a>  <span class="fu">multilocus_assignment</span>( freqs )</span>
+<span id="cb29-165"><a href="#cb29-165" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-166"><a href="#cb29-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-167"><a href="#cb29-167" aria-hidden="true" tabindex="-1"></a><span class="fu">## Without Pipes</span></span>
+<span id="cb29-167"><a href="#cb29-167" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Posterior`</span> column gives the relative probability of assignment to each stratum given the individual's multilocus genotype.</span>
 <span id="cb29-168"><a href="#cb29-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-171"><a href="#cb29-171" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb29-172"><a href="#cb29-172" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb29-173"><a href="#cb29-173" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>)</span>
-<span id="cb29-174"><a href="#cb29-174" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">nperm =</span> <span class="dv">99</span>)</span>
-<span id="cb29-175"><a href="#cb29-175" aria-hidden="true" tabindex="-1"></a>pw <span class="ot">&lt;-</span> <span class="fu">genetic_structure</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">pairwise =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb29-176"><a href="#cb29-176" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">locus =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>))</span>
-<span id="cb29-177"><a href="#cb29-177" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> <span class="fu">frequencies</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>)</span>
-<span id="cb29-178"><a href="#cb29-178" aria-hidden="true" tabindex="-1"></a><span class="fu">multilocus_assignment</span>(arapat[<span class="dv">1</span>, ], freqs)</span>
-<span id="cb29-179"><a href="#cb29-179" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-169"><a href="#cb29-169" aria-hidden="true" tabindex="-1"></a><span class="fu">## Without Pipes</span></span>
+<span id="cb29-170"><a href="#cb29-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-173"><a href="#cb29-173" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb29-174"><a href="#cb29-174" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb29-175"><a href="#cb29-175" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>( arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span> )</span>
+<span id="cb29-176"><a href="#cb29-176" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>( arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Gst"</span>, <span class="at">nperm =</span> <span class="dv">99</span> )</span>
+<span id="cb29-177"><a href="#cb29-177" aria-hidden="true" tabindex="-1"></a>pw <span class="ot">&lt;-</span> <span class="fu">genetic_structure</span>( arapat,</span>
+<span id="cb29-178"><a href="#cb29-178" aria-hidden="true" tabindex="-1"></a>                         <span class="at">stratum =</span> <span class="st">"Species"</span>,</span>
+<span id="cb29-179"><a href="#cb29-179" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mode =</span> <span class="st">"Gst"</span>,</span>
+<span id="cb29-180"><a href="#cb29-180" aria-hidden="true" tabindex="-1"></a>                         <span class="at">pairwise =</span> <span class="cn">TRUE</span> )</span>
+<span id="cb29-181"><a href="#cb29-181" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_structure</span>( arapat,</span>
+<span id="cb29-182"><a href="#cb29-182" aria-hidden="true" tabindex="-1"></a>                   <span class="at">stratum =</span> <span class="st">"Species"</span>,</span>
+<span id="cb29-183"><a href="#cb29-183" aria-hidden="true" tabindex="-1"></a>                   <span class="at">mode =</span> <span class="st">"Gst"</span>,</span>
+<span id="cb29-184"><a href="#cb29-184" aria-hidden="true" tabindex="-1"></a>                   <span class="at">locus =</span> <span class="fu">c</span>( <span class="st">"LTRS"</span>, <span class="st">"WNT"</span> ) )</span>
+<span id="cb29-185"><a href="#cb29-185" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">&lt;-</span> <span class="fu">frequencies</span>( arapat, <span class="at">stratum =</span> <span class="st">"Species"</span> )</span>
+<span id="cb29-186"><a href="#cb29-186" aria-hidden="true" tabindex="-1"></a><span class="fu">multilocus_assignment</span>( arapat[<span class="dv">1</span>, ], freqs )</span>
+<span id="cb29-187"><a href="#cb29-187" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

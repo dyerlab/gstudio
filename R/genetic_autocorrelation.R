@@ -5,7 +5,9 @@
 #' Returns a tidy data frame of bin-level correlations that can be plotted
 #' directly with \code{ggplot2}.
 #'
-#' @param P A square physical distance matrix.
+#' @param P A square physical distance matrix, e.g. from
+#'   \code{\link{strata_distance}} (use the individual ID as the stratum to get
+#'   distances among individuals).
 #' @param G A square genetic distance matrix (same dimensions as \code{P}).
 #' @param bins A numeric vector of bin boundaries. Pairs whose physical
 #'   distance falls in \eqn{[\code{bins[i]}, \code{bins[i+1]})} are placed in
@@ -23,11 +25,15 @@
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' \donttest{
-#' data(arapat)
-#' P <- as.matrix(dist(arapat[, c("Longitude", "Latitude")]))
-#' G <- genetic_distance(arapat, mode = "AMOVA")
-#' bins <- c(0, 1, 2, 3, 5)
-#' ac <- genetic_autocorrelation(P, G, bins)
+#' # Adult flowering dogwoods mapped on a projected (X, Y) grid
+#' data(cornus_florida)
+#' adults <- cornus_florida[cornus_florida$OffID == 0, ]
+#' P <- strata_distance(adults, stratum = "ID", longitude = "X", latitude = "Y",
+#'                      mode = "Euclidean")
+#' G <- genetic_distance(adults, mode = "AMOVA")
+#' bins <- c(seq(0, 1200, by = 200), 2600)
+#' ac <- genetic_autocorrelation(P, G, bins, perms = 99)
+#' ac
 #'
 #' library(ggplot2)
 #' ggplot(ac, aes(x = To, y = R)) +
@@ -36,7 +42,7 @@
 #'   geom_point() +
 #'   labs(x = "Distance (upper bin boundary)", y = "Autocorrelation (r)")
 #' }
-#' @seealso \code{\link{genetic_distance}}
+#' @seealso \code{\link{genetic_distance}}, \code{\link{strata_distance}}
 genetic_autocorrelation <- function(P, G, bins, perms = 0) {
   if (missing(P) || missing(G) || missing(bins))
     stop("Need P, G, and binsize for autocorrelation.")

@@ -33,3 +33,18 @@ test_that("checking",{
   
 })
 
+
+test_that("strata_distance() takes raw data and finds the coordinates", {
+  data(arapat)
+  expect_equal(strata_distance(arapat), strata_distance(strata_coordinates(arapat)))
+  expect_equal(strata_distance(arapat, stratum = "Species", mode = "Euclidean"),
+               strata_distance(strata_coordinates(arapat, stratum = "Species"), mode = "Euclidean"))
+  expect_equal(strata_distance(dplyr::group_by(arapat, Species)),
+               strata_distance(strata_coordinates(arapat, stratum = "Species")))
+  data(cornus_florida)
+  a <- cornus_florida[cornus_florida$OffID == 0, ]
+  D <- strata_distance(a, stratum = "ID", longitude = "X", latitude = "Y", mode = "Euclidean")
+  expect_equal(dim(D), c(nrow(a), nrow(a)))
+  expect_equal(D[1, 2], sqrt((a$X[1] - a$X[2])^2 + (a$Y[1] - a$Y[2])^2))
+  expect_error(strata_distance(a), "cannot find column 'Population'")
+})

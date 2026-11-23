@@ -2,23 +2,40 @@
 % Please edit documentation in R/strata_distance.R
 \name{strata_distance}
 \alias{strata_distance}
-\title{Return distances between strats}
+\title{Return distances between strata}
 \usage{
-strata_distance(x, mode = c("Euclidean", "Circle")[2])
+strata_distance(
+  x,
+  mode = c("Euclidean", "Circle")[2],
+  stratum = "Population",
+  longitude = "Longitude",
+  latitude = "Latitude"
+)
 }
 \arguments{
-\item{x}{A \code{data.frame} object from \code{strata_coordinates}.}
+\item{x}{A \code{data.frame} from \code{strata_coordinates}, or a raw data
+\code{data.frame} with stratum and coordinate columns.}
 
 \item{mode}{The type of distance to calculate.  Currently there are two 
 available types of physical distance, Euclidean (straight-line) and
-Great Circle (from the curvature of the earth)}
+Great Circle (from the curvature of the earth; the default, which assumes
+decimal-degree longitude and latitude).  Use \code{"Euclidean"} for
+projected coordinates.}
+
+\item{stratum, longitude, latitude}{Used only when \code{x} is raw data: the
+stratum and coordinate columns passed to \code{strata_coordinates()}
+(defaults \code{"Population"} or the grouping of a grouped data frame,
+\code{"Longitude"} and \code{"Latitude"}).}
 }
 \value{
 A matrix of pairwise distances among strata.
 }
 \description{
-This function takes a \code{data.frame} from the \code{strata_coordinates}
- function and returns the between strata distance matrix.
+Returns the matrix of physical distances among strata.  \code{x} is either
+ the coordinate \code{data.frame} made by \code{\link{strata_coordinates}}
+ (columns \code{Stratum}, \code{Longitude}, \code{Latitude}) or the raw data,
+ in which case \code{strata_coordinates()} is called on it first with
+ \code{stratum}, \code{longitude} and \code{latitude}.
 }
 \note{
 This uses the mean radius of the earth to be 6371km as the latest estimate by USGS.
@@ -28,6 +45,16 @@ data(arapat)
 coords <- strata_coordinates(arapat)
 D_geo <- strata_distance(coords, mode = "Circle")
 D_geo[1:5, 1:5]
+
+# The same, straight from the raw data
+D_geo <- strata_distance(arapat)
+
+# Individuals on a projected grid
+data(cornus_florida)
+adults <- cornus_florida[cornus_florida$OffID == 0, ]
+D <- strata_distance(adults, stratum = "ID", longitude = "X", latitude = "Y",
+                     mode = "Euclidean")
+D[1:5, 1:5]
 }
 \author{
 Rodney J. Dyer \email{rjdyer@vcu.edu}

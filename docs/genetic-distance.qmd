@@ -4,9 +4,11 @@ This chapter covers inter-individual and inter-population distance estimation, p
 
 ```{r}
 #| message: false
-library(gstudio)
-library(dplyr)
-data(arapat)
+library( gstudio )
+library( dplyr )
+library( ggplot2 )
+data( arapat )
+data( cornus_florida )
 ```
 
 ## Genetic Distance
@@ -33,10 +35,10 @@ AMOVA distance computes inter-individual genetic distances:
 ```{r}
 # The first 20 individuals, for a manageable example
 D_amova <- arapat |>
-  slice(1:20) |>
-  genetic_distance(mode = "AMOVA")
+  slice( 1:20 ) |>
+  genetic_distance( mode = "AMOVA" )
 
-dim(D_amova)
+dim( D_amova )
 D_amova[1:5, 1:5]
 ```
 
@@ -46,13 +48,13 @@ Population-level distances require a stratum column:
 
 ```{r}
 D_nei <- arapat |>
-  genetic_distance(stratum = "Species", mode = "Nei")
+  genetic_distance( stratum = "Species", mode = "Nei" )
 D_nei
 ```
 
 ```{r}
 D_cgd <- arapat |>
-  genetic_distance(stratum = "Species", mode = "cGD")
+  genetic_distance( stratum = "Species", mode = "cGD" )
 D_cgd
 ```
 
@@ -60,13 +62,13 @@ Directional conditional genetic distance (dcGD) splits each Population Graph edg
 
 ```{r}
 D_dcgd <- arapat |>
-  genetic_distance(stratum = "Species", mode = "dcGD")
+  genetic_distance( stratum = "Species", mode = "dcGD" )
 D_dcgd
 ```
 
 ```{r}
 D_euc <- arapat |>
-  genetic_distance(stratum = "Species", mode = "Euclidean")
+  genetic_distance( stratum = "Species", mode = "Euclidean" )
 D_euc
 ```
 
@@ -89,12 +91,12 @@ The Nason estimator divides by the polymorphic index (`genetic_diversity(mode = 
 ```{r}
 # Use loci that are polymorphic in this subset
 R <- arapat |>
-  slice(1:10) |>
-  select(Species, WNT, EN, EF, ZMP, AML, MP20) |>
-  genetic_relatedness(mode = "Nason")
+  slice( 1:10 ) |>
+  select( Species, WNT, EN, EF, ZMP, AML, MP20 ) |>
+  genetic_relatedness( mode = "Nason" )
 
-dim(R)
-round(R[1:5, 1:5], 4)
+dim( R )
+round( R[1:5, 1:5], 4 )
 ```
 
 ### Single-Locus Relatedness
@@ -103,44 +105,64 @@ Relatedness at a single locus uses the same function, with `loci =`:
 
 ```{r}
 r_nason <- arapat |>
-  slice(1:10) |>
-  genetic_relatedness(loci = "EN", mode = "Nason")
+  slice( 1:10 ) |>
+  genetic_relatedness( loci = "EN", mode = "Nason" )
 
-round(r_nason[1:5, 1:5], 4)
+round( r_nason[1:5, 1:5], 4 )
 ```
 
 ## Spatial Autocorrelation
 
-The `genetic_autocorrelation()` function performs the spatial autocorrelation analysis of Smouse & Peakall (1999). It requires two square distance matrices --- one physical, one genetic --- and a vector of distance bin boundaries:
+The `genetic_autocorrelation()` function performs the spatial autocorrelation analysis of Smouse & Peakall (1999). It requires two square distance matrices --- one physical, one genetic --- among the same individuals, and a vector of distance bin boundaries.  Here we use the adult flowering dogwoods (*Cornus florida*, `OffID == 0`), which are mapped on a projected X/Y grid, so the physical distance is Euclidean.  Using the individual `ID` as the stratum gives `strata_distance()` one point per tree:
 
 ```{r}
-#| eval: false
-# Physical distance matrix
-P <- arapat |>
-  strata_distance(longitude = "Longitude", latitude = "Latitude")
+adults <- cornus_florida |>
+  filter( OffID == 0 )
 
-# Genetic distance matrix
-G <- arapat |>
-  genetic_distance(mode = "AMOVA")
+# Physical distance among trees
+P <- adults |>
+  strata_distance( stratum = "ID",
+                   longitude = "X",
+                   latitude = "Y",
+                   mode = "Euclidean" )
 
-# Define distance bins
-bins <- seq(0, max(P), length.out = 6)
+# Genetic distance among the same trees
+G <- adults |>
+  genetic_distance( mode = "AMOVA" )
 
-# Run autocorrelation
-result <- genetic_autocorrelation(P, G, bins = bins, perms = 99)
+# Distance classes: 200 units wide to 1200,
+# then one class for the few long pairs
+bins <- c( seq( 0, 1200, by = 200 ), 2600 )
+
+set.seed( 1 )
+result <- genetic_autocorrelation( P, G, bins = bins, perms = 99 )
 result
 ```
 
-The output includes the spatial autocorrelation coefficient (R) for each distance class, the number of pairwise comparisons (N), and a p-value from the permutation test (P).
+Each row is a distance class, from `From` up to (not including) `To`, with the autocorrelation coefficient `R`, the number of pairs of trees in the class `N`, and the one-sided permutation `p.value` for positive autocorrelation.  The result plots directly:
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+ggplot( result, aes( x = To, y = R ) ) +
+  geom_hline( yintercept = 0, linetype = "dashed" ) +
+  geom_line() +
+  geom_point( aes( colour = p.value < 0.05 ), size = 2.5 ) +
+  scale_colour_manual( values = c( `TRUE` = "firebrick",
+                                    `FALSE` = "grey40" ),
+                       name = "p < 0.05" ) +
+  labs( x = "Distance class (upper bound, map units)",
+        y = "Autocorrelation (r)" )
+```
 
 ## Isolation by Distance
 
 `genetic_isolation()` tests whether genetic distance among strata grows with their separation, starting from the genotypes.  The default, `mode = "IBD"`, correlates Nei's genetic distance (change it with `genetic =`) with great-circle distance between strata and tests it with a Mantel permutation test:
 
 ```{r}
-set.seed(1)
+set.seed( 1 )
 arapat |>
-  genetic_isolation(stratum = "Population", nperm = 499)
+  genetic_isolation( stratum = "Population", nperm = 499 )
 ```
 
 `mode = "IBGD"` uses the conditional genetic distance through a Population Graph instead, and `mode = "dcGD"` asks whether a directional model fits better, given an `axis` (see @sec-genetic-gravity).  Separation can also come from your own matrix (`spatial =`, e.g. resistance distances) or positions along an axis (`axis =`).  If you already have a Population Graph, `ibgd()` works on it directly.
@@ -151,7 +173,9 @@ The `strata_coordinates()` function extracts per-stratum centroid coordinates, a
 
 ```{r}
 coords <- arapat |>
-  strata_coordinates(stratum = "Species", longitude = "Longitude", latitude = "Latitude")
+  strata_coordinates( stratum = "Species",
+                      longitude = "Longitude",
+                      latitude = "Latitude" )
 coords
 ```
 
@@ -160,16 +184,42 @@ coords |>
   strata_distance()
 ```
 
+`strata_distance()` also takes the raw data and finds the coordinates itself, so these are the same:
+
+```{r}
+#| eval: false
+arapat |> strata_coordinates() |> strata_distance()
+arapat |> strata_distance()
+```
+
 ## Without Pipes
 
 ```{r}
 #| eval: false
-D_amova <- genetic_distance(arapat[1:20, ], mode = "AMOVA")
-D_nei   <- genetic_distance(arapat, stratum = "Species", mode = "Nei")
-D_dcgd   <- genetic_distance(arapat, stratum = "Species", mode = "dcGD", gamma = 0.5)
-R       <- genetic_relatedness(arapat[1:10, c("Species", "WNT", "EN", "EF", "ZMP", "AML", "MP20")],
-                               mode = "Nason")
-coords  <- strata_coordinates(arapat, stratum = "Species")
-strata_distance(coords)
-genetic_isolation(arapat, stratum = "Population", mode = "IBD", nperm = 499)
+D_amova <- genetic_distance( arapat[1:20, ], mode = "AMOVA" )
+D_nei   <- genetic_distance( arapat, stratum = "Species", mode = "Nei" )
+D_dcgd  <- genetic_distance( arapat,
+                             stratum = "Species",
+                             mode = "dcGD",
+                             gamma = 0.5 )
+loci    <- c( "Species", "WNT", "EN", "EF", "ZMP", "AML", "MP20" )
+R       <- genetic_relatedness( arapat[1:10, loci],
+                                mode = "Nason" )
+coords  <- strata_coordinates( arapat, stratum = "Species" )
+strata_distance( coords )
+adults <- cornus_florida[cornus_florida$OffID == 0, ]
+P      <- strata_distance( adults,
+                           stratum = "ID",
+                           longitude = "X",
+                           latitude = "Y",
+                           mode = "Euclidean" )
+G      <- genetic_distance( adults, mode = "AMOVA" )
+genetic_autocorrelation( P,
+                         G,
+                         bins = c( seq( 0, 1200, by = 200 ), 2600 ),
+                         perms = 99 )
+genetic_isolation( arapat,
+                   stratum = "Population",
+                   mode = "IBD",
+                   nperm = 499 )
 ```

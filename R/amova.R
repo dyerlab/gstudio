@@ -101,7 +101,8 @@ anova.amova <- function( object, ... ) {
   rownames( tab ) <- .amova_labels( object )
   names( tab )[ names( tab ) == "Percent" ] <- "% Var"
   tab[[ stat ]] <- c( object[[ stat ]][ last ], NA, NA )
-  tab[[ paste0( "Pr(>=", stat, ")" ) ]] <- c( object$p.value[ last ], NA, NA )
+  if( !is.null( object$p.value ) )
+    tab[[ paste0( "Pr(>=", stat, ")" ) ]] <- c( object$p.value[ last ], NA, NA )
   structure( tab, heading = paste0( "Analysis of Molecular Variance (", stat, ")\n" ),
              class = c( "anova", "data.frame" ) )
 }

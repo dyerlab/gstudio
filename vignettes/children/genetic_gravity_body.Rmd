@@ -10,9 +10,9 @@ source-sink scores, tests for a directional gradient and a map of the gravity
 field.
 
 ```{r libraries, message = FALSE}
-library(gstudio)
-library(dplyr)
-library(ggplot2)
+library( gstudio )
+library( dplyr )
+library( ggplot2 )
 ```
 
 The code below is written as pipelines, with each function on its own line.
@@ -89,12 +89,12 @@ higher-numbered populations than back (`Pop01` is the upstream end), so the
 answer is known in advance.  See `?gravity` for how the census was chosen.
 
 ```{r data}
-data(gravity)
-dim(gravity)
+data( gravity )
+dim( gravity )
 
 gravity |>
-  select(Population, L01:L04) |>
-  head(4)
+  select( Population, L01:L04 ) |>
+  head( 4 )
 ```
 
 ## From genotypes to a Population Graph
@@ -113,12 +113,12 @@ The hypothesized axis of flow is position along the stepping stone, which here
 is the population number:
 
 ```{r deme}
-nodes <- igraph::V(graph)$name
+nodes <- igraph::V( graph )$name
 
 deme <- nodes |>
-  sub(pattern = "Pop", replacement = "") |>
+  sub( pattern = "Pop", replacement = "" ) |>
   as.integer() |>
-  setNames(nodes)
+  setNames( nodes )
 ```
 
 `plot()` draws the graph.  Without coordinates it uses a Kamada-Kawai layout.
@@ -139,8 +139,8 @@ over that population's neighbours.
 W <- graph |>
   neighbourhood_weights()
 
-round(W[1:5, 1:5], 3)
-rowSums(W, na.rm = TRUE)[1:5]
+round( W[1:5, 1:5], 3 )
+rowSums( W, na.rm = TRUE )[1:5]
 ```
 
 `gravity_edges()` gives one row per edge with both weights, $\Delta$ and the
@@ -150,14 +150,14 @@ upstream population is the source.
 
 ```{r edges}
 edges <- graph |>
-  gravity_edges(x = deme)
+  gravity_edges( x = deme )
 
 edges |>
   head()
 
 edges |>
-  summarize(edges = n(),
-            upstream_source = mean(Delta > 0))
+  summarize( edges = n(),
+             upstream_source = mean( Delta > 0 ) )
 ```
 
 ## Source-sink scores and the bandwidth
@@ -167,13 +167,13 @@ the degree diagnostics attached.
 
 ```{r scores}
 scores <- graph |>
-  source_sink_scores(x = deme)
+  source_sink_scores( x = deme )
 
 scores |>
-  select(Stratum, S, gravity, balance, degree) |>
+  select( Stratum, S, gravity, balance, degree ) |>
   head()
 
-attr(scores, "degree_share")
+attr( scores, "degree_share" )
 ```
 
 Plotted against position, $S$ falls steadily downstream: sources upstream,
@@ -181,12 +181,12 @@ sinks downstream.
 
 ```{r scores-plot, fig.height = 3.5}
 scores |>
-  mutate(deme = deme[Stratum]) |>
-  ggplot(aes(deme, S)) +
-  geom_hline(yintercept = 0, colour = "grey60") +
-  geom_point(aes(size = degree)) +
-  labs(x = "Position along the stepping stone (upstream to downstream)",
-       y = "Source-sink score S") +
+  mutate( deme = deme[Stratum] ) |>
+  ggplot( aes( deme, S ) ) +
+  geom_hline( yintercept = 0, colour = "grey60" ) +
+  geom_point( aes( size = degree ) ) +
+  labs( x = "Position along the stepping stone (upstream to downstream)",
+        y = "Source-sink score S" ) +
   theme_minimal()
 ```
 
@@ -197,9 +197,9 @@ diagnostics side by side:
 
 ```{r bandwidth}
 graph |>
-  gravity_field(gamma = c(0.5, 1)) |>
-  as.data.frame(what = "diagnostics") |>
-  select(gamma, degree_share, cor_S_degree, gradient_share)
+  gravity_field( gamma = c( 0.5, 1 ) ) |>
+  as.data.frame( what = "diagnostics" ) |>
+  select( gamma, degree_share, cor_S_degree, gradient_share )
 ```
 
 Report the bandwidth and the degree share with any directional result.
@@ -217,10 +217,10 @@ randomization of $S$ on the graph itself, which reproduces the smoothness $S$
 inherits from the topology.  A negative $r$ places the sources at low $x$.
 
 ```{r ss-test}
-set.seed(1)
+set.seed( 1 )
 
 graph |>
-  source_sink_test(x = deme)
+  source_sink_test( x = deme )
 ```
 
 ### Directional isolation by graph distance
@@ -244,10 +244,10 @@ two fits are not nested.
 
 ```{r ibgd}
 graph |>
-  ibgd(x = deme)
+  ibgd( x = deme )
 
 graph |>
-  ibgd(x = deme, mode = "dcGD")
+  ibgd( x = deme, mode = "dcGD" )
 ```
 
 Both procedures recover the imposed direction: a strong negative gradient in
@@ -262,9 +262,9 @@ directed graph of edge shares (`output = "graph"`).
 
 ```{r dcgd}
 P <- gravity |>
-  genetic_distance(mode = "dcGD")
+  genetic_distance( mode = "dcGD" )
 
-round(P[1:4, 1:4], 3)
+round( P[1:4, 1:4], 3 )
 ```
 
 ## Mapping the gravity field
@@ -291,8 +291,8 @@ the local-mean and degree-neutral bandwidths:
 
 ```{r field-gamma, fig.width = 9, fig.height = 5}
 graph |>
-  gravity_field(gamma = c(1, 0.5)) |>
-  plot(node_labels = "none")
+  gravity_field( gamma = c( 1, 0.5 ) ) |>
+  plot( node_labels = "none" )
 ```
 
 All the quantities behind the map are available as tidy tables for your own
@@ -300,8 +300,8 @@ figures:
 
 ```{r field-tables}
 field |>
-  as.data.frame(what = "edges") |>
-  arrange(desc(abs(delta))) |>
+  as.data.frame( what = "edges" ) |>
+  arrange( desc( abs( delta ) ) ) |>
   head()
 ```
 
@@ -312,7 +312,7 @@ the defaults give a complete picture in one line, here for `lopho`, the
 Population Graph of the Sonoran Desert cactus *Lophocereus*.
 
 ```{r lopho}
-data(lopho)
+data( lopho )
 
 lopho |>
   gravity_field() |>
@@ -327,19 +327,22 @@ steps above, shown here but not run:
 
 ```{r no-pipes}
 #| eval: false
-graph  <- popgraph(to_mv(gravity), groups = gravity$Population)
-deme   <- as.integer(sub("Pop", "", igraph::V(graph)$name))
-names(deme) <- igraph::V(graph)$name
+graph <- popgraph( to_mv( gravity ), groups = gravity$Population )
+deme  <- as.integer( sub( "Pop", "", igraph::V( graph )$name ) )
+names( deme ) <- igraph::V( graph )$name
 
-W      <- neighbourhood_weights(graph, gamma = 0.5)
-edges  <- gravity_edges(graph, gamma = 0.5, x = deme)
-scores <- source_sink_scores(graph, gamma = 0.5, x = deme)
+W      <- neighbourhood_weights( graph, gamma = 0.5 )
+edges  <- gravity_edges( graph, gamma = 0.5, x = deme )
+scores <- source_sink_scores( graph, gamma = 0.5, x = deme )
 
-source_sink_test(graph, x = deme, gamma = 0.5, nperm = 999)
-ibgd(graph, x = deme, mode = "cGD", nperm = 999)
-ibgd(graph, x = deme, mode = "dcGD", gamma = 0.5)
+source_sink_test( graph, x = deme, gamma = 0.5, nperm = 999 )
+ibgd( graph, x = deme, mode = "cGD", nperm = 999 )
+ibgd( graph, x = deme, mode = "dcGD", gamma = 0.5 )
 
-P      <- genetic_distance(gravity, stratum = "Population", mode = "dcGD", gamma = 0.5)
-field  <- gravity_field(graph, gamma = 0.5)
-plot(field, layout = "kk", surface = "interpolate")
+P     <- genetic_distance( gravity,
+                           stratum = "Population",
+                           mode = "dcGD",
+                           gamma = 0.5 )
+field <- gravity_field( graph, gamma = 0.5 )
+plot( field, layout = "kk", surface = "interpolate" )
 ```

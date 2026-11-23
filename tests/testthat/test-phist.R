@@ -16,11 +16,11 @@ test_that("PhiST matches a direct AMOVA partition of the summed distances", {
 
   ps <- genetic_structure( cc, stratum = "Species", mode = "PhiST" )
   expect_s3_class( ps, "data.frame" )
-  expect_equal( names( ps ), c( "Locus", "PhiST", "sigma2_among", "sigma2_within", "p.value" ) )
+  expect_equal( names( ps ), c( "Locus", "PhiST", "sigma2_among", "sigma2_within" ) )
   expect_equal( ps$Locus, c( loci, "Multilocus" ) )
   expect_equal( ps$PhiST[ nrow( ps ) ], s2a / ( s2a + MS_w ) )
   expect_equal( ps$sigma2_within[ nrow( ps ) ], MS_w )
-  expect_true( all( is.na( ps$p.value ) ) )
+  expect_null( ps$p.value )
 })
 
 test_that("PhiST handles missing data, permutations, case and pairwise", {

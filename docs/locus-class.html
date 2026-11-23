@@ -291,14 +291,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>The <code>locus</code> is the fundamental data type in <code>gstudio</code>. It is an S3 class that stores a genotype as a colon-separated string of alleles. This chapter covers creating, manipulating, and converting locus objects.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( gstudio )</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( dplyr )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="creating-locus-objects" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="creating-locus-objects"><span class="header-section-number">2.1</span> Creating Locus Objects</h2>
 <p>The <code>locus()</code> constructor takes a vector of alleles and collapses them into a single genotype:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>loc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>loc <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>loc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -308,12 +308,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Homozygotes and higher-ploidy genotypes work the same way:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"A"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:A"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>) <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B:C:D"</code></pre>
@@ -328,7 +328,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.na</span>(loc_missing)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.na</span>( loc_missing )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
@@ -342,8 +342,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="2.2.1" class="anchored" data-anchor-id="codominant-default"><span class="header-section-number">2.2.1</span> Codominant (default)</h3>
 <p>Alleles are sorted alphabetically and joined with <code>:</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>(<span class="at">type =</span> <span class="st">"codom"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>( <span class="st">"B"</span>, <span class="st">"A"</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>( <span class="at">type =</span> <span class="st">"codom"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B"</code></pre>
 </div>
@@ -353,11 +353,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="2.2.2" class="anchored" data-anchor-id="aflp"><span class="header-section-number">2.2.2</span> AFLP</h3>
 <p>Binary presence/absence data (0 or 1):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"1"</span>, <span class="at">type =</span> <span class="st">"aflp"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"1"</span>, <span class="at">type =</span> <span class="st">"aflp"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "1"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"0"</span>, <span class="at">type =</span> <span class="st">"aflp"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"0"</span>, <span class="at">type =</span> <span class="st">"aflp"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "0"</code></pre>
 </div>
@@ -367,15 +367,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="2.2.3" class="anchored" data-anchor-id="snp"><span class="header-section-number">2.2.3</span> SNP</h3>
 <p>Encoded as 0, 1, or 2 (count of minor alleles):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"0"</span>, <span class="at">type =</span> <span class="st">"snp"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"0"</span>, <span class="at">type =</span> <span class="st">"snp"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:A"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"1"</span>, <span class="at">type =</span> <span class="st">"snp"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"1"</span>, <span class="at">type =</span> <span class="st">"snp"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"2"</span>, <span class="at">type =</span> <span class="st">"snp"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"2"</span>, <span class="at">type =</span> <span class="st">"snp"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "B:B"</code></pre>
 </div>
@@ -385,7 +385,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="2.2.4" class="anchored" data-anchor-id="separated"><span class="header-section-number">2.2.4</span> Separated</h3>
 <p>Pre-formatted colon-separated strings:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"A:B"</span>, <span class="at">type =</span> <span class="st">"separated"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"A:B"</span>, <span class="at">type =</span> <span class="st">"separated"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B"</code></pre>
 </div>
@@ -395,11 +395,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="2.2.5" class="anchored" data-anchor-id="zyme-allozyme"><span class="header-section-number">2.2.5</span> Zyme (allozyme)</h3>
 <p>Alleles encoded as concatenated integers (e.g., “12” = alleles 1 and 2):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"12"</span>, <span class="at">type =</span> <span class="st">"zyme"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"12"</span>, <span class="at">type =</span> <span class="st">"zyme"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "1:2"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"23"</span>, <span class="at">type =</span> <span class="st">"zyme"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"23"</span>, <span class="at">type =</span> <span class="st">"zyme"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "2:3"</code></pre>
 </div>
@@ -409,10 +409,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="2.2.6" class="anchored" data-anchor-id="column"><span class="header-section-number">2.2.6</span> Column</h3>
 <p>Two-column matrix format (used internally by <code>read_population()</code>):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>alleles_mat <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"C"</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>alleles_mat <span class="ot">&lt;-</span> <span class="fu">cbind</span>( <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span> ), <span class="fu">c</span>( <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"C"</span> ) )</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>alleles_mat <span class="sc">|&gt;</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>(<span class="at">type =</span> <span class="st">"column"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>( <span class="at">type =</span> <span class="st">"column"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B" "A:B" "C:C"</code></pre>
 </div>
@@ -422,13 +422,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="2.2.7" class="anchored" data-anchor-id="locus-columns-in-a-data-frame"><span class="header-section-number">2.2.7</span> Locus Columns in a Data Frame</h3>
 <p>Raw genotype data usually arrive as one column per allele. <code>mutate()</code> turns each pair of allele columns into a <code>locus</code> column, and locus columns keep their class through <code>filter()</code>, <code>select()</code> and <code>arrange()</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Population =</span> <span class="fu">c</span>(<span class="st">"North"</span>, <span class="st">"North"</span>, <span class="st">"South"</span>),</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">TPI_1 =</span> <span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"1"</span>, <span class="st">"2"</span>),</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">TPI_2 =</span> <span class="fu">c</span>(<span class="st">"2"</span>, <span class="st">"1"</span>, <span class="st">"2"</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">Population =</span> <span class="fu">c</span>( <span class="st">"North"</span>, <span class="st">"North"</span>, <span class="st">"South"</span> ),</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">TPI_1 =</span> <span class="fu">c</span>( <span class="st">"1"</span>, <span class="st">"1"</span>, <span class="st">"2"</span> ),</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">TPI_2 =</span> <span class="fu">c</span>( <span class="st">"2"</span>, <span class="st">"1"</span>, <span class="st">"2"</span> ) )</span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>genos <span class="ot">&lt;-</span> raw <span class="sc">|&gt;</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TPI =</span> <span class="fu">locus</span>(<span class="fu">cbind</span>(TPI_1, TPI_2), <span class="at">type =</span> <span class="st">"column"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Population, TPI)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">TPI =</span> <span class="fu">locus</span>( <span class="fu">cbind</span>( TPI_1, TPI_2 ), <span class="at">type =</span> <span class="st">"column"</span> ) ) <span class="sc">|&gt;</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>( Population, TPI )</span>
 <span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>genos</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -438,7 +438,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 3      South 2:2</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>genos <span class="sc">|&gt;</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_class</span>(<span class="st">"locus"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_class</span>( <span class="st">"locus"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "TPI"</code></pre>
 </div>
@@ -449,14 +449,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="2.3" class="anchored" data-anchor-id="working-with-vectors-of-loci"><span class="header-section-number">2.3</span> Working with Vectors of Loci</h2>
 <p>Genotype vectors are created using <code>c()</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>AA <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>AA <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"A"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>AB <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>AB <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>BB <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>BB <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">"B"</span>, <span class="st">"B"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
 <span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>loci <span class="ot">&lt;-</span> <span class="fu">c</span>(AA, AB, AB, AA, BB)</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>loci <span class="ot">&lt;-</span> <span class="fu">c</span>( AA, AB, AB, AA, BB )</span>
 <span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>loci</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:A" "A:B" "A:B" "A:A" "B:B"</code></pre>
@@ -469,7 +469,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>loci[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>loci[<span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span> )]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:A" "A:B" "B:B"</code></pre>
 </div>
@@ -479,7 +479,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="2.3.2" class="anchored" data-anchor-id="replication"><span class="header-section-number">2.3.2</span> Replication</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>AB <span class="sc">|&gt;</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="at">times =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>( <span class="at">times =</span> <span class="dv">3</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B" "A:B" "A:B"</code></pre>
 </div>
@@ -518,12 +518,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Within a data frame, the same test summarizes observed heterozygosity by stratum:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>( arapat )</span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">het =</span> <span class="fu">is_heterozygote</span>(LTRS)) <span class="sc">|&gt;</span></span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Species) <span class="sc">|&gt;</span></span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Ho_LTRS =</span> <span class="fu">mean</span>(het, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">het =</span> <span class="fu">is_heterozygote</span>( LTRS ) ) <span class="sc">|&gt;</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>( Species ) <span class="sc">|&gt;</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>( <span class="at">Ho_LTRS =</span> <span class="fu">mean</span>( het, <span class="at">na.rm =</span> <span class="cn">TRUE</span> ) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   Species   Ho_LTRS
@@ -540,9 +540,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="2.6.1" class="anchored" data-anchor-id="mating"><span class="header-section-number">2.6.1</span> Mating (<code>+</code>)</h3>
 <p>The <code>+</code> operator simulates mating by randomly sampling one allele from each parent:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>dad <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"B"</span>))</span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>dad <span class="ot">&lt;-</span> <span class="fu">locus</span>( <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"A"</span> ) )</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">locus</span>( <span class="fu">c</span>( <span class="st">"B"</span>, <span class="st">"B"</span> ) )</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>( <span class="dv">42</span> )</span>
 <span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>offspring <span class="ot">&lt;-</span> mom <span class="sc">+</span> dad</span>
 <span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>offspring</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -554,8 +554,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="2.6.2" class="anchored" data-anchor-id="parental-subtraction--"><span class="header-section-number">2.6.2</span> Parental Subtraction (<code>-</code>)</h3>
 <p>The <code>-</code> operator removes the maternal contribution from an offspring genotype:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>off <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>off             <span class="ot">&lt;-</span> <span class="fu">locus</span>( <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ) )</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>mom             <span class="ot">&lt;-</span> <span class="fu">locus</span>( <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"A"</span> ) )</span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>paternal_gamete <span class="ot">&lt;-</span> off <span class="sc">-</span> mom</span>
 <span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>paternal_gamete</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -585,12 +585,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="from-other-types" class="level3" data-number="2.7.2">
 <h3 data-number="2.7.2" class="anchored" data-anchor-id="from-other-types"><span class="header-section-number">2.7.2</span> From Other Types</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.locus</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A:B"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"C"</span>, <span class="st">"D"</span>) <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>( <span class="st">"C"</span>, <span class="st">"D"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.locus</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "C:D"</code></pre>
@@ -600,11 +600,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="is-a-test" class="level3" data-number="2.7.3">
 <h3 data-number="2.7.3" class="anchored" data-anchor-id="is-a-test"><span class="header-section-number">2.7.3</span> Is-a Test</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>(AB)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>( AB )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>(<span class="st">"not a locus"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>( <span class="st">"not a locus"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] FALSE</code></pre>
 </div>
@@ -618,7 +618,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">to_mv</span>()</span>
 <span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(mv)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>( mv )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 363  58</code></pre>
 </div>
@@ -637,14 +637,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="without-pipes" class="level2" data-number="2.9">
 <h2 data-number="2.9" class="anchored" data-anchor-id="without-pipes"><span class="header-section-number">2.9</span> Without Pipes</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>loc   <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
-<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>genos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Population =</span> raw<span class="sc">$</span>Population,</span>
-<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">TPI =</span> <span class="fu">locus</span>(<span class="fu">cbind</span>(raw<span class="sc">$</span>TPI_1, raw<span class="sc">$</span>TPI_2), <span class="at">type =</span> <span class="st">"column"</span>))</span>
-<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a><span class="fu">alleles</span>(loci)</span>
-<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a><span class="fu">is_heterozygote</span>(loci)</span>
-<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(loci)</span>
-<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a><span class="fu">as.locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
-<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> <span class="fu">to_mv</span>(arapat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>loc   <span class="ot">&lt;-</span> <span class="fu">locus</span>( <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ) )</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>genos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">Population =</span> raw<span class="sc">$</span>Population,</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">TPI =</span> <span class="fu">locus</span>( <span class="fu">cbind</span>( raw<span class="sc">$</span>TPI_1, raw<span class="sc">$</span>TPI_2 ),</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">type =</span> <span class="st">"column"</span> ) )</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a><span class="fu">alleles</span>( loci )</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a><span class="fu">is_heterozygote</span>( loci )</span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>( loci )</span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a><span class="fu">as.locus</span>( <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ) )</span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> <span class="fu">to_mv</span>( arapat )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
@@ -1122,8 +1123,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
-<span id="cb71-10"><a href="#cb71-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( gstudio )</span>
+<span id="cb71-10"><a href="#cb71-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( dplyr )</span>
 <span id="cb71-11"><a href="#cb71-11" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-12"><a href="#cb71-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-13"><a href="#cb71-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Creating Locus Objects</span></span>
@@ -1131,7 +1132,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-15"><a href="#cb71-15" aria-hidden="true" tabindex="-1"></a>The <span class="in">`locus()`</span> constructor takes a vector of alleles and collapses them into a single genotype:</span>
 <span id="cb71-16"><a href="#cb71-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-19"><a href="#cb71-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-20"><a href="#cb71-20" aria-hidden="true" tabindex="-1"></a>loc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-20"><a href="#cb71-20" aria-hidden="true" tabindex="-1"></a>loc <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb71-21"><a href="#cb71-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
 <span id="cb71-22"><a href="#cb71-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-23"><a href="#cb71-23" aria-hidden="true" tabindex="-1"></a>loc</span>
@@ -1140,10 +1141,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-26"><a href="#cb71-26" aria-hidden="true" tabindex="-1"></a>Homozygotes and higher-ploidy genotypes work the same way:</span>
 <span id="cb71-27"><a href="#cb71-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-30"><a href="#cb71-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-31"><a href="#cb71-31" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-31"><a href="#cb71-31" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"A"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb71-32"><a href="#cb71-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
 <span id="cb71-33"><a href="#cb71-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-34"><a href="#cb71-34" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-34"><a href="#cb71-34" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb71-35"><a href="#cb71-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
 <span id="cb71-36"><a href="#cb71-36" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-37"><a href="#cb71-37" aria-hidden="true" tabindex="-1"></a></span>
@@ -1154,7 +1155,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-44"><a href="#cb71-44" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb71-45"><a href="#cb71-45" aria-hidden="true" tabindex="-1"></a>loc_missing <span class="ot">&lt;-</span> <span class="fu">locus</span>()</span>
 <span id="cb71-46"><a href="#cb71-46" aria-hidden="true" tabindex="-1"></a>loc_missing</span>
-<span id="cb71-47"><a href="#cb71-47" aria-hidden="true" tabindex="-1"></a><span class="fu">is.na</span>(loc_missing)</span>
+<span id="cb71-47"><a href="#cb71-47" aria-hidden="true" tabindex="-1"></a><span class="fu">is.na</span>( loc_missing )</span>
 <span id="cb71-48"><a href="#cb71-48" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-49"><a href="#cb71-49" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-50"><a href="#cb71-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## Marker Types</span></span>
@@ -1166,8 +1167,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-56"><a href="#cb71-56" aria-hidden="true" tabindex="-1"></a>Alleles are sorted alphabetically and joined with <span class="in">`:`</span>:</span>
 <span id="cb71-57"><a href="#cb71-57" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-60"><a href="#cb71-60" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-61"><a href="#cb71-61" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb71-62"><a href="#cb71-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>(<span class="at">type =</span> <span class="st">"codom"</span>)</span>
+<span id="cb71-61"><a href="#cb71-61" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>( <span class="st">"B"</span>, <span class="st">"A"</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb71-62"><a href="#cb71-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>( <span class="at">type =</span> <span class="st">"codom"</span> )</span>
 <span id="cb71-63"><a href="#cb71-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-64"><a href="#cb71-64" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-65"><a href="#cb71-65" aria-hidden="true" tabindex="-1"></a><span class="fu">### AFLP</span></span>
@@ -1175,8 +1176,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-67"><a href="#cb71-67" aria-hidden="true" tabindex="-1"></a>Binary presence/absence data (0 or 1):</span>
 <span id="cb71-68"><a href="#cb71-68" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-71"><a href="#cb71-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-72"><a href="#cb71-72" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"1"</span>, <span class="at">type =</span> <span class="st">"aflp"</span>)</span>
-<span id="cb71-73"><a href="#cb71-73" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"0"</span>, <span class="at">type =</span> <span class="st">"aflp"</span>)</span>
+<span id="cb71-72"><a href="#cb71-72" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"1"</span>, <span class="at">type =</span> <span class="st">"aflp"</span> )</span>
+<span id="cb71-73"><a href="#cb71-73" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"0"</span>, <span class="at">type =</span> <span class="st">"aflp"</span> )</span>
 <span id="cb71-74"><a href="#cb71-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-75"><a href="#cb71-75" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-76"><a href="#cb71-76" aria-hidden="true" tabindex="-1"></a><span class="fu">### SNP</span></span>
@@ -1184,9 +1185,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-78"><a href="#cb71-78" aria-hidden="true" tabindex="-1"></a>Encoded as 0, 1, or 2 (count of minor alleles):</span>
 <span id="cb71-79"><a href="#cb71-79" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-82"><a href="#cb71-82" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-83"><a href="#cb71-83" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"0"</span>, <span class="at">type =</span> <span class="st">"snp"</span>)</span>
-<span id="cb71-84"><a href="#cb71-84" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"1"</span>, <span class="at">type =</span> <span class="st">"snp"</span>)</span>
-<span id="cb71-85"><a href="#cb71-85" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"2"</span>, <span class="at">type =</span> <span class="st">"snp"</span>)</span>
+<span id="cb71-83"><a href="#cb71-83" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"0"</span>, <span class="at">type =</span> <span class="st">"snp"</span> )</span>
+<span id="cb71-84"><a href="#cb71-84" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"1"</span>, <span class="at">type =</span> <span class="st">"snp"</span> )</span>
+<span id="cb71-85"><a href="#cb71-85" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"2"</span>, <span class="at">type =</span> <span class="st">"snp"</span> )</span>
 <span id="cb71-86"><a href="#cb71-86" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-87"><a href="#cb71-87" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-88"><a href="#cb71-88" aria-hidden="true" tabindex="-1"></a><span class="fu">### Separated</span></span>
@@ -1194,7 +1195,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-90"><a href="#cb71-90" aria-hidden="true" tabindex="-1"></a>Pre-formatted colon-separated strings:</span>
 <span id="cb71-91"><a href="#cb71-91" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-94"><a href="#cb71-94" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-95"><a href="#cb71-95" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"A:B"</span>, <span class="at">type =</span> <span class="st">"separated"</span>)</span>
+<span id="cb71-95"><a href="#cb71-95" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"A:B"</span>, <span class="at">type =</span> <span class="st">"separated"</span> )</span>
 <span id="cb71-96"><a href="#cb71-96" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-97"><a href="#cb71-97" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-98"><a href="#cb71-98" aria-hidden="true" tabindex="-1"></a><span class="fu">### Zyme (allozyme)</span></span>
@@ -1202,8 +1203,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-100"><a href="#cb71-100" aria-hidden="true" tabindex="-1"></a>Alleles encoded as concatenated integers (e.g., "12" = alleles 1 and 2):</span>
 <span id="cb71-101"><a href="#cb71-101" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-104"><a href="#cb71-104" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-105"><a href="#cb71-105" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"12"</span>, <span class="at">type =</span> <span class="st">"zyme"</span>)</span>
-<span id="cb71-106"><a href="#cb71-106" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>(<span class="st">"23"</span>, <span class="at">type =</span> <span class="st">"zyme"</span>)</span>
+<span id="cb71-105"><a href="#cb71-105" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"12"</span>, <span class="at">type =</span> <span class="st">"zyme"</span> )</span>
+<span id="cb71-106"><a href="#cb71-106" aria-hidden="true" tabindex="-1"></a><span class="fu">locus</span>( <span class="st">"23"</span>, <span class="at">type =</span> <span class="st">"zyme"</span> )</span>
 <span id="cb71-107"><a href="#cb71-107" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-108"><a href="#cb71-108" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-109"><a href="#cb71-109" aria-hidden="true" tabindex="-1"></a><span class="fu">### Column</span></span>
@@ -1211,10 +1212,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-111"><a href="#cb71-111" aria-hidden="true" tabindex="-1"></a>Two-column matrix format (used internally by <span class="in">`read_population()`</span>):</span>
 <span id="cb71-112"><a href="#cb71-112" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-115"><a href="#cb71-115" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-116"><a href="#cb71-116" aria-hidden="true" tabindex="-1"></a>alleles_mat <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"C"</span>))</span>
+<span id="cb71-116"><a href="#cb71-116" aria-hidden="true" tabindex="-1"></a>alleles_mat <span class="ot">&lt;-</span> <span class="fu">cbind</span>( <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span> ), <span class="fu">c</span>( <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"C"</span> ) )</span>
 <span id="cb71-117"><a href="#cb71-117" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-118"><a href="#cb71-118" aria-hidden="true" tabindex="-1"></a>alleles_mat <span class="sc">|&gt;</span></span>
-<span id="cb71-119"><a href="#cb71-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>(<span class="at">type =</span> <span class="st">"column"</span>)</span>
+<span id="cb71-119"><a href="#cb71-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>( <span class="at">type =</span> <span class="st">"column"</span> )</span>
 <span id="cb71-120"><a href="#cb71-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-121"><a href="#cb71-121" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-122"><a href="#cb71-122" aria-hidden="true" tabindex="-1"></a><span class="fu">### Locus Columns in a Data Frame</span></span>
@@ -1224,18 +1225,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-126"><a href="#cb71-126" aria-hidden="true" tabindex="-1"></a>class through <span class="in">`filter()`</span>, <span class="in">`select()`</span> and <span class="in">`arrange()`</span>:</span>
 <span id="cb71-127"><a href="#cb71-127" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-130"><a href="#cb71-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-131"><a href="#cb71-131" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Population =</span> <span class="fu">c</span>(<span class="st">"North"</span>, <span class="st">"North"</span>, <span class="st">"South"</span>),</span>
-<span id="cb71-132"><a href="#cb71-132" aria-hidden="true" tabindex="-1"></a>                  <span class="at">TPI_1 =</span> <span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"1"</span>, <span class="st">"2"</span>),</span>
-<span id="cb71-133"><a href="#cb71-133" aria-hidden="true" tabindex="-1"></a>                  <span class="at">TPI_2 =</span> <span class="fu">c</span>(<span class="st">"2"</span>, <span class="st">"1"</span>, <span class="st">"2"</span>))</span>
+<span id="cb71-131"><a href="#cb71-131" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">Population =</span> <span class="fu">c</span>( <span class="st">"North"</span>, <span class="st">"North"</span>, <span class="st">"South"</span> ),</span>
+<span id="cb71-132"><a href="#cb71-132" aria-hidden="true" tabindex="-1"></a>                   <span class="at">TPI_1 =</span> <span class="fu">c</span>( <span class="st">"1"</span>, <span class="st">"1"</span>, <span class="st">"2"</span> ),</span>
+<span id="cb71-133"><a href="#cb71-133" aria-hidden="true" tabindex="-1"></a>                   <span class="at">TPI_2 =</span> <span class="fu">c</span>( <span class="st">"2"</span>, <span class="st">"1"</span>, <span class="st">"2"</span> ) )</span>
 <span id="cb71-134"><a href="#cb71-134" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-135"><a href="#cb71-135" aria-hidden="true" tabindex="-1"></a>genos <span class="ot">&lt;-</span> raw <span class="sc">|&gt;</span></span>
-<span id="cb71-136"><a href="#cb71-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TPI =</span> <span class="fu">locus</span>(<span class="fu">cbind</span>(TPI_1, TPI_2), <span class="at">type =</span> <span class="st">"column"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb71-137"><a href="#cb71-137" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Population, TPI)</span>
+<span id="cb71-136"><a href="#cb71-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">TPI =</span> <span class="fu">locus</span>( <span class="fu">cbind</span>( TPI_1, TPI_2 ), <span class="at">type =</span> <span class="st">"column"</span> ) ) <span class="sc">|&gt;</span></span>
+<span id="cb71-137"><a href="#cb71-137" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>( Population, TPI )</span>
 <span id="cb71-138"><a href="#cb71-138" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-139"><a href="#cb71-139" aria-hidden="true" tabindex="-1"></a>genos</span>
 <span id="cb71-140"><a href="#cb71-140" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-141"><a href="#cb71-141" aria-hidden="true" tabindex="-1"></a>genos <span class="sc">|&gt;</span></span>
-<span id="cb71-142"><a href="#cb71-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_class</span>(<span class="st">"locus"</span>)</span>
+<span id="cb71-142"><a href="#cb71-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_class</span>( <span class="st">"locus"</span> )</span>
 <span id="cb71-143"><a href="#cb71-143" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-144"><a href="#cb71-144" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-145"><a href="#cb71-145" aria-hidden="true" tabindex="-1"></a><span class="fu">## Working with Vectors of Loci</span></span>
@@ -1243,14 +1244,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-147"><a href="#cb71-147" aria-hidden="true" tabindex="-1"></a>Genotype vectors are created using <span class="in">`c()`</span>:</span>
 <span id="cb71-148"><a href="#cb71-148" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-151"><a href="#cb71-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-152"><a href="#cb71-152" aria-hidden="true" tabindex="-1"></a>AA <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-152"><a href="#cb71-152" aria-hidden="true" tabindex="-1"></a>AA <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"A"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb71-153"><a href="#cb71-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
-<span id="cb71-154"><a href="#cb71-154" aria-hidden="true" tabindex="-1"></a>AB <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-154"><a href="#cb71-154" aria-hidden="true" tabindex="-1"></a>AB <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb71-155"><a href="#cb71-155" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
-<span id="cb71-156"><a href="#cb71-156" aria-hidden="true" tabindex="-1"></a>BB <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-156"><a href="#cb71-156" aria-hidden="true" tabindex="-1"></a>BB <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">"B"</span>, <span class="st">"B"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb71-157"><a href="#cb71-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">locus</span>()</span>
 <span id="cb71-158"><a href="#cb71-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-159"><a href="#cb71-159" aria-hidden="true" tabindex="-1"></a>loci <span class="ot">&lt;-</span> <span class="fu">c</span>(AA, AB, AB, AA, BB)</span>
+<span id="cb71-159"><a href="#cb71-159" aria-hidden="true" tabindex="-1"></a>loci <span class="ot">&lt;-</span> <span class="fu">c</span>( AA, AB, AB, AA, BB )</span>
 <span id="cb71-160"><a href="#cb71-160" aria-hidden="true" tabindex="-1"></a>loci</span>
 <span id="cb71-161"><a href="#cb71-161" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-162"><a href="#cb71-162" aria-hidden="true" tabindex="-1"></a></span>
@@ -1258,14 +1259,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-164"><a href="#cb71-164" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-167"><a href="#cb71-167" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb71-168"><a href="#cb71-168" aria-hidden="true" tabindex="-1"></a>loci[<span class="dv">2</span>]</span>
-<span id="cb71-169"><a href="#cb71-169" aria-hidden="true" tabindex="-1"></a>loci[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)]</span>
+<span id="cb71-169"><a href="#cb71-169" aria-hidden="true" tabindex="-1"></a>loci[<span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span> )]</span>
 <span id="cb71-170"><a href="#cb71-170" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-171"><a href="#cb71-171" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-172"><a href="#cb71-172" aria-hidden="true" tabindex="-1"></a><span class="fu">### Replication</span></span>
 <span id="cb71-173"><a href="#cb71-173" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-176"><a href="#cb71-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb71-177"><a href="#cb71-177" aria-hidden="true" tabindex="-1"></a>AB <span class="sc">|&gt;</span></span>
-<span id="cb71-178"><a href="#cb71-178" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="at">times =</span> <span class="dv">3</span>)</span>
+<span id="cb71-178"><a href="#cb71-178" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>( <span class="at">times =</span> <span class="dv">3</span> )</span>
 <span id="cb71-179"><a href="#cb71-179" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-180"><a href="#cb71-180" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-181"><a href="#cb71-181" aria-hidden="true" tabindex="-1"></a><span class="fu">## Extracting Alleles</span></span>
@@ -1291,12 +1292,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-205"><a href="#cb71-205" aria-hidden="true" tabindex="-1"></a>stratum:</span>
 <span id="cb71-206"><a href="#cb71-206" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-209"><a href="#cb71-209" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-210"><a href="#cb71-210" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb71-210"><a href="#cb71-210" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>( arapat )</span>
 <span id="cb71-211"><a href="#cb71-211" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-212"><a href="#cb71-212" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb71-213"><a href="#cb71-213" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">het =</span> <span class="fu">is_heterozygote</span>(LTRS)) <span class="sc">|&gt;</span></span>
-<span id="cb71-214"><a href="#cb71-214" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Species) <span class="sc">|&gt;</span></span>
-<span id="cb71-215"><a href="#cb71-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Ho_LTRS =</span> <span class="fu">mean</span>(het, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb71-213"><a href="#cb71-213" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">het =</span> <span class="fu">is_heterozygote</span>( LTRS ) ) <span class="sc">|&gt;</span></span>
+<span id="cb71-214"><a href="#cb71-214" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>( Species ) <span class="sc">|&gt;</span></span>
+<span id="cb71-215"><a href="#cb71-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>( <span class="at">Ho_LTRS =</span> <span class="fu">mean</span>( het, <span class="at">na.rm =</span> <span class="cn">TRUE</span> ) )</span>
 <span id="cb71-216"><a href="#cb71-216" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-217"><a href="#cb71-217" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-218"><a href="#cb71-218" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operator Overloads</span></span>
@@ -1306,9 +1307,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-222"><a href="#cb71-222" aria-hidden="true" tabindex="-1"></a>The <span class="in">`+`</span> operator simulates mating by randomly sampling one allele from each parent:</span>
 <span id="cb71-223"><a href="#cb71-223" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-226"><a href="#cb71-226" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-227"><a href="#cb71-227" aria-hidden="true" tabindex="-1"></a>dad <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
-<span id="cb71-228"><a href="#cb71-228" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"B"</span>, <span class="st">"B"</span>))</span>
-<span id="cb71-229"><a href="#cb71-229" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb71-227"><a href="#cb71-227" aria-hidden="true" tabindex="-1"></a>dad <span class="ot">&lt;-</span> <span class="fu">locus</span>( <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"A"</span> ) )</span>
+<span id="cb71-228"><a href="#cb71-228" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">locus</span>( <span class="fu">c</span>( <span class="st">"B"</span>, <span class="st">"B"</span> ) )</span>
+<span id="cb71-229"><a href="#cb71-229" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>( <span class="dv">42</span> )</span>
 <span id="cb71-230"><a href="#cb71-230" aria-hidden="true" tabindex="-1"></a>offspring <span class="ot">&lt;-</span> mom <span class="sc">+</span> dad</span>
 <span id="cb71-231"><a href="#cb71-231" aria-hidden="true" tabindex="-1"></a>offspring</span>
 <span id="cb71-232"><a href="#cb71-232" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -1318,8 +1319,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-236"><a href="#cb71-236" aria-hidden="true" tabindex="-1"></a>The <span class="in">`-`</span> operator removes the maternal contribution from an offspring genotype:</span>
 <span id="cb71-237"><a href="#cb71-237" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-240"><a href="#cb71-240" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-241"><a href="#cb71-241" aria-hidden="true" tabindex="-1"></a>off <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
-<span id="cb71-242"><a href="#cb71-242" aria-hidden="true" tabindex="-1"></a>mom <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>))</span>
+<span id="cb71-241"><a href="#cb71-241" aria-hidden="true" tabindex="-1"></a>off             <span class="ot">&lt;-</span> <span class="fu">locus</span>( <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ) )</span>
+<span id="cb71-242"><a href="#cb71-242" aria-hidden="true" tabindex="-1"></a>mom             <span class="ot">&lt;-</span> <span class="fu">locus</span>( <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"A"</span> ) )</span>
 <span id="cb71-243"><a href="#cb71-243" aria-hidden="true" tabindex="-1"></a>paternal_gamete <span class="ot">&lt;-</span> off <span class="sc">-</span> mom</span>
 <span id="cb71-244"><a href="#cb71-244" aria-hidden="true" tabindex="-1"></a>paternal_gamete</span>
 <span id="cb71-245"><a href="#cb71-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -1338,18 +1339,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-260"><a href="#cb71-260" aria-hidden="true" tabindex="-1"></a><span class="fu">### From Other Types</span></span>
 <span id="cb71-261"><a href="#cb71-261" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-264"><a href="#cb71-264" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-265"><a href="#cb71-265" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-265"><a href="#cb71-265" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb71-266"><a href="#cb71-266" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.locus</span>()</span>
 <span id="cb71-267"><a href="#cb71-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-268"><a href="#cb71-268" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"C"</span>, <span class="st">"D"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-268"><a href="#cb71-268" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>( <span class="st">"C"</span>, <span class="st">"D"</span> ) <span class="sc">|&gt;</span></span>
 <span id="cb71-269"><a href="#cb71-269" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.locus</span>()</span>
 <span id="cb71-270"><a href="#cb71-270" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-271"><a href="#cb71-271" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-272"><a href="#cb71-272" aria-hidden="true" tabindex="-1"></a><span class="fu">### Is-a Test</span></span>
 <span id="cb71-273"><a href="#cb71-273" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-276"><a href="#cb71-276" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb71-277"><a href="#cb71-277" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>(AB)</span>
-<span id="cb71-278"><a href="#cb71-278" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>(<span class="st">"not a locus"</span>)</span>
+<span id="cb71-277"><a href="#cb71-277" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>( AB )</span>
+<span id="cb71-278"><a href="#cb71-278" aria-hidden="true" tabindex="-1"></a><span class="fu">is.locus</span>( <span class="st">"not a locus"</span> )</span>
 <span id="cb71-279"><a href="#cb71-279" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-280"><a href="#cb71-280" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-281"><a href="#cb71-281" aria-hidden="true" tabindex="-1"></a><span class="fu">## Multivariate Conversion</span></span>
@@ -1360,7 +1361,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-288"><a href="#cb71-288" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
 <span id="cb71-289"><a href="#cb71-289" aria-hidden="true" tabindex="-1"></a>  <span class="fu">to_mv</span>()</span>
 <span id="cb71-290"><a href="#cb71-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-291"><a href="#cb71-291" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(mv)</span>
+<span id="cb71-291"><a href="#cb71-291" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>( mv )</span>
 <span id="cb71-292"><a href="#cb71-292" aria-hidden="true" tabindex="-1"></a>mv[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]</span>
 <span id="cb71-293"><a href="#cb71-293" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb71-294"><a href="#cb71-294" aria-hidden="true" tabindex="-1"></a></span>
@@ -1370,15 +1371,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb71-298"><a href="#cb71-298" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-301"><a href="#cb71-301" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb71-302"><a href="#cb71-302" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb71-303"><a href="#cb71-303" aria-hidden="true" tabindex="-1"></a>loc   <span class="ot">&lt;-</span> <span class="fu">locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
-<span id="cb71-304"><a href="#cb71-304" aria-hidden="true" tabindex="-1"></a>genos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Population =</span> raw<span class="sc">$</span>Population,</span>
-<span id="cb71-305"><a href="#cb71-305" aria-hidden="true" tabindex="-1"></a>                    <span class="at">TPI =</span> <span class="fu">locus</span>(<span class="fu">cbind</span>(raw<span class="sc">$</span>TPI_1, raw<span class="sc">$</span>TPI_2), <span class="at">type =</span> <span class="st">"column"</span>))</span>
-<span id="cb71-306"><a href="#cb71-306" aria-hidden="true" tabindex="-1"></a><span class="fu">alleles</span>(loci)</span>
-<span id="cb71-307"><a href="#cb71-307" aria-hidden="true" tabindex="-1"></a><span class="fu">is_heterozygote</span>(loci)</span>
-<span id="cb71-308"><a href="#cb71-308" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(loci)</span>
-<span id="cb71-309"><a href="#cb71-309" aria-hidden="true" tabindex="-1"></a><span class="fu">as.locus</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span>
-<span id="cb71-310"><a href="#cb71-310" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> <span class="fu">to_mv</span>(arapat)</span>
-<span id="cb71-311"><a href="#cb71-311" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb71-303"><a href="#cb71-303" aria-hidden="true" tabindex="-1"></a>loc   <span class="ot">&lt;-</span> <span class="fu">locus</span>( <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ) )</span>
+<span id="cb71-304"><a href="#cb71-304" aria-hidden="true" tabindex="-1"></a>genos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">Population =</span> raw<span class="sc">$</span>Population,</span>
+<span id="cb71-305"><a href="#cb71-305" aria-hidden="true" tabindex="-1"></a>                     <span class="at">TPI =</span> <span class="fu">locus</span>( <span class="fu">cbind</span>( raw<span class="sc">$</span>TPI_1, raw<span class="sc">$</span>TPI_2 ),</span>
+<span id="cb71-306"><a href="#cb71-306" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">type =</span> <span class="st">"column"</span> ) )</span>
+<span id="cb71-307"><a href="#cb71-307" aria-hidden="true" tabindex="-1"></a><span class="fu">alleles</span>( loci )</span>
+<span id="cb71-308"><a href="#cb71-308" aria-hidden="true" tabindex="-1"></a><span class="fu">is_heterozygote</span>( loci )</span>
+<span id="cb71-309"><a href="#cb71-309" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>( loci )</span>
+<span id="cb71-310"><a href="#cb71-310" aria-hidden="true" tabindex="-1"></a><span class="fu">as.locus</span>( <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"B"</span> ) )</span>
+<span id="cb71-311"><a href="#cb71-311" aria-hidden="true" tabindex="-1"></a>mv <span class="ot">&lt;-</span> <span class="fu">to_mv</span>( arapat )</span>
+<span id="cb71-312"><a href="#cb71-312" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

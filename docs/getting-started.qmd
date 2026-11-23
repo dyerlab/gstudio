@@ -8,16 +8,17 @@ The `gstudio` package is available from GitHub and can be installed using the `d
 
 ```{r}
 #| eval: false
-install.packages("devtools")
-devtools::install_github("dyerlab/gstudio")
+install.packages( "devtools" )
+devtools::install_github( "dyerlab/gstudio" )
 ```
 
 Once installed, load the package, along with dplyr for the pipelines used throughout this book:
 
 ```{r}
 #| message: false
-library(gstudio)
-library(dplyr)
+library( gstudio )
+library( dplyr )
+data( arapat )
 ```
 
 ## Code Style in This Book
@@ -27,14 +28,14 @@ Every `gstudio` function takes its data as the first argument, so analyses are w
 ```{r}
 #| eval: false
 arapat |>
-  genetic_diversity(stratum = "Species", mode = "He")
+  genetic_diversity( stratum = "Species", mode = "He" )
 ```
 
 The older style, with the data and every option passed as arguments, works exactly the same and needs no other packages:
 
 ```{r}
 #| eval: false
-genetic_diversity(arapat, stratum = "Species", mode = "He")
+genetic_diversity( arapat, stratum = "Species", mode = "He" )
 ```
 
 Grouped data frames work too: when no `stratum` is given, the grouping variable is used, so these two calls are the same (an explicit `stratum =` always takes precedence over the grouping):
@@ -42,11 +43,11 @@ Grouped data frames work too: when no `stratum` is given, the grouping variable 
 ```{r}
 #| eval: false
 arapat |>
-  group_by(Species) |>
-  genetic_diversity(mode = "He")
+  group_by( Species ) |>
+  genetic_diversity( mode = "He" )
 
 arapat |>
-  genetic_diversity(stratum = "Species", mode = "He")
+  genetic_diversity( stratum = "Species", mode = "He" )
 ```
 
 Tests (`source_sink_test()`, `ibgd()`, `directional_test()`, the graph-level `asymmetry_significance()` and others) return standard `htest` objects, so they print like `t.test()` and can be turned into a one-row data frame with `broom::tidy()`.
@@ -71,7 +72,7 @@ The package ships with several datasets for examples and testing:
 Load any dataset with the `data()` function:
 
 ```{r}
-data(arapat)
+data( arapat )
 ```
 
 ## Exploring a Dataset
@@ -92,7 +93,7 @@ Use `column_class()` to find all columns of a particular class:
 
 ```{r}
 arapat |>
-  column_class("locus")
+  column_class( "locus" )
 ```
 
 This returns the names of all columns that contain `locus` objects --- a function used extensively throughout the package.
@@ -103,17 +104,17 @@ The `partition()` function splits a data.frame by a grouping column, returning a
 
 ```{r}
 pops <- arapat |>
-  partition(stratum = "Species")
+  partition( stratum = "Species" )
 
 pops |>
-  sapply(nrow)
+  sapply( nrow )
 ```
 
 With dplyr, the same counts come from grouping:
 
 ```{r}
 arapat |>
-  count(Species)
+  count( Species )
 ```
 
 ### Ploidy
@@ -122,7 +123,7 @@ Check the ploidy level of a locus column:
 
 ```{r}
 arapat |>
-  pull(LTRS) |>
+  pull( LTRS ) |>
   ploidy()
 ```
 
@@ -132,14 +133,14 @@ With just a few lines, you can estimate genetic diversity across populations:
 
 ```{r}
 arapat |>
-  genetic_diversity(stratum = "Species", mode = "He")
+  genetic_diversity( stratum = "Species", mode = "He" )
 ```
 
 Or compute population structure:
 
 ```{r}
 arapat |>
-  genetic_structure(stratum = "Species", mode = "Gst")
+  genetic_structure( stratum = "Species", mode = "Gst" )
 ```
 
 The following chapters cover each of these operations in detail.
@@ -148,11 +149,11 @@ The following chapters cover each of these operations in detail.
 
 ```{r}
 #| eval: false
-names(arapat)
-column_class(arapat, "locus")
-pops <- partition(arapat, stratum = "Species")
-sapply(pops, nrow)
-ploidy(arapat$LTRS)
-genetic_diversity(arapat, stratum = "Species", mode = "He")
-genetic_structure(arapat, stratum = "Species", mode = "Gst")
+names( arapat )
+column_class( arapat, "locus" )
+pops <- partition( arapat, stratum = "Species" )
+sapply( pops, nrow )
+ploidy( arapat$LTRS )
+genetic_diversity( arapat, stratum = "Species", mode = "He" )
+genetic_structure( arapat, stratum = "Species", mode = "Gst" )
 ```

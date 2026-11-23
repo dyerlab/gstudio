@@ -41,8 +41,8 @@
 #'  in the analysis. If this is not specified, then all loci are used.
 #' @return An object of type \code{data.frame} with columns \code{Locus}, the
 #'  estimate (named for the mode: \code{Gst}, \code{Gst_prime}, \code{Dest} or
-#'  \code{Fst}), \code{Hs}, \code{Ht} and \code{p.value}, in that order for every
-#'  mode.  There is one row per locus and, when more than one locus is analysed, a
+#'  \code{Fst}), \code{Hs}, \code{Ht} and, when \code{nperm > 0}, \code{p.value},
+#'  in that order for every mode.  There is one row per locus and, when more than one locus is analysed, a
 #'  \code{Multilocus} row whose \code{Hs} and \code{Ht} are means across loci.
 #'  The multilocus estimate is 1 - mean(Hs)/mean(Ht) for \code{Gst} and \code{Fst}
 #'  (Culley et al. 2001), and the harmonic mean of the per-locus estimates for
@@ -54,7 +54,8 @@
 #'  is tested too.
 #'
 #'  \code{PhiST} and \code{PhiFT} have their own layout: \code{Locus}, the
-#'  estimate, \code{sigma2_among}, \code{sigma2_within} and \code{p.value}, where
+#'  estimate, \code{sigma2_among}, \code{sigma2_within} and (when \code{nperm > 0})
+#'  \code{p.value}, where
 #'  Phi = sigma2_among / (sigma2_among + sigma2_within).  \code{PhiFT} also has
 #'  \code{Nep} = 1 / (2 PhiFT), the effective number of pollen donors (\code{NA}
 #'  when PhiFT <= 0), before \code{p.value}.  Individuals with a missing stratum
@@ -158,15 +159,19 @@ genetic_structure <- function( x, stratum="Population", mode=c("Gst", "Gst_prime
       ret <- Fst( x, stratum, nperm )
 
     else if( mode_clean %in% c( "phist", "phi_st" ) )
-      return( PhiST( x, stratum = stratum, nperm = nperm ) )
+      ret <- PhiST( x, stratum = stratum, nperm = nperm )
 
     else if( mode_clean %in% c( "phift", "phi_ft" ) )
-      return( PhiFT( x, stratum = stratum, offspring = offspring, nperm = nperm ) )
-
-    if( !("P" %in% names(ret)) )
-      ret$P <- NA_real_
+      ret <- PhiFT( x, stratum = stratum, offspring = offspring, nperm = nperm )
 
     names(ret)[names(ret) == "P"] <- "p.value"
+
+    # p-values come only from permutation: without it there is no p.value column
+    if( nperm > 0 ) {
+      if( !("p.value" %in% names(ret)) )
+        ret$p.value <- NA_real_
+    } else
+      ret$p.value <- NULL
   }
   
 

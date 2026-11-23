@@ -16,9 +16,9 @@ Each chapter is self-contained and can be read independently, though they build 
 
 ```{r}
 #| message: false
-library(gstudio)
-library(dplyr)
-data(arapat)
+library( gstudio )
+library( dplyr )
+data( arapat )
 
 arapat |>
   glimpse()

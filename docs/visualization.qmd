@@ -4,11 +4,11 @@ The `gstudio` package returns analysis results as standard `data.frame` objects,
 
 ```{r}
 #| message: false
-library(gstudio)
-library(dplyr)
-library(ggplot2)
-library(ggraph)
-data(arapat)
+library( gstudio )
+library( dplyr )
+library( ggplot2 )
+library( ggraph )
+data( arapat )
 ```
 
 ## Allele Frequency Plots
@@ -19,10 +19,10 @@ data(arapat)
 
 ```{r}
 arapat |>
-  frequencies(loci = "LTRS") |>
-  ggplot(aes(x = Allele, y = Frequency)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  labs(title = "Allele Frequencies at LTRS") +
+  frequencies( loci = "LTRS" ) |>
+  ggplot( aes( x = Allele, y = Frequency ) ) +
+  geom_bar( stat = "identity", fill = "steelblue" ) +
+  labs( title = "Allele Frequencies at LTRS" ) +
   theme_minimal()
 ```
 
@@ -32,12 +32,12 @@ When `stratum` is supplied, `frequencies()` zero-fills missing allele/stratum co
 
 ```{r}
 freqs <- arapat |>
-  frequencies(loci = "LTRS", stratum = "Species")
+  frequencies( loci = "LTRS", stratum = "Species" )
 
 freqs |>
-  ggplot(aes(x = Allele, y = Frequency, fill = Stratum)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "LTRS Allele Frequencies by Species") +
+  ggplot( aes( x = Allele, y = Frequency, fill = Stratum ) ) +
+  geom_bar( stat = "identity", position = "dodge" ) +
+  labs( title = "LTRS Allele Frequencies by Species" ) +
   theme_minimal()
 ```
 
@@ -47,13 +47,13 @@ Here the zero-filled alleles are dropped with `filter()` before plotting:
 
 ```{r}
 freqs |>
-  filter(Frequency > 0) |>
-  ggplot(aes(x = Allele, y = Frequency, fill = Allele)) +
-  geom_bar(stat = "identity") +
-  facet_wrap(~Stratum) +
-  labs(title = "LTRS Frequencies by Species") +
+  filter( Frequency > 0 ) |>
+  ggplot( aes( x = Allele, y = Frequency, fill = Allele ) ) +
+  geom_bar( stat = "identity" ) +
+  facet_wrap( ~Stratum ) +
+  labs( title = "LTRS Frequencies by Species" ) +
   theme_minimal() +
-  theme(legend.position = "none")
+  theme( legend.position = "none" )
 ```
 
 ## Spatial Sampling Maps
@@ -65,9 +65,9 @@ coords <- arapat |>
   strata_coordinates()
 
 coords |>
-  ggplot(aes(x = Longitude, y = Latitude)) +
-  geom_point(size = 3, shape = 21, fill = "steelblue") +
-  labs(title = "Araptus attenuatus Sampling Locations") +
+  ggplot( aes( x = Longitude, y = Latitude ) ) +
+  geom_point( size = 3, shape = 21, fill = "steelblue" ) +
+  labs( title = "Araptus attenuatus Sampling Locations" ) +
   coord_fixed() +
   theme_minimal()
 ```
@@ -76,8 +76,8 @@ Individual-level data works just as well when you want within-population spread:
 
 ```{r}
 arapat |>
-  ggplot(aes(x = Longitude, y = Latitude, fill = Species)) +
-  geom_point(size = 2, shape = 21, alpha = 0.7) +
+  ggplot( aes( x = Longitude, y = Latitude, fill = Species ) ) +
+  geom_point( size = 2, shape = 21, alpha = 0.7 ) +
   coord_fixed() +
   theme_minimal()
 ```
@@ -92,18 +92,18 @@ Build a population graph from the `arapat` dataset and plot it with a Fruchterma
 
 ```{r}
 graph <- arapat |>
-  population_graph(stratum = "Species")
+  population_graph( stratum = "Species" )
 
-igraph::V(graph)$degree <- igraph::degree(graph)
+igraph::V( graph )$degree <- igraph::degree( graph )
 
 graph |>
-  ggraph(layout = "fr") +
-  geom_edge_link(color = "grey60", linewidth = 0.5) +
-  geom_node_point(aes(fill = degree), size = 5, shape = 21) +
-  geom_node_label(aes(label = name), repel = TRUE, size = 2.5) +
+  ggraph( layout = "fr" ) +
+  geom_edge_link( color = "grey60", linewidth = 0.5 ) +
+  geom_node_point( aes( fill = degree ), size = 5, shape = 21 ) +
+  geom_node_label( aes( label = name ), repel = TRUE, size = 2.5 ) +
   scale_fill_viridis_c() +
   theme_graph() +
-  labs(title = "Araptus attenuatus Population Graph")
+  labs( title = "Araptus attenuatus Population Graph" )
 ```
 
 ### Geographic (IBD) Layout
@@ -113,24 +113,27 @@ For isolation-by-distance analyses, use `layout = "manual"` with longitude and l
 Use `scale_edge_width(range = c(min, max))` to control the rendered line width in mm. Dividing weights inside `aes()` has no effect because ggraph's default scale auto-normalises to the data range regardless — the scale absorbs any constant factor. For non-linear transforms (log, normalize), add a pre-computed edge attribute with `igraph::E(graph)$attr <- ...` before plotting.
 
 ```{r}
-data(lopho)
-data(baja)
+data( lopho )
+data( baja )
 
 lopho_dec <- lopho |>
-  decorate_graph(baja, stratum = "Population")
+  decorate_graph( baja, stratum = "Population" )
 
 lopho_dec |>
-  ggraph(layout = "manual",
-         x = igraph::V(lopho_dec)$Longitude,
-         y = igraph::V(lopho_dec)$Latitude) +
-  geom_edge_link(aes(width = weight), color = "grey60", show.legend = FALSE) +
-  scale_edge_width(range = c(0.3, 2.5), guide = "none") +
-  geom_node_point(aes(size = size, color = Region), show.legend = FALSE) +
-  geom_node_label(aes(label = name), repel = TRUE, size = 2.5) +
+  ggraph( layout = "manual",
+          x = igraph::V( lopho_dec )$Longitude,
+          y = igraph::V( lopho_dec )$Latitude ) +
+  geom_edge_link( aes( width = weight ),
+                  color = "grey60",
+                  show.legend = FALSE ) +
+  scale_edge_width( range = c( 0.3, 2.5 ), guide = "none" ) +
+  geom_node_point( aes( size = size, color = Region ),
+                   show.legend = FALSE ) +
+  geom_node_label( aes( label = name ), repel = TRUE, size = 2.5 ) +
   coord_fixed() +
-  labs(title = "Lophocereus Population Graph",
-       x = "Longitude", y = "Latitude") +
-  theme_minimal() + 
+  labs( title = "Lophocereus Population Graph",
+        x = "Longitude", y = "Latitude" ) +
+  theme_minimal() +
   coord_map()
 ```
 
@@ -143,20 +146,23 @@ lopho_asym <- lopho_dec |>
   asymmetric_popgraph()
 
 lopho_asym |>
-  ggraph(layout = "manual",
-         x = igraph::V(lopho_asym)$Longitude,
-         y = igraph::V(lopho_asym)$Latitude) +
-  geom_edge_fan(aes(color = weight, width = weight),
-                arrow = arrow(length = unit(2.5, "mm"), type = "closed"),
-                end_cap = circle(3, "mm"),
-                show.legend = FALSE) +
-  scale_edge_width(range = c(0.3, 2), guide = "none") +
-  scale_edge_color_viridis(option = "magma", alpha = 0.4, guide="none") +
-  geom_node_point(size = 3, shape = 21, fill = "white", stroke = 0.8) +
+  ggraph( layout = "manual",
+          x = igraph::V( lopho_asym )$Longitude,
+          y = igraph::V( lopho_asym )$Latitude ) +
+  geom_edge_fan( aes( color = weight, width = weight ),
+                 arrow = arrow( length = unit( 2.5, "mm" ),
+                                type = "closed" ),
+                 end_cap = circle( 3, "mm" ),
+                 show.legend = FALSE ) +
+  scale_edge_width( range = c( 0.3, 2 ), guide = "none" ) +
+  scale_edge_color_viridis( option = "magma",
+                            alpha = 0.4,
+                            guide = "none" ) +
+  geom_node_point( size = 3, shape = 21, fill = "white", stroke = 0.8 ) +
   coord_fixed() +
-  labs(title = "Asymmetric Gene Flow — Lophocereus",
-       x = "Longitude", y = "Latitude") +
-  theme_minimal() + 
+  labs( title = "Asymmetric Gene Flow — Lophocereus",
+        x = "Longitude", y = "Latitude" ) +
+  theme_minimal() +
   coord_map()
 ```
 
@@ -165,17 +171,17 @@ lopho_asym |>
 `addAlleleFrequencies()` adds allele-frequency pie charts to a leaflet map and follows the standard leaflet pipe pattern. Pre-compute frequencies with `frequencies()`, build the base map from `strata_coordinates()`, then pipe into `addAlleleFrequencies()`.
 
 ```{r}
-library(leaflet)
-library(leaflet.minicharts)
+library( leaflet )
+library( leaflet.minicharts )
 
 freqs <- arapat |>
-  frequencies(loci = "LTRS", stratum = "Species")
+  frequencies( loci = "LTRS", stratum = "Species" )
 
 arapat |>
-  strata_coordinates(stratum = "Species") |>
+  strata_coordinates( stratum = "Species" ) |>
   leaflet() |>
   addTiles() |>
-  addAlleleFrequencies(freqs)
+  addAlleleFrequencies( freqs )
 ```
 
 Pass `locus =` explicitly when `freqs` contains more than one locus. Width and height of the pie charts (in pixels) are controlled with `width =` and `height =`.
@@ -184,17 +190,19 @@ Pass `locus =` explicitly when `freqs` contains more than one locus. Width and h
 
 ```{r}
 #| eval: false
-freqs <- frequencies(arapat, loci = "LTRS", stratum = "Species")
-ggplot(freqs, aes(x = Allele, y = Frequency, fill = Stratum)) +
-  geom_col(position = "dodge")
+freqs <- frequencies( arapat, loci = "LTRS", stratum = "Species" )
+ggplot( freqs, aes( x = Allele, y = Frequency, fill = Stratum ) ) +
+  geom_col( position = "dodge" )
 
-coords <- strata_coordinates(arapat)
-ggplot(coords, aes(x = Longitude, y = Latitude)) +
+coords <- strata_coordinates( arapat )
+ggplot( coords, aes( x = Longitude, y = Latitude ) ) +
   geom_point()
 
-lopho_dec <- decorate_graph(lopho, baja, stratum = "Population")
-ggraph(lopho_dec, layout = "manual",
-       x = igraph::V(lopho_dec)$Longitude, y = igraph::V(lopho_dec)$Latitude) +
+lopho_dec <- decorate_graph( lopho, baja, stratum = "Population" )
+ggraph( lopho_dec,
+        layout = "manual",
+        x = igraph::V( lopho_dec )$Longitude,
+        y = igraph::V( lopho_dec )$Latitude ) +
   geom_edge_link() +
   geom_node_point()
 ```

@@ -4,8 +4,9 @@ This chapter covers reading genetic data from files, converting between formats,
 
 ```{r}
 #| message: false
-library(gstudio)
-library(dplyr)
+library( gstudio )
+library( dplyr )
+data( arapat )
 ```
 
 ## Reading Population Data
@@ -14,10 +15,9 @@ The `read_population()` function is the primary data import tool. It reads text 
 
 ### Function Signature
 
-```{r}
-#| eval: false
-read_population(path, type, locus.columns, phased = FALSE,
-                sep = ",", header = TRUE, delim = ":")
+```r
+read_population( path, type, locus.columns, phased = FALSE,
+                 sep = ",", header = TRUE, delim = ":" )
 ```
 
 The key parameters:
@@ -31,8 +31,11 @@ The key parameters:
 The most common format uses colon-separated alleles (e.g., `"A:B"`):
 
 ```{r}
-data_sep <- system.file("extdata", "data_separated.csv", package = "gstudio") |>
-  read_population(type = "separated", locus.columns = c(4, 5))
+data_sep <- system.file( "extdata",
+                         "data_separated.csv",
+                         package = "gstudio" ) |>
+  read_population( type = "separated",
+                   locus.columns = c( 4, 5 ) )
 
 data_sep |>
   head()
@@ -43,8 +46,11 @@ data_sep |>
 Two adjacent columns per locus (one column per allele):
 
 ```{r}
-data_col <- system.file("extdata", "data_2_column.csv", package = "gstudio") |>
-  read_population(type = "column", locus.columns = c(4:7))
+data_col <- system.file( "extdata",
+                         "data_2_column.csv",
+                         package = "gstudio" ) |>
+  read_population( type = "column",
+                   locus.columns = c( 4:7 ) )
 
 data_col |>
   head()
@@ -55,8 +61,10 @@ data_col |>
 Encoded as 0, 1, 2 (minor allele count):
 
 ```{r}
-data_snp <- system.file("extdata", "data_snp.csv", package = "gstudio") |>
-  read_population(type = "snp", locus.columns = c(4:7))
+data_snp <- system.file( "extdata",
+                         "data_snp.csv",
+                         package = "gstudio" ) |>
+  read_population( type = "snp", locus.columns = c( 4:7 ) )
 
 data_snp |>
   head()
@@ -67,8 +75,11 @@ data_snp |>
 Binary (0/1) presence-absence:
 
 ```{r}
-data_aflp <- system.file("extdata", "data_aflp.csv", package = "gstudio") |>
-  read_population(type = "aflp", locus.columns = c(4:7))
+data_aflp <- system.file( "extdata",
+                          "data_aflp.csv",
+                          package = "gstudio" ) |>
+  read_population( type = "aflp",
+                   locus.columns = c( 4:7 ) )
 
 data_aflp |>
   head()
@@ -79,8 +90,11 @@ data_aflp |>
 Concatenated integer alleles (e.g., "12" for alleles 1 and 2):
 
 ```{r}
-data_zyme <- system.file("extdata", "data_zymelike.csv", package = "gstudio") |>
-  read_population(type = "zyme", locus.columns = c(4:7))
+data_zyme <- system.file( "extdata",
+                          "data_zymelike.csv",
+                          package = "gstudio" ) |>
+  read_population( type = "zyme",
+                   locus.columns = c( 4:7 ) )
 
 data_zyme |>
   head()
@@ -91,8 +105,8 @@ data_zyme |>
 Genepop files have their own structure with `Pop` delimiters:
 
 ```{r}
-data_gp <- system.file("extdata", "genepop.txt", package = "gstudio") |>
-  read_population(type = "genepop")
+data_gp <- system.file( "extdata", "genepop.txt", package = "gstudio" ) |>
+  read_population( type = "genepop" )
 
 data_gp |>
   head()
@@ -103,8 +117,10 @@ data_gp |>
 Two-row-per-individual STRUCTURE format:
 
 ```{r}
-data_str <- system.file("extdata", "data_structure.str", package = "gstudio") |>
-  read_population(type = "structure")
+data_str <- system.file( "extdata",
+                         "data_structure.str",
+                         package = "gstudio" ) |>
+  read_population( type = "structure" )
 
 data_str |>
   head()
@@ -118,16 +134,20 @@ The `write_population()` function exports a data.frame to various formats:
 #| eval: false
 # Plain text (colon-separated loci)
 arapat |>
-  write_population(file = "arapat.csv")
+  write_population( file = "arapat.csv" )
 
 # Genepop format, for one species only
 arapat |>
-  filter(Species == "Cape") |>
-  write_population(file = "cape.gen", mode = "genepop", stratum = "Population")
+  filter( Species == "Cape" ) |>
+  write_population( file = "cape.gen",
+                    mode = "genepop",
+                    stratum = "Population" )
 
 # Structure format
 arapat |>
-  write_population(file = "arapat.str", mode = "structure", stratum = "Species")
+  write_population( file = "arapat.str",
+                    mode = "structure",
+                    stratum = "Species" )
 ```
 
 ## Direct Format Conversion
@@ -135,19 +155,19 @@ arapat |>
 You can also convert data.frames directly without writing to disk:
 
 ```{r}
-data(arapat)
+data( arapat )
 
 gp <- arapat |>
-  to_genepop(stratum = "Species")
+  to_genepop( stratum = "Species" )
 
-cat(gp[1:10], sep = "\n")
+cat( gp[1:10], sep = "\n" )
 ```
 
 ```{r}
 st <- arapat |>
-  to_structure(stratum = "Species")
+  to_structure( stratum = "Species" )
 
-cat(st[1:5], sep = "\n")
+cat( st[1:5], sep = "\n" )
 ```
 
 ## Generating Synthetic Data
@@ -158,12 +178,12 @@ The `make_population()` function creates a random population from a frequency ta
 
 ```{r}
 freqs <- data.frame(
-  Locus = rep(c("TPI", "PGM"), each = 3),
-  Allele = c("A", "B", "C", "H", "I", "J"),
-  Frequency = c(0.55, 0.30, 0.15, 0.34, 0.34, 0.32)
+  Locus = rep( c( "TPI", "PGM" ), each = 3 ),
+  Allele = c( "A", "B", "C", "H", "I", "J" ),
+  Frequency = c( 0.55, 0.30, 0.15, 0.34, 0.34, 0.32 )
 )
-pop <- freqs |>
-  make_population(N = 10)
+pop   <- freqs |>
+    make_population( N = 10 )
 
 pop |>
   head()
@@ -174,23 +194,23 @@ pop |>
 The `make_populations()` function creates several populations at once from a frequency data.frame with a `Population` column:
 
 ```{r}
-freqs <- expand.grid(Allele = c("01", "02"),
-                     Locus = c("Loc1", "Loc2"),
-                     Population = c("A", "B"),
-                     stringsAsFactors = FALSE) |>
-  mutate(Frequency = c(0.2, 0.8, 0.3, 0.7,
-                       0.7, 0.3, 0.5, 0.5),
-         Population = factor(Population, ordered = TRUE)) |>
-  select(Population, Locus, Allele, Frequency)
+pop_freqs <- expand.grid( Allele = c( "01", "02" ),
+                          Locus = c( "Loc1", "Loc2" ),
+                          Population = c( "A", "B" ),
+                          stringsAsFactors = FALSE ) |>
+  mutate( Frequency = c( 0.2, 0.8, 0.3, 0.7,
+                         0.7, 0.3, 0.5, 0.5 ),
+          Population = factor( Population, ordered = TRUE ) ) |>
+  select( Population, Locus, Allele, Frequency )
 
-pops <- freqs |>
-  make_populations(N = 15)
+pops <- pop_freqs |>
+  make_populations( N = 15 )
 
 pops |>
   head()
 
 pops |>
-  count(Population)
+  count( Population )
 ```
 
 ### From Individual Loci
@@ -198,9 +218,9 @@ pops |>
 The `make_loci()` function generates a vector of random locus objects:
 
 ```{r}
-f <- data.frame(Allele = c("A", "B"), Frequency = c(0.6, 0.4))
+f    <- data.frame( Allele = c( "A", "B" ), Frequency = c( 0.6, 0.4 ) )
 loci <- f |>
-  make_loci(N = 10)
+  make_loci( N = 10 )
 
 loci
 ```
@@ -209,11 +229,18 @@ loci
 
 ```{r}
 #| eval: false
-path     <- system.file("extdata", "data_separated.csv", package = "gstudio")
-data_sep <- read_population(path, type = "separated", locus.columns = c(4, 5))
-write_population(arapat, file = "arapat.str", mode = "structure", stratum = "Species")
-gp   <- to_genepop(arapat, stratum = "Species")
-pop  <- make_population(freqs, N = 10)
-pops <- make_populations(freqs, N = 15)
-loci <- make_loci(f, N = 10)
+path     <- system.file( "extdata",
+                         "data_separated.csv",
+                         package = "gstudio" )
+data_sep <- read_population( path,
+                             type = "separated",
+                             locus.columns = c( 4, 5 ) )
+write_population( arapat,
+                  file = "arapat.str",
+                  mode = "structure",
+                  stratum = "Species" )
+gp   <- to_genepop( arapat, stratum = "Species" )
+pop  <- make_population( freqs, N = 10 )
+pops <- make_populations( pop_freqs, N = 15 )
+loci <- make_loci( f, N = 10 )
 ```

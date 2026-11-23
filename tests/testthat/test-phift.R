@@ -19,7 +19,7 @@ test_that("PhiFT with unambiguous gametes is an AMOVA of the paternal alleles", 
                       L = locus( paste( pmin( mat, pat ), pmax( mat, pat ), sep = ":" ), type = "separated" ) )
   x <- rbind( moms, offs )
   ft <- genetic_structure( x, mode = "PhiFT" )
-  expect_equal( names( ft ), c( "Locus", "PhiFT", "sigma2_among", "sigma2_within", "Nep", "p.value" ) )
+  expect_equal( names( ft ), c( "Locus", "PhiFT", "sigma2_among", "sigma2_within", "Nep" ) )
   expect_equal( ft$Nep, 1 / ( 2 * ft$PhiFT ) )
   # Gamete distance: 1 when the paternal alleles differ, 0 when they match.
   D <- outer( pat, pat, function( a, b ) as.numeric( a != b ) )

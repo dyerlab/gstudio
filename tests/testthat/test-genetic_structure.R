@@ -22,14 +22,14 @@ test_that("checking",{
   
   gs <- genetic_structure( df  )
   expect_that( gs, is_a("data.frame") )
-  expect_that( dim(gs), is_equivalent_to(c(1,5) ) )
-  expect_that( names(gs), is_equivalent_to(c("Locus","Gst","Hs","Ht","p.value") ) )
+  expect_that( dim(gs), is_equivalent_to(c(1,4) ) )
+  expect_that( names(gs), is_equivalent_to(c("Locus","Gst","Hs","Ht") ) )
   
   df$PGM <- loc2
   gs <- genetic_structure( df  )
   expect_that( gs, is_a("data.frame") )
-  expect_that( dim(gs), is_equivalent_to(c(3,5) ) )
-  expect_that( names(gs), is_equivalent_to(c("Locus","Gst","Hs","Ht","p.value") ) )
+  expect_that( dim(gs), is_equivalent_to(c(3,4) ) )
+  expect_that( names(gs), is_equivalent_to(c("Locus","Gst","Hs","Ht") ) )
   expect_that( gs$Locus, is_equivalent_to( c("TPI","PGM","Multilocus")))
   expect_true( gs$Gst[1] < gs$Gst[2])
   
@@ -47,12 +47,12 @@ test_that("checking",{
   # Test Gst_prime mode
   gs_gstp <- genetic_structure( df, mode = "gst_prime" )
   expect_s3_class( gs_gstp, "data.frame" )
-  expect_true( all(c("Locus", "Gst_prime", "Hs", "Ht", "p.value") %in% names(gs_gstp)) )
+  expect_true( all(c("Locus", "Gst_prime", "Hs", "Ht") %in% names(gs_gstp)) )
 
   # Test Dest mode
   gs_dest <- genetic_structure( df, mode = "dest" )
   expect_s3_class( gs_dest, "data.frame" )
-  expect_true( all(c("Locus", "Dest", "Hs", "Ht", "p.value") %in% names(gs_dest)) )
+  expect_true( all(c("Locus", "Dest", "Hs", "Ht") %in% names(gs_dest)) )
 
   # Test pairwise Dest
   gs_dest_pw <- genetic_structure( df, mode = "dest", pairwise = TRUE )
@@ -71,7 +71,7 @@ test_that("permutation gives the Multilocus row a p-value", {
   expect_false(is.na(ml$p.value))
   expect_true(ml$p.value >= 1 / 20 && ml$p.value <= 1)
   expect_false(anyNA(gs$p.value))
-  expect_true(all(is.na(genetic_structure(arapat, stratum = "Species")$p.value)))
+  expect_false("p.value" %in% names(genetic_structure(arapat, stratum = "Species")))
 })
 
 test_that("structure estimators: D_est scaling, naming, column order, small strata", {
@@ -89,7 +89,7 @@ test_that("structure estimators: D_est scaling, naming, column order, small stra
   # Same column layout in every mode; estimate column named for the mode
   for (m in c("Gst", "Gst_prime", "Dest", "Fst")) {
     r <- suppressWarnings(genetic_structure(df, mode = m))
-    expect_equal(names(r), c("Locus", m, "Hs", "Ht", "p.value"))
+    expect_equal(names(r), c("Locus", m, "Hs", "Ht"))
     expect_equal(r$Locus, c("L1", "L2", "L3", "Multilocus"))
     # A monomorphic locus has no estimate and does not zero the multilocus row
     expect_true(is.na(r[[m]][3]))
@@ -108,4 +108,19 @@ test_that("structure estimators: D_est scaling, naming, column order, small stra
   p <- genetic_structure(df, mode = "Dest", nperm = 49)
   expect_false(anyNA(p$p.value[-3]))
   expect_true(is.na(p$p.value[3]))
+})
+
+test_that("p.value is present only with permutations", {
+  data(arapat)
+  for (m in c("Gst", "Fst", "PhiST")) {
+    # Fst warns about arapat's missing genotypes
+    expect_false("p.value" %in% names(suppressWarnings(genetic_structure(arapat, stratum = "Species", mode = m))))
+    set.seed(1)
+    r <- suppressWarnings(genetic_structure(arapat, stratum = "Species", mode = m, nperm = 9))
+    expect_equal(tail(names(r), 1), "p.value")
+  }
+  fit <- genetic_structure(arapat, stratum = "Species", mode = "PhiST")
+  expect_s3_class(fit, "amova")
+  expect_output(print(fit), "no permutation test")
+  expect_false(any(grepl("^Pr", names(anova(fit)))))
 })
