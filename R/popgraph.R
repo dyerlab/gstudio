@@ -10,10 +10,11 @@
 #' @return An object of type \code{popgraph}. Its \code{"design"} attribute records how
 #'   much of the data entered the estimate: \code{N} (individuals), \code{K} (strata),
 #'   \code{n} (individuals per stratum), \code{df_within} (\eqn{N-K}, the degrees of freedom
-#'   for the within-stratum covariance), \code{dims} (rotated genetic variables retained),
-#'   \code{constant_within} (retained variables that are constant within every stratum),
-#'   \code{rank_within} (rank of the within-stratum covariance) and \code{rank_between}
-#'   (discriminant axes used).  See \code{\link{popgraph_diagnostics}}.
+#'   for the within-stratum covariance), \code{dims} (rotated genetic variables used),
+#'   \code{constant_within} (rotated variables dropped because they are constant within
+#'   every stratum), \code{rank_within} (rank of the within-stratum covariance),
+#'   \code{rank_between} (discriminant axes used), and the \code{alpha} and \code{tol}
+#'   the graph was built with.  See \code{\link{popgraph_diagnostics}}.
 #' @export
 #' @author Rodney J. Dyer <rjdyer@@vcu.edu>
 #' @examples
@@ -59,14 +60,22 @@ popgraph <- function( x, groups, alpha=0.05, tol=1.0e-4 ) {
   Pop.priors <- as.numeric(table(groups)/N)
   K <- length( Pop.priors)
   pop.means <- tapply( mv, list( rep(groups,P),col(mv)), mean)
-  sigma.w <- sqrt( diag( var( mv - pop.means[groups,])))
-  
-  if( any( sigma.w < tol ) )
+  sigma.w <- sqrt( diag( var( mv - pop.means[groups,, drop=FALSE])))
+
+  constant_within <- sum( sigma.w < tol )
+  if( constant_within > 0 ) {
     warning( paste( "Dropped rotated genetic variable '",
                     paste((as.character(1:P)[sigma.w<tol]),collapse=","),
                     "' from the analysis due to constancy within groups",
-                    sep="") )  
-  
+                    sep="") )
+    keep <- sigma.w >= tol
+    if( !any(keep) ) stop("every rotated genetic variable is constant within groups")
+    mv <- mv[, keep, drop=FALSE]
+    pop.means <- pop.means[, keep, drop=FALSE]
+    sigma.w <- sigma.w[keep]
+    P <- ncol(mv)
+  }
+
   scaling <- diag(1/sigma.w,,P)
   fac <- 1/(N-K)
   X <- sqrt(fac) * (mv - pop.means[groups,]) %*% scaling
@@ -143,9 +152,9 @@ popgraph <- function( x, groups, alpha=0.05, tol=1.0e-4 ) {
 
   class( graph ) <- c("popgraph", "igraph")
   attr( graph, "design" ) <- list( N = N, K = K, n = c(table(groups)), df_within = N - K,
-                                   dims = P, constant_within = sum( sigma.w < tol ),
+                                   dims = P, constant_within = constant_within,
                                    rank_within = rank_within, rank_between = rank_between,
-                                   alpha = alpha )
+                                   alpha = alpha, tol = tol )
   
   return( graph )
 }

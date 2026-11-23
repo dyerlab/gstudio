@@ -3,11 +3,20 @@
 \name{popgraph_diagnostics}
 \alias{popgraph_diagnostics}
 \alias{print.popgraph_diagnostics}
+\alias{as.data.frame.popgraph_diagnostics}
 \title{Sampling-design diagnostics for a Population Graph}
 \usage{
-popgraph_diagnostics(x, stratum = "Population", graph = NULL, gamma = 0.5)
+popgraph_diagnostics(
+  x,
+  stratum = "Population",
+  graph = NULL,
+  gamma = 0.5,
+  min_nHs = 5
+)
 
 \method{print}{popgraph_diagnostics}(x, ...)
+
+\method{as.data.frame}{popgraph_diagnostics}(x, row.names = NULL, optional = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{data.frame} of genotypes with \code{locus} columns and a
@@ -17,11 +26,19 @@ stratum column.}
 grouping of a grouped data frame).}
 
 \item{graph}{Optional Population Graph for \code{x} (default
-\code{population_graph(x, stratum)}).}
+\code{population_graph(x, stratum)}).
+Its nodes must be the strata of \code{x}; to diagnose one component, subset
+\code{x} to its strata.}
 
 \item{gamma}{Bandwidth multiplier for the degree-share check (default 0.5).}
 
+\item{min_nHs}{Strata whose median expected number of heterozygotes per
+locus, \eqn{n_i H_{S,il}}, falls below this are counted as thinly sampled
+(default 5, from simulations with biallelic loci).}
+
 \item{...}{Ignored.}
+
+\item{row.names, optional}{Ignored.}
 }
 \value{
 An object of class \code{popgraph_diagnostics}: \code{design}
@@ -31,7 +48,13 @@ An object of class \code{popgraph_diagnostics}: \code{design}
   \code{"design"} attribute of the graph), \code{graph} (components,
   largest component, mean degree, leaves, degree share, \eqn{cor(S, S^0)}),
   \code{falconer} (the \code{optimal_sampling()} optimum for the total
-  sample size and \eqn{G_{ST}}) and \code{flags}.
+  sample size and \eqn{G_{ST}}) and \code{checks}: a \code{data.frame}
+  with one row per check (\code{section}, \code{check}, \code{value},
+  \code{threshold}, \code{status} -- \code{"ok"}, \code{"warn"}, or
+  \code{NA} for a value reported without a threshold -- and \code{note}).
+  \code{as.data.frame()} returns \code{checks}; \code{print()} shows it
+  grouped by section, marking passed checks with a tick and failed
+  ones with \code{"!"}.
 }
 \description{
 Reports whether a data set carries enough within-stratum information for a
@@ -49,13 +72,15 @@ The allocation that minimizes the variance of \eqn{\Phi}
 is reported for comparison: it is generally too thin for a Population Graph.
 }
 \details{
-The thresholds used for the flags come from simulations of a one-dimensional
+The thresholds used for the checks come from simulations of a one-dimensional
 stepping stone with 20 biallelic loci; they are guides, not tests.  For a
 calibrated cutoff for a particular design use \code{\link{popgraph_null}}.
 }
 \examples{
 data(arapat)
-popgraph_diagnostics(arapat)
+dg <- popgraph_diagnostics(arapat)
+dg
+as.data.frame(dg)
 }
 \seealso{
 \code{\link{popgraph_null}}, \code{\link{optimal_sampling}},

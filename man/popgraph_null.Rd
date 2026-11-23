@@ -44,7 +44,9 @@ forward pairs).  \code{axis} is still used for \eqn{r(S, x)}.}
 
 \item{graph}{The observed Population Graph (default
 \code{population_graph(x, stratum)}).  Supply it when the test is run on a
-component of a larger graph; its nodes must be the strata of \code{x}.}
+component of a larger graph; its nodes must be the strata of \code{x}.  A
+graph made with \code{population_graph(x, alpha = )} passes its edge-retention
+level to the null graphs.}
 
 \item{nsim}{Number of null data sets (default 199).}
 
@@ -98,7 +100,10 @@ returning the null distributions of \eqn{\Delta R^2} and \eqn{r(S, x)}.
 }
 \details{
 Each null data set keeps the observed strata, the number of genotyped
-individuals in each stratum, and the loci with their alleles.  Every stratum
+individuals in each stratum, the loci with their alleles, and which
+individuals are missing at which locus.  Each null graph is built with the
+\code{alpha} and \code{tol} recorded in the \code{"design"} attribute of the
+observed graph (\code{\link{popgraph}} defaults if it has none).  Every stratum
 starts at the pooled observed allele frequencies and evolves for \code{ngen}
 generations under a Wright--Fisher model on allele frequencies: migration
 through a symmetric, doubly stochastic matrix \eqn{M}, then multinomial

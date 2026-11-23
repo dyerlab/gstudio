@@ -79,6 +79,9 @@ arapat |>
   and `edge_width`.  Directed graphs (`asymmetric_popgraph()`) are drawn with
   arrows.
 - `animate_popgraphs()`: animate a sequence of graphs on fixed node positions.
+- `popgraph_diagnostics()`: is the sampling design adequate for a Population
+  Graph?  `popgraph_null()`: a design-matched symmetric null for the directional
+  tests.
 - `to_sf()`, `to_json()`, `write_popgraph()`, ...: export.
 
 ## Genetic gravity: direction from an undirected graph

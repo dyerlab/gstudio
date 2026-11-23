@@ -89,6 +89,45 @@ source-sink test.  Edge-level permutation tests of $\Delta$
 direction: under symmetric migration they are anti-conservative, or never
 reject.
 
+## Is the design adequate? Calibrating the tests
+
+How often the directional tests point somewhere by chance depends on the
+sampling design: the number of strata, the individuals in each and the loci.
+`popgraph_diagnostics()` summarizes the design and flags the common problems
+(thin sampling within strata, a fragmented graph, a degree-driven source-sink
+score, few strata or loci):
+
+```{r arapat-diagnostics}
+dg <- popgraph_diagnostics(arapat)
+dg
+```
+
+Each check that has a threshold is marked `✓` or `!`, with a note saying what
+a failed check means for the tests.  The same checks are available as a
+data frame, and the per-stratum detail is in `dg$strata`:
+
+```{r arapat-diagnostics-df}
+as.data.frame(dg) |>
+  subset(status == "warn", select = c(check, value, threshold, note))
+
+head(dg$strata)
+```
+
+`popgraph_null()` then calibrates the tests for that design.  It simulates
+data sets with the same strata, sample sizes, loci and missing genotypes under
+*symmetric* migration tuned to the observed $G_{ST}$, rebuilds each Population
+Graph and returns the null distributions of $\Delta R^2$ and $r(S, x)$.  The
+95th percentile of the null $\Delta R^2$ replaces the rule $\Delta R^2 > 0$:
+
+```{r arapat-null}
+#| eval: false
+peninsula <- droplevels(arapat[arapat$Species == "Peninsula", ])
+peninsula <- droplevels(peninsula[peninsula$Population %in%
+                                  names(which(table(peninsula$Population) >= 8)), ])
+lat_p <- tapply(peninsula$Latitude, peninsula$Population, mean)
+popgraph_null(peninsula, axis = -lat_p, nsim = 199, cores = 4)
+```
+
 ## Data quality: information loss
 
 As loci fix, graphs are estimated from fewer informative loci, which inflates

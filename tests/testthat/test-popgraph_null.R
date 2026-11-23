@@ -46,3 +46,32 @@ test_that("popgraph_null() returns a calibration for a design", {
   expect_output(print(nl), "Design-matched symmetric null")
   expect_error(popgraph_null(d, axis = c(a = 1)), "named by every stratum")
 })
+
+test_that("simulated genotypes carry the observed missing pattern", {
+  set.seed(5)
+  P <- list(L1 = matrix(0.5, 2, 2), L2 = matrix(c(0.2, 0.8), 2, 2, byrow = TRUE))
+  miss <- list(L1 = c(TRUE, FALSE, FALSE, FALSE, TRUE), L2 = rep(FALSE, 5))
+  X <- gstudio:::.pgn_genotypes(P, c(A = 2, B = 3), miss)
+  expect_true(all(is.na(X$by_locus$L1[c(1, 5), ])))
+  expect_true(all(X$mv[c(1, 5), 1:2] == 0))
+  expect_false(anyNA(X$mv))
+  fr <- gstudio:::.pgn_freqs(X$by_locus$L1, X$groups)
+  expect_equal(unname(fr$n), c(1, 2))
+  sf <- gstudio:::.pgn_sample_freqs(P, list(c(A = 0, B = 3), c(A = 2, B = 3)))
+  expect_true(all(is.na(sf[[1]]$p[1, ])))
+})
+
+test_that("popgraph_null() builds null graphs at the observed graph's alpha", {
+  data(arapat)
+  d <- droplevels(arapat[arapat$Species == "Peninsula", ])
+  d <- droplevels(d[d$Population %in% names(which(table(d$Population) >= 9)), ])
+  lat <- tapply(d$Latitude, d$Population, mean)
+  g <- suppressWarnings(population_graph(d, alpha = 0.01))
+  seen <- NULL
+  local_mocked_bindings(popgraph = function(x, groups, alpha = 0.05, tol = 1e-4) {
+    seen <<- c(seen, alpha); igraph::make_ring(1)
+  })
+  set.seed(6)
+  suppressWarnings(popgraph_null(d, axis = -lat, graph = g, nsim = 2, ngen = 10, pilot = 1))
+  expect_equal(unique(seen), 0.01)
+})

@@ -11,7 +11,10 @@
 #' returning the null distributions of \eqn{\Delta R^2} and \eqn{r(S, x)}.
 #'
 #' Each null data set keeps the observed strata, the number of genotyped
-#' individuals in each stratum, and the loci with their alleles.  Every stratum
+#' individuals in each stratum, the loci with their alleles, and which
+#' individuals are missing at which locus.  Each null graph is built with the
+#' \code{alpha} and \code{tol} recorded in the \code{"design"} attribute of the
+#' observed graph (\code{\link{popgraph}} defaults if it has none).  Every stratum
 #' starts at the pooled observed allele frequencies and evolves for \code{ngen}
 #' generations under a Wright--Fisher model on allele frequencies: migration
 #' through a symmetric, doubly stochastic matrix \eqn{M}, then multinomial
@@ -50,7 +53,9 @@
 #'   forward pairs).  \code{axis} is still used for \eqn{r(S, x)}.
 #' @param graph The observed Population Graph (default
 #'   \code{population_graph(x, stratum)}).  Supply it when the test is run on a
-#'   component of a larger graph; its nodes must be the strata of \code{x}.
+#'   component of a larger graph; its nodes must be the strata of \code{x}.  A
+#'   graph made with \code{population_graph(x, alpha = )} passes its edge-retention
+#'   level to the null graphs.
 #' @param nsim Number of null data sets (default 199).
 #' @param gamma Bandwidth multiplier (default 0.5).
 #' @param Ne Effective size of each stratum in the simulation (default 100).
@@ -115,6 +120,14 @@ popgraph_null <- function(x, stratum = "Population", axis, distance = NULL, forw
   n_i <- c(table(grp))
   p0 <- lapply(mv, function(m) { p <- colMeans(m, na.rm = TRUE); p / sum(p) })
   obs_gst <- .pgn_gst(lapply(mv, function(m) .pgn_freqs(m, grp)), n_i)
+  # observed missing genotypes, with rows in the stratum order of the simulated data
+  ord <- order(grp)
+  miss <- lapply(mv, function(m) !stats::complete.cases(m)[ord])
+  n_l <- lapply(mv, function(m) c(table(factor(grp[stats::complete.cases(m)], levels = strata))))
+  # null graphs are built as the observed graph was
+  gd <- attr(graph, "design")
+  g_alpha <- if (is.null(gd$alpha)) 0.05 else gd$alpha
+  g_tol <- if (is.null(gd$tol)) 1e-4 else gd$tol
 
   stat <- function(g) .pgn_stats(g, axis, distance, forward, gamma)
   observed <- stat(graph)
@@ -126,7 +139,7 @@ popgraph_null <- function(x, stratum = "Population", axis, distance = NULL, forw
     nn <- apply(D + diag(Inf, K), 1, min); s <- max(nn[is.finite(nn) & nn > 0])
     B <- .pgn_balance(exp(-D / s))
     target <- if (is.null(phi)) obs_gst[["gst"]] else phi
-    sim_gst <- function(m) mean(replicate(pilot, .pgn_gst(.pgn_sample_freqs(.pgn_wf(p0, .pgn_mix(B, m), Ne, ngen), n_i), n_i)[["gst"]]))
+    sim_gst <- function(m) mean(replicate(pilot, .pgn_gst(.pgn_sample_freqs(.pgn_wf(p0, .pgn_mix(B, m), Ne, ngen), n_l), n_i)[["gst"]]))
     lo <- log(1e-4); hi <- log(0.95)
     for (it in seq_len(12)) {
       mid <- (lo + hi) / 2; g_mid <- sim_gst(exp(mid))
@@ -142,9 +155,10 @@ popgraph_null <- function(x, stratum = "Population", axis, distance = NULL, forw
 
   one <- function(b) {
     P <- .pgn_wf(p0, M, Ne, ngen)
-    X <- .pgn_genotypes(P, n_i)
+    X <- .pgn_genotypes(P, n_i, miss)
     fr <- lapply(X$by_locus, function(m) .pgn_freqs(m, X$groups)); gs <- .pgn_gst(fr, n_i)
-    g <- tryCatch(suppressWarnings(popgraph(X$mv, groups = X$groups)), error = function(e) NULL)
+    g <- tryCatch(suppressWarnings(popgraph(X$mv, groups = X$groups, alpha = g_alpha, tol = g_tol)),
+                  error = function(e) NULL)
     st <- if (is.null(g)) rep(NA_real_, length(observed)) else stat(g)
     c(st, gst = gs[["gst"]], hs = gs[["hs"]])
   }
@@ -264,24 +278,34 @@ print.popgraph_null <- function(x, ...) {
   C / twoN
 }
 
-# Sampled stratum frequencies (for tuning): n_i individuals from each stratum
-.pgn_sample_freqs <- function(P, n_i) lapply(P, function(Pl) {
-  f <- t(vapply(seq_len(nrow(Pl)), function(i) tabulate(sample.int(ncol(Pl), 2L * n_i[i], TRUE, Pl[i, ]), ncol(Pl)) / (2 * n_i[i]),
-                numeric(ncol(Pl))))
-  list(p = f, n = n_i)
-})
+# Sampled stratum frequencies (for tuning). n: per stratum genotyped individuals, one vector
+# for all loci or a list with one vector per locus (strata with none give NA frequencies)
+.pgn_sample_freqs <- function(P, n) {
+  if (!is.list(n)) n <- rep(list(n), length(P))
+  Map(function(Pl, nl) {
+    f <- t(vapply(seq_len(nrow(Pl)), function(i)
+      if (nl[[i]] > 0) tabulate(sample.int(ncol(Pl), 2L * nl[[i]], TRUE, Pl[i, ]), ncol(Pl)) / (2 * nl[[i]])
+      else rep(NA_real_, ncol(Pl)), numeric(ncol(Pl))))
+    list(p = f, n = nl)
+  }, P, n)
+}
 
-# Hardy-Weinberg genotypes: dosage/2 matrices (as to_mv()) for n_i individuals per stratum
-.pgn_genotypes <- function(P, n_i) {
+# Hardy-Weinberg genotypes: dosage/2 matrices (as to_mv()) for n_i individuals per stratum,
+# rows ordered by stratum.  miss: optional list (one logical vector per locus, in that row
+# order) of genotypes to leave missing -- coded 0 in 'mv' (as to_mv()) and NA in 'by_locus'
+.pgn_genotypes <- function(P, n_i, miss = NULL) {
   groups <- factor(rep(names(n_i), n_i), levels = names(n_i)); N <- sum(n_i)
-  by_locus <- lapply(P, function(Pl) {
-    A <- ncol(Pl); m <- matrix(0, N, A); row0 <- 0L
+  by_locus <- lapply(seq_along(P), function(l) {
+    Pl <- P[[l]]; A <- ncol(Pl); m <- matrix(0, N, A); row0 <- 0L
     for (i in seq_len(nrow(Pl))) {
       ni <- n_i[[i]]; al <- matrix(sample.int(A, 2L * ni, TRUE, Pl[i, ]), ni, 2L); r <- row0 + seq_len(ni)
       m[cbind(r, al[, 1])] <- m[cbind(r, al[, 1])] + 0.5; m[cbind(r, al[, 2])] <- m[cbind(r, al[, 2])] + 0.5
       row0 <- row0 + ni
     }
+    if (!is.null(miss)) m[miss[[l]], ] <- NA
     m
   })
-  list(mv = do.call(cbind, by_locus), by_locus = by_locus, groups = groups)
+  names(by_locus) <- names(P)
+  mv <- do.call(cbind, by_locus); mv[is.na(mv)] <- 0
+  list(mv = mv, by_locus = by_locus, groups = groups)
 }

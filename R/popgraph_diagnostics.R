@@ -14,7 +14,7 @@
 #' (\code{\link{optimal_sampling}}, about \eqn{1/\Phi} individuals per stratum)
 #' is reported for comparison: it is generally too thin for a Population Graph.
 #'
-#' The thresholds used for the flags come from simulations of a one-dimensional
+#' The thresholds used for the checks come from simulations of a one-dimensional
 #' stepping stone with 20 biallelic loci; they are guides, not tests.  For a
 #' calibrated cutoff for a particular design use \code{\link{popgraph_null}}.
 #'
@@ -24,7 +24,12 @@
 #'   grouping of a grouped data frame).
 #' @param graph Optional Population Graph for \code{x} (default
 #'   \code{population_graph(x, stratum)}).
+#'   Its nodes must be the strata of \code{x}; to diagnose one component, subset
+#'   \code{x} to its strata.
 #' @param gamma Bandwidth multiplier for the degree-share check (default 0.5).
+#' @param min_nHs Strata whose median expected number of heterozygotes per
+#'   locus, \eqn{n_i H_{S,il}}, falls below this are counted as thinly sampled
+#'   (default 5, from simulations with biallelic loci).
 #' @return An object of class \code{popgraph_diagnostics}: \code{design}
 #'   (strata, individuals per stratum, loci, alleles, polymorphic loci,
 #'   \eqn{G_{ST}}), \code{strata} (per stratum: \eqn{n_i}, mean \eqn{H_S}, and the
@@ -32,15 +37,23 @@
 #'   \code{"design"} attribute of the graph), \code{graph} (components,
 #'   largest component, mean degree, leaves, degree share, \eqn{cor(S, S^0)}),
 #'   \code{falconer} (the \code{optimal_sampling()} optimum for the total
-#'   sample size and \eqn{G_{ST}}) and \code{flags}.
+#'   sample size and \eqn{G_{ST}}) and \code{checks}: a \code{data.frame}
+#'   with one row per check (\code{section}, \code{check}, \code{value},
+#'   \code{threshold}, \code{status} -- \code{"ok"}, \code{"warn"}, or
+#'   \code{NA} for a value reported without a threshold -- and \code{note}).
+#'   \code{as.data.frame()} returns \code{checks}; \code{print()} shows it
+#'   grouped by section, marking passed checks with a tick and failed
+#'   ones with \code{"!"}.
 #' @seealso \code{\link{popgraph_null}}, \code{\link{optimal_sampling}},
 #'   \code{\link{source_sink_scores}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
 #' data(arapat)
-#' popgraph_diagnostics(arapat)
+#' dg <- popgraph_diagnostics(arapat)
+#' dg
+#' as.data.frame(dg)
 #' @export
-popgraph_diagnostics <- function(x, stratum = "Population", graph = NULL, gamma = 0.5) {
+popgraph_diagnostics <- function(x, stratum = "Population", graph = NULL, gamma = 0.5, min_nHs = 5) {
   if (!is.data.frame(x)) stop("'x' must be a data.frame")
   stratum <- .detect_stratum(x, stratum, default = "Population", explicit = !missing(stratum))
   x <- .plain_df(x)
@@ -48,6 +61,8 @@ popgraph_diagnostics <- function(x, stratum = "Population", graph = NULL, gamma 
   loci <- column_class(x, "locus")
   grp <- factor(as.character(x[[stratum]])); strata <- levels(grp); K <- length(strata)
   if (is.null(graph)) graph <- population_graph(x, stratum = stratum)
+  if (!setequal(igraph::V(graph)$name, strata))
+    stop("the nodes of 'graph' must be the strata of 'x' (subset 'x' to diagnose a component)")
 
   mv <- lapply(loci, function(l) { m <- to_mv(x[[l]]); m[rowSums(m) == 0, ] <- NA; m })
   fr <- lapply(mv, function(m) .pgn_freqs(m, grp))
@@ -69,18 +84,50 @@ popgraph_diagnostics <- function(x, stratum = "Population", graph = NULL, gamma 
   fal <- tryCatch({ o <- optimal_sampling(N, max(gs[["gst"]], 1e-3)); b <- o[which.min(o$var_phi), ]
     c(strata = b$Stratum, per_stratum = N / b$Stratum) }, error = function(e) c(strata = NA, per_stratum = NA))
 
-  flags <- character(0)
-  low <- sts$Stratum[sts$nHs < 5]
-  if (length(low)) flags <- c(flags, sprintf("%d of %d strata have fewer than 5 expected heterozygotes per locus (median n*Hs): within-stratum variance is poorly estimated", length(low), K))
-  if (cm$no > 1) flags <- c(flags, sprintf("the graph has %d components: test within components", cm$no))
-  if (isTRUE(gr[["degree_share"]] > 0.15)) flags <- c(flags, sprintf("degree share %.2f at gamma = %g: the source-sink score is partly set by node degree", gr[["degree_share"]], gamma))
-  if (K < 10) flags <- c(flags, "fewer than 10 strata: neither directional test is likely to certify direction from one graph; report signs as descriptions")
-  else if (K < 15) flags <- c(flags, "10-14 strata: the source-sink test has low power; prefer the directional isolation comparison with a cutoff from popgraph_null()")
-  if (sum(poly) < 10) flags <- c(flags, sprintf("%d polymorphic loci: power of the source-sink test falls and the Delta R^2 > 0 rule becomes liberal; calibrate with popgraph_null()", sum(poly)))
+  Kc <- max(cm$csize)
+  nlow <- sum(sts$nHs < min_nHs, na.rm = TRUE)
+  ds <- gr[["degree_share"]]
+  npoly <- sum(poly)
+  e <- attr(graph, "design")
+
+  # one row per check: status "ok" / "warn" when there is a threshold, NA when informational
+  row <- function(section, check, value, threshold = NA_character_, status = NA_character_, note = NA_character_)
+    data.frame(section = section, check = check, value = value, threshold = threshold,
+               status = status, note = note, stringsAsFactors = FALSE)
+  st <- function(bad) if (is.na(bad)) NA_character_ else if (bad) "warn" else "ok"
+  checks <- rbind(
+    row("Design", "strata in largest component",
+        if (cm$no > 1) sprintf("%d of %d", Kc, K) else sprintf("%d", Kc), ">= 15", st(Kc < 15),
+        if (Kc < 10) "too few to certify direction; report signs as descriptions"
+        else if (Kc < 15) "source-sink test has low power; calibrate dR2 with popgraph_null()"
+        else NA_character_),
+    row("Design", "individuals per stratum",
+        sprintf("%d-%d (median %g)", min(n_i), max(n_i), stats::median(n_i))),
+    row("Design", "polymorphic loci", sprintf("%d of %d", npoly, length(loci)), ">= 10", st(npoly < 10),
+        if (npoly < 10) "dR2 > 0 rule is liberal; calibrate with popgraph_null()" else NA_character_),
+    row("Design", "alleles per locus", sprintf("median %g", stats::median(A))),
+    row("Design", "Gst / mean Hs", sprintf("%.3f / %.3f", gs[["gst"]], gs[["hs"]])),
+    row("Design", "expected hets (n*Hs)",
+        sprintf("median %.1f (min %.1f)", stats::median(sts$nHs, na.rm = TRUE), min(sts$nHs, na.rm = TRUE)),
+        sprintf(">= %g", min_nHs), st(nlow > 0),
+        if (nlow > 0) sprintf("%d of %d strata below; within-stratum variance poorly estimated", nlow, K) else NA_character_),
+    if (!is.null(e)) row("Estimate", "rotated variables / df", sprintf("%d on %d df", e$dims, e$df_within),
+                         note = sprintf("%d dropped; %d discriminant axes", e$constant_within, e$rank_between)),
+    row("Graph", "components", sprintf("%d (largest %d)", cm$no, Kc), "1", st(cm$no > 1),
+        if (cm$no > 1) "test within a component" else NA_character_),
+    row("Graph", "mean degree / leaves", sprintf("%.1f / %d", mean(k), sum(k == 1))),
+    row("Graph", sprintf("degree share (gamma = %g)", gamma), sprintf("%.2f", ds), "<= 0.15", st(ds > 0.15),
+        if (isTRUE(ds > 0.15)) "source-sink score partly set by node degree" else NA_character_),
+    row("Graph", "cor(S, S0)", sprintf("%.2f", gr[["cor_S_S0"]])),
+    row("Reference", "Falconer optimum for Phi",
+        sprintf("%g strata of %g", fal[["strata"]], fal[["per_stratum"]]),
+        note = "optimal_sampling(); generally too thin for a graph")
+  )
+  rownames(checks) <- NULL
 
   out <- list(design = c(strata = K, individuals = N, n_min = min(n_i), n_median = stats::median(n_i), loci = length(loci),
-                         polymorphic = sum(poly), alleles_median = stats::median(A), gst = gs[["gst"]], hs = gs[["hs"]]),
-              strata = sts, estimate = attr(graph, "design"), graph = gr, falconer = fal, flags = flags)
+                         polymorphic = npoly, alleles_median = stats::median(A), gst = gs[["gst"]], hs = gs[["hs"]]),
+              strata = sts, estimate = e, graph = gr, falconer = fal, checks = checks)
   class(out) <- "popgraph_diagnostics"
   out
 }
@@ -89,19 +136,28 @@ popgraph_diagnostics <- function(x, stratum = "Population", graph = NULL, gamma 
 #' @param ... Ignored.
 #' @export
 print.popgraph_diagnostics <- function(x, ...) {
-  d <- x$design; g <- x$graph; e <- x$estimate
-  cat("Population Graph sampling diagnostics\n")
-  cat(sprintf("  %d strata, %d individuals (per stratum %d-%g, median %g); %d loci (%d polymorphic; median %g alleles)\n",
-              d[["strata"]], d[["individuals"]], d[["n_min"]], max(x$strata$n), d[["n_median"]], d[["loci"]], d[["polymorphic"]], d[["alleles_median"]]))
-  cat(sprintf("  Gst %.3f; mean Hs %.3f; median n*Hs per stratum %.1f (min %.1f)\n", d[["gst"]], d[["hs"]],
-              stats::median(x$strata$nHs), min(x$strata$nHs)))
-  if (!is.null(e)) cat(sprintf("  estimate: %d rotated variables on %d within-stratum df (%d constant within strata); %d discriminant axes\n",
-                               e$dims, e$df_within, e$constant_within, e$rank_between))
-  cat(sprintf("  graph: %d edges, %d component(s) (largest %d), mean degree %.1f, %d leaves; degree share %.2f, cor(S, S0) %.2f\n",
-              g[["edges"]], g[["components"]], g[["largest"]], g[["mean_degree"]], g[["leaves"]], g[["degree_share"]], g[["cor_S_S0"]]))
-  cat(sprintf("  Falconer optimum for Phi at N = %d: %g strata of %g (optimal_sampling())\n",
-              d[["individuals"]], x$falconer[["strata"]], x$falconer[["per_stratum"]]))
-  if (length(x$flags)) { cat("\n"); for (f in x$flags) cat("  * ", f, "\n", sep = "") }
-  cat("\n")
+  d <- x$design; ck <- x$checks
+  cat(sprintf("Population Graph sampling diagnostics: %d strata, %d individuals, %d loci\n",
+              d[["strata"]], d[["individuals"]], d[["loci"]]))
+  w1 <- max(nchar(ck$check)); w2 <- max(nchar(ck$value))
+  thr <- ifelse(is.na(ck$threshold), "", paste0("(", ck$threshold, ")")); w3 <- max(nchar(thr))
+  mark <- ifelse(is.na(ck$status), " ", ifelse(ck$status == "warn", "!", "✓"))
+  for (sec in unique(ck$section)) {
+    cat("\n", sec, "\n", sep = "")
+    for (i in which(ck$section == sec)) {
+      line <- sprintf("  %-*s  %-*s  %-*s  %s", w1, ck$check[i], w2, ck$value[i], w3, thr[i], mark[i])
+      if (!is.na(ck$note[i])) line <- paste0(line, "  ", ck$note[i])
+      cat(sub("\\s+$", "", line), "\n", sep = "")
+    }
+  }
+  nw <- sum(ck$status == "warn", na.rm = TRUE)
+  cat(if (nw) sprintf("\n! %d check%s need%s attention (see ?popgraph_diagnostics)\n\n", nw,
+                      if (nw > 1) "s" else "", if (nw > 1) "" else "s")
+      else "\nAll checks passed.\n\n")
   invisible(x)
 }
+
+#' @rdname popgraph_diagnostics
+#' @param row.names,optional Ignored.
+#' @export
+as.data.frame.popgraph_diagnostics <- function(x, row.names = NULL, optional = FALSE, ...) x$checks
