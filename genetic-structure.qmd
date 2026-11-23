@@ -4,9 +4,9 @@ This chapter covers the estimation of genetic structure statistics --- measures 
 
 ```{r}
 #| message: false
-library(gstudio)
-library(dplyr)
-data(arapat)
+library( gstudio )
+library( dplyr )
+data( arapat )
 ```
 
 ## The `genetic_structure()` Wrapper
@@ -28,10 +28,10 @@ Estimate Gst across species:
 
 ```{r}
 arapat |>
-  genetic_structure(stratum = "Species", mode = "Gst")
+  genetic_structure( stratum = "Species", mode = "Gst" )
 ```
 
-The output provides per-locus estimates plus a multilocus estimate (last row). Every mode returns the same columns, `Locus`, the estimate (named `Gst`, `Gst_prime`, `Dest` or `Fst`), `Hs`, `Ht` and `p.value`, and the `Multilocus` row reports mean `Hs` and `Ht` across loci. For `Gst` and `Fst` the multilocus estimate is 1 - mean(Hs)/mean(Ht), following Culley et al. (2001); for `Gst_prime` and `Dest` it is the harmonic mean of the per-locus values. Monomorphic loci have no estimate (`NA`) and are left out of the multilocus value.
+The output provides per-locus estimates plus a multilocus estimate (last row). Every mode returns the same columns, `Locus`, the estimate (named `Gst`, `Gst_prime`, `Dest` or `Fst`), `Hs` and `Ht` (plus `p.value` when you ask for permutations, below), and the `Multilocus` row reports mean `Hs` and `Ht` across loci. For `Gst` and `Fst` the multilocus estimate is 1 - mean(Hs)/mean(Ht), following Culley et al. (2001); for `Gst_prime` and `Dest` it is the harmonic mean of the per-locus values. Monomorphic loci have no estimate (`NA`) and are left out of the multilocus value.
 
 ## Hedrick's Correction
 
@@ -39,7 +39,7 @@ For highly polymorphic markers, `Gst` is constrained to small values. Hedrick's 
 
 ```{r}
 arapat |>
-  genetic_structure(stratum = "Species", mode = "Gst_prime")
+  genetic_structure( stratum = "Species", mode = "Gst_prime" )
 ```
 
 ## Jost's D
@@ -48,7 +48,7 @@ An alternative differentiation measure that is independent of within-population 
 
 ```{r}
 arapat |>
-  genetic_structure(stratum = "Species", mode = "Dest")
+  genetic_structure( stratum = "Species", mode = "Dest" )
 ```
 
 ## Permutation Testing
@@ -58,7 +58,7 @@ Use the `nperm` parameter to test the null hypothesis that the structure paramet
 ```{r}
 #| message: false
 arapat |>
-  genetic_structure(stratum = "Species", mode = "Gst", nperm = 99)
+  genetic_structure( stratum = "Species", mode = "Gst", nperm = 99 )
 ```
 
 The resulting `p.value` column indicates the probability of observing a value as extreme as the estimate under random permutation of individuals among strata.
@@ -69,7 +69,7 @@ Set `pairwise = TRUE` to compute structure between all pairs of strata:
 
 ```{r}
 pw <- arapat |>
-  genetic_structure(stratum = "Species", mode = "Gst", pairwise = TRUE)
+  genetic_structure( stratum = "Species", mode = "Gst", pairwise = TRUE )
 pw
 ```
 
@@ -81,12 +81,14 @@ Use the `locus` parameter to restrict the analysis:
 
 ```{r}
 arapat |>
-  genetic_structure(stratum = "Species", mode = "Gst", locus = "LTRS")
+  genetic_structure( stratum = "Species", mode = "Gst", locus = "LTRS" )
 ```
 
 ```{r}
 arapat |>
-  genetic_structure(stratum = "Species", mode = "Gst", locus = c("LTRS", "WNT"))
+  genetic_structure( stratum = "Species",
+                     mode = "Gst",
+                     locus = c( "LTRS", "WNT" ) )
 ```
 
 ## Analysis of Molecular Variance
@@ -96,16 +98,16 @@ arapat |>
 ```{r}
 #| message: false
 fit <- arapat |>
-  genetic_structure(stratum = "Species", mode = "PhiST", nperm = 99)
+  genetic_structure( stratum = "Species", mode = "PhiST", nperm = 99 )
 fit
 ```
 
 The multilocus sums of squares and variance components are sums over loci. When loci were genotyped in different numbers of individuals their degrees of freedom differ, so the multilocus `Df` is left blank. Significance comes from permuting strata across individuals, not from an F distribution. `anova()` returns the table itself, `as.data.frame()` the per-locus estimates, and `plot()` the permutation null distribution:
 
 ```{r}
-anova(fit)
-as.data.frame(fit)
-plot(fit)
+anova( fit )
+as.data.frame( fit )
+plot( fit )
 ```
 
 As usual for AMOVA, sigma2_among and so PhiST can be negative when there is no structure; read that as an estimate of zero.
@@ -116,9 +118,9 @@ As usual for AMOVA, sigma2_among and so PhiST can be negative when there is no s
 
 ```{r}
 #| message: false
-data(cornus_florida)
+data( cornus_florida )
 cornus_florida |>
-  genetic_structure(mode = "PhiFT", nperm = 99)
+  genetic_structure( mode = "PhiFT", nperm = 99 )
 ```
 
 `Nep` = 1 / (2 PhiFT) is the effective number of pollen donors. A mother not genotyped at a locus is reconstructed from her offspring when one genotype is at least 20 times as likely as the next best. Those reconstructions are listed in `attr(result, "maternal_inference")`.
@@ -130,12 +132,12 @@ The `multilocus_assignment()` function estimates the probability that an individ
 ```{r}
 # Compute stratum-level frequencies
 freqs <- arapat |>
-  frequencies(stratum = "Species")
+  frequencies( stratum = "Species" )
 
 # Assign the first individual
 arapat |>
-  slice(1) |>
-  multilocus_assignment(freqs)
+  slice( 1 ) |>
+  multilocus_assignment( freqs )
 ```
 
 The `Posterior` column gives the relative probability of assignment to each stratum given the individual's multilocus genotype.
@@ -144,10 +146,16 @@ The `Posterior` column gives the relative probability of assignment to each stra
 
 ```{r}
 #| eval: false
-genetic_structure(arapat, stratum = "Species", mode = "Gst")
-genetic_structure(arapat, stratum = "Species", mode = "Gst", nperm = 99)
-pw <- genetic_structure(arapat, stratum = "Species", mode = "Gst", pairwise = TRUE)
-genetic_structure(arapat, stratum = "Species", mode = "Gst", locus = c("LTRS", "WNT"))
-freqs <- frequencies(arapat, stratum = "Species")
-multilocus_assignment(arapat[1, ], freqs)
+genetic_structure( arapat, stratum = "Species", mode = "Gst" )
+genetic_structure( arapat, stratum = "Species", mode = "Gst", nperm = 99 )
+pw <- genetic_structure( arapat,
+                         stratum = "Species",
+                         mode = "Gst",
+                         pairwise = TRUE )
+genetic_structure( arapat,
+                   stratum = "Species",
+                   mode = "Gst",
+                   locus = c( "LTRS", "WNT" ) )
+freqs <- frequencies( arapat, stratum = "Species" )
+multilocus_assignment( arapat[1, ], freqs )
 ```

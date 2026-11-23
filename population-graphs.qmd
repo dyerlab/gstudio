@@ -4,10 +4,10 @@ Population Graphs are a graph-theoretic approach to understanding among-populati
 
 ```{r}
 #| message: false
-library(gstudio)
-library(dplyr)
-library(igraph)
-data(arapat)
+library( gstudio )
+library( dplyr )
+library( igraph )
+data( arapat )
 ```
 
 ## Constructing a Population Graph
@@ -18,7 +18,7 @@ The easiest way to create a population graph is with `population_graph()`, which
 
 ```{r}
 graph <- arapat |>
-  population_graph(stratum = "Species")
+  population_graph( stratum = "Species" )
 graph
 ```
 
@@ -31,11 +31,11 @@ mv <- arapat |>
   to_mv()
 
 groups <- arapat |>
-  pull(Species) |>
+  pull( Species ) |>
   factor()
 
 graph <- mv |>
-  popgraph(groups)
+  popgraph( groups )
 
 graph
 ```
@@ -44,7 +44,7 @@ The `alpha` parameter controls edge retention significance (default 0.05):
 
 ```{r}
 graph_strict <- mv |>
-  popgraph(groups, alpha = 0.01)
+  popgraph( groups, alpha = 0.01 )
 graph_strict
 ```
 
@@ -53,11 +53,11 @@ graph_strict
 Use `as.popgraph()` to convert a pre-computed adjacency matrix:
 
 ```{r}
-A <- matrix(c(0, 1, 0, 1,
-              1, 0, 1, 0,
-              0, 1, 0, 1,
-              1, 0, 1, 0), nrow = 4)
-rownames(A) <- colnames(A) <- LETTERS[1:4]
+A <- matrix( c( 0, 1, 0, 1,
+                1, 0, 1, 0,
+                0, 1, 0, 1,
+                1, 0, 1, 0 ), nrow = 4 )
+rownames( A ) <- colnames( A ) <- LETTERS[1:4]
 g <- A |>
   as.popgraph()
 g
@@ -68,12 +68,12 @@ g
 The package includes two pre-computed population graphs:
 
 ```{r}
-data(lopho)
+data( lopho )
 lopho
 ```
 
 ```{r}
-data(upiga)
+data( upiga )
 upiga
 ```
 
@@ -82,14 +82,14 @@ upiga
 The `decorate_graph()` function merges external data into graph vertex attributes. This is essential for spatial visualization:
 
 ```{r}
-data(baja)
+data( baja )
 baja |>
   head()
 ```
 
 ```{r}
 lopho_dec <- lopho |>
-  decorate_graph(baja, stratum = "Population")
+  decorate_graph( baja, stratum = "Population" )
 lopho_dec |>
   vertex_attr_names()
 ```
@@ -102,7 +102,7 @@ Now the graph nodes carry coordinate and metadata attributes.
 
 ```{r}
 # Vertex names
-V(lopho)$name
+V( lopho )$name
 ```
 
 ```{r}
@@ -123,7 +123,7 @@ The multivariate centroid distance between population centroids in discriminant 
 
 ```{r}
 cd <- mv |>
-  centroid_distance(groups)
+  centroid_distance( groups )
 
 cd
 ```
@@ -134,7 +134,7 @@ Multivariate variance around each population centroid:
 
 ```{r}
 cv <- mv |>
-  centroid_variance(groups)
+  centroid_variance( groups )
 cv
 ```
 
@@ -147,18 +147,24 @@ Shannon entropy quantifies the uncertainty in a probability distribution:
 deg <- lopho |>
   degree()
 
-(deg / sum(deg)) |>
+( deg / sum( deg ) ) |>
   shannon_entropy()
 ```
 
 ### Edge Contortion
 
-A measure of how edges deviate from geographic expectations (requires decorated graph with coordinates):
+A measure of how edges deviate from geographic expectations.  It needs a graph decorated with coordinates and a physical distance matrix among its nodes, in node order:
 
 ```{r}
-#| eval: false
-lopho_dec |>
-  edge_contortion()
+nodes <- igraph::V( lopho_dec )$name
+P     <- baja |>
+  strata_distance( stratum = "Population" )
+
+contorted <- lopho_dec |>
+  edge_contortion( P = P[nodes, nodes] )
+
+igraph::E( contorted )$stretch |>
+  table()
 ```
 
 ## Congruence Testing
@@ -168,10 +174,10 @@ lopho_dec |>
 Compare the topology of two population graphs:
 
 ```{r}
-data(lopho)
-data(upiga)
+data( lopho )
+data( upiga )
 lopho |>
-  congruence_topology(upiga)
+  congruence_topology( upiga )
 ```
 
 ### Statistical Testing
@@ -181,7 +187,7 @@ Use `test_congruence()` to test whether two graphs are more similar in topology 
 ```{r}
 #| eval: false
 lopho |>
-  test_congruence(upiga, method = "combinatorial")
+  test_congruence( upiga )
 ```
 
 ### Permutation
@@ -191,7 +197,7 @@ The `permute_popgraph()` function creates a null distribution of graph topologie
 ```{r}
 #| eval: false
 null_graphs <- mv |>
-  permute_popgraph(groups, nperm = 99)
+  permute_popgraph( groups, nperm = 99 )
 ```
 
 ## Subgraph Operations
@@ -200,8 +206,8 @@ The `-` operator computes the difference between two popgraphs (removes edges in
 
 ```{r}
 smaller <- lopho |>
-  delete_vertices("SenBas")
-V(smaller)$name
+  delete_vertices( "SenBas" )
+V( smaller )$name
 ```
 
 ## Export Formats
@@ -241,7 +247,7 @@ sf_obj <- lopho_dec |>
 
 # As KML
 lopho_dec |>
-  to_kml(file = "lopho.kml")
+  to_kml( file = "lopho.kml" )
 ```
 
 ### To pgraph Format
@@ -251,13 +257,13 @@ The `.pgraph` format is a simple text representation:
 ```{r}
 #| eval: false
 lopho_dec |>
-  write_popgraph(file = "lopho.pgraph")
+  write_popgraph( file = "lopho.pgraph" )
 ```
 
 ### Reading a Population Graph
 
 ```{r}
-g <- system.file("extdata", "lopho.pgraph", package = "gstudio") |>
+g <- system.file( "extdata", "lopho.pgraph", package = "gstudio" ) |>
   read_popgraph()
 
 g
@@ -296,13 +302,18 @@ lopho |>
 
 ```{r}
 #| eval: false
-graph     <- population_graph(arapat, stratum = "Species")
-graph     <- popgraph(to_mv(arapat), factor(arapat$Species), alpha = 0.05)
-lopho_dec <- decorate_graph(lopho, baja, stratum = "Population")
-cd        <- centroid_distance(to_mv(arapat), factor(arapat$Species))
-congruence_topology(lopho, upiga)
-M         <- to_matrix(lopho)
-g         <- read_popgraph(system.file("extdata", "lopho.pgraph", package = "gstudio"))
-plot(lopho, layout = "kk")
-plot(gravity_field(lopho))
+graph     <- population_graph( arapat, stratum = "Species" )
+graph     <- popgraph( to_mv( arapat ),
+                       factor( arapat$Species ),
+                       alpha = 0.05 )
+lopho_dec <- decorate_graph( lopho, baja, stratum = "Population" )
+cd        <- centroid_distance( to_mv( arapat ), factor( arapat$Species ) )
+congruence_topology( lopho, upiga )
+M    <- to_matrix( lopho )
+path <- system.file( "extdata",
+                     "lopho.pgraph",
+                     package = "gstudio" )
+g    <- read_popgraph( path )
+plot( lopho, layout = "kk" )
+plot( gravity_field( lopho ) )
 ```

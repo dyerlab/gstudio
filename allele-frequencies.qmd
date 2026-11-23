@@ -4,10 +4,10 @@ This chapter covers estimating allele and genotype frequencies, testing for Hard
 
 ```{r}
 #| message: false
-library(gstudio)
-library(dplyr)
-library(ggplot2)
-data(arapat)
+library( gstudio )
+library( dplyr )
+library( ggplot2 )
+data( arapat )
 ```
 
 ## Allele Frequencies
@@ -18,7 +18,7 @@ The `frequencies()` function is an S3 generic that works on both individual locu
 
 ```{r}
 arapat |>
-  pull(LTRS) |>
+  pull( LTRS ) |>
   frequencies()
 ```
 
@@ -31,7 +31,7 @@ freqs <- arapat |>
   frequencies()
 
 freqs |>
-  head(12)
+  head( 12 )
 ```
 
 ### By Stratum
@@ -40,10 +40,10 @@ Add a `stratum` argument to partition frequencies by population:
 
 ```{r}
 freqs_pop <- arapat |>
-  frequencies(stratum = "Species")
+  frequencies( stratum = "Species" )
 
 freqs_pop |>
-  head(12)
+  head( 12 )
 ```
 
 Because the result is a tidy data frame, dplyr summaries follow directly, for
@@ -51,16 +51,16 @@ example the most common allele at each locus in each species:
 
 ```{r}
 freqs_pop |>
-  group_by(Stratum, Locus) |>
-  slice_max(Frequency, n = 1, with_ties = FALSE) |>
-  filter(Locus %in% c("LTRS", "WNT"))
+  group_by( Stratum, Locus ) |>
+  slice_max( Frequency, n = 1, with_ties = FALSE ) |>
+  filter( Locus %in% c( "LTRS", "WNT" ) )
 ```
 
 ### Selecting Specific Loci
 
 ```{r}
 arapat |>
-  frequencies(loci = c("LTRS", "WNT"))
+  frequencies( loci = c( "LTRS", "WNT" ) )
 ```
 
 ## Frequency Matrix
@@ -69,7 +69,7 @@ The `frequency_matrix()` function produces a wide-format matrix of allele freque
 
 ```{r}
 fm <- arapat |>
-  frequency_matrix(stratum = "Species")
+  frequency_matrix( stratum = "Species" )
 
 fm[, 1:8]
 ```
@@ -87,7 +87,7 @@ arapat |>
 
 ```{r}
 arapat |>
-  genotype_counts(stratum = "Species")
+  genotype_counts( stratum = "Species" )
 ```
 
 ### Genotype Frequencies
@@ -96,7 +96,7 @@ The `genotype_frequencies()` function returns observed and expected genotype cou
 
 ```{r}
 arapat |>
-  pull(LTRS) |>
+  pull( LTRS ) |>
   genotype_frequencies()
 ```
 
@@ -106,8 +106,8 @@ The `hwe.test()` function tests for HWE using a chi-square approximation.  A sin
 
 ```{r}
 arapat |>
-  filter(Species == "Mainland") |>
-  pull(LTRS) |>
+  filter( Species == "Mainland" ) |>
+  pull( LTRS ) |>
   hwe.test()
 ```
 
@@ -116,7 +116,7 @@ Several loci, or a `stratum`, give a table with one row per test: the chi-square
 ```{r}
 #| warning: false
 arapat |>
-  hwe.test(stratum = "Species", loci = c("LTRS", "WNT"))
+  hwe.test( stratum = "Species", loci = c( "LTRS", "WNT" ) )
 ```
 
 ### Interpreting Results
@@ -133,20 +133,22 @@ Departures from HWE can arise from:
 Diversity statistics such as allelic richness grow with sample size, so strata sampled unequally cannot be compared directly.  `rarefaction.test()` rarefies each locus to the smallest number of genotyped individuals in any stratum: every larger stratum is resampled `nperm` times without replacement at that size, and the table gives the observed value, the mean across resamples (`estimate`) and a percentile interval (`conf.low`, `conf.high`) for each stratum, locus and mode.  With several loci, a `Multilocus` row per stratum combines each resample across loci.  It is `NA` for a stratum missing any of the loci, so strata are compared over the same loci; `na.rm = TRUE` combines the loci that are available instead.
 
 ```{r}
-set.seed(1)
+set.seed( 1 )
 rare <- arapat |>
-  rarefaction.test(stratum = "Species", mode = c("A", "Ae"), nperm = 199)
+  rarefaction.test( stratum = "Species",
+                    mode = c( "A", "Ae" ),
+                    nperm = 199 )
 rare |>
-  filter(Locus == "Multilocus")
+  filter( Locus == "Multilocus" )
 ```
 
 ```{r}
 rare |>
-  filter(Mode == "A", Locus != "Multilocus") |>
-  ggplot(aes(Locus, estimate, colour = Stratum)) +
-  geom_pointrange(aes(ymin = conf.low, ymax = conf.high),
-                  position = position_dodge(width = 0.5)) +
-  labs(y = "Rarefied allelic richness") +
+  filter( Mode == "A", Locus != "Multilocus" ) |>
+  ggplot( aes( Locus, estimate, colour = Stratum ) ) +
+  geom_pointrange( aes( ymin = conf.low, ymax = conf.high ),
+                   position = position_dodge( width = 0.5 ) ) +
+  labs( y = "Rarefied allelic richness" ) +
   theme_minimal()
 ```
 
@@ -154,27 +156,31 @@ Set `size =` to rarefy to a fixed number of individuals instead; strata with few
 
 ## Optimal Sampling
 
-The `optimal_sampling()` function estimates how many individuals are needed to capture a given proportion of allelic diversity:
+The `optimal_sampling()` function asks how a fixed number of individuals, `N`, is best divided among strata.  Given an expected level of differentiation `phi`, it returns the variance of the estimate of $\Phi$ for every way of splitting `N` into strata × individuals per stratum (Falconer); the smallest variance is the most efficient design.  For the 363 beetles and $\Phi \approx 0.45$:
 
 ```{r}
-#| eval: false
-arapat |>
-  pull(LTRS) |>
-  optimal_sampling(nrep = 99)
+design <- optimal_sampling( 363, phi = 0.45 )
+design
+
+design |>
+  slice_min( var_phi )
 ```
 
 ## Without Pipes
 
 ```{r}
 #| eval: false
-frequencies(arapat$LTRS)
-frequencies(arapat, stratum = "Species")
-frequencies(arapat, loci = c("LTRS", "WNT"))
-frequency_matrix(arapat, stratum = "Species")
-genotype_counts(arapat, stratum = "Species")
-genotype_frequencies(arapat$LTRS)
-hwe.test(arapat[arapat$Species == "Mainland", ])
-rare <- rarefaction.test(arapat, stratum = "Species", mode = c("A", "Ae"), nperm = 199)
+frequencies( arapat$LTRS )
+frequencies( arapat, stratum = "Species" )
+frequencies( arapat, loci = c( "LTRS", "WNT" ) )
+frequency_matrix( arapat, stratum = "Species" )
+genotype_counts( arapat, stratum = "Species" )
+genotype_frequencies( arapat$LTRS )
+hwe.test( arapat[arapat$Species == "Mainland", ] )
+rare <- rarefaction.test( arapat,
+                          stratum = "Species",
+                          mode = c( "A", "Ae" ),
+                          nperm = 199 )
 rare[rare$Locus == "Multilocus", ]
-optimal_sampling(arapat$LTRS, nrep = 99)
+optimal_sampling( 363, phi = 0.45 )
 ```

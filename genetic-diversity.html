@@ -300,10 +300,10 @@ window.Quarto = {
 
 <p>This chapter covers estimation of genetic diversity statistics using <code>genetic_diversity()</code>. As with <code>genetic_structure()</code>, <code>genetic_distance()</code> and <code>genetic_relatedness()</code>, this front-end function is the only way to reach the individual estimators; there are no standalone <code>A()</code>, <code>He()</code> or <code>Fis()</code> functions.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( gstudio )</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( dplyr )</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( ggplot2 )</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>( arapat )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="the-genetic_diversity-wrapper" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="the-genetic_diversity-wrapper"><span class="header-section-number">5.1</span> The <code>genetic_diversity()</code> Wrapper</h2>
@@ -400,7 +400,7 @@ window.Quarto = {
 <p>Without a stratum, diversity is estimated across all individuals:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"A"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">mode =</span> <span class="st">"A"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Locus  A
 1  LTRS  2
@@ -413,7 +413,7 @@ window.Quarto = {
 8  MP20 19</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"He"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">mode =</span> <span class="st">"He"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Locus        He
 1  LTRS 0.4989034
@@ -429,7 +429,7 @@ window.Quarto = {
 <p>Pass several modes to get one table with a column for each:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Ho"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">mode =</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Ho"</span> ) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Locus  A       Ae        He         Ho
 1  LTRS  2 1.995623 0.4989034 0.23691460
@@ -448,7 +448,7 @@ window.Quarto = {
 <p>Provide a <code>stratum</code> argument to compute diversity within each population:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Stratum Locus         He
 2       Cape  LTRS 0.14720000
@@ -479,7 +479,7 @@ window.Quarto = {
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Fis"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="fu">c</span>( <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Fis"</span> ) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Stratum Locus       Ae         He         Fis
 1       Cape  LTRS 1.172608 0.14720000  0.27536232
@@ -514,8 +514,8 @@ window.Quarto = {
 <p>A bare <code>locus</code> vector can be passed in place of a data frame:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"Fis"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>( LTRS ) <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">mode =</span> <span class="st">"Fis"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Locus       Fis
 1 Locus 0.5251293</code></pre>
@@ -527,9 +527,9 @@ window.Quarto = {
 <p>The <code>Hi</code> mode is estimated per individual rather than per locus. It returns one row for each individual, keeping the non-locus columns, so it can be summarized by any grouping you like:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"Hi"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Species) <span class="sc">|&gt;</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_Hi =</span> <span class="fu">mean</span>(Hi))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">mode =</span> <span class="st">"Hi"</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>( Species ) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>( <span class="at">mean_Hi =</span> <span class="fu">mean</span>( Hi ) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   Species   mean_Hi
@@ -545,7 +545,7 @@ window.Quarto = {
 <p>The <code>Hes</code> and <code>Hos</code> modes require a stratum because they apply a small-sample correction per subpopulation:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Hes"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Hes"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Locus       Hes
 1       LTRS 0.3233431
@@ -562,7 +562,7 @@ window.Quarto = {
 <p><code>Ht</code> gives the matching total expected heterozygosity (the <span class="math inline">\(H_S\)</span> and <span class="math inline">\(H_T\)</span> that <code>genetic_structure()</code> builds <span class="math inline">\(G_{ST}\)</span> from). These pooled modes return one row per locus, so they combine with each other but not with per-stratum modes:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"Hos"</span>, <span class="st">"Hes"</span>, <span class="st">"Ht"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="fu">c</span>( <span class="st">"Hos"</span>, <span class="st">"Hes"</span>, <span class="st">"Ht"</span> ) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Locus        Hos       Hes        Ht
 1       LTRS 0.27365079 0.3233431 0.4531627
@@ -582,13 +582,13 @@ window.Quarto = {
 <p>The <code>Dm</code> mode gives the fraction of individuals with unique multilocus genotypes across all loci, returned as a single <code>Multilocus</code> row (one per stratum if a stratum is given):</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"Dm"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">mode =</span> <span class="st">"Dm"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Locus        Dm
 1 Multilocus 0.8374656</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Dm"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Dm"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    Stratum      Locus        Dm
 2      Cape Multilocus 0.5600000
@@ -602,7 +602,7 @@ window.Quarto = {
 <p>You can restrict the analysis to a subset of loci, with or without a stratum:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">loci =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>), <span class="at">mode =</span> <span class="st">"He"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">loci =</span> <span class="fu">c</span>( <span class="st">"LTRS"</span>, <span class="st">"WNT"</span> ), <span class="at">mode =</span> <span class="st">"He"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Locus        He
 1  LTRS 0.4989034
@@ -612,8 +612,8 @@ window.Quarto = {
 <p>or select the columns first:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Species, LTRS, WNT) <span class="sc">|&gt;</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>( Species, LTRS, WNT ) <span class="sc">|&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    Stratum Locus         He
 2      Cape  LTRS 0.14720000
@@ -630,11 +630,11 @@ window.Quarto = {
 <p>A common workflow is to estimate diversity per population, then compare:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span> )</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="sc">|&gt;</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Stratum) <span class="sc">|&gt;</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_He =</span> <span class="fu">mean</span>(He), <span class="at">sd_He =</span> <span class="fu">sd</span>(He))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>( Stratum ) <span class="sc">|&gt;</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>( <span class="at">mean_He =</span> <span class="fu">mean</span>( He ), <span class="at">sd_He =</span> <span class="fu">sd</span>( He ) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 3
   Stratum   mean_He sd_He
@@ -646,12 +646,12 @@ window.Quarto = {
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="sc">|&gt;</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum)) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>( <span class="fu">aes</span>( <span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum ) ) <span class="sc">+</span></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Expected Heterozygosity by Species"</span>,</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"He"</span>) <span class="sc">+</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>( <span class="at">title =</span> <span class="st">"Expected Heterozygosity by Species"</span>,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">"He"</span> ) <span class="sc">+</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>( <span class="at">legend.position =</span> <span class="st">"none"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -664,16 +664,16 @@ window.Quarto = {
 <section id="without-pipes" class="level2" data-number="5.10">
 <h2 data-number="5.10" class="anchored" data-anchor-id="without-pipes"><span class="header-section-number">5.10</span> Without Pipes</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Ho"</span>))</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">loci =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>), <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat<span class="sc">$</span>LTRS, <span class="at">mode =</span> <span class="st">"Fis"</span>)</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="st">"Hi"</span>)</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="st">"Dm"</span>)</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"Sh"</span>, <span class="st">"Pex"</span>))</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="ot">&lt;-</span> <span class="fu">genetic_diversity</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(he_by_pop, <span class="fu">aes</span>(<span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum)) <span class="sc">+</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat, <span class="at">mode =</span> <span class="st">"He"</span> )</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat, <span class="at">mode =</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Ho"</span> ) )</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span> )</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat, <span class="at">loci =</span> <span class="fu">c</span>( <span class="st">"LTRS"</span>, <span class="st">"WNT"</span> ), <span class="at">mode =</span> <span class="st">"He"</span> )</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat<span class="sc">$</span>LTRS, <span class="at">mode =</span> <span class="st">"Fis"</span> )</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat, <span class="at">mode =</span> <span class="st">"Hi"</span> )</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat, <span class="at">mode =</span> <span class="st">"Dm"</span> )</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat, <span class="at">mode =</span> <span class="fu">c</span>( <span class="st">"Sh"</span>, <span class="st">"Pex"</span> ) )</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="ot">&lt;-</span> <span class="fu">genetic_diversity</span>( arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span> )</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>( he_by_pop, <span class="fu">aes</span>( <span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum ) ) <span class="sc">+</span></span>
 <span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
@@ -1228,10 +1228,10 @@ window.Quarto = {
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstudio)</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(arapat)</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( gstudio )</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( dplyr )</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( ggplot2 )</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>( arapat )</span>
 <span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `genetic_diversity()` Wrapper</span></span>
@@ -1261,17 +1261,17 @@ window.Quarto = {
 <span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"A"</span>)</span>
+<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">mode =</span> <span class="st">"A"</span> )</span>
 <span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-47"><a href="#cb32-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb32-47"><a href="#cb32-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">mode =</span> <span class="st">"He"</span> )</span>
 <span id="cb32-48"><a href="#cb32-48" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-49"><a href="#cb32-49" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-50"><a href="#cb32-50" aria-hidden="true" tabindex="-1"></a>Pass several modes to get one table with a column for each:</span>
 <span id="cb32-51"><a href="#cb32-51" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-54"><a href="#cb32-54" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-55"><a href="#cb32-55" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-56"><a href="#cb32-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Ho"</span>))</span>
+<span id="cb32-56"><a href="#cb32-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">mode =</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Ho"</span> ) )</span>
 <span id="cb32-57"><a href="#cb32-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-58"><a href="#cb32-58" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-59"><a href="#cb32-59" aria-hidden="true" tabindex="-1"></a><span class="fu">## Per-Stratum Estimates</span></span>
@@ -1280,12 +1280,12 @@ window.Quarto = {
 <span id="cb32-62"><a href="#cb32-62" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-65"><a href="#cb32-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-66"><a href="#cb32-66" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-67"><a href="#cb32-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb32-67"><a href="#cb32-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span> )</span>
 <span id="cb32-68"><a href="#cb32-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-69"><a href="#cb32-69" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-72"><a href="#cb32-72" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-73"><a href="#cb32-73" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-74"><a href="#cb32-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Fis"</span>))</span>
+<span id="cb32-74"><a href="#cb32-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="fu">c</span>( <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Fis"</span> ) )</span>
 <span id="cb32-75"><a href="#cb32-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-76"><a href="#cb32-76" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-77"><a href="#cb32-77" aria-hidden="true" tabindex="-1"></a><span class="fu">## Single Loci</span></span>
@@ -1294,8 +1294,8 @@ window.Quarto = {
 <span id="cb32-80"><a href="#cb32-80" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-83"><a href="#cb32-83" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-84"><a href="#cb32-84" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-85"><a href="#cb32-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(LTRS) <span class="sc">|&gt;</span></span>
-<span id="cb32-86"><a href="#cb32-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"Fis"</span>)</span>
+<span id="cb32-85"><a href="#cb32-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>( LTRS ) <span class="sc">|&gt;</span></span>
+<span id="cb32-86"><a href="#cb32-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">mode =</span> <span class="st">"Fis"</span> )</span>
 <span id="cb32-87"><a href="#cb32-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-88"><a href="#cb32-88" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-89"><a href="#cb32-89" aria-hidden="true" tabindex="-1"></a><span class="fu">## Individual Heterozygosity</span></span>
@@ -1304,9 +1304,9 @@ window.Quarto = {
 <span id="cb32-92"><a href="#cb32-92" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-95"><a href="#cb32-95" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-96"><a href="#cb32-96" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-97"><a href="#cb32-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"Hi"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-98"><a href="#cb32-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Species) <span class="sc">|&gt;</span></span>
-<span id="cb32-99"><a href="#cb32-99" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_Hi =</span> <span class="fu">mean</span>(Hi))</span>
+<span id="cb32-97"><a href="#cb32-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">mode =</span> <span class="st">"Hi"</span> ) <span class="sc">|&gt;</span></span>
+<span id="cb32-98"><a href="#cb32-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>( Species ) <span class="sc">|&gt;</span></span>
+<span id="cb32-99"><a href="#cb32-99" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>( <span class="at">mean_Hi =</span> <span class="fu">mean</span>( Hi ) )</span>
 <span id="cb32-100"><a href="#cb32-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-101"><a href="#cb32-101" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-102"><a href="#cb32-102" aria-hidden="true" tabindex="-1"></a><span class="fu">## Corrected Heterozygosity (Nei's)</span></span>
@@ -1315,7 +1315,7 @@ window.Quarto = {
 <span id="cb32-105"><a href="#cb32-105" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-108"><a href="#cb32-108" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-109"><a href="#cb32-109" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-110"><a href="#cb32-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Hes"</span>)</span>
+<span id="cb32-110"><a href="#cb32-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Hes"</span> )</span>
 <span id="cb32-111"><a href="#cb32-111" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-112"><a href="#cb32-112" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-113"><a href="#cb32-113" aria-hidden="true" tabindex="-1"></a><span class="in">`Ht`</span> gives the matching total expected heterozygosity (the $H_S$ and $H_T$ that <span class="in">`genetic_structure()`</span> builds $G_{ST}$ from).  These pooled modes return one row per locus, so they combine with each other but not with per-stratum modes:</span>
@@ -1323,7 +1323,7 @@ window.Quarto = {
 <span id="cb32-117"><a href="#cb32-117" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-118"><a href="#cb32-118" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
 <span id="cb32-119"><a href="#cb32-119" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-120"><a href="#cb32-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"Hos"</span>, <span class="st">"Hes"</span>, <span class="st">"Ht"</span>))</span>
+<span id="cb32-120"><a href="#cb32-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="fu">c</span>( <span class="st">"Hos"</span>, <span class="st">"Hes"</span>, <span class="st">"Ht"</span> ) )</span>
 <span id="cb32-121"><a href="#cb32-121" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-122"><a href="#cb32-122" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-123"><a href="#cb32-123" aria-hidden="true" tabindex="-1"></a><span class="fu">## Multilocus Diversity</span></span>
@@ -1332,9 +1332,9 @@ window.Quarto = {
 <span id="cb32-126"><a href="#cb32-126" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-129"><a href="#cb32-129" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-130"><a href="#cb32-130" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-131"><a href="#cb32-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">mode =</span> <span class="st">"Dm"</span>)</span>
+<span id="cb32-131"><a href="#cb32-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">mode =</span> <span class="st">"Dm"</span> )</span>
 <span id="cb32-132"><a href="#cb32-132" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-133"><a href="#cb32-133" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Dm"</span>)</span>
+<span id="cb32-133"><a href="#cb32-133" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"Dm"</span> )</span>
 <span id="cb32-134"><a href="#cb32-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-135"><a href="#cb32-135" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-136"><a href="#cb32-136" aria-hidden="true" tabindex="-1"></a><span class="fu">## Selecting Specific Loci</span></span>
@@ -1343,15 +1343,15 @@ window.Quarto = {
 <span id="cb32-139"><a href="#cb32-139" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-142"><a href="#cb32-142" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-143"><a href="#cb32-143" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-144"><a href="#cb32-144" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">loci =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>), <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb32-144"><a href="#cb32-144" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">loci =</span> <span class="fu">c</span>( <span class="st">"LTRS"</span>, <span class="st">"WNT"</span> ), <span class="at">mode =</span> <span class="st">"He"</span> )</span>
 <span id="cb32-145"><a href="#cb32-145" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-146"><a href="#cb32-146" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-147"><a href="#cb32-147" aria-hidden="true" tabindex="-1"></a>or select the columns first:</span>
 <span id="cb32-148"><a href="#cb32-148" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-151"><a href="#cb32-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-152"><a href="#cb32-152" aria-hidden="true" tabindex="-1"></a>arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-153"><a href="#cb32-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Species, LTRS, WNT) <span class="sc">|&gt;</span></span>
-<span id="cb32-154"><a href="#cb32-154" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb32-153"><a href="#cb32-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>( Species, LTRS, WNT ) <span class="sc">|&gt;</span></span>
+<span id="cb32-154"><a href="#cb32-154" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span> )</span>
 <span id="cb32-155"><a href="#cb32-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-156"><a href="#cb32-156" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-157"><a href="#cb32-157" aria-hidden="true" tabindex="-1"></a><span class="fu">## Comparing Populations</span></span>
@@ -1360,37 +1360,37 @@ window.Quarto = {
 <span id="cb32-160"><a href="#cb32-160" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-163"><a href="#cb32-163" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-164"><a href="#cb32-164" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="ot">&lt;-</span> arapat <span class="sc">|&gt;</span></span>
-<span id="cb32-165"><a href="#cb32-165" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>(<span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
+<span id="cb32-165"><a href="#cb32-165" aria-hidden="true" tabindex="-1"></a>  <span class="fu">genetic_diversity</span>( <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span> )</span>
 <span id="cb32-166"><a href="#cb32-166" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-167"><a href="#cb32-167" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="sc">|&gt;</span></span>
-<span id="cb32-168"><a href="#cb32-168" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Stratum) <span class="sc">|&gt;</span></span>
-<span id="cb32-169"><a href="#cb32-169" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_He =</span> <span class="fu">mean</span>(He), <span class="at">sd_He =</span> <span class="fu">sd</span>(He))</span>
+<span id="cb32-168"><a href="#cb32-168" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>( Stratum ) <span class="sc">|&gt;</span></span>
+<span id="cb32-169"><a href="#cb32-169" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>( <span class="at">mean_He =</span> <span class="fu">mean</span>( He ), <span class="at">sd_He =</span> <span class="fu">sd</span>( He ) )</span>
 <span id="cb32-170"><a href="#cb32-170" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-171"><a href="#cb32-171" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-174"><a href="#cb32-174" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-175"><a href="#cb32-175" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="sc">|&gt;</span></span>
-<span id="cb32-176"><a href="#cb32-176" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum)) <span class="sc">+</span></span>
+<span id="cb32-176"><a href="#cb32-176" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>( <span class="fu">aes</span>( <span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum ) ) <span class="sc">+</span></span>
 <span id="cb32-177"><a href="#cb32-177" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
 <span id="cb32-178"><a href="#cb32-178" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb32-179"><a href="#cb32-179" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Expected Heterozygosity by Species"</span>,</span>
-<span id="cb32-180"><a href="#cb32-180" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"He"</span>) <span class="sc">+</span></span>
-<span id="cb32-181"><a href="#cb32-181" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
+<span id="cb32-179"><a href="#cb32-179" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>( <span class="at">title =</span> <span class="st">"Expected Heterozygosity by Species"</span>,</span>
+<span id="cb32-180"><a href="#cb32-180" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">"He"</span> ) <span class="sc">+</span></span>
+<span id="cb32-181"><a href="#cb32-181" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>( <span class="at">legend.position =</span> <span class="st">"none"</span> )</span>
 <span id="cb32-182"><a href="#cb32-182" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-183"><a href="#cb32-183" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-184"><a href="#cb32-184" aria-hidden="true" tabindex="-1"></a><span class="fu">## Without Pipes</span></span>
 <span id="cb32-185"><a href="#cb32-185" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-188"><a href="#cb32-188" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-189"><a href="#cb32-189" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb32-190"><a href="#cb32-190" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb32-191"><a href="#cb32-191" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Ho"</span>))</span>
-<span id="cb32-192"><a href="#cb32-192" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb32-193"><a href="#cb32-193" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">loci =</span> <span class="fu">c</span>(<span class="st">"LTRS"</span>, <span class="st">"WNT"</span>), <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb32-194"><a href="#cb32-194" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat<span class="sc">$</span>LTRS, <span class="at">mode =</span> <span class="st">"Fis"</span>)</span>
-<span id="cb32-195"><a href="#cb32-195" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="st">"Hi"</span>)</span>
-<span id="cb32-196"><a href="#cb32-196" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="st">"Dm"</span>)</span>
-<span id="cb32-197"><a href="#cb32-197" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>(arapat, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"Sh"</span>, <span class="st">"Pex"</span>))</span>
-<span id="cb32-198"><a href="#cb32-198" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="ot">&lt;-</span> <span class="fu">genetic_diversity</span>(arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span>)</span>
-<span id="cb32-199"><a href="#cb32-199" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(he_by_pop, <span class="fu">aes</span>(<span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum)) <span class="sc">+</span></span>
+<span id="cb32-190"><a href="#cb32-190" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat, <span class="at">mode =</span> <span class="st">"He"</span> )</span>
+<span id="cb32-191"><a href="#cb32-191" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat, <span class="at">mode =</span> <span class="fu">c</span>( <span class="st">"A"</span>, <span class="st">"Ae"</span>, <span class="st">"He"</span>, <span class="st">"Ho"</span> ) )</span>
+<span id="cb32-192"><a href="#cb32-192" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span> )</span>
+<span id="cb32-193"><a href="#cb32-193" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat, <span class="at">loci =</span> <span class="fu">c</span>( <span class="st">"LTRS"</span>, <span class="st">"WNT"</span> ), <span class="at">mode =</span> <span class="st">"He"</span> )</span>
+<span id="cb32-194"><a href="#cb32-194" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat<span class="sc">$</span>LTRS, <span class="at">mode =</span> <span class="st">"Fis"</span> )</span>
+<span id="cb32-195"><a href="#cb32-195" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat, <span class="at">mode =</span> <span class="st">"Hi"</span> )</span>
+<span id="cb32-196"><a href="#cb32-196" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat, <span class="at">mode =</span> <span class="st">"Dm"</span> )</span>
+<span id="cb32-197"><a href="#cb32-197" aria-hidden="true" tabindex="-1"></a><span class="fu">genetic_diversity</span>( arapat, <span class="at">mode =</span> <span class="fu">c</span>( <span class="st">"Sh"</span>, <span class="st">"Pex"</span> ) )</span>
+<span id="cb32-198"><a href="#cb32-198" aria-hidden="true" tabindex="-1"></a>he_by_pop <span class="ot">&lt;-</span> <span class="fu">genetic_diversity</span>( arapat, <span class="at">stratum =</span> <span class="st">"Species"</span>, <span class="at">mode =</span> <span class="st">"He"</span> )</span>
+<span id="cb32-199"><a href="#cb32-199" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>( he_by_pop, <span class="fu">aes</span>( <span class="at">x =</span> Stratum, <span class="at">y =</span> He, <span class="at">fill =</span> Stratum ) ) <span class="sc">+</span></span>
 <span id="cb32-200"><a href="#cb32-200" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span>
 <span id="cb32-201"><a href="#cb32-201" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>

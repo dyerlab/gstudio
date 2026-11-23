@@ -4,8 +4,8 @@ The `locus` is the fundamental data type in `gstudio`. It is an S3 class that st
 
 ```{r}
 #| message: false
-library(gstudio)
-library(dplyr)
+library( gstudio )
+library( dplyr )
 ```
 
 ## Creating Locus Objects
@@ -13,7 +13,7 @@ library(dplyr)
 The `locus()` constructor takes a vector of alleles and collapses them into a single genotype:
 
 ```{r}
-loc <- c("A", "B") |>
+loc <- c( "A", "B" ) |>
   locus()
 
 loc
@@ -22,10 +22,10 @@ loc
 Homozygotes and higher-ploidy genotypes work the same way:
 
 ```{r}
-c("A", "A") |>
+c( "A", "A" ) |>
   locus()
 
-c("A", "B", "C", "D") |>
+c( "A", "B", "C", "D" ) |>
   locus()
 ```
 
@@ -36,7 +36,7 @@ Missing data is represented as an empty string internally:
 ```{r}
 loc_missing <- locus()
 loc_missing
-is.na(loc_missing)
+is.na( loc_missing )
 ```
 
 ## Marker Types
@@ -48,8 +48,8 @@ The `type` parameter controls how raw data is interpreted:
 Alleles are sorted alphabetically and joined with `:`:
 
 ```{r}
-c("B", "A") |>
-  locus(type = "codom")
+c( "B", "A" ) |>
+  locus( type = "codom" )
 ```
 
 ### AFLP
@@ -57,8 +57,8 @@ c("B", "A") |>
 Binary presence/absence data (0 or 1):
 
 ```{r}
-locus("1", type = "aflp")
-locus("0", type = "aflp")
+locus( "1", type = "aflp" )
+locus( "0", type = "aflp" )
 ```
 
 ### SNP
@@ -66,9 +66,9 @@ locus("0", type = "aflp")
 Encoded as 0, 1, or 2 (count of minor alleles):
 
 ```{r}
-locus("0", type = "snp")
-locus("1", type = "snp")
-locus("2", type = "snp")
+locus( "0", type = "snp" )
+locus( "1", type = "snp" )
+locus( "2", type = "snp" )
 ```
 
 ### Separated
@@ -76,7 +76,7 @@ locus("2", type = "snp")
 Pre-formatted colon-separated strings:
 
 ```{r}
-locus("A:B", type = "separated")
+locus( "A:B", type = "separated" )
 ```
 
 ### Zyme (allozyme)
@@ -84,8 +84,8 @@ locus("A:B", type = "separated")
 Alleles encoded as concatenated integers (e.g., "12" = alleles 1 and 2):
 
 ```{r}
-locus("12", type = "zyme")
-locus("23", type = "zyme")
+locus( "12", type = "zyme" )
+locus( "23", type = "zyme" )
 ```
 
 ### Column
@@ -93,10 +93,10 @@ locus("23", type = "zyme")
 Two-column matrix format (used internally by `read_population()`):
 
 ```{r}
-alleles_mat <- cbind(c("A", "B", "C"), c("B", "A", "C"))
+alleles_mat <- cbind( c( "A", "B", "C" ), c( "B", "A", "C" ) )
 
 alleles_mat |>
-  locus(type = "column")
+  locus( type = "column" )
 ```
 
 ### Locus Columns in a Data Frame
@@ -106,18 +106,18 @@ each pair of allele columns into a `locus` column, and locus columns keep their
 class through `filter()`, `select()` and `arrange()`:
 
 ```{r}
-raw <- data.frame(Population = c("North", "North", "South"),
-                  TPI_1 = c("1", "1", "2"),
-                  TPI_2 = c("2", "1", "2"))
+raw <- data.frame( Population = c( "North", "North", "South" ),
+                   TPI_1 = c( "1", "1", "2" ),
+                   TPI_2 = c( "2", "1", "2" ) )
 
 genos <- raw |>
-  mutate(TPI = locus(cbind(TPI_1, TPI_2), type = "column")) |>
-  select(Population, TPI)
+  mutate( TPI = locus( cbind( TPI_1, TPI_2 ), type = "column" ) ) |>
+  select( Population, TPI )
 
 genos
 
 genos |>
-  column_class("locus")
+  column_class( "locus" )
 ```
 
 ## Working with Vectors of Loci
@@ -125,14 +125,14 @@ genos |>
 Genotype vectors are created using `c()`:
 
 ```{r}
-AA <- c("A", "A") |>
+AA <- c( "A", "A" ) |>
   locus()
-AB <- c("A", "B") |>
+AB <- c( "A", "B" ) |>
   locus()
-BB <- c("B", "B") |>
+BB <- c( "B", "B" ) |>
   locus()
 
-loci <- c(AA, AB, AB, AA, BB)
+loci <- c( AA, AB, AB, AA, BB )
 loci
 ```
 
@@ -140,14 +140,14 @@ loci
 
 ```{r}
 loci[2]
-loci[c(1, 3, 5)]
+loci[c( 1, 3, 5 )]
 ```
 
 ### Replication
 
 ```{r}
 AB |>
-  rep(times = 3)
+  rep( times = 3 )
 ```
 
 ## Extracting Alleles
@@ -173,12 +173,12 @@ Within a data frame, the same test summarizes observed heterozygosity by
 stratum:
 
 ```{r}
-data(arapat)
+data( arapat )
 
 arapat |>
-  mutate(het = is_heterozygote(LTRS)) |>
-  group_by(Species) |>
-  summarize(Ho_LTRS = mean(het, na.rm = TRUE))
+  mutate( het = is_heterozygote( LTRS ) ) |>
+  group_by( Species ) |>
+  summarize( Ho_LTRS = mean( het, na.rm = TRUE ) )
 ```
 
 ## Operator Overloads
@@ -188,9 +188,9 @@ arapat |>
 The `+` operator simulates mating by randomly sampling one allele from each parent:
 
 ```{r}
-dad <- locus(c("A", "A"))
-mom <- locus(c("B", "B"))
-set.seed(42)
+dad <- locus( c( "A", "A" ) )
+mom <- locus( c( "B", "B" ) )
+set.seed( 42 )
 offspring <- mom + dad
 offspring
 ```
@@ -200,8 +200,8 @@ offspring
 The `-` operator removes the maternal contribution from an offspring genotype:
 
 ```{r}
-off <- locus(c("A", "B"))
-mom <- locus(c("A", "A"))
+off             <- locus( c( "A", "B" ) )
+mom             <- locus( c( "A", "A" ) )
 paternal_gamete <- off - mom
 paternal_gamete
 ```
@@ -220,18 +220,18 @@ loci |>
 ### From Other Types
 
 ```{r}
-c("A", "B") |>
+c( "A", "B" ) |>
   as.locus()
 
-list("C", "D") |>
+list( "C", "D" ) |>
   as.locus()
 ```
 
 ### Is-a Test
 
 ```{r}
-is.locus(AB)
-is.locus("not a locus")
+is.locus( AB )
+is.locus( "not a locus" )
 ```
 
 ## Multivariate Conversion
@@ -242,7 +242,7 @@ The `to_mv()` function converts locus data to a multivariate numeric format suit
 mv <- arapat |>
   to_mv()
 
-dim(mv)
+dim( mv )
 mv[1:5, 1:6]
 ```
 
@@ -252,12 +252,13 @@ Each allele at each locus becomes a column, with values representing allele coun
 
 ```{r}
 #| eval: false
-loc   <- locus(c("A", "B"))
-genos <- data.frame(Population = raw$Population,
-                    TPI = locus(cbind(raw$TPI_1, raw$TPI_2), type = "column"))
-alleles(loci)
-is_heterozygote(loci)
-as.data.frame(loci)
-as.locus(c("A", "B"))
-mv <- to_mv(arapat)
+loc   <- locus( c( "A", "B" ) )
+genos <- data.frame( Population = raw$Population,
+                     TPI = locus( cbind( raw$TPI_1, raw$TPI_2 ),
+                                  type = "column" ) )
+alleles( loci )
+is_heterozygote( loci )
+as.data.frame( loci )
+as.locus( c( "A", "B" ) )
+mv <- to_mv( arapat )
 ```

@@ -4,10 +4,10 @@ This chapter covers estimation of genetic diversity statistics using `genetic_di
 
 ```{r}
 #| message: false
-library(gstudio)
-library(dplyr)
-library(ggplot2)
-data(arapat)
+library( gstudio )
+library( dplyr )
+library( ggplot2 )
+data( arapat )
 ```
 
 ## The `genetic_diversity()` Wrapper
@@ -37,17 +37,17 @@ Without a stratum, diversity is estimated across all individuals:
 
 ```{r}
 arapat |>
-  genetic_diversity(mode = "A")
+  genetic_diversity( mode = "A" )
 
 arapat |>
-  genetic_diversity(mode = "He")
+  genetic_diversity( mode = "He" )
 ```
 
 Pass several modes to get one table with a column for each:
 
 ```{r}
 arapat |>
-  genetic_diversity(mode = c("A", "Ae", "He", "Ho"))
+  genetic_diversity( mode = c( "A", "Ae", "He", "Ho" ) )
 ```
 
 ## Per-Stratum Estimates
@@ -56,12 +56,12 @@ Provide a `stratum` argument to compute diversity within each population:
 
 ```{r}
 arapat |>
-  genetic_diversity(stratum = "Species", mode = "He")
+  genetic_diversity( stratum = "Species", mode = "He" )
 ```
 
 ```{r}
 arapat |>
-  genetic_diversity(stratum = "Species", mode = c("Ae", "He", "Fis"))
+  genetic_diversity( stratum = "Species", mode = c( "Ae", "He", "Fis" ) )
 ```
 
 ## Single Loci
@@ -70,8 +70,8 @@ A bare `locus` vector can be passed in place of a data frame:
 
 ```{r}
 arapat |>
-  pull(LTRS) |>
-  genetic_diversity(mode = "Fis")
+  pull( LTRS ) |>
+  genetic_diversity( mode = "Fis" )
 ```
 
 ## Individual Heterozygosity
@@ -80,9 +80,9 @@ The `Hi` mode is estimated per individual rather than per locus.  It returns one
 
 ```{r}
 arapat |>
-  genetic_diversity(mode = "Hi") |>
-  group_by(Species) |>
-  summarize(mean_Hi = mean(Hi))
+  genetic_diversity( mode = "Hi" ) |>
+  group_by( Species ) |>
+  summarize( mean_Hi = mean( Hi ) )
 ```
 
 ## Corrected Heterozygosity (Nei's)
@@ -91,7 +91,7 @@ The `Hes` and `Hos` modes require a stratum because they apply a small-sample co
 
 ```{r}
 arapat |>
-  genetic_diversity(stratum = "Species", mode = "Hes")
+  genetic_diversity( stratum = "Species", mode = "Hes" )
 ```
 
 `Ht` gives the matching total expected heterozygosity (the $H_S$ and $H_T$ that `genetic_structure()` builds $G_{ST}$ from).  These pooled modes return one row per locus, so they combine with each other but not with per-stratum modes:
@@ -99,7 +99,7 @@ arapat |>
 ```{r}
 #| warning: false
 arapat |>
-  genetic_diversity(stratum = "Species", mode = c("Hos", "Hes", "Ht"))
+  genetic_diversity( stratum = "Species", mode = c( "Hos", "Hes", "Ht" ) )
 ```
 
 ## Multilocus Diversity
@@ -108,9 +108,9 @@ The `Dm` mode gives the fraction of individuals with unique multilocus genotypes
 
 ```{r}
 arapat |>
-  genetic_diversity(mode = "Dm")
+  genetic_diversity( mode = "Dm" )
 arapat |>
-  genetic_diversity(stratum = "Species", mode = "Dm")
+  genetic_diversity( stratum = "Species", mode = "Dm" )
 ```
 
 ## Selecting Specific Loci
@@ -119,15 +119,15 @@ You can restrict the analysis to a subset of loci, with or without a stratum:
 
 ```{r}
 arapat |>
-  genetic_diversity(loci = c("LTRS", "WNT"), mode = "He")
+  genetic_diversity( loci = c( "LTRS", "WNT" ), mode = "He" )
 ```
 
 or select the columns first:
 
 ```{r}
 arapat |>
-  select(Species, LTRS, WNT) |>
-  genetic_diversity(stratum = "Species", mode = "He")
+  select( Species, LTRS, WNT ) |>
+  genetic_diversity( stratum = "Species", mode = "He" )
 ```
 
 ## Comparing Populations
@@ -136,36 +136,36 @@ A common workflow is to estimate diversity per population, then compare:
 
 ```{r}
 he_by_pop <- arapat |>
-  genetic_diversity(stratum = "Species", mode = "He")
+  genetic_diversity( stratum = "Species", mode = "He" )
 
 he_by_pop |>
-  group_by(Stratum) |>
-  summarize(mean_He = mean(He), sd_He = sd(He))
+  group_by( Stratum ) |>
+  summarize( mean_He = mean( He ), sd_He = sd( He ) )
 ```
 
 ```{r}
 he_by_pop |>
-  ggplot(aes(x = Stratum, y = He, fill = Stratum)) +
+  ggplot( aes( x = Stratum, y = He, fill = Stratum ) ) +
   geom_boxplot() +
   theme_minimal() +
-  labs(title = "Expected Heterozygosity by Species",
-       y = "He") +
-  theme(legend.position = "none")
+  labs( title = "Expected Heterozygosity by Species",
+        y = "He" ) +
+  theme( legend.position = "none" )
 ```
 
 ## Without Pipes
 
 ```{r}
 #| eval: false
-genetic_diversity(arapat, mode = "He")
-genetic_diversity(arapat, mode = c("A", "Ae", "He", "Ho"))
-genetic_diversity(arapat, stratum = "Species", mode = "He")
-genetic_diversity(arapat, loci = c("LTRS", "WNT"), mode = "He")
-genetic_diversity(arapat$LTRS, mode = "Fis")
-genetic_diversity(arapat, mode = "Hi")
-genetic_diversity(arapat, mode = "Dm")
-genetic_diversity(arapat, mode = c("Sh", "Pex"))
-he_by_pop <- genetic_diversity(arapat, stratum = "Species", mode = "He")
-ggplot(he_by_pop, aes(x = Stratum, y = He, fill = Stratum)) +
+genetic_diversity( arapat, mode = "He" )
+genetic_diversity( arapat, mode = c( "A", "Ae", "He", "Ho" ) )
+genetic_diversity( arapat, stratum = "Species", mode = "He" )
+genetic_diversity( arapat, loci = c( "LTRS", "WNT" ), mode = "He" )
+genetic_diversity( arapat$LTRS, mode = "Fis" )
+genetic_diversity( arapat, mode = "Hi" )
+genetic_diversity( arapat, mode = "Dm" )
+genetic_diversity( arapat, mode = c( "Sh", "Pex" ) )
+he_by_pop <- genetic_diversity( arapat, stratum = "Species", mode = "He" )
+ggplot( he_by_pop, aes( x = Stratum, y = He, fill = Stratum ) ) +
   geom_boxplot()
 ```
