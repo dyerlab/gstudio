@@ -294,4 +294,49 @@ stepping stone.  @sec-simulation builds that simulation from scratch with
 and `simulate_pop()`, and follows the Population Graph and the source-sink
 scores through a symmetric burn-in and three forward scenarios.
 
+{{< include ../vignettes/children/genetic_gravity_nopipes.Rmd >}}
+
+The *Araptus attenuatus* case study, calibration and data-quality steps:
+
+```{r no-pipes-arapat}
+#| eval: false
+peninsula <- arapat[arapat$Species == "Peninsula", ]
+n_site    <- table( peninsula$Population )
+peninsula <- droplevels( peninsula[peninsula$Population %in%
+                                     names( n_site )[n_site >= 4], ] )
+beetles   <- population_graph( peninsula,
+                               stratum = "Population",
+                               decorate = TRUE )
+
+coords <- strata_coordinates( peninsula, stratum = "Population" )
+plot( gravity_field( beetles ),
+      layout = coords,
+      base = land_map,
+      clip_to_base = TRUE,
+      mask_dist = 0.6 )
+
+central      <- component_of( "93" )
+central_data <- droplevels(
+  peninsula[peninsula$Population %in% igraph::V( central )$name, ]
+)
+dg <- popgraph_diagnostics( central_data,
+                            stratum = "Population",
+                            graph = central )
+warn <- as.data.frame( dg )
+warn[warn$status == "warn", c( "check", "value", "note" )]
+
+calibration <- popgraph_null( central_data,
+                              stratum = "Population",
+                              axis = dk,
+                              distance = sep,
+                              forward = fwd,
+                              graph = central,
+                              nsim = 999 )
+
+locus_subsample_null( arapat,
+                      stratum = "Population",
+                      k = c( 2, 3, 4, 6 ),
+                      nsub = 3 )
+```
+
 {{< include ../vignettes/children/genetic_gravity_summary.Rmd >}}
