@@ -4,9 +4,11 @@ Population Graphs are a graph-theoretic approach to understanding among-populati
 
 ```{r}
 #| message: false
+#| warning: false
 library( gstudio )
 library( dplyr )
 library( igraph )
+library( ggplot2 )
 data( arapat )
 ```
 
@@ -65,16 +67,11 @@ g
 
 ## Bundled Population Graphs
 
-The package includes two pre-computed population graphs:
+The package includes one pre-computed population graph, *Lophocereus* from Dyer & Nason (2004):
 
 ```{r}
 data( lopho )
 lopho
-```
-
-```{r}
-data( upiga )
-upiga
 ```
 
 ## Decorating a Graph
@@ -171,13 +168,20 @@ igraph::E( contorted )$stretch |>
 
 ### Topology Congruence
 
-Compare the topology of two population graphs:
+Compare the topology of two population graphs.  Here we ask whether two independent sets of markers give the beetles the same graph, building one graph from the first four loci and one from the last four:
 
 ```{r}
-data( lopho )
-data( upiga )
-lopho |>
-  congruence_topology( upiga )
+#| warning: false
+graph_a <- arapat |>
+  select( Population, LTRS, WNT, EN, EF ) |>
+  population_graph()
+
+graph_b <- arapat |>
+  select( Population, ZMP, AML, ATPS, MP20 ) |>
+  population_graph()
+
+graph_a |>
+  congruence_topology( graph_b )
 ```
 
 ### Statistical Testing
@@ -185,19 +189,18 @@ lopho |>
 Use `test_congruence()` to test whether two graphs are more similar in topology than expected by chance:
 
 ```{r}
-#| eval: false
-lopho |>
-  test_congruence( upiga )
+graph_a |>
+  test_congruence( graph_b )
 ```
 
-### Permutation
+### Edge Stability
 
-The `permute_popgraph()` function creates a null distribution of graph topologies by permuting the data:
+The `permute_popgraph()` function bootstraps individuals within each stratum, rebuilds the graph `nboot` times (default 999) and returns a graph whose edge weights are the fraction of bootstrap graphs containing each edge:
 
 ```{r}
 #| eval: false
-null_graphs <- mv |>
-  permute_popgraph( groups, nperm = 99 )
+boot_graph <- mv |>
+  permute_popgraph( groups, nboot = 999 )
 ```
 
 ## Subgraph Operations
@@ -278,6 +281,25 @@ lopho |>
   plot()
 ```
 
+On a decorated graph, nodes are placed at their coordinates.  For context, draw the graph over a map: `base =` takes any ggplot, here a grey outline of the land from Natural Earth (the `rnaturalearth` package), and the graph's layers go on top.  The Visualization chapter (@sec-visualization) adds sea labels and a north arrow.
+
+```{r}
+#| message: false
+#| fig-width: 6
+#| fig-height: 6
+countries <- c( "Mexico", "United States of America" )
+land      <- rnaturalearth::ne_countries( country = countries,
+                                          scale = "medium",
+                                          returnclass = "sf" )
+
+baja_map <- ggplot() +
+  geom_sf( data = land, fill = "grey92", colour = "grey55" ) +
+  coord_sf( xlim = c( -116, -108.5 ), ylim = c( 22.5, 32.5 ) )
+
+lopho_dec |>
+  plot( base = baja_map )
+```
+
 ## Randomization
 
 Generate a random graph with the same nodes and degree sequence as the original (the default, `mode = "degree"`, uses degree-preserving edge swaps), or with the same number of edges placed at random (`mode = "full"`):
@@ -288,15 +310,7 @@ rg <- lopho |>
 rg
 ```
 
-## Genetic Gravity: Direction from an Undirected Graph
-
-Each edge of a Population Graph is symmetric, but the two populations it joins are compared against different neighbourhoods. *Genetic gravity* reads the direction of gene flow from that difference: edge asymmetries $\Delta$, a source–sink score $S$ for every population, the directional distance dcGD, tests for a directional gradient, and maps of the gravity field. It has its own chapter, @sec-genetic-gravity, which walks through the analysis from raw genotypes.
-
-```{r}
-lopho |>
-  gravity_field() |>
-  plot()
-```
+To read the direction of gene flow from a Population Graph, see @sec-genetic-gravity.
 
 ## Without Pipes
 
@@ -308,12 +322,12 @@ graph     <- popgraph( to_mv( arapat ),
                        alpha = 0.05 )
 lopho_dec <- decorate_graph( lopho, baja, stratum = "Population" )
 cd        <- centroid_distance( to_mv( arapat ), factor( arapat$Species ) )
-congruence_topology( lopho, upiga )
+congruence_topology( graph_a, graph_b )
+test_congruence( graph_a, graph_b )
 M    <- to_matrix( lopho )
 path <- system.file( "extdata",
                      "lopho.pgraph",
                      package = "gstudio" )
 g    <- read_popgraph( path )
 plot( lopho, layout = "kk" )
-plot( gravity_field( lopho ) )
 ```

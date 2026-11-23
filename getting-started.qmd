@@ -16,6 +16,7 @@ Once installed, load the package, along with dplyr for the pipelines used throug
 
 ```{r}
 #| message: false
+#| warning: false
 library( gstudio )
 library( dplyr )
 data( arapat )
@@ -65,7 +66,6 @@ The package ships with several datasets for examples and testing:
 | `cornus` | *Cornus florida* adult genotypes |
 | `cornus_florida` | *Cornus florida* mother-offspring pair data |
 | `lopho` | *Lophocereus schottii* population graph (Dyer & Nason 2004) |
-| `upiga` | *Upiga virescens* population graph |
 | `baja` | Baja California sampling location metadata |
 | `gravity` | Simulated genotypes under directional gene flow (Genetic Gravity) |
 

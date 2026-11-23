@@ -4,6 +4,7 @@ This chapter covers reading genetic data from files, converting between formats,
 
 ```{r}
 #| message: false
+#| warning: false
 library( gstudio )
 library( dplyr )
 data( arapat )

@@ -4,6 +4,7 @@ This chapter covers inter-individual and inter-population distance estimation, p
 
 ```{r}
 #| message: false
+#| warning: false
 library( gstudio )
 library( dplyr )
 library( ggplot2 )
@@ -116,6 +117,7 @@ round( r_nason[1:5, 1:5], 4 )
 The `genetic_autocorrelation()` function performs the spatial autocorrelation analysis of Smouse & Peakall (1999). It requires two square distance matrices --- one physical, one genetic --- among the same individuals, and a vector of distance bin boundaries.  Here we use the adult flowering dogwoods (*Cornus florida*, `OffID == 0`), which are mapped on a projected X/Y grid, so the physical distance is Euclidean.  Using the individual `ID` as the stratum gives `strata_distance()` one point per tree:
 
 ```{r}
+#| cache: true
 adults <- cornus_florida |>
   filter( OffID == 0 )
 
@@ -135,7 +137,7 @@ G <- adults |>
 bins <- c( seq( 0, 1200, by = 200 ), 2600 )
 
 set.seed( 1 )
-result <- genetic_autocorrelation( P, G, bins = bins, perms = 99 )
+result <- genetic_autocorrelation( P, G, bins = bins, perms = 999 )
 result
 ```
 
@@ -160,9 +162,10 @@ ggplot( result, aes( x = To, y = R ) ) +
 `genetic_isolation()` tests whether genetic distance among strata grows with their separation, starting from the genotypes.  The default, `mode = "IBD"`, correlates Nei's genetic distance (change it with `genetic =`) with great-circle distance between strata and tests it with a Mantel permutation test:
 
 ```{r}
+#| cache: true
 set.seed( 1 )
 arapat |>
-  genetic_isolation( stratum = "Population", nperm = 499 )
+  genetic_isolation( stratum = "Population", nperm = 999 )
 ```
 
 `mode = "IBGD"` uses the conditional genetic distance through a Population Graph instead, and `mode = "dcGD"` asks whether a directional model fits better, given an `axis` (see @sec-genetic-gravity).  Separation can also come from your own matrix (`spatial =`, e.g. resistance distances) or positions along an axis (`axis =`).  If you already have a Population Graph, `ibgd()` works on it directly.
@@ -217,9 +220,9 @@ G      <- genetic_distance( adults, mode = "AMOVA" )
 genetic_autocorrelation( P,
                          G,
                          bins = c( seq( 0, 1200, by = 200 ), 2600 ),
-                         perms = 99 )
+                         perms = 999 )
 genetic_isolation( arapat,
                    stratum = "Population",
                    mode = "IBD",
-                   nperm = 499 )
+                   nperm = 999 )
 ```

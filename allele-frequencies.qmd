@@ -4,6 +4,7 @@ This chapter covers estimating allele and genotype frequencies, testing for Hard
 
 ```{r}
 #| message: false
+#| warning: false
 library( gstudio )
 library( dplyr )
 library( ggplot2 )
@@ -133,11 +134,12 @@ Departures from HWE can arise from:
 Diversity statistics such as allelic richness grow with sample size, so strata sampled unequally cannot be compared directly.  `rarefaction.test()` rarefies each locus to the smallest number of genotyped individuals in any stratum: every larger stratum is resampled `nperm` times without replacement at that size, and the table gives the observed value, the mean across resamples (`estimate`) and a percentile interval (`conf.low`, `conf.high`) for each stratum, locus and mode.  With several loci, a `Multilocus` row per stratum combines each resample across loci.  It is `NA` for a stratum missing any of the loci, so strata are compared over the same loci; `na.rm = TRUE` combines the loci that are available instead.
 
 ```{r}
+#| cache: true
 set.seed( 1 )
 rare <- arapat |>
   rarefaction.test( stratum = "Species",
                     mode = c( "A", "Ae" ),
-                    nperm = 199 )
+                    nperm = 999 )
 rare |>
   filter( Locus == "Multilocus" )
 ```
@@ -180,7 +182,7 @@ hwe.test( arapat[arapat$Species == "Mainland", ] )
 rare <- rarefaction.test( arapat,
                           stratum = "Species",
                           mode = c( "A", "Ae" ),
-                          nperm = 199 )
+                          nperm = 999 )
 rare[rare$Locus == "Multilocus", ]
 optimal_sampling( 363, phi = 0.45 )
 ```

@@ -4,6 +4,7 @@ This chapter covers estimation of genetic diversity statistics using `genetic_di
 
 ```{r}
 #| message: false
+#| warning: false
 library( gstudio )
 library( dplyr )
 library( ggplot2 )

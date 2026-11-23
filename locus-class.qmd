@@ -4,6 +4,7 @@ The `locus` is the fundamental data type in `gstudio`. It is an S3 class that st
 
 ```{r}
 #| message: false
+#| warning: false
 library( gstudio )
 library( dplyr )
 ```

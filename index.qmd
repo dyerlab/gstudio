@@ -16,6 +16,7 @@ Each chapter is self-contained and can be read independently, though they build 
 
 ```{r}
 #| message: false
+#| warning: false
 library( gstudio )
 library( dplyr )
 data( arapat )
