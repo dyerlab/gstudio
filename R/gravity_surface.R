@@ -3,10 +3,10 @@
 #' @description
 #' Interpolates the source-sink score \eqn{S} of a \code{\link{gravity_field}}
 #' onto a regular grid: the surface that \code{\link{plot.gravity_field}} draws,
-#' as a table or a raster to map, export or analyse.  On a map, the surface of
-#' each connected component fills the convex hull of that component (with a
-#' margin around its outer populations), and \code{clip} removes the parts of
-#' the landscape where the species cannot be, such as water.
+#' as a table or a raster to map, export or analyse.  The surface of each
+#' connected component fills the convex hull of that component (with a margin
+#' around its outer populations); on a map, \code{clip} removes the parts of the
+#' landscape where the species cannot be, such as water.
 #'
 #' @details
 #' \eqn{S} sums to zero within a connected component, so scores are comparable
@@ -19,7 +19,8 @@
 #' With \code{mask = "nodes"} the surface is those discs alone.  With
 #' \code{mask = "hull"} it is the convex hull of the discs of each component, so
 #' it uses the same radius and also fills the ground between populations.
-#' The surface there is interpolated, and no population was sampled in it.
+#' The surface there is interpolated, and no population was sampled in it; when
+#' the populations are placed by a graph layout, it is not a place at all.
 #'
 #' Distances are measured in the units of the layout.  For longitude and
 #' latitude these are degrees.
@@ -28,12 +29,9 @@
 #' @param layout Where the populations are; see \code{\link{plot.popgraph}}.  By
 #'   default the \code{x}, \code{y} or \code{Longitude}, \code{Latitude} vertex
 #'   attributes of the graph.
-#' @param mask Where the surface is defined.  \code{"hull"} fills the convex
-#'   hull of each connected component, \code{"nodes"} keeps a disc around each
-#'   population, and \code{"auto"} (default) uses \code{"hull"} when the
-#'   populations are placed by coordinates (vertex attributes, or a matrix or
-#'   data.frame given as \code{layout}) and \code{"nodes"} when they are placed
-#'   by a graph layout (a layout name or function).
+#' @param mask Where the surface is defined.  \code{"hull"} (default) fills the
+#'   convex hull of each connected component, and \code{"nodes"} keeps a disc
+#'   around each population.
 #' @param mask_dist Radius of the disc around each population, in the units of
 #'   the layout; default 1.2 times the median nearest-neighbour distance between
 #'   populations (floored at a quarter of their mean spacing, so near-coincident
@@ -96,7 +94,7 @@
 #' @export
 gravity_surface <- function( x,
                              layout = NULL,
-                             mask = c( "auto", "hull", "nodes" ),
+                             mask = c( "hull", "nodes" ),
                              mask_dist = NULL,
                              clip = NULL,
                              surface = c( "interpolate", "voronoi" ),
@@ -131,7 +129,7 @@ gravity_surface <- function( x,
     clip <- .clip_polygons( clip, placed$geographic )
   }
   out <- .surface_grid( nd, "S", panels, surface, mask_dist, grid_n,
-                        mask = .resolve_mask( mask, placed$coordinates ),
+                        mask = mask,
                         clip = clip )
   names( out )[names( out ) == "value"] <- "S"
   out <- out[c( "panel", "x", "y", "component", "S" )]
@@ -171,13 +169,6 @@ gravity_surface <- function( x,
 .node_component <- function( p ) {
   memb <- igraph::components( p$graph )$membership
   as.integer( memb[match( p$nodes$Stratum, igraph::V( p$graph )$name )] )
-}
-
-#' @keywords internal
-#' @noRd
-.resolve_mask <- function( mask, coordinates ) {
-  if( mask != "auto" ) return( mask )
-  if( coordinates ) "hull" else "nodes"
 }
 
 #' @keywords internal
@@ -234,7 +225,7 @@ gravity_surface <- function( x,
 #' @keywords internal
 #' @noRd
 .surface_grid <- function( nd, value, lab, surface, mask_dist = NULL, grid_n = 140,
-                           mask = "nodes", clip = NULL ) {
+                           mask = "hull", clip = NULL ) {
   xy1  <- nd[nd$panel == lab[1], c( "x", "y" )]
   dmat <- as.matrix( stats::dist( xy1 ) )
   diag( dmat ) <- Inf

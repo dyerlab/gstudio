@@ -41,6 +41,10 @@ vignettes/*_files/
 # Stray graphics device output
 Rplots.pdf
 
-# knitr chunk caches for the Quarto docs (local only; the site uses _freeze)
+# Saved chunk results for the Quarto docs (local only; the site is rendered
+# locally and GitHub Pages serves the committed HTML in docs/)
+docs/_freeze/
+
+# knitr chunk caches for the Quarto docs (local only)
 docs/*_cache/
 vignettes/*_cache/

@@ -291,9 +291,10 @@ window.Quarto = {
   </ul></li>
   <li><a href="#data-quality-information-loss" id="toc-data-quality-information-loss" class="nav-link" data-scroll-target="#data-quality-information-loss"><span class="header-section-number">9.12</span> Data quality: information loss</a></li>
   <li><a href="#simulating-directional-gene-flow" id="toc-simulating-directional-gene-flow" class="nav-link" data-scroll-target="#simulating-directional-gene-flow"><span class="header-section-number">9.13</span> Simulating directional gene flow</a></li>
-  <li><a href="#without-pipes" id="toc-without-pipes" class="nav-link" data-scroll-target="#without-pipes"><span class="header-section-number">9.14</span> Without Pipes</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">9.15</span> Summary</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9.16</span> References</a></li>
+  <li><a href="#sec-gravity-3d" id="toc-sec-gravity-3d" class="nav-link" data-scroll-target="#sec-gravity-3d"><span class="header-section-number">9.14</span> Extending the map: a ray-traced source-sink surface</a></li>
+  <li><a href="#without-pipes" id="toc-without-pipes" class="nav-link" data-scroll-target="#without-pipes"><span class="header-section-number">9.15</span> Without Pipes</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">9.16</span> Summary</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9.17</span> References</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyerlab/gstudio/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -855,7 +856,7 @@ Pop04 0.284 0.275 0.041 0.000</code></pre>
 </section>
 <section id="the-cropped-raster" class="level4" data-number="9.10.2.3">
 <h4 data-number="9.10.2.3" class="anchored" data-anchor-id="the-cropped-raster"><span class="header-section-number">9.10.2.3</span> The cropped raster</h4>
-<p>Cropping happens in two steps. First, the surface of each component fills the convex hull of its sites plus a margin (<code>mask = "hull"</code>, the default for nodes placed by coordinates; <code>mask_dist</code> sets the margin). A hull drawn around sites on a narrow peninsula crosses open water, so the second step keeps only the cells on land. <code>gravity_surface()</code> returns the raster itself, and its <code>clip</code> argument takes the land polygons directly; as a data frame the two steps can be compared side by side:</p>
+<p>Cropping happens in two steps. First, the surface of each component fills the convex hull of its sites plus a margin (<code>mask = "hull"</code>, the default; <code>mask_dist</code> sets the margin). A hull drawn around sites on a narrow peninsula crosses open water, so the second step keeps only the cells on land. <code>gravity_surface()</code> returns the raster itself, and its <code>clip</code> argument takes the land polygons directly; as a data frame the two steps can be compared side by side:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>hull <span class="ot">&lt;-</span> beetle_field <span class="sc">|&gt;</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gravity_surface</span>( <span class="at">grid_n =</span> <span class="dv">400</span> )</span>
@@ -908,7 +909,7 @@ max value   :  0.340195</code></pre>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">writeRaster</span>( S_land, <span class="st">"arapat_S.tif"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The Visualization chapter (<a href="visualization.html" class="quarto-xref"><span>Chapter 12</span></a>) builds a fuller base map with labels and a north arrow.</p>
+<p>The Visualization chapter (<a href="visualization.html" class="quarto-xref"><span>Chapter 12</span></a>) builds a fuller base map with labels and a north arrow, and <a href="#sec-gravity-3d" class="quarto-xref"><span>Section 9.14</span></a> renders this surface in relief.</p>
 </section>
 </section>
 <section id="the-axis-distance-from-the-refugium" class="level3" data-number="9.10.3">
@@ -1156,13 +1157,91 @@ Reference
 <section id="simulating-directional-gene-flow" class="level2" data-number="9.13">
 <h2 data-number="9.13" class="anchored" data-anchor-id="simulating-directional-gene-flow"><span class="header-section-number">9.13</span> Simulating directional gene flow</h2>
 <p>The <code>gravity</code> data come from an individual-based simulation of a directional stepping stone. <a href="simulation.html" class="quarto-xref"><span>Chapter 10</span></a> builds that simulation from scratch with <code>make_populations()</code>, <code>migration_matrix( model = "stepping_stone_1d_asym" )</code> and <code>simulate_pop()</code>, and follows the Population Graph and the source-sink scores through a symmetric burn-in and three forward scenarios.</p>
+</section>
+<section id="sec-gravity-3d" class="level2" data-number="9.14">
+<h2 data-number="9.14" class="anchored" data-anchor-id="sec-gravity-3d"><span class="header-section-number">9.14</span> Extending the map: a ray-traced source-sink surface</h2>
+<p>A flat map shows the sign of <span class="math inline">\(S\)</span> by colour, but the shape of the surface, its ramps, saddles and basins, is easier to see in relief. <code>gstudio</code> does not draw in three dimensions, and does not need to: <code>gravity_surface()</code> returns the surface and <code>gravity_field()</code> the directions, and any renderer can take it from there. <a href="#fig-gravity-3d" class="quarto-xref">Figure&nbsp;<span>9.1</span></a> does so with <a href="https://www.rayshader.com"><code>rayshader</code></a> and <code>ggplot2</code>, from the same beetles as <a href="#sec-gravity-map" class="quarto-xref"><span>Section 9.10.2</span></a>.</p>
+<div id="fig-gravity-3d" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Oblique three-dimensional view of the Baja California peninsula.  The source-sink surface rises in red over the central sites and falls to blue in the south, with a network of labelled sites and arrows above it.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gravity-3d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/gravity-source-sink-3d.png" class="img-fluid figure-img" alt="Oblique three-dimensional view of the Baja California peninsula.  The source-sink surface rises in red over the central sites and falls to blue in the south, with a network of labelled sites and arrows above it.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gravity-3d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.1: Source-sink surface of <em>Araptus attenuatus</em> in relief, with the Population Graph floating above it. Height and colour are the interpolated <span class="math inline">\(S\)</span> (red, source; blue, sink), with contours every 0.05 and a heavier line at <span class="math inline">\(S = 0\)</span>. Arrows point from source to sink, edges are wider for larger <span class="math inline">\(|\Delta|\)</span>, and drop lines mark where each site is.
+</figcaption>
+</figure>
+</div>
+<p>The code is one documented script, <a href="media/gravity-rayshader.R" download="gravity-rayshader.R">gravity-rayshader.R</a>. It holds everything from the data to the figure, in eight steps:</p>
+<ol type="1">
+<li>settings;</li>
+<li>the data and the <code>gravity_field</code>;</li>
+<li>the surface, resampled to cells that are square on the ground, each component on its own;</li>
+<li>the colours of the map, and a light from the slopes of <span class="math inline">\(S\)</span>;</li>
+<li>the ray-traced render, without OpenGL;</li>
+<li>the camera, fitted so that any point can be placed on the image;</li>
+<li>the grid, contours, sites, edges and arrows;</li>
+<li>the figure, with the network drawn by <code>ggplot2</code> so it stays sharp.</li>
+</ol>
+<p>Run it from a terminal with <code>Rscript gravity-rayshader.R</code>, or with <code>source()</code> in R; give it a file name ending in <code>.pdf</code> to keep the network, contours and labels as vectors. To use your own data, replace step 2.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Before you run it: packages, time and complexity">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Before you run it: packages, time and complexity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The script is an example and not part of <code>gstudio</code>, and it is <strong>not run</strong> when this book is built; <a href="#fig-gravity-3d" class="quarto-xref">Figure&nbsp;<span>9.1</span></a> is a saved image.</p>
+<p><strong>Packages.</strong> Beyond <code>gstudio</code> and the packages it installs, you need:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Package</th>
+<th>Used for</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>rayshader</code></td>
+<td>Ray-traced shadows and the 3-D render (also installs <code>rgl</code>, <code>rayvertex</code>, <code>rayimage</code> and <code>rayrender</code>)</td>
+</tr>
+<tr class="even">
+<td><code>terra</code></td>
+<td>The surface as a raster, and its resampling</td>
+</tr>
+<tr class="odd">
+<td><code>png</code></td>
+<td>Reading the render back into R</td>
+</tr>
+<tr class="even">
+<td><code>ggrepel</code></td>
+<td>Site labels</td>
+</tr>
+<tr class="odd">
+<td><code>rnaturalearth</code>, <code>rnaturalearthhires</code></td>
+<td>The land polygons</td>
+</tr>
+</tbody>
+</table>
+<p>The last is not on CRAN; the top of the script has the lines that install them all.</p>
+<p><strong>Time and memory.</strong> The figure took about one minute and 9 GB of memory on an Apple M4 Max laptop. Work small while choosing a view: <code>size = c( 900, 750 )</code> with <code>nx &lt;- 300</code> took 20 seconds and 2.4 GB.</p>
+<p><strong>Complexity.</strong> An oblique view has costs that a map does not: some ground is hidden, distances and angles are foreshortened, and values cannot be read off by position. Use it to show the shape of a surface, and the flat map of <a href="#sec-gravity-map" class="quarto-xref"><span>Section 9.10.2</span></a> to read it.</p>
+</div>
+</div>
+<p>Four things about the picture are not data. The outer walls are where the surface was clipped. The step between the components is meaningless, since <span class="math inline">\(S\)</span> is not comparable across it. The height of the network above the surface is constant, and its arcs only keep it clear of the terrain. And the surface is <em>smoothed</em>: it spans -0.49 to 0.34, where the sites’ own scores span -0.78 to 0.49. Direction comes from each edge and not from the surface, so an arrow may point uphill, as 4 of the 32 edges do here (2 of them also by the sites’ own scores), all with a small <span class="math inline">\(|\Delta|\)</span> (at most 0.13).</p>
 <!-- Shared "Without Pipes" section of the genetic gravity walkthrough (see
      genetic_gravity_body.Rmd).  The vignette includes it after the body; the
      website includes it at the end of docs/genetic-gravity.qmd and follows it
      with the case-study calls. -->
 </section>
-<section id="without-pipes" class="level2" data-number="9.14">
-<h2 data-number="9.14" class="anchored" data-anchor-id="without-pipes"><span class="header-section-number">9.14</span> Without Pipes</h2>
+<section id="without-pipes" class="level2" data-number="9.15">
+<h2 data-number="9.15" class="anchored" data-anchor-id="without-pipes"><span class="header-section-number">9.15</span> Without Pipes</h2>
 <p>The pipelines above are the recommended style. Every call also works with its options passed as arguments, without dplyr; these are the equivalents of the steps above, shown here but not run:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">popgraph</span>( <span class="fu">to_mv</span>( gravity ), <span class="at">groups =</span> gravity<span class="sc">$</span>Population )</span>
@@ -1243,8 +1322,8 @@ Reference
 <!-- Shared closing sections of the genetic gravity walkthrough (see
      genetic_gravity_body.Rmd). -->
 </section>
-<section id="summary" class="level2" data-number="9.15">
-<h2 data-number="9.15" class="anchored" data-anchor-id="summary"><span class="header-section-number">9.15</span> Summary</h2>
+<section id="summary" class="level2" data-number="9.16">
+<h2 data-number="9.16" class="anchored" data-anchor-id="summary"><span class="header-section-number">9.16</span> Summary</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -1309,8 +1388,8 @@ Reference
 </table>
 <p>Use <span class="math inline">\(\gamma = 1/2\)</span> for inferring direction and <span class="math inline">\(\gamma = 1\)</span> for describing connectivity, test within components against an <em>a priori</em> axis, calibrate <span class="math inline">\(\Delta R^2\)</span> for the design, and report the degree share with every directional analysis.</p>
 </section>
-<section id="references" class="level2" data-number="9.16">
-<h2 data-number="9.16" class="anchored" data-anchor-id="references"><span class="header-section-number">9.16</span> References</h2>
+<section id="references" class="level2" data-number="9.17">
+<h2 data-number="9.17" class="anchored" data-anchor-id="references"><span class="header-section-number">9.17</span> References</h2>
 <p>DiLeo MF, Siu JC, Rhodes MK, López-Villalobos A, Redwine A, Ksiazek K, Dyer RJ (2014) The gravity of pollination: integrating at-site features into spatial analysis of contemporary pollen movement. <em>Molecular Ecology</em> <strong>23</strong>. https://doi.org/10.1111/mec.12839</p>
 <p>Dyer RJ (2026) Genetic gravity: extracting directional gene flow from Population Graphs. <em>bioRxiv</em>.</p>
 <p>Dyer RJ, Nason JD (2004) Population Graphs: the graph theoretic shape of genetic structure. <em>Molecular Ecology</em> <strong>13</strong>: 1713–1727.</p>
@@ -1978,8 +2057,8 @@ Reference
 <span id="cb69-184"><a href="#cb69-184" aria-hidden="true" tabindex="-1"></a><span class="fu">#### The cropped raster</span></span>
 <span id="cb69-185"><a href="#cb69-185" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb69-186"><a href="#cb69-186" aria-hidden="true" tabindex="-1"></a>Cropping happens in two steps.  First, the surface of each component fills the</span>
-<span id="cb69-187"><a href="#cb69-187" aria-hidden="true" tabindex="-1"></a>convex hull of its sites plus a margin (<span class="in">`mask = "hull"`</span>, the default for nodes</span>
-<span id="cb69-188"><a href="#cb69-188" aria-hidden="true" tabindex="-1"></a>placed by coordinates; <span class="in">`mask_dist`</span> sets the margin).  A hull drawn around sites</span>
+<span id="cb69-187"><a href="#cb69-187" aria-hidden="true" tabindex="-1"></a>convex hull of its sites plus a margin (<span class="in">`mask = "hull"`</span>, the default;</span>
+<span id="cb69-188"><a href="#cb69-188" aria-hidden="true" tabindex="-1"></a><span class="in">`mask_dist`</span> sets the margin).  A hull drawn around sites</span>
 <span id="cb69-189"><a href="#cb69-189" aria-hidden="true" tabindex="-1"></a>on a narrow peninsula crosses open water, so the second step keeps only the</span>
 <span id="cb69-190"><a href="#cb69-190" aria-hidden="true" tabindex="-1"></a>cells on land.  <span class="in">`gravity_surface()`</span> returns the raster itself, and its <span class="in">`clip`</span></span>
 <span id="cb69-191"><a href="#cb69-191" aria-hidden="true" tabindex="-1"></a>argument takes the land polygons directly; as a data frame the two steps can be</span>
@@ -2028,7 +2107,7 @@ Reference
 <span id="cb69-234"><a href="#cb69-234" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb69-235"><a href="#cb69-235" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb69-236"><a href="#cb69-236" aria-hidden="true" tabindex="-1"></a>The Visualization chapter (@sec-visualization) builds a fuller base map with</span>
-<span id="cb69-237"><a href="#cb69-237" aria-hidden="true" tabindex="-1"></a>labels and a north arrow.</span>
+<span id="cb69-237"><a href="#cb69-237" aria-hidden="true" tabindex="-1"></a>labels and a north arrow, and @sec-gravity-3d renders this surface in relief.</span>
 <span id="cb69-238"><a href="#cb69-238" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb69-239"><a href="#cb69-239" aria-hidden="true" tabindex="-1"></a><span class="fu">### The axis: distance from the refugium</span></span>
 <span id="cb69-240"><a href="#cb69-240" aria-hidden="true" tabindex="-1"></a></span>
@@ -2238,66 +2317,133 @@ Reference
 <span id="cb69-444"><a href="#cb69-444" aria-hidden="true" tabindex="-1"></a>and <span class="in">`simulate_pop()`</span>, and follows the Population Graph and the source-sink</span>
 <span id="cb69-445"><a href="#cb69-445" aria-hidden="true" tabindex="-1"></a>scores through a symmetric burn-in and three forward scenarios.</span>
 <span id="cb69-446"><a href="#cb69-446" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-447"><a href="#cb69-447" aria-hidden="true" tabindex="-1"></a>{{&lt; include ../vignettes/children/genetic_gravity_nopipes.Rmd &gt;}}</span>
+<span id="cb69-447"><a href="#cb69-447" aria-hidden="true" tabindex="-1"></a><span class="fu">## Extending the map: a ray-traced source-sink surface {#sec-gravity-3d}</span></span>
 <span id="cb69-448"><a href="#cb69-448" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-449"><a href="#cb69-449" aria-hidden="true" tabindex="-1"></a>The *Araptus attenuatus* case study, calibration and data-quality steps:</span>
-<span id="cb69-450"><a href="#cb69-450" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-451"><a href="#cb69-451" aria-hidden="true" tabindex="-1"></a><span class="in">```{r no-pipes-arapat}</span></span>
-<span id="cb69-452"><a href="#cb69-452" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb69-453"><a href="#cb69-453" aria-hidden="true" tabindex="-1"></a>peninsula <span class="ot">&lt;-</span> arapat[arapat<span class="sc">$</span>Species <span class="sc">==</span> <span class="st">"Peninsula"</span>, ]</span>
-<span id="cb69-454"><a href="#cb69-454" aria-hidden="true" tabindex="-1"></a>n_site    <span class="ot">&lt;-</span> <span class="fu">table</span>( peninsula<span class="sc">$</span>Population )</span>
-<span id="cb69-455"><a href="#cb69-455" aria-hidden="true" tabindex="-1"></a>peninsula <span class="ot">&lt;-</span> <span class="fu">droplevels</span>( peninsula[peninsula<span class="sc">$</span>Population <span class="sc">%in%</span></span>
-<span id="cb69-456"><a href="#cb69-456" aria-hidden="true" tabindex="-1"></a>                                     <span class="fu">names</span>( n_site )[n_site <span class="sc">&gt;=</span> <span class="dv">4</span>], ] )</span>
-<span id="cb69-457"><a href="#cb69-457" aria-hidden="true" tabindex="-1"></a>beetles   <span class="ot">&lt;-</span> <span class="fu">population_graph</span>( peninsula,</span>
-<span id="cb69-458"><a href="#cb69-458" aria-hidden="true" tabindex="-1"></a>                               <span class="at">stratum =</span> <span class="st">"Population"</span>,</span>
-<span id="cb69-459"><a href="#cb69-459" aria-hidden="true" tabindex="-1"></a>                               <span class="at">decorate =</span> <span class="cn">TRUE</span> )</span>
-<span id="cb69-460"><a href="#cb69-460" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-461"><a href="#cb69-461" aria-hidden="true" tabindex="-1"></a>mapped <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">induced_subgraph</span>(</span>
-<span id="cb69-462"><a href="#cb69-462" aria-hidden="true" tabindex="-1"></a>  beetles,</span>
-<span id="cb69-463"><a href="#cb69-463" aria-hidden="true" tabindex="-1"></a>  <span class="fu">which</span>( parts<span class="sc">$</span>csize[parts<span class="sc">$</span>membership] <span class="sc">&gt;</span> <span class="dv">2</span> )</span>
-<span id="cb69-464"><a href="#cb69-464" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb69-465"><a href="#cb69-465" aria-hidden="true" tabindex="-1"></a>beetle_field <span class="ot">&lt;-</span> <span class="fu">gravity_field</span>( mapped )</span>
-<span id="cb69-466"><a href="#cb69-466" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-467"><a href="#cb69-467" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( beetle_field,                          <span class="co"># with the topology</span></span>
-<span id="cb69-468"><a href="#cb69-468" aria-hidden="true" tabindex="-1"></a>      <span class="at">base =</span> land_map,</span>
-<span id="cb69-469"><a href="#cb69-469" aria-hidden="true" tabindex="-1"></a>      <span class="at">clip_to_base =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb69-470"><a href="#cb69-470" aria-hidden="true" tabindex="-1"></a>      <span class="at">grid_n =</span> <span class="dv">400</span> )</span>
-<span id="cb69-471"><a href="#cb69-471" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( beetle_field,                          <span class="co"># the surface alone</span></span>
-<span id="cb69-472"><a href="#cb69-472" aria-hidden="true" tabindex="-1"></a>      <span class="at">base =</span> land_map,</span>
-<span id="cb69-473"><a href="#cb69-473" aria-hidden="true" tabindex="-1"></a>      <span class="at">clip_to_base =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb69-474"><a href="#cb69-474" aria-hidden="true" tabindex="-1"></a>      <span class="at">grid_n =</span> <span class="dv">400</span>,</span>
-<span id="cb69-475"><a href="#cb69-475" aria-hidden="true" tabindex="-1"></a>      <span class="at">show_graph =</span> <span class="cn">FALSE</span> )</span>
+<span id="cb69-449"><a href="#cb69-449" aria-hidden="true" tabindex="-1"></a>A flat map shows the sign of $S$ by colour, but the shape of the surface, its</span>
+<span id="cb69-450"><a href="#cb69-450" aria-hidden="true" tabindex="-1"></a>ramps, saddles and basins, is easier to see in relief.  <span class="in">`gstudio`</span> does not draw</span>
+<span id="cb69-451"><a href="#cb69-451" aria-hidden="true" tabindex="-1"></a>in three dimensions, and does not need to: <span class="in">`gravity_surface()`</span> returns the</span>
+<span id="cb69-452"><a href="#cb69-452" aria-hidden="true" tabindex="-1"></a>surface and <span class="in">`gravity_field()`</span> the directions, and any renderer can take it from</span>
+<span id="cb69-453"><a href="#cb69-453" aria-hidden="true" tabindex="-1"></a>there.  @fig-gravity-3d does so</span>
+<span id="cb69-454"><a href="#cb69-454" aria-hidden="true" tabindex="-1"></a>with <span class="co">[</span><span class="ot">`rayshader`</span><span class="co">](https://www.rayshader.com)</span> and <span class="in">`ggplot2`</span>, from the same</span>
+<span id="cb69-455"><a href="#cb69-455" aria-hidden="true" tabindex="-1"></a>beetles as @sec-gravity-map.</span>
+<span id="cb69-456"><a href="#cb69-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-457"><a href="#cb69-457" aria-hidden="true" tabindex="-1"></a><span class="al">![Source-sink surface of *Araptus attenuatus* in relief, with the Population Graph floating above it.  Height and colour are the interpolated $S$ (red, source; blue, sink), with contours every 0.05 and a heavier line at $S = 0$.  Arrows point from source to sink, edges are wider for larger $|\Delta|$, and drop lines mark where each site is.](media/gravity-source-sink-3d.png)</span>{#fig-gravity-3d fig-alt="Oblique three-dimensional view of the Baja California peninsula.  The source-sink surface rises in red over the central sites and falls to blue in the south, with a network of labelled sites and arrows above it."}</span>
+<span id="cb69-458"><a href="#cb69-458" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-459"><a href="#cb69-459" aria-hidden="true" tabindex="-1"></a>The code is one documented script,</span>
+<span id="cb69-460"><a href="#cb69-460" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">gravity-rayshader.R</span><span class="co">](media/gravity-rayshader.R)</span>{download="gravity-rayshader.R"}.</span>
+<span id="cb69-461"><a href="#cb69-461" aria-hidden="true" tabindex="-1"></a>It holds everything from the data to the figure, in eight steps:</span>
+<span id="cb69-462"><a href="#cb69-462" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-463"><a href="#cb69-463" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>settings;</span>
+<span id="cb69-464"><a href="#cb69-464" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>the data and the <span class="in">`gravity_field`</span>;</span>
+<span id="cb69-465"><a href="#cb69-465" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>the surface, resampled to cells that are square on the ground, each</span>
+<span id="cb69-466"><a href="#cb69-466" aria-hidden="true" tabindex="-1"></a>   component on its own;</span>
+<span id="cb69-467"><a href="#cb69-467" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>the colours of the map, and a light from the slopes of $S$;</span>
+<span id="cb69-468"><a href="#cb69-468" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>the ray-traced render, without OpenGL;</span>
+<span id="cb69-469"><a href="#cb69-469" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>the camera, fitted so that any point can be placed on the image;</span>
+<span id="cb69-470"><a href="#cb69-470" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>the grid, contours, sites, edges and arrows;</span>
+<span id="cb69-471"><a href="#cb69-471" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span>the figure, with the network drawn by <span class="in">`ggplot2`</span> so it stays sharp.</span>
+<span id="cb69-472"><a href="#cb69-472" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-473"><a href="#cb69-473" aria-hidden="true" tabindex="-1"></a>Run it from a terminal with <span class="in">`Rscript gravity-rayshader.R`</span>, or with <span class="in">`source()`</span></span>
+<span id="cb69-474"><a href="#cb69-474" aria-hidden="true" tabindex="-1"></a>in R; give it a file name ending in <span class="in">`.pdf`</span> to keep the network, contours and</span>
+<span id="cb69-475"><a href="#cb69-475" aria-hidden="true" tabindex="-1"></a>labels as vectors.  To use your own data, replace step 2.</span>
 <span id="cb69-476"><a href="#cb69-476" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-477"><a href="#cb69-477" aria-hidden="true" tabindex="-1"></a><span class="fu">gravity_surface</span>( beetle_field,</span>
-<span id="cb69-478"><a href="#cb69-478" aria-hidden="true" tabindex="-1"></a>                 <span class="at">grid_n =</span> <span class="dv">400</span>,</span>
-<span id="cb69-479"><a href="#cb69-479" aria-hidden="true" tabindex="-1"></a>                 <span class="at">clip =</span> land,</span>
-<span id="cb69-480"><a href="#cb69-480" aria-hidden="true" tabindex="-1"></a>                 <span class="at">output =</span> <span class="st">"raster"</span> )</span>
-<span id="cb69-481"><a href="#cb69-481" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-482"><a href="#cb69-482" aria-hidden="true" tabindex="-1"></a>central      <span class="ot">&lt;-</span> <span class="fu">component_of</span>( <span class="st">"93"</span> )</span>
-<span id="cb69-483"><a href="#cb69-483" aria-hidden="true" tabindex="-1"></a>central_data <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(</span>
-<span id="cb69-484"><a href="#cb69-484" aria-hidden="true" tabindex="-1"></a>  peninsula[peninsula<span class="sc">$</span>Population <span class="sc">%in%</span> igraph<span class="sc">::</span><span class="fu">V</span>( central )<span class="sc">$</span>name, ]</span>
-<span id="cb69-485"><a href="#cb69-485" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb69-486"><a href="#cb69-486" aria-hidden="true" tabindex="-1"></a>dg <span class="ot">&lt;-</span> <span class="fu">popgraph_diagnostics</span>( central_data,</span>
-<span id="cb69-487"><a href="#cb69-487" aria-hidden="true" tabindex="-1"></a>                            <span class="at">stratum =</span> <span class="st">"Population"</span>,</span>
-<span id="cb69-488"><a href="#cb69-488" aria-hidden="true" tabindex="-1"></a>                            <span class="at">graph =</span> central )</span>
-<span id="cb69-489"><a href="#cb69-489" aria-hidden="true" tabindex="-1"></a>warn <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>( dg )</span>
-<span id="cb69-490"><a href="#cb69-490" aria-hidden="true" tabindex="-1"></a>warn[warn<span class="sc">$</span>status <span class="sc">==</span> <span class="st">"warn"</span>, <span class="fu">c</span>( <span class="st">"check"</span>, <span class="st">"value"</span>, <span class="st">"note"</span> )]</span>
-<span id="cb69-491"><a href="#cb69-491" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-492"><a href="#cb69-492" aria-hidden="true" tabindex="-1"></a>calibration <span class="ot">&lt;-</span> <span class="fu">popgraph_null</span>( central_data,</span>
-<span id="cb69-493"><a href="#cb69-493" aria-hidden="true" tabindex="-1"></a>                              <span class="at">stratum =</span> <span class="st">"Population"</span>,</span>
-<span id="cb69-494"><a href="#cb69-494" aria-hidden="true" tabindex="-1"></a>                              <span class="at">axis =</span> dk,</span>
-<span id="cb69-495"><a href="#cb69-495" aria-hidden="true" tabindex="-1"></a>                              <span class="at">distance =</span> sep,</span>
-<span id="cb69-496"><a href="#cb69-496" aria-hidden="true" tabindex="-1"></a>                              <span class="at">forward =</span> fwd,</span>
-<span id="cb69-497"><a href="#cb69-497" aria-hidden="true" tabindex="-1"></a>                              <span class="at">graph =</span> central,</span>
-<span id="cb69-498"><a href="#cb69-498" aria-hidden="true" tabindex="-1"></a>                              <span class="at">nsim =</span> <span class="dv">999</span> )</span>
-<span id="cb69-499"><a href="#cb69-499" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-500"><a href="#cb69-500" aria-hidden="true" tabindex="-1"></a><span class="fu">locus_subsample_null</span>( arapat,</span>
-<span id="cb69-501"><a href="#cb69-501" aria-hidden="true" tabindex="-1"></a>                      <span class="at">stratum =</span> <span class="st">"Population"</span>,</span>
-<span id="cb69-502"><a href="#cb69-502" aria-hidden="true" tabindex="-1"></a>                      <span class="at">k =</span> <span class="fu">c</span>( <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span> ),</span>
-<span id="cb69-503"><a href="#cb69-503" aria-hidden="true" tabindex="-1"></a>                      <span class="at">nsub =</span> <span class="dv">3</span> )</span>
-<span id="cb69-504"><a href="#cb69-504" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb69-505"><a href="#cb69-505" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-506"><a href="#cb69-506" aria-hidden="true" tabindex="-1"></a>{{&lt; include ../vignettes/children/genetic_gravity_summary.Rmd &gt;}}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb69-477"><a href="#cb69-477" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="Before you run it: packages, time and complexity"}</span>
+<span id="cb69-478"><a href="#cb69-478" aria-hidden="true" tabindex="-1"></a>The script is an example and not part of <span class="in">`gstudio`</span>, and it is **not run** when</span>
+<span id="cb69-479"><a href="#cb69-479" aria-hidden="true" tabindex="-1"></a>this book is built; @fig-gravity-3d is a saved image.</span>
+<span id="cb69-480"><a href="#cb69-480" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-481"><a href="#cb69-481" aria-hidden="true" tabindex="-1"></a>**Packages.**  Beyond <span class="in">`gstudio`</span> and the packages it installs, you need:</span>
+<span id="cb69-482"><a href="#cb69-482" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-483"><a href="#cb69-483" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Package <span class="pp">|</span> Used for <span class="pp">|</span></span>
+<span id="cb69-484"><a href="#cb69-484" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb69-485"><a href="#cb69-485" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`rayshader`</span> <span class="pp">|</span> Ray-traced shadows and the 3-D render (also installs <span class="in">`rgl`</span>, <span class="in">`rayvertex`</span>, <span class="in">`rayimage`</span> and <span class="in">`rayrender`</span>) <span class="pp">|</span></span>
+<span id="cb69-486"><a href="#cb69-486" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`terra`</span> <span class="pp">|</span> The surface as a raster, and its resampling <span class="pp">|</span></span>
+<span id="cb69-487"><a href="#cb69-487" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`png`</span> <span class="pp">|</span> Reading the render back into R <span class="pp">|</span></span>
+<span id="cb69-488"><a href="#cb69-488" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ggrepel`</span> <span class="pp">|</span> Site labels <span class="pp">|</span></span>
+<span id="cb69-489"><a href="#cb69-489" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`rnaturalearth`</span>, <span class="in">`rnaturalearthhires`</span> <span class="pp">|</span> The land polygons <span class="pp">|</span></span>
+<span id="cb69-490"><a href="#cb69-490" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-491"><a href="#cb69-491" aria-hidden="true" tabindex="-1"></a>The last is not on CRAN; the top of the script has the lines that install them</span>
+<span id="cb69-492"><a href="#cb69-492" aria-hidden="true" tabindex="-1"></a>all.</span>
+<span id="cb69-493"><a href="#cb69-493" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-494"><a href="#cb69-494" aria-hidden="true" tabindex="-1"></a>**Time and memory.**  The figure took about one minute and 9 GB of memory on</span>
+<span id="cb69-495"><a href="#cb69-495" aria-hidden="true" tabindex="-1"></a>an Apple M4 Max laptop.  Work small while choosing a view:</span>
+<span id="cb69-496"><a href="#cb69-496" aria-hidden="true" tabindex="-1"></a><span class="in">`size = c( 900, 750 )`</span> with <span class="in">`nx &lt;- 300`</span> took 20 seconds and 2.4 GB.</span>
+<span id="cb69-497"><a href="#cb69-497" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-498"><a href="#cb69-498" aria-hidden="true" tabindex="-1"></a>**Complexity.**  An oblique view has costs that a map does not: some ground is</span>
+<span id="cb69-499"><a href="#cb69-499" aria-hidden="true" tabindex="-1"></a>hidden, distances and angles are foreshortened, and values cannot be read off</span>
+<span id="cb69-500"><a href="#cb69-500" aria-hidden="true" tabindex="-1"></a>by position.  Use it to show the shape of a surface, and the flat map of</span>
+<span id="cb69-501"><a href="#cb69-501" aria-hidden="true" tabindex="-1"></a>@sec-gravity-map to read it.</span>
+<span id="cb69-502"><a href="#cb69-502" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb69-503"><a href="#cb69-503" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-504"><a href="#cb69-504" aria-hidden="true" tabindex="-1"></a>Four things about the picture are not data.  The outer walls are where the</span>
+<span id="cb69-505"><a href="#cb69-505" aria-hidden="true" tabindex="-1"></a>surface was clipped.  The step between the components is meaningless, since</span>
+<span id="cb69-506"><a href="#cb69-506" aria-hidden="true" tabindex="-1"></a>$S$ is not comparable across it.  The height of the network above the surface</span>
+<span id="cb69-507"><a href="#cb69-507" aria-hidden="true" tabindex="-1"></a>is constant, and its arcs only keep it clear of the terrain.  And the surface is</span>
+<span id="cb69-508"><a href="#cb69-508" aria-hidden="true" tabindex="-1"></a>*smoothed*: it spans</span>
+<span id="cb69-509"><a href="#cb69-509" aria-hidden="true" tabindex="-1"></a>-0.49 to 0.34, where the sites' own scores span -0.78 to 0.49.  Direction comes</span>
+<span id="cb69-510"><a href="#cb69-510" aria-hidden="true" tabindex="-1"></a>from each edge and not from the surface, so an arrow may point uphill, as 4 of</span>
+<span id="cb69-511"><a href="#cb69-511" aria-hidden="true" tabindex="-1"></a>the 32 edges do here (2 of them also by the sites' own scores), all with a</span>
+<span id="cb69-512"><a href="#cb69-512" aria-hidden="true" tabindex="-1"></a>small $|\Delta|$ (at most 0.13).</span>
+<span id="cb69-513"><a href="#cb69-513" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-514"><a href="#cb69-514" aria-hidden="true" tabindex="-1"></a>{{&lt; include ../vignettes/children/genetic_gravity_nopipes.Rmd &gt;}}</span>
+<span id="cb69-515"><a href="#cb69-515" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-516"><a href="#cb69-516" aria-hidden="true" tabindex="-1"></a>The *Araptus attenuatus* case study, calibration and data-quality steps:</span>
+<span id="cb69-517"><a href="#cb69-517" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-518"><a href="#cb69-518" aria-hidden="true" tabindex="-1"></a><span class="in">```{r no-pipes-arapat}</span></span>
+<span id="cb69-519"><a href="#cb69-519" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb69-520"><a href="#cb69-520" aria-hidden="true" tabindex="-1"></a>peninsula <span class="ot">&lt;-</span> arapat[arapat<span class="sc">$</span>Species <span class="sc">==</span> <span class="st">"Peninsula"</span>, ]</span>
+<span id="cb69-521"><a href="#cb69-521" aria-hidden="true" tabindex="-1"></a>n_site    <span class="ot">&lt;-</span> <span class="fu">table</span>( peninsula<span class="sc">$</span>Population )</span>
+<span id="cb69-522"><a href="#cb69-522" aria-hidden="true" tabindex="-1"></a>peninsula <span class="ot">&lt;-</span> <span class="fu">droplevels</span>( peninsula[peninsula<span class="sc">$</span>Population <span class="sc">%in%</span></span>
+<span id="cb69-523"><a href="#cb69-523" aria-hidden="true" tabindex="-1"></a>                                     <span class="fu">names</span>( n_site )[n_site <span class="sc">&gt;=</span> <span class="dv">4</span>], ] )</span>
+<span id="cb69-524"><a href="#cb69-524" aria-hidden="true" tabindex="-1"></a>beetles   <span class="ot">&lt;-</span> <span class="fu">population_graph</span>( peninsula,</span>
+<span id="cb69-525"><a href="#cb69-525" aria-hidden="true" tabindex="-1"></a>                               <span class="at">stratum =</span> <span class="st">"Population"</span>,</span>
+<span id="cb69-526"><a href="#cb69-526" aria-hidden="true" tabindex="-1"></a>                               <span class="at">decorate =</span> <span class="cn">TRUE</span> )</span>
+<span id="cb69-527"><a href="#cb69-527" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-528"><a href="#cb69-528" aria-hidden="true" tabindex="-1"></a>mapped <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">induced_subgraph</span>(</span>
+<span id="cb69-529"><a href="#cb69-529" aria-hidden="true" tabindex="-1"></a>  beetles,</span>
+<span id="cb69-530"><a href="#cb69-530" aria-hidden="true" tabindex="-1"></a>  <span class="fu">which</span>( parts<span class="sc">$</span>csize[parts<span class="sc">$</span>membership] <span class="sc">&gt;</span> <span class="dv">2</span> )</span>
+<span id="cb69-531"><a href="#cb69-531" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb69-532"><a href="#cb69-532" aria-hidden="true" tabindex="-1"></a>beetle_field <span class="ot">&lt;-</span> <span class="fu">gravity_field</span>( mapped )</span>
+<span id="cb69-533"><a href="#cb69-533" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-534"><a href="#cb69-534" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( beetle_field,                          <span class="co"># with the topology</span></span>
+<span id="cb69-535"><a href="#cb69-535" aria-hidden="true" tabindex="-1"></a>      <span class="at">base =</span> land_map,</span>
+<span id="cb69-536"><a href="#cb69-536" aria-hidden="true" tabindex="-1"></a>      <span class="at">clip_to_base =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb69-537"><a href="#cb69-537" aria-hidden="true" tabindex="-1"></a>      <span class="at">grid_n =</span> <span class="dv">400</span> )</span>
+<span id="cb69-538"><a href="#cb69-538" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( beetle_field,                          <span class="co"># the surface alone</span></span>
+<span id="cb69-539"><a href="#cb69-539" aria-hidden="true" tabindex="-1"></a>      <span class="at">base =</span> land_map,</span>
+<span id="cb69-540"><a href="#cb69-540" aria-hidden="true" tabindex="-1"></a>      <span class="at">clip_to_base =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb69-541"><a href="#cb69-541" aria-hidden="true" tabindex="-1"></a>      <span class="at">grid_n =</span> <span class="dv">400</span>,</span>
+<span id="cb69-542"><a href="#cb69-542" aria-hidden="true" tabindex="-1"></a>      <span class="at">show_graph =</span> <span class="cn">FALSE</span> )</span>
+<span id="cb69-543"><a href="#cb69-543" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-544"><a href="#cb69-544" aria-hidden="true" tabindex="-1"></a><span class="fu">gravity_surface</span>( beetle_field,</span>
+<span id="cb69-545"><a href="#cb69-545" aria-hidden="true" tabindex="-1"></a>                 <span class="at">grid_n =</span> <span class="dv">400</span>,</span>
+<span id="cb69-546"><a href="#cb69-546" aria-hidden="true" tabindex="-1"></a>                 <span class="at">clip =</span> land,</span>
+<span id="cb69-547"><a href="#cb69-547" aria-hidden="true" tabindex="-1"></a>                 <span class="at">output =</span> <span class="st">"raster"</span> )</span>
+<span id="cb69-548"><a href="#cb69-548" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-549"><a href="#cb69-549" aria-hidden="true" tabindex="-1"></a>central      <span class="ot">&lt;-</span> <span class="fu">component_of</span>( <span class="st">"93"</span> )</span>
+<span id="cb69-550"><a href="#cb69-550" aria-hidden="true" tabindex="-1"></a>central_data <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(</span>
+<span id="cb69-551"><a href="#cb69-551" aria-hidden="true" tabindex="-1"></a>  peninsula[peninsula<span class="sc">$</span>Population <span class="sc">%in%</span> igraph<span class="sc">::</span><span class="fu">V</span>( central )<span class="sc">$</span>name, ]</span>
+<span id="cb69-552"><a href="#cb69-552" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb69-553"><a href="#cb69-553" aria-hidden="true" tabindex="-1"></a>dg <span class="ot">&lt;-</span> <span class="fu">popgraph_diagnostics</span>( central_data,</span>
+<span id="cb69-554"><a href="#cb69-554" aria-hidden="true" tabindex="-1"></a>                            <span class="at">stratum =</span> <span class="st">"Population"</span>,</span>
+<span id="cb69-555"><a href="#cb69-555" aria-hidden="true" tabindex="-1"></a>                            <span class="at">graph =</span> central )</span>
+<span id="cb69-556"><a href="#cb69-556" aria-hidden="true" tabindex="-1"></a>warn <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>( dg )</span>
+<span id="cb69-557"><a href="#cb69-557" aria-hidden="true" tabindex="-1"></a>warn[warn<span class="sc">$</span>status <span class="sc">==</span> <span class="st">"warn"</span>, <span class="fu">c</span>( <span class="st">"check"</span>, <span class="st">"value"</span>, <span class="st">"note"</span> )]</span>
+<span id="cb69-558"><a href="#cb69-558" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-559"><a href="#cb69-559" aria-hidden="true" tabindex="-1"></a>calibration <span class="ot">&lt;-</span> <span class="fu">popgraph_null</span>( central_data,</span>
+<span id="cb69-560"><a href="#cb69-560" aria-hidden="true" tabindex="-1"></a>                              <span class="at">stratum =</span> <span class="st">"Population"</span>,</span>
+<span id="cb69-561"><a href="#cb69-561" aria-hidden="true" tabindex="-1"></a>                              <span class="at">axis =</span> dk,</span>
+<span id="cb69-562"><a href="#cb69-562" aria-hidden="true" tabindex="-1"></a>                              <span class="at">distance =</span> sep,</span>
+<span id="cb69-563"><a href="#cb69-563" aria-hidden="true" tabindex="-1"></a>                              <span class="at">forward =</span> fwd,</span>
+<span id="cb69-564"><a href="#cb69-564" aria-hidden="true" tabindex="-1"></a>                              <span class="at">graph =</span> central,</span>
+<span id="cb69-565"><a href="#cb69-565" aria-hidden="true" tabindex="-1"></a>                              <span class="at">nsim =</span> <span class="dv">999</span> )</span>
+<span id="cb69-566"><a href="#cb69-566" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-567"><a href="#cb69-567" aria-hidden="true" tabindex="-1"></a><span class="fu">locus_subsample_null</span>( arapat,</span>
+<span id="cb69-568"><a href="#cb69-568" aria-hidden="true" tabindex="-1"></a>                      <span class="at">stratum =</span> <span class="st">"Population"</span>,</span>
+<span id="cb69-569"><a href="#cb69-569" aria-hidden="true" tabindex="-1"></a>                      <span class="at">k =</span> <span class="fu">c</span>( <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span> ),</span>
+<span id="cb69-570"><a href="#cb69-570" aria-hidden="true" tabindex="-1"></a>                      <span class="at">nsub =</span> <span class="dv">3</span> )</span>
+<span id="cb69-571"><a href="#cb69-571" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb69-572"><a href="#cb69-572" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-573"><a href="#cb69-573" aria-hidden="true" tabindex="-1"></a>{{&lt; include ../vignettes/children/genetic_gravity_summary.Rmd &gt;}}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

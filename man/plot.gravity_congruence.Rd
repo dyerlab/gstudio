@@ -21,7 +21,9 @@
   palette = c("#2166ac", "#b2182b"),
   mask_dist = NULL,
   arrow_scale = 1,
-  grid_n = 140
+  grid_n = 140,
+  mask = c("hull", "nodes"),
+  boundary = TRUE
 )
 }
 \arguments{
@@ -82,16 +84,25 @@ stay opaque.}
 \item{palette}{Two colours, sink then source (default a colour-blind-safe
 blue/red pair).}
 
-\item{mask_dist}{Surface cells farther than this from every node are left
-blank; default 1.2 times the median nearest-neighbour distance between
-nodes (floored at a quarter of the nodes' mean spacing, so near-coincident
-nodes do not blank the surface).}
+\item{mask_dist}{Radius of the disc around each node, and so the margin
+around each hull, beyond which the surface is left blank; default
+1.2 times the median nearest-neighbour distance between nodes (floored at
+a quarter of the nodes' mean spacing, so near-coincident nodes do not
+blank the surface).}
 
 \item{arrow_scale}{Arrow length multiplier (default 1).  The longest arrow
 over all facets is \code{arrow_scale} times the median edge length.}
 
 \item{grid_n}{Surface grid resolution per axis (default 140).  A finer grid
 follows a clipped coastline more closely.}
+
+\item{mask}{Where the surface is drawn.  \code{"hull"} (default) fills the
+convex hull of each group of populations that share a component in both
+graphs, with a margin of \code{mask_dist} around it; \code{"nodes"} draws a
+disc of radius \code{mask_dist} around each node.}
+
+\item{boundary}{Draw a grey line where the surfaces of two such groups meet
+(default \code{TRUE}), since colours on its two sides are not comparable.}
 }
 \value{
 A \code{ggplot} object.
@@ -101,7 +112,9 @@ Maps where two graphs agree about genetic gravity.  The surface is the
 \emph{shared} source-sink score: at each population the mean of the two
 standardized scores (\eqn{S / sd(S)}) when both graphs agree that it is a
 source (red) or a sink (blue), and 0 (white) when they disagree or either
-score is 0.  The shared
+score is 0.  The surface is interpolated, and its convex hull drawn, separately
+for each group of populations that share a component in both graphs, since
+scores are comparable only within such a group.  The shared
 edges are drawn; an arrow on each edge whose gene-flow direction agrees
 points from source to sink, with length proportional to the geometric mean
 of the two \eqn{|\Delta|}, and edges whose directions disagree are overlaid

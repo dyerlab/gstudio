@@ -165,10 +165,50 @@ test_that("the shared surface interpolates each component separately", {
   expect_true(any(gc$nodes$concordance[!q] %in% c("source", "sink")))
   surf <- function(p) p$layers[[which(vapply(p$layers, function(l) inherits(l$geom, "GeomRaster"), logical(1)))]]$data
   for (s in c("interpolate", "voronoi")) {
-    d <- surf(plot(gc, layout = xy, surface = s))
+    d <- surf(plot(gc, layout = xy, surface = s, mask = "nodes"))
     d <- d[!is.na(d$value), ]
     near <- apply(sqrt(outer(d$x, xy[, 1], "-")^2 + outer(d$y, xy[, 2], "-")^2), 1, which.min)
     expect_true(any(q[near]))
     expect_equal(d$value[q[near]], rep(0, sum(q[near])), tolerance = 1e-12)
   }
 })
+
+test_that( "the shared surface fills the hull of each group by default", {
+  gp   <- chain_pair()
+  pair <- igraph::make_full_graph( 2 )
+  igraph::V( pair )$name   <- c( "Q1", "Q2" )
+  igraph::E( pair )$weight <- 1
+  set.seed( 1 )
+  gc <- gravity_congruence( igraph::disjoint_union( gp$g1, pair ),
+                            igraph::disjoint_union( gp$g2, pair ),
+                            nperm = 9 )
+  # The pair beside the hull of the chain, close enough for them to meet.
+  xy <- rbind( xy10, cbind( x = c( 11.5, 11.5 ), y = c( -1, 1 ) ) )
+  rownames( xy ) <- gc$nodes$Stratum
+  layer <- function( p, geom ) {
+    Filter( function( l ) inherits( l$geom, geom ), p$layers )
+  }
+  surf  <- function( p ) layer( p, "GeomRaster" )[[1]]$data
+  r     <- 1
+  p     <- plot( gc, layout = xy, mask_dist = r, grid_n = 60 )
+  d     <- surf( p )
+  pts   <- sf::st_as_sf( d, coords = c( "x", "y" ) )
+  hull  <- function( k ) {
+    sf::st_convex_hull( sf::st_buffer( sf::st_multipoint( xy[k, ] ), r, nQuadSegs = 200 ) )
+  }
+  inside <- lengths( sf::st_intersects( pts, sf::st_sfc( hull( 1:10 ) ) ) ) > 0 |
+    lengths( sf::st_intersects( pts, sf::st_sfc( hull( 11:12 ) ) ) ) > 0
+  expect_equal( !is.na( d$value ), inside )
+  # Each group is interpolated from its own populations: the pair's scores are 0.
+  west <- d$component[which.min( ifelse( is.na( d$value ), Inf, d$x ) )]
+  q    <- which( d$component != west )
+  expect_gt( length( q ), 0 )
+  expect_equal( d$value[q], rep( 0, length( q ) ), tolerance = 1e-12 )
+  # A line marks where the groups meet, and discs are still available.
+  no_line <- plot( gc, layout = xy, mask_dist = r, grid_n = 60, boundary = FALSE )
+  expect_length( layer( p, "GeomPath" ), length( layer( no_line, "GeomPath" ) ) + 1 )
+  discs <- surf( plot( gc, layout = xy, mask_dist = r, grid_n = 60, mask = "nodes" ) )
+  expect_gt( sum( !is.na( d$value ) ), sum( !is.na( discs$value ) ) )
+  expect_error( plot( gc, layout = xy, boundary = NA ), "TRUE or FALSE" )
+  expect_error( plot( gc, layout = xy, mask = "circle" ), "should be one of" )
+} )

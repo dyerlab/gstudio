@@ -57,12 +57,9 @@
 #'   \eqn{\Delta^0}) and cor(\eqn{S}, degree) to each facet label (default
 #'   \code{TRUE}).
 #' @param mask Where the surface is drawn; see \code{\link{gravity_surface}}.
-#'   \code{"hull"} fills the convex hull of each connected component, with a
-#'   margin of \code{mask_dist} around it; \code{"nodes"} draws a disc of radius
-#'   \code{mask_dist} around each node; \code{"auto"} (default) uses
-#'   \code{"hull"} when the nodes are placed by coordinates (vertex attributes,
-#'   or a matrix or data.frame given as \code{layout}) and \code{"nodes"} in
-#'   graph space (a layout name or function).
+#'   \code{"hull"} (default) fills the convex hull of each connected component,
+#'   with a margin of \code{mask_dist} around it; \code{"nodes"} draws a disc of
+#'   radius \code{mask_dist} around each node.
 #' @param mask_dist Radius of the disc around each node, and so the margin
 #'   around each hull, beyond which the surface is left blank; default
 #'   1.2 times the median nearest-neighbour distance between nodes (floored at
@@ -144,7 +141,7 @@ plot.gravity_field <- function(x, y, ...,
                                arrow_scale = 1,
                                min_delta = 0,
                                grid_n = 140,
-                               mask = c("auto", "hull", "nodes"),
+                               mask = c("hull", "nodes"),
                                boundary = TRUE,
                                clip_to_base = FALSE,
                                show_graph = TRUE,
@@ -219,7 +216,7 @@ plot.gravity_field <- function(x, y, ...,
     else clip <- .base_polygons(base)
   }
   underlay <- .gravity_surface(nd, "S", lab, surface, mask_dist, grid_n, alpha,
-                               mask = .resolve_mask(mask, placed$coordinates), clip = clip,
+                               mask = mask, clip = clip,
                                boundary = boundary)
   overlay <- list()
   if (arrows && ga[["arrows"]] > 0) {
@@ -268,7 +265,7 @@ plot.gravity_field <- function(x, y, ...,
 #' @keywords internal
 #' @noRd
 .gravity_surface <- function( nd, value, lab, surface, mask_dist = NULL, grid_n = 140, alpha = 1,
-                              mask = "nodes", clip = NULL, boundary = FALSE ) {
+                              mask = "hull", clip = NULL, boundary = FALSE ) {
   if( surface == "none" ) return( list() )
   surf <- .surface_grid( nd, value, lab, surface, mask_dist, grid_n, mask = mask, clip = clip )
   surf$panel <- factor( surf$panel, lab )

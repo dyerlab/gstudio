@@ -184,8 +184,8 @@ whole (`graph_alpha = 0.35`) or by part
 #### The cropped raster
 
 Cropping happens in two steps.  First, the surface of each component fills the
-convex hull of its sites plus a margin (`mask = "hull"`, the default for nodes
-placed by coordinates; `mask_dist` sets the margin).  A hull drawn around sites
+convex hull of its sites plus a margin (`mask = "hull"`, the default;
+`mask_dist` sets the margin).  A hull drawn around sites
 on a narrow peninsula crosses open water, so the second step keeps only the
 cells on land.  `gravity_surface()` returns the raster itself, and its `clip`
 argument takes the land polygons directly; as a data frame the two steps can be
@@ -234,7 +234,7 @@ terra::writeRaster( S_land, "arapat_S.tif" )
 ```
 
 The Visualization chapter (@sec-visualization) builds a fuller base map with
-labels and a north arrow.
+labels and a north arrow, and @sec-gravity-3d renders this surface in relief.
 
 ### The axis: distance from the refugium
 
@@ -443,6 +443,73 @@ stepping stone.  @sec-simulation builds that simulation from scratch with
 `make_populations()`, `migration_matrix( model = "stepping_stone_1d_asym" )`
 and `simulate_pop()`, and follows the Population Graph and the source-sink
 scores through a symmetric burn-in and three forward scenarios.
+
+## Extending the map: a ray-traced source-sink surface {#sec-gravity-3d}
+
+A flat map shows the sign of $S$ by colour, but the shape of the surface, its
+ramps, saddles and basins, is easier to see in relief.  `gstudio` does not draw
+in three dimensions, and does not need to: `gravity_surface()` returns the
+surface and `gravity_field()` the directions, and any renderer can take it from
+there.  @fig-gravity-3d does so
+with [`rayshader`](https://www.rayshader.com) and `ggplot2`, from the same
+beetles as @sec-gravity-map.
+
+![Source-sink surface of *Araptus attenuatus* in relief, with the Population Graph floating above it.  Height and colour are the interpolated $S$ (red, source; blue, sink), with contours every 0.05 and a heavier line at $S = 0$.  Arrows point from source to sink, edges are wider for larger $|\Delta|$, and drop lines mark where each site is.](media/gravity-source-sink-3d.png){#fig-gravity-3d fig-alt="Oblique three-dimensional view of the Baja California peninsula.  The source-sink surface rises in red over the central sites and falls to blue in the south, with a network of labelled sites and arrows above it."}
+
+The code is one documented script,
+[gravity-rayshader.R](media/gravity-rayshader.R){download="gravity-rayshader.R"}.
+It holds everything from the data to the figure, in eight steps:
+
+1. settings;
+2. the data and the `gravity_field`;
+3. the surface, resampled to cells that are square on the ground, each
+   component on its own;
+4. the colours of the map, and a light from the slopes of $S$;
+5. the ray-traced render, without OpenGL;
+6. the camera, fitted so that any point can be placed on the image;
+7. the grid, contours, sites, edges and arrows;
+8. the figure, with the network drawn by `ggplot2` so it stays sharp.
+
+Run it from a terminal with `Rscript gravity-rayshader.R`, or with `source()`
+in R; give it a file name ending in `.pdf` to keep the network, contours and
+labels as vectors.  To use your own data, replace step 2.
+
+::: {.callout-warning title="Before you run it: packages, time and complexity"}
+The script is an example and not part of `gstudio`, and it is **not run** when
+this book is built; @fig-gravity-3d is a saved image.
+
+**Packages.**  Beyond `gstudio` and the packages it installs, you need:
+
+| Package | Used for |
+|---|---|
+| `rayshader` | Ray-traced shadows and the 3-D render (also installs `rgl`, `rayvertex`, `rayimage` and `rayrender`) |
+| `terra` | The surface as a raster, and its resampling |
+| `png` | Reading the render back into R |
+| `ggrepel` | Site labels |
+| `rnaturalearth`, `rnaturalearthhires` | The land polygons |
+
+The last is not on CRAN; the top of the script has the lines that install them
+all.
+
+**Time and memory.**  The figure took about one minute and 9 GB of memory on
+an Apple M4 Max laptop.  Work small while choosing a view:
+`size = c( 900, 750 )` with `nx <- 300` took 20 seconds and 2.4 GB.
+
+**Complexity.**  An oblique view has costs that a map does not: some ground is
+hidden, distances and angles are foreshortened, and values cannot be read off
+by position.  Use it to show the shape of a surface, and the flat map of
+@sec-gravity-map to read it.
+:::
+
+Four things about the picture are not data.  The outer walls are where the
+surface was clipped.  The step between the components is meaningless, since
+$S$ is not comparable across it.  The height of the network above the surface
+is constant, and its arcs only keep it clear of the terrain.  And the surface is
+*smoothed*: it spans
+-0.49 to 0.34, where the sites' own scores span -0.78 to 0.49.  Direction comes
+from each edge and not from the surface, so an arrow may point uphill, as 4 of
+the 32 edges do here (2 of them also by the sites' own scores), all with a
+small $|\Delta|$ (at most 0.13).
 
 {{< include ../vignettes/children/genetic_gravity_nopipes.Rmd >}}
 

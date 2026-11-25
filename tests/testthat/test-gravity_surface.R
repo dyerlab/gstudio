@@ -61,13 +61,23 @@ test_that( "the hull is the convex hull of the discs around the nodes", {
   expect_equal( !is.na( n$S ), lengths( sf::st_intersects( pts, discs ) ) > 0 )
 } )
 
-test_that( "mask = 'auto' is hulls by coordinates and discs in graph space", {
+test_that( "the default mask is hulls, by coordinates and in graph space", {
   f <- surface_field()
   expect_equal( gravity_surface( f ), gravity_surface( f, mask = "hull" ) )
-  expect_equal( gravity_surface( f, layout = "kk" ),
-                gravity_surface( f, layout = "kk", mask = "nodes" ) )
-  expect_false( isTRUE( all.equal( gravity_surface( f, layout = "kk" ),
-                                   gravity_surface( f, layout = "kk", mask = "hull" ) ) ) )
+  kk <- gravity_surface( f, layout = "kk" )
+  expect_equal( kk, gravity_surface( f, layout = "kk", mask = "hull" ) )
+  discs <- gravity_surface( f, layout = "kk", mask = "nodes" )
+  expect_true( all( is.na( discs$S ) | !is.na( kk$S ) ) )
+  expect_gt( sum( !is.na( kk$S ) ), sum( !is.na( discs$S ) ) )
+} )
+
+test_that( "a graph-space surface is the same hull with and without the topology", {
+  f  <- surface_field()
+  kk <- gravity_surface( f, layout = "kk", grid_n = 40 )
+  for( show in c( TRUE, FALSE ) ) {
+    d <- plotted_surface( plot( f, layout = "kk", grid_n = 40, show_graph = show ) )
+    expect_equal( d$value, kk$S )
+  }
 } )
 
 test_that( "a component keeps the whole of its own hull", {

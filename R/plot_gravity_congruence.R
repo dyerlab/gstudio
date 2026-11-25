@@ -5,7 +5,9 @@
 #' \emph{shared} source-sink score: at each population the mean of the two
 #' standardized scores (\eqn{S / sd(S)}) when both graphs agree that it is a
 #' source (red) or a sink (blue), and 0 (white) when they disagree or either
-#' score is 0.  The shared
+#' score is 0.  The surface is interpolated, and its convex hull drawn, separately
+#' for each group of populations that share a component in both graphs, since
+#' scores are comparable only within such a group.  The shared
 #' edges are drawn; an arrow on each edge whose gene-flow direction agrees
 #' points from source to sink, with length proportional to the geometric mean
 #' of the two \eqn{|\Delta|}, and edges whose directions disagree are overlaid
@@ -33,10 +35,12 @@
 #'   the mean of the two graphs' weights.
 #' @param arrows Draw arrows on concordant edges and dashes on discordant ones
 #'   (default \code{TRUE}).
-#' @param mask_dist Surface cells farther than this from every node are left
-#'   blank; default 1.2 times the median nearest-neighbour distance between
-#'   nodes (floored at a quarter of the nodes' mean spacing, so near-coincident
-#'   nodes do not blank the surface).
+#' @param mask Where the surface is drawn.  \code{"hull"} (default) fills the
+#'   convex hull of each group of populations that share a component in both
+#'   graphs, with a margin of \code{mask_dist} around it; \code{"nodes"} draws a
+#'   disc of radius \code{mask_dist} around each node.
+#' @param boundary Draw a grey line where the surfaces of two such groups meet
+#'   (default \code{TRUE}), since colours on its two sides are not comparable.
 #' @return A \code{ggplot} object.
 #' @seealso \code{\link{gravity_congruence}}, \code{\link{plot.gravity_field}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
@@ -57,9 +61,15 @@ plot.gravity_congruence <- function(x, y, ...,
                                     palette = c("#2166ac", "#b2182b"),
                                     mask_dist = NULL,
                                     arrow_scale = 1,
-                                    grid_n = 140) {
+                                    grid_n = 140,
+                                    mask = c("hull", "nodes"),
+                                    boundary = TRUE) {
   chkDots(...)
   .check_base(base)
+  mask <- match.arg(mask)
+  if (!is.logical(boundary) || length(boundary) != 1 || is.na(boundary))
+    stop("'boundary' must be TRUE or FALSE.")
+  .check_surface_grid(grid_n, mask_dist)
   if (!is.numeric(alpha) || length(alpha) != 1 || is.na(alpha) || alpha < 0 || alpha > 1)
     stop("'alpha' must be a single number between 0 and 1.")
   if (!is.numeric(node_size)) node_size <- match.arg(node_size)
@@ -114,7 +124,8 @@ plot.gravity_congruence <- function(x, y, ...,
   seg$weight <- (e$weight.1 + e$weight.2) / 2
   seg$panel <- ""
 
-  underlay <- .gravity_surface(nd, "shared", "", surface, mask_dist, grid_n, alpha)
+  underlay <- .gravity_surface(nd, "shared", "", surface, mask_dist, grid_n, alpha,
+                               mask = mask, boundary = boundary)
   overlay <- list()
   edge_keys <- c("Concordant (source \u2192 sink)", "Discordant")
   if (arrows && nrow(e)) {

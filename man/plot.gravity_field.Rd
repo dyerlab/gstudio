@@ -24,7 +24,7 @@
   arrow_scale = 1,
   min_delta = 0,
   grid_n = 140,
-  mask = c("auto", "hull", "nodes"),
+  mask = c("hull", "nodes"),
   boundary = TRUE,
   clip_to_base = FALSE,
   show_graph = TRUE,
@@ -115,12 +115,9 @@ all \eqn{|\Delta|} (default 0, show all).}
 follows a clipped coastline more closely.}
 
 \item{mask}{Where the surface is drawn; see \code{\link{gravity_surface}}.
-\code{"hull"} fills the convex hull of each connected component, with a
-margin of \code{mask_dist} around it; \code{"nodes"} draws a disc of radius
-\code{mask_dist} around each node; \code{"auto"} (default) uses
-\code{"hull"} when the nodes are placed by coordinates (vertex attributes,
-or a matrix or data.frame given as \code{layout}) and \code{"nodes"} in
-graph space (a layout name or function).}
+\code{"hull"} (default) fills the convex hull of each connected component,
+with a margin of \code{mask_dist} around it; \code{"nodes"} draws a disc of
+radius \code{mask_dist} around each node.}
 
 \item{boundary}{Draw a grey line where the surfaces of two connected components
 meet (default \code{TRUE}).  \eqn{S} is comparable only within a component,
