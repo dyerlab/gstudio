@@ -383,6 +383,12 @@ test_that("the S surface interpolates each component separately", {
   for (s in c("interpolate", "voronoi")) {
     d <- surf(plot(f, layout = xy, surface = s))
     d <- d[!is.na(d$value), ]
+    two <- d$component == 2                  # the two-node component
+    expect_true(any(two))
+    expect_equal(d$value[two], rep(0, sum(two)), tolerance = 1e-12)
+    # around discs, a cell belongs to the component of its nearest node
+    d <- surf(plot(f, layout = xy, surface = s, mask = "nodes"))
+    d <- d[!is.na(d$value), ]
     near <- apply(sqrt(outer(d$x, xy[, 1], "-")^2 + outer(d$y, xy[, 2], "-")^2), 1, which.min)
     expect_true(any(q[near]))
     expect_equal(d$value[q[near]], rep(0, sum(q[near])), tolerance = 1e-12)
@@ -397,7 +403,7 @@ test_that("plot.gravity_field masks the surface to the component hull or to the 
   f <- gravity_field(g)
   surf <- function(p) p$layers[[which(vapply(p$layers, function(l) inherits(l$geom, "GeomRaster"), logical(1)))]]$data
   centre <- function(d) d$value[which.min(d$x^2 + d$y^2)]
-  d_hull <- surf(plot(f, layout = xy))                       # mask = "hull" is the default
+  d_hull <- surf(plot(f, layout = xy))                       # hull: placed by coordinates
   d_node <- surf(plot(f, layout = xy, mask = "nodes"))
   expect_false(is.na(centre(d_hull)))
   expect_true(is.na(centre(d_node)))

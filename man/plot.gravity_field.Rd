@@ -24,7 +24,8 @@
   arrow_scale = 1,
   min_delta = 0,
   grid_n = 140,
-  mask = c("hull", "nodes"),
+  mask = c("auto", "hull", "nodes"),
+  boundary = TRUE,
   clip_to_base = FALSE,
   show_graph = TRUE,
   graph_alpha = 1
@@ -98,8 +99,8 @@ blue/red pair).}
 \eqn{\Delta^0}) and cor(\eqn{S}, degree) to each facet label (default
 \code{TRUE}).}
 
-\item{mask_dist}{Buffer around the hull (\code{mask = "hull"}) or the nodes
-(\code{mask = "nodes"}) beyond which surface cells are left blank; default
+\item{mask_dist}{Radius of the disc around each node, and so the margin
+around each hull, beyond which the surface is left blank; default
 1.2 times the median nearest-neighbour distance between nodes (floored at
 a quarter of the nodes' mean spacing, so near-coincident nodes do not
 blank the surface).}
@@ -110,13 +111,20 @@ over all facets is \code{arrow_scale} times the median edge length.}
 \item{min_delta}{Hide arrows whose \eqn{|\Delta|} is below this quantile of
 all \eqn{|\Delta|} (default 0, show all).}
 
-\item{grid_n}{Surface grid resolution per axis (default 140).}
+\item{grid_n}{Surface grid resolution per axis (default 140).  A finer grid
+follows a clipped coastline more closely.}
 
-\item{mask}{Where the surface is drawn.  \code{"hull"} (default) keeps
-cells inside the convex hull of each connected component's nodes, or
-within \code{mask_dist} of it; \code{"nodes"} keeps only cells within
-\code{mask_dist} of a node (a disc around each node, the behaviour before
-this option).}
+\item{mask}{Where the surface is drawn; see \code{\link{gravity_surface}}.
+\code{"hull"} fills the convex hull of each connected component, with a
+margin of \code{mask_dist} around it; \code{"nodes"} draws a disc of radius
+\code{mask_dist} around each node; \code{"auto"} (default) uses
+\code{"hull"} when the nodes are placed by coordinates (vertex attributes,
+or a matrix or data.frame given as \code{layout}) and \code{"nodes"} in
+graph space (a layout name or function).}
+
+\item{boundary}{Draw a grey line where the surfaces of two connected components
+meet (default \code{TRUE}).  \eqn{S} is comparable only within a component,
+so colours on the two sides of the line are not comparable.}
 
 \item{clip_to_base}{With a \code{base} map, also blank the surface outside
 the base plot's polygons (its \code{geom_polygon()} and \code{geom_sf()}
@@ -156,6 +164,25 @@ Uses the same plotting backend as \code{\link{plot.popgraph}}, so
 \code{edges} and \code{edge_width} work the same way; the remaining arguments
 are specific to gravity fields.
 }
+\section{With and without the topology}{
+
+By default the graph is drawn over the surface.  \code{show_graph = FALSE}
+draws the surface alone, with the same contours, component boundaries and
+colour scale, so the two versions can be shown side by side;
+\code{graph_alpha} gives the steps in between.
+}
+
+\section{Cropping the surface}{
+
+The surface is first limited by \code{mask} and \code{mask_dist}.  With a
+\code{base} map, \code{clip_to_base = TRUE} then blanks the cells outside
+the map's polygons, so that a surface over land leaves the water empty.  The
+cells are tested at their centres, so raise \code{grid_n} (e.g. 400) to
+follow a coastline closely.
+\code{\link{gravity_surface}} gives the same cropped surface as a table or
+raster, with the polygons given as \code{clip}.
+}
+
 \examples{
 library(igraph)
 set.seed(4)
@@ -169,9 +196,23 @@ f <- gravity_field(list(`local mean` = g, `degree-neutral` = g), gamma = c(1, 0.
 plot(f, layout = xy)
 plot(f, layout = xy, show_graph = FALSE)       # the surface alone
 plot(f, layout = xy, graph_alpha = c(nodes = 0.5, edges = 0.2, arrows = 0))
+
+# On a map, with the surface cropped to land: with and without the topology
+library( ggplot2 )
+V( g )$Longitude <- seq( -114, -110, length.out = K )
+V( g )$Latitude  <- seq( 29, 24, length.out = K ) + 0.3 * sin( 1:K )
+coast <- data.frame( x = c( -115, -113.4, -109.3, -110.3 ),
+                     y = c( 29.5, 29.7, 23.9, 23.2 ) )
+land <- ggplot() +
+  geom_polygon( aes( x, y ), data = coast, fill = "grey85" ) +
+  coord_quickmap()
+field <- gravity_field( g )
+plot( field, base = land, clip_to_base = TRUE )
+plot( field, base = land, clip_to_base = TRUE, show_graph = FALSE )
 }
 \seealso{
-\code{\link{gravity_field}}, \code{\link{plot.popgraph}},
+\code{\link{gravity_surface}} for the surface as a table or raster,
+  \code{\link{gravity_field}}, \code{\link{plot.popgraph}},
   \code{\link{source_sink_scores}}
 }
 \author{

@@ -14,6 +14,21 @@
 #' \code{edges} and \code{edge_width} work the same way; the remaining arguments
 #' are specific to gravity fields.
 #'
+#' @section With and without the topology:
+#' By default the graph is drawn over the surface.  \code{show_graph = FALSE}
+#' draws the surface alone, with the same contours, component boundaries and
+#' colour scale, so the two versions can be shown side by side;
+#' \code{graph_alpha} gives the steps in between.
+#'
+#' @section Cropping the surface:
+#' The surface is first limited by \code{mask} and \code{mask_dist}.  With a
+#' \code{base} map, \code{clip_to_base = TRUE} then blanks the cells outside
+#' the map's polygons, so that a surface over land leaves the water empty.  The
+#' cells are tested at their centres, so raise \code{grid_n} (e.g. 400) to
+#' follow a coastline closely.
+#' \code{\link{gravity_surface}} gives the same cropped surface as a table or
+#' raster, with the polygons given as \code{clip}.
+#'
 #' @inheritParams plot.popgraph
 #' @param x A \code{\link{gravity_field}}.
 #' @param layout How to place the nodes; see \code{\link{plot.popgraph}}.  Named
@@ -41,16 +56,21 @@
 #' @param subtitle_stats Add the degree share (\eqn{R^2} of \eqn{\Delta} on
 #'   \eqn{\Delta^0}) and cor(\eqn{S}, degree) to each facet label (default
 #'   \code{TRUE}).
-#' @param mask Where the surface is drawn.  \code{"hull"} (default) keeps
-#'   cells inside the convex hull of each connected component's nodes, or
-#'   within \code{mask_dist} of it; \code{"nodes"} keeps only cells within
-#'   \code{mask_dist} of a node (a disc around each node, the behaviour before
-#'   this option).
-#' @param mask_dist Buffer around the hull (\code{mask = "hull"}) or the nodes
-#'   (\code{mask = "nodes"}) beyond which surface cells are left blank; default
+#' @param mask Where the surface is drawn; see \code{\link{gravity_surface}}.
+#'   \code{"hull"} fills the convex hull of each connected component, with a
+#'   margin of \code{mask_dist} around it; \code{"nodes"} draws a disc of radius
+#'   \code{mask_dist} around each node; \code{"auto"} (default) uses
+#'   \code{"hull"} when the nodes are placed by coordinates (vertex attributes,
+#'   or a matrix or data.frame given as \code{layout}) and \code{"nodes"} in
+#'   graph space (a layout name or function).
+#' @param mask_dist Radius of the disc around each node, and so the margin
+#'   around each hull, beyond which the surface is left blank; default
 #'   1.2 times the median nearest-neighbour distance between nodes (floored at
 #'   a quarter of the nodes' mean spacing, so near-coincident nodes do not
 #'   blank the surface).
+#' @param boundary Draw a grey line where the surfaces of two connected components
+#'   meet (default \code{TRUE}).  \eqn{S} is comparable only within a component,
+#'   so colours on the two sides of the line are not comparable.
 #' @param clip_to_base With a \code{base} map, also blank the surface outside
 #'   the base plot's polygons (its \code{geom_polygon()} and \code{geom_sf()}
 #'   layers), so that, for example, a surface over land does not spill into the
@@ -73,9 +93,11 @@
 #'   over all facets is \code{arrow_scale} times the median edge length.
 #' @param min_delta Hide arrows whose \eqn{|\Delta|} is below this quantile of
 #'   all \eqn{|\Delta|} (default 0, show all).
-#' @param grid_n Surface grid resolution per axis (default 140).
+#' @param grid_n Surface grid resolution per axis (default 140).  A finer grid
+#'   follows a clipped coastline more closely.
 #' @return A \code{ggplot} object.
-#' @seealso \code{\link{gravity_field}}, \code{\link{plot.popgraph}},
+#' @seealso \code{\link{gravity_surface}} for the surface as a table or raster,
+#'   \code{\link{gravity_field}}, \code{\link{plot.popgraph}},
 #'   \code{\link{source_sink_scores}}
 #' @author Rodney J. Dyer \email{rjdyer@@vcu.edu}
 #' @examples
@@ -91,6 +113,19 @@
 #' plot(f, layout = xy)
 #' plot(f, layout = xy, show_graph = FALSE)       # the surface alone
 #' plot(f, layout = xy, graph_alpha = c(nodes = 0.5, edges = 0.2, arrows = 0))
+#'
+#' # On a map, with the surface cropped to land: with and without the topology
+#' library( ggplot2 )
+#' V( g )$Longitude <- seq( -114, -110, length.out = K )
+#' V( g )$Latitude  <- seq( 29, 24, length.out = K ) + 0.3 * sin( 1:K )
+#' coast <- data.frame( x = c( -115, -113.4, -109.3, -110.3 ),
+#'                      y = c( 29.5, 29.7, 23.9, 23.2 ) )
+#' land <- ggplot() +
+#'   geom_polygon( aes( x, y ), data = coast, fill = "grey85" ) +
+#'   coord_quickmap()
+#' field <- gravity_field( g )
+#' plot( field, base = land, clip_to_base = TRUE )
+#' plot( field, base = land, clip_to_base = TRUE, show_graph = FALSE )
 #' @export
 plot.gravity_field <- function(x, y, ...,
                                layout = NULL,
@@ -109,7 +144,8 @@ plot.gravity_field <- function(x, y, ...,
                                arrow_scale = 1,
                                min_delta = 0,
                                grid_n = 140,
-                               mask = c("hull", "nodes"),
+                               mask = c("auto", "hull", "nodes"),
+                               boundary = TRUE,
                                clip_to_base = FALSE,
                                show_graph = TRUE,
                                graph_alpha = 1) {
@@ -118,12 +154,15 @@ plot.gravity_field <- function(x, y, ...,
   mask <- match.arg(mask)
   if (!is.logical(clip_to_base) || length(clip_to_base) != 1 || is.na(clip_to_base))
     stop("'clip_to_base' must be TRUE or FALSE.")
+  if (!is.logical(boundary) || length(boundary) != 1 || is.na(boundary))
+    stop("'boundary' must be TRUE or FALSE.")
   if (!is.logical(show_graph) || length(show_graph) != 1 || is.na(show_graph))
     stop("'show_graph' must be TRUE or FALSE.")
   ga <- .graph_alpha(graph_alpha)
   if (!show_graph) ga[] <- 0
   if (!is.numeric(alpha) || length(alpha) != 1 || is.na(alpha) || alpha < 0 || alpha > 1)
     stop("'alpha' must be a single number between 0 and 1.")
+  .check_surface_grid(grid_n, mask_dist)
   if (!is.numeric(node_size)) node_size <- match.arg(node_size)
   node_labels <- match.arg(node_labels)
   edge_width  <- match.arg(edge_width)
@@ -142,18 +181,11 @@ plot.gravity_field <- function(x, y, ...,
   } else diag$panel
   lab <- make.unique(lab, sep = " ")
 
-  # One layout for all panels when they share their populations.
-  coords_for <- function(p) {
-    .graph_layout(p$graph, layout, layout_graph = dcgd(p$graph, gamma = p$diagnostics$gamma, output = "graph"),
-                  nodes = p$nodes$Stratum)
-  }
-  same_nodes <- all(vapply(parts, function(p) setequal(p$nodes$Stratum, parts[[1]]$nodes$Stratum), logical(1)))
-  shared <- if (same_nodes) coords_for(parts[[1]]) else NULL
-  geo <- list(); nd <- list(); ed <- list(); seg <- list()
+  placed <- .field_layouts(parts, layout)
+  nd <- list(); ed <- list(); seg <- list()
   for (i in seq_along(parts)) {
     p  <- parts[[i]]
-    xy <- if (same_nodes) shared[p$nodes$Stratum, , drop = FALSE] else coords_for(p)
-    geo[[i]] <- identical(attr(if (same_nodes) shared else xy, "source"), "geographic")
+    xy <- placed$xy[[i]]
     # Only the computed columns: decorations (e.g. a 'fill' or 'alpha' vertex
     # attribute) must not reach the plotting canvas.
     n <- p$nodes[c("panel", "Stratum", "degree", "size", "S", "gravity")]
@@ -161,7 +193,7 @@ plot.gravity_field <- function(x, y, ...,
     n$alpha <- ga[["nodes"]]; n$label_alpha <- ga[["labels"]]
     n$x <- xy[n$node, 1]; n$y <- xy[n$node, 2]; n$panel <- lab[i]
     # S is centred within each component, so the surface interpolates them apart.
-    n$component <- igraph::components(p$graph)$membership[match(n$node, igraph::V(p$graph)$name)]
+    n$component <- .node_component(p)
     # gravity_field() fills 'size' with degree when the graph has no size
     # attribute; mark it missing so node_size = "size" reports the fallback.
     if (!"size" %in% igraph::vertex_attr_names(p$graph)) n$size <- NA_real_
@@ -183,10 +215,12 @@ plot.gravity_field <- function(x, y, ...,
   clip <- NULL
   if (clip_to_base) {
     if (is.null(base)) warning("'clip_to_base' needs a 'base' plot; the surface is not clipped.")
-    else if (!all(unlist(geo))) warning("'clip_to_base' needs a geographic layout; the surface is not clipped.")
+    else if (!placed$geographic) warning("'clip_to_base' needs a geographic layout; the surface is not clipped.")
     else clip <- .base_polygons(base)
   }
-  underlay <- .gravity_surface(nd, "S", lab, surface, mask_dist, grid_n, alpha, mask = mask, clip = clip)
+  underlay <- .gravity_surface(nd, "S", lab, surface, mask_dist, grid_n, alpha,
+                               mask = .resolve_mask(mask, placed$coordinates), clip = clip,
+                               boundary = boundary)
   overlay <- list()
   if (arrows && ga[["arrows"]] > 0) {
     a <- ed[abs(ed$delta) > 1e-6, ]
@@ -197,7 +231,7 @@ plot.gravity_field <- function(x, y, ...,
 
   p <- .graph_canvas(nd, seg, node_size = node_size, node_labels = node_labels,
                      node_fill = node_fill, edges = edges && ga[["edges"]] > 0, edge_width = edge_width,
-                     geographic = all(unlist(geo)), underlay = underlay, overlay = overlay,
+                     geographic = placed$geographic, underlay = underlay, overlay = overlay,
                      base = base, show_nodes = ga[["nodes"]] > 0, edge_alpha = 0.7 * ga[["edges"]],
                      show_labels = ga[["labels"]] > 0)
   p + ggplot2::scale_fill_gradient2(low = palette[1], mid = "#f7f7f7", high = palette[2], midpoint = 0,
@@ -228,65 +262,67 @@ plot.gravity_field <- function(x, y, ...,
 }
 
 
-# Interpolated (or Voronoi) surface of nd[[value]] over the node positions,
-# one per panel, as underlay layers on the fill aesthetic.  With a
-# 'component' column, each grid cell belongs to its nearest node's component
-# and is interpolated from that component's nodes only.  mask = "nodes" keeps
-# cells within mask_dist of a node; "hull" keeps cells within mask_dist of the
-# convex hull of a component (all nodes when there is no 'component' column).
-# 'clip' (from .base_polygons()) further keeps only cells inside its rings.
+# The surface of nd[[value]] (see .surface_grid()) as underlay layers on the
+# fill aesthetic.  Contours are drawn within each component, so none piles up
+# where the surfaces of two components meet.
 #' @keywords internal
 #' @noRd
-.gravity_surface <- function(nd, value, lab, surface, mask_dist = NULL, grid_n = 140, alpha = 1,
-                             mask = "nodes", clip = NULL) {
-  if (surface == "none") return(list())
-  xy1 <- nd[nd$panel == lab[1], c("x", "y")]
-  dmat <- as.matrix(stats::dist(xy1)); diag(dmat) <- Inf
-  nn <- stats::median(apply(dmat, 1, min))
-  # Near-coincident nodes shrink the median nearest-neighbour distance toward
-  # zero, which would mask almost the whole surface; floor it at a quarter of
-  # the mean spacing of the nodes over their bounding box.
-  box <- diff(range(xy1$x)) * diff(range(xy1$y))
-  nn <- max(nn, 0.25 * sqrt(box / nrow(xy1)), 1e-9)
-  if (is.null(mask_dist)) mask_dist <- 1.2 * nn
-
-  rx <- range(nd$x); ry <- range(nd$y); pad <- 0.12 * max(diff(rx), diff(ry), 1e-9)
-  gx <- seq(rx[1] - pad, rx[2] + pad, length.out = grid_n)
-  gy <- seq(ry[1] - pad, ry[2] + pad, length.out = grid_n)
-  gr <- expand.grid(x = gx, y = gy)
-  inside_clip <- if (is.null(clip)) TRUE else .in_rings(gr$x, gr$y, clip)
-  surf <- do.call(rbind, lapply(lab, function(l) {
-    n <- nd[nd$panel == l, ]
-    d <- sqrt(outer(gr$x, n$x, "-")^2 + outer(gr$y, n$y, "-")^2)
-    near <- apply(d, 1, which.min)
-    dmin <- d[cbind(seq_len(nrow(d)), near)]
-    v <- if (surface == "voronoi") {
-      n[[value]][near]
-    } else {
-      h <- pmax(nn * 1.2, 1e-6)
-      # Weights relative to the nearest node, so cells far from every node
-      # (inside a large hull) do not underflow to zero.
-      w <- exp(-0.5 * (d^2 - dmin^2) / h^2)
-      if (!is.null(n$component)) w <- w * outer(n$component[near], n$component, "==")
-      as.numeric((w %*% n[[value]]) / pmax(rowSums(w), 1e-9))
-    }
-    far <- if (mask == "hull") {
-      comp <- if (is.null(n$component)) rep(1L, nrow(n)) else n$component
-      dh <- do.call(pmin, lapply(split(seq_len(nrow(n)), comp), function(k)
-        .hull_distance(gr$x, gr$y, n$x[k], n$y[k])))
-      dh > mask_dist
-    } else dmin > mask_dist
-    v[far | !inside_clip] <- NA
-    data.frame(gr, value = v, panel = l)
-  }))
-  surf$panel <- factor(surf$panel, lab)
-  out <- list(ggplot2::geom_raster(data = surf, ggplot2::aes(.data$x, .data$y, fill = .data$value),
-                                   interpolate = TRUE, na.rm = TRUE, alpha = alpha, inherit.aes = FALSE))
-  if (surface == "interpolate")
-    out[[2]] <- ggplot2::geom_contour(data = surf, ggplot2::aes(.data$x, .data$y, z = .data$value),
-                                      colour = "grey35", linewidth = 0.25, bins = 10, na.rm = TRUE,
-                                      inherit.aes = FALSE)
+.gravity_surface <- function( nd, value, lab, surface, mask_dist = NULL, grid_n = 140, alpha = 1,
+                              mask = "nodes", clip = NULL, boundary = FALSE ) {
+  if( surface == "none" ) return( list() )
+  surf <- .surface_grid( nd, value, lab, surface, mask_dist, grid_n, mask = mask, clip = clip )
+  surf$panel <- factor( surf$panel, lab )
+  out <- list( ggplot2::geom_raster( data = surf,
+                                     ggplot2::aes( .data$x, .data$y, fill = .data$value ),
+                                     interpolate = TRUE,
+                                     na.rm = TRUE,
+                                     alpha = alpha,
+                                     inherit.aes = FALSE ) )
+  if( surface == "interpolate" ) {
+    z   <- surf[!is.na( surf$value ), ]
+    lev <- .contour_levels( z$value )
+    # A component whose scores cross no level has no contours to draw.
+    key   <- paste( z$panel, z$component )
+    spans <- tapply( z$value, key, function( v ) any( lev > min( v ) & lev < max( v ) ) )
+    z     <- z[as.logical( spans[key] ), ]
+    if( nrow( z ) )
+      out[[2]] <- ggplot2::geom_contour( data = z,
+                                         ggplot2::aes( .data$x, .data$y,
+                                                       z = .data$value,
+                                                       group = .data$component ),
+                                         colour = "grey35",
+                                         linewidth = 0.25,
+                                         breaks = lev,
+                                         na.rm = TRUE,
+                                         inherit.aes = FALSE )
+  }
+  if( boundary ) {
+    b <- .surface_boundaries( surf )
+    if( nrow( b ) )
+      out[[length( out ) + 1]] <- ggplot2::geom_path( data = b,
+                                                      ggplot2::aes( .data$x, .data$y,
+                                                                    group = .data$line ),
+                                                      colour = "grey35",
+                                                      linewidth = 0.9,
+                                                      lineend = "round",
+                                                      inherit.aes = FALSE )
+  }
   out
+}
+
+# Contour levels common to all components and panels: multiples of a tenth of
+# the range, as geom_contour( bins = 10 ) places them.
+#' @keywords internal
+#' @noRd
+.contour_levels <- function( v, bins = 10 ) {
+  v <- v[is.finite( v )]
+  if( !length( v ) ) return( numeric( 0 ) )
+  r <- range( v )
+  if( diff( r ) <= 0 ) return( numeric( 0 ) )
+  levels_at <- function( w ) seq( floor( r[1] / w ), ceiling( r[2] / w ) ) * w
+  lev <- levels_at( diff( r ) / ( bins - 1 ) )
+  if( length( lev ) < bins + 1 ) lev <- levels_at( diff( r ) / bins )
+  lev
 }
 
 # Arrows centred on each edge midpoint, pointing along (ux, uy), with length
@@ -367,14 +403,7 @@ plot.gravity_field <- function(x, y, ...,
       g <- built$data[[i]]$geometry
       if (is.null(g)) next
       if (!is.na(sf::st_crs(g)) && !isTRUE(sf::st_is_longlat(g))) g <- sf::st_transform(g, 4326)
-      g <- g[sf::st_dimension(g) == 2]
-      for (k in seq_along(g)) {
-        cc <- sf::st_coordinates(g[k])
-        L <- intersect(c("L3", "L2", "L1"), colnames(cc))
-        feat <- if (length(L)) split(as.data.frame(cc[, c("X", "Y")]), interaction(as.data.frame(cc[, L, drop = FALSE]), drop = TRUE))
-                else list(as.data.frame(cc[, c("X", "Y")]))
-        out[[length(out) + 1]] <- lapply(feat, stats::setNames, c("x", "y"))
-      }
+      out <- c(out, .sfc_polygons(g))
     } else if (inherits(geom, "GeomPolygon")) {
       d <- built$data[[i]]
       if (!all(c("x", "y") %in% names(d))) next
@@ -389,24 +418,50 @@ plot.gravity_field <- function(x, y, ...,
 }
 
 # Points inside any feature (even-odd over a feature's rings), by ray casting.
+# Edges that no point's ray can cross are dropped first, and the rest are
+# tested once for each distinct py: a grid has few of them, so a detailed
+# coastline stays fast.
 #' @keywords internal
 #' @noRd
-.in_rings <- function(px, py, features) {
-  rx <- range(px); ry <- range(py)
-  inside <- logical(length(px))
-  for (f in features) {
-    fin <- logical(length(px))
-    for (r in f) {
-      r <- r[stats::complete.cases(r), , drop = FALSE]
-      if (nrow(r) < 3 || max(r$x) < rx[1] || min(r$x) > rx[2] || max(r$y) < ry[1] || min(r$y) > ry[2]) next
-      vx <- r$x; vy <- r$y; j <- length(vx)
-      for (k in seq_along(vx)) {
-        cr <- ((vy[k] > py) != (vy[j] > py)) &
-          (px < (vx[j] - vx[k]) * (py - vy[k]) / (vy[j] - vy[k]) + vx[k])
-        fin <- xor(fin, cr %in% TRUE); j <- k
-      }
+.in_rings <- function( px, py, features ) {
+  inside <- logical( length( px ) )
+  if( !length( px ) ) return( inside )
+  x_min <- min( px )
+  ry    <- range( py )
+  rows  <- split( seq_along( py ), match( py, unique( py ) ) )
+  for( f in features ) {
+    e <- .ring_edges( f )
+    e <- e[pmax( e$y0, e$y1 ) > ry[1] & pmin( e$y0, e$y1 ) <= ry[2] &
+             pmax( e$x0, e$x1 ) >= x_min, ]
+    if( !nrow( e ) ) next
+    for( k in rows ) {
+      y   <- py[k[1]]
+      hit <- which( ( e$y1 > y ) != ( e$y0 > y ) )
+      if( !length( hit ) ) next
+      x1 <- e$x1[hit]
+      y1 <- e$y1[hit]
+      at <- sort( ( e$x0[hit] - x1 ) * ( y - y1 ) / ( e$y0[hit] - y1 ) + x1 )
+      # Crossings to the right of each point; an odd number is inside.
+      n_right   <- length( at ) - findInterval( px[k], at )
+      inside[k] <- inside[k] | n_right %% 2 == 1
     }
-    inside <- inside | fin
   }
   inside
+}
+
+# The edges of all the rings of a feature, each from (x0, y0) to (x1, y1).
+#' @keywords internal
+#' @noRd
+.ring_edges <- function( rings ) {
+  e <- lapply( rings, function( r ) {
+    r <- r[stats::complete.cases( r ), , drop = FALSE]
+    m <- nrow( r )
+    if( m < 3 ) return( NULL )
+    prev <- c( m, seq_len( m - 1 ) )
+    data.frame( x0 = r$x[prev], y0 = r$y[prev], x1 = r$x, y1 = r$y )
+  } )
+  e <- do.call( rbind, unname( e ) )
+  if( is.null( e ) )
+    e <- data.frame( x0 = numeric(), y0 = numeric(), x1 = numeric(), y1 = numeric() )
+  e
 }

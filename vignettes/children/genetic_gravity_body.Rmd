@@ -319,6 +319,13 @@ field |>
   plot()
 ```
 
+`show_graph = FALSE` leaves out the topology and draws the same surface alone:
+
+```{r field-surface}
+field |>
+  plot( show_graph = FALSE )
+```
+
 Fields with several panels are drawn on common scales.  Here the same graph at
 the local-mean and degree-neutral bandwidths:
 
@@ -337,6 +344,10 @@ field |>
   arrange( desc( abs( delta ) ) ) |>
   head()
 ```
+
+`gravity_surface()` returns the interpolated surface itself, as a data frame or
+a raster.  For populations placed by coordinates it can also be cropped, for
+example to land, with `clip =`.
 
 ## Default behaviour on a real graph
 

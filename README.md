@@ -116,9 +116,15 @@ gravity |>
 graph |>
   gravity_field() |>
   plot()                                   # map of sources and sinks
+
+graph |>
+  gravity_field() |>
+  plot(show_graph = FALSE)                 # the surface without the graph
 ```
 
-See `vignette("genetic_gravity")` for the model and a full walkthrough.
+Over a base map, `plot(base = , clip_to_base = TRUE)` crops the surface to land,
+and `gravity_surface()` returns it as a data frame or raster.  See
+`vignette("genetic_gravity")` for the model and a full walkthrough.
 
 ## Interactive maps
 

@@ -29,4 +29,6 @@ P     <- genetic_distance( gravity,
                            gamma = 0.5 )
 field <- gravity_field( graph, gamma = 0.5 )
 plot( field, layout = "kk", surface = "interpolate" )
+plot( field, show_graph = FALSE )
+surface <- gravity_surface( field )
 ```

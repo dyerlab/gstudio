@@ -439,12 +439,19 @@ plot.popgraph <- function(x, y, ...,
 
   if (any(nzchar(levels(nd$panel))))
     p <- p + ggplot2::facet_wrap(~panel)
-  # Keep a coordinate system the base plot sets (e.g. coord_sf() for geom_sf()).
-  if (is.null(base) || isTRUE(base$coordinates$default))
-    p <- p + if (geographic)
-    ggplot2::coord_quickmap(xlim = limits$x, ylim = limits$y, expand = is.null(limits))
-  else
-    ggplot2::coord_equal(xlim = limits$x, ylim = limits$y, expand = is.null(limits))
+  # Keep a coordinate system the base plot sets, and the one geom_sf() adds,
+  # which ggplot2 marks as a default but geom_sf() cannot be drawn without;
+  # only fixed limits (an animation's) are put on that one.
+  if (is.null(base) || isTRUE(base$coordinates$default)) {
+    if (inherits(base$coordinates, "CoordSf")) {
+      if (!is.null(limits))
+        p <- p + ggplot2::coord_sf(xlim = limits$x, ylim = limits$y, expand = FALSE)
+    } else if (geographic) {
+      p <- p + ggplot2::coord_quickmap(xlim = limits$x, ylim = limits$y, expand = is.null(limits))
+    } else {
+      p <- p + ggplot2::coord_equal(xlim = limits$x, ylim = limits$y, expand = is.null(limits))
+    }
+  }
   # A base plot keeps its own theme and axis labels.
   if (!is.null(base)) return(p)
   p + ggplot2::labs(x = NULL, y = NULL) + ggplot2::theme_minimal(base_size = 10) +

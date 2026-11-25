@@ -140,3 +140,32 @@ test_that("plot methods draw on a base ggplot, under the graph", {
   expect_error(plot(g, base = "map"), "ggplot")
   expect_error(plot(f, base = 1), "ggplot")
 })
+
+test_that( "a geom_sf() base draws without an explicit coord_sf()", {
+  data( lopho, package = "gstudio", envir = environment() )
+  data( baja, package = "gstudio", envir = environment() )
+  g    <- decorate_graph( lopho, baja, stratum = "Population" )
+  land <- sf::st_as_sfc( sf::st_bbox( c( xmin = -115, ymin = 23, xmax = -109, ymax = 31 ),
+                                      crs = sf::st_crs( 4326 ) ) )
+  base <- ggplot2::ggplot() + ggplot2::geom_sf( data = land )
+  for( p in list( plot( g, base = base ),
+                  plot( gravity_field( g ), base = base, clip_to_base = TRUE ) ) ) {
+    expect_s3_class( p$coordinates, "CoordSf" )
+    expect_no_error( ggplot2::ggplotGrob( p ) )
+  }
+  # an animation's fixed limits are kept
+  xy    <- .graph_layout( g )
+  frame <- .animation_frame( g,
+                             xy,
+                             "t",
+                             "size",
+                             "name",
+                             "white",
+                             limits = list( x = c( -116, -108 ), y = c( 22, 32 ) ),
+                             base = base )
+  expect_equal( frame$coordinates$limits$x, c( -116, -108 ) )
+  expect_no_error( ggplot2::ggplotGrob( frame ) )
+  # a base without sf layers still gets geographic proportions
+  p <- plot( g, base = ggplot2::ggplot() )
+  expect_s3_class( p$coordinates, "CoordQuickmap" )
+} )

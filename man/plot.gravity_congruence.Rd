@@ -90,7 +90,8 @@ nodes do not blank the surface).}
 \item{arrow_scale}{Arrow length multiplier (default 1).  The longest arrow
 over all facets is \code{arrow_scale} times the median edge length.}
 
-\item{grid_n}{Surface grid resolution per axis (default 140).}
+\item{grid_n}{Surface grid resolution per axis (default 140).  A finer grid
+follows a clipped coastline more closely.}
 }
 \value{
 A \code{ggplot} object.

@@ -13,6 +13,8 @@
 | Gradient test, $r(S, x)$ | `source_sink_test()` |
 | Isolation by graph distance (Mantel); directional isolation, $\Delta R^2$ | `ibgd(mode = "cGD")`, `ibgd(mode = "dcGD")` |
 | Everything for mapping; the map | `gravity_field()`, `plot()` |
+| The map without the topology | `plot(show_graph = FALSE)` |
+| The surface as a table or raster, cropped to land | `gravity_surface(clip = )` |
 | Is the design adequate? | `popgraph_diagnostics()` |
 | Design-matched null: cutoff for $\Delta R^2$, null for $r(S, x)$ | `popgraph_null()` |
 
