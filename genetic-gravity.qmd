@@ -48,43 +48,193 @@ igraph::components( beetles )$csize
 
 The components recapitulate the regional populations of Garrick et al.
 (2013): a central group, a northern group, and two southern dyads, which carry
-no directional information.  At the degree-neutral bandwidth, the gravity field
-drawn on the sites' coordinates shows the source-sink surface of each
-component separately; because $S$ sums to zero within a component, colours are
-comparable only within one.  A grey outline of the land from Natural Earth
-(`rnaturalearth`), passed as `base =`, goes underneath, and `clip_to_base`
-keeps the surface on land; the Visualization
-chapter (@sec-visualization) builds a fuller base map with labels and a north
-arrow.
+no directional information.
 
-```{r arapat-field}
-#| fig-width: 7
-#| fig-height: 7
+### Mapping the surface on land {#sec-gravity-map}
+
+At the degree-neutral bandwidth, `plot()` draws the gravity field at the
+sites' coordinates, which `decorate = TRUE` stored in the graph.  The
+source-sink scores are interpolated onto a raster, and two choices decide how
+that raster appears: where it is cropped, and whether the Population Graph is
+drawn over it.
+
+The base map is a grey outline of the land from Natural Earth
+(`rnaturalearth`).  The 1:10m coastline (`scale = "large"`) resolves the
+islands and lagoons; it comes from `rnaturalearthhires`, which is installed
+from <https://ropensci.r-universe.dev>, and `scale = "medium"` needs only
+`rnaturalearthdata`.
+
+```{r arapat-land}
 #| message: false
-coords <- peninsula |>
-  strata_coordinates()
+countries <- c( "Mexico", "United States of America" )
 
-land <- rnaturalearth::ne_countries( country = "Mexico",
-                                     scale = "medium",
+land <- rnaturalearth::ne_countries( country = countries,
+                                     scale = "large",
                                      returnclass = "sf" )
 
 land_map <- ggplot() +
   geom_sf( data = land,
-           fill = "grey92",
-           colour = "grey55",
-           linewidth = 0.3 ) +
-  coord_sf( xlim = c( -115.5, -108.5 ),
-            ylim = c( 22.5, 30 ) ) +
-  labs( x = NULL, y = NULL ) +
-  theme_minimal()
-
-beetles |>
-  gravity_field() |>
-  plot( layout = coords,
-        base = land_map,
-        clip_to_base = TRUE,
-        mask_dist = 0.6 )
+           fill = "grey85",
+           colour = "grey60",
+           linewidth = 0.15 ) +
+  coord_sf( xlim = c( -115, -110.3 ),
+            ylim = c( 24.4, 29.8 ),
+            expand = FALSE ) +
+  labs( x = "Longitude", y = "Latitude" ) +
+  theme_bw()
 ```
+
+Both southern dyads have $S = 0$ by symmetry, so only the two larger
+components are mapped.  $S$ is computed within each component, so leaving the
+dyads out does not change the other scores.
+
+```{r arapat-mapped}
+parts  <- igraph::components( beetles )
+mapped <- beetles |>
+  igraph::induced_subgraph( which( parts$csize[parts$membership] > 2 ) )
+
+group <- igraph::components( mapped )$membership
+igraph::V( mapped )$Component <- c( "Central", "Northern" )[group]
+
+beetle_field <- mapped |>
+  gravity_field()
+```
+
+#### With the topology
+
+By default the graph is drawn over the surface.  `clip_to_base = TRUE` crops
+the raster to the polygons of the base map, and `grid_n = 400` makes it fine
+enough to follow the coastline.  The site labels are added with `ggrepel`, at
+the node positions returned by `plot_nodes()`, because the central sites are
+close together.
+
+```{r arapat-field}
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: "Source-sink surface of *Araptus attenuatus*, cropped to land, with the Population Graph drawn over it.  Red, source; blue, sink.  Arrows point from source to sink, with length proportional to $|\\Delta|$.  The heavy grey line is where the surfaces of the two components meet, and the dashed line is the hypothesized refugium."
+#| message: false
+refuge <- list(
+  geom_hline( yintercept = 27.5,
+              linetype = "dashed",
+              colour = "grey20" ),
+  annotate( "text",
+            x = -110.4,
+            y = 27.62,
+            label = "refuge, 27.5°N",
+            hjust = 1,
+            size = 3.2,
+            colour = "grey20" )
+)
+
+with_graph <- beetle_field |>
+  plot( base = land_map,
+        clip_to_base = TRUE,
+        grid_n = 400,
+        node_fill = "Component",
+        node_labels = "none",
+        subtitle_stats = FALSE )
+
+with_graph +
+  ggrepel::geom_text_repel( data = plot_nodes( with_graph ),
+                            aes( x, y, label = node ),
+                            size = 2.7,
+                            fontface = "bold",
+                            point.size = 7,
+                            box.padding = 0.4,
+                            min.segment.length = 0.3,
+                            max.overlaps = Inf,
+                            bg.colour = "white",
+                            bg.r = 0.12,
+                            seed = 1,
+                            inherit.aes = FALSE ) +
+  scale_colour_manual( name = "Component",
+                       values = c( Central = "#440154",
+                                   Northern = "#35b779" ) ) +
+  refuge
+```
+
+Because $S$ sums to zero within a component, each component is interpolated
+from its own sites, and colours on the two sides of the grey boundary line are
+not comparable.  `boundary = FALSE` leaves the line out.
+
+#### Without the topology
+
+`show_graph = FALSE` leaves out the edges, arrows, nodes and labels.  The
+surface, its contours and the boundary are exactly the same, on the same colour
+scale, and nothing hides the gradient:
+
+```{r arapat-surface}
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: "The same surface without the topology (`show_graph = FALSE`)."
+#| message: false
+beetle_field |>
+  plot( base = land_map,
+        clip_to_base = TRUE,
+        grid_n = 400,
+        show_graph = FALSE,
+        subtitle_stats = FALSE ) +
+  refuge
+```
+
+Between the two, `graph_alpha` fades the graph rather than removing it, as a
+whole (`graph_alpha = 0.35`) or by part
+(`graph_alpha = c( nodes = 0.5, edges = 0.35, arrows = 0 )`).
+
+#### The cropped raster
+
+Cropping happens in two steps.  First, the surface of each component fills the
+convex hull of its sites plus a margin (`mask = "hull"`, the default for nodes
+placed by coordinates; `mask_dist` sets the margin).  A hull drawn around sites
+on a narrow peninsula crosses open water, so the second step keeps only the
+cells on land.  `gravity_surface()` returns the raster itself, and its `clip`
+argument takes the land polygons directly; as a data frame the two steps can be
+compared side by side:
+
+```{r arapat-crop}
+#| fig-width: 8
+#| fig-height: 5.5
+#| fig-cap: "The surface over each component's hull (left) and cropped to land (right)."
+hull <- beetle_field |>
+  gravity_surface( grid_n = 400 )
+
+on_land <- beetle_field |>
+  gravity_surface( grid_n = 400, clip = land )
+
+hull$Area    <- "Component hulls"
+on_land$Area <- "Cropped to land"
+
+S_max <- max( abs( beetle_field$nodes$S ) )  # the limits plot() uses
+
+land_map +
+  geom_raster( aes( x, y, fill = S ),
+               data = rbind( hull, on_land ),
+               na.rm = TRUE ) +
+  facet_wrap( ~ Area ) +
+  scale_x_continuous( breaks = -114:-111 ) +
+  scale_fill_gradient2( low = "#2166ac",
+                        mid = "#f7f7f7",
+                        high = "#b2182b",
+                        limits = c( -S_max, S_max ),
+                        na.value = NA )
+```
+
+With `output = "raster"` the result is a `terra` raster, with blank cells where
+the surface was cropped, ready for a GIS:
+
+```{r arapat-raster}
+S_land <- beetle_field |>
+  gravity_surface( grid_n = 400, clip = land, output = "raster" )
+S_land
+```
+
+```{r arapat-write}
+#| eval: false
+terra::writeRaster( S_land, "arapat_S.tif" )
+```
+
+The Visualization chapter (@sec-visualization) builds a fuller base map with
+labels and a north arrow.
 
 ### The axis: distance from the refugium
 
@@ -308,12 +458,26 @@ beetles   <- population_graph( peninsula,
                                stratum = "Population",
                                decorate = TRUE )
 
-coords <- strata_coordinates( peninsula, stratum = "Population" )
-plot( gravity_field( beetles ),
-      layout = coords,
+mapped <- igraph::induced_subgraph(
+  beetles,
+  which( parts$csize[parts$membership] > 2 )
+)
+beetle_field <- gravity_field( mapped )
+
+plot( beetle_field,                          # with the topology
       base = land_map,
       clip_to_base = TRUE,
-      mask_dist = 0.6 )
+      grid_n = 400 )
+plot( beetle_field,                          # the surface alone
+      base = land_map,
+      clip_to_base = TRUE,
+      grid_n = 400,
+      show_graph = FALSE )
+
+gravity_surface( beetle_field,
+                 grid_n = 400,
+                 clip = land,
+                 output = "raster" )
 
 central      <- component_of( "93" )
 central_data <- droplevels(

@@ -184,7 +184,7 @@ lopho_dec |>
   plot( base = baja_map )
 ```
 
-The same `base =` works for a gravity field (@sec-genetic-gravity), whose source-sink surface is drawn between the map and the graph.
+The same `base =` works for a gravity field (@sec-genetic-gravity), whose source-sink surface is drawn between the map and the graph.  @sec-gravity-map crops that surface to land and draws it with and without the graph on top.
 
 ### Geographic Layout with ggraph
 
