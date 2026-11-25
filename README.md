@@ -1,3 +1,6 @@
+![Genetic gravity topology for the *arapat* data set](https://dyerlab.github.io/gstudio/media/gravity-source-sink-3d.png)
+
+
 gstudio
 =======
 
